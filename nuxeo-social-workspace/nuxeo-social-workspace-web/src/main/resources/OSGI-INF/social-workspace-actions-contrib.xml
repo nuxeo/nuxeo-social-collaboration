@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.actions">
+
+  <require>org.nuxeo.ecm.platform.webengine.sites.actions</require>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="actions">
+
+    <!--
+    <action id="convertToCommunity"
+      link="#{navigationContext.currentDocument.addFacet('Community')}"
+      label="command.convert.to.community" icon="/icons/action_add.gif">
+      <category>SUBVIEW_UPPER_LIST_HREF</category>
+      <filter id="not_community"/>
+      <filter id="user_canedit"/>
+      <filter id="workspace">
+        <rule grant="true">
+          <type>Workspace</type>
+        </rule>
+      </filter>
+    </action>
+    -->
+
+    <action id="TAB_MANAGE_SOCIAL_WORKSPACE"
+      link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml" order="100"
+      label="action.view.manage" icon="/icons/file.gif">
+      <category>VIEW_ACTION_LIST</category>
+      <filter-id>manage_social_workspace</filter-id>
+    </action>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="filters">
+
+    <filter id="manage" append="true">
+      <rule grant="false">
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="manage_social_workspace">
+      <rule grant="true">
+        <permission>Manage everything</permission>
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="social_workspace">
+      <rule grant="true">
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="not_social_workspace">
+      <rule grant="false">
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="isWebContainer" append="true">
+      <rule grant="false">
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="denyFilesTab" append="true">
+      <rule grant="false">
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+  </extension>
+</component>

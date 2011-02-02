@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.ecm.social.workspace.types">
+
+  <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+
+    <type id="SocialWorkspace">
+      <label>SocialWorkspace</label>
+      <icon>/icons/social_workspace.png</icon>
+      <bigIcon>/icons/social_workspace_100.png</bigIcon>
+      <icon-expanded>/icons/social_workspace_open.png</icon-expanded>
+      <category>Collaborative</category>
+      <default-view>view_documents</default-view>
+      <layouts mode="any">
+        <layout>social_workspace_heading</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>social_workspace_heading</layout>
+        <layout>social_workspace</layout>
+      </layouts>
+      <subtypes>
+        <type>Workspace</type>
+        <type>Section</type>
+      </subtypes>
+    </type>
+
+    <type id="Workspace">
+      <subtypes>
+        <type>SocialWorkspace</type>
+      </subtypes>
+    </type>
+
+  </extension>
+</component>

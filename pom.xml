@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.nuxeo.ecm.platform</groupId>
+    <artifactId>nuxeo-features-parent</artifactId>
+    <version>5.4.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.nuxeo.ecm.social</groupId>
+  <artifactId>nuxeo-social-collaboration-parent</artifactId>
+  <name>Nuxeo Social Collaboration Parent</name>
+  <description>Nuxeo Social Collaboration Parent</description>
+  <packaging>pom</packaging>
+
+  <properties>
+    <nuxeo.distribution.version>5.4.1-SNAPSHOT</nuxeo.distribution.version>
+  </properties>
+
+  <modules>
+    <module>nuxeo-social-workspace</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.nuxeo.ecm.platform</groupId>
+        <artifactId>nuxeo-social-workspace-core</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.platform</groupId>
+        <artifactId>nuxeo-social-workspace-web</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.nuxeo.ecm.distribution</groupId>
+        <artifactId>nuxeo-distribution-jboss</artifactId>
+        <version>${nuxeo.distribution.version}</version>
+        <classifier>nuxeo-dm</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.distribution</groupId>
+        <artifactId>nuxeo-distribution-tomcat</artifactId>
+        <version>${nuxeo.distribution.version}</version>
+        <classifier>nuxeo-dm</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.seleniumhq.selenium.server</groupId>
+        <artifactId>selenium-server</artifactId>
+        <version>1.0.3</version>
+        <classifier>standalone</classifier>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <repositories>
+    <repository>
+      <id>public</id>
+      <url>http://maven.nuxeo.org/public</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>public-snapshot</id>
+      <url>http://maven.nuxeo.org/public-snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+</project>

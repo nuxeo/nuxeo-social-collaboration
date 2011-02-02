@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Nuxeo Social Workspace Core
+Bundle-SymbolicName: org.nuxeo.ecm.social.workspace.core;singleton:=true
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Nuxeo-Component: OSGI-INF/social-workspace-core-types-contrib.xml,
+ OSGI-INF/social-workspace-content-template-contrib.xml,
+ OSGI-INF/social-workspace-listener-contrib.xml

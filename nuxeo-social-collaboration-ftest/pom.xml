@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.nuxeo.ecm.social</groupId>
+    <artifactId>nuxeo-social-collaboration-parent</artifactId>
+    <version>5.4.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>nuxeo-social-collaboration-ftest</artifactId>
+  <name>Nuxeo Social Collaboration Functional Tests</name>
+  <description>Nuxeo Social Collaboration Functional Tests</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <artifactItems>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-social-workspace-core</artifactId>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-social-workspace-web</artifactId>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+
+            <artifactItem>
+              <groupId>org.seleniumhq.selenium.server</groupId>
+              <artifactId>selenium-server</artifactId>
+              <classifier>standalone</classifier>
+              <overWrite>false</overWrite>
+              <outputDirectory>selenium</outputDirectory>
+              <destFileName>selenium-server.jar</destFileName>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.distribution</groupId>
+              <artifactId>nuxeo-distribution-tomcat</artifactId>
+              <classifier>nuxeo-dm</classifier>
+              <type>zip</type>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.distribution</groupId>
+              <artifactId>nuxeo-distribution-jboss</artifactId>
+              <classifier>nuxeo-dm</classifier>
+              <type>zip</type>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+          </artifactItems>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

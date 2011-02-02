@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.content.template">
+
+  <require>org.nuxeo.ecm.platform.content.template.service.ContentTemplateService.defaultContrib</require>
+
+  <extension
+    target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService"
+    point="factoryBinding">
+    <factoryBinding name="SocialWorkspaceFactory" factoryName="SimpleTemplateFactory"
+      targetType="SocialWorkspace">
+      <template>
+        <templateItem typeName="Workspace" id="workspace"
+          title="Workspace"
+          description="Workspace"/>
+        <templateItem typeName="Section" id="section" title="Section"
+          description="Section"/>
+      </template>
+    </factoryBinding>
+  </extension>
+
+</component>

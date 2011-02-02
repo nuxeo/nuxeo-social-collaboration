@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.nuxeo.ecm.social</groupId>
+    <artifactId>nuxeo-social-collaboration-parent</artifactId>
+    <version>5.4.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.nuxeo.ecm.social</groupId>
+  <artifactId>nuxeo-social-workspace-parent</artifactId>
+  <name>Nuxeo Social Workspace Parent</name>
+  <description>Nuxeo Social Workspace Parent</description>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>nuxeo-social-workspace-core</module>
+    <module>nuxeo-social-workspace-web</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.nuxeo.ecm.social</groupId>
+        <artifactId>nuxeo-social-workspace-core</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.social</groupId>
+        <artifactId>nuxeo-social-workspace-web</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <repositories>
+    <repository>
+      <id>public</id>
+      <url>http://maven.nuxeo.org/public</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>public-snapshot</id>
+      <url>http://maven.nuxeo.org/public-snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+</project>

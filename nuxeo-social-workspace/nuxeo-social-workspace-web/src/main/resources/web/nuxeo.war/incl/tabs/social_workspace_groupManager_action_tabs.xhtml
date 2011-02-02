@@ -1,0 +1,29 @@
+<div xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:nxl="http://nuxeo.org/nxforms/layout">
+
+  <h:form id="editSocialWorkspaceGroups">
+    <h2>#{messages['label.community.groups.administrator']}</h2>
+    <nxl:layout name="group" mode="edit"
+                value="#{socialWorkspaceGroupManagerActions.administratorsGroup}"/>
+
+    <h2>#{messages['label.community.groups.member']}</h2>
+    <nxl:layout name="group" mode="edit"
+                value="#{socialWorkspaceGroupManagerActions.membersGroup}"/>
+
+    <table class="dataInput">
+      <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <h:commandButton
+                  value="#{messages['command.save']}"
+                  action="#{socialWorkspaceGroupManagerActions.updateGroups}"
+                  styleClass="button"/>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </h:form>
+
+</div>

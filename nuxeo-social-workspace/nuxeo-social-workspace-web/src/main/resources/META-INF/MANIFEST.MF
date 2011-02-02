@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Nuxeo Social Workspace Web
+Bundle-SymbolicName: org.nuxeo.ecm.social.workspace.web;singleton:=true
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Nuxeo-Component: OSGI-INF/social-workspace-actions-contrib.xml,
+ OSGI-INF/social-workspace-ecm-types-contrib.xml,
+ OSGI-INF/social-workspace-layout-contrib.xml
