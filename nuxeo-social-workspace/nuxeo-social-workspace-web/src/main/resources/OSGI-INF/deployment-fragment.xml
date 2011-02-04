@@ -3,6 +3,15 @@
 
   <require>org.nuxeo.ecm.platform.lang</require>
 
+  <extension target="faces-config#VALIDATOR">
+    <validator>
+      <validator-id>ImageBlobValidator</validator-id>
+      <validator-class>
+        org.nuxeo.ecm.social.workspace.ImageBlobValidator
+      </validator-class>
+    </validator>
+  </extension>
+
   <install>
     <!--  unzip the war template -->
     <unzip from="${bundle.fileName}" to="/" prefix="web">

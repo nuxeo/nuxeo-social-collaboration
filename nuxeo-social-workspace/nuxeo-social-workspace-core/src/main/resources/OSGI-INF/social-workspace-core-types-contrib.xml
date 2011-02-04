@@ -2,18 +2,25 @@
 <component name="org.nuxeo.ecm.social.workspace.core.types">
 
   <require>org.nuxeo.ecm.core.CoreExtensions</require>
+  <require>org.nuxeo.ecm.platform.picture.coreTypes</require>
 
   <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
-    <schema name="social_workspace" prefix="sw" src="schemas/social_workspace.xsd"/>
+    <schema name="social" prefix="soc" src="schemas/social.xsd"/>
+    <schema name="article" prefix="art" src="schemas/article.xsd"/>
   </extension>
 
   <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
     <facet name="SocialWorkspace">
-      <schema name="social_workspace"/>
+      <schema name="social"/>
     </facet>
 
     <doctype name="SocialWorkspace" extends="Workspace">
       <facet name="SocialWorkspace" />
+    </doctype>
+
+    <doctype name="Article" extends="Note">
+      <schema name="social"/>
+      <schema name="article"/>
     </doctype>
   </extension>
 

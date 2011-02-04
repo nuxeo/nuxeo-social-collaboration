@@ -9,6 +9,14 @@
       priority="100">
       <event>documentCreated</event>
     </listener>
+
+    <listener name="resizeArticlePictureListener" async="false"
+      postCommit="false"
+      class="org.nuxeo.ecm.social.workspace.ResizeArticlePictureListener"
+      priority="200">
+      <event>aboutToCreate</event>
+      <event>beforeDocumentModification</event>
+    </listener>
   </extension>
 
 </component>
