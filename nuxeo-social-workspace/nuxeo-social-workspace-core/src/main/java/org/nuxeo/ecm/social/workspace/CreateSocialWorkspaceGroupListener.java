@@ -104,7 +104,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
 
             if (!(principal == null || "".equals(principal))) {
                 group.setProperty(userManager.getGroupSchemaName(), "members",
-                        Arrays.asList(new String[] { principal }));
+                        Arrays.asList(principal));
             }
             userManager.updateGroup(group);
         } catch (GroupAlreadyExistsException e) {
