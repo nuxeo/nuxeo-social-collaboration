@@ -35,9 +35,9 @@ public class ResizeArticlePictureListener implements EventListener {
 
     private static final String ARTICLE_PICTURE_FIELD = "art:picture";
 
-    private static final int RESIZED_IMAGE_WIDTH = 400;
+    private static final int RESIZED_IMAGE_WIDTH = 300;
 
-    private static final int RESIZED_IMAGE_HEIGHT = 300;
+    private static final int RESIZED_IMAGE_HEIGHT = 200;
 
     @Override
     public void handleEvent(Event event) throws ClientException {

@@ -1,0 +1,36 @@
+<div xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxh="http://nuxeo.org/nxweb/html">
+
+  <c:if test="#{widget.mode == 'view'}">
+    <c:set var="cssClass" value="#{nxu:test(!empty widget.properties.cssClass, widget.properties.cssClass, '')}" />
+
+    <div class="#{cssClass}">
+      <c:if test="#{!empty currentDocument.art.picture}">
+        <c:set var="float" value="#{nxu:test(!empty widget.properties.float, widget.properties.float, 'left')}" />
+        <c:set var="margin" value="#{nxu:test(float == 'right', 'left', 'right')}" />
+        <img src="#{nxd:fileUrl('downloadFile', currentDocument, 'art:picture', field_2)}" alt="#{field_2}" style="float: #{float}; margin-#{margin}: 10px;" />
+      </c:if>
+
+      <c:choose>
+        <c:when test="#{(field_1 == 'text/html') or (empty field_1)}">
+          <c:set var="preprocessedHtml" value="#{nxu:test(!empty widget.properties.translatedHtml, widget.properties.translatedHtml, null)}" />
+          <c:if test="#{!empty preprocessedHtml}">
+            <nxh:outputText value="#{preprocessedHtml}" escape="false" />
+          </c:if>
+          <c:if test="#{empty htmlPreprocess}">
+            <h:outputText value="#{field_0}" escape="false" />
+          </c:if>
+        </c:when>
+        <c:otherwise>
+          <pre>
+               <h:outputText value="#{field_0}"/>
+          </pre>
+        </c:otherwise>
+      </c:choose>
+      <div style="clear:both;" ></div>
+    </div>
+  </c:if>
+</div>
