@@ -7,4 +7,5 @@ Bundle-Version: 1.0.0
 Nuxeo-Component: OSGI-INF/social-workspace-core-types-contrib.xml,
  OSGI-INF/social-workspace-life-cycle-contrib.xml,
  OSGI-INF/social-workspace-content-template-contrib.xml,
- OSGI-INF/social-workspace-listener-contrib.xml
+ OSGI-INF/social-workspace-listener-contrib.xml,
+ OSGI-INF/social-workspace-adapters-contrib.xml

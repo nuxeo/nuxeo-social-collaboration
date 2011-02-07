@@ -16,6 +16,9 @@
 
 package org.nuxeo.ecm.social.workspace;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_PICTURE_FIELD;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
+
 import java.io.Serializable;
 
 import org.nuxeo.ecm.core.api.Blob;
@@ -31,9 +34,7 @@ import org.nuxeo.runtime.api.Framework;
 
 public class ResizeArticlePictureListener implements EventListener {
 
-    private static final String ARTICLE_TYPE = "Article";
 
-    private static final String ARTICLE_PICTURE_FIELD = "art:picture";
 
     private static final int RESIZED_IMAGE_WIDTH = 300;
 

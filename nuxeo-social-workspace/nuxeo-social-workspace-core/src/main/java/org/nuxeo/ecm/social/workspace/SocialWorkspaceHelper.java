@@ -16,7 +16,15 @@
 
 package org.nuxeo.ecm.social.workspace;
 
+import java.io.Serializable;
+
+import javax.print.Doc;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.model.PropertyException;
 
 /**
  * Class to provide some useful methods
@@ -25,6 +33,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
  * @since 5.4.1
  */
 public class SocialWorkspaceHelper {
+
+	private static final Log log = LogFactory.getLog(SocialWorkspaceHelper.class);
 
     public static final String ADMINISTRATORS_SUFFIX = "_administrators";
 
@@ -41,5 +51,27 @@ public class SocialWorkspaceHelper {
     public static String getCommunityMembersGroupName(DocumentModel doc) {
         return doc.getId() + MEMBERS_SUFFIX;
     }
+
+    public static Object getDocProperty(DocumentModel doc, String xpath) {
+    	try {
+			return doc.getPropertyValue(xpath);
+		} catch (PropertyException e) {
+			log.debug(e);
+		} catch (ClientException e) {
+			log.debug(e);
+		}
+		return null;
+    }
+
+    public static void setDocProperty(DocumentModel doc, String xpath, Serializable value){
+    	try {
+			doc.setPropertyValue(xpath, value);
+		} catch (PropertyException e) {
+			log.debug(e);
+		} catch (ClientException e) {
+			log.debug(e);
+		}
+    }
+
 
 }
