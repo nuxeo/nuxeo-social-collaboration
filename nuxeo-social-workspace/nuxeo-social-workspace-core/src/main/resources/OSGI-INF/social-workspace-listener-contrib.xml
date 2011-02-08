@@ -5,14 +5,21 @@
     point="listener">
     <listener name="createSocialWorkspaceGroupListener" async="false"
       postCommit="false"
-      class="org.nuxeo.ecm.social.workspace.CreateSocialWorkspaceGroupListener"
+      class="org.nuxeo.ecm.social.workspace.listeners.CreateSocialWorkspaceGroupListener"
       priority="100">
       <event>documentCreated</event>
     </listener>
 
+    <listener name="createSocialWorkspaceGroupListener" async="false"
+      postCommit="false"
+      class="org.nuxeo.ecm.social.workspace.listeners.RemoveSocialWorkspaceGroupListener"
+      priority="100">
+      <event>documentRemoved</event>
+    </listener>
+
     <listener name="resizeArticlePictureListener" async="false"
       postCommit="false"
-      class="org.nuxeo.ecm.social.workspace.ResizeArticlePictureListener"
+      class="org.nuxeo.ecm.social.workspace.listeners.ResizeArticlePictureListener"
       priority="200">
       <event>aboutToCreate</event>
       <event>beforeDocumentModification</event>
