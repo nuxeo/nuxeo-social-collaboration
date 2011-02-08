@@ -52,26 +52,6 @@ public class SocialWorkspaceHelper {
         return doc.getId() + MEMBERS_SUFFIX;
     }
 
-    public static Object getDocProperty(DocumentModel doc, String xpath) {
-    	try {
-			return doc.getPropertyValue(xpath);
-		} catch (PropertyException e) {
-			log.debug(e);
-		} catch (ClientException e) {
-			log.debug(e);
-		}
-		return null;
-    }
-
-    public static void setDocProperty(DocumentModel doc, String xpath, Serializable value){
-    	try {
-			doc.setPropertyValue(xpath, value);
-		} catch (PropertyException e) {
-			log.debug(e);
-		} catch (ClientException e) {
-			log.debug(e);
-		}
-    }
 
 
 }
