@@ -67,15 +67,15 @@ public class RemoveSocialWorkspaceGroupListener implements EventListener {
         String groupName = null;
         try {
             groupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(doc);
-            userManager.deleteGroup(groupName);
-        }catch (ClientException e) {
-            log.warn("Cannot delete group: " + groupName , e);
+            getUserManager().deleteGroup(groupName);
+        } catch (ClientException e) {
+            log.warn("Cannot delete group: " + groupName, e);
         }
         try {
             groupName = SocialWorkspaceHelper.getCommunityMembersGroupName(doc);
-            userManager.deleteGroup(groupName);
-        }catch (ClientException e) {
-            log.warn("Cannot delete group: " + groupName , e);
+            getUserManager().deleteGroup(groupName);
+        } catch (ClientException e) {
+            log.warn("Cannot delete group: " + groupName, e);
         }
     }
 

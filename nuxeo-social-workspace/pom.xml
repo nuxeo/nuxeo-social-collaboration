@@ -16,6 +16,7 @@
   <modules>
     <module>nuxeo-social-workspace-core</module>
     <module>nuxeo-social-workspace-web</module>
+    <module>nuxeo-social-workspace-gadgets</module>
   </modules>
 
   <dependencyManagement>
@@ -28,6 +29,11 @@
       <dependency>
         <groupId>org.nuxeo.ecm.social</groupId>
         <artifactId>nuxeo-social-workspace-web</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.social</groupId>
+        <artifactId>nuxeo-social-workspace-gadgets</artifactId>
         <version>${nuxeo.features.version}</version>
       </dependency>
     </dependencies>

@@ -10,7 +10,7 @@
       <event>documentCreated</event>
     </listener>
 
-    <listener name="createSocialWorkspaceGroupListener" async="false"
+    <listener name="removeSocialWorkspaceGroupListener" async="false"
       postCommit="false"
       class="org.nuxeo.ecm.social.workspace.listeners.RemoveSocialWorkspaceGroupListener"
       priority="100">
