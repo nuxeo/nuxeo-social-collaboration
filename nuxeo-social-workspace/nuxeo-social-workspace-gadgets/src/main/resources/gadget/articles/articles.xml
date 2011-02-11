@@ -24,8 +24,11 @@
    var prefs = new _IG_Prefs(__MODULE_ID__);
 
    // configure Automation REST call
-   var NXRequestParams={ operationId : 'Document.PageProvider',            // id of operation or chain to execute
-     operationParams : { query : "Select * from Article", pageSize : 5},  // parameters for the chain or operation
+   var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
+     operationParams : { query : "Select * from Article",
+          pageSize : 5,
+          socialWorkspacePath : '/default-domain/workspaces-agora/comm1'
+     },  // parameters for the chain or operation
      operationContext : {},                                                // context
      operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
      entityType : 'documents',                                             // result type : only document is supported for now
