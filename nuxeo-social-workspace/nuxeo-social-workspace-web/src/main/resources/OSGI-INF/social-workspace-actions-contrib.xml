@@ -23,8 +23,8 @@
 
     <action id="TAB_MANAGE_SOCIAL_WORKSPACE"
       link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml" order="100"
-      label="action.view.manage" icon="/icons/file.gif">
-      <category>VIEW_ACTION_LIST</category>
+      label="action.view.group.management" icon="/icons/file.gif">
+      <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
@@ -32,12 +32,6 @@
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="filters">
-
-    <filter id="manage" append="true">
-      <rule grant="false">
-        <facet>SocialWorkspace</facet>
-      </rule>
-    </filter>
 
     <filter id="manage_social_workspace">
       <rule grant="true">
