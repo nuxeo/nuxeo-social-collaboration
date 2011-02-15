@@ -21,14 +21,14 @@
   <script>
    var prefs = new _IG_Prefs(__MODULE_ID__);
 
-   var socialWorkspacePath = '/default-domain/workspaces-agora'
-   var getSocialWorkspaceQuery = 'select * from WorkspaceRoot'
+   var socialWorkspacePath = '/default-domain/workspaces-agora/comm1';
+   var getSocialWorkspaceQuery = 'select * from SocialWorkspace where ecm:path = \'' + socialWorkspacePath + '\'';
 
    var NXRequestParams={ operationId : 'Document.Query',            // id of operation or chain to execute
      operationParams : { query : getSocialWorkspaceQuery},    	    // parameters for the chain or operation
      operationContext : {},                                         // context
+     operationDocumentProperties : "common,dublincore",
      entityType : 'documents',
-     operationDocumentProperties : "dublincore",
      displayMethod : displaySocialWorkspaceDescription
    };
 
