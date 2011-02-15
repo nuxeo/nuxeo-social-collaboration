@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Join"
+    description="Join to Social Workspace gadget"
+    author="ei" author_email="ei@nuxeo.com"
+    height="420">
+    <#include "dynamic-translations.ftl"/>
+    <Require feature="dynamic-height" />
+    <#include "default-oauth-prefs.ftl"/>
+  </ModulePrefs>
+  <Content type="html">
+
+<![CDATA[
+<html>
+  <head>
+  <!-- insert JS Context -->
+  ${jsContext}
+
+  <script src="${specDirectoryUrl}default-automation-request.js"></script>
+
+  <script>
+   var prefs = new _IG_Prefs(__MODULE_ID__);
+
+   var socialWorkspacePath = '/default-domain/workspaces-agora'
+   var getSocialWorkspaceQuery = 'select * from WorkspaceRoot'
+
+   var NXRequestParams={ operationId : 'Document.Query',            // id of operation or chain to execute
+     operationParams : { query : getSocialWorkspaceQuery},    	    // parameters for the chain or operation
+     operationContext : {},                                         // context
+     entityType : 'documents',
+     operationDocumentProperties : "dublincore",
+     displayMethod : displaySocialWorkspaceDescription
+   };
+
+	function disableButton() {
+		_gel("joinButton").disabled = true;
+	}
+
+   function displaySocialWorkspaceDescription(entries) {
+   		msg = ""
+   		if ( entries.length > 0 ) {
+   			msg = entries[0].properties["dc:description"];
+   		}
+   		_gel("socialWorkspaceDescription").innerHTML = msg;
+   }
+
+   // execute automation request onload
+   gadgets.util.registerOnLoadHandler(function() {doAutomationRequest(NXRequestParams);} );
+
+   var NXJoinRequestParams = {
+   		operationId : 'Social.Join',
+   		operationParams : {
+   		 socialWorkspacePath : socialWorkspacePath
+   		},
+   		operationContext : {},
+   		operationCallback : disableButton
+   }
+
+   function joinSocialWorkspace() {
+   	    doAutomationRequest(NXJoinRequestParams);
+   };
+
+  </script>
+  </head>
+   <body>
+    <#include "default-request-controls.ftl"/>
+	<div id="socialWorkspaceDescription">
+
+	</div>
+	<br>
+	<button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.join__</button>
+	<br>
+  </body>
+</html>
+]]>
+  </Content>
+</Module>
