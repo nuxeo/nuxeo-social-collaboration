@@ -95,6 +95,10 @@
     </layout>
 
      <layout name="requests_summary_layout">
+     <properties mode="any">
+        <property name="showListingHeader">true</property>
+        <property name="showRowEvenOddClass">true</property>
+      </properties>
       <templates>
         <template mode="any">/layouts/layout_listing_ajax_template.xhtml</template>
       </templates>
@@ -214,6 +218,9 @@
     </widget>
 
     <widget name="request_user_email" type="template">
+      <labels>
+        <label mode="any">email</label>
+      </labels>
       <fields>
          <field>data.dc.creator</field>
       </fields>
@@ -227,7 +234,7 @@
 
     <widget name="request_username" type="text">
       <labels>
-        <label mode="any">EMAIL</label>
+        <label mode="any">label.username</label>
       </labels>
       <fields>
          <field>data.req.username</field>
