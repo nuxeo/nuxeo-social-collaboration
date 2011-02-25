@@ -14,6 +14,15 @@
           description="Workspace"/>
         <templateItem typeName="Section" id="section" title="Section"
           description="Section"/>
+        <templateItem typeName="RequestRoot" id="requests" title="RequestRoot"
+          description="Requests Container">
+          <acl>
+       		 <ace principal="Administrator" permission="Everything" granted="true"/>
+        	 <ace principal="administrators" permission="Everything" granted="true"/>
+        	 <ace principal="invites" permission="Read" granted="true"/>
+        	 <ace principal="ecp" permission="Write" granted="true"/>
+          </acl>
+        </templateItem>
       </template>
     </factoryBinding>
   </extension>

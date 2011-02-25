@@ -93,6 +93,72 @@
         </row>
       </rows>
     </layout>
+
+     <layout name="requests_summary_layout">
+      <templates>
+        <template mode="any">/layouts/layout_listing_ajax_template.xhtml</template>
+      </templates>
+      <columns>
+        <column name="selection" alwaysSelected="true">
+          <properties mode="any">
+            <property name="isListingSelectionBox">true</property>
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+            <property name="columnStyleClass">iconColumn</property>
+          </properties>
+          <widget>listing_ajax_selection_box</widget>
+        </column>
+        <column>
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="sortPropertyName">req:username</property>
+          </properties>
+          <widget>request_username</widget>
+        </column>
+
+        <column name="creation_date">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="sortPropertyName">dc:created</property>
+            <property name="label">label.dublincore.created</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+           <widget>listing_creation_date</widget>
+        </column>
+
+        <column name="email">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="label">label.email</property>
+          </properties>
+          <widget>request_user_email</widget>
+        </column>
+
+         <column name="lifecycle">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="sortPropertyName">
+              ecm:currentLifeCycleState
+            </property>
+            <property name="label">
+              label.content.header.currentLifecycleState
+            </property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_lifecycle</widget>
+        </column>
+      </columns>
+    </layout>
+
+
+
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
@@ -146,6 +212,31 @@
         <mode value="any">view</mode>
       </widgetModes>
     </widget>
+
+    <widget name="request_user_email" type="template">
+      <fields>
+         <field>data.dc.creator</field>
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/request_user_email_widget_template.xhtml</property>
+      </properties>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
+    </widget>
+
+    <widget name="request_username" type="text">
+      <labels>
+        <label mode="any">EMAIL</label>
+      </labels>
+      <fields>
+         <field>data.req.username</field>
+      </fields>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
+    </widget>
+
 
   </extension>
 

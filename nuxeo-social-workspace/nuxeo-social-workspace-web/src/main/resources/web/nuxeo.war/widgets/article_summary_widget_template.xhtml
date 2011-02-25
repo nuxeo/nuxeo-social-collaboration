@@ -4,6 +4,8 @@
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:nxh="http://nuxeo.org/nxweb/html">
 
+
+
   <c:if test="#{widget.mode == 'view'}">
     <c:set var="cssClass" value="#{nxu:test(!empty widget.properties.cssClass, widget.properties.cssClass, '')}" />
 

@@ -16,6 +16,9 @@
 
 package org.nuxeo.ecm.social.workspace;
 
+import static org.jboss.seam.ScopeType.PAGE;
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.annotations.In;
@@ -29,9 +32,6 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
-
-import static org.jboss.seam.ScopeType.PAGE;
-import static org.jboss.seam.annotations.Install.FRAMEWORK;
 
 /**
  * Bean to manage both groups of a community

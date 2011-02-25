@@ -16,16 +16,9 @@
 
 package org.nuxeo.ecm.social.workspace;
 
-import java.io.Serializable;
-
-import javax.print.Doc;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.model.PropertyException;
 
 /**
  * Class to provide some useful methods
@@ -52,5 +45,6 @@ public class SocialWorkspaceHelper {
     public static String getCommunityMembersGroupName(DocumentModel doc) {
         return doc.getId() + MEMBERS_SUFFIX;
     }
+
 
 }

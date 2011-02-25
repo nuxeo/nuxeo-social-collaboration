@@ -16,7 +16,11 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import java.util.List;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,9 +32,10 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -63,27 +68,20 @@ public class JoinSocialWorkspaceRequest {
             return;
         }
         DocumentModel sws = session.getDocument(new PathRef(socialWorkspacePath));
+
+
         String currentUser = session.getPrincipal().getName();
 
-        DocumentModel principal = userManager.getUserModel(currentUser);
-        List<String> groups = (List<String>) principal.getProperty(
-                userManager.getUserSchemaName(), "groups");
-
-        if (groups.contains(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) { // already
-                                                                                               // an
-                                                                                               // admin
-            return;
+        if ( false  ) { // TODO open social workspace user is added to members group without validation
+            SocialGroupsManagement.acceptMember(sws, currentUser, userManager);
+        } else { // restricted social workspace ; reuqest will be validated by admin
+            DocumentRef requestRootPath = new PathRef(sws.getPathAsString(), REQUEST_ROOT_NAME);
+            DocumentModel request = session.createDocumentModel(requestRootPath.toString(), currentUser, TYPE_REQUEST);
+            request.setPropertyValue(FIELD_REQUEST_USERNAME, currentUser);
+            request.setPropertyValue(FIELD_REQUEST_TYPE, REQUEST_TYPE_JOIN);
+            request = session.createDocument(request);
+            session.save();
         }
-
-        String membersGroup = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
-        if (groups.contains(membersGroup)) { // already a member
-            return;
-        }
-
-        // TODO replace this code with join request validation
-        groups.add(membersGroup);
-        principal.setProperty(userManager.getUserSchemaName(), "groups", groups);
-        userManager.updateUser(principal);
 
     }
 

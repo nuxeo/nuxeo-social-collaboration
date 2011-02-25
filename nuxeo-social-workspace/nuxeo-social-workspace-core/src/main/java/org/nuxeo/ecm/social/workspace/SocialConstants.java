@@ -24,6 +24,18 @@ public class SocialConstants {
 
     public static final String ARTICLE_TYPE = "Article";
 
+    public static final String TYPE_REQUEST = "Request";
+
+    public static final String REQUEST_ROOT_NAME = "requests";
+
+    public static final String REQUEST_TYPE_JOIN = "joinRequest";
+
+    public static final String REQUEST_TYPE_INVITATION = "invitation";
+
+    public static final String FIELD_REQUEST_USERNAME = "req:username";
+
+    public static final String FIELD_REQUEST_TYPE = "req:type";
+
     public static final String ARTICLE_PICTURE_FIELD = "art:picture";
 
     public static final String ARTICLE_SCHEMA = "article";

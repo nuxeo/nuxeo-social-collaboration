@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.ecm.social.workspace.content.views">
+
+<extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
+  point="contentViews">
+
+  <contentView name="requests_view">
+
+    <coreQueryPageProvider>
+      <property name="coreSession">#{documentManager}</property>
+      <pattern>
+        SELECT * FROM Request WHERE ecm:path STARTSWITH ?
+      </pattern>
+      <parameter>#{currentDocument.pathAsString}</parameter>
+      <pageSize>20</pageSize>
+    </coreQueryPageProvider>
+
+    <cacheKey>#{currentDocument.id}</cacheKey>
+    <cacheSize>10</cacheSize>
+    <refresh>
+      <event>documentChanged</event>
+      <event>documentChildrenChanged</event>
+    </refresh>
+
+    <resultLayouts>
+     <layout name="requests_summary_layout" title="document_listing"
+          translateTitle="true" iconPath="/icons/document_listing_icon.png" />
+    </resultLayouts>
+
+    <selectionList>CURRENT_SELECTION</selectionList>
+    <actions category="MANAGE_REQUESTS" />
+
+
+  </contentView>
+
+</extension>
+
+</component>

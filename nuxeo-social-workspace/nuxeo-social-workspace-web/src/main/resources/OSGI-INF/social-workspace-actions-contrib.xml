@@ -28,6 +28,24 @@
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
+    <action id="TAB_MANAGE_REQUESTS"
+      link="/incl/tabs/manage_requests_action_tab.xhtml" order="800"
+      label="action.view.manage.requests" icon="/icons/file.gif">
+      <category>TAB_MANAGE_sub_tab</category>
+      <filter-id>manage_social_workspace</filter-id>
+      <filter-id>workspace_administrator</filter-id>
+    </action>
+
+    <action id="REQUEST_ACCEPT" link="#{requestActions.accept}"
+      label="command.manage.requests.accept" icon="/icons/file.gif">
+      <category>MANAGE_REQUESTS</category>
+    </action>
+
+    <action id="REQUEST_REJECT" link="#{requestActions.reject}"
+      label="command.manage.requests.reject" icon="/icons/file.gif">
+      <category>MANAGE_REQUESTS</category>
+    </action>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
