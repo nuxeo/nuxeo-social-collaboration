@@ -48,6 +48,8 @@ public class SocialConstants {
 
     public static final String FIELD_DC_AUTHOR = "dc:author";
 
+    public static final String FIELD_SOCIAL_IS_RESTRICTED = "soc:isRestricted";
+
     public static final String SOCIAL_WORKSPACE_ACL_NAME = "socialWorkspaceAcl";
 
     public static final String SOCIAL_WORKSPACE_FACET = "SocialWorkspace";

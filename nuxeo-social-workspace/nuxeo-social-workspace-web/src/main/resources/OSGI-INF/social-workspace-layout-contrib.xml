@@ -25,6 +25,9 @@
           <widget>social_isPublic</widget>
         </row>
         <row>
+          <widget>social_isRestricted</widget>
+        </row>
+        <row>
           <widget>expired</widget>
         </row>
       </rows>
@@ -178,6 +181,19 @@
       <translated>true</translated>
       <fields>
         <field>soc:isPublic</field>
+      </fields>
+    </widget>
+
+    <widget name="social_isRestricted" type="checkbox">
+      <labels>
+        <label mode="any">label.widget.social.isRestricted</label>
+      </labels>
+      <helpLabels>
+         <label mode="any">label.widget.social.isRestricted.info</label>
+       </helpLabels>
+      <translated>true</translated>
+      <fields>
+        <field>soc:isRestricted</field>
       </fields>
     </widget>
 

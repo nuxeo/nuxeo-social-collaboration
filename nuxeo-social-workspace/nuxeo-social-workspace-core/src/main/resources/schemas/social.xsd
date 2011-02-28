@@ -5,4 +5,7 @@
 
   <xs:element name="isPublic" type="xs:boolean" default="false" />
 
+  <!-- if true all join request are accepted automatically -->
+  <xs:element name="isRestricted" type="xs:boolean"  default="false"/>
+
 </xs:schema>
