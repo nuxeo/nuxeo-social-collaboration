@@ -4,10 +4,12 @@
     description="Join to Social Workspace gadget"
     author="ei" author_email="ei@nuxeo.com"
     height="420">
+    <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
+  <#include "context-prefs.ftl"/>
   <Content type="html">
 
 <![CDATA[
@@ -17,11 +19,12 @@
   ${jsContext}
 
   <script src="${specDirectoryUrl}default-automation-request.js"></script>
+  <script src="${specDirectoryUrl}context-management.js"></script>
 
   <script>
    var prefs = new _IG_Prefs(__MODULE_ID__);
 
-   var socialWorkspacePath = '/default-domain/workspaces-agora/comm1';
+   var socialWorkspacePath = getTargetContextPath();
    var getSocialWorkspaceQuery = 'select * from SocialWorkspace where ecm:path = \'' + socialWorkspacePath + '\'';
 
    var NXRequestParams={ operationId : 'Document.Query',            // id of operation or chain to execute

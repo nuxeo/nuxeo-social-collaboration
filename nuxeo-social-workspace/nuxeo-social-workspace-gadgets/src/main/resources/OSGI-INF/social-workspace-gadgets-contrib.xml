@@ -12,6 +12,7 @@
 
     <internalGadget name="join" disabled="false">
       <mountPoint>/join</mountPoint>
+      <directory>join</directory>
       <entryPoint>join.xml</entryPoint>
       <category>Nuxeo</category>
       <icon>Nuxeo.png</icon>

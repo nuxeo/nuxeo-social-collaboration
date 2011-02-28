@@ -4,10 +4,12 @@
     description="Diplay articles list using Nuxeo REST Automation API "
     author="ei" author_email="ei@nuxeo.com"
     height="420">
+    <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
+  <#include "context-prefs.ftl"/>
   <Content type="html">
 
 <![CDATA[
@@ -27,7 +29,7 @@
    var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
      operationParams : { query : "Select * from Article",
           pageSize : 5,
-          socialWorkspacePath : '/default-domain/workspaces-agora/comm1'
+          socialWorkspacePath : getTargetContextPath()
      },  // parameters for the chain or operation
      operationContext : {},                                                // context
      operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
