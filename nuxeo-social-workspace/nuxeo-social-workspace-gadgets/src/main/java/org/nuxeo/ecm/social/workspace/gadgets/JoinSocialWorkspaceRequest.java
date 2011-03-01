@@ -33,6 +33,7 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -75,6 +76,14 @@ public class JoinSocialWorkspaceRequest {
         boolean isRestricted = (Boolean) sws.getPropertyValue(FIELD_SOCIAL_IS_RESTRICTED);
 
         if (isRestricted) {
+            String queryTemplate = "SELECT * FROM Request WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
+            String query = String.format( queryTemplate, REQUEST_TYPE_JOIN, currentUser, sws.getId());
+            DocumentModelList list = session.query(query);
+            if ( list != null && list.size() > 0 ){
+                log.debug(String.format("there is already a join reqest from '%s' on '%s' ", currentUser, sws.getPathAsString()));
+                return;
+            }
+
             DocumentRef requestRootPath = new PathRef(sws.getPathAsString(),
                     REQUEST_ROOT_NAME);
             DocumentModel request = session.createDocumentModel(
