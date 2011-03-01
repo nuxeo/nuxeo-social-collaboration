@@ -78,13 +78,14 @@ public class RequestActions implements Serializable {
                 if (TYPE_REQUEST.equals(doc.getType())) {
                     String userName = (String) doc.getPropertyValue(FIELD_REQUEST_USERNAME);
                     boolean ok = SocialGroupsManagement.acceptMember(sws,
-                            userName, userManager);
+                            userName);
                     if (ok) {
                         doc.followTransition(transition);
-                        // TODO send notification mail ECP-117
+                        SocialGroupsManagement.notifyUser(sws, userName,
+                                "accept".equals(transition));
                     }
                 }
-            } catch (ClientException e) {
+            } catch (Exception e) {
                 log.debug("failed to accept request " + doc.getId(), e);
             }
         }

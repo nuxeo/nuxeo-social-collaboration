@@ -16,10 +16,10 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_IS_RESTRICTED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
 
@@ -70,20 +70,25 @@ public class JoinSocialWorkspaceRequest {
         }
         DocumentModel sws = session.getDocument(new PathRef(socialWorkspacePath));
 
-
         String currentUser = session.getPrincipal().getName();
 
         boolean isRestricted = (Boolean) sws.getPropertyValue(FIELD_SOCIAL_IS_RESTRICTED);
 
-        if (  isRestricted ) {
-            DocumentRef requestRootPath = new PathRef(sws.getPathAsString(), REQUEST_ROOT_NAME);
-            DocumentModel request = session.createDocumentModel(requestRootPath.toString(), currentUser, TYPE_REQUEST);
+        if (isRestricted) {
+            DocumentRef requestRootPath = new PathRef(sws.getPathAsString(),
+                    REQUEST_ROOT_NAME);
+            DocumentModel request = session.createDocumentModel(
+                    requestRootPath.toString(), currentUser, TYPE_REQUEST);
             request.setPropertyValue(FIELD_REQUEST_USERNAME, currentUser);
             request.setPropertyValue(FIELD_REQUEST_TYPE, REQUEST_TYPE_JOIN);
+            request.setPropertyValue(FIELD_REQUEST_INFO, sws.getId());
             request = session.createDocument(request);
             session.save();
-        } else { // restricted social workspace ; reuqest will be validated by admin
-            SocialGroupsManagement.acceptMember(sws, currentUser, userManager);
+            SocialGroupsManagement.notifyAdmins(request);
+        } else { // restricted social workspace ; reuqest will be validated by
+                 // admin
+            SocialGroupsManagement.acceptMember(sws, currentUser);
+            SocialGroupsManagement.notifyUser(sws, currentUser, true);
         }
 
     }

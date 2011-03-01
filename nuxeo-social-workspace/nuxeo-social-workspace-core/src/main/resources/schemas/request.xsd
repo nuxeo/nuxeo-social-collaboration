@@ -4,9 +4,9 @@
   xmlns:nxs="http://www.nuxeo.org/ecm/schemas/request/">
 
   <xs:element name="username" type="xs:string" />
+  <xs:element name="type" type="xs:string" />
   <xs:element name="processedDate" type="xs:date" />
   <xs:element name="processedComment" type="xs:string" />
-  <xs:element name="type" type="xs:string" />
-
+  <xs:element name="info" type="xs:string" />
 
 </xs:schema>

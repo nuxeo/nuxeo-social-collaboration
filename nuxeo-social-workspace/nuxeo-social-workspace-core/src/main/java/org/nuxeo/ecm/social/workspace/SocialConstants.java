@@ -28,6 +28,8 @@ public class SocialConstants {
 
     public static final String REQUEST_ROOT_NAME = "requests";
 
+    public static final String REQUEST_SCHEMA = "request";
+
     public static final String REQUEST_TYPE_JOIN = "joinRequest";
 
     public static final String REQUEST_TYPE_INVITATION = "invitation";
@@ -35,6 +37,12 @@ public class SocialConstants {
     public static final String FIELD_REQUEST_USERNAME = "req:username";
 
     public static final String FIELD_REQUEST_TYPE = "req:type";
+
+    public static final String FIELD_REQUEST_INFO = "req:info";
+
+    public static final String FIELD_REQUEST_PROCESSED_DATE = "req:processedDate";
+
+    public static final String FIELD_REQUEST_PROCESSED_COMMENT = "req:processedComment";
 
     public static final String ARTICLE_PICTURE_FIELD = "art:picture";
 

@@ -7,8 +7,14 @@
 
   <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService"
     point="adapters">
-    <adapter class="org.nuxeo.ecm.social.workspace.ArticleAdapter"
-      factory="org.nuxeo.ecm.social.workspace.AdapterFactory" />
+    <adapter class="org.nuxeo.ecm.social.workspace.adapters.ArticleAdapter"
+      factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
+  </extension>
+
+   <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService"
+    point="adapters">
+    <adapter class="org.nuxeo.ecm.social.workspace.adapters.RequestAdapter"
+      factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
   </extension>
 
 </component>
