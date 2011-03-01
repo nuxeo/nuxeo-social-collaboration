@@ -90,7 +90,6 @@ public class JoinSocialWorkspaceRequest {
             SocialGroupsManagement.acceptMember(sws, currentUser);
             SocialGroupsManagement.notifyUser(sws, currentUser, true);
         }
-
     }
 
 }

@@ -92,4 +92,17 @@ public class RequestActions implements Serializable {
         documentManager.save();
     }
 
+    public boolean enableRequestActions() throws ClientException{
+        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        if ( list.size() == 0 ){
+            return false;
+        }
+        for ( DocumentModel doc : list) {
+            if ( !"pending".equals(doc.getCurrentLifeCycleState())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
