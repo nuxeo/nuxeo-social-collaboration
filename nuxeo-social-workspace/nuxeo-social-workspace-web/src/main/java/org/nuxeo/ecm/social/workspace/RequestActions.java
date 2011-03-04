@@ -77,28 +77,31 @@ public class RequestActions implements Serializable {
             try {
                 if (TYPE_REQUEST.equals(doc.getType())) {
                     String userName = (String) doc.getPropertyValue(FIELD_REQUEST_USERNAME);
-                    boolean ok = SocialGroupsManagement.acceptMember(sws,
-                            userName);
+                    boolean ok = true;
+                    boolean accept = "accept".equals(transition);
+                    if (accept) {
+                        ok = SocialGroupsManagement.acceptMember(sws, userName);
+                    }
                     if (ok) {
                         doc.followTransition(transition);
-                        SocialGroupsManagement.notifyUser(sws, userName,
-                                "accept".equals(transition));
+                        SocialGroupsManagement.notifyUser(sws, userName, accept);
                     }
+
                 }
             } catch (Exception e) {
-                log.debug("failed to accept request " + doc.getId(), e);
+                log.debug("failed to procees the request ... " + doc.getId(), e);
             }
         }
         documentManager.save();
     }
 
-    public boolean enableRequestActions() throws ClientException{
+    public boolean enableRequestActions() throws ClientException {
         List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
-        if ( list.size() == 0 ){
+        if (list.size() == 0) {
             return false;
         }
-        for ( DocumentModel doc : list) {
-            if ( !"pending".equals(doc.getCurrentLifeCycleState())) {
+        for (DocumentModel doc : list) {
+            if (!"pending".equals(doc.getCurrentLifeCycleState())) {
                 return false;
             }
         }

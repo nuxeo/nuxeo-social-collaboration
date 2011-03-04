@@ -80,7 +80,7 @@ public class JoinSocialWorkspaceRequest {
             String query = String.format( queryTemplate, REQUEST_TYPE_JOIN, currentUser, sws.getId());
             DocumentModelList list = session.query(query);
             if ( list != null && list.size() > 0 ){
-                log.debug(String.format("there is already a join reqest from '%s' on '%s' ", currentUser, sws.getPathAsString()));
+                log.debug(String.format("there is already a join request from '%s' on '%s' ", currentUser, sws.getPathAsString()));
                 return;
             }
 
