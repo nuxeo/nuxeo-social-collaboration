@@ -75,7 +75,8 @@
 
       </div>
       <br>
-      <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.join__</button>
+      <p>__MSG_label.gadget.joinDescription__</p>
+      <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.gadget.joinButton__</button>
       <br>
     </body>
 </html>
