@@ -45,10 +45,14 @@
    			msg = entries[0].properties["dc:description"];
    		}
    		_gel("socialWorkspaceDescription").innerHTML = msg;
+   		gadgets.window.adjustHeight();
    }
 
    // execute automation request onload
-   gadgets.util.registerOnLoadHandler(function() {doAutomationRequest(NXRequestParams);} );
+   gadgets.util.registerOnLoadHandler(function() {
+     doAutomationRequest(NXRequestParams);
+     gadgets.window.adjustHeight();
+   } );
 
    var NXJoinRequestParams = {
    		operationId : 'Social.Join',
@@ -65,15 +69,15 @@
 
   </script>
   </head>
-   <body>
-    <#include "default-request-controls.ftl"/>
-	<div id="socialWorkspaceDescription">
+    <body>
+      <#include "default-request-controls.ftl"/>
+      <div id="socialWorkspaceDescription">
 
-	</div>
-	<br>
-	<button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.join__</button>
-	<br>
-  </body>
+      </div>
+      <br>
+      <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.join__</button>
+      <br>
+    </body>
 </html>
 ]]>
   </Content>
