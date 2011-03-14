@@ -49,7 +49,7 @@
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_DASHBOARD" link="/incl/tabs/social_workspace_dashboard.xhtml" order="5"
-      label="action.view.content" icon="/icons/file.gif">
+      label="action.view.dashboard" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>social_workspace</filter-id>
     </action>
