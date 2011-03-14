@@ -89,7 +89,7 @@ public class JoinSocialWorkspaceRequest {
             request = session.createDocument(request);
             session.save();
             SocialGroupsManagement.notifyAdmins(request);
-        } else { // restricted social workspace ; reuqest will be validated by
+        } else { // restricted social workspace ; request will be validated by
                  // admin
             SocialGroupsManagement.acceptMember(sws, currentUser);
             SocialGroupsManagement.notifyUser(sws, currentUser, true);

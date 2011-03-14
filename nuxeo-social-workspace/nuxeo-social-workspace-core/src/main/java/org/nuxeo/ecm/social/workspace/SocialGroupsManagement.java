@@ -40,8 +40,9 @@ import org.nuxeo.ecm.social.workspace.adapters.RequestAdapter;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a> helper class for group
- *         members management ...
+ * Helper class for group members management
+ *
+ * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 public class SocialGroupsManagement {
 
@@ -56,7 +57,7 @@ public class SocialGroupsManagement {
     static UserManager userManager = null;
 
     private static final Log log = LogFactory.getLog(SocialGroupsManagement.class);
-    
+
     private SocialGroupsManagement() {
     }
 
@@ -90,9 +91,8 @@ public class SocialGroupsManagement {
             return;
         }
 
-        String subject = null;
-
-        String template = null;
+        String subject;
+        String template;
         if (accepted) {
             template = loadTemplate(TEMPLATE_JOIN_REQUEST_ACCEPTED);
             subject = "Join request accepted";
@@ -110,18 +110,14 @@ public class SocialGroupsManagement {
                 .set("subject", subject)
                 .set("HTML", true)
                 .set("message", template);
-
         getAutomationService().run(ctx, chain);
     }
-
 
     public static void notifyAdmins(DocumentModel request) throws Exception {
         CoreSession session = CoreInstance.getInstance().getSession(request.getSessionId());
         RequestAdapter requestAdapter = request.getAdapter(RequestAdapter.class);
 
         DocumentModel socialWorkspace = session.getDocument(new IdRef(requestAdapter.getInfo()));
-
-
         String adminGroupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace);
         NuxeoGroup adminGroup = getUserManager().getGroup(adminGroupName);
         List<String> admins = adminGroup.getMemberUsers();
@@ -144,7 +140,6 @@ public class SocialGroupsManagement {
         }
 
         Expression subject = Scripting.newTemplate("Join request received from ${Context.principal.firstName} ${Context.principal.lastName} ");
-        Expression email = Scripting.newTemplate("${Context.principal.email} ");
         String template = loadTemplate(TEMPLATE_JOIN_REQUEST_RECEIVED);
 
         OperationContext ctx = new OperationContext(session);
@@ -156,9 +151,7 @@ public class SocialGroupsManagement {
                 .set("subject", subject)
                 .set("HTML", true)
                 .set("message", template);
-
         getAutomationService().run(ctx, chain);
-
     }
 
     private static AutomationService getAutomationService() throws Exception {
@@ -180,8 +173,7 @@ public class SocialGroupsManagement {
         InputStream io = SocialGroupsManagement.class.getClassLoader().getResourceAsStream(key);
         if (io != null) {
             try {
-                String s = FileUtils.read(io);
-                return s;
+                return FileUtils.read(io);
             } finally {
                 io.close();
             }
