@@ -25,10 +25,10 @@ import org.nuxeo.ecm.core.api.model.PropertyException;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 public class BaseAdapter {
-    DocumentModel doc;
+
+    final DocumentModel doc;
 
     public BaseAdapter(DocumentModel doc) {
         this.doc = doc;

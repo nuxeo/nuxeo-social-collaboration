@@ -28,7 +28,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
  */
 public class SocialWorkspaceHelper {
 
-	private static final Log log = LogFactory.getLog(SocialWorkspaceHelper.class);
+    private static final Log log = LogFactory.getLog(SocialWorkspaceHelper.class);
 
     public static final String ADMINISTRATORS_SUFFIX = "_administrators";
 
@@ -45,6 +45,5 @@ public class SocialWorkspaceHelper {
     public static String getCommunityMembersGroupName(DocumentModel doc) {
         return doc.getId() + MEMBERS_SUFFIX;
     }
-
 
 }

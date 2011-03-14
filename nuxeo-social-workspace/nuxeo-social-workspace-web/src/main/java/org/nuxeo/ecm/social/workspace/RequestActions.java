@@ -39,14 +39,13 @@ import org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager;
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
-
 @Name("requestActions")
 @Scope(ScopeType.CONVERSATION)
 public class RequestActions implements Serializable {
 
     private static final long serialVersionUID = -7362146679190186610L;
 
-    private static Log log = LogFactory.getLog(RequestActions.class);
+    private static final Log log = LogFactory.getLog(RequestActions.class);
 
     @In(create = true, required = false)
     protected transient CoreSession documentManager;

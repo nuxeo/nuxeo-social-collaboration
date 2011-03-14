@@ -34,7 +34,7 @@ import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 
 /**
- * Bean to manage both groups of a community
+ * Bean to manage both groups of a community.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.1
@@ -44,24 +44,24 @@ import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 @Install(precedence = FRAMEWORK)
 public class ManageSocialWorkspaceActions {
 
-    private static Log log = LogFactory.getLog(ManageSocialWorkspaceActions.class);
-
     public static final String GROUPS_SAVE_COMPLETED_LABEL = "label.social.workspace.faces.saveCompleted";
 
     public static final String GROUPS_SAVE_ERROR_LABEL = "label.social.workspace.faces.saveError";
+
+    private static final Log log = LogFactory.getLog(ManageSocialWorkspaceActions.class);
 
     protected DocumentModel administratorsGroup = null;
 
     protected DocumentModel membersGroup = null;
 
     @In(create = true)
-    protected transient UserManager userManager;
+    protected UserManager userManager;
 
     @In(create = true)
-    protected transient NavigationContext navigationContext;
+    protected NavigationContext navigationContext;
 
     @In(create = true, required = false)
-    protected transient FacesMessages facesMessages;
+    protected FacesMessages facesMessages;
 
     @In(create = true)
     protected ResourcesAccessor resourcesAccessor;

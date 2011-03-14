@@ -17,11 +17,6 @@
 package org.nuxeo.ecm.social.workspace.gadgets;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_IS_RESTRICTED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
