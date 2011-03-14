@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.notifications">
+
+  <extension
+    target="org.nuxeo.ecm.platform.ec.notification.service.NotificationService"
+    point="notifications">
+
+    <notification name="Subscriptions updated" channel="email" enabled="true" availableIn="SocialWorkspace"
+      autoSubscribed="true" template="subscriptionsUpdated" subject="New subscription" label="label.nuxeo.notifications.subscriptions.updated">
+      <event name="subscriptionAssigned"/>
+    </notification>
+
+    <notification name="Modification" channel="email" enabled="true" availableIn="SocialWorkspace"
+      autoSubscribed="false" template="modif" subject="Document modified" label="label.nuxeo.notifications.modif">
+      <event name="documentModified"/>
+    </notification>
+
+    <notification name="Creation" channel="email" enabled="true" availableIn="SocialWorkspace"
+      autoSubscribed="false" template="modif" subject="Document created" label="label.nuxeo.notifications.create">
+      <event name="documentCreated"/>
+    </notification>
+
+    <notification name="Workflow Change" channel="email" enabled="true" availableIn="SocialWorkspace"
+      autoSubscribed="false" template="workflow" subject="Workflow event" label="label.nuxeo.notifications.workflow">
+      <event name="workflowNewProcessStarted"/>
+      <event name="workflowProcessEnded"/>
+      <event name="workflowProcessCanceled"/>
+      <event name="workflowAbandoned"/>
+      <event name="workflowTaskCompleted"/>
+      <event name="workflowTaskRejected"/>
+      <event name="workflowTaskAssigned"/>
+    </notification>
+
+    <notification name="Approbation review started" channel="email" enabled="true" availableIn="SocialWorkspace"
+      autoSubscribed="false" template="aprobationWorkflowStarted" subject="Review started for ${docTitle}"
+      label="label.nuxeo.notifications.appReviewStarted">
+      <event name="workflowNewProcessStarted"/>
+    </notification>
+
+    <notification name="Task assigned" channel="email" enabled="true" availableIn="SocialWorkspace"
+      autoSubscribed="true" template="workflowTaskAssigned" subject="Task Assigned for ${docTitle}"
+      label="label.nuxeo.notifications.appReviewStarted">
+      <event name="workflowTaskAssigned"/>
+    </notification>
+
+    <notification name="CommentPublication" channel="email" enabled="true" availableIn="SocialWorkspace"
+      autoSubscribed="false" template="comment" subject="Comment published" label="notifications.name.Comments">
+      <event name="commentPublished"/>
+    </notification>
+
+  </extension>
+
+</component>
