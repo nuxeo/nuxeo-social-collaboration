@@ -7,7 +7,7 @@
       <mountPoint>/articles</mountPoint>
       <entryPoint>articles.xml</entryPoint>
       <category>Nuxeo</category>
-      <icon>Nuxeo.png</icon>
+      <icon>gadget-article.png</icon>
     </internalGadget>
 
     <internalGadget name="join" disabled="false">
@@ -15,7 +15,7 @@
       <directory>join</directory>
       <entryPoint>join.xml</entryPoint>
       <category>Nuxeo</category>
-      <icon>Nuxeo.png</icon>
+      <icon>gadget-join.png</icon>
     </internalGadget>
 
   </extension>
