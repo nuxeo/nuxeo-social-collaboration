@@ -18,6 +18,8 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.nuxeo.ecm.spaces.api.Constants.SPACE_DOCUMENT_TYPE;
 
+import java.util.Map;
+
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -41,7 +43,7 @@ public class SocialWorkspaceSpaceProvider extends AbstractSpaceProvider {
 
     @Override
     protected Space doGetSpace(CoreSession session,
-            DocumentModel contextDocument, String spaceName)
+            DocumentModel contextDocument, String spaceName, Map<String, String> parameters)
             throws SpaceException {
         if (spaceName == null || spaceName.isEmpty()) {
             spaceName = DEFAULT_SPACE_NAME;
