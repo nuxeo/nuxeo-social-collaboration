@@ -60,7 +60,7 @@ public class ArticleAdapterImpl extends BaseAdapter implements ArticleAdapter {
         String s = getContent();
         if (s != null) {
             int length = s.length();
-            s.substring(0, n < length ? n : length);
+            return s.substring(0, n < length ? n : length);
         }
         return "";
     }
@@ -74,7 +74,5 @@ public class ArticleAdapterImpl extends BaseAdapter implements ArticleAdapter {
     public void setContent(String text) {
         setDocProperty(doc, FIELD_NOTE_NOTE, text);
     }
-
-
 
 }

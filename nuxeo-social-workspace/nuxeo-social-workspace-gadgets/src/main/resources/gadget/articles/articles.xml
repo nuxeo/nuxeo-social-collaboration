@@ -16,44 +16,21 @@
 <html>
   <head>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}documentlists.css"/>
+  <link rel="stylesheet" type="text/css" href="articles.css"/>
+
   <!-- insert JS Context -->
   ${jsContext}
 
   <script src="${specDirectoryUrl}default-automation-request.js"></script>
-  <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
   <script src="${specDirectoryUrl}context-management.js"></script>
+  <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
+  <script type="text/javascript" language="javascript" src="articles.js"></script>
 
-  <script>
-   var prefs = new _IG_Prefs(__MODULE_ID__);
-
-   // configure Automation REST call
-   var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
-     operationParams : { query : "Select * from Article",
-          pageSize : 5,
-          socialWorkspacePath : getTargetContextPath()
-     },  // parameters for the chain or operation
-     operationContext : {},                                                // context
-     operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
-     entityType : 'documents',                                             // result type : only document is supported for now
-     usePagination : true,                                                 // manage pagination or not
-     displayMethod : displayDocumentList,                                  // js method used to display the result
-     displayColumns : [ { type: 'builtin', field: 'icon'},                 // minimalist layout listing
-                      { type: 'builtin', field: 'titleWithLink', label: '__MSG_label.dublincore.title__'},
-                      { type: 'date', field: 'dc:modified', label: '__MSG_label.dublincore.modified__'},
-                      { type: 'text', field: 'dc:creator', label: '__MSG_label.dublincore.creator__'},
-                      { type: 'text', field: 'note:note', label: '__MSG_label.article.abstract__'}
-                      ]
-   };
-
-   // execute automation request onload
-   gadgets.util.registerOnLoadHandler(function() {doAutomationRequest(NXRequestParams);} );
-
-  </script>
   </head>
-   <body>
 
-   <#include "default-documentlist-layout.ftl"/>
-   <#include "default-request-controls.ftl"/>
+  <body>
+    <#include "default-documentlist-layout.ftl"/>
+    <#include "default-request-controls.ftl"/>
 
   </body>
 </html>
