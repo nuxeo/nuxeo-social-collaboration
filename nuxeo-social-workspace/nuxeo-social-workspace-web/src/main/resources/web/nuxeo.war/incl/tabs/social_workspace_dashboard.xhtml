@@ -28,7 +28,15 @@
 
     <ui:decorate template="/incl/opensocial_container_template.xhtml">
 
-      <ui:define name="opensocial_container_title">
+      <ui:define name="opensocial_container_actions">
+        <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">
+          <div class="opensocial_buttons">
+            <ul>
+              <li><a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a></li>
+              <li><a onclick="showPopup('#{baseURL}site/gadgets/?mode=popup');" title="#{messages['label.opensocial.container.add.gadget']}">#{messages['label.opensocial.container.add.gadget']}</a></li>
+            </ul>
+          </div>
+        </c:if>
       </ui:define>
 
     </ui:decorate>
