@@ -25,8 +25,9 @@ function displayArticles(entries, nxParams) {
   for (var i = 0; i < entries.length; i++) {
     var entry = entries[i];
     var date = new Date(entry.properties["dc:modified"]);
+    html += '<div class="article">';
     html += '<p>' + entry.properties["dc:creator"] + ', ' + date.toLocaleDateString() + ' - ';
-    html += '<a target ="_top" title="';
+    html += '<a target ="_top" class="article_title" title="';
     html += entry.title;
     html += "\" href=\"";
     html += NXGadgetContext.clientSideBaseUrl;
@@ -39,7 +40,7 @@ function displayArticles(entries, nxParams) {
     var text = entry.properties["note:note"];
     text = text.substring(0, text.length > 300 ? 300 : text.length);
     html += '<p>' + text + '</p>';
-    html += '<hr/>';
+    html += '</div>';
   }
 
   _gel('navFirstPage').onclick = function(e) {

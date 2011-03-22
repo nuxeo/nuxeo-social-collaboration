@@ -15,7 +15,8 @@
 <![CDATA[
 <html>
   <head>
-  <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}documentlists.css"/>
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/documentlists.css"/>
   <link rel="stylesheet" type="text/css" href="articles.css"/>
 
   <!-- insert JS Context -->
@@ -29,11 +30,13 @@
   </head>
 
   <body>
-    <#include "default-documentlist-layout.ftl"/>
-    <#include "default-request-controls.ftl"/>
-
+     <div class="content">
+      <#include "default-documentlist-layout.ftl"/>
+      <#include "default-request-controls.ftl"/>
+    </div>
   </body>
 </html>
 ]]>
+
   </Content>
 </Module>

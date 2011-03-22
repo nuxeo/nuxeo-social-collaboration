@@ -15,6 +15,9 @@
 <![CDATA[
 <html>
   <head>
+
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
+
   <!-- insert JS Context -->
   ${jsContext}
 
@@ -70,14 +73,14 @@
   </script>
   </head>
     <body>
-      <#include "default-request-controls.ftl"/>
-      <div id="socialWorkspaceDescription">
 
+      <div class="content">
+        <#include "default-request-controls.ftl"/>
+        <p id="socialWorkspaceDescription">
+        </p>
+        <p>__MSG_label.gadget.joinDescription__</p>
+        <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.gadget.joinButton__</button>
       </div>
-      <br>
-      <p>__MSG_label.gadget.joinDescription__</p>
-      <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.gadget.joinButton__</button>
-      <br>
     </body>
 </html>
 ]]>
