@@ -7,21 +7,6 @@
   xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
   xmlns:nxu="http://nuxeo.org/nxweb/util">
 
-  <script type="text/javascript">
-    function addStylesheet(stylesheetUrl) {
-      var cssNode = document.createElement('link');
-      cssNode.type = 'text/css';
-      cssNode.rel = 'stylesheet';
-      cssNode.href = stylesheetUrl;
-      cssNode.media = 'screen';
-      document.getElementsByTagName("head")[0].appendChild(cssNode);
-    }
-
-    addStylesheet('#{baseURL}opensocial/css/reset-fonts-grids.css');
-    addStylesheet('#{baseURL}opensocial/css/container.css');
-    addStylesheet('#{baseURL}opensocial/css/gadgets.css');
-  </script>
-
   <nxu:set var="repositoryName" value="#{currentDocument.repositoryName}">
   <nxu:set var="spaceProviderName" value="socialWorkspaceSpaceProvider">
   <nxu:set var="documentContextId" value="#{currentDocument.id}">
@@ -33,7 +18,7 @@
           <div class="opensocial_buttons">
             <ul>
               <li><a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a></li>
-              <li><a onclick="showPopup('#{baseURL}site/gadgets/?mode=popup');" title="#{messages['label.opensocial.container.add.gadget']}">#{messages['label.opensocial.container.add.gadget']}</a></li>
+              <li><a id="addGadgetButton" href="#{baseURL}site/gadgets">#{messages['label.opensocial.container.add.gadget']}</a></li>
             </ul>
           </div>
         </c:if>
