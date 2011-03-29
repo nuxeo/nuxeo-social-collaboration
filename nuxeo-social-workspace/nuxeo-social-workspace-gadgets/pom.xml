@@ -34,6 +34,16 @@
       <artifactId>nuxeo-platform-test</artifactId>
       <scope>test</scope>
     </dependency>
+        <dependency>
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+      <classifier>jdk15</classifier>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.ezmorph</groupId>
+      <artifactId>ezmorph</artifactId>
+    </dependency>
+
    </dependencies>
 
 

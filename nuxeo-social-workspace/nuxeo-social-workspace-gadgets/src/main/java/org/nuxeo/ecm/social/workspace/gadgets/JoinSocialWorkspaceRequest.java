@@ -71,10 +71,7 @@ public class JoinSocialWorkspaceRequest {
         boolean isRestricted = (Boolean) sws.getPropertyValue(FIELD_SOCIAL_IS_RESTRICTED);
 
         if (isRestricted) {
-            String queryTemplate = "SELECT * FROM Request WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
-            String query = String.format( queryTemplate, REQUEST_TYPE_JOIN, currentUser, sws.getId());
-            DocumentModelList list = session.query(query);
-            if ( list != null && list.size() > 0 ){
+            if ( SocialGroupsManagement.isRequestPending(sws, currentUser)) {
                 log.debug(String.format("there is already a join request from '%s' on '%s' ", currentUser, sws.getPathAsString()));
                 return;
             }

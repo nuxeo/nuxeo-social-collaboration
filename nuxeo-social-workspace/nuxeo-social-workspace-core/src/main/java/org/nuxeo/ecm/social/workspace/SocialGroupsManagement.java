@@ -16,6 +16,8 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -32,6 +34,7 @@ import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -80,6 +83,31 @@ public class SocialGroupsManagement {
         getUserManager().updateUser(principal);
         return true;
     }
+
+    public static boolean isMember(DocumentModel sws, String user) throws Exception {
+        NuxeoPrincipal nuxeoPrincipal = getUserManager().getPrincipal(user);
+        List<String> groups = nuxeoPrincipal.getGroups();
+        if (groups.contains(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) {
+            return true;
+        }
+        String membersGroup = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
+        if (groups.contains(membersGroup)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isRequestPending(DocumentModel sws, String user) throws Exception {
+        CoreSession session = CoreInstance.getInstance().getSession(sws.getSessionId());
+        String queryTemplate = "SELECT * FROM Request WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
+        String query = String.format( queryTemplate, REQUEST_TYPE_JOIN, user, sws.getId());
+        DocumentModelList list = session.query(query);
+        if ( list != null && list.size() > 0 ){
+            return true;
+        }
+        return false;
+    }
+
 
     public static void notifyUser(DocumentModel socialWorkspace, String username, boolean accepted) throws Exception {
         CoreSession session = CoreInstance.getInstance().getSession(socialWorkspace.getSessionId());
