@@ -45,9 +45,7 @@ import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;
 public class GetUserSocialWorkspaceStatute {
 
     enum Statute {
-        NOT_MEMBER,
-        REQUEST_PENDING,
-        MEMBER
+        NOT_MEMBER, REQUEST_PENDING, MEMBER
     };
 
     public static final String ID = "SocialWorkspace.Statute";
@@ -70,16 +68,17 @@ public class GetUserSocialWorkspaceStatute {
     public Blob run() throws Exception {
         String currentUser = session.getPrincipal().getName();
         DocumentModel sws = session.getDocument(new PathRef(socialWorkspacePath));
-        if ( SocialGroupsManagement.isMember(sws, currentUser)){
-            return buildResponse(sws, Statute.NOT_MEMBER);
+        if (SocialGroupsManagement.isMember(sws, currentUser)) {
+            return buildResponse(sws, Statute.MEMBER);
         }
-        if ( SocialGroupsManagement.isRequestPending(sws, currentUser)){
+        if (SocialGroupsManagement.isRequestPending(sws, currentUser)) {
             return buildResponse(sws, Statute.REQUEST_PENDING);
         }
         return buildResponse(sws, Statute.NOT_MEMBER);
     }
 
-    protected Blob buildResponse( DocumentModel sws, Statute statute) throws PropertyException, ClientException{
+    protected Blob buildResponse(DocumentModel sws, Statute statute)
+            throws PropertyException, ClientException {
         JSONObject obj = new JSONObject();
         obj.element("statute", statute);
         obj.element("title", sws.getPropertyValue("dc:title"));

@@ -138,7 +138,11 @@ public class SocialGroupsManagement {
                 .set("subject", subject)
                 .set("HTML", true)
                 .set("message", template);
-        getAutomationService().run(ctx, chain);
+        try {
+            getAutomationService().run(ctx, chain);
+        } catch (Exception e ) {
+            log.warn("failed to notify users", e);
+        }
     }
 
     public static void notifyAdmins(DocumentModel request) throws Exception {
@@ -179,7 +183,11 @@ public class SocialGroupsManagement {
                 .set("subject", subject)
                 .set("HTML", true)
                 .set("message", template);
-        getAutomationService().run(ctx, chain);
+        try {
+            getAutomationService().run(ctx, chain);
+        } catch (Exception e ) {
+            log.warn("failed to notify admins", e);
+        }
     }
 
     private static AutomationService getAutomationService() throws Exception {
