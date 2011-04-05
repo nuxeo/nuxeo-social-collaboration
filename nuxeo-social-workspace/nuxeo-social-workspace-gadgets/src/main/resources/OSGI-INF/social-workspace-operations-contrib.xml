@@ -14,7 +14,7 @@
       class="org.nuxeo.ecm.social.workspace.gadgets.JoinSocialWorkspaceRequest" />
 
 	<operation
-      class="org.nuxeo.ecm.social.workspace.gadgets.GetUserSocialWorkspaceStatute" />
+      class="org.nuxeo.ecm.social.workspace.gadgets.GetUserSocialWorkspaceStatus" />
 
   </extension>
 

@@ -39,7 +39,7 @@
    //};
 
    var NXRequestParams = {
-   		operationId : 'SocialWorkspace.Statute',
+   		operationId : 'SocialWorkspace.UserStatus',
    		operationParams : {
    		 socialWorkspacePath : socialWorkspacePath
    		},
@@ -65,7 +65,7 @@
    }
 
    function displayStatut(response, nxParams) {
-   		statute = response.data["statute"];
+   		statute = response.data["status"];
    		_gel("socialWorkspaceDescription").innerHTML = response.data["description"];
 		if ( "REQUEST_PENDING" == statute ) {
 			_gel("statusMessage").innerHTML = "__MSG_label.request.alreadyRegistered__";
