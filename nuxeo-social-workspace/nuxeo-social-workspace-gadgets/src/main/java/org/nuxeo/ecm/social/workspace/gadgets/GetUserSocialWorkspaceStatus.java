@@ -16,6 +16,9 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
@@ -31,6 +34,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -75,12 +79,13 @@ public class GetUserSocialWorkspaceStatus {
     }
 
     protected Blob buildResponse(DocumentModel sws, Status status)
-            throws PropertyException, ClientException {
+            throws PropertyException, ClientException,
+            UnsupportedEncodingException {
         JSONObject obj = new JSONObject();
         obj.element("status", status);
         obj.element("title", sws.getPropertyValue("dc:title"));
         obj.element("description", sws.getPropertyValue("dc:description"));
-        return new StringBlob(obj.toString(), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(obj.toString().getBytes("UTF-8")), "application/json");
     }
 
 }
