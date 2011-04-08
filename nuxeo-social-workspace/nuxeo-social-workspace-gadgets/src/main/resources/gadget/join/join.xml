@@ -101,7 +101,7 @@
   </head>
     <body>
 
-      <div class="content">
+      <div id="content">
         <#include "default-request-controls.ftl"/>
         <p id="socialWorkspaceDescription">
         </p>
