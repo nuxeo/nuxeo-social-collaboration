@@ -62,7 +62,7 @@
       </templates>
       <rows>
         <row>
-          <widget>social_isPublic</widget>
+          <widget>social_isPublicArticle</widget>
         </row>
         <row>
           <widget>article_picture</widget>
@@ -183,6 +183,20 @@
         <field>soc:isPublic</field>
       </fields>
     </widget>
+
+     <widget name="social_isPublicArticle" type="checkbox">
+      <labels>
+        <label mode="any">label.widget.social.isPublic</label>
+      </labels>
+      <helpLabels>
+         <label mode="any">label.widget.social.isPublicArticle.info</label>
+       </helpLabels>
+      <translated>true</translated>
+      <fields>
+        <field>soc:isPublic</field>
+      </fields>
+    </widget>
+
 
     <widget name="social_isRestricted" type="checkbox">
       <labels>
