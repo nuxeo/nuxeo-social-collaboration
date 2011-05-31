@@ -8,4 +8,7 @@
   <xs:element name="picturename" type="xs:string" />
   <xs:element name="picture" type="nxs:content" />
 
+  <xs:element name="catchphrase" type="xs:string" />
+
+
 </xs:schema>

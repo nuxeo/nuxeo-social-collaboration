@@ -63,7 +63,11 @@ public class SocialConstants {
     public static final String SOCIAL_WORKSPACE_FACET = "SocialWorkspace";
 
     public static final String SOCIAL_WORKSPACE_TYPE = "SocialWorkspace";
-    
+
+    public static final String COMMUNITY_DOCUMENT_FACET = "CommunityDocument";
+
+    public static final String NEWS_TYPE = "News";
+
     private SocialConstants() {
     }
 

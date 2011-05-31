@@ -14,14 +14,26 @@
       <schema name="social"/>
     </facet>
 
+<facet name="CommunityDocument">
+      <schema name="article"/>
+    </facet>
+
+
     <doctype name="SocialWorkspace" extends="Workspace">
       <facet name="SocialWorkspace" />
     </doctype>
+
+
 
     <doctype name="Article" extends="Note">
       <schema name="social"/>
       <schema name="article"/>
     </doctype>
+
+    <doctype name="News" extends="Note">
+      <facet name="CommunityDocument" />
+    </doctype>
+
 
     <doctype name="Request" extends="Document">
       <schema name="dublincore"/>
@@ -31,6 +43,11 @@
     <doctype name="RequestRoot" extends="Folder">
       <facet name="HiddenInNavigation" />
     </doctype>
+
+    <doctype name="SocialPublication" extends="Section">
+      <facet name="HiddenInNavigation" />
+    </doctype>
+
 
   </extension>
 

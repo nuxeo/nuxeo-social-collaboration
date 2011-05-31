@@ -16,8 +16,13 @@
 
 package org.nuxeo.ecm.social.workspace;
 
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
@@ -34,6 +39,8 @@ public class SocialWorkspaceHelper {
 
     public static final String MEMBERS_SUFFIX = "_members";
 
+    public static final String COMMUNITY_FACET = "CommunityFacet";
+
     private SocialWorkspaceHelper() {
         // Helper class
     }
@@ -45,5 +52,38 @@ public class SocialWorkspaceHelper {
     public static String getCommunityMembersGroupName(DocumentModel doc) {
         return doc.getId() + MEMBERS_SUFFIX;
     }
+
+    public static boolean couldDocumentBePublished(CoreSession session,
+            DocumentModel news) throws ClientException {
+        List<DocumentModel> parents = session.getParentDocuments(news.getRef());
+        return couldDocumentBePublished(parents, news);
+    }
+
+    protected static boolean couldDocumentBePublished(List<DocumentModel> parents,
+            DocumentModel news) {
+        for (DocumentModel currentParent : parents) {
+            if (isSocialWorkspace(currentParent)) {
+                if (log.isDebugEnabled()) {
+                    log.debug(String.format(
+                            "There is a %s as parent for the document \"%s\" and it's : \"%s\"",
+                            SocialConstants.SOCIAL_WORKSPACE_TYPE,
+                            news.toString(), currentParent.toString()));
+                }
+                return news.hasFacet(SocialConstants.COMMUNITY_DOCUMENT_FACET);
+            }
+
+        }
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("There is no %s as parent for the document \"%s\"",
+                    SocialConstants.SOCIAL_WORKSPACE_TYPE, news.toString()));
+        }
+        return false;
+    }
+
+    public static boolean isSocialWorkspace(DocumentModel community) {
+        return community != null
+                && SocialConstants.SOCIAL_WORKSPACE_TYPE.equals(community.getType());
+    }
+
 
 }

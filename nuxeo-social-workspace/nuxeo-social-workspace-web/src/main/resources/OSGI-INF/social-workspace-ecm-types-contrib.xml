@@ -3,7 +3,8 @@
 
   <require>org.nuxeo.ecm.platform.types</require>
 
-  <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+  <extension target="org.nuxeo.ecm.platform.types.TypeService"
+    point="types">
 
     <type id="SocialWorkspace">
       <label>SocialWorkspace</label>
@@ -51,16 +52,45 @@
       </layouts>
     </type>
 
+    <type id="News">
+      <label>News</label>
+      <icon>/icons/note.gif</icon>
+      <bigIcon>/icons/note_100.png</bigIcon>
+      <category>SimpleDocument</category>
+      <default-view>view_documents</default-view>
+      <layouts mode="any">
+        <layout>heading</layout>
+        <layout>article</layout>
+        <layout>note</layout>
+      </layouts>
+      <layouts mode="summary">
+        <layout>article_summary_layout</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>heading</layout>
+        <layout>article</layout>
+        <layout>note</layout>
+        <layout>dublincore</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>article</layout>
+        <layout>note</layout>
+      </layouts>
+    </type>
+
+
     <type id="Workspace">
       <subtypes>
         <type>SocialWorkspace</type>
         <type>Article</type>
+        <type>News</type>
       </subtypes>
     </type>
 
     <type id="Folder">
       <subtypes>
         <type>Article</type>
+        <type>News</type>
       </subtypes>
     </type>
 
