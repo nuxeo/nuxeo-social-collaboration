@@ -54,27 +54,24 @@ public class SocialWorkspaceHelper {
 
     public static boolean couldDocumentBePublished(CoreSession session,
             DocumentModel news) throws ClientException {
-        List<DocumentModel> parents = session.getParentDocuments(news.getRef());
-        return couldDocumentBePublished(parents, news);
+        DocumentModel parent=session.getParentDocument(news.getRef());
+        return couldDocumentBePublished(parent, news);
     }
 
-    protected static boolean couldDocumentBePublished(
-            List<DocumentModel> parents, DocumentModel news) {
-        for (DocumentModel currentParent : parents) {
+    protected static boolean couldDocumentBePublished(DocumentModel currentParent,
+            DocumentModel news) {
             if (isSocialWorkspace(currentParent)) {
                 if (log.isDebugEnabled()) {
                     log.debug(String.format(
-                            "There is a %s as parent for the document \"%s\" and it's : \"%s\"",
+                            "There is a %s as direct parent for the document \"%s\" and it's : \"%s\"",
                             SocialConstants.SOCIAL_WORKSPACE_TYPE,
                             news.toString(), currentParent.toString()));
                 }
                 return news.hasFacet(SocialConstants.SOCIAL_DOCUMENT_FACET);
             }
 
-        }
         if (log.isDebugEnabled()) {
-            log.debug(String.format(
-                    "There is no %s as parent for the document \"%s\"",
+            log.debug(String.format("There is no %s as direct parent for the document \"%s\"",
                     SocialConstants.SOCIAL_WORKSPACE_TYPE, news.toString()));
         }
         return false;

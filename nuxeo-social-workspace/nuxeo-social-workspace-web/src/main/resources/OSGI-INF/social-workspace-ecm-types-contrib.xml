@@ -22,7 +22,10 @@
       </layouts>
       <subtypes>
         <type>Workspace</type>
-        <type>Section</type>
+<type>News</type>
+<type>Article</type>
+<type>File</type>
+<type>Note</type>
       </subtypes>
     </type>
 
@@ -68,7 +71,6 @@
       </layouts>
       <layouts mode="edit">
         <layout>heading</layout>
-        <layout>article</layout>
         <layout>note</layout>
         <layout>dublincore</layout>
       </layouts>
@@ -82,15 +84,12 @@
     <type id="Workspace">
       <subtypes>
         <type>SocialWorkspace</type>
-        <type>Article</type>
-        <type>News</type>
       </subtypes>
     </type>
 
     <type id="Folder">
       <subtypes>
         <type>Article</type>
-        <type>News</type>
       </subtypes>
     </type>
 

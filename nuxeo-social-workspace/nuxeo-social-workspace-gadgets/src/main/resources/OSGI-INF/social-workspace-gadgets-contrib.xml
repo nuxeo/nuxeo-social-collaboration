@@ -10,6 +10,13 @@
       <icon>gadget-article.png</icon>
     </internalGadget>
 
+   <internalGadget name="news" disabled="false">
+      <mountPoint>/news</mountPoint>
+      <entryPoint>news.xml</entryPoint>
+      <category>Nuxeo</category>
+      <icon>gadget-news.png</icon>
+    </internalGadget>
+
     <internalGadget name="join" disabled="false">
       <mountPoint>/join</mountPoint>
       <directory>join</directory>

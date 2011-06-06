@@ -6,31 +6,20 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <!--
-    <action id="convertToCommunity"
-      link="#{navigationContext.currentDocument.addFacet('Community')}"
-      label="command.convert.to.community" icon="/icons/action_add.gif">
-      <category>SUBVIEW_UPPER_LIST_HREF</category>
-      <filter id="not_community"/>
-      <filter id="user_canedit"/>
-      <filter id="workspace">
-        <rule grant="true">
-          <type>Workspace</type>
-        </rule>
-      </filter>
-    </action>
-    -->
+    <!-- <action id="convertToCommunity" link="#{navigationContext.currentDocument.addFacet('Community')}"
+      label="command.convert.to.community" icon="/icons/action_add.gif"> <category>SUBVIEW_UPPER_LIST_HREF</category>
+      <filter id="not_community"/> <filter id="user_canedit"/> <filter id="workspace">
+      <rule grant="true"> <type>Workspace</type> </rule> </filter> </action> -->
 
     <action id="TAB_MANAGE_SOCIAL_WORKSPACE"
-      link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml" order="100"
-      label="action.view.group.management" icon="/icons/file.gif">
+      link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml"
+      order="100" label="action.view.group.management" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
-    <action id="TAB_MANAGE_REQUESTS"
-      link="/incl/tabs/manage_requests_action_tab.xhtml" order="800"
-      label="action.view.manage.requests" icon="/icons/file.gif">
+    <action id="TAB_MANAGE_REQUESTS" link="/incl/tabs/manage_requests_action_tab.xhtml"
+      order="800" label="action.view.manage.requests" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
       <filter-id>workspace_administrator</filter-id>
@@ -48,8 +37,8 @@
       <filter-id>isPendingRequest</filter-id>
     </action>
 
-    <action id="TAB_SOCIAL_WORKSPACE_DASHBOARD" link="/incl/tabs/social_workspace_dashboard.xhtml" order="5"
-      label="action.view.dashboard" icon="/icons/file.gif">
+    <action id="TAB_SOCIAL_WORKSPACE_DASHBOARD" link="/incl/tabs/social_workspace_dashboard.xhtml"
+      order="5" label="action.view.dashboard" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>social_workspace</filter-id>
     </action>
@@ -96,9 +85,21 @@
           #{requestActions.enableRequestActions()}
         </condition>
       </rule>
-
     </filter>
 
+    <filter id="create" append="true">
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="importFile" append="true">
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
 
   </extension>
 </component>

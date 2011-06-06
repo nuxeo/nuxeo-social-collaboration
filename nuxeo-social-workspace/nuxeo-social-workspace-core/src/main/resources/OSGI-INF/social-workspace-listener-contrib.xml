@@ -24,6 +24,15 @@
       <event>aboutToCreate</event>
       <event>beforeDocumentModification</event>
     </listener>
+
+        <listener name="createSocialDocumentListener" async="true"
+      postCommit="true"
+      class="org.nuxeo.ecm.social.workspace.listeners.CreateSocialDocumentListener"
+      priority="200">
+      <event>documentCreated</event>
+      <event>documentModified</event>
+    </listener>
+
   </extension>
 
 </component>

@@ -20,12 +20,9 @@
       <schema name="article" />
     </facet>
 
-
     <doctype name="SocialWorkspace" extends="Workspace">
       <facet name="SocialWorkspace" />
     </doctype>
-
-
 
     <doctype name="Article" extends="Note">
       <schema name="social" />
@@ -35,7 +32,6 @@
     <doctype name="News" extends="Note">
       <facet name="SocialDocument" />
     </doctype>
-
 
     <doctype name="Request" extends="Document">
       <schema name="dublincore" />
@@ -49,7 +45,6 @@
     <doctype name="SocialSection" extends="Section">
       <facet name="HiddenInNavigation" />
     </doctype>
-
 
   </extension>
 

@@ -48,7 +48,6 @@
       <artifactId>groovy-all</artifactId>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
 

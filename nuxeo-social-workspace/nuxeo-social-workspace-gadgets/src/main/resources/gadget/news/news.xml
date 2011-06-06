@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="News"
+    description="Diplay articles list using Nuxeo REST Automation API "
+    author="rlg" author_email="rlg@nuxeo.com"
+    height="420">
+    <Require feature="setprefs"/>
+    <#include "dynamic-translations.ftl"/>
+    <Require feature="dynamic-height" />
+    <#include "default-oauth-prefs.ftl"/>
+  </ModulePrefs>
+  <#include "context-prefs.ftl"/>
+  <Content type="html">
+
+<![CDATA[
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/documentlists.css"/>
+  <link rel="stylesheet" type="text/css" href="news.css"/>
+
+  <!-- insert JS Context -->
+  ${jsContext}
+
+  <script src="${specDirectoryUrl}default-automation-request.js"></script>
+  <script src="${specDirectoryUrl}context-management.js"></script>
+  <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
+  <script type="text/javascript" language="javascript" src="news.js"></script>
+
+  </head>
+
+  <body>
+     <div class="content">
+      <#include "default-documentlist-layout.ftl"/>
+      <#include "default-request-controls.ftl"/>
+    </div>
+  </body>
+</html>
+]]>
+
+  </Content>
+</Module>

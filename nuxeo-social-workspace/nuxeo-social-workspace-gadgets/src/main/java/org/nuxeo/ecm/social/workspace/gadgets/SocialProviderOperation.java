@@ -101,20 +101,7 @@ public class SocialProviderOperation {
     public DocumentModelList run() throws Exception {
         String principal = session.getPrincipal().getName();
 
-        List<SortInfo> sortInfos = new ArrayList<SortInfo>();
-        if (sortInfoAsStringList != null) {
-            for (String sortInfoDesc : sortInfoAsStringList) {
-                SortInfo sortInfo;
-                if (sortInfoDesc.contains(":")) {
-                    String[] parts = sortInfoDesc.split(":");
-                    sortInfo = new SortInfo(parts[0],
-                            Boolean.parseBoolean(parts[1]));
-                } else {
-                    sortInfo = new SortInfo(sortInfoDesc, true);
-                }
-                sortInfos.add(sortInfo);
-            }
-        }
+        List<SortInfo> sortInfos = manageSortParameter();
 
         Object[] parameters = null;
 
@@ -174,6 +161,25 @@ public class SocialProviderOperation {
                             new Long(page), props, parameters));
         }
         return EMPTY_LIST;
+    }
+
+    protected List<SortInfo> manageSortParameter() {
+        List<SortInfo> sortInfos = new ArrayList<SortInfo>();
+        if (sortInfoAsStringList != null) {
+            String sortParameterSeparator = " ";
+            for (String sortInfoDesc : sortInfoAsStringList) {
+                SortInfo sortInfo;
+                if (sortInfoDesc.contains(sortParameterSeparator)) {
+                    String[] parts = sortInfoDesc.split(sortParameterSeparator);
+                    sortInfo = new SortInfo(parts[0],
+                            Boolean.parseBoolean(parts[1]));
+                } else {
+                    sortInfo = new SortInfo(sortInfoDesc, true);
+                }
+                sortInfos.add(sortInfo);
+            }
+        }
+        return sortInfos;
     }
 
     protected boolean isMember(String principal, DocumentModel sws) {
