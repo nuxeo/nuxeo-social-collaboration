@@ -17,7 +17,6 @@
 package org.nuxeo.ecm.social.workspace;
 
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,8 +58,8 @@ public class SocialWorkspaceHelper {
         return couldDocumentBePublished(parents, news);
     }
 
-    protected static boolean couldDocumentBePublished(List<DocumentModel> parents,
-            DocumentModel news) {
+    protected static boolean couldDocumentBePublished(
+            List<DocumentModel> parents, DocumentModel news) {
         for (DocumentModel currentParent : parents) {
             if (isSocialWorkspace(currentParent)) {
                 if (log.isDebugEnabled()) {
@@ -74,7 +73,8 @@ public class SocialWorkspaceHelper {
 
         }
         if (log.isDebugEnabled()) {
-            log.debug(String.format("There is no %s as parent for the document \"%s\"",
+            log.debug(String.format(
+                    "There is no %s as parent for the document \"%s\"",
                     SocialConstants.SOCIAL_WORKSPACE_TYPE, news.toString()));
         }
         return false;
@@ -84,6 +84,5 @@ public class SocialWorkspaceHelper {
         return community != null
                 && SocialConstants.SOCIAL_WORKSPACE_TYPE.equals(community.getType());
     }
-
 
 }

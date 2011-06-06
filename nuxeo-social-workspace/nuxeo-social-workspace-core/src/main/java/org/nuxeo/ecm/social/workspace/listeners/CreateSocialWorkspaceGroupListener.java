@@ -42,8 +42,8 @@ import org.nuxeo.runtime.api.Framework;
  * Class to handle community document creation. It automatically creates two
  * groups :
  * <ul>
- *   <li>{doc_id}_administrators : with an EVERYTHING permission</li>
- *   <li>{doc_id}_members : with a READ_WRITE permission</li>
+ * <li>{doc_id}_administrators : with an EVERYTHING permission</li>
+ * <li>{doc_id}_members : with a READ_WRITE permission</li>
  * </ul>
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
@@ -54,7 +54,6 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
     protected UserManager userManager;
 
     private static final Log log = LogFactory.getLog(CreateSocialWorkspaceGroupListener.class);
-
 
     @Override
     public void handleEvent(Event event) throws ClientException {

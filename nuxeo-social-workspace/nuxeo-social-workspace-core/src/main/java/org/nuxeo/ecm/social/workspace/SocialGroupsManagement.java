@@ -64,27 +64,33 @@ public class SocialGroupsManagement {
     private SocialGroupsManagement() {
     }
 
-    public static boolean acceptMember(DocumentModel sws, String user) throws Exception {
+    public static boolean acceptMember(DocumentModel sws, String user)
+            throws Exception {
         DocumentModel principal = getUserManager().getUserModel(user);
 
         @SuppressWarnings("unchecked")
-        List<String> groups = (List<String>) principal.getProperty(getUserManager().getUserSchemaName(), "groups");
+        List<String> groups = (List<String>) principal.getProperty(
+                getUserManager().getUserSchemaName(), "groups");
         if (groups.contains(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) {
-            log.info(String.format("%s is already an administrator of %s (%s)", user, sws.getTitle(), sws.getPathAsString()));
+            log.info(String.format("%s is already an administrator of %s (%s)",
+                    user, sws.getTitle(), sws.getPathAsString()));
             return false;
         }
         String membersGroup = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
         if (groups.contains(membersGroup)) { // already a member
-            log.info(String.format("%s is already a member of %s (%s)", user, sws.getTitle(), sws.getPathAsString()));
+            log.info(String.format("%s is already a member of %s (%s)", user,
+                    sws.getTitle(), sws.getPathAsString()));
             return false;
         }
         groups.add(membersGroup);
-        principal.setProperty(getUserManager().getUserSchemaName(), "groups", groups);
+        principal.setProperty(getUserManager().getUserSchemaName(), "groups",
+                groups);
         getUserManager().updateUser(principal);
         return true;
     }
 
-    public static boolean isMember(DocumentModel sws, String user) throws Exception {
+    public static boolean isMember(DocumentModel sws, String user)
+            throws Exception {
         NuxeoPrincipal nuxeoPrincipal = getUserManager().getPrincipal(user);
         List<String> groups = nuxeoPrincipal.getGroups();
         if (groups.contains(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) {
@@ -97,20 +103,24 @@ public class SocialGroupsManagement {
         return false;
     }
 
-    public static boolean isRequestPending(DocumentModel sws, String user) throws Exception {
-        CoreSession session = CoreInstance.getInstance().getSession(sws.getSessionId());
+    public static boolean isRequestPending(DocumentModel sws, String user)
+            throws Exception {
+        CoreSession session = CoreInstance.getInstance().getSession(
+                sws.getSessionId());
         String queryTemplate = "SELECT * FROM Request WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
-        String query = String.format( queryTemplate, REQUEST_TYPE_JOIN, user, sws.getId());
+        String query = String.format(queryTemplate, REQUEST_TYPE_JOIN, user,
+                sws.getId());
         DocumentModelList list = session.query(query);
-        if ( list != null && list.size() > 0 ){
+        if (list != null && list.size() > 0) {
             return true;
         }
         return false;
     }
 
-
-    public static void notifyUser(DocumentModel socialWorkspace, String username, boolean accepted) throws Exception {
-        CoreSession session = CoreInstance.getInstance().getSession(socialWorkspace.getSessionId());
+    public static void notifyUser(DocumentModel socialWorkspace,
+            String username, boolean accepted) throws Exception {
+        CoreSession session = CoreInstance.getInstance().getSession(
+                socialWorkspace.getSessionId());
         NuxeoPrincipal principal = getUserManager().getPrincipal(username);
         String email = principal.getEmail();
 
@@ -132,29 +142,30 @@ public class SocialGroupsManagement {
         OperationContext ctx = new OperationContext(session);
         ctx.setInput(socialWorkspace);
         OperationChain chain = new OperationChain("sendEMail");
-        chain.add(SendMail.ID)
-                .set("from", "admin@nuxeo.org")
-                .set("to", email)
-                .set("subject", subject)
-                .set("HTML", true)
-                .set("message", template);
+        chain.add(SendMail.ID).set("from", "admin@nuxeo.org").set("to", email).set(
+                "subject", subject).set("HTML", true).set("message", template);
         try {
             getAutomationService().run(ctx, chain);
-        } catch (Exception e ) {
+        } catch (Exception e) {
             log.warn("failed to notify users", e);
         }
     }
 
     public static void notifyAdmins(DocumentModel request) throws Exception {
-        CoreSession session = CoreInstance.getInstance().getSession(request.getSessionId());
+        CoreSession session = CoreInstance.getInstance().getSession(
+                request.getSessionId());
         RequestAdapter requestAdapter = request.getAdapter(RequestAdapter.class);
 
-        DocumentModel socialWorkspace = session.getDocument(new IdRef(requestAdapter.getInfo()));
+        DocumentModel socialWorkspace = session.getDocument(new IdRef(
+                requestAdapter.getInfo()));
         String adminGroupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace);
         NuxeoGroup adminGroup = getUserManager().getGroup(adminGroupName);
         List<String> admins = adminGroup.getMemberUsers();
         if (admins == null || admins.size() == 0) {
-            log.warn(String.format("No admin users for social workspace %s (%s) ", socialWorkspace.getTitle(), socialWorkspace.getPathAsString()));
+            log.warn(String.format(
+                    "No admin users for social workspace %s (%s) ",
+                    socialWorkspace.getTitle(),
+                    socialWorkspace.getPathAsString()));
             return;
         }
         StringList toList = new StringList();
@@ -177,15 +188,11 @@ public class SocialGroupsManagement {
         OperationContext ctx = new OperationContext(session);
         ctx.setInput(socialWorkspace);
         OperationChain chain = new OperationChain("sendEMail");
-        chain.add(SendMail.ID)
-                .set("from", "admin@nuxeo.org")
-                .set("to", toList)
-                .set("subject", subject)
-                .set("HTML", true)
-                .set("message", template);
+        chain.add(SendMail.ID).set("from", "admin@nuxeo.org").set("to", toList).set(
+                "subject", subject).set("HTML", true).set("message", template);
         try {
             getAutomationService().run(ctx, chain);
-        } catch (Exception e ) {
+        } catch (Exception e) {
             log.warn("failed to notify admins", e);
         }
     }
@@ -204,9 +211,9 @@ public class SocialGroupsManagement {
         return userManager;
     }
 
-
     private static String loadTemplate(String key) throws Exception {
-        InputStream io = SocialGroupsManagement.class.getClassLoader().getResourceAsStream(key);
+        InputStream io = SocialGroupsManagement.class.getClassLoader().getResourceAsStream(
+                key);
         if (io != null) {
             try {
                 return FileUtils.read(io);

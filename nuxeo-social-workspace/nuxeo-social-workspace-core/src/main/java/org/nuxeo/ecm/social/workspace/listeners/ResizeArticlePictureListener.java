@@ -34,8 +34,6 @@ import org.nuxeo.runtime.api.Framework;
 
 public class ResizeArticlePictureListener implements EventListener {
 
-
-
     private static final int RESIZED_IMAGE_WIDTH = 300;
 
     private static final int RESIZED_IMAGE_HEIGHT = 200;

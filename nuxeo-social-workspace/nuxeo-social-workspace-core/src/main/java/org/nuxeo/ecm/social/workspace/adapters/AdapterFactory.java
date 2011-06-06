@@ -16,7 +16,8 @@
  */
 package org.nuxeo.ecm.social.workspace.adapters;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_SCHEMA;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_SCHEMA;
 
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;

@@ -25,18 +25,23 @@ import java.util.Calendar;
 public interface RequestAdapter {
 
     String getUsername();
+
     void setUserNanme(String value);
 
     String getType();
+
     void setType(String value);
 
     String getInfo();
+
     void setInfo(String value);
 
     Calendar getProcessedDate();
+
     void setProcessedDate(Calendar value);
 
     String getProcessedComment();
+
     void setProcessdComment(String value);
 
 }
