@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.nuxeo.ecm.social</groupId>
@@ -12,7 +11,7 @@
   <name>Nuxeo Social Workspace Gadgets</name>
   <description>Nuxeo Social Workspace Gadgets</description>
 
-   <dependencies>
+  <dependencies>
     <dependency>
       <groupId>org.nuxeo.ecm.social</groupId>
       <artifactId>nuxeo-social-workspace-core</artifactId>
@@ -34,7 +33,7 @@
       <artifactId>nuxeo-platform-test</artifactId>
       <scope>test</scope>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib</artifactId>
       <classifier>jdk15</classifier>
@@ -43,8 +42,14 @@
       <groupId>net.sf.ezmorph</groupId>
       <artifactId>ezmorph</artifactId>
     </dependency>
+    <dependency>
+      <groupId>groovy</groupId>
+      <artifactId>groovy</artifactId>
+      <scope>test</scope>
+      <version>1.1-rc-1</version>
+    </dependency>
 
-   </dependencies>
+  </dependencies>
 
 
 </project>

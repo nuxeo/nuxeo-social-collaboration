@@ -79,19 +79,23 @@ public class TestSocialProviderOperation {
         sws1.setPropertyValue("dc:title", "Social Workspace 1");
         sws1 = session.createDocument(sws1);
 
+        session.save();
+
         DocumentModel sws2 = session.createDocumentModel("/", "sws2",
                 "SocialWorkspace");
         sws2.setPropertyValue("dc:title", "Social Workspace 2");
         sws2 = session.createDocument(sws2);
+        session.save();
 
         // create two articles in 2nd social workspace
-        DocumentModel article1 = session.createDocumentModel("/sws2/workspace",
+        DocumentModel article1 = session.createDocumentModel("/sws2",
                 "article1", "Article");
         article1.setPropertyValue("social:isPublic", true);
         article1.setPropertyValue("dc:title", "Public Article");
         article1 = session.createDocument(article1);
+        session.save();
 
-        DocumentModel article2 = session.createDocumentModel("/sws2/workspace",
+        DocumentModel article2 = session.createDocumentModel("/sws2",
                 "article2", "Article");
         article2.setPropertyValue("social:isPublic", false);
         article2.setPropertyValue("dc:title", "Non Public Article");
