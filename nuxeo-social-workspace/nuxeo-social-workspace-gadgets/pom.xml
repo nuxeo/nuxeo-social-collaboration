@@ -43,10 +43,9 @@
       <artifactId>ezmorph</artifactId>
     </dependency>
     <dependency>
-      <groupId>groovy</groupId>
-      <artifactId>groovy</artifactId>
+       <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
       <scope>test</scope>
-      <version>1.1-rc-1</version>
     </dependency>
 
   </dependencies>
