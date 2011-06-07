@@ -32,7 +32,7 @@
             </artifactItem>
 
             <artifactItem>
-              <groupId>org.seleniumhq.selenium.server</groupId>
+              <groupId>org.seleniumhq.selenium</groupId>
               <artifactId>selenium-server</artifactId>
               <classifier>standalone</classifier>
               <overWrite>false</overWrite>
