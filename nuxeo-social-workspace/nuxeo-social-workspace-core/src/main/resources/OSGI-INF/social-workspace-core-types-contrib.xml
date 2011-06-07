@@ -14,7 +14,7 @@
       <schema name="social"/>
     </facet>
 
-<facet name="CommunityDocument">
+<facet name="SocialDocument">
       <schema name="article"/>
     </facet>
 
@@ -31,7 +31,7 @@
     </doctype>
 
     <doctype name="News" extends="Note">
-      <facet name="CommunityDocument" />
+      <facet name="SocialDocument" />
     </doctype>
 
 
@@ -44,7 +44,7 @@
       <facet name="HiddenInNavigation" />
     </doctype>
 
-    <doctype name="SocialPublication" extends="Section">
+    <doctype name="SocialSection" extends="Section">
       <facet name="HiddenInNavigation" />
     </doctype>
 

@@ -7,12 +7,12 @@
   <extension
     target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService"
     point="factoryBinding">
-    <factoryBinding name="CommunityFactory" factoryName="SimpleTemplateFactory"
+    <factoryBinding name="SocialWorkspaceFactory" factoryName="SimpleTemplateFactory"
       targetType="SocialWorkspace">
       <template>
-        <templateItem typeName="SocialPublication" id="PublicationSection"
+        <templateItem typeName="SocialSection" id="PublicationSection"
           title="Publication" description="Publication space" />
-        <templateItem typeName="SocialPublication" id="News"
+        <templateItem typeName="SocialSection" id="News"
           title="PrivateNews" description="Private publication space"
           path="PublicationSection" />
         <templateItem typeName="Section" id="PublicNews"

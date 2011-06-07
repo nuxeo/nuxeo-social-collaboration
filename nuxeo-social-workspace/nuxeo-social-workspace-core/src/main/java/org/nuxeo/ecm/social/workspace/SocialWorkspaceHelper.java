@@ -80,9 +80,9 @@ public class SocialWorkspaceHelper {
         return false;
     }
 
-    public static boolean isSocialWorkspace(DocumentModel community) {
-        return community != null
-                && SocialConstants.SOCIAL_WORKSPACE_TYPE.equals(community.getType());
+    public static boolean isSocialWorkspace(DocumentModel socialWorkspace) {
+        return socialWorkspace != null
+                && socialWorkspace.hasFacet(SocialConstants.SOCIAL_WORKSPACE_FACET);
     }
 
 }
