@@ -68,7 +68,7 @@ public class SocialWorkspaceHelper {
                             SocialConstants.SOCIAL_WORKSPACE_TYPE,
                             news.toString(), currentParent.toString()));
                 }
-                return news.hasFacet(SocialConstants.COMMUNITY_DOCUMENT_FACET);
+                return news.hasFacet(SocialConstants.SOCIAL_DOCUMENT_FACET);
             }
 
         }

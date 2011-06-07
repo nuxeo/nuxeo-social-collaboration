@@ -61,10 +61,9 @@ public class TestNewsManagement {
         DocumentModel wrongNews = createDocumentModelInSession("/",
                 "Unpublishable Novelty", SocialConstants.NEWS_TYPE);
 
-        assertTrue(wrongNews.hasFacet(SocialConstants.COMMUNITY_DOCUMENT_FACET));
+        assertTrue(wrongNews.hasFacet(SocialConstants.SOCIAL_DOCUMENT_FACET));
 
-        assertFalse(
-                "A news out of a SocialWorkspace shouldn't be publishable",
+        assertFalse("A news out of a SocialWorkspace shouldn't be publishable",
                 SocialWorkspaceHelper.couldDocumentBePublished(session,
                         wrongNews));
 
@@ -74,10 +73,9 @@ public class TestNewsManagement {
         correctNews = session.createDocument(correctNews);
         session.save();
 
-        assertTrue(correctNews.hasFacet(SocialConstants.COMMUNITY_DOCUMENT_FACET));
+        assertTrue(correctNews.hasFacet(SocialConstants.SOCIAL_DOCUMENT_FACET));
 
-        assertTrue(
-                "A news within a SocialWorkspace should be publishable",
+        assertTrue("A news within a SocialWorkspace should be publishable",
                 SocialWorkspaceHelper.couldDocumentBePublished(session,
                         correctNews));
 
@@ -92,7 +90,7 @@ public class TestNewsManagement {
         return sws;
     }
 
-//    @Test
+    @Test
     public void testReadingRightToEveryOne() throws Exception {
         DocumentModel containerWorkspace = session.createDocumentModel(
                 session.getRootDocument().getPathAsString(),
@@ -109,8 +107,8 @@ public class TestNewsManagement {
                 NAME_SOCIAL_WORKSPACE, SocialConstants.SOCIAL_WORKSPACE_TYPE);
 
         DocumentModel publicationSection = session.getDocument(new PathRef("/"
-                + BASE_WORKSPACE_NAME + "/" + NAME_SOCIAL_WORKSPACE
-                + "/PublicationSection"));
+                + BASE_WORKSPACE_NAME + "/" + NAME_SOCIAL_WORKSPACE + "/"
+                + SocialConstants.ROOT_SECTION_NAME));
 
         ACP currentSectionACP = publicationSection.getACP();
 
@@ -140,8 +138,9 @@ public class TestNewsManagement {
                 currentSectionACP.getAccess("nobody", SecurityConstants.WRITE).toBoolean());
 
         DocumentModel newsSection = session.getDocument(new PathRef("/"
-                + BASE_WORKSPACE_NAME + "/" + NAME_SOCIAL_WORKSPACE
-                + "/PublicationSection/News"));
+                + BASE_WORKSPACE_NAME + "/" + NAME_SOCIAL_WORKSPACE + "/"
+                + SocialConstants.ROOT_SECTION_NAME + "/"
+                + SocialConstants.NEWS_SECTION_NAME));
         currentSectionACP = newsSection.getACP();
 
         assertTrue(
@@ -170,8 +169,10 @@ public class TestNewsManagement {
                 currentSectionACP.getAccess("nobody", SecurityConstants.WRITE).toBoolean());
 
         DocumentModel publicSection = session.getDocument(new PathRef("/"
-                + BASE_WORKSPACE_NAME + "/" + NAME_SOCIAL_WORKSPACE
-                + "/PublicationSection/News/PublicNews"));
+                + BASE_WORKSPACE_NAME + "/" + NAME_SOCIAL_WORKSPACE + "/"
+                + SocialConstants.ROOT_SECTION_NAME + "/"
+                + SocialConstants.NEWS_SECTION_NAME + "/"
+                + SocialConstants.PUBLIC_NEWS_SECTION_NAME));
         currentSectionACP = publicSection.getACP();
 
         assertTrue(
