@@ -17,15 +17,14 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
@@ -49,7 +48,7 @@ import com.google.inject.Inject;
 @Deploy({ "org.nuxeo.ecm.social.workspace.core" })
 public class TestListeners {
 
-    public static final String NAME_SOCIAL_WORKSPACE = "sws";
+    public static final String SOCIAL_WORKSPACE_NAME = "sws";
 
     @Inject
     protected CoreSession session;
@@ -65,12 +64,12 @@ public class TestListeners {
         return doc;
     }
 
-    // @Test
+    @Test
     public void testGroupListeners() throws Exception {
 
         DocumentModel sws = createDocumentModel(
                 session.getRootDocument().getPathAsString(),
-                NAME_SOCIAL_WORKSPACE, "SocialWorkspace");
+                SOCIAL_WORKSPACE_NAME, "SocialWorkspace");
 
         assertNotNull(userManager);
         String adminGroupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws);
@@ -90,37 +89,7 @@ public class TestListeners {
         assertNull(membersGroup);
     }
 
-    @Test(expected = ClientException.class)
-    public void testCommunityDocumentManagement() throws Exception {
-        DocumentModel sws = createDocumentModel(
-                session.getRootDocument().getPathAsString(),
-                NAME_SOCIAL_WORKSPACE, SocialConstants.SOCIAL_WORKSPACE_TYPE);
-        DocumentModel publicationSection = session.getChild(sws.getRef(),
-                SocialConstants.ROOT_SECTION_NAME);
-        DocumentModel privateNewsSection = session.getChild(
-                publicationSection.getRef(), SocialConstants.NEWS_SECTION_NAME);
 
-        DocumentModel news1 = createDocumentModel(sws.getPathAsString(),
-                "news 1", SocialConstants.NEWS_TYPE);
-        assertNotNull(news1);
-        assertFalse("ae",news1.isProxy());
-        DocumentRef privateNewsSectionRef = privateNewsSection.getRef();
 
-        DocumentModel publishedNews = session.getChild(privateNewsSectionRef,
-                news1.getName());
-        assertNotNull(
-                "A news called news 1 should be found as published in the private news section.",
-                publishedNews);
-//        assertFalse("ae",publishedNews.isProxy());
-        assertTrue("", publishedNews.isProxy());
-
-        DocumentModel wrongPlacedNews = createDocumentModel("/",
-                "wrong place of creation", SocialConstants.NEWS_TYPE);
-
-        session.getChild(privateNewsSectionRef, wrongPlacedNews.getName());
-        fail(String.format(
-                "The news called \"%s\" shouldn't been plublished in the private news section.",
-                wrongPlacedNews.getName()));
-    }
 
 }

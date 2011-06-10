@@ -21,11 +21,11 @@
         <layout>social_workspace</layout>
       </layouts>
       <subtypes>
-        <type>Workspace</type>
-<type>News</type>
-<type>Article</type>
-<type>File</type>
-<type>Note</type>
+        <type>Folder</type>
+        <type>News</type>
+        <type>Article</type>
+        <type>File</type>
+        <type>Note</type>
       </subtypes>
     </type>
 
@@ -90,6 +90,10 @@
     <type id="Folder">
       <subtypes>
         <type>Article</type>
+        <type>News</type>
+        <type>Article</type>
+        <type>File</type>
+        <type>Note</type>
       </subtypes>
     </type>
 

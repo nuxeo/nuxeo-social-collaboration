@@ -12,20 +12,19 @@
  * Lesser General Public License for more details.
  *
  * Contributors:
-* Nuxeo - initial API and implementation
+ * Nuxeo - initial API and implementation
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
@@ -35,13 +34,15 @@ import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
 
 /**
+ * Class to handle "Social Document" faceted document publication after creation
+ * or update. It publishes documents in sections define within
+ * "social-workspace-content-template-core.xml"
+ *
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
  *
  */
 
 public class CreateSocialDocumentListener implements PostCommitEventListener {
-
-    private static final int NUMBER_OF_SOCIAL_SECTIONS_IN_THE_ROOT_SOCIAL_SECTION = 2;
 
     Log log = LogFactory.getLog(CreateSocialDocumentListener.class);
 
@@ -74,39 +75,27 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         }
 
         CoreSession session = ctx.getCoreSession();
-        if (SocialWorkspaceHelper.couldDocumentBePublished(session, doc)) {
+        if (SocialWorkspaceHelper.isSocialDocumentPublishable(session, doc)) {
             publishCommunityDocumentInPrivateSection(session, doc);
         }
     }
 
     protected void publishCommunityDocumentInPrivateSection(
-            CoreSession session, DocumentModel news) throws ClientException {
-        // the news are created as direct children of the socialworkspace
-        Path socialWorkspacePath = news.getPath().removeLastSegments(1);
-        String queryGettingNewsSection = String.format(
-                "select * from %s where ecm:path STARTSWITH '%s/%s'",
-                SocialConstants.SOCIAL_PUBLICATION_TYPE, socialWorkspacePath,
-                SocialConstants.ROOT_SECTION_NAME);
+            CoreSession session, DocumentModel socialDocument)
+            throws ClientException {
 
-        DocumentModelList docs = session.query(queryGettingNewsSection);
-        if (docs.size() == NUMBER_OF_SOCIAL_SECTIONS_IN_THE_ROOT_SOCIAL_SECTION) {
-            DocumentModel privateNewsSection = docs.get(0);
-            session.publishDocument(news, privateNewsSection);
-            session.save();
-            if (log.isDebugEnabled()) {
-                String msg = String.format(
-                        "The News named \"%s\" have been published in the private section called \"%s\"",
-                        news.getName(), privateNewsSection.getName());
-                log.debug(msg);
-            }
-        } else {
-            if (log.isDebugEnabled()) {
-                String msg = String.format(
-                        "The News named \"%s\" can't be published in the private section ",
-                        news.getName());
-                log.debug(msg);
-            }
+        String sectionName = chooseSocialSection(socialDocument);
+        SocialWorkspaceHelper.publishSocialdocument(session, socialDocument,
+                sectionName);
+
+    }
+
+    protected String chooseSocialSection(DocumentModel socialDocument) {
+        String sectionPath = "";
+        if (SocialConstants.NEWS_TYPE.equals(socialDocument.getType())) {
+            sectionPath = ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME;
         }
+        return sectionPath;
     }
 
 }
