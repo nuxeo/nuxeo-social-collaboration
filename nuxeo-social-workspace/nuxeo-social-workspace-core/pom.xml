@@ -5,12 +5,11 @@
   <parent>
     <groupId>org.nuxeo.ecm.social</groupId>
     <artifactId>nuxeo-social-workspace-parent</artifactId>
-    <version>5.4.2</version>
+    <version>5.4.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>org.nuxeo.ecm.social</groupId>
   <artifactId>nuxeo-social-workspace-core</artifactId>
-  <version>5.4.2-SNAPSHOT</version>
   <name>Nuxeo Social Workspace Core</name>
   <description>Nuxeo Social Workspace Core</description>
 

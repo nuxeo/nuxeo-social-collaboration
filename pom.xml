@@ -10,6 +10,7 @@
   <groupId>org.nuxeo.ecm.social</groupId>
   <artifactId>nuxeo-social-collaboration-parent</artifactId>
   <name>Nuxeo Social Collaboration Parent</name>
+  <version>5.4.2-SNAPSHOT</version>
   <description>Nuxeo Social Collaboration Parent</description>
   <packaging>pom</packaging>
 
