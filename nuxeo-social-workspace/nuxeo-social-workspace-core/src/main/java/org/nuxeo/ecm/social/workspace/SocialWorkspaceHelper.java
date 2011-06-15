@@ -79,7 +79,7 @@ public class SocialWorkspaceHelper {
 
     protected static boolean isDocumentPublishable(List<DocumentModel> parents,
             DocumentModel socialDocument) {
-        return socialDocument.hasFacet(SocialConstants.SOCIAL_DOCUMENT_FACET)
+        return socialDocument.hasFacet(SOCIAL_DOCUMENT_FACET)
                 && getSocialWorkspaceParentIfAny(parents, socialDocument) != null;
     }
 
@@ -159,7 +159,7 @@ public class SocialWorkspaceHelper {
                 String msg = String.format(
                         "The SocialDocument (%s) named \"%s\" is not a child of a document of %s type.",
                         socialDocument.getType(), socialDocument.getName(),
-                        SocialConstants.SOCIAL_WORKSPACE_TYPE);
+                        SOCIAL_WORKSPACE_TYPE);
                 log.error(msg);
             }
         }
@@ -169,8 +169,8 @@ public class SocialWorkspaceHelper {
     protected static DocumentModel findTheSocialSection(CoreSession session,
             DocumentModel socialWorkspace, String socialSectionPath) {
 
-        DocumentRef socialSectionRef = new PathRef(socialWorkspace.getPathAsString(),
-                socialSectionPath);
+        DocumentRef socialSectionRef = new PathRef(
+                socialWorkspace.getPathAsString(), socialSectionPath);
         try {
             DocumentModel section = session.getDocument(socialSectionRef);
             if (SOCIAL_PUBLICATION_TYPE.equals(section.getType())) {
@@ -186,7 +186,8 @@ public class SocialWorkspaceHelper {
         } catch (ClientException e) {
             if (log.isInfoEnabled()) {
                 String message = String.format(
-                        "The social section \"%s\" can't be found.", socialSectionRef);
+                        "The social section \"%s\" can't be found.",
+                        socialSectionRef);
                 log.info(message);
             }
         }

@@ -17,9 +17,18 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
+import java.io.Serializable;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -89,7 +98,42 @@ public class TestListeners {
         assertNull(membersGroup);
     }
 
+    @Test
+    public void testNewsPublication() throws Exception {
+        DocumentModel sws = createDocumentModel(
+                session.getRootDocument().getPathAsString(),
+                SOCIAL_WORKSPACE_NAME, SOCIAL_WORKSPACE_TYPE);
 
+        DocumentModel nominalNews = createDocumentModel(sws.getPathAsString(),
+                "nominal news", NEWS_TYPE);
+        String publicationOfTheNewsPathAsString = String.format("%s/%s/%s",
+                sws.getPathAsString(), ROOT_SECTION_NAME,
+                NEWS_SECTION_NAME);
+        DocumentRef refPublicationOfTheNews = new PathRef(
+                publicationOfTheNewsPathAsString);
+        DocumentModel publicationOfTheNews = session.getDocument(refPublicationOfTheNews);
+        assertNotNull("There should exist a proxy of the doc \"nominal news\"",
+                publicationOfTheNews);
 
+        Serializable originalNewsDcCreator = nominalNews.getProperty(
+                "dc:creator").getValue();
+        assertNotNull("The \"dc:creator\" of the original news should existe",
+                originalNewsDcCreator);
+        assertEquals(
+                "The \"dc:creator\" of the original news should be \"Administrator\"",
+                "Administrator", originalNewsDcCreator);
 
+        Serializable publicationDcCreator = publicationOfTheNews.getProperty(
+                "dc:creator").getValue();
+        assertNotNull("The \"dc:creator\" of the original news should existe",
+                publicationDcCreator);
+        assertEquals(
+                "The \"dc:creator\" of the original news and of its publication should be the same",
+                originalNewsDcCreator, publicationDcCreator);
+
+        Property publicationLastModifiedDate = publicationOfTheNews.getProperty("dc:modified");
+        assertNotNull(
+                "For the news publication the date of the last modification should exists",
+                publicationLastModifiedDate);
+    }
 }

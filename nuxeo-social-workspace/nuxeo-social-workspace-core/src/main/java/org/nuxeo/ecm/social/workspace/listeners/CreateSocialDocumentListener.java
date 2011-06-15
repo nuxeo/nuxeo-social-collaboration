@@ -18,7 +18,9 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +32,6 @@ import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
 
 /**
@@ -75,8 +76,9 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         }
 
         CoreSession session = ctx.getCoreSession();
-        if (SocialWorkspaceHelper.isSocialDocumentPublishable(session, doc)) {
-            publishCommunityDocumentInPrivateSection(session, doc);
+        if (SocialWorkspaceHelper.isSocialDocumentPublishable(session,
+                socialDocument)) {
+            publishCommunityDocumentInPrivateSection(session, socialDocument);
         }
     }
 
@@ -92,7 +94,7 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
 
     protected String chooseSocialSection(DocumentModel socialDocument) {
         String sectionPath = "";
-        if (SocialConstants.NEWS_TYPE.equals(socialDocument.getType())) {
+        if (NEWS_TYPE.equals(socialDocument.getType())) {
             sectionPath = ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME;
         }
         return sectionPath;

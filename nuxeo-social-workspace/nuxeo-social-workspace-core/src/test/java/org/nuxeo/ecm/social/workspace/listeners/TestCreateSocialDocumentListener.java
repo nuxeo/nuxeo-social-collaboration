@@ -119,14 +119,15 @@ public class TestCreateSocialDocumentListener {
         socialDocumentFacetedNote = session.createDocument(socialDocumentFacetedNote);
         session.save();
 
-        underTest.publishCommunityDocumentInPrivateSection(session,socialDocumentFacetedNote);
+        underTest.publishCommunityDocumentInPrivateSection(session,
+                socialDocumentFacetedNote);
 
         query = String.format(
                 "SELECT * FROM Note WHERE ecm:path STARTSWITH '%s/' "
                         + "AND  ecm:isProxy =1 AND ecm:name ='%s'",
                 sws.getPathAsString(), socialDocumentFacetedNote.getName());
 
-        DocumentModelList unpublishedNotes= session.query(query);
+        DocumentModelList unpublishedNotes = session.query(query);
 
         assertEquals(
                 "There should have no publication of \"Social Document Note\"",
