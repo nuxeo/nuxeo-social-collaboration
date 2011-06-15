@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/nuxeo/" />
+<title>createNews</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">createNews</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>restAPI/systemLog?token=dolog&amp;level=INFO&amp;message=-----Selenium<br /><br /><br /> createSocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>logout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Administrator</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Workspaces</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Create a new workspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//td[@class=&quot;fieldColumn&quot;]/input[@type=&quot;text&quot;]</td>
+	<td>testWorkspace</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Create']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDown</td>
+	<td>link=New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Social Workspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//td[@class=&quot;fieldColumn&quot;]/input[@type=&quot;text&quot;]</td>
+	<td>mySocialWorkspace</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value=&quot;Create&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//*[@id=&quot;addGadgetButton&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='gadgetListContainer']/div/div[@gadget-name='news']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//*[@id=&quot;addGadgetButton&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='gadgetListContainer']/div/div[@gadget-name='join']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Admin Center</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Users &amp; groups</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Create a new user</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_username&quot;]</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_email&quot;]</td>
+	<td>member@community.org</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_firstPassword&quot;]</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_secondPassword&quot;]</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>watchA4jRequests</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>typeKeys</td>
+	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
+	<td>members</td>
+</tr>
+<tr>
+	<td>waitForA4jRequest</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='createUserView:createUser:nxl_user:nxw_groups_suggestionBox:suggest']/x:tbody/x:tr[1]/x:td[2]</td>
+	<td>members</td>
+</tr>
+<tr>
+	<td>watchA4jRequests</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//*[@id='createUserView:createUser:nxl_user:nxw_groups_suggestionBox:suggest']/x:tbody/x:tr[1]/x:td[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForA4jRequest</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>watchA4jRequests</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@id='createUserView:createUser:button_save_and_create']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForA4jRequest</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>User created</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_username&quot;]</td>
+	<td>OutOfCommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_email&quot;]</td>
+	<td>user@lambda.org</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_firstPassword&quot;]</td>
+	<td>OutOfCommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_secondPassword&quot;]</td>
+	<td>OutOfCommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_groups_suggest&quot;]</td>
+	<td>members</td>
+</tr>
+<tr>
+	<td>watchA4jRequests</td>
+	<td></td>
+	<td></td>
+</tr>
+<!--a space is typed to make the suggestion list appear-->
+<tr>
+	<td>typeKeys</td>
+	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
+	<td> </td>
+</tr>
+<tr>
+	<td>waitForA4jRequest</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='createUserView:createUser:nxl_user:nxw_groups_suggestionBox:suggest']/x:tbody/x:tr[1]/x:td[2]</td>
+	<td>members</td>
+</tr>
+<tr>
+	<td>watchA4jRequests</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//*[@id='createUserView:createUser:nxl_user:nxw_groups_suggestionBox:suggest']/x:tbody/x:tr[1]/x:td[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForA4jRequest</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>watchA4jRequests</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@id='createUserView:createUser:button_save_and_create']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForA4jRequest</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>User created</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;userServicesForm:userMenuActionsTable:1:userMenuActionLink&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Workspaces</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=testWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=mySocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>watchA4jRequests</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//*[@id=&quot;joinButton&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForA4jRequest</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;userServicesForm:userMenuActionsTable:1:userMenuActionLink&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Workspaces</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=testWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=mySocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Content</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;selectDocumentTypeForCreationForm:selectDocumentTypeForCreationTable:0:selectDocumentTypeForCreationCategory:0:selectDocumentTypeForCreationCategoryTable:2:selectDocumentTypeForCreationCategoryTitleLink&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;document_create:nxl_heading:nxw_title&quot;]</td>
+	<td>News for test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;document_create:nxl_heading:nxw_description&quot;]</td>
+	<td>description for test</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//*[@id=&quot;document_create:nxl_note:j_id268:nxw_note_editorselector&quot;]</td>
+	<td>label=Text</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;document_create:nxl_note:j_id268:nxw_note_editor&quot;]</td>
+	<td>And now the content of the news</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;document_create:create_doc_CREATE_DOCUMENT&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=mySocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
+	<td>Administrator,*</td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>01/01/1970</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p/a</td>
+	<td>News for test</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p[2]</td>
+	<td>And now the content of the news</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;userServicesForm:userMenuActionsTable:1:userMenuActionLink&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Workspaces</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=testWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=mySocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>800</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
+	<td>Administrator,*</td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>01/01/1970</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p/a</td>
+	<td>News for test</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p[2]</td>
+	<td>And now the content of the news</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;userServicesForm:userMenuActionsTable:1:userMenuActionLink&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Workspaces</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=testWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=mySocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Content</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=News for test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//*[@id=&quot;document_edit:nxl_note:j_id278:nxw_note_editor&quot;]</td>
+	<td>And now something completely different:&quot; the larch!&quot;</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;document_edit:edit_doc_EDIT_CURRENT_DOCUMENT&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=mySocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
+	<td>Administrator,*</td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>01/01/1970</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p/a</td>
+	<td>News for test</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p[2]</td>
+	<td>And now something completely different:&quot; the larch!&quot;</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id=&quot;userServicesForm:userMenuActionsTable:1:userMenuActionLink&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>CommunityMember</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Workspaces</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=testWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=mySocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
+	<td>Administrator,*</td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>01/01/1970</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p/a</td>
+	<td>News for test</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//*[@id='nxDocumentListData']/div/p[2]</td>
+	<td>And now something completely different:&quot; the larch!&quot;</td>
+</tr>
+</tbody></table>
+</body>
+</html>
