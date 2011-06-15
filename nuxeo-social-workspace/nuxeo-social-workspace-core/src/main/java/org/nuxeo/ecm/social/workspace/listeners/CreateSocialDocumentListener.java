@@ -70,8 +70,8 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         if (!(ctx instanceof DocumentEventContext)) {
             return;
         }
-        DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
-        if (doc == null) {
+        DocumentModel socialDocument = ((DocumentEventContext) ctx).getSourceDocument();
+        if (socialDocument == null) {
             return;
         }
 
