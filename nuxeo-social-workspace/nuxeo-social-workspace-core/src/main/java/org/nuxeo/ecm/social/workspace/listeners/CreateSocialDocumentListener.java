@@ -18,9 +18,7 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +30,7 @@ import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
 
 /**
  * Class to handle "Social Document" faceted document publication after creation
@@ -74,30 +72,34 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         if (socialDocument == null || socialDocument.isProxy()) {
             return;
         }
+        if (NEWS_TYPE.equals(socialDocument.getType())) {
 
-        CoreSession session = ctx.getCoreSession();
-        if (SocialWorkspaceHelper.isSocialDocumentPublishable(session,
-                socialDocument)) {
-            publishCommunityDocumentInPrivateSection(session, socialDocument);
+            CoreSession session = ctx.getCoreSession();
+
+            if (ctx.hasProperty("Public")) {
+                publishCommunityDocumentInPublicSection(session, socialDocument);
+            } else {
+                publishCommunityDocumentInPrivateSection(session,
+                        socialDocument);
+            }
         }
     }
 
     protected void publishCommunityDocumentInPrivateSection(
             CoreSession session, DocumentModel socialDocument)
             throws ClientException {
-
-        String sectionName = chooseSocialSection(socialDocument);
-        SocialWorkspaceHelper.publishSocialdocument(session, socialDocument,
-                sectionName);
+        SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
+                session, socialDocument);
+        publisher.publishPrivatelySocialDocument();
 
     }
 
-    protected String chooseSocialSection(DocumentModel socialDocument) {
-        String sectionPath = "";
-        if (NEWS_TYPE.equals(socialDocument.getType())) {
-            sectionPath = ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME;
-        }
-        return sectionPath;
+    protected void publishCommunityDocumentInPublicSection(CoreSession session,
+            DocumentModel socialDocument) throws ClientException {
+        SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
+                session, socialDocument);
+        publisher.publishPubliclySocialDocument();
+
     }
 
 }

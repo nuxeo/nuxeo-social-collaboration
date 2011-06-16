@@ -27,6 +27,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TY
 
 import java.io.Serializable;
 
+import org.concordion.internal.command.AssertEqualsCommand;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -34,11 +35,13 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.VersioningOption;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.ecm.core.versioning.VersioningService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -110,14 +113,10 @@ public class TestListeners {
 
         DocumentModel nominalNews = createDocumentModel(sws.getPathAsString(),
                 "nominal news", NEWS_TYPE);
-        String publicationOfTheNewsPathAsString = String.format("%s/%s/%s",
-                sws.getPathAsString(), ROOT_SECTION_NAME,
-                NEWS_SECTION_NAME);
-        DocumentRef refPublicationOfTheNews = new PathRef(
-                publicationOfTheNewsPathAsString);
-        DocumentModel publicationOfTheNews = session.getDocument(refPublicationOfTheNews);
+        DocumentModel publicationOfTheNews = getTheProxyOfTheNews(sws);
         assertNotNull("There should exist a proxy of the doc \"nominal news\"",
                 publicationOfTheNews);
+        String publicationOfTheNewsId=publicationOfTheNews.getId();
 
         Serializable originalNewsDcCreator = nominalNews.getProperty(
                 "dc:creator").getValue();
@@ -139,5 +138,23 @@ public class TestListeners {
         assertNotNull(
                 "For the news publication the date of the last modification should exists",
                 publicationLastModifiedDate);
+
+        nominalNews.putContextData(VersioningService.VERSIONING_OPTION, VersioningOption.MAJOR);
+        session.saveDocument(nominalNews);
+
+        publicationOfTheNews = getTheProxyOfTheNews(sws);
+        assertEquals(publicationOfTheNewsId,publicationOfTheNews.getId());
+        
+    }
+
+    protected DocumentModel getTheProxyOfTheNews(DocumentModel sws)
+            throws ClientException {
+        String publicationOfTheNewsPathAsString = String.format("%s/%s/%s",
+                sws.getPathAsString(), ROOT_SECTION_NAME,
+                NEWS_SECTION_NAME);
+        DocumentRef refPublicationOfTheNews = new PathRef(
+                publicationOfTheNewsPathAsString);
+        DocumentModel publicationOfTheNews = session.getDocument(refPublicationOfTheNews);
+        return publicationOfTheNews;
     }
 }

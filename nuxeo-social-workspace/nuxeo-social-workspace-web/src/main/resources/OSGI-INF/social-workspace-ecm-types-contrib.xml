@@ -63,7 +63,7 @@
       <default-view>view_documents</default-view>
       <layouts mode="any">
         <layout>heading</layout>
-        <layout>article</layout>
+        <layout>news</layout>
         <layout>note</layout>
       </layouts>
       <layouts mode="summary">
@@ -71,6 +71,7 @@
       </layouts>
       <layouts mode="edit">
         <layout>heading</layout>
+        <layout>news</layout>
         <layout>note</layout>
         <layout>dublincore</layout>
       </layouts>

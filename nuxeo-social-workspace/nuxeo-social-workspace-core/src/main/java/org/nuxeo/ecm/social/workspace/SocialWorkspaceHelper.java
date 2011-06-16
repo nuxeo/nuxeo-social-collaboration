@@ -94,6 +94,7 @@ public class SocialWorkspaceHelper {
      * @return true if the document could be published in a social section.
      * @throws ClientException
      */
+    @Deprecated
     public static boolean isSocialDocumentPublishable(CoreSession session,
             DocumentModel socialDocument) throws ClientException {
         DocumentRef socialDocumentRef = socialDocument.getRef();
@@ -137,12 +138,15 @@ public class SocialWorkspaceHelper {
      * @param socialWorkspace : the document to be tested
      * @return true if socialWorkspace exists with the facet SocialWorkspace.
      */
+    @Deprecated
     public static boolean isSocialWorkspace(DocumentModel socialWorkspace) {
         return socialWorkspace != null
                 && socialWorkspace.hasFacet(SOCIAL_WORKSPACE_FACET);
     }
 
     /**
+     *
+     *
      * Tries to published socialDocument within the section referenced by
      * sectionPath. Returns the socialDocument proxy if it exists.
      *
@@ -155,6 +159,7 @@ public class SocialWorkspaceHelper {
      * @throws ClientException if the document doesn't posses the facet
      *             "Social Document" and if the document can't be published
      */
+    @Deprecated
     public static DocumentModel publishSocialdocument(CoreSession session,
             DocumentModel socialDocument, String sectionName)
             throws ClientException {

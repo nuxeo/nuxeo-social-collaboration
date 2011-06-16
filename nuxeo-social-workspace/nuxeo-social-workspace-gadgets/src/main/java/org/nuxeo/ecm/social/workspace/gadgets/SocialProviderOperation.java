@@ -143,9 +143,9 @@ public class SocialProviderOperation {
 
         String s = " ecm:path STARTSWITH '" + socialWorkspacePath + "'";
 
-        if (!isMember(principal, sws)) {
-            s += " AND soc:isPublic = 1";
-        }
+//        if (!isMember(principal, sws)) {
+//            s += " AND soc:isPublic = 1";
+//        }
 
         if (query != null) {
             if (query.toUpperCase().contains("WHERE")) {

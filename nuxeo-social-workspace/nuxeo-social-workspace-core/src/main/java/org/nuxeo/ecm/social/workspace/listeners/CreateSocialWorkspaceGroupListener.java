@@ -16,6 +16,9 @@
 
 package org.nuxeo.ecm.social.workspace.listeners;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_ACL_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
@@ -24,12 +27,16 @@ import java.util.Arrays;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
@@ -71,12 +78,14 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         if (!doc.hasFacet(SOCIAL_WORKSPACE_FACET)) {
             return;
         }
-
         ACP acp = doc.getACP();
         acp.addACL(createCommunityACL(acp, doc));
         doc.setACP(acp, true);
 
-        ctx.getCoreSession().saveDocument(doc);
+        CoreSession session = ctx.getCoreSession();
+        session.saveDocument(doc);
+
+        handleACPOnSocialSections(doc, session);
 
         createGroup(
                 SocialWorkspaceHelper.getCommunityAdministratorsGroupName(doc),
@@ -94,7 +103,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
      * @param groupLabel group label that can be null
      * @param principal null is you do not want to add a member
      */
-    protected void createGroup(String groupName, String groupLabel, String principal) {
+    protected void createGroup(String groupName, String groupLabel, String principal) throws ClientException{
         UserManager userManager = getUserManager();
         try {
             String groupSchemaName = userManager.getGroupSchemaName();
@@ -129,15 +138,91 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         return acl;
     }
 
-    protected UserManager getUserManager() {
+    protected UserManager getUserManager() throws ClientException {
         if (userManager == null) {
             try {
                 userManager = Framework.getService(UserManager.class);
             } catch (Exception e) {
                 log.error("Cannot instantiate userManager", e);
+                throw new ClientException(e);
             }
         }
         return userManager;
+    }
+
+    public void handleACPOnSocialSections(DocumentModel socialWorkspace,
+            CoreSession session) throws ClientException {
+        DocumentModel rootSocialSection = session.getChild(
+                socialWorkspace.getRef(), ROOT_SECTION_NAME);
+
+        tuneRightsOnSocialSection(socialWorkspace, session, rootSocialSection);
+
+        DocumentRef privatNewsSectionRef = new PathRef(
+                rootSocialSection.getPathAsString(), NEWS_SECTION_NAME);
+
+        DocumentModel publicSocialSection = session.getChild(
+                privatNewsSectionRef, PUBLIC_NEWS_SECTION_NAME);
+
+        grantReadRightForEveryOneOnSocialSection(socialWorkspace, session,
+                publicSocialSection);
+    }
+
+    protected void tuneRightsOnSocialSection(DocumentModel socialWorkspace,
+            CoreSession session, DocumentModel rootSocialSection)
+            throws ClientException {
+        ACP acp = new ACPImpl();
+        ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
+        grantSpecificRightsOnSocialSections(socialWorkspace, acl);
+        acl.add(new ACE(SecurityConstants.EVERYONE,
+                SecurityConstants.EVERYTHING, false));
+        acp.addACL(acl);
+        rootSocialSection.setACP(acp, true);
+        session.saveDocument(rootSocialSection);
+    }
+
+    protected void grantSpecificRightsOnSocialSections(
+            DocumentModel socialWorkspace, ACL acl) throws ClientException {
+        grantEverythingToAdministrator(acl);
+        acl.add(new ACE(
+                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
+                SecurityConstants.EVERYTHING, true));
+        acl.add(new ACE(
+                SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
+                SecurityConstants.READ_WRITE, true));
+
+    }
+
+    protected void grantEverythingToAdministrator(ACL acl)
+            throws ClientException {
+        for (String adminGroup : getUserManager().getAdministratorsGroups()) {
+            acl.add(new ACE(adminGroup, SecurityConstants.EVERYTHING, true));
+        }
+    }
+
+    protected void grantReadRightForEveryOneOnSocialSection(
+            DocumentModel socialWorkspace, CoreSession session,
+            DocumentModel publicSocialSection) throws ClientException {
+
+        ACP acpPublicSection = new ACPImpl();
+
+        ACL aclPublicSection = acpPublicSection.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
+        grantSpecificRightsOnSocialSections(socialWorkspace, aclPublicSection);
+        grantPublicReadRight(aclPublicSection);
+
+        acpPublicSection.addACL(aclPublicSection);
+        publicSocialSection.setACP(acpPublicSection, true);
+
+        session.saveDocument(publicSocialSection);
+    }
+
+    protected void grantPublicReadRight(ACL aclPublicSection)
+            throws ClientException {
+        String defaultGroupName = getUserManager().getDefaultGroup();
+        if (defaultGroupName == null ) {
+            defaultGroupName = SecurityConstants.EVERYONE;
+        }
+        aclPublicSection.add(new ACE(defaultGroupName, SecurityConstants.READ,
+                true));
     }
 
 }

@@ -13,11 +13,20 @@
  *
  * Contributors:
  *     Ronan
- */package org.nuxeo.ecm.social.workspace;
+ */
+package org.nuxeo.ecm.social.workspace;
 
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
-import static junit.framework.Assert.*;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_PUBLICATION_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,15 +34,9 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.security.ACE;
-import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
-import org.nuxeo.ecm.core.api.security.impl.ACLImpl;
-import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
-import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
-import org.nuxeo.ecm.core.test.RepositorySettings;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -42,6 +45,7 @@ import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
 
@@ -50,11 +54,10 @@ import com.google.inject.Inject;
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.social.workspace.core" })
+@LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
 public class TestNewsManagement {
 
     private static final String BASE_WORKSPACE_NAME = "base";
-
-    private static final String COMMUNITY_CREATOR_NAME = "Community creator";
 
     public static final String TEST_NAME_SOCIAL_WORKSPACE = "socialworkspace";
 
@@ -158,159 +161,81 @@ public class TestNewsManagement {
                 socialWorkspace.getPathAsString(), "socialSectionForTesting",
                 SOCIAL_PUBLICATION_TYPE);
 
-
         DocumentModel newsPublicationInSocialSection = SocialWorkspaceHelper.publishSocialdocument(
                 session, oneDoc, socialSectionOutOfTheTemplate.getName());
 
-        assertNotNull("The proxy of the news should exist.", newsPublicationInSocialSection);
-
+        assertNotNull("The proxy of the news should exist.",
+                newsPublicationInSocialSection);
 
         try {
             DocumentModel newsNonPublished = SocialWorkspaceHelper.publishSocialdocument(
                     session, oneDoc, "inexsiting social section");
 
-            assertNull("The proxy shouldn't exist in an inexisting section",newsNonPublished);
+            assertNull("The proxy shouldn't exist in an inexisting section",
+                    newsNonPublished);
         } catch (Exception e) {
 
         }
 
         DocumentModel newsPublishInTemplateSection = SocialWorkspaceHelper.publishSocialdocument(
-                session, oneDoc, ROOT_SECTION_NAME+"/"+NEWS_SECTION_NAME);
+                session, oneDoc, ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME);
 
-        assertNotNull("The proxy of the news should exist.", newsPublishInTemplateSection);
-
-        DocumentModel newsPublishInPublicTemplateSection = SocialWorkspaceHelper.publishSocialdocument(
-                session, oneDoc, ROOT_SECTION_NAME+"/"+NEWS_SECTION_NAME+"/"+PUBLIC_NEWS_SECTION_NAME);
-
-        assertNotNull("The proxy of the news should exist.", newsPublishInPublicTemplateSection);
-
+        assertNotNull("The proxy of the news should exist.",
+                newsPublishInTemplateSection);
 
     }
 
-     @Test
-    public void testReadingRightToEveryOne() throws Exception {
-        DocumentModel containerWorkspace = session.createDocumentModel(
+    @Test
+    public void testRightsOnSocialSections() throws Exception {
+        DocumentModel workspace = createDocumentModelInSession(
                 session.getRootDocument().getPathAsString(),
                 BASE_WORKSPACE_NAME, "Workspace");
-        containerWorkspace = session.createDocument(containerWorkspace);
-        containerWorkspace.setACP(
-                instanciateUserAcpToEveryThing(COMMUNITY_CREATOR_NAME), true);
-        containerWorkspace = session.saveDocument(containerWorkspace);
-        session.save();
+        DocumentModel socialWorkspace = createDocumentModelInSession(
+                workspace.getPathAsString(), TEST_NAME_SOCIAL_WORKSPACE,
+                SOCIAL_WORKSPACE_TYPE);
+        DocumentModel pubsec = session.getDocument(new PathRef(
+                socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME));
+        assertNotNull(pubsec);
+        DocumentModel privatePubsec = session.getDocument(new PathRef(
+                pubsec.getPathAsString() + "/" + NEWS_SECTION_NAME));
+        DocumentModel publicPubsec = session.getDocument(new PathRef(
+                privatePubsec.getPathAsString(), PUBLIC_NEWS_SECTION_NAME));
 
-        changeUser(COMMUNITY_CREATOR_NAME);
-
-        createDocumentModelInSession(containerWorkspace.getPathAsString(),
-                TEST_NAME_SOCIAL_WORKSPACE, SOCIAL_WORKSPACE_TYPE);
-
-        DocumentModel publicationSection = session.getDocument(new PathRef("/"
-                + BASE_WORKSPACE_NAME + "/" + TEST_NAME_SOCIAL_WORKSPACE + "/"
-                + ROOT_SECTION_NAME));
-
-        ACP currentSectionACP = publicationSection.getACP();
-
+        ACP acp = pubsec.getACP();
+        assertFalse(acp.getAccess(userManager.getDefaultGroup(),
+                SecurityConstants.READ).toBoolean());
+        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ_WRITE).toBoolean());
         assertTrue(
-                "The Administrator should have the READ right on the Publication Section",
-                currentSectionACP.getAccess("Administrator",
-                        SecurityConstants.READ).toBoolean());
-        assertTrue(
-                "The Administrator should have the WRITE right on the Publication Section",
-                currentSectionACP.getAccess("Administrator",
-                        SecurityConstants.WRITE).toBoolean());
+                "The members of the community should have the READ_WRIGHT right",
+                acp.getAccess(
+                        SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
+                        SecurityConstants.READ_WRITE).toBoolean());
+        assertTrue(acp.getAccess(
+                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
+                SecurityConstants.READ).toBoolean());
 
-        assertTrue(
-                "The community creator should have READ Right on the Publication section",
-                currentSectionACP.getAccess(COMMUNITY_CREATOR_NAME,
-                        SecurityConstants.READ).toBoolean());
-        assertTrue(
-                "The community creator should have WRITE Right on the Publication section",
-                currentSectionACP.getAccess(COMMUNITY_CREATOR_NAME,
-                        SecurityConstants.WRITE).toBoolean());
+        acp = privatePubsec.getACP();
+        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ_WRITE).toBoolean());
+        assertFalse(acp.getAccess(userManager.getDefaultGroup(),
+                SecurityConstants.READ).toBoolean());
+        assertTrue(acp.getAccess(
+                SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
+                SecurityConstants.READ_WRITE).toBoolean());
+        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ_WRITE).toBoolean());
+        assertTrue(acp.getAccess(
+                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
+                SecurityConstants.READ).toBoolean());
 
-        assertFalse(
-                "Whomever shouldn't have the READ right on the Publication section",
-                currentSectionACP.getAccess("nobody", SecurityConstants.READ).toBoolean());
-        assertFalse(
-                "Whomever shouldn't have the WRITE right on the Publication section",
-                currentSectionACP.getAccess("nobody", SecurityConstants.WRITE).toBoolean());
-
-        DocumentModel newsSection = session.getDocument(new PathRef("/"
-                + BASE_WORKSPACE_NAME + "/" + TEST_NAME_SOCIAL_WORKSPACE + "/"
-                + ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME));
-        currentSectionACP = newsSection.getACP();
-
-        assertTrue(
-                "The Administrator should have the READ right on the News Section",
-                currentSectionACP.getAccess("Administrator",
-                        SecurityConstants.READ).toBoolean());
-        assertTrue(
-                "The Administrator should have the WRITE right on the News Section",
-                currentSectionACP.getAccess("Administrator",
-                        SecurityConstants.WRITE).toBoolean());
-
-        assertTrue(
-                "The community creator should have READ Right on the News section",
-                currentSectionACP.getAccess(COMMUNITY_CREATOR_NAME,
-                        SecurityConstants.READ).toBoolean());
-        assertTrue(
-                "The community creator should have WRITE Right on the News section",
-                currentSectionACP.getAccess(COMMUNITY_CREATOR_NAME,
-                        SecurityConstants.WRITE).toBoolean());
-
-        assertFalse(
-                "Whomever shouldn't have the READ right on the News section",
-                currentSectionACP.getAccess("nobody", SecurityConstants.READ).toBoolean());
-        assertFalse(
-                "Whomever shouldn't have the WRITE right on the News section",
-                currentSectionACP.getAccess("nobody", SecurityConstants.WRITE).toBoolean());
-
-        DocumentModel publicSection = session.getDocument(new PathRef("/"
-                + BASE_WORKSPACE_NAME + "/" + TEST_NAME_SOCIAL_WORKSPACE + "/"
-                + ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME + "/"
-                + PUBLIC_NEWS_SECTION_NAME));
-        currentSectionACP = publicSection.getACP();
-
-        assertTrue(
-                "The Administrator should have the READ right on the PublicNews Section",
-                currentSectionACP.getAccess("Administrator",
-                        SecurityConstants.READ).toBoolean());
-        assertTrue(
-                "The Administrator should have the WRITE right on the PublicNews Section",
-                currentSectionACP.getAccess("Administrator",
-                        SecurityConstants.WRITE).toBoolean());
-
-        assertTrue(
-                "The community creator should have READ Right on the PublicNews section",
-                currentSectionACP.getAccess(COMMUNITY_CREATOR_NAME,
-                        SecurityConstants.READ).toBoolean());
-        assertTrue(
-                "The community creator should have WRITE Right on the PublicNews section",
-                currentSectionACP.getAccess(COMMUNITY_CREATOR_NAME,
-                        SecurityConstants.WRITE).toBoolean());
-
-        assertTrue(
-                "Whomever should have the READ right on the PublicNews section",
-                currentSectionACP.getAccess("nobody", SecurityConstants.READ).toBoolean());
-        assertFalse(
-                "Whomever shouldn't have the WRITE right on the PublicNews section",
-                currentSectionACP.getAccess("nobody", SecurityConstants.WRITE).toBoolean());
-    }
-
-    private ACP instanciateUserAcpToEveryThing(String userName) {
-        ACP acp = new ACPImpl();
-        ACL acl = new ACLImpl("acl");
-        ACE ace = new ACE(userName, EVERYTHING, true);
-        acl.add(ace);
-        acp.addACL(acl);
-        return acp;
-    }
-
-    protected void changeUser(String username) {
-        CoreFeature coreFeature = featuresRunner.getFeature(CoreFeature.class);
-        RepositorySettings repository = coreFeature.getRepository();
-        repository.shutdown();
-        repository.setUsername(username);
-        session = repository.get();
+        acp = publicPubsec.getACP();
+        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ).toBoolean());
+         assertTrue(acp.getAccess(userManager.getDefaultGroup(),
+         SecurityConstants.READ).toBoolean());
+        assertTrue(acp.getAccess(
+                SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
+                SecurityConstants.READ_WRITE).toBoolean());
+        assertTrue(acp.getAccess(
+                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
+                SecurityConstants.READ_WRITE).toBoolean());
     }
 
 }

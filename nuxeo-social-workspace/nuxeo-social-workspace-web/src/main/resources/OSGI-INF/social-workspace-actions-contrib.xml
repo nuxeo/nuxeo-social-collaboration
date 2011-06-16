@@ -43,6 +43,20 @@
       <filter-id>social_workspace</filter-id>
     </action>
 
+    <action id="MAKE_NEWS_PUBLIC" link="#{SocialPublishing.publishAsPublic()}"
+      label="command.publish.publicly" icon="" order="17">
+      <category>SOCIAL_DOCUMENT_SUMMARY_PUBLICATION_ACTIONS</category>
+      <filter-id>publishing</filter-id>
+      <filter-id>canBePublishAsPublic</filter-id>
+    </action>
+
+    <action id="MAKE_NEWS_PRIVATE" link="#{SocialPublishing.publishAsPrivate()}"
+      label="command.publish.privately" icon="" order="17">
+      <category>SOCIAL_DOCUMENT_SUMMARY_PUBLICATION_ACTIONS</category>
+      <filter-id>publishing</filter-id>
+      <filter-id>canBePublishAsPrivate</filter-id>
+    </action>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
@@ -98,6 +112,30 @@
       <rule grant="true">
         <permission>AddChildren</permission>
         <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="publishing">
+      <rule grant="true">
+        <type>News</type>
+      </rule>
+    </filter>
+
+    <filter id="canBePublishAsPrivate">
+      <rule grant="true">
+        <condition>
+          #{!SocialPublishing.isPrivate()}
+        </condition>
+      </rule>
+    </filter>
+
+    <filter id="canBePublishAsPublic">
+      <rule grant="true">
+
+        <condition>
+          #{SocialPublishing.isPrivate()}
+        </condition>
+
       </rule>
     </filter>
 

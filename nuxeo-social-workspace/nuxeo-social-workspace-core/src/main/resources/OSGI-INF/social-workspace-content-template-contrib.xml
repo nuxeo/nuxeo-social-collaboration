@@ -4,6 +4,7 @@
   <require>org.nuxeo.ecm.platform.content.template.service.ContentTemplateService.defaultContrib
   </require>
 
+
   <extension
     target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService"
     point="factoryBinding">
@@ -11,17 +12,13 @@
       factoryName="SimpleTemplateFactory" targetType="SocialWorkspace">
       <template>
         <templateItem typeName="SocialSection" id="social-section-root"
-          title="Publication" description="Publication space" />
+          title="Publication" description="Publication space"/>
         <templateItem typeName="SocialSection" id="news"
           title="PrivateNews" description="Private publication space"
           path="social-section-root" />
         <templateItem typeName="SocialSection" id="public-news"
           title="PublicNews" description="Public publication space"
-          path="social-section-root/news">
-          <acl>
-            <ace principal="Everyone" permission="Read" granted="true" />
-          </acl>
-        </templateItem>
+          path="social-section-root/news"/>
       </template>
     </factoryBinding>
   </extension>

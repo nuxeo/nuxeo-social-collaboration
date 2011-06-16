@@ -23,6 +23,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -31,6 +32,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventContext;
+import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.core.event.impl.EventImpl;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
@@ -68,6 +73,18 @@ public class TestCreateSocialDocumentListener {
     @Inject
     protected UserManager userManager;
 
+    CreateSocialDocumentListener underTest;
+
+    DocumentModel socialWorkspace;
+
+    @Before
+    public void setUp() throws Exception {
+        underTest = new CreateSocialDocumentListener();
+        socialWorkspace = createDocumentModel(
+                session.getRootDocument().getPathAsString(),
+                SOCIAL_WORKSPACE_NAME, SocialConstants.SOCIAL_WORKSPACE_TYPE);
+    }
+
     protected DocumentModel createDocumentModel(String path, String name,
             String type) throws ClientException {
         DocumentModel doc = session.createDocumentModel(path, name, type);
@@ -78,17 +95,16 @@ public class TestCreateSocialDocumentListener {
 
     @Test
     public void testListener() throws ClientException {
-        DocumentModel sws = createDocumentModel(
-                session.getRootDocument().getPathAsString(),
-                SOCIAL_WORKSPACE_NAME, SocialConstants.SOCIAL_WORKSPACE_TYPE);
 
-        CreateSocialDocumentListener underTest = new CreateSocialDocumentListener();
-        DocumentModel privateNews = createDocumentModel(sws.getPathAsString(),
-                "private news", SocialConstants.NEWS_TYPE);
+        DocumentModel privateNews = createDocumentModel(
+                socialWorkspace.getPathAsString(), "private news",
+                SocialConstants.NEWS_TYPE);
+
         underTest.publishCommunityDocumentInPrivateSection(session, privateNews);
 
-        DocumentRef privateNewsSection = new PathRef(sws.getPathAsString()
-                + "/" + ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME);
+        DocumentRef privateNewsSection = new PathRef(
+                socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME
+                        + "/" + NEWS_SECTION_NAME);
 
         DocumentModel publishedNews = session.getChild(privateNewsSection,
                 privateNews.getName());
@@ -105,7 +121,7 @@ public class TestCreateSocialDocumentListener {
         String query = String.format(
                 "SELECT * FROM Note WHERE ecm:path STARTSWITH '%s/' "
                         + "AND  ecm:isProxy =1 AND ecm:name ='%s'",
-                sws.getPathAsString(), wrongPlacedNews.getName());
+                socialWorkspace.getPathAsString(), wrongPlacedNews.getName());
 
         DocumentModelList unpublishedNews = session.query(query);
 
@@ -114,7 +130,8 @@ public class TestCreateSocialDocumentListener {
                 0, unpublishedNews.size());
 
         DocumentModel socialDocumentFacetedNote = session.createDocumentModel(
-                sws.getPathAsString(), "Social Document Note", "Note");
+                socialWorkspace.getPathAsString(), "Social Document Note",
+                "Note");
         socialDocumentFacetedNote.addFacet(SOCIAL_DOCUMENT_FACET);
         socialDocumentFacetedNote = session.createDocument(socialDocumentFacetedNote);
         session.save();
@@ -122,16 +139,35 @@ public class TestCreateSocialDocumentListener {
         underTest.publishCommunityDocumentInPrivateSection(session,
                 socialDocumentFacetedNote);
 
-        query = String.format(
-                "SELECT * FROM Note WHERE ecm:path STARTSWITH '%s/' "
-                        + "AND  ecm:isProxy =1 AND ecm:name ='%s'",
-                sws.getPathAsString(), socialDocumentFacetedNote.getName());
+        DocumentModel publishedNote = session.getChild(privateNewsSection,
+                socialDocumentFacetedNote.getName());
 
-        DocumentModelList unpublishedNotes = session.query(query);
+        assertNotNull(publishedNote);
+    }
 
-        assertEquals(
-                "There should have no publication of \"Social Document Note\"",
-                0, unpublishedNotes.size());
+    @Test
+    public void testEventHandle() throws Exception {
+        DocumentModel privateNews = createDocumentModel(
+                socialWorkspace.getPathAsString(), "private news",
+                SocialConstants.NEWS_TYPE);
+
+        EventContext context = new DocumentEventContext(session, null,
+                privateNews);
+        Event createDocumentEvent = new EventImpl("", context, 0);
+
+        underTest.handleEvent(createDocumentEvent);
+
+        DocumentRef privateNewsSectionRef = new PathRef(
+                socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME
+                        + "/" + NEWS_SECTION_NAME);
+
+        DocumentModel publishedNews = session.getChild(privateNewsSectionRef,
+                privateNews.getName());
+
+        assertNotNull(
+                "A news called news 1 should be found as published in the private news section.",
+                publishedNews);
+        assertTrue("", publishedNews.isProxy());
     }
 
 }
