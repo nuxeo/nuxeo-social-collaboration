@@ -11,10 +11,10 @@
 	<div class="links">
 		<a href="javascript: loadContent('${currentDoc.id}', ${page})"><img src="${skinPath}/icons/refresh.png" alt="refresh"/></a>
 		<#if parent?? >
-			<a href="javascript: loadContent('${parent.id}')"><img src="${skinPath}/icons/folder_up.png" alt="folder up"/></a>
+			<a href="javascript: loadContent('${parent.id}')"><img src="${skinPath}/icons/folder_up.png" alt="goToParent"/></a>
 		</#if>
 		<#if (ancestors?size > 1) >
-		<a href="javascript: loadContent('${socialWorkspace.id}')"><img src="${skinPath}/icons/root.png" alt="community Root"/></a>
+		<a href="javascript: loadContent('${socialWorkspace.id}')"><img src="${skinPath}/icons/root.png" alt="goToRoot"/></a>
 		</#if>
   </div>
   <div class="clear"></div>
@@ -47,7 +47,7 @@
 		<tr>
 			<td><img src="${contextPath}${doc["common:icon"]}" alt="icon"/></td>
 			<#if doc.isFolder>
-				<td><a href="javascript: loadContent('${doc.id}')" class="">${doc.title}</a></td>
+				<td><a href="javascript: loadContent('${doc.id}')" class="navigation">${doc.title}</a></td>
 			<#else>
 				<td>${doc.title}</td>
 			</#if>
