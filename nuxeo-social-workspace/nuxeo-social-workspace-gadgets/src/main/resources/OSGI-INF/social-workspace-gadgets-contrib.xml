@@ -25,5 +25,12 @@
       <icon>gadget-join.png</icon>
     </internalGadget>
 
+    <internalGadget name="library" disabled="false">
+      <mountPoint>/library</mountPoint>
+      <directory>library</directory>
+      <entryPoint>library.xml</entryPoint>
+      <category>Nuxeo</category>
+      <icon>gadget-library.png</icon>
+    </internalGadget>
   </extension>
 </component>

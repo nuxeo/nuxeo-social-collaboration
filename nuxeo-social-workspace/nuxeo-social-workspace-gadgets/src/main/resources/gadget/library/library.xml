@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Library"
+    description="Display public documents"
+    author="Eugen Ionica" author_email="ei@nuxeo.com"
+    height="300">
+    <Require feature="setprefs"/>
+    <Require feature="jquery" />
+    <#include "dynamic-translations.ftl"/>
+    <Require feature="dynamic-height" />
+    <Require feature="settitle" />
+  </ModulePrefs>
+  <#include "context-prefs.ftl"/>
+  <Content type="html">
+
+<![CDATA[
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
+  <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}documentlists.css"/>
+  <link rel="stylesheet" type="text/css" href="library.css"/>
+
+
+  <!-- insert JS Context -->
+  ${jsContext}
+
+  <script src="${specDirectoryUrl}context-management.js"></script>
+  <script type="text/javascript" language="javascript" src="library.js"></script>
+  <script type="text/javascript">
+  	var prefs  = new _IG_Prefs(__MODULE_ID__);
+  </script>
+
+  </head>
+
+  <body>
+     <div id="waitMessage" style="display: none">
+        <img src="${clientSideBaseUrl}img/standart_waiter.gif">
+     </div>
+     <div class="content" id="content">
+        Library gadget
+     </div>
+  </body>
+</html>
+]]>
+
+  </Content>
+</Module>

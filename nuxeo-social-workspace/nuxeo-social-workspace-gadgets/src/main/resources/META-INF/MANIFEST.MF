@@ -6,3 +6,4 @@ Bundle-Vendor: Nuxeo
 Bundle-Version: 1.0.0
 Nuxeo-Component: OSGI-INF/social-workspace-gadgets-contrib.xml,
  OSGI-INF/social-workspace-operations-contrib.xml
+Nuxeo-WebModule: org.nuxeo.ecm.webengine.app.WebEngineModule;name=social;package=org/nuxeo/ecm/social/workspace/gadgets/webengine
