@@ -71,7 +71,7 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
             return;
         }
         DocumentModel socialDocument = ((DocumentEventContext) ctx).getSourceDocument();
-        if (socialDocument == null) {
+        if (socialDocument == null || socialDocument.isProxy()) {
             return;
         }
 
