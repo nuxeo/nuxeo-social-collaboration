@@ -30,6 +30,12 @@
               <overWrite>true</overWrite>
               <outputDirectory>target</outputDirectory>
             </artifactItem>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-social-workspace-gadgets</artifactId>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
 
             <artifactItem>
               <groupId>org.seleniumhq.selenium</groupId>
