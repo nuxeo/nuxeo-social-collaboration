@@ -1,6 +1,6 @@
 /* 06/14/2011 */
 
-.content { font: normal 11px / 14px 'Lucida Grande',Verdana,Arial,sans-serif }
+.content { font: normal 11px / 14px 'Lucida Grande',Verdana,Arial,sans-serif ; height: 100% }
 
 h3 { border-bottom: 1px solid #ddd; margin: 8px 0; padding: 0 0 10px }
 
@@ -17,3 +17,4 @@ h3 { border-bottom: 1px solid #ddd; margin: 8px 0; padding: 0 0 10px }
 .clear { clear:both }
 
 img { border: none }
+

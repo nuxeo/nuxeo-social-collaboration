@@ -19,17 +19,17 @@
   <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}documentlists.css"/>
   <link rel="stylesheet" type="text/css" href="library.css"/>
-
+  <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}/css/jquery.fancybox.css" />
 
   <!-- insert JS Context -->
   ${jsContext}
 
-  <script src="${specDirectoryUrl}context-management.js"></script>
-  <script type="text/javascript" language="javascript" src="library.js"></script>
+  <script type="text/javascript" src="${specDirectoryUrl}context-management.js"></script>
+  <script type="text/javascript" src="${clientSideBaseUrl}/scripts/jquery/jquery.fancybox.pack.js"></script>
   <script type="text/javascript">
   	var prefs  = new _IG_Prefs(__MODULE_ID__);
   </script>
-
+  <script type="text/javascript" src="library.js"></script>
   </head>
 
   <body>
