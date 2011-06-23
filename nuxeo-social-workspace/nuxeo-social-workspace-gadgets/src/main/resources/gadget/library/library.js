@@ -1,79 +1,94 @@
 // load the page that will display the content of document specified
-function browse(docRef, page){
-	loadContent("browse", buildPageRequestData(docRef, page));
+function documentList(docRef, page, queryText){
+	data = buildPageRequestData(docRef, page, queryText);
+	loadContent(getBasePath() + '/' + "documentList", data);
 }
 
 // delete specified document from repository
 function deleteDocument(docRef, page){
-	loadContent("deleteDocument", buildPageRequestData(docRef, page));
+	loadContent(getBasePath() + '/' + "deleteDocument", buildPageRequestData(docRef, page));
 }
 
-function submitForm(submitElement) {
-	form = submitElement.form;
-	jQuery(form).submit( function (event) {
-		 event.preventDefault();
-
-		 jQuery.post(
-		 	jQuery(this).attr("action"),
-			jQuery(this).serializeArray(),
-		 	contentLoadedHandler
-		 );
-		 jQuery.fancybox.close();
-	});
+// used from form from popup ( eg for create folder)
+function submitForm(element) {
+	form = element.form;
+	data = jQuery(form).serializeArray();
+	loadContent(jQuery(form).attr("action"),data);
+	jQuery.fancybox.close();
 }
-
 
 function loadContent(path, data) {
-	jQuery("#waitMessage").show();
-	jQuery.get(
-		getBasePath() + '/' + path,
+	jQuery.post(
+		path,
 		data,
 		contentLoadedHandler
 	);
 }
 
-
+//
 function contentLoadedHandler(data){
+	// set the new content in "content" element
 	jQuery("#content").html(data);
+
 	addPopupBoxTo(jQuery(".addPopup"));
-	jQuery("#waitMessage").hide();
-	//gadgets.window.adjustHeight();
+
+	// intercept forms submit event and add custom behavior
+	jQuery("form").submit(
+		function(event){
+		    event.preventDefault();
+		 	data = jQuery(this).serializeArray();
+		 	data.push({
+		 		name: 'pageSize' ,
+		 		value : prefs.getString("pageSize")
+		 	});
+		 	loadContent(jQuery(this).attr("action"),data);
+		}
+	);
+
 }
 
-
-// called when gadget is load first time
-function loadInitialContent() {
-	browse(getTargetContextPath());
-}
 
 // return the path to access social webengine module
 function getBasePath() {
 	return basePath = top.nxContextPath + '/site/social';
 }
 
-function buildPageRequestData(docRef, page) {
+function buildPageRequestData(docRef, page, queryText) {
 	if ( typeof page == 'undefined' ) {
 		page = 0;
 	}
 	data = {
 		docRef: docRef,
-		pageSize: 5,
+		pageSize: prefs.getString("pageSize"),
 		page: page
 	}
+	if ( !(typeof queryText == "undefined")) {
+		data.queryText = queryText;
+	}
+
 	return data;
 }
 
 function addPopupBoxTo(a) {
       jQuery(a).fancybox({
-        'width'             : '80%',
-        'height'            : '80%',
-        'autoScale'         : true,
+        'width'             : '100%',
+        'height'            : '100%',
+        'autoScale'         : false,
         'transitionIn'      : 'none',
         'transitionOut'     : 'none',
         'type'              : 'iframe',
         'enableEscapeButton': true,
-        'centerOnScroll'	: true
+        'centerOnScroll'	: true,
+        'showCloseButton'	: false,
+        'padding'			: 0,
+        'margin'			: 0,
+        'overlayShow'		: false
       });
+}
+
+// called when gadget is load first time
+function loadInitialContent() {
+	documentList(getTargetContextPath());
 }
 
 gadgets.util.registerOnLoadHandler(loadInitialContent);
