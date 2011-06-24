@@ -9,7 +9,7 @@ function deleteDocument(docRef, page){
 	loadContent(getBasePath() + '/' + "deleteDocument", buildPageRequestData(docRef, page));
 }
 
-// used from form from popup ( eg for create folder)
+// used from popup ( eg for create folder)
 function submitForm(element) {
 	form = element.form;
 	data = jQuery(form).serializeArray();
