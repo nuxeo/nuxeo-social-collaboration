@@ -82,21 +82,6 @@ function getBasePath() {
 	return basePath = top.nxContextPath + '/site/social';
 }
 
-function buildPageRequestData(docRef, page, queryText) {
-	if ( typeof page == 'undefined' ) {
-		page = 0;
-	}
-	data = {
-		docRef: docRef,
-		pageSize: prefs.getString("pageSize"),
-		page: page
-	}
-	if ( !(typeof queryText == "undefined")) {
-		data.queryText = queryText;
-	}
-
-	return data;
-}
 
 function addPopupBoxTo(a) {
       jQuery(a).fancybox({
