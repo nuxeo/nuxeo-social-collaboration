@@ -112,7 +112,6 @@ public class SocialWebEngineRoot extends ModuleRoot {
             args.put("queryText", queryText);
         } else {
             docs = getChildren(doc, pageSize, page);
-            args.put("currentDoc", doc);
             List<DocumentModel> ancestors = getAncestors(doc);
 
             DocumentModel parent = null;
@@ -125,9 +124,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
             if (ancestors.size() > 0 && isSocialWorkspace(ancestors.get(0))) {
                 socialWorkspace = ancestors.remove(0);
             }
-            args.put("socialWorkspace", socialWorkspace);
-
             args.put("ancestors", ancestors);
+            args.put("socialWorkspace", socialWorkspace);
             args.put("queryText", "");
         }
 
@@ -147,6 +145,16 @@ public class SocialWebEngineRoot extends ModuleRoot {
         }
     }
 
+    @POST
+    @Path("publishDocument")
+    public Object publishDocument(@Context HttpServletRequest request)
+            throws Exception {
+        FormData formData = new FormData(request);
+        String targetRef = formData.getString("targetRef");
+        // TODO publish target document
+        return documentList(request);
+    }
+
     /**
      * remove the document specified in request
      */
@@ -155,16 +163,11 @@ public class SocialWebEngineRoot extends ModuleRoot {
     public Object deleteDocument(@Context HttpServletRequest request)
             throws Exception {
         FormData formData = new FormData(request);
-        String ref = formData.getString("docRef");
-        int pageSize = getIntFromString(formData.getString("pageSize"));
-        int page = getIntFromString(formData.getString("page"));
-        String queryText = formData.getString("queryText");
-
-        DocumentRef docRef = getDocumentRef(ref);
+        String target = formData.getString("targetRef");
+        DocumentRef docRef = getDocumentRef(target);
         CoreSession session = ctx.getCoreSession();
-        DocumentModel parent = session.getParentDocument(docRef);
         session.removeDocument(docRef);
-        return buildDocumentList(parent.getId(), pageSize, page, queryText);
+        return documentList(request);
     }
 
     /**

@@ -1,12 +1,40 @@
 // load the page that will display the content of document specified
-function documentList(docRef, page, queryText){
-	data = buildPageRequestData(docRef, page, queryText);
+function documentList(docRef, page){
+	data = loadContext();
+
+	if ( typeof page == 'number' ) {
+		data.page = page;
+	}
+	data.pageSize = prefs.getString("pageSize");
+
+	// set new value of docRef
+	data.docRef = docRef;
+
 	loadContent(getBasePath() + '/' + "documentList", data);
 }
 
 // delete specified document from repository
-function deleteDocument(docRef, page){
-	loadContent(getBasePath() + '/' + "deleteDocument", buildPageRequestData(docRef, page));
+function deleteDocument(targetRef){
+	data = loadContext();
+	data.targetRef = targetRef;
+	loadContent(getBasePath() + '/' + "deleteDocument", data);
+}
+
+// publish targetDocument
+function publishDocument(targetRef){
+	data = loadContext();
+	data.targetRef = targetRef;
+	loadContent(getBasePath() + '/' + "publishDocument", data);
+}
+
+
+// load navigation info from context form
+function loadContext() {
+    context = {};
+	jQuery.each(jQuery('[name="contextInfoForm"]').serializeArray(), function(i, field){
+		context[field.name]=field.value;
+	});
+	return context;
 }
 
 // used from popup ( eg for create folder)
@@ -24,6 +52,7 @@ function loadContent(path, data) {
 		contentLoadedHandler
 	);
 }
+
 
 //
 function contentLoadedHandler(data){

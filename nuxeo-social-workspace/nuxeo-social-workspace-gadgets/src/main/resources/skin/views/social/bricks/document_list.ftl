@@ -3,11 +3,11 @@
 		No documents.
 	<#else>
 	<div id="pageNavigationControls">
-    	<input type="image" onclick="javascript: documentList('${currentDoc.id}', 0, 			 '${queryText}' )" 	id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
-        <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${prevPage},   '${queryText}' )" 	id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
+    	<input type="image" onclick="javascript: documentList('${currentDoc.id}', 0, 			 )" 	id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
+        <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${prevPage}   )" 	id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
         <span class="currentPageStatus" id="nxDocumentListPage">${page + 1}/${maxPage}</span>
-        <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${nextPage},   '${queryText}' )" 	id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
-        <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${maxPage - 1} '${queryText}' )" 	id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
+        <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${nextPage}  )" 	id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
+        <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${maxPage - 1} )" 	id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
     </div>
 
 	<table class="dataList">
@@ -30,9 +30,13 @@
 			</#if>
 			<td>${doc["dc:modified"]?string("yyyy-MM-dd HH:mm")}</td>
 			<td>${doc["dc:creator"]}</td>
-			<td><a href="javascript: deleteDocument('${doc.id}', ${page})"><img src="${contextPath}/icons/action_delete.gif" alt="remove"></a></td>
+			<td>
+				<a href="javascript: deleteDocument('${doc.id}')"><img src="${contextPath}/icons/action_delete.gif" alt="remove"></a>
+				<a href="javascript: publishDocument('${doc.id}')"><img src="${contextPath}/icons/blog_folder.png" alt="publish"></a>
+			</td>
 		</tr>
 		</#list>
 	</table>
 	</#if>
 </div>
+<#include "@bricks/context">
