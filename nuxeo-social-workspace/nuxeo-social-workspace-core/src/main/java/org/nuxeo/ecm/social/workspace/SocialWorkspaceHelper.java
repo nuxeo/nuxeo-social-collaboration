@@ -47,6 +47,10 @@ public class SocialWorkspaceHelper {
 
     public static final String MEMBERS_SUFFIX = "_members";
 
+    public static final String ADMINISTRATORS_LABEL_PREFIX = "Administrators of ";
+
+    public static final String MEMBERS_LABEL_PREFIX = "Members of ";
+
     public static final String COMMUNITY_FACET = "CommunityFacet";
 
     private SocialWorkspaceHelper() {
@@ -59,6 +63,26 @@ public class SocialWorkspaceHelper {
 
     public static String getCommunityMembersGroupName(DocumentModel doc) {
         return doc.getId() + MEMBERS_SUFFIX;
+    }
+
+    public static String getCommunityAdministratorsGroupLabel(DocumentModel doc) {
+        try {
+            return ADMINISTRATORS_LABEL_PREFIX + doc.getTitle();
+        } catch (ClientException e) {
+            log.warn("Cannot retrieve document title to build administrators group label: " + doc.getId());
+            log.debug("Exception occurred:", e);
+            return null;
+        }
+    }
+
+    public static String getCommunityMembersGroupLabel(DocumentModel doc) {
+        try {
+            return MEMBERS_LABEL_PREFIX + doc.getTitle();
+        } catch (ClientException e) {
+            log.warn("Cannot retrieve document title to build members group label: " + doc.getId());
+            log.debug("Exception occurred:", e);
+            return null;
+        }
     }
 
     /**

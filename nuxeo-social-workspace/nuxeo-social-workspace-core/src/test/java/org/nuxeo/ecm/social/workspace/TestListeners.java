@@ -33,7 +33,6 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
@@ -83,19 +82,23 @@ public class TestListeners {
 
         assertNotNull(userManager);
         String adminGroupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws);
-        NuxeoGroup adminGroup = userManager.getGroup(adminGroupName);
+        DocumentModel adminGroup = userManager.getGroupModel(adminGroupName);
         assertNotNull(adminGroup);
+        assertEquals(SocialWorkspaceHelper.getCommunityAdministratorsGroupLabel(sws),
+                adminGroup.getProperty(userManager.getGroupSchemaName(), userManager.getGroupLabelField()));
 
         String membersGroupName = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
-        NuxeoGroup membersGroup = userManager.getGroup(membersGroupName);
+        DocumentModel membersGroup = userManager.getGroupModel(membersGroupName);
         assertNotNull(membersGroup);
+        assertEquals(SocialWorkspaceHelper.getCommunityMembersGroupLabel(sws),
+                membersGroup.getProperty(userManager.getGroupSchemaName(), userManager.getGroupLabelField()));
 
         session.removeDocument(sws.getRef());
         session.save();
 
-        adminGroup = userManager.getGroup(adminGroupName);
+        adminGroup = userManager.getGroupModel(adminGroupName);
         assertNull(adminGroup);
-        membersGroup = userManager.getGroup(membersGroupName);
+        membersGroup = userManager.getGroupModel(membersGroupName);
         assertNull(membersGroup);
     }
 

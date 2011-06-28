@@ -80,30 +80,34 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
 
         createGroup(
                 SocialWorkspaceHelper.getCommunityAdministratorsGroupName(doc),
+                SocialWorkspaceHelper.getCommunityAdministratorsGroupLabel(doc),
                 ctx.getPrincipal().getName());
-        createGroup(SocialWorkspaceHelper.getCommunityMembersGroupName(doc));
-    }
-
-    protected void createGroup(String groupName) {
-        createGroup(groupName, null);
+        createGroup(SocialWorkspaceHelper.getCommunityMembersGroupName(doc),
+                SocialWorkspaceHelper.getCommunityMembersGroupLabel(doc),
+                null);
     }
 
     /**
      * Create a group, and if exists add the principal as a member.
      *
      * @param groupName group name you want to create
+     * @param groupLabel group label that can be null
      * @param principal null is you do not want to add a member
      */
-    protected void createGroup(String groupName, String principal) {
+    protected void createGroup(String groupName, String groupLabel, String principal) {
         UserManager userManager = getUserManager();
         try {
+            String groupSchemaName = userManager.getGroupSchemaName();
+
             DocumentModel group = userManager.getBareGroupModel();
-            group.setProperty(userManager.getGroupSchemaName(), "groupname",
+            group.setProperty(groupSchemaName, userManager.getGroupIdField(),
                     groupName);
+            group.setProperty(groupSchemaName, userManager.getGroupLabelField(),
+                    groupLabel);
             group = userManager.createGroup(group);
 
             if (!(principal == null || "".equals(principal))) {
-                group.setProperty(userManager.getGroupSchemaName(), "members",
+                group.setProperty(groupSchemaName, userManager.getGroupMembersField(),
                         Arrays.asList(principal));
             }
             userManager.updateGroup(group);
