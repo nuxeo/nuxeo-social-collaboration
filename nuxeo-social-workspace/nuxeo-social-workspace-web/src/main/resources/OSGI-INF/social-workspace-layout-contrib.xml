@@ -169,13 +169,13 @@
       </templates>
       <rows>
         <row>
-          <widget>groupname</widget>
+          <widget>group_name</widget>
         </row>
         <row>
-          <widget>grouplabel</widget>
+          <widget>group_label</widget>
         </row>
         <row>
-          <widget>members</widget>
+          <widget>group_members</widget>
         </row>
       </rows>
     </layout>
