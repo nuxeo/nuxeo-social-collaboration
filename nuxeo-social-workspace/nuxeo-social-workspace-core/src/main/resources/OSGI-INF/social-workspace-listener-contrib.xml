@@ -33,6 +33,13 @@
       <event>documentModified</event>
     </listener>
 
+    <listener name="deleteSocialDocumentListener" async="false"
+      postCommit="false"
+      class="org.nuxeo.ecm.social.workspace.listeners.DeleteSocialDocumentListener"
+      priority="200">
+      <event>lifecycle_transition_event</event>
+    </listener>
+
   </extension>
 
 </component>

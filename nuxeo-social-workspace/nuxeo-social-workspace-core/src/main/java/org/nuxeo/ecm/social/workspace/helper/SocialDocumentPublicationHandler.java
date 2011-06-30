@@ -237,6 +237,7 @@ public class SocialDocumentPublicationHandler {
         int nbrOfProxies = curSoclDocProxy.size();
         if (nbrOfProxies == MAXIMAL_NUMBER_OF_PROXY_PER_SOCIAL_DOCUMENT) {
             proxyOrCurrentDoc = curSoclDocProxy.get(FIRST_AND_ONLY_PROXY);
+            currentProxy = proxyOrCurrentDoc;
         } else {
             if (nbrOfProxies > MAXIMAL_NUMBER_OF_PROXY_PER_SOCIAL_DOCUMENT
                     && log.isInfoEnabled()) {
@@ -274,6 +275,30 @@ public class SocialDocumentPublicationHandler {
         }
 
         return null;
+    }
+
+    public void unpublishSocialDocument() throws ClientException {
+        String queryToGetProxy=String.format(
+                "Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted' and ecm:name = '%s'",
+                currentSocialDocument.getName());
+        DocumentModelList newsProxies = session.query(queryToGetProxy);
+        currentProxy = newsProxies.get(0);
+        if (currentProxy != null) {
+            session.removeDocument(currentProxy.getRef());
+            currentProxy = null;
+            if (log.isInfoEnabled()) {
+                String message = String.format(
+                        "The proxy of the social document \"%s\" has been remove.",
+                        currentSocialDocument.toString());
+                log.info(message);
+            }
+        } else {
+            if (log.isInfoEnabled()) {
+                String message = "There is no social document proxy to remove.";
+                log.info(message);
+            }
+
+        }
     }
 
 }

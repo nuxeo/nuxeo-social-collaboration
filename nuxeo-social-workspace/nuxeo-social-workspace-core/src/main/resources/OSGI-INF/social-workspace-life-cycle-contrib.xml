@@ -31,13 +31,11 @@
     </lifecycle>
   </extension>
 
-
-
-
   <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
-             point="types">
+    point="types">
     <types>
       <type name="SocialWorkspace">default</type>
+      <type name="News">default</type>
       <type name="Article">default</type>
       <type name="Request">requestLifecycle</type>
     </types>
