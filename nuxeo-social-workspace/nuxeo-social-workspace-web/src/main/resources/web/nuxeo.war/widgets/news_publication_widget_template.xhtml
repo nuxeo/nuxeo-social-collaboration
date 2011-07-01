@@ -6,7 +6,7 @@
 
 <div class="lockFile_block" id='private_public_publishing_button'>
   <c:if test="#{SocialPublishing.isPrivate()}">
-    <h:outputText value="#{messages[' label.summary.publication.intro']} "/>
+    <h:outputText value="#{messages['label.summary.publication.intro']} "/>
     <h:outputText class="summary_locked" value="#{messages['label.summary.private']}"/>
       <h:outputText value=" | " />
       <h:commandLink value="#{messages['command.publish.publicly']}"

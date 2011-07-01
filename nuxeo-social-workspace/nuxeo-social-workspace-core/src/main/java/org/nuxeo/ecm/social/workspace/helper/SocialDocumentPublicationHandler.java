@@ -282,7 +282,18 @@ public class SocialDocumentPublicationHandler {
                 "Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted' and ecm:name = '%s'",
                 currentSocialDocument.getName());
         DocumentModelList newsProxies = session.query(queryToGetProxy);
+        if(newsProxies.size()==1){
         currentProxy = newsProxies.get(0);
+        }else{
+            DocumentModelList curSoclDocProxy = session.getProxies(
+                    currentSocialDocument.getRef(), publicSocialSection.getRef());
+            curSoclDocProxy.addAll(session.getProxies(
+                    currentSocialDocument.getRef(), privateSocialSection.getRef()));
+            if (curSoclDocProxy.isEmpty()) {
+                return;
+            }
+            currentProxy = curSoclDocProxy.get(FIRST_AND_ONLY_PROXY);
+        }
         if (currentProxy != null) {
             session.removeDocument(currentProxy.getRef());
             currentProxy = null;
