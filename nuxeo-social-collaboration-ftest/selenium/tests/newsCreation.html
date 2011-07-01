@@ -87,8 +87,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>10000</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='gadgetListContainer']/div/div[@gadget-name='news']</td>
 	<td></td>
 </tr>
 <tr>
@@ -102,8 +102,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>10000</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='gadgetListContainer']/div/div[@gadget-name='join']</td>
 	<td></td>
 </tr>
 <tr>
@@ -127,8 +127,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_username&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -163,7 +163,7 @@
 </tr>
 <tr>
 	<td>waitForA4jRequest</td>
-	<td>10000</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
@@ -197,7 +197,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForA4jRequest</td>
+	<td>pause</td>
 	<td>1000</td>
 	<td></td>
 </tr>
@@ -217,8 +217,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>750</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id=&quot;createUserView:createUser:nxl_user:nxw_username&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -253,7 +253,7 @@
 </tr>
 <tr>
 	<td>waitForA4jRequest</td>
-	<td>10000</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
@@ -332,8 +332,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id=&quot;joinButton&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -403,12 +403,12 @@
 </tr>
 <tr>
 	<td>select</td>
-	<td>//*[@id=&quot;document_create:nxl_note:j_id258:nxw_note_editorselector&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editorselector&quot;)]</td>
 	<td>label=Text</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//*[@id=&quot;document_create:nxl_note:j_id258:nxw_note_editor&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editor&quot;)]</td>
 	<td>And now the content of the news</td>
 </tr>
 <tr>
@@ -422,8 +422,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>1000</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -482,8 +482,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>800</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -558,7 +558,7 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>//*[@id=&quot;document_edit:nxl_note:j_id294:nxw_note_editor&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editor&quot;)]</td>
 	<td>And now something completely different:&quot; the larch!&quot;</td>
 </tr>
 <tr>
@@ -572,8 +572,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -632,8 +632,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -692,8 +692,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id=&quot;userServicesForm:userMenuActionsTable:1:userMenuActionLink&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -763,12 +763,12 @@
 </tr>
 <tr>
 	<td>select</td>
-	<td>//*[@id=&quot;document_create:nxl_note:j_id258:nxw_note_editorselector&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editorselector&quot;)]</td>
 	<td>label=Text</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//*[@id=&quot;document_create:nxl_note:j_id258:nxw_note_editor&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editor&quot;)]</td>
 	<td>And now the content of the public news</td>
 </tr>
 <tr>
@@ -782,8 +782,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -819,16 +819,16 @@
 <tr>
 	<td>verifyText</td>
 	<td>//*[@id='private_public_publishing_button']/span</td>
-	<td>Private</td>
+	<td>Restricted to the community</td>
 </tr>
 <tr>
 	<td>verifyText</td>
 	<td>//*[@id='private_public_publishing_button']/a</td>
-	<td>publish as public</td>
+	<td>make it public</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=publish as public</td>
+	<td>link=make it public</td>
 	<td></td>
 </tr>
 <tr>
@@ -839,7 +839,7 @@
 <tr>
 	<td>verifyText</td>
 	<td>//*[@id='private_public_publishing_button']/a</td>
-	<td>publish as private</td>
+	<td>restrict to the community</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -877,8 +877,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>1000</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -947,8 +947,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -1048,12 +1048,12 @@
 </tr>
 <tr>
 	<td>select</td>
-	<td>//*[@id=&quot;document_create:nxl_note:j_id258:nxw_note_editorselector&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editorselector&quot;)]</td>
 	<td>label=Text</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//*[@id=&quot;document_create:nxl_note:j_id258:nxw_note_editor&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editor&quot;)]</td>
 	<td>And now the content of the public news 2</td>
 </tr>
 <tr>
@@ -1069,7 +1069,7 @@
 <tr>
 	<td>verifyText</td>
 	<td>//*[@id='private_public_publishing_button']/a</td>
-	<td>publish as private</td>
+	<td>restrict to the community</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -1087,8 +1087,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -1167,8 +1167,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -1247,8 +1247,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -1338,7 +1338,7 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>//*[@id=&quot;document_edit:nxl_note:j_id294:nxw_note_editor&quot;]</td>
+	<td>//*[contains(@id,&quot;nxw_note_editor&quot;)]</td>
 	<td>This is another story.</td>
 </tr>
 <tr>
@@ -1352,8 +1352,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -1457,8 +1457,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
@@ -1517,8 +1517,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>waitForElementPresent</td>
+	<td>//*[@id='nxDocumentListData']/div/p</td>
 	<td></td>
 </tr>
 <tr>
