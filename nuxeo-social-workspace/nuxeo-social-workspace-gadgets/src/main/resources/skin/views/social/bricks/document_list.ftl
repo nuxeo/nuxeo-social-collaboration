@@ -34,10 +34,10 @@
 				<a href="javascript: confirmDeleteDocument('${doc.id}' , '${doc.title}' )"><img src="${contextPath}/icons/action_delete.gif" alt="remove"></a>
 
 				<#if publishablePublic?seq_contains(doc.id)>
-					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', true )"><img src="${contextPath}/icons/blogpage.png" alt="publish private"></a>
+					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', true )"><img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></a>
 				</#if>
 				<#if publishablePrivate?seq_contains(doc.id)>
-					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', false )"><img src="${contextPath}/icons/blog_folder.png" alt="publish public"></a>
+					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', false )"><img src="${skinPath}/icons/publish_to_community.png" alt="publish public"></a>
 				</#if>
 
 			</td>
