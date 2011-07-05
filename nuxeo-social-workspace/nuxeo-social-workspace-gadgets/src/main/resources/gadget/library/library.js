@@ -13,6 +13,12 @@ function documentList(docRef, page){
 	loadContent(getBasePath() + '/' + "documentList", data);
 }
 
+function confirmDeleteDocument(targetRef, targetTitle){
+	message = 'Delete "' +  targetTitle + '" ?';
+	code = 'deleteDocument( \'' + targetRef + '\' );' ;
+	showConfirmationPopup(message, code);
+}
+
 // delete specified document from repository
 function deleteDocument(targetRef){
 	data = loadContext();
@@ -20,13 +26,29 @@ function deleteDocument(targetRef){
 	loadContent(getBasePath() + '/' + "deleteDocument", data);
 }
 
+function confirmPublishDocument(targetRef, targetTitle, public){
+	if ( public ) {
+		message = 'Publish public the document "' +  targetTitle + '" ?';
+	} else {
+		message = 'Publish private the document "' +  targetTitle + '" ?';
+	}
+	code = 'publishDocument( \'' + targetRef + '\', ' + public + ' );' ;
+	showConfirmationPopup(message, code);
+}
+
 // publish targetDocument
-function publishDocument(targetRef){
+function publishDocument(targetRef, public){
 	data = loadContext();
 	data.targetRef = targetRef;
+	if ( typeof public != 'undefined' ) {
+		data.public = public;
+	}
 	loadContent(getBasePath() + '/' + "publishDocument", data);
 }
 
+function goToDocument(path) {
+	window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + path + "@view_documents";
+}
 
 // load navigation info from context form
 function loadContext() {
@@ -52,7 +74,6 @@ function loadContent(path, data) {
 		contentLoadedHandler
 	);
 }
-
 
 //
 function contentLoadedHandler(data){
@@ -82,6 +103,26 @@ function getBasePath() {
 	return basePath = top.nxContextPath + '/site/social';
 }
 
+
+// display an confirmation dialog
+// message - message that will be displayed
+// code - code that will be executed(as string) if ok button is pressed
+function showConfirmationPopup(message, code ) {
+	content = '<h3>' + message + '</h3>';
+	content += '<button class="border" name="ok" type="button" onclick="jQuery.fancybox.close();'+ code +'">OK</button>';
+	content += '<button class="border" name="cancel" type="button" onclick="jQuery.fancybox.close()">Cancel</button>';
+	jQuery.fancybox(
+		content,
+		{
+			'showCloseButton'	: false,
+        	'autoDimensions'	: false,
+			'width'         	: 350,
+			'height'        	: 'auto',
+			'transitionIn'		: 'none',
+			'transitionOut'		: 'none'
+		}
+	);
+}
 
 function addPopupBoxTo(a) {
       jQuery(a).fancybox({

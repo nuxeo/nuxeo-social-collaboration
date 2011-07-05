@@ -26,13 +26,20 @@
 			<#if doc.isFolder>
 				<td><a href="javascript: documentList('${doc.id}')" class="navigation">${doc.title}</a></td>
 			<#else>
-				<td>${doc.title}</td>
+				<td><a href="javascript: goToDocument('${doc.path}')" class="navigation">${doc.title}</a></td>
 			</#if>
 			<td>${doc["dc:modified"]?string("yyyy-MM-dd HH:mm")}</td>
 			<td>${doc["dc:creator"]}</td>
 			<td>
-				<a href="javascript: deleteDocument('${doc.id}')"><img src="${contextPath}/icons/action_delete.gif" alt="remove"></a>
-				<a href="javascript: publishDocument('${doc.id}')"><img src="${contextPath}/icons/blog_folder.png" alt="publish"></a>
+				<a href="javascript: confirmDeleteDocument('${doc.id}' , '${doc.title}' )"><img src="${contextPath}/icons/action_delete.gif" alt="remove"></a>
+
+				<#if publishablePublic?seq_contains(doc.id)>
+					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', true )"><img src="${contextPath}/icons/blogpage.png" alt="publish private"></a>
+				</#if>
+				<#if publishablePrivate?seq_contains(doc.id)>
+					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', false )"><img src="${contextPath}/icons/blog_folder.png" alt="publish public"></a>
+				</#if>
+
 			</td>
 		</tr>
 		</#list>

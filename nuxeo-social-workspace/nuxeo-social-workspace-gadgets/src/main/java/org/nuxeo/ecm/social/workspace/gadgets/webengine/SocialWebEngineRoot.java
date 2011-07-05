@@ -16,6 +16,8 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +43,13 @@ import org.nuxeo.ecm.automation.core.util.PaginableDocumentModelList;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.model.PropertyException;
+import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
+import org.nuxeo.ecm.social.workspace.helper.SocialDocumentStatusInfoHandler;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
@@ -102,13 +108,14 @@ public class SocialWebEngineRoot extends ModuleRoot {
         CoreSession session = ctx.getCoreSession();
 
         DocumentModel doc = session.getDocument(docRef);
+        DocumentModel socialWorkspace = null;
         args.put("currentDoc", doc);
         args.put("documetListPath", getPath() + "/documentList");
 
         PaginableDocumentModelList docs = null;
         if (isSearch) {
             docs = search(doc, pageSize, page, queryText);
-            args.put("socialWorkspace", doc);
+            socialWorkspace = doc;
             args.put("queryText", queryText);
         } else {
             docs = getChildren(doc, pageSize, page);
@@ -120,16 +127,21 @@ public class SocialWebEngineRoot extends ModuleRoot {
             }
             args.put("parent", parent);
 
-            DocumentModel socialWorkspace = null;
             if (ancestors.size() > 0 && isSocialWorkspace(ancestors.get(0))) {
                 socialWorkspace = ancestors.remove(0);
             }
             args.put("ancestors", ancestors);
-            args.put("socialWorkspace", socialWorkspace);
+
             args.put("queryText", "");
         }
 
+        args.put("socialWorkspace", socialWorkspace);
         args.put("docs", docs);
+
+        args.put("publishablePublic",
+                getPublishableDocs(socialWorkspace, docs, true));
+        args.put("publishablePrivate",
+                getPublishableDocs(socialWorkspace, docs, false));
 
         // add navigation arguments
         args.put("page", docs.getCurrentPageIndex());
@@ -150,8 +162,19 @@ public class SocialWebEngineRoot extends ModuleRoot {
     public Object publishDocument(@Context HttpServletRequest request)
             throws Exception {
         FormData formData = new FormData(request);
-        String targetRef = formData.getString("targetRef");
-        // TODO publish target document
+        CoreSession session = ctx.getCoreSession();
+        DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
+
+        DocumentModel target = session.getDocument(docRef);
+        SocialDocumentPublicationHandler handler = new SocialDocumentPublicationHandler(
+                session, target);
+
+        boolean isPublic = "true".equals(formData.getString("public"));
+        if (isPublic) {
+            handler.publishPubliclySocialDocument();
+        } else {
+            handler.publishPrivatelySocialDocument();
+        }
         return documentList(request);
     }
 
@@ -310,6 +333,39 @@ public class SocialWebEngineRoot extends ModuleRoot {
             automationService = Framework.getService(AutomationService.class);
         }
         return automationService;
+    }
+
+    // better way to do this ?
+    private List<String> getPublishableDocs(DocumentModel socialWorkspace,
+            DocumentModelList docs, boolean isPublic) throws PropertyException,
+            ClientException {
+        CoreSession session = socialWorkspace.getCoreSession();
+        boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue("social:isPublic");
+
+        List<String> list = new ArrayList<String>();
+
+        if (isPublicSocialWorkspace) {
+            if (isPublic) { // is public publication
+                for (DocumentModel doc : docs) {
+                    SocialDocumentStatusInfoHandler handler = new SocialDocumentStatusInfoHandler(
+                            session, doc);
+                    if (handler.isPrivate()
+                            && doc.hasFacet(SOCIAL_DOCUMENT_FACET)) {
+                        list.add(doc.getId());
+                    }
+                }
+            } else { // is private publication
+                for (DocumentModel doc : docs) {
+                    SocialDocumentStatusInfoHandler handler = new SocialDocumentStatusInfoHandler(
+                            session, doc);
+                    if (handler.isPublic()
+                            && doc.hasFacet(SOCIAL_DOCUMENT_FACET)) {
+                        list.add(doc.getId());
+                    }
+                }
+            }
+        }
+        return list;
     }
 
 }
