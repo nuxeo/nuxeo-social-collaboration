@@ -1,0 +1,1314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme name="social-collaboration" template-engines="jsf-facelets">
+  <layout>
+    <page name="dashboard">
+      <section>
+        <cell>
+          <!-- logo -->
+          <fragment type="generic fragment"/>
+        </cell>
+        <cell>
+          <!-- header -->
+          <fragment type="generic fragment"/>
+        </cell>
+        <cell>
+          <!-- Include -->
+          <fragment type="generic fragment"/>
+        </cell>
+      </section>
+      <section>
+        <cell>
+          <!-- main area -->
+          <fragment type="region fragment"/>
+        </cell>
+      </section>
+      <section>
+        <cell>
+          <!-- copyrights -->
+          <fragment type="generic fragment"/>
+        </cell>
+      </section>
+    </page>
+  </layout>
+  <properties element="page[1]/section[2]/cell[1]/fragment[1]">
+    <name>body</name>
+    <defaultBody/>
+    <defaultSrc/>
+  </properties>
+  <formats>
+    <layout element="page[1]">
+      <margin>0</margin>
+      <padding>0</padding>
+    </layout>
+    <layout element="page[1]/section[1]">
+      <height>36px</height>
+      <width>100%</width>
+      <overflow>auto</overflow>
+    </layout>
+    <layout element="page[1]/section[1]/cell[1]">
+      <width>18%</width>
+      <text-align>center</text-align>
+    </layout>
+    <layout element="page[1]/section[1]/cell[2]">
+      <width>82%</width>
+      <padding>0px 10px 0px 0px</padding>
+    </layout>
+    <layout element="page[1]/section[1]/cell[3]">
+      <width>0%</width>
+    </layout>
+    <layout element="page[1]/section[2]">
+      <height>600px</height>
+      <width>100%</width>
+    </layout>
+    <layout element="page[1]/section[2]/cell[1]">
+      <padding>20px 20px 180px</padding>
+    </layout>
+    <layout element="page[1]/section[3]">
+      <width>100%</width>
+    </layout>
+    <layout element="page[1]/section[3]/cell[1]">
+      <width>100%</width>
+      <text-align>right</text-align>
+    </layout>
+    <widget element="">
+      <view>theme view</view>
+      <icon>${org.nuxeo.ecm.contextPath}/icons/favicon.png</icon>
+      <charset>utf-8</charset>
+    </widget>
+    <widget element="page[1]">
+      <view>page frame</view>
+    </widget>
+    <widget element="page[1]/section[1]|page[1]/section[2]|page[1]/section[3]">
+      <view>section frame</view>
+    </widget>
+    <widget element="page[1]/section[1]/cell[1]|page[1]/section[1]/cell[2]|page[1]/section[1]/cell[3]|page[1]/section[2]/cell[1]|page[1]/section[3]/cell[1]">
+      <view>cell frame</view>
+    </widget>
+    <widget element="page[1]/section[1]/cell[1]/fragment[1]">
+      <view>Nuxeo DM logo (Galaxy Theme)</view>
+    </widget>
+    <widget element="page[1]/section[1]/cell[2]/fragment[1]">
+      <view>Nuxeo header</view>
+    </widget>
+    <widget element="page[1]/section[1]/cell[3]/fragment[1]">
+      <view>nuxeo5 includes</view>
+    </widget>
+    <widget element="page[1]/section[2]/cell[1]/fragment[1]">
+      <view>facelet region</view>
+    </widget>
+    <widget element="page[1]/section[3]/cell[1]/fragment[1]">
+      <view>Nuxeo footer</view>
+    </widget>
+    <!-- buttons -->
+    <style name="default buttons">
+      <selector path="input.button">
+        <font preset="default (Social Collaboration fonts)"/>
+        <color preset="buttons (Social Collaboration colors)" />
+        <border preset="buttons (Social Collaboration borders)"/>
+        <background preset="buttons (Social Collaboration backgrounds)"/>
+        <margin>5px 10px 10px 0px</margin>
+        <padding>2px 5px 2px 5px</padding>
+        <cursor>pointer</cursor>
+      </selector>
+      <selector path="input.button:hover">
+        <color preset="buttons.hover (Social Collaboration colors)" />
+        <border preset="buttons.hover (Social Collaboration borders)" />
+      </selector>
+      <selector path="input.button[disabled=disabled], input.button[disabled=disabled]:hover">
+        <color preset="buttons.disabled (Social Collaboration colors)" />
+        <border preset="buttons (Social Collaboration borders)"/>
+        <cursor>default</cursor>
+      </selector>
+    </style>
+    <!-- header and footer style  -->
+    <style name="header and footer style" inherit="default buttons">
+      <selector path="a, a:link, a:visited">
+        <text-decoration>none</text-decoration>
+      </selector>
+      <selector path="a:hover, a:active">
+        <text-decoration>underline</text-decoration>
+      </selector>
+      <selector path="a, a:link, a:visited, a:hover, a:active">
+        <color preset="header.link (Social Collaboration colors)" />
+      </selector>
+      <selector path="img">
+        <margin-left>5px</margin-left>
+        <margin-right>2px</margin-right>
+        <vertical-align>middle</vertical-align>
+      </selector>
+      <selector path="form">
+        <margin>0</margin>
+        <padding>0</padding>
+      </selector>
+      <selector path=".userActions">
+        <font preset="small (Social Collaboration fonts)"/>
+        <color preset="header.text (Social Collaboration colors)" />
+        <line-height>185%</line-height>
+        <padding>5px 0 0 0</padding>
+        <text-align>left</text-align>
+        <float>left</float>
+        <margin>0 0 0 15px</margin>
+      </selector>
+      <selector path=".searchService">
+        <padding-top>4px</padding-top>
+        <font preset="small (Social Collaboration fonts)"/>
+      </selector>
+      <selector path=".searchService input.button">
+        <margin>3px 5px 0 3px</margin>
+        <padding>2px</padding>
+      </selector>
+      <selector path=".userServicesBlock">
+        <float>left</float>
+        <padding-top>10px</padding-top>
+      </selector>
+      <selector path=".userSearchBlock">
+        <float>right</float>
+      </selector>
+      <selector path=".userMenuActions">
+        <font preset="default (Social Collaboration fonts)"/>
+        <color preset="header.text (Social Collaboration colors)" />
+        <line-height>185%</line-height>
+        <padding>0px</padding>
+        <text-align>left</text-align>
+        <float>left</float>
+        <margin>0 0 0 15px</margin>
+      </selector>
+      <selector path=".userMenuActions ul, .userMenuActions ul ul">
+        <list-style>none</list-style>
+      </selector>
+      <selector path=".userMenuActions ul">
+        <margin>0</margin>
+        <padding>0</padding>
+        <height>28px</height>
+      </selector>
+      <selector path=".userMenuActions ul li">
+        <float>left</float>
+        <text-align>left</text-align>
+      </selector>
+      <selector path=".userMenuActions ul li a:hover, .userMenuActions ul li:hover">
+        <background-color preset="white (Social Collaboration backgrounds)" />
+        <color preset="header.userMenuHover (Social Collaboration colors)" />
+      </selector>
+      <selector path=".userMenuActions a">
+        <display>block</display>
+        <text-decoration>none</text-decoration>
+        <margin>0</margin>
+        <color preset="header.userMenu (Social Collaboration colors)" />
+        <background-color preset="white (Social Collaboration backgrounds)" />
+      </selector>
+      <selector path=".userMenuActions a.userButton">
+        <background preset="header.userMenu (Social Collaboration backgrounds)"/>
+        <padding>3px 8px 5px 23px</padding>
+      </selector>
+      <selector path=".userMenuActions li ul">
+        <display>none</display>
+        <position>absolute</position>
+        <width>180px</width>
+        <height>auto</height>
+        <border preset="header.userMenuList (Social Collaboration borders)" />
+        <box-shadow>3px 3px 5px rgba(0, 0, 0, 0.5)</box-shadow>
+        <border-top>none</border-top>
+        <z-index>1000</z-index>
+      </selector>
+      <selector path=".userMenuActions li:hover ul">
+        <display>block</display>
+      </selector>
+      <selector path=".userMenuActions li ul a">
+        <padding>4px 4px 4px 22px</padding>
+      </selector>
+      <selector path=".userMenuActions ul li li">
+        <width>180px</width>
+      </selector>
+       <selector path=".userMenuActions ul ul a:hover">
+        <background-color preset="header.userListLinkHover (Social Collaboration backgrounds)" />
+      </selector>
+      <selector path=".userMenuActions input.button">
+        <margin>0 5px</margin>
+      </selector>
+      <selector path=".mainTabs">
+        <font preset="default (Social Collaboration fonts)"/>
+        <line-height>normal</line-height>
+        <height>28px</height>
+        <float>left</float>
+      </selector>
+      <selector path=".mainTabs ul">
+        <margin>0</margin>
+        <padding>0</padding>
+      </selector>
+      <selector path=".mainTabs li">
+        <background-color preset="header.mainTabs (Social Collaboration backgrounds)" />
+        <display>inline</display>
+        <float>left</float>
+        <height>28px</height>
+        <margin>0 5px</margin>
+      </selector>
+      <selector path=".mainTabs a, .mainTabs a:visited">
+        <color preset="header.mainTabs (Social Collaboration colors)" />
+        <display>inline-block</display>
+        <font-size>12px</font-size>
+        <padding>5px 11px 8px</padding>
+        <text-decoration>none</text-decoration>
+      </selector>
+      <selector path=".mainTabs a:hover">
+        <color preset="header.mainTabsHover (Social Collaboration colors)" />
+      </selector>
+      <selector path=".mainTabs li.selected">
+        <background-color preset="header.mainTabsSelected (Social Collaboration backgrounds)" />
+      </selector>
+      <selector path=".mainTabs li.selected a, .mainTabs li.selected a:hover, .mainTabs li.selected a:visited">
+        <color preset="header.mainTabsSelected (Social Collaboration colors)" />
+        <font-weight>bold</font-weight>
+        <text-decoration>none</text-decoration>
+      </selector>
+      <selector path=".mainTabs li a:hover">
+        <text-decoration>none</text-decoration>
+      </selector>
+      <!-- Fix rss-font-grid inheritance from Opensocial -->
+      <selector path=".searchService input.directoryFilter">
+        <padding>1px 0</padding>
+        <font preset="default (Social Collaboration fonts)" />
+      </selector>
+      <selector path=".footerDefaultLinks">
+        <border-top preset="footer (Social Collaboration borders)"/>
+        <background preset="footer (Social Collaboration backgrounds)"/>
+        <padding>15px</padding>
+      </selector>
+      <selector path=".footerBlock">
+        <margin>0</margin>
+        <line-height>1.25em</line-height>
+        <padding>0</padding>
+        <font preset="small (Social Collaboration fonts)"/>
+      </selector>
+      <selector path=".footerBlock div">
+        <margin>0</margin>
+        <line-height>1.25em</line-height>
+        <padding>0</padding>
+        <font preset="small (Social Collaboration fonts)"/>
+      </selector>
+      <selector path=".footerBlock form, .footerBlock p">
+        <margin>5px 0px 0px 0px</margin>
+        <padding>0</padding>
+      </selector>
+      <selector path=".nuxLinks">
+        <float>right</float>
+        <padding-left>20px</padding-left>
+      </selector>
+      <selector path=".nuxLinks a">
+        <vertical-align>middle</vertical-align>
+      </selector>
+      <selector path=".copyrights">
+        <float>right</float>
+        <padding>2px 20px 0 0</padding>
+        <color preset="footer.text (Social Collaboration colors)" />
+      </selector>
+      <selector path="a.twitt">
+        <background preset="footer.twittLink (Social Collaboration backgrounds)" />
+        <height>16px</height>
+        <width>16px</width>
+        <display>inline-block</display>
+        <margin>0px 5px</margin>
+      </selector>
+      <selector path="a.twitt:hover">
+        <background-position>left bottom</background-position>
+      </selector>
+      <selector path="a.linkedin">
+        <background preset="footer.linkedInLink (Social Collaboration backgrounds)" />
+        <height>16px</height>
+        <width>16px</width>
+        <display>inline-block</display>
+        <margin>0px 5px</margin>
+      </selector>
+      <selector path="a.linkedin:hover">
+        <background-position>-16px bottom</background-position>
+      </selector>
+      <selector path=".clear">
+        <clear>both</clear>
+      </selector>
+    </style>
+    <style inherit="default buttons" name="common style 1">
+      <selector path="h1, h2, h3, h4, h5, h6, form, p">
+        <margin>0</margin>
+        <padding>0</padding>
+      </selector>
+      <selector path="input">
+        <margin>0</margin>
+      </selector>
+      <selector path=".pageNavigationControls span">
+        <color preset="navigation.control (Social Collaboration colors)" />
+        <vertical-align>top</vertical-align>
+        <font-weight>bold</font-weight>
+        <margin>10px 5px</margin>
+        <font-size>13px</font-size>
+      </selector>
+      <selector path=".directoryBack">
+        <background preset="back (Social Collaboration backgrounds)"/>
+        <padding>2px 2px 2px 20px</padding>
+      </selector>
+      <selector path=".errorMessage">
+        <color preset="default.text (Social Collaboration colors)" />
+        <border preset="dataInput (Social Collaboration borders)" />
+        <background preset="warning (Social Collaboration backgrounds)"/>
+        <width>480px</width>
+        <margin>2px 0 2px 0</margin>
+        <padding>3px 3px 3px 23px</padding>
+        <display>block</display>
+        <list-style>none</list-style>
+      </selector>
+      <selector path=".taskActions">
+        <width>470px</width>
+      </selector>
+      <selector path=".infoMessage">
+        <color preset="default.text (Social Collaboration colors)" />
+        <border preset="blue.border (Social Collaboration borders)" />
+        <background preset="info (Social Collaboration backgrounds)"/>
+        <margin-bottom>5px</margin-bottom>
+        <padding>5px 5px 5px 23px</padding>
+        <display>block</display>
+      </selector>
+      <selector path=".tooltip">
+        <color preset="default.text (Social Collaboration colors)" />
+        <border preset="blue.border (Social Collaboration borders)" />
+        <background preset="tooltip (Social Collaboration backgrounds)" />
+        <margin-bottom>5px !important</margin-bottom>
+        <padding>5px 5px 5px 23px !important</padding>
+        <display>none</display>
+        <max-width>20%</max-width>
+        <z-index>1000</z-index>
+      </selector>
+      <selector path=".rightsAddManager td">
+        <border preset="subtabsbar (Social Collaboration borders)" />
+        <background-color preset="white (Social Collaboration backgrounds)"/>
+        <margin>0 10px 0 10px</margin>
+        <padding>10px</padding>
+      </selector>
+      <selector path=".massEditForm foldableBox">
+        <margin-right>15px</margin-right>
+      </selector>
+      <selector path=".wizardFrame">
+        <border preset="blue.sky (Social Collaboration borders)" />
+        <width>800px</width>
+        <padding>0 5px !important</padding>
+      </selector>
+      <selector path=".error">
+        <color preset="warning.message (Social Collaboration colors)" />
+        <font-weight>bold</font-weight>
+      </selector>
+      <selector path=".archiveTabContent">
+        <margin-left>18px</margin-left>
+      </selector>
+      <selector path=".iconColumn">
+        <width>20px</width>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".iconColumn .dropInto">
+        <background-color preset="blue.sky (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".wizardFrame .wizardFinish h4 img">
+        <margin-right>10px</margin-right>
+        <float>left</float>
+      </selector>
+      <selector path=".dataInputGroup">
+        <vertical-align>top</vertical-align>
+        <margin>0</margin>
+        <padding>0</padding>
+      </selector>
+      <selector path=".relationActionsColumn">
+        <width>60px</width>
+        <vertical-align>top</vertical-align>
+        <text-align>center</text-align>
+      </selector>
+      <selector path="table.dataOutput thead th a, table.dataOutput thead th a:hover, table.dataOutput thead th a:active, table.dataOutput thead th a:visited">
+        <color preset="tableheader (Social Collaboration colors)" />
+      </selector>
+      <selector path=".boldColumn">
+        <font-weight>bold !important</font-weight>
+      </selector>
+      <selector path=".facesStatusMessage ul, .infoFeedback ul, .warningFeedback ul, .errorFeedback ul">
+        <list-style-type>none</list-style-type>
+        <width>200px</width>
+        <padding>10px</padding>
+      </selector>
+      <selector path=".vocabularyEntryContent .notEditable">
+        <color preset="default.text (Social Collaboration colors)" />
+        <background-color preset="white (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".warningMessage">
+        <background preset="warning (Social Collaboration backgrounds)"/>
+        <width>500px</width>
+        <margin>2px 0 2px 0</margin>
+        <border preset="dataInput (Social Collaboration borders)" />
+        <color preset="default.text (Social Collaboration colors)" />
+        <margin-bottom>12px</margin-bottom>
+        <display>block</display>
+        <padding>5px 5px 5px 23px</padding>
+        <list-style>none</list-style>
+      </selector>
+      <selector path=".vocabularyEntryContent .dataInput">
+        <border>none</border>
+        <margin-bottom>15px</margin-bottom>
+      </selector>
+      <selector path=".buttonColumn">
+        <width>280px</width>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".radioColumn">
+        <width>8px</width>
+        <vertical-align>top</vertical-align>
+        <padding>0 0 0 5px</padding>
+      </selector>
+      <selector path=".focusColumn">
+        <background-color preset="blue.sky (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path="a:visited">
+        <color preset="link.visited (Social Collaboration colors)" />
+      </selector>
+      <selector path=".dataInput textarea, .dataInput .dataInputText">
+        <width>500px</width>
+      </selector>
+      <selector path=".selectDocumentType td">
+        <padding>3px</padding>
+      </selector>
+      <selector path=".vocabularyEntryContent">
+        <margin-left>18px</margin-left>
+      </selector>
+      <selector path=".dataOutput, .dataOutput2Columns, .dataList">
+        <width>100%</width>
+      </selector>
+      <selector path=".wizardFrame .templatePreview">
+        <border preset="blue.sky (Social Collaboration borders)" />
+        <padding>10px !important</padding>
+      </selector>
+      <selector path=".dataList td">
+        <border-bottom preset="tablelines (Social Collaboration borders)"/>
+        <border-top preset="tablelines (Social Collaboration borders)"/>
+        <padding>5px 3px</padding>
+      </selector>
+      <selector path=".dataOutput td table td">
+        <border>0px none transparent</border>
+      </selector>
+      <selector path=".currentItemDescription">
+        <color preset="default.text (Social Collaboration colors)" />
+        <font-size>13px</font-size>
+        <display>block</display>
+      </selector>
+      <selector path=".dataInput">
+        <margin-top>5px</margin-top>
+      </selector>
+      <selector path="div">
+        <font preset="default (Social Collaboration fonts)"/>
+        <margin>0</margin>
+        <line-height>1.25em</line-height>
+        <padding>0</padding>
+      </selector>
+      <selector path=".contentViewTitle">
+        <margin>10px 10px 10px 0</margin>
+        <line-height>normal</line-height>
+        <float>left</float>
+      </selector>
+      <selector path=".listingLayoutSelector">
+        <float>right</float>
+        <margin>11px 0 10px 7px</margin>
+        <text-align>right</text-align>
+      </selector>
+      <selector path=".listingLayoutSelector .contentViewPageSelectorDesc">
+        <float>left</float>
+        <padding>2px 3px 0 0</padding>
+      </selector>
+      <selector path=".listingLayoutSelector .langSelect">
+        <float>left</float>
+        <margin>0px 0 10px</margin>
+      </selector>
+      <selector path=".calendarTrigger">
+        <cursor>pointer</cursor>
+        <vertical-align>bottom</vertical-align>
+        <margin>0 0 5px</margin>
+      </selector>
+      <!-- rich faces tree -->
+      <selector path=".dr-tree-h-ic-div">
+        <margin-left>8px</margin-left>
+        <padding-left>10px</padding-left>
+      </selector>
+      <selector path=".treeNodeHighlightedClass">
+        <text-decoration>none</text-decoration>
+      </selector>
+      <selector path=".treeNodeSelectedClass">
+        <border>none</border>
+      </selector>
+      <!-- Rich Faces fileUpload -->
+      <selector path=".rich-fileupload-list-decor">
+        <margin>10px 0px</margin>
+      </selector>
+      <selector path=".rich-fileupload-button, .rich-fileupload-button-border">
+        <padding>2px</padding>
+      </selector>
+      <selector path=".rich-fileupload-button-light, .rich-fileupload-button-press">
+        <padding>1px</padding>
+      </selector>
+      <selector path=".rich-fileupload-button-content">
+        <padding>2px 6px 2px 19px</padding>
+      </selector>
+      <!-- End of Rich Faces fileUpload -->
+      <selector path=".rightsAddSelect">
+        <border preset="dataInput (Social Collaboration borders)" />
+        <margin-top>0px</margin-top>
+      </selector>
+      <selector path=".dataList thead th">
+        <border-bottom preset="tablelines (Social Collaboration borders)"/>
+        <color preset="tableheader (Social Collaboration colors)" />
+        <background preset="tablethead (Social Collaboration backgrounds)"/>
+        <padding>5px 3px</padding>
+        <text-align>left</text-align>
+      </selector>
+      <selector path=".dataList thead th a, .dataList thead th a:link">
+        <color preset="tableheader (Social Collaboration colors)" />
+        <text-decoration>none</text-decoration>
+      </selector>
+      <selector path=".dataList thead th a:visited">
+        <color preset="tableheader (Social Collaboration colors)" />
+      </selector>
+      <selector path=".dataList thead th a:active">
+        <color preset="tableheader (Social Collaboration colors)" />
+      </selector>
+      <selector path=".dataList thead th a:hover">
+        <color preset="tableheader (Social Collaboration colors)" />
+        <text-decoration>underline</text-decoration>
+      </selector>
+      <selector path=".relationPredicateColumn">
+        <width>100px</width>
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".selectDocumentType">
+        <margin-top>10px</margin-top>
+      </selector>
+      <selector path=".archiveTabContent .notEditable">
+        <color preset="default.text (Social Collaboration colors)" />
+        <border>none</border>
+        <background-color preset="white (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".twoColumns">
+        <width>50%</width>
+      </selector>
+      <selector path=".dataInput .button">
+        <margin>0 10px 0 0</margin>
+      </selector>
+      <selector path=".wizardFrame .templatePreview .templatePreviewDescription">
+        <font-style>italic</font-style>
+      </selector>
+      <selector path=".pageNavigationControls">
+        <border preset="blue.sky.mini (Social Collaboration borders)" />
+        <margin>5px 0px</margin>
+        <padding>7px</padding>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".dataList">
+        <background>white</background>
+        <border-collapse>collapse</border-collapse>
+        <margin>0</margin>
+      </selector>
+      <selector path=".dataInput .fieldColumn table.mceEditor .mceToolbarBottom">
+        <background-color preset="blue.sky (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".wizardFrame .wizardButtonBar">
+        <text-align>right</text-align>
+      </selector>
+      <selector path=".buttonsGadgetNoForm .button">
+        <margin-right>10px</margin-right>
+      </selector>
+      <selector path=".iconColumn .cell">
+        <background>none</background>
+        <width>40px</width>
+      </selector>
+      <selector path="a, a:link">
+        <color preset="link (Social Collaboration colors)" />
+        <text-decoration>none</text-decoration>
+      </selector>
+      <selector path="a:active">
+        <color preset="link (Social Collaboration colors)" />
+      </selector>
+      <selector path="a:hover">
+        <color preset="link.hover (Social Collaboration colors)" />
+        <text-decoration>underline</text-decoration>
+      </selector>
+      <selector path="table">
+        <margin>0</margin>
+      </selector>
+      <selector path=".pictureBookItem">
+        <height>160px</height>
+        <border preset="blue.sky.mini (Social Collaboration borders)" />
+        <width>140px</width>
+        <background-color preset="blue.sky (Social Collaboration backgrounds)"/>
+        <margin>10px 20px 10px 0px</margin>
+        <float>left</float>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".itemSelected">
+        <border preset="orange (Social Collaboration borders)" />
+        <background-color preset="selected.orange (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".pictureBookItem .cell">
+        <height>110px</height>
+        <padding-top>15px</padding-top>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".pictureBookItem .cell a">
+        <height>100px</height>
+        <width>100px</width>
+        <display>block</display>
+        <padding>20px</padding>
+      </selector>
+      <selector path=".pictureBookItemTitle">
+        <font preset="small (Social Collaboration fonts)"/>
+        <background-color preset="big.blue (Social Collaboration backgrounds)"/>
+        <padding>5px 0</padding>
+      </selector>
+      <selector path=".pictureBookItemTitle a, .pictureBookItemTitle a:hover, .pictureBookItemTitle a:visited">
+        <color preset="link (Social Collaboration colors)" />
+      </selector>
+      <selector path=".slideshowContent">
+        <padding>10px 0px 5px 0px</padding>
+      </selector>
+      <selector path=".slideshowContent h3">
+        <padding>8px 0px 5px 70px</padding>
+      </selector>
+      <selector path=".slideShowControl">
+        <margin>0px 0px 10px</margin>
+      </selector>
+      <selector path=".slideShowControl input">
+        <margin>0px 3px</margin>
+        <padding>0px</padding>
+      </selector>
+      <selector path=".slideShowControl input.button[disabled=disabled]">
+        <background preset="disabled (Social Collaboration backgrounds)"/>
+        <border-color>#ccc #999 #999 #ccc</border-color>
+        <cursor>default</cursor>
+      </selector>
+      <selector path=".slideShowControl .indexPicture">
+        <margin>0px 3px 4px 0px</margin>
+      </selector>
+      <selector path=".slideShowControl span">
+        <color preset="navigation.control (Social Collaboration colors)" />
+        <font-weight>bold</font-weight>
+        <font-size>13px</font-size>
+        <padding-right>10px</padding-right>
+      </selector>
+      <selector path=".rightsAdd">
+        <margin>10px 0 10px 0</margin>
+      </selector>
+      <selector path=".foldableBox">
+        <border-bottom preset="tabisnotselected (Social Collaboration borders)"/>
+        <margin-bottom>20px</margin-bottom>
+      </selector>
+      <selector path=".foldableBox h3">
+        <border preset="tabiselected (Social Collaboration borders)"/>
+        <color preset="foldablebox.titles (Social Collaboration colors)" />
+        <background preset="tabiselected (Social Collaboration backgrounds)"/>
+        <padding>3px 3px 3px 18px</padding>
+        <font-size>11px</font-size>
+      </selector>
+      <selector path=".foldableBox h3.folded">
+        <background preset="folded (Social Collaboration backgrounds)"/>
+        <height>18px</height>
+      </selector>
+      <selector path=".foldableBox h3.foldedDisabled">
+        <background preset="foldedDisabled (Social Collaboration backgrounds)"/>
+        <height>18px</height>
+        <color preset="foldablebox.titlesDisabled (Social Collaboration colors)" />
+        <border-bottom preset="foldablebox.titlesDisabled (Social Collaboration borders)" />
+      </selector>
+      <selector path=".foldableBox h3 span, .foldableBox h3 a:link, .foldableBox h3 a:visited, .foldableBox h3 a:hover, .foldableBox h3 a:visited:hover">
+        <color preset="foldablebox.titles (Social Collaboration colors)" />
+        <float>left</float>
+        <padding-right>10px</padding-right>
+      </selector>
+      <selector path=".foldableBox h3.unfolded">
+        <background preset="unfolded (Social Collaboration backgrounds)"/>
+        <clear>both</clear>
+        <height>18px</height>
+      </selector>
+      <selector path=".foldableBox h3 a">
+        <color preset="foldablebox.titles (Social Collaboration colors)" />
+        <display>block</display>
+      </selector>
+      <selector path=".foldableBox h3 a.warningLink">
+        <color preset="warning.message (Social Collaboration colors)" />
+      </selector>
+      <selector path=".foldableBox h3 a.action, .foldableBox h3 a.action:visited, .foldableBox h3 a.action:hover, .foldableBox h3 a.action:visited:hover">
+        <background-color preset="foldableBox.action (Social Collaboration backgrounds)" />
+        <border preset="foldableBox.actions (Social Collaboration borders)" />
+        <color preset="foldablebox.actions (Social Collaboration colors)" />
+        <float>right</float>
+        <font-weight>normal</font-weight>
+        <padding>1px 3px</padding>
+      </selector>
+      <selector path=".foldableBox .boxBody">
+        <clear>both</clear>
+        <padding>10px</padding>
+      </selector>
+      <selector path=".foldableLightBox">
+        <margin-bottom>20px</margin-bottom>
+      </selector>
+      <selector path=".foldableLightBox div.folded, .foldableLightBox div.unfolded ">
+        <border-bottom preset="tabisnotselected (Social Collaboration borders)"/>
+        <color preset="foldablelightbox.titles (Social Collaboration colors)" />
+        <padding>3px 3px 3px 18px</padding>
+        <font preset="small (Social Collaboration fonts)"/>
+        <height>18px</height>
+      </selector>
+      <selector path=".foldableLightBox div.folded">
+        <background preset="foldedlight (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".foldableLightBox div.unfolded">
+        <background preset="unfoldedlight (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".foldableLightBox div.folded a, .foldableLightBox div.unfolded a">
+        <color preset="foldablelightbox.titles (Social Collaboration colors)" />
+        <float>left</float>
+      </selector>
+      <selector path=".foldableLightBox .boxBody">
+        <border-left preset="tabisnotselected (Social Collaboration borders)"/>
+        <border-right preset="tabisnotselected (Social Collaboration borders)"/>
+        <border-bottom preset="tabisnotselected (Social Collaboration borders)"/>
+        <clear>both</clear>
+        <padding>10px</padding>
+      </selector>
+      <selector path=".relationCreateFieldColumn, .fieldColumn, .workflowFieldColumn">
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".commentQuote">
+        <font preset="default (Social Collaboration fonts)" />
+        <margin>5px 0 5px 0</margin>
+      </selector>
+      <selector path=".warningFeedback">
+        <font preset="big.default (Social Collaboration fonts)"/>
+        <color preset="default.text (Social Collaboration colors)" />
+        <border preset="warningfeedback (Social Collaboration borders)" />
+        <background preset="warning (Social Collaboration backgrounds)"/>
+        <padding>7px 7px 7px 24px</padding>
+      </selector>
+      <selector path=".vocabularyEntryContent .currentDocumentInformation">
+      </selector>
+      <selector path=".rightsAddLabel">
+        <font-weight>bold</font-weight>
+        <padding>0 5px 0 0px</padding>
+      </selector>
+      <selector path=".archiveTabContent .currentDocumentInformation">
+        <background-color preset="blue.sky (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".buttonsGadget">
+        <margin>5px 0px 5px 40px</margin>
+      </selector>
+      <selector path=".errorFeedback">
+        <font preset="big.default (Social Collaboration fonts)"/>
+        <color preset="default.text (Social Collaboration colors)" />
+        <border preset="warningfeedback (Social Collaboration borders)" />
+        <background preset="warning (Social Collaboration backgrounds)"/>
+        <padding>7px 7px 7px 24px</padding>
+      </selector>
+      <selector path=".wizardFrame .templatePreview img">
+        <border preset="preview (Social Collaboration borders)" />
+        <float>left</float>
+      </selector>
+      <selector path=".dataInput td">
+        <border>0px solid #FFF</border>
+        <padding>7px 4px</padding>
+      </selector>
+      <selector path=".dataInput td td, .dataInput td td td">
+        <padding>3px 4px</padding>
+      </selector>
+      <selector path=".dataInput textarea, .dataInput .dataInputText, .dataInput .dataInputTextNoSize">
+        <font preset="default (Social Collaboration fonts)"/>
+        <border preset="dataInput (Social Collaboration borders)" />
+        <vertical-align>top</vertical-align>
+        <padding>4px</padding>
+      </selector>
+      <selector path="h4, h5, h6">
+        <font preset="title4+ (Social Collaboration fonts)"/>
+        <color preset="summary.titles (Social Collaboration colors)" />
+        <margin>10px 0px 5px 0px</margin>
+      </selector>
+      <selector path=".relationCommentList">
+        <background>transparent</background>
+      </selector>
+      <selector path=".infoFeedback">
+        <font preset="big.default (Social Collaboration fonts)"/>
+        <color preset="default.text (Social Collaboration colors)" />
+        <border preset="infofeedback (Social Collaboration borders)" />
+        <background preset="info (Social Collaboration backgrounds)"/>
+        <padding>7px 7px 7px 24px</padding>
+      </selector>
+      <selector path=".pageNavigationControls input">
+        <margin-left>5px</margin-left>
+      </selector>
+      <selector path=".relationCreateLabelColumn">
+        <width>100px</width>
+      </selector>
+      <selector path=".commentAuthor">
+        <color preset="comments.details (Social Collaboration colors)" />
+        <background preset="comment (Social Collaboration backgrounds)"/>
+        <font-weight>bold</font-weight>
+        <padding>5px 3px 3px 24px</padding>
+      </selector>
+      <selector path=".serverChoice">
+        <margin-right>30px</margin-right>
+        <width>200px</width>
+        <margin-top>20px</margin-top>
+        <float>left</float>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".dataInput .fieldColumn table.mceEditor">
+        <background preset="blue.sky (Social Collaboration backgrounds)"/>
+        <border preset="gray.light (Social Collaboration borders)"/>
+      </selector>
+      <selector path="table.dataOutput thead th">
+        <border-bottom preset="tablelines (Social Collaboration borders)"/>
+        <color preset="tableheader (Social Collaboration colors)" />
+        <background preset="tablethead (Social Collaboration backgrounds)"/>
+        <padding>5px 3px</padding>
+        <text-align>left</text-align>
+      </selector>
+      <selector path=".relationCommentList td">
+        <border>0px none</border>
+      </selector>
+      <selector path=".facesStatusMessage">
+        <position>absolute</position>
+        <left>48%</left>
+        <top>40%</top>
+      </selector>
+      <selector path=".currentDocumentDescription">
+        <padding>4px 0</padding>
+      </selector>
+      <selector path=".rightsAddTitle">
+        <border preset="blue.border (Social Collaboration borders)" />
+        <background preset="blue.light (Social Collaboration backgrounds)"/>
+        <padding>5px</padding>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".dataOutput, .dataOutput2Columns">
+        <border-collapse>collapse</border-collapse>
+        <margin-bottom>5px</margin-bottom>
+        <margin-top>7px</margin-top>
+      </selector>
+      <selector path=".dataOutput2Columns td">
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".selectDocumentType td a img">
+        <margin-right>4px</margin-right>
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".commentCreationDate">
+        <font-weight>normal</font-weight>
+      </selector>
+      <selector path="table thead th">
+        <padding>3px</padding>
+        <text-align>left</text-align>
+      </selector>
+      <selector path=".fieldColumn img">
+        <margin>0px 4px</margin>
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".relationCreateFieldColumn table, .fieldColumn table, .workflowFieldColumn table">
+        <border>0px none #fff</border>
+        <vertical-align>top</vertical-align>
+        <margin>0 0 0 0</margin>
+      </selector>
+      <selector path=".archiveTabContent .dataInput">
+        <border>none</border>
+        <margin-bottom>15px</margin-bottom>
+      </selector>
+      <selector path=".closedContent">
+        <background preset="white (Social Collaboration backgrounds)"/>
+        <margin>15px 0px 0px 0px</margin>
+        <padding>0px 10px 10px 10px</padding>
+        <border preset="blue.border (Social Collaboration borders)"/>
+      </selector>
+      <selector path=".dataOutput td">
+        <border-bottom preset="tablelines (Social Collaboration borders)"/>
+        <border-top preset="tablelines (Social Collaboration borders)"/>
+        <padding>5px 3px</padding>
+      </selector>
+      <selector path=".dataOutput2Columns td">
+        <vertical-align>top</vertical-align>
+        <padding>5px 3px</padding>
+      </selector>
+      <selector path=".selectDocumentType td a img">
+        <margin-right>4px</margin-right>
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".relationObjectColumn">
+        <width>100px</width>
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".labelColumn">
+        <width>120px</width>
+        <vertical-align>top</vertical-align>
+        <font-weight>bold</font-weight>
+      </selector>
+      <selector path=".labelColumn span">
+        <padding-right>8px</padding-right>
+        <display>block</display>
+      </selector>
+      <selector path=".required">
+        <background preset="required (Social Collaboration backgrounds)"/>
+        <padding>0 10px 0 0</padding>
+      </selector>
+      <selector path=".rightsAddManager .labelColumn">
+        <width>80px</width>
+      </selector>
+      <selector path=".smallButtonsGadget">
+        <margin>0 0 5px 100px</margin>
+      </selector>
+      <selector path=".workflowLabelColumn">
+        <width>120px</width>
+      </selector>
+      <selector path="h2">
+        <color preset="titles (Social Collaboration colors)" />
+        <font preset="title2 (Social Collaboration fonts)"/>
+        <padding>0.5em 1em 0.5em 0</padding>
+      </selector>
+      <selector path=".dataInput select">
+        <border preset="dataInput (Social Collaboration borders)" />
+        <vertical-align>top</vertical-align>
+        <padding>2px 1px 2px 1px</padding>
+      </selector>
+      <selector path=".dataInput .fieldColumn table.mceEditor .mceEditorIframe">
+        <background-color preset="white (Social Collaboration backgrounds)" />
+        <border preset="preview (Social Collaboration borders)" />
+        <padding>5px</padding>
+      </selector>
+      <selector path=".action_bar">
+        <margin>10px 10px 10px 0</margin>
+        <line-height>normal</line-height>
+        <float>left</float>
+      </selector>
+      <selector path=".action_bar_message">
+        <margin>0</margin>
+        <font preset="small (Social Collaboration fonts)"/>
+        <float>right</float>
+      </selector>
+      <selector path=".action_bar_message form">
+        <display>inline</display>
+        <text-align>right</text-align>
+      </selector>
+      <selector path=".action_bar ul">
+        <margin>0</margin>
+        <padding>0px 10px 0 0</padding>
+        <list-style>none</list-style>
+      </selector>
+      <selector path=".action_bar li">
+        <margin>0</margin>
+        <padding>0</padding>
+        <float>left</float>
+      </selector>
+      <selector path=".action_bar img">
+        <display>none</display>
+      </selector>
+      <selector path=".action_bar a">
+        <background preset="buttons (Social Collaboration backgrounds)"/>
+        <font preset="default (Social Collaboration fonts)"/>
+        <float>left</float>
+        <text-decoration>none</text-decoration>
+        <border preset="buttons (Social Collaboration borders)"/>
+        <color preset="buttons (Social Collaboration colors)" />
+        <padding>4px 7px</padding>
+        <margin-right>10px</margin-right>
+        <cursor>pointer</cursor>
+      </selector>
+      <selector path=".action_bar a:hover">
+        <color preset="buttons.hover (Social Collaboration colors)" />
+        <border preset="buttons.hover (Social Collaboration borders)" />
+      </selector>
+      <selector path=".tabsContent">
+        <margin>0px</margin>
+        <padding>5px 10px 10px 10px</padding>
+      </selector>
+      <selector path=".tabsContent table.trashTable thead th">
+        <background-color preset="orange.lite (Social Collaboration backgrounds)" />
+      </selector>
+      <selector path="table.trashTable tbody tr.dataRowOdd">
+        <background-color preset="orange.odd (Social Collaboration backgrounds)" />
+      </selector>
+      <selector path="textarea">
+        <padding>5px</padding>
+      </selector>
+      <selector path=".checkBox">
+        <margin-right>3px</margin-right>
+      </selector>
+      <selector path=".rightsAddManager">
+        <background preset="addmanager (Social Collaboration backgrounds)"/>
+        <width>100%</width>
+        <margin>3px 0 0 0</margin>
+      </selector>
+      <selector path=".userAndGroupSearch">
+        <margin>0</margin>
+      </selector>
+      <selector path=".userAndGroupFilter">
+        <margin>15px 0 0 0</margin>
+      </selector>
+      <selector path=".buttonsGadgetNoForm">
+        <margin>0px 5px</margin>
+      </selector>
+      <selector path=".dataOutput .button">
+        <margin>2px 10px 2px 0px !important</margin>
+      </selector>
+      <selector path=".commentBlock">
+        <margin-bottom>8px</margin-bottom>
+        <margin-top>7px</margin-top>
+        <padding>2px 10px 2px 0px</padding>
+      </selector>
+      <selector path="h1">
+        <color preset="titles (Social Collaboration colors)" />
+        <font preset="title1 (Social Collaboration fonts)"/>
+        <overflow>auto</overflow>
+      </selector>
+      <selector path=".dataRowEven">
+        <background preset="white (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path=".relationCommentColumn">
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".taskAssign">
+        <border preset="blue.border (Social Collaboration borders)" />
+        <background preset="blue.light (Social Collaboration backgrounds)"/>
+        <margin>5px 0px 10px 0px</margin>
+        <display>block</display>
+        <padding>5px</padding>
+        <text-align>center</text-align>
+      </selector>
+      <selector path=".commentActions">
+        <margin-right>4px</margin-right>
+        <font-size>10px</font-size>
+        <padding>3px</padding>
+        <float>right</float>
+      </selector>
+      <selector path=".iconColumn img">
+        <position>relative</position>
+        <background>none</background>
+        <z-index>25</z-index>
+      </selector>
+      <selector path="h3">
+        <color preset="titles (Social Collaboration colors)" />
+        <font preset="title3 (Social Collaboration fonts)"/>
+        <margin>0</margin>
+        <padding>13px 0px 10px 0px</padding>
+      </selector>
+      <selector path=".directoryFilter, .searchField">
+        <border preset="dataInput (Social Collaboration borders)" />
+        <background preset="search (Social Collaboration backgrounds)"/>
+        <margin>0 5px 10px 0</margin>
+        <padding>3px 3px 3px 20px</padding>
+        <font-size>11px</font-size>
+      </selector>
+      <selector path=".taskPrincipalSelect select">
+        <border preset="dataInput (Social Collaboration borders)" />
+        <margin>5px 0px 10px 15px</margin>
+        <padding>2px 1px 2px 1px</padding>
+      </selector>
+      <selector path=".dataRowOdd">
+        <background preset="tableevenlines (Social Collaboration backgrounds)"/>
+      </selector>
+      <selector path="table.dataOutput th a img">
+        <vertical-align>bottom</vertical-align>
+        <margin>0 0 0 2px</margin>
+        <padding>0</padding>
+      </selector>
+      <selector path="table.dataInput td.fieldColumn label">
+        <vertical-align>top</vertical-align>
+      </selector>
+      <!-- Style for Resume Tab -->
+      <selector path="h3.summaryTitle">
+        <border-bottom preset="summary (Social Collaboration borders)" />
+        <color preset="summary.titles (Social Collaboration colors)" />
+        <font preset="title3 (Social Collaboration fonts)"/>
+        <margin>0px 0px 10px 0px</margin>
+        <padding>17px 0px 3px 0px</padding>
+      </selector>
+      <selector path=".dublincore_block table.floatingLeftTable">
+        <margin-right>100px</margin-right>
+        <float>left</float>
+      </selector>
+      <selector path=".labelColumnLeftAlign">
+        <font-weight>bold</font-weight>
+        <padding-right>30px</padding-right>
+      </selector>
+      <selector path=".boldLabel">
+        <font-weight>bold</font-weight>
+      </selector>
+      <selector path=".rank_block, .publication_block, .attachments">
+        <margin-top>15px</margin-top>
+      </selector>
+      <selector path=".content_block table">
+        <width>100%</width>
+        <margin-bottom>10px</margin-bottom>
+      </selector>
+      <selector path=".content_block td">
+        <vertical-align>top</vertical-align>
+        <padding>0</padding>
+      </selector>
+      <selector path=".content_block .labelColumn">
+        <width>100px</width>
+      </selector>
+      <selector path=".content_block .actionsColumn">
+        <width>20%</width>
+        <vertical-align>top</vertical-align>
+      </selector>
+      <selector path=".content_block img">
+        <padding>0px 5px</padding>
+      </selector>
+      <selector path=".note_content_block">
+        <padding>15px</padding>
+        <border preset="summary.noteBlock (Social Collaboration borders)"/>
+        <margin>0 0 15px</margin>
+      </selector>
+      <selector path=".note_content_block span, .note_content_block p">
+        <line-height>1.8em</line-height>
+        <font-size>105%</font-size>
+      </selector>
+      <selector path=".relation_block">
+      </selector>
+      <selector path=".lockFile_block, .restoreFile_block">
+        <padding>0px 0px 10px</padding>
+      </selector>
+      <selector path=".summary_locked">
+        <color preset="warning.message (Social Collaboration colors)" />
+        <font-weight>bold</font-weight>
+      </selector>
+      <selector path=".summary_unlocked">
+        <color preset="thumbsup.message (Social Collaboration colors)" />
+        <font-weight>bold</font-weight>
+      </selector>
+      <selector path=".lockDetail, .DetailList">
+        <padding-top>5px</padding-top>
+      </selector>
+      <selector path=".lcAndVersion">
+        <border preset="summary.actions (Social Collaboration borders)" />
+        <padding>3px</padding>
+      </selector>
+      <selector path=".actions_block">
+        <border preset="summary.actions (Social Collaboration borders)" />
+        <padding>10px 7px 3px</padding>
+        <margin>10px 0</margin>
+      </selector>
+      <selector path=".comments_block .commentBlock">
+        <border>none</border>
+      </selector>
+      <selector path=".comments_block .commentQuote">
+        <margin>5px 0 5px 24px</margin>
+      </selector>
+      <selector path=".metadata_block .dataInput td">
+        <padding>3px</padding>
+      </selector>
+      <selector path=".layoutViewMode">
+        <margin>0px</margin>
+        <padding>0px</padding>
+      </selector>
+      <selector path=".layoutViewMode li">
+        <display>inline</display>
+      </selector>
+      <selector path=".layoutViewMode a img">
+        <border preset="noborder (Social Collaboration borders)" />
+      </selector>
+      <selector path=".layoutViewMode a:hover img, .layoutViewMode li.selected img">
+        <border preset="layoutselected.icon (Social Collaboration borders)" />
+      </selector>
+      <selector path=".summary_div_0">
+        <float>left</float>
+        <width>62%</width>
+        <padding-top>10px</padding-top>
+      </selector>
+      <selector path=".summary_div_1">
+        <float>right</float>
+        <width>33%</width>
+        <padding>10px 0</padding>
+      </selector>
+      <selector path=".summary_div_1 h3.summaryTitle">
+        <color preset="summary.titles (Social Collaboration colors)" />
+        <font-size>12px</font-size>
+      </selector>
+      <selector path=".summary_div_2">
+        <clear>both</clear>
+      </selector>
+      <selector path=".bigIcon">
+        <width>50px</width>
+      </selector>
+      <selector path=".smallIcon">
+        <width>16px</width>
+        <height>16px</height>
+      </selector>
+      <selector path="div.syndicationButton">
+        <background preset="rss (Social Collaboration backgrounds)"/>
+        <margin-bottom>5px</margin-bottom>
+        <font-size>9px</font-size>
+        <float>right</float>
+      </selector>
+      <selector path=".syndicationContainer">
+        <height>30px</height>
+      </selector>
+      <selector path="div.syndicationButton div.syndicationLinks">
+        <color preset="syndication.link (Social Collaboration colors)" />
+        <font preset="small (Social Collaboration fonts)"/>
+        <padding>2px 4px</padding>
+      </selector>
+      <selector path="div.syndicationButton div.syndicationLinks a">
+        <color preset="syndication.link (Social Collaboration colors)" />
+        <text-decoration>none</text-decoration>
+      </selector>
+      <!-- For RFaces Navigation Tree in the main area -->
+      <selector path=".dataInput .dr-tree td, .dataInput .dr-tree td td">
+        <padding>1px</padding>
+      </selector>
+      <selector path=".fieldColumn .dr-tree img">
+        <margin>0</margin>
+      </selector>
+    </style>
+    <!-- General -->
+    <style element="page[1]">
+      <selector path="img" view="page frame">
+        <border>0</border>
+      </selector>
+    </style>
+    <!-- Banner -->
+    <style element="page[1]/section[1]">
+      <selector path="" view="section frame">
+        <border-bottom preset="topbar (Social Collaboration borders)"/>
+        <background preset="topbar (Social Collaboration backgrounds)"/>
+      </selector>
+    </style>
+    <!-- Logo -->
+    <style element="page[1]/section[1]/cell[1]/fragment[1]">
+      <selector path="form" view="Nuxeo DM logo (Galaxy Theme)">
+        <margin>0</margin>
+        <padding>0</padding>
+      </selector>
+      <selector path="img, a" view="Nuxeo DM logo (Galaxy Theme)">
+        <outline>none</outline>
+      </selector>
+    </style>
+    <style element="page[1]/section[1]/cell[2]/fragment[1]" inherit="header and footer style" />
+    <!-- Main cell -->
+    <style element="page[1]/section[2]">
+      <selector path="" view="section frame">
+        <border-top preset="whitethin (Social Collaboration borders)"/>
+      </selector>
+    </style>
+    <style element="page[1]/section[2]/cell[1]">
+      <selector path="" view="cell frame">
+        <background preset="maincell (Social Collaboration backgrounds)"/>
+      </selector>
+    </style>
+    <style element="page[1]/section[2]/cell[1]/fragment[1]" inherit="common style 1">
+      <selector path="" view="facelet region">
+      </selector>
+    </style>
+    <!-- Footer -->
+    <style element="page[1]/section[3]" />
+    <style element="page[1]/section[3]/cell[1]/fragment[1]" inherit="header and footer style">
+      <selector path="" view="Nuxeo footer">
+        <font preset="small (Social Collaboration fonts)"/>
+        <color preset="header.text (Social Collaboration colors)" />
+      </selector>
+    </style>
+  </formats>
+  <presets>
+    <preset category="image" name="site.logo" label="Site logo" description="Site logo image (max: 120x40 pixels)">url(nuxeo DM/nuxeo_5.2_logo.png)</preset>
+  </presets>
+</theme>

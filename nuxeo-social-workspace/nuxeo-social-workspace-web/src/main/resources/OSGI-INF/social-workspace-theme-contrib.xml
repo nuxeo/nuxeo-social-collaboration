@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<component name="org.nuxeo.social.collaboration.theme">
+
+  <require>org.nuxeo.theme.core</require>
+  <require>org.nuxeo.theme.fragments</require>
+  <require>org.nuxeo.theme.html</require>
+  <require>org.nuxeo.theme.jsf</require>
+  <require>org.nuxeo.theme.nuxeo.default</require>
+
+  <!--  themes -->
+  <extension target="org.nuxeo.theme.services.ThemeService" point="themes">
+
+    <theme>
+      <src>themes/theme-social-collaboration.xml</src>
+    </theme>
+
+  </extension>
+
+  <!-- application settings -->
+  <extension target="org.nuxeo.theme.services.ThemeService" point="applications">
+    <application root="${org.nuxeo.ecm.contextPath}" template-engine="jsf-facelets">
+       
+      <view id="/view_social_collaboration_dashboard.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
+   </application>
+  </extension>
+
+  <!-- Styles presets -->
+
+  <extension target="org.nuxeo.theme.services.ThemeService" point="presets">
+    <palette name="Social Collaboration borders" src="themes/palettes/social-collaboration-borders.properties" category="border" />
+    <palette name="Social Collaboration backgrounds" src="themes/palettes/social-collaboration-backgrounds.properties" category="background" />
+    <palette name="Social Collaboration fonts" src="themes/palettes/social-collaboration-fonts.properties" category="font" />
+    <palette name="Social Collaboration colors" src="themes/palettes/social-collaboration-colors.properties" category="color" />
+  </extension>
+
+
+</component>
