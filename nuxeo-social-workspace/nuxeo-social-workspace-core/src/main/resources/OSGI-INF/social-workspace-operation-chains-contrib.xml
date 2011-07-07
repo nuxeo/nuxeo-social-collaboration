@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.operation.chains">
+
+  <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="chains">
+    <chain id="SocialWorkspaceCreatedChain">
+      <operation id="Context.FetchDocument"/>
+      <operation id="Context.SetVar">
+        <param type="string" name="name">admins</param>
+        <param type="object" name="value">group:administrators</param>
+      </operation>
+      <operation id="Workflow.CreateTask">
+        <param type="string" name="task name">validateSocialWorkspace</param>
+        <param type="date" name="due date">expr:CurrentDate.days(Env['social.workspace.expire']==null?15:Env['social.workspace.expire']).date</param>
+        <param type="string" name="directive">VERIFICATION</param>
+        <param type="string" name="comment">Please validate social workspace</param>
+        <param type="string" name="variable name for actors prefixed ids">admins</param>
+        <param type="boolean" name="create one task per actor">true</param>
+      </operation>
+      <operation id="Notification.SendMail">
+        <param type="string" name="from">expr:Env["mail.from"]</param>
+        <param type="string" name="message">&lt;html&gt;
+Hello,
+
+Social Workspace &lt;a href="${docUrl}"&gt;${Document.title}&lt;/a&gt; was created. Please validate it at [...].
+&lt;/html&gt;</param>
+        <param type="string" name="subject">Social Workspace  created</param>
+        <param type="string" name="HTML">true</param>
+        <param type="stringlist" name="to">expr:Fn.getEmailsFromGroup("administrators")</param>
+      </operation>
+    </chain>
+    <chain id="SocialWorkspaceNotValidatedChain">
+      <operation id="Context.FetchDocument"/>
+      <operation id="Document.SetACE">
+        <param type="string" name="permission">Everything</param>
+        <param type="string" name="user">administrators</param>
+        <param type="string" name="acl">local</param>
+        <param type="boolean" name="grant">true</param>
+        <param type="boolean" name="overwrite">false</param>
+      </operation>
+      <operation id="Document.SetACE">
+        <param type="string" name="permission">Everything</param>
+        <param type="string" name="user">Everyone</param>
+        <param type="string" name="acl">local</param>
+        <param type="boolean" name="grant">false</param>
+        <param type="boolean" name="overwrite">false</param>
+      </operation>
+      <operation id="Notification.SendMail">
+        <param type="string" name="from">expr:Env["mail.from"]</param>
+        <param type="string" name="message">Social Workspace "${Document.title}" was not validated by adminitrators and it will be suspended.</param>
+        <param type="string" name="subject">expr:Social Workspace not validated: @{Document.title}</param>
+        <param type="stringlist" name="to">expr:Fn.getEmail(Document["dc:creator"])</param>
+      </operation>
+    </chain>
+  </extension>
+
+</component>

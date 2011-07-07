@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.event.handlers">
+
+  <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="event-handlers">
+    <handler chainId="SocialWorkspaceCreatedChain" postCommit="true">
+      <event>documentCreated</event>
+      <filters>
+        <doctype>SocialWorkspace</doctype>
+      </filters>
+    </handler>
+  </extension>
+
+</component>
