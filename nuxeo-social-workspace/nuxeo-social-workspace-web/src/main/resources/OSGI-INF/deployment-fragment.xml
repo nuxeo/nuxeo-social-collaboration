@@ -12,6 +12,14 @@
     </validator>
   </extension>
 
+  <extension target="faces-config#NAVIGATION">
+    <navigation-case>
+      <from-outcome>view_social_collaboration_dashboard</from-outcome>
+      <to-view-id>/view_social_collaboration_dashboard.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
+  </extension>
+
   <install>
     <!--  unzip the war template -->
     <unzip from="${bundle.fileName}" to="/" prefix="web">

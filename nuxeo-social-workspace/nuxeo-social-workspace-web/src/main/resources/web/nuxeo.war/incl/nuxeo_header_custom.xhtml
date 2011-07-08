@@ -1,0 +1,55 @@
+<div xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxd="http://nuxeo.org/nxweb/document"
+  xmlns:nxh="http://nuxeo.org/nxweb/html"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<ui:insert name="user">
+
+  <div class="userServicesBlock">
+  <h:form id="userServicesForm">
+
+   <div class="userMenuActions">
+     <ul class="userMenuList">
+       <li>
+         <nxd:restDocumentLink styleClass="userButton" document="#{mainTabsActions.getDocumentFor('home')}"
+           view="#{mainTabsActions.getViewFor('home')}" addTabInfo="false"
+           tabs="MAIN_TABS:home">
+           <h:outputText value="#{messages['label.loggedAsUser']}" />
+         </nxd:restDocumentLink>
+         <nxu:set var="actions"
+           value="#{webActions.getActionsList('USER_MENU_ACTIONS')}"
+           cache="true">
+           <nxu:dataList layout="unorderedList"
+             var="action"
+             value="#{actions}"
+             rowIndexVar="row"
+             rowCountVar="rowCount"
+             id="userMenuActionsTable">
+             <nxh:commandLink action="#{action.getLink()}"
+               rendered="#{fn:startsWith(action.link,'#')}"
+               immediate="#{action.immediate}"
+               id="userMenuActionCommandLink">
+               <h:outputText value="#{messages[action.label]}" />
+             </nxh:commandLink>
+             <h:outputLink value="#{baseURL}#{action.link}"
+               rendered="#{!(fn:startsWith(action.link,'#'))}"
+               id="userMenuActionLink">
+               <h:outputText value="#{messages[action.label]}" />
+             </h:outputLink>
+           </nxu:dataList>
+         </nxu:set>
+       </li>
+     </ul>
+   </div>
+
+   <div class="clear"></div>
+  </h:form>
+  </div>
+
+</ui:insert>
+
+</div>
