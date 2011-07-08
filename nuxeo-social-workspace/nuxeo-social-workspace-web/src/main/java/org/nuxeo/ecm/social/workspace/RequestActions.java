@@ -19,8 +19,10 @@ package org.nuxeo.ecm.social.workspace;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -29,12 +31,16 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
+import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -137,6 +143,7 @@ public class RequestActions implements Serializable {
             try {
                 if (SOCIAL_WORKSPACE_TYPE.equals(doc.getType())) {
                     doc.followTransition(transition);
+                    removeValidationTasks(doc);
                 }
             } catch (Exception e) {
                 log.debug(
@@ -147,4 +154,26 @@ public class RequestActions implements Serializable {
         documentManager.save();
     }
 
+    private void removeValidationTasks(DocumentModel doc) {
+        List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
+        try {
+            JbpmService jbpmService = Framework.getService(JbpmService.class);
+            List<TaskInstance> taskInstances = jbpmService.getTaskInstances(
+                    doc, null, (JbpmListFilter) null);
+            for (TaskInstance task : taskInstances) {
+                if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())) {
+                    task.cancel();
+                    canceledTasks.add(task);
+                }
+            }
+            if (canceledTasks.size() > 0) {
+                jbpmService.saveTaskInstances(canceledTasks);
+            }
+        } catch (Exception e) {
+            log.warn(
+                    "failed cancel tasks for accepeted/rejected SocialWorkspace",
+                    e);
+        }
+
+    }
 }

@@ -16,6 +16,8 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,7 +83,7 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
                 doc, null, (JbpmListFilter) null);
         List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
         for (TaskInstance task : taskInstances) {
-            if ("validateSocialWorkspace".equals(task.getName())
+            if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())
                     && isExpired(task)) {
                 OperationContext ctx = new OperationContext(
                         doc.getCoreSession());
