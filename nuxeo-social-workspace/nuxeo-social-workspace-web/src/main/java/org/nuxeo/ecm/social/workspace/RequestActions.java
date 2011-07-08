@@ -17,6 +17,7 @@
 package org.nuxeo.ecm.social.workspace;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
 
 import java.io.Serializable;
@@ -37,7 +38,7 @@ import org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
+ * 
  */
 @Name("requestActions")
 @Scope(ScopeType.CONVERSATION)
@@ -105,6 +106,45 @@ public class RequestActions implements Serializable {
             }
         }
         return true;
+    }
+
+    public boolean enableSocialWorkspaceActions() throws ClientException {
+        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        if (list.size() == 0) {
+            return false;
+        }
+        for (DocumentModel doc : list) {
+            if (!"project".equals(doc.getCurrentLifeCycleState())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void acceptSocialWorkspaces() throws ClientException {
+        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        processSocialWorkspaces(list, "approve");
+    }
+
+    public void rejectSocialWorkspaces() throws ClientException {
+        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        processSocialWorkspaces(list, "obsolete");
+    }
+
+    protected void processSocialWorkspaces(List<DocumentModel> list,
+            String transition) throws ClientException {
+        for (DocumentModel doc : list) {
+            try {
+                if (SOCIAL_WORKSPACE_TYPE.equals(doc.getType())) {
+                    doc.followTransition(transition);
+                }
+            } catch (Exception e) {
+                log.debug(
+                        "failed to procees the social workspace ... "
+                                + doc.getId(), e);
+            }
+        }
+        documentManager.save();
     }
 
 }
