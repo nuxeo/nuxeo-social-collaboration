@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Nuxeo Social Friendships
+Bundle-SymbolicName: org.nuxeo.ecm.social.user.relationship;singleton:=true
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Nuxeo-Component: OSGI-INF/social-user-relationship-contrib.xml,
+ OSGI-INF/social-user-relationship-layout-contrib.xml

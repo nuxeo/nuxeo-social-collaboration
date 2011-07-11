@@ -20,6 +20,7 @@
 
   <modules>
     <module>nuxeo-social-workspace</module>
+    <module>nuxeo-social-user-relationship</module>
   </modules>
 
   <dependencyManagement>
@@ -37,6 +38,11 @@
       <dependency>
         <groupId>org.nuxeo.ecm.social</groupId>
         <artifactId>nuxeo-social-workspace-gadgets</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.platform</groupId>
+        <artifactId>nuxeo-user-relationship</artifactId>
         <version>${nuxeo.features.version}</version>
       </dependency>
 

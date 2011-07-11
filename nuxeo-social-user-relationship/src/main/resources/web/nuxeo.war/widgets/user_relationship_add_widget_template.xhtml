@@ -1,0 +1,59 @@
+<f:subview xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:a4j="http://richfaces.org/a4j"
+  id="#{widget.id}" rendered="#{widget.mode == 'view' }">
+
+  <a4j:region>
+  <a4j:form>
+  <a4j:outputPanel id="userRelationPanel">
+
+    <!-- current user is you -->
+    <a4j:commandButton rendered="#{userRelationshipAction.you}" disabled="true"
+      styleClass="button" value="#{messages['action.social.user.relationship.isYou']}" />
+
+    <a4j:outputPanel rendered="#{!userRelationshipAction.you}">
+      <script type="text/javascript">
+        jQuery("#add_relationship_#{widget.id}").fancybox({
+          'type'    : 'inline'
+        });
+      </script>
+      <a id="add_relationship_#{widget.id}"
+        href="#add_relationship_#{widget.id}">
+        <h:outputText value="#{userRelationshipAction.alreadyConnected ? messages['action.social.user.relationship.join'] : messages['action.social.uesr.relationship.addNew']}" />
+      </a>
+
+      <!-- in a fancybox -->
+      <div style="display: none;">
+        <div id="add_relationship_#{widget.id}">
+          <a4j:status>
+            <f:facet name="start">
+              <h:graphicImage value="/img/standart_waiter.gif" />
+            </f:facet>
+          </a4j:status>
+          <a4j:outputPanel id="add_relationship_#{widget.id}">
+            <nxu:dataTable id="#{widget.id}_add_relationship"
+              value="#{userRelationshipService.kinds}" var="kind"
+              rendered="#{!(userRelationshipAction.you)}">
+
+              <nxu:column>
+                <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipAction.relationshipCheckboxChanged}"
+                  value="#{userRelationshipAction.isActiveRelationship(kind)}">
+                  <a4j:support event="onchange"
+                    reRender="add_relationship_#{widget.id},facesStatusMessagePanel">
+                    <f:param name="selectedKind" value="#{kind}" />
+                  </a4j:support>
+                  <h:outputText value="#{kind}" />
+                </h:selectBooleanCheckbox>
+              </nxu:column>
+            </nxu:dataTable>
+          </a4j:outputPanel>
+        </div>
+      </div>
+    </a4j:outputPanel>
+
+  </a4j:outputPanel>
+  </a4j:form>
+  </a4j:region>
+</f:subview>
