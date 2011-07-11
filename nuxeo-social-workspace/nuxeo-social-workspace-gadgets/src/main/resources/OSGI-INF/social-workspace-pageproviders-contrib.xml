@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.ecm.social.workspace..pageproviders"
+  version="1.0">
+
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+    point="providers">
+
+    <coreQueryPageProvider name="user_socialworkspaces">
+      <pattern>
+        SELECT *
+        FROM SocialWorkspace
+        WHERE  ecm:mixinType!='HiddenInNavigation'
+               AND
+               ecm:currentLifeCycleState !='deleted'
+      </pattern>
+      <sort column="dc:title" ascending="true" />
+      <pageSize>0</pageSize>
+    </coreQueryPageProvider>
+  </extension>
+
+</component>

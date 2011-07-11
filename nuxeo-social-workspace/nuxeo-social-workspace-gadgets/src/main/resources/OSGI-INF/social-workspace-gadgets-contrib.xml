@@ -32,5 +32,14 @@
       <category>Nuxeo</category>
       <icon>gadget-library.png</icon>
     </internalGadget>
+
+      <internalGadget name="usersocialworkspaces" disabled="false">
+      <mountPoint>/usersocialworkspaces</mountPoint>
+      <directory>usersocialworkspaces</directory>
+      <entryPoint>usersocialworkspaces.xml</entryPoint>
+      <category>Nuxeo</category>
+      <icon>user_socialworkspaces.png</icon>
+    </internalGadget>
+
   </extension>
 </component>
