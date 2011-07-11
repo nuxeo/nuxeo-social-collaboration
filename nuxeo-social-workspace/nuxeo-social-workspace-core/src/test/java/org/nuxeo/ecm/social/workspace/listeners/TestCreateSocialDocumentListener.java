@@ -100,7 +100,7 @@ public class TestCreateSocialDocumentListener {
                 socialWorkspace.getPathAsString(), "private news",
                 SocialConstants.NEWS_TYPE);
 
-        underTest.publishCommunityDocumentInPrivateSection(session, privateNews);
+        underTest.publishSocialDocumentInPrivateSection(session, privateNews);
 
         DocumentRef privateNewsSection = new PathRef(
                 socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME
@@ -115,7 +115,7 @@ public class TestCreateSocialDocumentListener {
 
         DocumentModel wrongPlacedNews = createDocumentModel("/",
                 "wrong place of creation", SocialConstants.NEWS_TYPE);
-        underTest.publishCommunityDocumentInPrivateSection(session,
+        underTest.publishSocialDocumentInPrivateSection(session,
                 wrongPlacedNews);
 
         String query = String.format(
@@ -136,7 +136,7 @@ public class TestCreateSocialDocumentListener {
         socialDocumentFacetedNote = session.createDocument(socialDocumentFacetedNote);
         session.save();
 
-        underTest.publishCommunityDocumentInPrivateSection(session,
+        underTest.publishSocialDocumentInPrivateSection(session,
                 socialDocumentFacetedNote);
 
         DocumentModel publishedNote = session.getChild(privateNewsSection,

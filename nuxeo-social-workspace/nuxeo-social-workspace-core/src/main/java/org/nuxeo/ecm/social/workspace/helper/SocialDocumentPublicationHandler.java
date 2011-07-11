@@ -19,7 +19,8 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_PUBLICATION_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
 import java.util.List;
@@ -32,16 +33,15 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
 
 /**
  * This class aims to provide information about the social document and manage
  * the creation of proxy in the private or public social section.
- *
+ * 
  * In the documentation about method of this class, when we reference to a
  * social document, we implicitly talking about the social document handle by
  * the instance of the class at it's creation.
- *
+ * 
  */
 public class SocialDocumentPublicationHandler {
 
@@ -51,27 +51,27 @@ public class SocialDocumentPublicationHandler {
 
     private static final Log log = LogFactory.getLog(SocialDocumentPublicationHandler.class);
 
-    CoreSession session;
+    protected CoreSession session;
 
-    DocumentModel currentSocialDocument;
+    protected DocumentModel currentSocialDocument;
 
-    DocumentModel socialWorkspace;
+    protected DocumentModel socialWorkspace;
 
-    DocumentModel privateSocialSection;
+    protected DocumentModel privateSocialSection;
 
-    DocumentModel publicSocialSection;
+    protected DocumentModel publicSocialSection;
 
-    DocumentModel currentProxy;
+    protected DocumentModel currentProxy;
 
-    String endOfPrivateSocialSectionPath = "/" + ROOT_SECTION_NAME + "/"
-            + NEWS_SECTION_NAME;
+    static final String ENDOFPRIVATESOCIALSECTIONPATH = "/" + ROOT_SECTION_NAME
+            + "/" + NEWS_SECTION_NAME;
 
-    String endOfPublicSocialSectionPath = endOfPrivateSocialSectionPath + "/"
-            + PUBLIC_NEWS_SECTION_NAME;
+    static final String ENDOFPUBLICSOCIALSECTIONPATH = ENDOFPRIVATESOCIALSECTIONPATH
+            + "/" + PUBLIC_NEWS_SECTION_NAME;
 
     /**
-     *
-     *
+     * 
+     * 
      * @param session the current session during which the social document is
      *            created
      * @param currentSocialDocument the social document on which social
@@ -95,7 +95,7 @@ public class SocialDocumentPublicationHandler {
     protected void lookForSocialWorkspaceAndSections() {
         try {
             List<DocumentModel> parents = session.getParentDocuments(currentSocialDocument.getRef());
-            getSocialWorkspaceParentIfAny(parents, currentSocialDocument);
+            lookUpForSocialWorkspaceParentIfAny(parents, currentSocialDocument);
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
                 String message = String.format(
@@ -106,10 +106,10 @@ public class SocialDocumentPublicationHandler {
         }
     }
 
-    protected void getSocialWorkspaceParentIfAny(List<DocumentModel> parents,
-            DocumentModel socialDocument) {
+    protected void lookUpForSocialWorkspaceParentIfAny(
+            List<DocumentModel> parents, DocumentModel socialDocument) {
         for (DocumentModel currentParent : parents) {
-            if (SocialWorkspaceHelper.isSocialWorkspace(currentParent)) {
+            if (isSocialWorkspace(currentParent)) {
                 if (log.isDebugEnabled()) {
                     log.debug(String.format(
                             "There is a %s as parent for the document \"%s\" and it's : \"%s\"",
@@ -123,12 +123,11 @@ public class SocialDocumentPublicationHandler {
             }
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug(String.format(
-                    "There is no %s as parent for the document \"%s\"",
-                    SOCIAL_WORKSPACE_TYPE, socialDocument.toString()));
-        }
-        ;
+    }
+
+    protected boolean isSocialWorkspace(DocumentModel socialWorkspace) {
+        return socialWorkspace != null
+                && socialWorkspace.hasFacet(SOCIAL_WORKSPACE_FACET);
     }
 
     protected void initSections() {
@@ -137,7 +136,7 @@ public class SocialDocumentPublicationHandler {
     }
 
     protected void initPrivateSection() {
-        privateSocialSection = initSingleSocialSection(endOfPrivateSocialSectionPath);
+        privateSocialSection = initSingleSocialSection(ENDOFPRIVATESOCIALSECTIONPATH);
     }
 
     protected DocumentModel initSingleSocialSection(
@@ -159,34 +158,32 @@ public class SocialDocumentPublicationHandler {
     }
 
     protected void initPublicSection() {
-        publicSocialSection = initSingleSocialSection(endOfPublicSocialSectionPath);
+        publicSocialSection = initSingleSocialSection(ENDOFPUBLICSOCIALSECTIONPATH);
     }
 
     protected boolean isPrivatePublishable() {
-        return isSocialyPublishable()
-                && isSectionSocialSection(privateSocialSection);
+        return isPublishable() && isSocialSection(privateSocialSection);
     }
 
-    protected boolean isSectionSocialSection(DocumentModel socialSection) {
+    protected boolean isSocialSection(DocumentModel socialSection) {
         return socialSection != null
-                && SOCIAL_PUBLICATION_TYPE.equals(socialSection.getType());
+                && SOCIAL_SECTION_TYPE.equals(socialSection.getType());
     }
 
-    protected boolean isSocialyPublishable() {
+    protected boolean isPublishable() {
         return currentSocialDocument != null
                 && currentSocialDocument.hasFacet(SOCIAL_DOCUMENT_FACET)
                 && socialWorkspace != null;
     }
 
     protected boolean isPublicPublishable() {
-        return isSocialyPublishable()
-                && isSectionSocialSection(publicSocialSection);
+        return isPublishable() && isSocialSection(publicSocialSection);
     }
 
     /**
      * Used to create or update and move a proxy of the handled social document
      * in a private social section
-     *
+     * 
      * @return the proxy created or updated
      */
     public DocumentModel publishPrivatelySocialDocument() {
@@ -230,13 +227,13 @@ public class SocialDocumentPublicationHandler {
 
     protected DocumentModel getProxyOrCurrentDoc() throws ClientException {
         DocumentModel proxyOrCurrentDoc = null;
-        DocumentModelList curSoclDocProxy = session.getProxies(
+        DocumentModelList proxies = session.getProxies(
                 currentSocialDocument.getRef(), publicSocialSection.getRef());
-        curSoclDocProxy.addAll(session.getProxies(
-                currentSocialDocument.getRef(), privateSocialSection.getRef()));
-        int nbrOfProxies = curSoclDocProxy.size();
+        proxies.addAll(session.getProxies(currentSocialDocument.getRef(),
+                privateSocialSection.getRef()));
+        int nbrOfProxies = proxies.size();
         if (nbrOfProxies == MAXIMAL_NUMBER_OF_PROXY_PER_SOCIAL_DOCUMENT) {
-            proxyOrCurrentDoc = curSoclDocProxy.get(FIRST_AND_ONLY_PROXY);
+            proxyOrCurrentDoc = proxies.get(FIRST_AND_ONLY_PROXY);
             currentProxy = proxyOrCurrentDoc;
         } else {
             if (nbrOfProxies > MAXIMAL_NUMBER_OF_PROXY_PER_SOCIAL_DOCUMENT
@@ -260,7 +257,7 @@ public class SocialDocumentPublicationHandler {
     /**
      * Used to create or update and move a proxy of the handled social document
      * in a public social section
-     *
+     * 
      * @return the proxy created or updated
      */
     public DocumentModel publishPubliclySocialDocument() {
@@ -278,17 +275,19 @@ public class SocialDocumentPublicationHandler {
     }
 
     public void unpublishSocialDocument() throws ClientException {
-        String queryToGetProxy=String.format(
+        String queryToGetProxy = String.format(
                 "Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted' and ecm:name = '%s'",
                 currentSocialDocument.getName());
         DocumentModelList newsProxies = session.query(queryToGetProxy);
-        if(newsProxies.size()==1){
-        currentProxy = newsProxies.get(0);
-        }else{
+        if (newsProxies.size() == 1) {
+            currentProxy = newsProxies.get(0);
+        } else {
             DocumentModelList curSoclDocProxy = session.getProxies(
-                    currentSocialDocument.getRef(), publicSocialSection.getRef());
+                    currentSocialDocument.getRef(),
+                    publicSocialSection.getRef());
             curSoclDocProxy.addAll(session.getProxies(
-                    currentSocialDocument.getRef(), privateSocialSection.getRef()));
+                    currentSocialDocument.getRef(),
+                    privateSocialSection.getRef()));
             if (curSoclDocProxy.isEmpty()) {
                 return;
             }

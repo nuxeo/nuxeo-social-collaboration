@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * Contributors:
- *     eugen
+ *     eugen,ronan
  */
 package org.nuxeo.ecm.social.workspace;
 
@@ -72,7 +72,7 @@ public class SocialConstants {
 
     public static final String ROOT_SECTION_NAME = "social-section-root";
 
-    public static final String SOCIAL_PUBLICATION_TYPE = "SocialSection";
+    public static final String SOCIAL_SECTION_TYPE = "SocialSection";
 
     public static final String PUBLIC_NEWS_SECTION_NAME = "public-news";
 

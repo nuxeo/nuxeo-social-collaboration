@@ -26,13 +26,13 @@ import org.nuxeo.ecm.social.workspace.SocialConstants;
 /**
  * * This class aims to provide information about the social document and mainly
  * about the kind of its publication status(i.e. if it is public or private).
- *
+ * 
  * In the documentation about method of this class, when we reference to a
  * social document, we implicitly talking about the social document handle by
  * the instance of the class at it's creation.
- *
+ * 
  * @author rlegall
- *
+ * 
  */
 public class SocialDocumentStatusInfoHandler extends
         SocialDocumentPublicationHandler {
@@ -40,7 +40,7 @@ public class SocialDocumentStatusInfoHandler extends
     private static final Log log = LogFactory.getLog(SocialDocumentStatusInfoHandler.class);
 
     /**
-     *
+     * 
      * @param session the current session during which the social document is
      *            created
      * @param currentSocialDocument the social document on which social
@@ -75,7 +75,7 @@ public class SocialDocumentStatusInfoHandler extends
     /**
      * Look up for the existence of a proxy in the public social section. In
      * that case, the method returns true, false other wise.
-     *
+     * 
      * @return true if the social document handled by the instance got a proxy
      *         in the public social section for its type. false, it there no
      *         proxy in this public social section or no proxy at all.
@@ -99,10 +99,10 @@ public class SocialDocumentStatusInfoHandler extends
     }
 
     /**
-     * By default, à social document is private. So this method return false
+     * By default, a social document is private. So this method return false
      * only when a social document got a proxy in a public social section. At
      * it's creation, a social document is private.
-     *
+     * 
      * @return true if the social document got no proxy in a public social
      *         section or if newly created. false in case the document handle by
      *         the current instance got a proxy in a public social section.

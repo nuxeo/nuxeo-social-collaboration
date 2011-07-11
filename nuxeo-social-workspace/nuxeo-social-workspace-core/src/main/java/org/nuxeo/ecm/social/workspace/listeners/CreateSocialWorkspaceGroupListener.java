@@ -52,7 +52,7 @@ import org.nuxeo.runtime.api.Framework;
  * <li>{doc_id}_administrators : with an EVERYTHING permission</li>
  * <li>{doc_id}_members : with a READ_WRITE permission</li>
  * </ul>
- *
+ * 
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.1
  */
@@ -92,18 +92,18 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
                 SocialWorkspaceHelper.getCommunityAdministratorsGroupLabel(doc),
                 ctx.getPrincipal().getName());
         createGroup(SocialWorkspaceHelper.getCommunityMembersGroupName(doc),
-                SocialWorkspaceHelper.getCommunityMembersGroupLabel(doc),
-                null);
+                SocialWorkspaceHelper.getCommunityMembersGroupLabel(doc), null);
     }
 
     /**
      * Create a group, and if exists add the principal as a member.
-     *
+     * 
      * @param groupName group name you want to create
      * @param groupLabel group label that can be null
      * @param principal null is you do not want to add a member
      */
-    protected void createGroup(String groupName, String groupLabel, String principal) throws ClientException{
+    protected void createGroup(String groupName, String groupLabel,
+            String principal) throws ClientException {
         UserManager userManager = getUserManager();
         try {
             String groupSchemaName = userManager.getGroupSchemaName();
@@ -111,12 +111,13 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
             DocumentModel group = userManager.getBareGroupModel();
             group.setProperty(groupSchemaName, userManager.getGroupIdField(),
                     groupName);
-            group.setProperty(groupSchemaName, userManager.getGroupLabelField(),
-                    groupLabel);
+            group.setProperty(groupSchemaName,
+                    userManager.getGroupLabelField(), groupLabel);
             group = userManager.createGroup(group);
 
             if (!(principal == null || "".equals(principal))) {
-                group.setProperty(groupSchemaName, userManager.getGroupMembersField(),
+                group.setProperty(groupSchemaName,
+                        userManager.getGroupMembersField(),
                         Arrays.asList(principal));
             }
             userManager.updateGroup(group);
@@ -150,18 +151,18 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         return userManager;
     }
 
-    public void handleACPOnSocialSections(DocumentModel socialWorkspace,
+    protected void handleACPOnSocialSections(DocumentModel socialWorkspace,
             CoreSession session) throws ClientException {
         DocumentModel rootSocialSection = session.getChild(
                 socialWorkspace.getRef(), ROOT_SECTION_NAME);
 
         tuneRightsOnSocialSection(socialWorkspace, session, rootSocialSection);
 
-        DocumentRef privatNewsSectionRef = new PathRef(
+        DocumentRef privateNewsSectionRef = new PathRef(
                 rootSocialSection.getPathAsString(), NEWS_SECTION_NAME);
 
         DocumentModel publicSocialSection = session.getChild(
-                privatNewsSectionRef, PUBLIC_NEWS_SECTION_NAME);
+                privateNewsSectionRef, PUBLIC_NEWS_SECTION_NAME);
 
         grantReadRightForEveryOneOnSocialSection(socialWorkspace, session,
                 publicSocialSection);
@@ -218,7 +219,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
     protected void grantPublicReadRight(ACL aclPublicSection)
             throws ClientException {
         String defaultGroupName = getUserManager().getDefaultGroup();
-        if (defaultGroupName == null ) {
+        if (defaultGroupName == null) {
             defaultGroupName = SecurityConstants.EVERYONE;
         }
         aclPublicSection.add(new ACE(defaultGroupName, SecurityConstants.READ,

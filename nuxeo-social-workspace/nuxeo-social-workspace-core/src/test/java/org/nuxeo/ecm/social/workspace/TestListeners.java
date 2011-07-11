@@ -127,8 +127,7 @@ public class TestListeners {
                 "The \"dc:creator\" of the original news should be \"Administrator\"",
                 "Administrator", originalNewsDcCreator);
 
-        Serializable publicationDcCreator = publicationOfTheNews.getProperty(
-                "dc:creator").getValue();
+        Serializable publicationDcCreator = publicationOfTheNews.getPropertyValue("dc:creator");
         assertNotNull("The \"dc:creator\" of the original news should existe",
                 publicationDcCreator);
         assertEquals(

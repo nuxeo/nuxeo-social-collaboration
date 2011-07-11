@@ -18,14 +18,12 @@ package org.nuxeo.ecm.social.workspace;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_PUBLICATION_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
 import org.junit.Test;
@@ -82,20 +80,12 @@ public class TestNewsManagement {
 
         assertTrue(wrongNews.hasFacet(SOCIAL_DOCUMENT_FACET));
 
-        assertFalse("A news out of a SocialWorkspace shouldn't be publishable",
-                SocialWorkspaceHelper.isSocialDocumentPublishable(session,
-                        wrongNews));
-
         DocumentModel correctDirectNews = session.createDocumentModel("/"
                 + TEST_NAME_SOCIAL_WORKSPACE, "Publishable Novelty", NEWS_TYPE);
         correctDirectNews = session.createDocument(correctDirectNews);
         session.save();
 
         assertTrue(correctDirectNews.hasFacet(SOCIAL_DOCUMENT_FACET));
-
-        assertTrue("A news within a SocialWorkspace should be publishable",
-                SocialWorkspaceHelper.isSocialDocumentPublishable(session,
-                        correctDirectNews));
 
         DocumentModel folderInSocialWorkspace = createDocumentModelInSession(
                 "/" + TEST_NAME_SOCIAL_WORKSPACE, "Folder", "Folder");
@@ -110,11 +100,6 @@ public class TestNewsManagement {
                 "A news created in a Folder of a SocialWorkspace should have the SocialDocument facet",
                 anOtherPublishableNews.hasFacet(SOCIAL_DOCUMENT_FACET));
 
-        assertTrue(
-                "A news created in a Folder of a SocialWorkspace should be publishable",
-                SocialWorkspaceHelper.isSocialDocumentPublishable(session,
-                        anOtherPublishableNews));
-
         DocumentModel aNoteInFolderWihinSocialWorkspace = createDocumentModelInSession(
                 "", "a lambda not", "Note");
 
@@ -125,11 +110,6 @@ public class TestNewsManagement {
                 "A document with out a socialDocument facet created in a Folder of a SocialWorkspace shouldn't have the SocialDocument facet",
                 aNoteInFolderWihinSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
-        assertFalse(
-                "A document with out a socialDocument facet created in a Folder of a SocialWorkspace shouldn't be publishable",
-                SocialWorkspaceHelper.isSocialDocumentPublishable(session,
-                        aNoteInFolderWihinSocialWorkspace));
-
     }
 
     private DocumentModel createDocumentModelInSession(String pathAsString,
@@ -139,50 +119,6 @@ public class TestNewsManagement {
         sws = session.createDocument(sws);
         session.save();
         return sws;
-    }
-
-    @Test
-    public void testPublishSocialdocument() throws Exception {
-        DocumentModel containerWorkspace = createDocumentModelInSession(
-                session.getRootDocument().getPathAsString(),
-                BASE_WORKSPACE_NAME, "Workspace");
-
-        DocumentModel socialWorkspace = createDocumentModelInSession(
-                containerWorkspace.getPathAsString(),
-                TEST_NAME_SOCIAL_WORKSPACE, SOCIAL_WORKSPACE_TYPE);
-
-        DocumentModel oneDoc = createDocumentModelInSession(
-                socialWorkspace.getPathAsString(),
-                "DocWithSocialDocumentFacet", "Document");
-        oneDoc.addFacet(SOCIAL_DOCUMENT_FACET);
-        session.save();
-
-        DocumentModel socialSectionOutOfTheTemplate = createDocumentModelInSession(
-                socialWorkspace.getPathAsString(), "socialSectionForTesting",
-                SOCIAL_PUBLICATION_TYPE);
-
-        DocumentModel newsPublicationInSocialSection = SocialWorkspaceHelper.publishSocialdocument(
-                session, oneDoc, socialSectionOutOfTheTemplate.getName());
-
-        assertNotNull("The proxy of the news should exist.",
-                newsPublicationInSocialSection);
-
-        try {
-            DocumentModel newsNonPublished = SocialWorkspaceHelper.publishSocialdocument(
-                    session, oneDoc, "inexsiting social section");
-
-            assertNull("The proxy shouldn't exist in an inexisting section",
-                    newsNonPublished);
-        } catch (Exception e) {
-
-        }
-
-        DocumentModel newsPublishInTemplateSection = SocialWorkspaceHelper.publishSocialdocument(
-                session, oneDoc, ROOT_SECTION_NAME + "/" + NEWS_SECTION_NAME);
-
-        assertNotNull("The proxy of the news should exist.",
-                newsPublishInTemplateSection);
-
     }
 
     @Test
@@ -228,8 +164,8 @@ public class TestNewsManagement {
 
         acp = publicPubsec.getACP();
         assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ).toBoolean());
-         assertTrue(acp.getAccess(userManager.getDefaultGroup(),
-         SecurityConstants.READ).toBoolean());
+        assertTrue(acp.getAccess(userManager.getDefaultGroup(),
+                SecurityConstants.READ).toBoolean());
         assertTrue(acp.getAccess(
                 SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
                 SecurityConstants.READ_WRITE).toBoolean());
