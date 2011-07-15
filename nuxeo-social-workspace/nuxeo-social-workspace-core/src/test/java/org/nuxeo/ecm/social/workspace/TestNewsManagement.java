@@ -19,11 +19,10 @@ package org.nuxeo.ecm.social.workspace;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
 import org.junit.Test;
@@ -130,12 +129,10 @@ public class TestNewsManagement {
                 workspace.getPathAsString(), TEST_NAME_SOCIAL_WORKSPACE,
                 SOCIAL_WORKSPACE_TYPE);
         DocumentModel pubsec = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME));
+                socialWorkspace.getPathAsString() + "/" + SOCIAL_SECTION_NAME));
         assertNotNull(pubsec);
-        DocumentModel privatePubsec = session.getDocument(new PathRef(
-                pubsec.getPathAsString() + "/" + NEWS_SECTION_NAME));
         DocumentModel publicPubsec = session.getDocument(new PathRef(
-                privatePubsec.getPathAsString(), PUBLIC_NEWS_SECTION_NAME));
+                pubsec.getPathAsString(), PUBLIC_SOCIAL_SECTION_NAME));
 
         ACP acp = pubsec.getACP();
         assertFalse(acp.getAccess(userManager.getDefaultGroup(),
@@ -146,18 +143,6 @@ public class TestNewsManagement {
                 acp.getAccess(
                         SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
                         SecurityConstants.READ_WRITE).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
-                SecurityConstants.READ).toBoolean());
-
-        acp = privatePubsec.getACP();
-        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ_WRITE).toBoolean());
-        assertFalse(acp.getAccess(userManager.getDefaultGroup(),
-                SecurityConstants.READ).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
-                SecurityConstants.READ_WRITE).toBoolean());
-        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ_WRITE).toBoolean());
         assertTrue(acp.getAccess(
                 SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
                 SecurityConstants.READ).toBoolean());

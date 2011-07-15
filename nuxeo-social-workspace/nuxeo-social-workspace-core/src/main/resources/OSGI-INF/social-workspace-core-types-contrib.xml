@@ -25,8 +25,7 @@
     </doctype>
 
     <doctype name="Article" extends="Note">
-      <schema name="social" />
-      <schema name="article" />
+      <facet name="SocialDocument" />
     </doctype>
 
     <doctype name="News" extends="Note">

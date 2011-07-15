@@ -15,12 +15,11 @@
 
 package org.nuxeo.ecm.social.workspace.helper;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SOCIAL_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
-
-import static junit.framework.Assert.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +36,6 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
-import org.nuxeo.ecm.social.workspace.helper.SocialDocumentStatusInfoHandler;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -78,17 +76,15 @@ public class TestRemoveSocialDocument {
                 socialWorkspace.getPathAsString(), "A private News",
                 SocialConstants.NEWS_TYPE);
 
-        DocumentModel privateNews2 = createDocumentModelInSession(
+        createDocumentModelInSession(
                 socialWorkspace.getPathAsString(), "Another private News",
                 SocialConstants.NEWS_TYPE);
 
         DocumentModel pubsec = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME));
+                socialWorkspace.getPathAsString() + "/" + SOCIAL_SECTION_NAME));
         assertNotNull(pubsec);
-        DocumentModel privatePubsec = session.getDocument(new PathRef(
-                pubsec.getPathAsString() + "/" + NEWS_SECTION_NAME));
         DocumentModel publicPubsec = session.getDocument(new PathRef(
-                privatePubsec.getPathAsString(), PUBLIC_NEWS_SECTION_NAME));
+                pubsec.getPathAsString(), PUBLIC_SOCIAL_SECTION_NAME));
 
         String queryToGetProxies = String.format("Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted'");
 
@@ -102,7 +98,7 @@ public class TestRemoveSocialDocument {
         assertEquals(1, newsProxies.size());
 
         DocumentModelList curSoclDocProxy = session.getProxies(
-                privateNews.getRef(), privatePubsec.getRef());
+                privateNews.getRef(), pubsec.getRef());
         curSoclDocProxy.addAll(session.getProxies(privateNews.getRef(),
                 publicPubsec.getRef()));
 
@@ -111,7 +107,7 @@ public class TestRemoveSocialDocument {
 
         curSoclDocProxy.clear();
         curSoclDocProxy = session.getProxies(privateNews.getRef(),
-                privatePubsec.getRef());
+                pubsec.getRef());
         curSoclDocProxy.addAll(session.getProxies(privateNews.getRef(),
                 publicPubsec.getRef()));
 

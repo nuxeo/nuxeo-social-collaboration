@@ -19,9 +19,8 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
 import java.io.Serializable;
@@ -50,7 +49,7 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- * 
+ *
  */
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
@@ -150,8 +149,8 @@ public class TestListeners {
 
     protected DocumentModel getTheProxyOfTheNews(DocumentModel sws)
             throws ClientException {
-        String publicationOfTheNewsPathAsString = String.format("%s/%s/%s",
-                sws.getPathAsString(), ROOT_SECTION_NAME, NEWS_SECTION_NAME);
+        String publicationOfTheNewsPathAsString = String.format("%s/%s",
+                sws.getPathAsString(), SOCIAL_SECTION_NAME);
         DocumentRef refPublicationOfTheNews = new PathRef(
                 publicationOfTheNewsPathAsString);
         DocumentModel publicationOfTheNews = session.getDocument(refPublicationOfTheNews);

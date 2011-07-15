@@ -19,9 +19,8 @@ package org.nuxeo.ecm.social.workspace.listeners;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -103,8 +102,7 @@ public class TestCreateSocialDocumentListener {
         underTest.publishSocialDocumentInPrivateSection(session, privateNews);
 
         DocumentRef privateNewsSection = new PathRef(
-                socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME
-                        + "/" + NEWS_SECTION_NAME);
+                socialWorkspace.getPathAsString() + "/" + SOCIAL_SECTION_NAME);
 
         DocumentModel publishedNews = session.getChild(privateNewsSection,
                 privateNews.getName());
@@ -158,8 +156,7 @@ public class TestCreateSocialDocumentListener {
         underTest.handleEvent(createDocumentEvent);
 
         DocumentRef privateNewsSectionRef = new PathRef(
-                socialWorkspace.getPathAsString() + "/" + ROOT_SECTION_NAME
-                        + "/" + NEWS_SECTION_NAME);
+                socialWorkspace.getPathAsString() + "/" + SOCIAL_SECTION_NAME);
 
         DocumentModel publishedNews = session.getChild(privateNewsSectionRef,
                 privateNews.getName());

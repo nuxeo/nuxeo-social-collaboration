@@ -18,7 +18,7 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,7 +73,7 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         if (socialDocument == null || socialDocument.isProxy()) {
             return;
         }
-        if (NEWS_TYPE.equals(socialDocument.getType())) {
+        if (socialDocument.hasFacet(SOCIAL_DOCUMENT_FACET)) {
 
             CoreSession session = ctx.getCoreSession();
 
@@ -92,7 +92,6 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
                 session, socialDocument);
         publisher.publishPrivatelySocialDocument();
-
     }
 
     protected void publishSocialDocumentInPublicSection(CoreSession session,
@@ -100,7 +99,6 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
                 session, socialDocument);
         publisher.publishPubliclySocialDocument();
-
     }
 
 }

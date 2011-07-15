@@ -24,6 +24,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -90,14 +91,13 @@ public class TestSocialProviderOperation {
         // create two articles in 2nd social workspace
         DocumentModel article1 = session.createDocumentModel("/sws2",
                 "article1", "Article");
-        article1.setPropertyValue("social:isPublic", true);
+        article1.putContextData(ScopeType.REQUEST, "Public", Boolean.TRUE);
         article1.setPropertyValue("dc:title", "Public Article");
         article1 = session.createDocument(article1);
         session.save();
 
         DocumentModel article2 = session.createDocumentModel("/sws2",
                 "article2", "Article");
-        article2.setPropertyValue("social:isPublic", false);
         article2.setPropertyValue("dc:title", "Non Public Article");
         article2 = session.createDocument(article2);
 
@@ -112,13 +112,12 @@ public class TestSocialProviderOperation {
         OperationChain chain = new OperationChain("fakeChain");
         OperationParameters oparams = new OperationParameters(
                 SocialProviderOperation.ID);
-        oparams.set("query", "select * from Article");
+        oparams.set("query", "select * from Article where ecm:isProxy = 0");
         oparams.set("socialWorkspacePath", "/sws2");
         chain.add(oparams);
 
         DocumentModelList result = (DocumentModelList) service.run(ctx, chain);
-        assertEquals(2, result.size()); // return all the articles ( current
-                                        // user is admin of sws2 )
+        assertEquals(2, result.size());
 
         // remove current user from admins of sws2
         DocumentModel sws = session.getDocument(new PathRef("/sws2"));
@@ -129,9 +128,9 @@ public class TestSocialProviderOperation {
         group.setProperty(userManager.getGroupSchemaName(), "members", list);
         userManager.updateGroup(group);
 
+        oparams.set("query", "select * from Article where ecm:isProxy = 1");
         result = (DocumentModelList) service.run(ctx, chain);
-//        TODO UpdateTest
-//        assertEquals(1, result.size()); // return only the public article
+        assertEquals(1, result.size()); // return only the public article
 
     }
 

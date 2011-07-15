@@ -24,8 +24,8 @@ derby.log
 nuxeo-*/META-INF
 nuxeo-*/OSGI-INF
 *.bak
-nuxeo-social-network-ftest/selenium/result-*.html
-nuxeo-social-network-ftest/selenium/run.conf
-nuxeo-social-network-ftest/selenium/user-extensions.js
-nuxeo-social-network-ftest/selenium/ffprofile/prefs.js
-nuxeo-social-network-ftest/selenium/selenium-server.jar
+nuxeo-social-collaboration-ftest/selenium/result-*.html
+nuxeo-social-collaboration-ftest/selenium/run.conf
+nuxeo-social-collaboration-ftest/selenium/user-extensions.js
+nuxeo-social-collaboration-ftest/selenium/ffprofile/prefs.js
+nuxeo-social-collaboration-ftest/selenium/selenium-server.jar

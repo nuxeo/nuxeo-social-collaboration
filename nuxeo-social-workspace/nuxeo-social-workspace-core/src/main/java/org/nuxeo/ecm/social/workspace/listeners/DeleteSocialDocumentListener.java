@@ -1,6 +1,6 @@
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -24,7 +24,7 @@ public class DeleteSocialDocumentListener implements EventListener {
         if (socialDocument == null || socialDocument.isProxy()) {
             return;
         }
-        if (NEWS_TYPE.equals(socialDocument.getType())) {
+        if (socialDocument.hasFacet(SOCIAL_DOCUMENT_FACET)) {
 
             // CoreSession session = ctx.getCoreSession();
 

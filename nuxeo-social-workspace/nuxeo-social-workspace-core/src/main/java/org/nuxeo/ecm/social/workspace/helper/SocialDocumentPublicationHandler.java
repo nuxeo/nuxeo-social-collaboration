@@ -15,10 +15,10 @@
  */
 package org.nuxeo.ecm.social.workspace.helper;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
@@ -37,11 +37,11 @@ import org.nuxeo.ecm.core.api.PathRef;
 /**
  * This class aims to provide information about the social document and manage
  * the creation of proxy in the private or public social section.
- * 
+ *
  * In the documentation about method of this class, when we reference to a
  * social document, we implicitly talking about the social document handle by
  * the instance of the class at it's creation.
- * 
+ *
  */
 public class SocialDocumentPublicationHandler {
 
@@ -63,15 +63,14 @@ public class SocialDocumentPublicationHandler {
 
     protected DocumentModel currentProxy;
 
-    static final String ENDOFPRIVATESOCIALSECTIONPATH = "/" + ROOT_SECTION_NAME
-            + "/" + NEWS_SECTION_NAME;
+    static final String ENDOFPRIVATESOCIALSECTIONPATH = "/" + SOCIAL_SECTION_NAME;
 
-    static final String ENDOFPUBLICSOCIALSECTIONPATH = ENDOFPRIVATESOCIALSECTIONPATH
-            + "/" + PUBLIC_NEWS_SECTION_NAME;
+    static final String ENDOFPUBLICSOCIALSECTIONPATH = ENDOFPRIVATESOCIALSECTIONPATH + "/"
+            + PUBLIC_SOCIAL_SECTION_NAME;
 
     /**
-     * 
-     * 
+     *
+     *
      * @param session the current session during which the social document is
      *            created
      * @param currentSocialDocument the social document on which social
@@ -183,11 +182,16 @@ public class SocialDocumentPublicationHandler {
     /**
      * Used to create or update and move a proxy of the handled social document
      * in a private social section
-     * 
+     *
      * @return the proxy created or updated
+     * @throws ClientException
      */
-    public DocumentModel publishPrivatelySocialDocument() {
-        if (isPrivatePublishable()) {
+    public DocumentModel publishPrivatelySocialDocument() throws ClientException {
+        if (currentSocialDocument != null
+                && ARTICLE_TYPE.equals(currentSocialDocument.getType())) {
+            unpublishSocialDocument();
+            return null;
+        } else if (isPrivatePublishable()) {
             return publishSocialDocument(privateSocialSection);
         }
         if (log.isInfoEnabled()) {
@@ -257,7 +261,7 @@ public class SocialDocumentPublicationHandler {
     /**
      * Used to create or update and move a proxy of the handled social document
      * in a public social section
-     * 
+     *
      * @return the proxy created or updated
      */
     public DocumentModel publishPubliclySocialDocument() {
@@ -276,11 +280,11 @@ public class SocialDocumentPublicationHandler {
 
     public void unpublishSocialDocument() throws ClientException {
         String queryToGetProxy = String.format(
-                "Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted' and ecm:name = '%s'",
+                "SELECT * FROM Document WHERE ecm:mixinType = 'SocialDocument' AND ecm:isProxy = 1 AND ecm:currentLifeCycleState <> 'deleted' AND ecm:name = '%s'",
                 currentSocialDocument.getName());
-        DocumentModelList newsProxies = session.query(queryToGetProxy);
-        if (newsProxies.size() == 1) {
-            currentProxy = newsProxies.get(0);
+        DocumentModelList proxies = session.query(queryToGetProxy);
+        if (proxies.size() == 1) {
+            currentProxy = proxies.get(0);
         } else {
             DocumentModelList curSoclDocProxy = session.getProxies(
                     currentSocialDocument.getRef(),

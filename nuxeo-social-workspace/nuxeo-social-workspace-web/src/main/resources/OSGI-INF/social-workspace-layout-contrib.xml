@@ -103,7 +103,7 @@
       </templates>
       <rows>
         <row>
-          <widget>social_isPublicArticle</widget>
+          <widget>social_public_or_private</widget>
         </row>
         <row>
           <widget>article_picture</widget>

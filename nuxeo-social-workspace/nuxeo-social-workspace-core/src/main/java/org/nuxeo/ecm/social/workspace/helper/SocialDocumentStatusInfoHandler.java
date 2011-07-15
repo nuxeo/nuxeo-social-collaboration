@@ -15,13 +15,14 @@
  */
 package org.nuxeo.ecm.social.workspace.helper;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SOCIAL_SECTION_NAME;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.social.workspace.SocialConstants;
 
 /**
  * * This class aims to provide information about the social document and mainly
@@ -112,8 +113,8 @@ public class SocialDocumentStatusInfoHandler extends
     }
 
     protected boolean isPublicationSectionPublic() throws ClientException {
-        DocumentModel publicNewsSection = lookForPublicationSection();
-        return SocialConstants.PUBLIC_NEWS_SECTION_NAME.equals(publicNewsSection.getName());
+        DocumentModel publicSocialSection = lookForPublicationSection();
+        return PUBLIC_SOCIAL_SECTION_NAME.equals(publicSocialSection.getName());
     }
 
     protected DocumentModel lookForPublicationSection() throws ClientException {

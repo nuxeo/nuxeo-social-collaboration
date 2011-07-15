@@ -28,6 +28,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.nuxeo.common.collections.ScopeType;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.actions.Action;
@@ -82,8 +83,9 @@ public class SocialPublishingActions {
     /**
      * create or update a proxy of the current social document in the private
      * social section associated to its type.
+     * @throws ClientException
      */
-    public void publishAsPrivate() {
+    public void publishAsPrivate() throws ClientException {
         DocumentModel currentSocialDocument = navigationContext.getCurrentDocument();
         SocialDocumentPublicationHandler publishingHandler = new SocialDocumentPublicationHandler(
                 documentManager, currentSocialDocument);

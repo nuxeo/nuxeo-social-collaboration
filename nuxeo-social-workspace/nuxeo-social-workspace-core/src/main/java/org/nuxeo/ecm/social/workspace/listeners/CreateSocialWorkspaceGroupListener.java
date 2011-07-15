@@ -16,9 +16,8 @@
 
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_NEWS_SECTION_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ROOT_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SOCIAL_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_ACL_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
@@ -29,8 +28,6 @@ import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
@@ -128,14 +125,11 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         }
     }
 
-    protected ACL createCommunityACL(ACP acp, DocumentModel doc) {
+    protected ACL createCommunityACL(ACP acp, DocumentModel doc) throws ClientException {
         ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
-        acl.add(new ACE(
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(doc),
-                SecurityConstants.EVERYTHING, true));
-        acl.add(new ACE(
-                SocialWorkspaceHelper.getCommunityMembersGroupName(doc),
-                SecurityConstants.READ_WRITE, true));
+        grantSpecificCommunityRights(doc, acl);
+        acl.add(new ACE(SecurityConstants.EVERYONE,
+                SecurityConstants.EVERYTHING, false));
         return acl;
     }
 
@@ -153,35 +147,16 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
 
     protected void handleACPOnSocialSections(DocumentModel socialWorkspace,
             CoreSession session) throws ClientException {
-        DocumentModel rootSocialSection = session.getChild(
-                socialWorkspace.getRef(), ROOT_SECTION_NAME);
-
-        tuneRightsOnSocialSection(socialWorkspace, session, rootSocialSection);
-
-        DocumentRef privateNewsSectionRef = new PathRef(
-                rootSocialSection.getPathAsString(), NEWS_SECTION_NAME);
+        DocumentModel socialSection = session.getChild(
+                socialWorkspace.getRef(), SOCIAL_SECTION_NAME);
 
         DocumentModel publicSocialSection = session.getChild(
-                privateNewsSectionRef, PUBLIC_NEWS_SECTION_NAME);
-
+                socialSection.getRef(), PUBLIC_SOCIAL_SECTION_NAME);
         grantReadRightForEveryOneOnSocialSection(socialWorkspace, session,
                 publicSocialSection);
     }
 
-    protected void tuneRightsOnSocialSection(DocumentModel socialWorkspace,
-            CoreSession session, DocumentModel rootSocialSection)
-            throws ClientException {
-        ACP acp = new ACPImpl();
-        ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
-        grantSpecificRightsOnSocialSections(socialWorkspace, acl);
-        acl.add(new ACE(SecurityConstants.EVERYONE,
-                SecurityConstants.EVERYTHING, false));
-        acp.addACL(acl);
-        rootSocialSection.setACP(acp, true);
-        session.saveDocument(rootSocialSection);
-    }
-
-    protected void grantSpecificRightsOnSocialSections(
+    protected void grantSpecificCommunityRights(
             DocumentModel socialWorkspace, ACL acl) throws ClientException {
         grantEverythingToAdministrator(acl);
         acl.add(new ACE(
@@ -207,7 +182,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         ACP acpPublicSection = new ACPImpl();
 
         ACL aclPublicSection = acpPublicSection.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
-        grantSpecificRightsOnSocialSections(socialWorkspace, aclPublicSection);
+        grantSpecificCommunityRights(socialWorkspace, aclPublicSection);
         grantPublicReadRight(aclPublicSection);
 
         acpPublicSection.addACL(aclPublicSection);
