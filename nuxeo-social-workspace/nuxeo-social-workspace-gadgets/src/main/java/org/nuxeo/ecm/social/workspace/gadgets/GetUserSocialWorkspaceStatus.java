@@ -21,8 +21,6 @@ import java.io.UnsupportedEncodingException;
 
 import net.sf.json.JSONObject;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -35,22 +33,18 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
-import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
-
-@Operation(id = GetUserSocialWorkspaceStatus.ID, category = Constants.CAT_EXECUTION, label = "Get User Social Workspace Statute", description = "Return user statut")
+@Operation(id = GetUserSocialWorkspaceStatus.ID, category = Constants.CAT_EXECUTION, label = "Get User Social Workspace Status", description = "Return user status")
 public class GetUserSocialWorkspaceStatus {
 
     enum Status {
         NOT_MEMBER, REQUEST_PENDING, MEMBER
-    };
+    }
 
     public static final String ID = "SocialWorkspace.UserStatus";
 
@@ -79,8 +73,7 @@ public class GetUserSocialWorkspaceStatus {
     }
 
     protected Blob buildResponse(DocumentModel sws, Status status)
-            throws PropertyException, ClientException,
-            UnsupportedEncodingException {
+            throws ClientException, UnsupportedEncodingException {
         JSONObject obj = new JSONObject();
         obj.element("status", status);
         obj.element("title", sws.getPropertyValue("dc:title"));

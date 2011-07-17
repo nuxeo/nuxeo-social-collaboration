@@ -38,8 +38,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
 import com.google.inject.Inject;
 
 /**
- * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
+ * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @RunWith(FeaturesRunner.class)
 @Features(CoreFeature.class)
@@ -58,7 +57,7 @@ public class TestAdapters {
     public void testArticleAdapter() throws Exception {
         DocumentModel article = session.createDocumentModel(
                 session.getRootDocument().getPathAsString(), "article1",
-                SocialConstants.ARTICLE_TYPE);
+                ARTICLE_TYPE);
         assertNotNull(article);
         article = session.createDocument(article);
         session.save();
@@ -72,7 +71,7 @@ public class TestAdapters {
     public void testRequestAdapter() throws Exception {
         DocumentModel request = session.createDocumentModel(
                 session.getRootDocument().getPathAsString(), "request",
-                SocialConstants.TYPE_REQUEST);
+                TYPE_REQUEST);
         request.setPropertyValue(FIELD_REQUEST_TYPE, REQUEST_TYPE_JOIN);
         assertNotNull(request);
         request = session.createDocument(request);
@@ -82,6 +81,5 @@ public class TestAdapters {
         assertNotNull(adapter);
         assertNotNull(adapter.getType());
     }
-
 
 }

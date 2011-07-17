@@ -55,9 +55,9 @@ public class SocialGroupsManagement {
 
     public static final String TEMPLATE_JOIN_REQUEST_REJECTED = "templates/joinRequestRejected.ftl";
 
-    static AutomationService automationService = null;
+    static AutomationService automationService;
 
-    static UserManager userManager = null;
+    static UserManager userManager;
 
     private static final Log log = LogFactory.getLog(SocialGroupsManagement.class);
 
@@ -96,11 +96,9 @@ public class SocialGroupsManagement {
         if (groups.contains(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) {
             return true;
         }
+
         String membersGroup = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
-        if (groups.contains(membersGroup)) {
-            return true;
-        }
-        return false;
+        return groups.contains(membersGroup);
     }
 
     public static boolean isRequestPending(DocumentModel sws, String user)
@@ -111,10 +109,7 @@ public class SocialGroupsManagement {
         String query = String.format(queryTemplate, REQUEST_TYPE_JOIN, user,
                 sws.getId());
         DocumentModelList list = session.query(query);
-        if (list != null && list.size() > 0) {
-            return true;
-        }
-        return false;
+        return list != null && !list.isEmpty();
     }
 
     public static void notifyUser(DocumentModel socialWorkspace,
@@ -161,7 +156,7 @@ public class SocialGroupsManagement {
         String adminGroupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace);
         NuxeoGroup adminGroup = getUserManager().getGroup(adminGroupName);
         List<String> admins = adminGroup.getMemberUsers();
-        if (admins == null || admins.size() == 0) {
+        if (admins == null || admins.isEmpty()) {
             log.warn(String.format(
                     "No admin users for social workspace %s (%s) ",
                     socialWorkspace.getTitle(),
@@ -177,7 +172,7 @@ public class SocialGroupsManagement {
             }
         }
 
-        if (toList.size() == 0) {
+        if (toList.isEmpty()) {
             log.warn("no admin email found ...");
             return;
         }

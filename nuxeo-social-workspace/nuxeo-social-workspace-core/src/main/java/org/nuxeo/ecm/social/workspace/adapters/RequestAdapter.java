@@ -26,7 +26,7 @@ public interface RequestAdapter {
 
     String getUsername();
 
-    void setUserNanme(String value);
+    void setUserName(String value);
 
     String getType();
 
@@ -42,6 +42,6 @@ public interface RequestAdapter {
 
     String getProcessedComment();
 
-    void setProcessdComment(String value);
+    void setProcessedComment(String value);
 
 }

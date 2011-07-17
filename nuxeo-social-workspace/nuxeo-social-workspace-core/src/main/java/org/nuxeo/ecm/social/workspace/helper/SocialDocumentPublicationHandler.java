@@ -78,14 +78,13 @@ public class SocialDocumentPublicationHandler {
      */
     public SocialDocumentPublicationHandler(CoreSession session,
             DocumentModel currentSocialDocument) {
-        super();
         if (session != null && currentSocialDocument != null) {
             this.session = session;
             this.currentSocialDocument = currentSocialDocument;
             lookForSocialWorkspaceAndSections();
         } else {
             if (log.isInfoEnabled()) {
-                log.info("It's not possible to perfom a social document publication management"
+                log.info("It's not possible to perform a social document publication management "
                         + "if the session or the social document don't exist.");
             }
         }
@@ -121,10 +120,9 @@ public class SocialDocumentPublicationHandler {
                 return;
             }
         }
-
     }
 
-    protected boolean isSocialWorkspace(DocumentModel socialWorkspace) {
+    protected static boolean isSocialWorkspace(DocumentModel socialWorkspace) {
         return socialWorkspace != null
                 && socialWorkspace.hasFacet(SOCIAL_WORKSPACE_FACET);
     }
@@ -164,7 +162,7 @@ public class SocialDocumentPublicationHandler {
         return isPublishable() && isSocialSection(privateSocialSection);
     }
 
-    protected boolean isSocialSection(DocumentModel socialSection) {
+    protected static boolean isSocialSection(DocumentModel socialSection) {
         return socialSection != null
                 && SOCIAL_SECTION_TYPE.equals(socialSection.getType());
     }
@@ -180,11 +178,10 @@ public class SocialDocumentPublicationHandler {
     }
 
     /**
-     * Used to create or update and move a proxy of the handled social document
-     * in a private social section
+     * Creates or updates and moves a proxy of the handled social document
+     * in a private social section.
      *
      * @return the proxy created or updated
-     * @throws ClientException
      */
     public DocumentModel publishPrivatelySocialDocument() throws ClientException {
         if (currentSocialDocument != null
@@ -230,12 +227,12 @@ public class SocialDocumentPublicationHandler {
     }
 
     protected DocumentModel getProxyOrCurrentDoc() throws ClientException {
-        DocumentModel proxyOrCurrentDoc = null;
         DocumentModelList proxies = session.getProxies(
                 currentSocialDocument.getRef(), publicSocialSection.getRef());
         proxies.addAll(session.getProxies(currentSocialDocument.getRef(),
                 privateSocialSection.getRef()));
         int nbrOfProxies = proxies.size();
+        DocumentModel proxyOrCurrentDoc;
         if (nbrOfProxies == MAXIMAL_NUMBER_OF_PROXY_PER_SOCIAL_DOCUMENT) {
             proxyOrCurrentDoc = proxies.get(FIRST_AND_ONLY_PROXY);
             currentProxy = proxyOrCurrentDoc;
@@ -259,8 +256,8 @@ public class SocialDocumentPublicationHandler {
     }
 
     /**
-     * Used to create or update and move a proxy of the handled social document
-     * in a public social section
+     * Creates or updates and moves a proxy of the handled social document
+     * in a public social section.
      *
      * @return the proxy created or updated
      */
@@ -286,16 +283,16 @@ public class SocialDocumentPublicationHandler {
         if (proxies.size() == 1) {
             currentProxy = proxies.get(0);
         } else {
-            DocumentModelList curSoclDocProxy = session.getProxies(
+            DocumentModelList curSocialDocProxy = session.getProxies(
                     currentSocialDocument.getRef(),
                     publicSocialSection.getRef());
-            curSoclDocProxy.addAll(session.getProxies(
+            curSocialDocProxy.addAll(session.getProxies(
                     currentSocialDocument.getRef(),
                     privateSocialSection.getRef()));
-            if (curSoclDocProxy.isEmpty()) {
+            if (curSocialDocProxy.isEmpty()) {
                 return;
             }
-            currentProxy = curSoclDocProxy.get(FIRST_AND_ONLY_PROXY);
+            currentProxy = curSocialDocProxy.get(FIRST_AND_ONLY_PROXY);
         }
         if (currentProxy != null) {
             session.removeDocument(currentProxy.getRef());

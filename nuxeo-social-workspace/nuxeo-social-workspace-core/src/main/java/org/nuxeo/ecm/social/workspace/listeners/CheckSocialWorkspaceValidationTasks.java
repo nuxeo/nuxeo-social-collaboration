@@ -41,18 +41,17 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- * 
- *         lister that process "checkExpiredTasksSignal" event which is
- *         generated each day by Scheduler Service. if there is a Social
- *         Workspace that wasn't validated and associated validation task is
- *         expired, then the access will be blocked.
- * 
+ *
+ * Listener that processes "checkExpiredTasksSignal" events which are
+ * generated each day by Scheduler Service. If there is a Social
+ * Workspace that wasn't validated and associated validation task is
+ * expired, then the access will be blocked.
  */
 public class CheckSocialWorkspaceValidationTasks implements EventListener {
 
     protected JbpmService jbpmService;
 
-    protected AutomationService automationService = null;
+    protected AutomationService automationService;
 
     private static final Log log = LogFactory.getLog(CheckSocialWorkspaceValidationTasks.class);
 
@@ -75,7 +74,6 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
                 Repository.close(session);
             }
         }
-
     }
 
     private void checkTasksFor(DocumentModel doc) throws ClientException {
@@ -100,14 +98,14 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
                 }
             }
         }
-        if (canceledTasks.size() > 0) {
+        if (!canceledTasks.isEmpty()) {
             getJbpmService().saveTaskInstances(canceledTasks);
         }
     }
 
-    private boolean isExpired(TaskInstance task) {
+    private static boolean isExpired(TaskInstance task) {
         Date date = task.getDueDate();
-        return (date != null && date.before(new Date()));
+        return date != null && date.before(new Date());
     }
 
     private AutomationService getAutomationService() throws Exception {
@@ -117,7 +115,7 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
         return automationService;
     }
 
-    protected CoreSession openSession() throws Exception {
+    protected static CoreSession openSession() throws Exception {
         RepositoryManager repositoryManager = Framework.getService(RepositoryManager.class);
         Repository repository = repositoryManager.getDefaultRepository();
         return repository.open();

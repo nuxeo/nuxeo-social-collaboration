@@ -54,7 +54,7 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.social.workspace.core" })
+@Deploy("org.nuxeo.ecm.social.workspace.core")
 public class TestListeners {
 
     public static final String SOCIAL_WORKSPACE_NAME = "sws";
@@ -120,14 +120,14 @@ public class TestListeners {
 
         Serializable originalNewsDcCreator = nominalNews.getProperty(
                 "dc:creator").getValue();
-        assertNotNull("The \"dc:creator\" of the original news should existe",
+        assertNotNull("The \"dc:creator\" of the original news should exist",
                 originalNewsDcCreator);
         assertEquals(
                 "The \"dc:creator\" of the original news should be \"Administrator\"",
                 "Administrator", originalNewsDcCreator);
 
         Serializable publicationDcCreator = publicationOfTheNews.getPropertyValue("dc:creator");
-        assertNotNull("The \"dc:creator\" of the original news should existe",
+        assertNotNull("The \"dc:creator\" of the original news should exist",
                 publicationDcCreator);
         assertEquals(
                 "The \"dc:creator\" of the original news and of its publication should be the same",
@@ -144,16 +144,12 @@ public class TestListeners {
 
         publicationOfTheNews = getTheProxyOfTheNews(sws);
         assertEquals(publicationOfTheNewsId, publicationOfTheNews.getId());
-
     }
 
     protected DocumentModel getTheProxyOfTheNews(DocumentModel sws)
             throws ClientException {
-        String publicationOfTheNewsPathAsString = String.format("%s/%s",
-                sws.getPathAsString(), SOCIAL_SECTION_NAME);
-        DocumentRef refPublicationOfTheNews = new PathRef(
-                publicationOfTheNewsPathAsString);
-        DocumentModel publicationOfTheNews = session.getDocument(refPublicationOfTheNews);
-        return publicationOfTheNews;
+        String path = sws.getPathAsString() + "/" + SOCIAL_SECTION_NAME;
+        DocumentRef pathRef = new PathRef(path);
+        return session.getDocument(pathRef);
     }
 }

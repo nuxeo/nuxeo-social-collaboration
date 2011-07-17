@@ -18,8 +18,6 @@ package org.nuxeo.ecm.social.workspace;
 import static org.jboss.seam.ScopeType.PAGE;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.annotations.In;
@@ -31,7 +29,6 @@ import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.platform.actions.Action;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.ui.web.api.WebActions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -44,7 +41,6 @@ import org.nuxeo.ecm.webapp.helpers.EventNames;
  * social document.
  *
  * @author rlegall
- *
  */
 @Name("SocialPublishing")
 @Scope(PAGE)
@@ -65,6 +61,7 @@ public class SocialPublishingActions {
     @In(create = true)
     protected transient WebActions webActions;
 
+    // FIXME: find a better name
     protected Boolean privatelyPublish;
 
     /**
@@ -83,7 +80,6 @@ public class SocialPublishingActions {
     /**
      * create or update a proxy of the current social document in the private
      * social section associated to its type.
-     * @throws ClientException
      */
     public void publishAsPrivate() throws ClientException {
         DocumentModel currentSocialDocument = navigationContext.getCurrentDocument();
@@ -100,33 +96,34 @@ public class SocialPublishingActions {
         SocialDocumentStatusInfoHandler publishingHandler = new SocialDocumentStatusInfoHandler(
                 documentManager, socialDocument);
         return publishingHandler.isPrivate();
-
     }
 
     /**
-     * used to specify if the current social document is publish in private
+     * Used to specify if the current social document is publish in private
      * social section.
      *
      * @return true if the current social document got a proxy in a private
      *         social section or if it's newly created, false if the current
      *         social document got a proxy in a public social section.
      */
+    // FIXME: find a better name
     public boolean isPrivatelyPublish() {
         if (privatelyPublish == null) {
-
-            privatelyPublish = new Boolean(isPrivate());
+            privatelyPublish = Boolean.valueOf(isPrivate());
         }
         return privatelyPublish.booleanValue();
     }
 
     /**
-     * Set the type of publication for the current social document. True to
+     * Sets the type of publication for the current social document. True to
      * publish it in a private social section, false to publish it in a public
      * social section.
      *
      * @param privatelyPublish true to choose a private publication, false to
      *            choose a public publication.
      */
+    // FIXME: it this really the intended behaviour?
+    // FIXME: find a better name
     public void setPrivatelyPublish(boolean privatelyPublish) {
         privatelyPublish = new Boolean(privatelyPublish);
         if (privatelyPublish) {
@@ -144,7 +141,6 @@ public class SocialPublishingActions {
     }
 
     protected void markAsPublic() {
-
         DocumentModel documentToMark = navigationContext.getChangeableDocument();
         if (documentToMark == null) {
             documentToMark = navigationContext.getCurrentDocument();

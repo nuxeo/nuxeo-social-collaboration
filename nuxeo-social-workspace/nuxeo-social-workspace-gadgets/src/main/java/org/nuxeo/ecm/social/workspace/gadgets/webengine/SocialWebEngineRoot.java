@@ -47,7 +47,6 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
 import org.nuxeo.ecm.social.workspace.helper.SocialDocumentStatusInfoHandler;
 import org.nuxeo.ecm.webengine.forms.FormData;
@@ -56,10 +55,10 @@ import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a> webengine handler for
- *         library gadget requests
+ * WebEngine handler for library gadget requests.
+ *
+ * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
-
 @Path("/social")
 @WebObject(type = "social")
 @Produces("text/html; charset=UTF-8")
@@ -67,22 +66,26 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     private static final Log log = LogFactory.getLog(SocialWebEngineRoot.class);
 
-    static AutomationService automationService = null;
+    static AutomationService automationService;
 
     /**
      * Main method that return a html snipped with the list of documents
-     * specified in request
-     *
-     * parameters: - docRef: parent document identificator ( may be a path or id
-     * ) - pageSize : numer of documnets per page - page : index of the current
-     * page - queryText ( optional ): search term
+     * specified in request.
+     * <p>
+     * parameters:
+     * <ul>
+     * <li>docRef: parent document identifier (may be a path or an id)
+     * <li>pageSize:  number of documents per page</li>
+     * <li>page: index of the current page</li>
+     * <li>queryText (optional): search term</li>
+     * </ul>
      */
     @POST
     @Path("documentList")
     public Object documentList(@Context HttpServletRequest request)
             throws Exception {
         FormData formData = new FormData(request);
-        setLaguage();
+        setLanguage();
 
         // get the arguments
         String ref = formData.getString("docRef");
@@ -100,7 +103,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     Object buildDocumentList(DocumentRef docRef, int pageSize, int page,
             String queryText) throws Exception {
-        boolean isSearch = (queryText != null && queryText.trim().length() > 0);
+        boolean isSearch = queryText != null && queryText.trim().length() > 0;
 
         // build freemarker arguments map
         Map<String, Object> args = new HashMap<String, Object>();
@@ -108,11 +111,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
         CoreSession session = ctx.getCoreSession();
 
         DocumentModel doc = session.getDocument(docRef);
-        DocumentModel socialWorkspace = null;
         args.put("currentDoc", doc);
+        // FIXME: typo (documet -> document)
         args.put("documetListPath", getPath() + "/documentList");
 
-        PaginableDocumentModelList docs = null;
+        PaginableDocumentModelList docs;
+        DocumentModel socialWorkspace = null;
         if (isSearch) {
             docs = search(doc, pageSize, page, queryText);
             socialWorkspace = doc;
@@ -127,7 +131,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
             }
             args.put("parent", parent);
 
-            if (ancestors.size() > 0 && isSocialWorkspace(ancestors.get(0))) {
+            if (!ancestors.isEmpty() && isSocialWorkspace(ancestors.get(0))) {
                 socialWorkspace = ancestors.remove(0);
             }
             args.put("ancestors", ancestors);
@@ -224,11 +228,6 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return buildDocumentList(newDoc.getId(), 0, 0, null);
     }
 
-    /**
-     * @param currentDoc
-     * @return
-     * @throws Exception
-     */
     protected PaginableDocumentModelList getChildren(DocumentModel doc,
             int pageSize, int page) throws Exception {
         CoreSession session = doc.getCoreSession();
@@ -270,12 +269,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * compute a list with the ancestors of the document specified within the
-     * SocialWorkspace
-     *
-     * @param currentDoc
-     * @return the list computed
-     * @throws ClientException
+     * Computes a list with the ancestors of the document specified within the
+     * SocialWorkspace.
      */
     protected List<DocumentModel> getAncestors(DocumentModel doc)
             throws ClientException {
@@ -294,7 +289,6 @@ public class SocialWebEngineRoot extends ModuleRoot {
             return false;
         }
         return "SocialWorkspace".equals(doc.getType());
-
     }
 
     protected DocumentRef getDocumentRef(String ref) {
@@ -308,7 +302,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return docRef;
     }
 
-    protected void setLaguage() {
+    protected void setLanguage() {
         try {
             Locale locale = LocaleSelector.instance().getLocale();
             ctx.setLocale(locale);
@@ -317,7 +311,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         }
     }
 
-    protected int getIntFromString(String value) {
+    protected static int getIntFromString(String value) {
         if (value != null) {
             try {
                 return Integer.parseInt(value);
@@ -336,9 +330,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     // better way to do this ?
-    private List<String> getPublishableDocs(DocumentModel socialWorkspace,
-            DocumentModelList docs, boolean isPublic) throws PropertyException,
-            ClientException {
+    private static List<String> getPublishableDocs(DocumentModel socialWorkspace,
+            DocumentModelList docs, boolean isPublic) throws  ClientException {
         CoreSession session = socialWorkspace.getCoreSession();
         boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue("social:isPublic");
 

@@ -95,7 +95,7 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
     }
 
     protected void publishSocialDocumentInPublicSection(CoreSession session,
-            DocumentModel socialDocument) throws ClientException {
+            DocumentModel socialDocument) {
         SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
                 session, socialDocument);
         publisher.publishPubliclySocialDocument();

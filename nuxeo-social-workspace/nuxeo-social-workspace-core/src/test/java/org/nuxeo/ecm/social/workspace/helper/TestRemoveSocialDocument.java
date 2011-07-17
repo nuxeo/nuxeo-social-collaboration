@@ -67,27 +67,22 @@ public class TestRemoveSocialDocument {
         DocumentModel containerWorkspace = createDocumentModelInSession(
                 session.getRootDocument().getPathAsString(),
                 "Workspace of tests", "Workspace");
-
         DocumentModel socialWorkspace = createDocumentModelInSession(
                 containerWorkspace.getPathAsString(),
-                "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
-
+                "SocialWorkspace for test", SOCIAL_WORKSPACE_TYPE);
         DocumentModel privateNews = createDocumentModelInSession(
                 socialWorkspace.getPathAsString(), "A private News",
                 SocialConstants.NEWS_TYPE);
-
         createDocumentModelInSession(
                 socialWorkspace.getPathAsString(), "Another private News",
                 SocialConstants.NEWS_TYPE);
-
         DocumentModel pubsec = session.getDocument(new PathRef(
                 socialWorkspace.getPathAsString() + "/" + SOCIAL_SECTION_NAME));
         assertNotNull(pubsec);
+
         DocumentModel publicPubsec = session.getDocument(new PathRef(
                 pubsec.getPathAsString(), PUBLIC_SOCIAL_SECTION_NAME));
-
-        String queryToGetProxies = String.format("Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted'");
-
+        String queryToGetProxies = "Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted'";
         DocumentModelList newsProxies = session.query(queryToGetProxies);
         assertEquals(2, newsProxies.size());
 
@@ -129,7 +124,7 @@ public class TestRemoveSocialDocument {
 
         newsProxies = session.query(queryToGetPublicProxy);
         assertEquals(1, newsProxies.size());
-        underTest = null;
+
         underTest = new SocialDocumentPublicationHandler(session, publicNews);
         underTest.unpublishSocialDocument();
 
@@ -148,4 +143,5 @@ public class TestRemoveSocialDocument {
         session.save();
         return sws;
     }
+
 }

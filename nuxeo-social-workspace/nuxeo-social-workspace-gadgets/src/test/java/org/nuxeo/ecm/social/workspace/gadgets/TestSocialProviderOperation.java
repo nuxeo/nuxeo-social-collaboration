@@ -110,11 +110,11 @@ public class TestSocialProviderOperation {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("fakeChain");
-        OperationParameters oparams = new OperationParameters(
+        OperationParameters oParams = new OperationParameters(
                 SocialProviderOperation.ID);
-        oparams.set("query", "select * from Article where ecm:isProxy = 0");
-        oparams.set("socialWorkspacePath", "/sws2");
-        chain.add(oparams);
+        oParams.set("query", "select * from Article where ecm:isProxy = 0");
+        oParams.set("socialWorkspacePath", "/sws2");
+        chain.add(oParams);
 
         DocumentModelList result = (DocumentModelList) service.run(ctx, chain);
         assertEquals(2, result.size());
@@ -128,10 +128,9 @@ public class TestSocialProviderOperation {
         group.setProperty(userManager.getGroupSchemaName(), "members", list);
         userManager.updateGroup(group);
 
-        oparams.set("query", "select * from Article where ecm:isProxy = 1");
+        oParams.set("query", "select * from Article where ecm:isProxy = 1");
         result = (DocumentModelList) service.run(ctx, chain);
         assertEquals(1, result.size()); // return only the public article
-
     }
 
 }

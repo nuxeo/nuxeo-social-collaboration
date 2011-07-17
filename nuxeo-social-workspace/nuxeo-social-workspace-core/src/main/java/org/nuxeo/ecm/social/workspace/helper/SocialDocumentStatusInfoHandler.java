@@ -45,7 +45,7 @@ public class SocialDocumentStatusInfoHandler extends
      * @param session the current session during which the social document is
      *            created
      * @param currentSocialDocument the social document on which social
-     *            informations are needed
+     *            information are needed
      */
     public SocialDocumentStatusInfoHandler(CoreSession session,
             DocumentModel currentSocialDocument) {
@@ -62,14 +62,14 @@ public class SocialDocumentStatusInfoHandler extends
     }
 
     protected void setCurrentProxy() throws ClientException {
-        DocumentModelList curSoclDocProxy = session.getProxies(
+        DocumentModelList curSocialDocProxy = session.getProxies(
                 currentSocialDocument.getRef(), publicSocialSection.getRef());
-        curSoclDocProxy.addAll(session.getProxies(
+        curSocialDocProxy.addAll(session.getProxies(
                 currentSocialDocument.getRef(), privateSocialSection.getRef()));
-        if (curSoclDocProxy.isEmpty()) {
+        if (curSocialDocProxy.isEmpty()) {
             return;
         }
-        currentProxy = curSoclDocProxy.get(FIRST_AND_ONLY_PROXY);
+        currentProxy = curSocialDocProxy.get(FIRST_AND_ONLY_PROXY);
 
     }
 
@@ -82,10 +82,10 @@ public class SocialDocumentStatusInfoHandler extends
      *         proxy in this public social section or no proxy at all.
      */
     public boolean isPublic() {
-        boolean currentProxyIsPublic = false;
         if (currentProxy == null) {
             return false;
         }
+        boolean currentProxyIsPublic = false;
         try {
             currentProxyIsPublic = isPublicationSectionPublic();
         } catch (ClientException e) {

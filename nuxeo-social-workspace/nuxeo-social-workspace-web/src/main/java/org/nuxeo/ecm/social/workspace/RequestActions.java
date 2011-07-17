@@ -95,7 +95,7 @@ public class RequestActions implements Serializable {
 
                 }
             } catch (Exception e) {
-                log.debug("failed to procees the request ... " + doc.getId(), e);
+                log.debug("failed to process the request ... " + doc.getId(), e);
             }
         }
         documentManager.save();
@@ -147,7 +147,7 @@ public class RequestActions implements Serializable {
                 }
             } catch (Exception e) {
                 log.debug(
-                        "failed to procees the social workspace ... "
+                        "failed to process the social workspace ... "
                                 + doc.getId(), e);
             }
         }
@@ -171,7 +171,7 @@ public class RequestActions implements Serializable {
             }
         } catch (Exception e) {
             log.warn(
-                    "failed cancel tasks for accepeted/rejected SocialWorkspace",
+                    "failed cancel tasks for accepted/rejected SocialWorkspace",
                     e);
         }
 

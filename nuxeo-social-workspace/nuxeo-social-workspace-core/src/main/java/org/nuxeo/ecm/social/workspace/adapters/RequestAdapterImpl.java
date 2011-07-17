@@ -28,56 +28,61 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 public class RequestAdapterImpl extends BaseAdapter implements RequestAdapter {
 
-    /**
-     * @param doc
-     */
     public RequestAdapterImpl(DocumentModel doc) {
         super(doc);
         // TODO Auto-generated constructor stub
     }
 
+    @Override
     public String getUsername() {
         return (String) getDocProperty(doc, FIELD_REQUEST_USERNAME);
     }
 
-    public void setUserNanme(String value) {
+    @Override
+    public void setUserName(String value) {
         setDocProperty(doc, FIELD_REQUEST_USERNAME, value);
     }
 
+    @Override
     public String getType() {
         return (String) getDocProperty(doc, FIELD_REQUEST_TYPE);
     }
 
+    @Override
     public void setType(String value) {
         setDocProperty(doc, FIELD_REQUEST_TYPE, value);
     }
 
+    @Override
     public String getInfo() {
         return (String) getDocProperty(doc, FIELD_REQUEST_INFO);
     }
 
+    @Override
     public void setInfo(String value) {
         setDocProperty(doc, FIELD_REQUEST_INFO, value);
     }
 
+    @Override
     public Calendar getProcessedDate() {
         return (Calendar) getDocProperty(doc, FIELD_REQUEST_PROCESSED_DATE);
     }
 
+    @Override
     public void setProcessedDate(Calendar value) {
         setDocProperty(doc, FIELD_REQUEST_PROCESSED_DATE, value);
     }
 
+    @Override
     public String getProcessedComment() {
         return (String) getDocProperty(doc, FIELD_REQUEST_PROCESSED_COMMENT);
     }
 
     @Override
-    public void setProcessdComment(String value) {
+    public void setProcessedComment(String value) {
         setDocProperty(doc, FIELD_REQUEST_PROCESSED_COMMENT, value);
     }
 

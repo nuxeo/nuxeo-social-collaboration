@@ -17,7 +17,6 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.web.RequestParameter;
 import org.jboss.seam.core.Events;
-import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -27,12 +26,12 @@ import org.nuxeo.ecm.webapp.base.InputController;
 import org.nuxeo.ecm.webapp.security.UserManagementActions;
 
 /**
- * Social Friendships action bean
+ * Social Friendships action bean.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  */
 @Name("userRelationshipAction")
-@Scope(value = ScopeType.CONVERSATION)
+@Scope(ScopeType.CONVERSATION)
 public class UserRelationshipActions extends InputController implements
         Serializable {
 
@@ -58,17 +57,17 @@ public class UserRelationshipActions extends InputController implements
 
     public static final String USER_RELATIONSHIP_CHANGED = "UserRelationshipChanged";
 
-    protected List<String> relationshipsWithSelectedUser = null;
+    protected List<String> relationshipsWithSelectedUser;
 
     public boolean isAlreadyConnected() throws ClientException {
-        return !isYou() && getRelationshipsWithSelectedUser().size() > 0;
+        return !isYou() && !getRelationshipsWithSelectedUser().isEmpty();
     }
 
     public boolean isYou() {
         return getCurrentUser().equals(getFriend());
     }
 
-    public List<String> getRelationshipsWithSelectedUser() throws ClientException {
+    public List<String> getRelationshipsWithSelectedUser() {
         if (relationshipsWithSelectedUser == null) {
             relationshipsWithSelectedUser = userRelationshipService.getRelationshipKinds(
                     getCurrentUser(), getFriend());
@@ -76,14 +75,13 @@ public class UserRelationshipActions extends InputController implements
         return relationshipsWithSelectedUser;
     }
 
-    protected void addRelationshipWithSelectedUser(String type)
-            throws ClientException {
+    protected void addRelationshipWithSelectedUser(String type) {
         userRelationshipService.addRelation(getCurrentUser(), getFriend(), type);
         setFacesMessage("label.social.user.relationship.addRelation.success");
         Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
     }
 
-    protected void removeRelationship(String type) throws ClientException {
+    protected void removeRelationship(String type) {
         userRelationshipService.removeRelation(getCurrentUser(), getFriend(),
                 type);
         Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
@@ -93,24 +91,16 @@ public class UserRelationshipActions extends InputController implements
         return getRelationshipsWithSelectedUser().contains(type);
     }
 
-    public List<String> getRelationshipsFromSelectedUser()
-            throws ClientException {
+    public List<String> getRelationshipsFromSelectedUser() {
         return userRelationshipService.getTargets(getFriend());
     }
 
     public void relationshipCheckboxChanged(ValueChangeEvent event) {
         if (!StringUtils.isEmpty(selectedKind)) {
-            try {
-                if ((Boolean) event.getNewValue()) {
-                    addRelationshipWithSelectedUser(selectedKind);
-                } else {
-                    removeRelationship(selectedKind);
-                }
-            } catch (ClientException e) {
-                log.error(e.getMessage(), e);
-                facesMessages.add(StatusMessage.Severity.ERROR,
-                        resourcesAccessor.getMessages().get(
-                                "label.social.user.relationship.error"));
+            if ((Boolean) event.getNewValue()) {
+                addRelationshipWithSelectedUser(selectedKind);
+            } else {
+                removeRelationship(selectedKind);
             }
         }
     }

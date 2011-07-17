@@ -99,15 +99,15 @@ public class TestNewsManagement {
                 "A news created in a Folder of a SocialWorkspace should have the SocialDocument facet",
                 anOtherPublishableNews.hasFacet(SOCIAL_DOCUMENT_FACET));
 
-        DocumentModel aNoteInFolderWihinSocialWorkspace = createDocumentModelInSession(
+        DocumentModel aNoteInFolderWithinSocialWorkspace = createDocumentModelInSession(
                 "", "a lambda not", "Note");
 
         assertNotNull(
                 "A document with out a socialDocument facet could be created in a Folder within a SocialWorkspace",
-                aNoteInFolderWihinSocialWorkspace);
+                aNoteInFolderWithinSocialWorkspace);
         assertFalse(
                 "A document with out a socialDocument facet created in a Folder of a SocialWorkspace shouldn't have the SocialDocument facet",
-                aNoteInFolderWihinSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
+                aNoteInFolderWithinSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
     }
 

@@ -34,7 +34,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-content-template-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-adapters-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-notifications-contrib.xml" })
-public class TestSocialDocumentPublishcationHandler {
+public class TestSocialDocumentPublicationHandler {
 
     @Inject
     protected CoreSession session;
@@ -54,33 +54,32 @@ public class TestSocialDocumentPublishcationHandler {
                 underTest.currentSocialDocument, underTest.privateSocialSection);
         session.save();
 
-        DocumentModel choosenDocForPublication = underTest.getProxyOrCurrentDoc();
-        assertNotNull(choosenDocForPublication);
-        assertEquals(proxy1, choosenDocForPublication);
-        String proxyid = proxy1.getId();
+        DocumentModel chosenDocForPublication = underTest.getProxyOrCurrentDoc();
+        assertNotNull(chosenDocForPublication);
+        assertEquals(proxy1, chosenDocForPublication);
+        String proxyId = proxy1.getId();
 
         currentSocialDocument.putContextData(
                 VersioningService.VERSIONING_OPTION, VersioningOption.MAJOR);
         session.saveDocument(currentSocialDocument);
 
-        choosenDocForPublication = underTest.getProxyOrCurrentDoc();
-        assertNotNull(choosenDocForPublication);
-        assertEquals(proxy1, choosenDocForPublication);
-        assertEquals(proxyid, choosenDocForPublication.getId());
+        chosenDocForPublication = underTest.getProxyOrCurrentDoc();
+        assertNotNull(chosenDocForPublication);
+        assertEquals(proxy1, chosenDocForPublication);
+        assertEquals(proxyId, chosenDocForPublication.getId());
 
         DocumentModel proxy2 = session.publishDocument(
                 underTest.currentSocialDocument, underTest.publicSocialSection);
         session.save();
-        assertFalse(proxyid.equals(proxy2.getId()));
+        assertFalse(proxyId.equals(proxy2.getId()));
 
-        choosenDocForPublication = underTest.getProxyOrCurrentDoc();
-        assertNotNull(choosenDocForPublication);
-        assertEquals(currentSocialDocument, choosenDocForPublication);
+        chosenDocForPublication = underTest.getProxyOrCurrentDoc();
+        assertNotNull(chosenDocForPublication);
+        assertEquals(currentSocialDocument, chosenDocForPublication);
 
-        choosenDocForPublication = underTest.getProxyOrCurrentDoc();
-        assertNotNull(choosenDocForPublication);
-        assertEquals(currentSocialDocument, choosenDocForPublication);
-
+        chosenDocForPublication = underTest.getProxyOrCurrentDoc();
+        assertNotNull(chosenDocForPublication);
+        assertEquals(currentSocialDocument, chosenDocForPublication);
     }
 
     @Test
@@ -89,13 +88,14 @@ public class TestSocialDocumentPublishcationHandler {
         underTest = new SocialDocumentPublicationHandler(session,
                 currentSocialDocument);
 
-        DocumentModel proxyManualyCreated = session.publishDocument(
+        DocumentModel proxyManuallyCreated = session.publishDocument(
                 currentSocialDocument, underTest.privateSocialSection);
         session.save();
-        assertNotNull(proxyManualyCreated);
+        assertNotNull(proxyManuallyCreated);
+
         DocumentModel proxyHandled = underTest.publishSocialDocument(underTest.privateSocialSection);
         assertNotNull(proxyHandled);
-        assertEquals(proxyManualyCreated, proxyHandled);
+        assertEquals(proxyManuallyCreated, proxyHandled);
 
         session.removeDocument(proxyHandled.getRef());
         DocumentModel proxyNewlyHandled = underTest.publishSocialDocument(underTest.privateSocialSection);
@@ -107,14 +107,13 @@ public class TestSocialDocumentPublishcationHandler {
         assertEquals(proxyNewlyHandled, publicProxyHandled);
         assertEquals(underTest.publicSocialSection.getRef(),
                 publicProxyHandled.getParentRef());
-
     }
 
     public void initNominalContext() throws Exception {
-        socialWorkspace = createDocumentModel("/", "currentSocialWokspace",
+        socialWorkspace = createDocumentModel("/", "currentSocialWorkspace",
                 SocialConstants.SOCIAL_WORKSPACE_TYPE);
         currentSocialDocument = createDocumentModel(
-                socialWorkspace.getPathAsString() + "/", "uneffective news",
+                socialWorkspace.getPathAsString() + "/", "ineffective news",
                 SocialConstants.NEWS_TYPE);
     }
 
@@ -147,7 +146,6 @@ public class TestSocialDocumentPublishcationHandler {
         assertNull(underTest.publishPrivatelySocialDocument());
         assertFalse(underTest.isPublicPublishable());
         assertNull(underTest.publishPubliclySocialDocument());
-
     }
 
     @Test
@@ -184,7 +182,6 @@ public class TestSocialDocumentPublishcationHandler {
         assertNotNull(String.format("The public proxy of \"%s\" should exist",
                 currentSocialDocument), proxy);
         assertEquals(proxyId, proxy.getId());
-
     }
 
 }

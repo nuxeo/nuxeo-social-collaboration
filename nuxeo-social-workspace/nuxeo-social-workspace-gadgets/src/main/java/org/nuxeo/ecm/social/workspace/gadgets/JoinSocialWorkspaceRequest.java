@@ -28,7 +28,6 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -38,7 +37,6 @@ import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
-
 @Operation(id = JoinSocialWorkspaceRequest.ID, category = Constants.CAT_EXECUTION, label = "Join Social Workspace", description = "Operation that will handle join request")
 public class JoinSocialWorkspaceRequest {
 

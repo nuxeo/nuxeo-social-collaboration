@@ -50,9 +50,9 @@ public class ManageSocialWorkspaceActions {
 
     private static final Log log = LogFactory.getLog(ManageSocialWorkspaceActions.class);
 
-    protected DocumentModel administratorsGroup = null;
+    protected DocumentModel administratorsGroup;
 
-    protected DocumentModel membersGroup = null;
+    protected DocumentModel membersGroup;
 
     @In(create = true)
     protected UserManager userManager;

@@ -19,6 +19,8 @@ package org.nuxeo.ecm.social.workspace;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
@@ -44,10 +46,10 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import com.google.inject.Inject;
 
 /**
- * This test case aims to test the case where "userManager.getDefaultGroup()" is not configured in Nuxeo distribution.
+ * This test case aims to test the case where "userManager.getDefaultGroup()"
+ * is not configured in Nuxeo distribution.
  *
  * @author rlegall@nuxeo.com
- *
  */
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
@@ -83,27 +85,27 @@ public class TestNewsManagementWithoutLocalConfig {
 
         ACP acp = pubsec.getACP();
         assertFalse(acp.getAccess(userManager.getDefaultGroup(),
-                SecurityConstants.READ).toBoolean());
-        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ_WRITE).toBoolean());
+                READ).toBoolean());
+        assertFalse(acp.getAccess("u,uuie,", READ_WRITE).toBoolean());
         assertTrue(
                 "The members of the community should have the READ_WRIGHT right",
                 acp.getAccess(
                         SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
-                        SecurityConstants.READ_WRITE).toBoolean());
+                        READ_WRITE).toBoolean());
         assertTrue(acp.getAccess(
                 SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
-                SecurityConstants.READ).toBoolean());
+                READ).toBoolean());
 
         acp = publicPubsec.getACP();
-        assertTrue(acp.getAccess("u,uuie,", SecurityConstants.READ).toBoolean());
-         assertTrue(acp.getAccess(userManager.getDefaultGroup(),
-         SecurityConstants.READ).toBoolean());
+        assertTrue(acp.getAccess("u,uuie,", READ).toBoolean());
+        assertTrue(acp.getAccess(userManager.getDefaultGroup(),
+                READ).toBoolean());
         assertTrue(acp.getAccess(
                 SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
-                SecurityConstants.READ_WRITE).toBoolean());
+                READ_WRITE).toBoolean());
         assertTrue(acp.getAccess(
                 SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
-                SecurityConstants.READ_WRITE).toBoolean());
+                READ_WRITE).toBoolean());
     }
 
     private DocumentModel createDocumentModelInSession(String pathAsString,

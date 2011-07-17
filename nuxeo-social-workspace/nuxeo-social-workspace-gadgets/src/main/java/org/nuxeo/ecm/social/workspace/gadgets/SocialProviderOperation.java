@@ -74,7 +74,7 @@ public class SocialProviderOperation {
     protected String providerName;
 
     @Param(name = "query", required = true)
-    protected String query = null;
+    protected String query;
 
     @Param(name = "language", required = false, widget = Constants.W_OPTION, values = { "NXQL" })
     protected String lang = "NXQL";
@@ -83,7 +83,7 @@ public class SocialProviderOperation {
     protected Integer page = 0;
 
     @Param(name = "pageSize", required = false)
-    protected Integer pageSize = null;
+    protected Integer pageSize;
 
     @Param(name = "sortInfo", required = false)
     protected StringList sortInfoAsStringList;
@@ -105,7 +105,7 @@ public class SocialProviderOperation {
 
         Object[] parameters = null;
 
-        if (strParameters != null && strParameters.size() > 0) {
+        if (strParameters != null && !strParameters.isEmpty()) {
             parameters = strParameters.toArray(new String[strParameters.size()]);
             // expand specific parameters
             for (int idx = 0; idx < parameters.length; idx++) {
@@ -132,9 +132,8 @@ public class SocialProviderOperation {
             return EMPTY_LIST;
         }
 
-        DocumentModel sws = null;
         try {
-            sws = session.getDocument(new PathRef(socialWorkspacePath));
+            DocumentModel sws = session.getDocument(new PathRef(socialWorkspacePath));
         } catch (Exception exception) {
             log.warn("failed to load social workspace (" + socialWorkspacePath
                     + ") ", exception);
