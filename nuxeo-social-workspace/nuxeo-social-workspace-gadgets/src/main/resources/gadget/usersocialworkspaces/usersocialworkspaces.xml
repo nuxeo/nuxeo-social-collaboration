@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="My Communities"
-    description="Lists user communities"
+  <ModulePrefs title="My socialworkspaces"
+    description="Lists user socialworkspaces."
     author="rlg" author_email="rlg@nuxeo.com"
 >
     >
@@ -46,7 +46,7 @@
       displayMethod: displayDocumentList,
       displayColumns: [
         {type: 'builtin', field: 'icon'},
-        {type: 'builtin', field: 'titleWithLink', label: '__MSG_label.dublincore.title__'},
+        {type: 'builtin', field: 'titleWithLink', label: '__MSG_label.dublincore.title__', view: 'view_social_collaboration_dashboard'},
         {type: 'date', field: 'dc:modified', label: '__MSG_label.dublincore.modified__'},
         {type: 'text', field: 'dc:creator', label: '__MSG_label.dublincore.creator__'}
       ],
