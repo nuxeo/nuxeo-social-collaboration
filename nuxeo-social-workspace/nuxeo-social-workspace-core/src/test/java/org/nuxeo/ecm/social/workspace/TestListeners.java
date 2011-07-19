@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
@@ -99,10 +100,10 @@ public class TestListeners {
         session.removeDocument(sws.getRef());
         session.save();
 
-        // adminGroup = userManager.getGroupModel(adminGroupName);
-        // assertNull(adminGroup);
-        // membersGroup = userManager.getGroupModel(membersGroupName);
-        // assertNull(membersGroup);
+        adminGroup = userManager.getGroupModel(adminGroupName);
+        assertNull(adminGroup);
+        membersGroup = userManager.getGroupModel(membersGroupName);
+        assertNull(membersGroup);
     }
 
     @Test
