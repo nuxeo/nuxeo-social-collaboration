@@ -10,10 +10,10 @@
   <a4j:outputPanel id="userRelationPanel">
 
     <!-- current user is you -->
-    <a4j:commandButton rendered="#{userRelationshipAction.you}" disabled="true"
+    <a4j:commandButton rendered="#{userRelationshipAction.currentUser}" disabled="true"
       styleClass="button" value="#{messages['action.social.user.relationship.isYou']}" />
 
-    <a4j:outputPanel rendered="#{!userRelationshipAction.you}">
+    <a4j:outputPanel rendered="#{!userRelationshipAction.currentUser}">
       <script type="text/javascript">
         jQuery("#add_relationship_#{widget.id}").fancybox({
           'type'    : 'inline'
@@ -35,7 +35,7 @@
           <a4j:outputPanel id="add_relationship_#{widget.id}">
             <nxu:dataTable id="#{widget.id}_add_relationship"
               value="#{userRelationshipService.kinds}" var="kind"
-              rendered="#{!(userRelationshipAction.you)}">
+              rendered="#{!(userRelationshipAction.currentUser)}">
 
               <nxu:column>
                 <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipAction.relationshipCheckboxChanged}"
