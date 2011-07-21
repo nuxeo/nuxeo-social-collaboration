@@ -35,11 +35,6 @@
       <filter-id>moderate_social_workspace</filter-id>
     </action>
 
-    <!-- <action id="convertToCommunity" link="#{navigationContext.currentDocument.addFacet('Community')}"
-      label="command.convert.to.community" icon="/icons/action_add.gif"> <category>SUBVIEW_UPPER_LIST_HREF</category>
-      <filter id="not_community"/> <filter id="user_canedit"/> <filter id="workspace">
-      <rule grant="true"> <type>Workspace</type> </rule> </filter> </action> -->
-
     <action id="TAB_MANAGE_SOCIAL_WORKSPACE"
       link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml"
       order="100" label="action.view.group.management" icon="/icons/file.gif">

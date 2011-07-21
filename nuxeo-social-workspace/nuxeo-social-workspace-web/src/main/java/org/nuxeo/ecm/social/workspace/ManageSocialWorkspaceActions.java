@@ -34,7 +34,7 @@ import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 
 /**
- * Bean to manage both groups of a community.
+ * Bean to manage both groups of a social workspace.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.1
@@ -68,14 +68,14 @@ public class ManageSocialWorkspaceActions {
 
     public DocumentModel getAdministratorsGroup() throws ClientException {
         if (administratorsGroup == null) {
-            administratorsGroup = userManager.getGroupModel(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(navigationContext.getCurrentDocument()));
+            administratorsGroup = userManager.getGroupModel(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(navigationContext.getCurrentDocument()));
         }
         return administratorsGroup;
     }
 
     public DocumentModel getMembersGroup() throws ClientException {
         if (membersGroup == null) {
-            membersGroup = userManager.getGroupModel(SocialWorkspaceHelper.getCommunityMembersGroupName(navigationContext.getCurrentDocument()));
+            membersGroup = userManager.getGroupModel(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(navigationContext.getCurrentDocument()));
         }
         return membersGroup;
     }

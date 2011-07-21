@@ -43,7 +43,7 @@ import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Class to handle community document creation. It automatically creates two
+ * Class to handle social workspace document creation. It automatically creates two
  * groups :
  * <ul>
  * <li>{doc_id}_administrators : with an EVERYTHING permission</li>
@@ -76,7 +76,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
             return;
         }
         ACP acp = doc.getACP();
-        acp.addACL(createCommunityACL(acp, doc));
+        acp.addACL(createSocialWorkspaceACL(acp, doc));
         doc.setACP(acp, true);
 
         CoreSession session = ctx.getCoreSession();
@@ -85,11 +85,11 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         handleACPOnSocialSections(doc, session);
 
         createGroup(
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(doc),
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupLabel(doc),
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc),
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(doc),
                 ctx.getPrincipal().getName());
-        createGroup(SocialWorkspaceHelper.getCommunityMembersGroupName(doc),
-                SocialWorkspaceHelper.getCommunityMembersGroupLabel(doc), null);
+        createGroup(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc),
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(doc), null);
     }
 
     /**
@@ -125,9 +125,9 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         }
     }
 
-    protected ACL createCommunityACL(ACP acp, DocumentModel doc) throws ClientException {
+    protected ACL createSocialWorkspaceACL(ACP acp, DocumentModel doc) throws ClientException {
         ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
-        grantSpecificCommunityRights(doc, acl);
+        grantSpecificSocialWorkspaceRights(doc, acl);
         acl.add(new ACE(SecurityConstants.EVERYONE,
                 SecurityConstants.EVERYTHING, false));
         return acl;
@@ -156,14 +156,14 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
                 publicSocialSection);
     }
 
-    protected void grantSpecificCommunityRights(
+    protected void grantSpecificSocialWorkspaceRights(
             DocumentModel socialWorkspace, ACL acl) throws ClientException {
         grantEverythingToAdministrator(acl);
         acl.add(new ACE(
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
                 SecurityConstants.EVERYTHING, true));
         acl.add(new ACE(
-                SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
                 SecurityConstants.READ_WRITE, true));
 
     }
@@ -182,7 +182,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         ACP acpPublicSection = new ACPImpl();
 
         ACL aclPublicSection = acpPublicSection.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
-        grantSpecificCommunityRights(socialWorkspace, aclPublicSection);
+        grantSpecificSocialWorkspaceRights(socialWorkspace, aclPublicSection);
         grantPublicReadRight(aclPublicSection);
 
         acpPublicSection.addACL(aclPublicSection);

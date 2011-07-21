@@ -82,18 +82,18 @@ public class TestListeners {
                 SOCIAL_WORKSPACE_NAME, "SocialWorkspace");
 
         assertNotNull(userManager);
-        String adminGroupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws);
+        String adminGroupName = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws);
         DocumentModel adminGroup = userManager.getGroupModel(adminGroupName);
         assertNotNull(adminGroup);
         assertEquals(
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupLabel(sws),
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(sws),
                 adminGroup.getProperty(userManager.getGroupSchemaName(),
                         userManager.getGroupLabelField()));
 
-        String membersGroupName = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
+        String membersGroupName = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws);
         DocumentModel membersGroup = userManager.getGroupModel(membersGroupName);
         assertNotNull(membersGroup);
-        assertEquals(SocialWorkspaceHelper.getCommunityMembersGroupLabel(sws),
+        assertEquals(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(sws),
                 membersGroup.getProperty(userManager.getGroupSchemaName(),
                         userManager.getGroupLabelField()));
 

@@ -186,10 +186,10 @@ public class SocialProviderOperation {
         }
         try {
             NuxeoPrincipal nuxeoPrincipal = userManager.getPrincipal(principal);
-            if (nuxeoPrincipal.isMemberOf(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) {
+            if (nuxeoPrincipal.isMemberOf(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws))) {
                 return true;
             }
-            if (nuxeoPrincipal.isMemberOf(SocialWorkspaceHelper.getCommunityMembersGroupName(sws))) {
+            if (nuxeoPrincipal.isMemberOf(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws))) {
                 return true;
             }
         } catch (Exception e) {

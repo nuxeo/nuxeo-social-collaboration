@@ -121,7 +121,7 @@ public class TestSocialProviderOperation {
 
         // remove current user from admins of sws2
         DocumentModel sws = session.getDocument(new PathRef("/sws2"));
-        DocumentModel group = userManager.getGroupModel(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws));
+        DocumentModel group = userManager.getGroupModel(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws));
         List<String> list = (List<String>) group.getProperty(
                 userManager.getGroupSchemaName(), "members");
         list.remove(session.getPrincipal().getName());

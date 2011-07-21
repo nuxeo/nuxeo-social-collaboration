@@ -37,7 +37,7 @@
 					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', true )"><img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></a>
 				</#if>
 				<#if publishablePrivate?seq_contains(doc.id)>
-					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', false )"><img src="${skinPath}/icons/publish_to_community.png" alt="publish public"></a>
+					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', false )"><img src="${skinPath}/icons/publish_to_social_workspace.png" alt="publish public"></a>
 				</#if>
 
 			</td>

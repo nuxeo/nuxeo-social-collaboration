@@ -39,21 +39,21 @@ public class SocialWorkspaceHelper {
 
     public static final String MEMBERS_LABEL_PREFIX = "Members of ";
 
-    public static final String COMMUNITY_FACET = "CommunityFacet";
+    public static final String SOCIAL_WORKSPACE_FACET = "SocialWorkspaceFacet";
 
     private SocialWorkspaceHelper() {
         // Helper class
     }
 
-    public static String getCommunityAdministratorsGroupName(DocumentModel doc) {
+    public static String getSocialWorkspaceAdministratorsGroupName(DocumentModel doc) {
         return doc.getId() + ADMINISTRATORS_SUFFIX;
     }
 
-    public static String getCommunityMembersGroupName(DocumentModel doc) {
+    public static String getSocialWorkspaceMembersGroupName(DocumentModel doc) {
         return doc.getId() + MEMBERS_SUFFIX;
     }
 
-    public static String getCommunityAdministratorsGroupLabel(DocumentModel doc) {
+    public static String getSocialWorkspaceAdministratorsGroupLabel(DocumentModel doc) {
         try {
             return ADMINISTRATORS_LABEL_PREFIX + doc.getTitle();
         } catch (ClientException e) {
@@ -64,7 +64,7 @@ public class SocialWorkspaceHelper {
         }
     }
 
-    public static String getCommunityMembersGroupLabel(DocumentModel doc) {
+    public static String getSocialWorkspaceMembersGroupLabel(DocumentModel doc) {
         try {
             return MEMBERS_LABEL_PREFIX + doc.getTitle();
         } catch (ClientException e) {

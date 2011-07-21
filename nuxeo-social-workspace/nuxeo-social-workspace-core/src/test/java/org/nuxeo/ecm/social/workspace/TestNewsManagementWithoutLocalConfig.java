@@ -88,12 +88,12 @@ public class TestNewsManagementWithoutLocalConfig {
                 READ).toBoolean());
         assertFalse(acp.getAccess("u,uuie,", READ_WRITE).toBoolean());
         assertTrue(
-                "The members of the community should have the READ_WRIGHT right",
+                "The members of the social workspace should have the READ_WRIGHT right",
                 acp.getAccess(
-                        SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
+                        SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
                         READ_WRITE).toBoolean());
         assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
                 READ).toBoolean());
 
         acp = publicPubsec.getACP();
@@ -101,10 +101,10 @@ public class TestNewsManagementWithoutLocalConfig {
         assertTrue(acp.getAccess(userManager.getDefaultGroup(),
                 READ).toBoolean());
         assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getCommunityMembersGroupName(socialWorkspace),
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
                 READ_WRITE).toBoolean());
         assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace),
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
                 READ_WRITE).toBoolean());
     }
 

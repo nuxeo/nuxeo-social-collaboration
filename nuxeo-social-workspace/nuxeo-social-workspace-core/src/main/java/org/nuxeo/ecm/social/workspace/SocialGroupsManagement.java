@@ -71,12 +71,12 @@ public class SocialGroupsManagement {
         @SuppressWarnings("unchecked")
         List<String> groups = (List<String>) principal.getProperty(
                 getUserManager().getUserSchemaName(), "groups");
-        if (groups.contains(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) {
+        if (groups.contains(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws))) {
             log.info(String.format("%s is already an administrator of %s (%s)",
                     user, sws.getTitle(), sws.getPathAsString()));
             return false;
         }
-        String membersGroup = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
+        String membersGroup = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws);
         if (groups.contains(membersGroup)) { // already a member
             log.info(String.format("%s is already a member of %s (%s)", user,
                     sws.getTitle(), sws.getPathAsString()));
@@ -93,11 +93,11 @@ public class SocialGroupsManagement {
             throws Exception {
         NuxeoPrincipal nuxeoPrincipal = getUserManager().getPrincipal(user);
         List<String> groups = nuxeoPrincipal.getGroups();
-        if (groups.contains(SocialWorkspaceHelper.getCommunityAdministratorsGroupName(sws))) {
+        if (groups.contains(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws))) {
             return true;
         }
 
-        String membersGroup = SocialWorkspaceHelper.getCommunityMembersGroupName(sws);
+        String membersGroup = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws);
         return groups.contains(membersGroup);
     }
 
@@ -153,7 +153,7 @@ public class SocialGroupsManagement {
 
         DocumentModel socialWorkspace = session.getDocument(new IdRef(
                 requestAdapter.getInfo()));
-        String adminGroupName = SocialWorkspaceHelper.getCommunityAdministratorsGroupName(socialWorkspace);
+        String adminGroupName = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
         NuxeoGroup adminGroup = getUserManager().getGroup(adminGroupName);
         List<String> admins = adminGroup.getMemberUsers();
         if (admins == null || admins.isEmpty()) {
