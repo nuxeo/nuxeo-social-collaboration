@@ -16,7 +16,12 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,11 +34,12 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.social.workspace.adapters.ArticleAdapter;
 import org.nuxeo.ecm.social.workspace.adapters.RequestAdapter;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-
-import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
 
@@ -43,11 +49,12 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(CoreFeature.class)
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.platform.content.template",
+@Deploy( { "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.platform.dublincore",
         "org.nuxeo.ecm.platform.usermanager",
         "org.nuxeo.ecm.platform.usermanager.api",
         "org.nuxeo.ecm.social.workspace.core" })
+@LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml")
 public class TestAdapters {
 
     @Inject
@@ -82,4 +89,9 @@ public class TestAdapters {
         assertNotNull(adapter.getType());
     }
 
+    @Test
+    public void testSocialWorkspaceService() throws Exception {
+        SocialWorkspaceService service = Framework.getService(SocialWorkspaceService.class);
+        assertEquals(3, service.getValidationDays());
+    }
 }
