@@ -17,34 +17,52 @@
 package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.CORE_BUNDLE_NAME;
+import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.TESTING_BUNDLE_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
+import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.event.impl.EventImpl;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
+import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
 
@@ -56,13 +74,22 @@ import com.google.inject.Inject;
 @Features(PlatformFeature.class)
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 // no listener configured
-@Deploy({
+@Deploy( {
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-core-types-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-life-cycle-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-content-template-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-adapters-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-notifications-contrib.xml" })
+        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-notifications-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-operation-chains-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-event-handlers-contrib.xml",
+        "org.nuxeo.ecm.automation.core",
+        "org.nuxeo.ecm.platform.jbpm.automation",
+        "org.nuxeo.ecm.automation.features", CORE_BUNDLE_NAME,
+        TESTING_BUNDLE_NAME })
+@LocalDeploy( { "org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml" })
 public class TestCreateSocialDocumentListener {
+
+    private static final Log log = LogFactory.getLog(TestCreateSocialDocumentListener.class);
 
     public static final String SOCIAL_WORKSPACE_NAME = "sws";
 
@@ -71,6 +98,15 @@ public class TestCreateSocialDocumentListener {
 
     @Inject
     protected UserManager userManager;
+
+    @Inject
+    protected JbpmService jbpmService;
+
+    @Inject
+    protected AutomationService automationService;
+
+    @Inject
+    protected EventService eventService;
 
     CreateSocialDocumentListener underTest;
 
@@ -81,7 +117,7 @@ public class TestCreateSocialDocumentListener {
         underTest = new CreateSocialDocumentListener();
         socialWorkspace = createDocumentModel(
                 session.getRootDocument().getPathAsString(),
-                SOCIAL_WORKSPACE_NAME, SocialConstants.SOCIAL_WORKSPACE_TYPE);
+                SOCIAL_WORKSPACE_NAME, SOCIAL_WORKSPACE_TYPE);
     }
 
     protected DocumentModel createDocumentModel(String path, String name,
@@ -89,12 +125,12 @@ public class TestCreateSocialDocumentListener {
         DocumentModel doc = session.createDocumentModel(path, name, type);
         doc = session.createDocument(doc);
         session.save();
+        eventService.waitForAsyncCompletion();
         return doc;
     }
 
     @Test
     public void testListener() throws ClientException {
-
         DocumentModel privateNews = createDocumentModel(
                 socialWorkspace.getPathAsString(), "private news",
                 SocialConstants.NEWS_TYPE);
@@ -149,6 +185,8 @@ public class TestCreateSocialDocumentListener {
                 socialWorkspace.getPathAsString(), "private news",
                 SocialConstants.NEWS_TYPE);
 
+        assertEquals(2, session.getParentDocuments(privateNews.getRef()).size());
+
         EventContext context = new DocumentEventContext(session, null,
                 privateNews);
         Event createDocumentEvent = new EventImpl("", context, 0);
@@ -167,4 +205,95 @@ public class TestCreateSocialDocumentListener {
         assertTrue("", publishedNews.isProxy());
     }
 
+    @Test
+    public void testModeratedSocialWorkspaceCreation() throws ClientException,
+            InterruptedException {
+        assertNotNull(jbpmService);
+
+        DocumentModel moderated = createDocumentModel(
+                session.getRootDocument().getPathAsString(), "willBeApproved",
+                SOCIAL_WORKSPACE_TYPE);
+        assertEquals("project", moderated.getCurrentLifeCycleState());
+        List<TaskInstance> tasks = jbpmService.getTaskInstances(moderated,
+                null, (JbpmListFilter) null);
+        assertEquals(1, tasks.size());
+        assertEquals(VALIDATE_SOCIAL_WORKSPACE_TASK_NAME,
+                tasks.get(0).getName());
+        assertTrue(tasks.get(0).isOpen());
+
+        assertTrue(moderated.followTransition("approve"));
+        removeValidationTasks(moderated);
+        session.save();
+        assertEquals("approved", moderated.getCurrentLifeCycleState());
+
+        tasks = jbpmService.getTaskInstances(moderated, null,
+                (JbpmListFilter) null);
+        assertNotNull(tasks);
+        assertTrue(tasks.isEmpty());
+
+        moderated = createDocumentModel(
+                session.getRootDocument().getPathAsString(), "willBeRejected",
+                SOCIAL_WORKSPACE_TYPE);
+        assertEquals("project", moderated.getCurrentLifeCycleState());
+        assertFalse(jbpmService.getTaskInstances(moderated, null,
+                (JbpmListFilter) null).isEmpty());
+        assertTrue(moderated.followTransition("delete"));
+        removeValidationTasks(moderated);
+        session.save();
+        assertEquals("deleted", moderated.getCurrentLifeCycleState());
+
+        assertTrue(jbpmService.getTaskInstances(moderated, null,
+                (JbpmListFilter) null).isEmpty());
+    }
+
+    @Test
+    public void testSocialWorkspaceCreationExpiration() throws ClientException,
+            InterruptedException {
+        DocumentModel socialWorkspace = createDocumentModel(
+                session.getRootDocument().getPathAsString(), "willBeExpired",
+                SOCIAL_WORKSPACE_TYPE);
+        String id = socialWorkspace.getId();
+        assertEquals("project", socialWorkspace.getCurrentLifeCycleState());
+
+        // Change task due date at two days before
+        List<TaskInstance> tasks = jbpmService.getTaskInstances(
+                socialWorkspace, null, (JbpmListFilter) null);
+        assertFalse(tasks.isEmpty());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -2);
+        tasks.get(0).setDueDate(cal.getTime());
+        jbpmService.saveTaskInstances(tasks);
+
+        CheckSocialWorkspaceValidationTasks fakeListener = new CheckSocialWorkspaceValidationTasks();
+        DocumentEventContext docCtx = new DocumentEventContext(session,
+                session.getPrincipal(), socialWorkspace);
+        fakeListener.handleEvent(new EventImpl("checkExpiredTasksSignal",
+                docCtx));
+        session.save();
+
+        DocumentModel doc = session.getDocument(new IdRef(id));
+        assertEquals("deleted", doc.getCurrentLifeCycleState());
+    }
+
+    protected void removeValidationTasks(DocumentModel doc) {
+        List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
+        try {
+            List<TaskInstance> taskInstances = jbpmService.getTaskInstances(
+                    doc, null, (JbpmListFilter) null);
+            for (TaskInstance task : taskInstances) {
+                if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())) {
+                    task.cancel();
+                    canceledTasks.add(task);
+                }
+            }
+            if (canceledTasks.size() > 0) {
+                jbpmService.saveTaskInstances(canceledTasks);
+            }
+        } catch (Exception e) {
+            log.warn(
+                    "failed cancel tasks for accepted/rejected SocialWorkspace",
+                    e);
+        }
+
+    }
 }

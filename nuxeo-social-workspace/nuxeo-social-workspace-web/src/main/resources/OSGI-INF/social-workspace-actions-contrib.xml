@@ -25,26 +25,15 @@
     </action>
 
     <action id="AcceptSocialWorkspace" label="Accept" enabled="true" order="0" link="#{requestActions.acceptSocialWorkspaces()}">
-      <category>cv_actions@SocialWorkspaces</category>
-      <filter id="filter@AcceptSocialWorkspace">
-        <rule grant="true">
-          <condition>#{requestActions.enableSocialWorkspaceActions()}</condition>
-          <condition>principal.isAdministrator()</condition>
-          <condition>#{documentsListsManager.isWorkingListEmpty("CURRENT_SELECTION") == false}</condition>
-        </rule>
-      </filter>
+      <category>MODERATE_SOCIAL_WORKSPACE</category>
+      <filter-id>only_for_manager</filter-id>
+      <filter-id>moderate_social_workspace</filter-id>
     </action>
     <action id="RejectSocialWorkspace" label="Reject" enabled="true" order="0" link="#{requestActions.rejectSocialWorkspaces()}">
-      <category>cv_actions@SocialWorkspaces</category>
-      <filter id="filter@RejectSocialWorkspace">
-        <rule grant="true">
-          <condition>#{requestActions.enableSocialWorkspaceActions()}</condition>
-          <condition>principal.isAdministrator()</condition>
-          <condition>#{documentsListsManager.isWorkingListEmpty("CURRENT_SELECTION") == false}</condition>
-        </rule>
-      </filter>
+      <category>MODERATE_SOCIAL_WORKSPACE</category>
+      <filter-id>only_for_manager</filter-id>
+      <filter-id>moderate_social_workspace</filter-id>
     </action>
-
 
     <!-- <action id="convertToCommunity" link="#{navigationContext.currentDocument.addFacet('Community')}"
       label="command.convert.to.community" icon="/icons/action_add.gif"> <category>SUBVIEW_UPPER_LIST_HREF</category>
@@ -101,6 +90,13 @@
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="filters">
+
+    <filter id="moderate_social_workspace">
+      <rule grant="true">
+        <condition>#{requestActions.enableSocialWorkspaceActions()}</condition>
+        <condition>#{documentsListsManager.isWorkingListEmpty("CURRENT_SELECTION") == false}</condition>
+      </rule>
+    </filter>
 
     <filter id="manage_social_workspace">
       <rule grant="true">

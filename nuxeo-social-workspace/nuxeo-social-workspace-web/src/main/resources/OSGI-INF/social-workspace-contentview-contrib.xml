@@ -35,7 +35,7 @@
     <contentView name="SocialWorkspaces">
       <coreQueryPageProvider>
         <property name="coreSession">#{documentManager}</property>
-        <pattern>SELECT * FROM SocialWorkspace WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState != 'deleted')</pattern>
+        <pattern>SELECT * FROM SocialWorkspace WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0)</pattern>
         <sort column="dc:title" ascending="true"/>
         <pageSize>10</pageSize>
       </coreQueryPageProvider>
@@ -47,7 +47,7 @@
       <cacheKey>#{currentDocument.id}</cacheKey>
       <cacheSize>10</cacheSize>
       <selectionList>CURRENT_SELECTION</selectionList>
-      <actions category="cv_actions@SocialWorkspaces"/>
+      <actions category="MODERATE_SOCIAL_WORKSPACE"/>
       <resultLayouts>
         <layout name="SocialWorkspaces@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png"/>
       </resultLayouts>

@@ -44,7 +44,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- * 
+ *
  */
 @Name("requestActions")
 @Scope(ScopeType.CONVERSATION)
@@ -134,7 +134,7 @@ public class RequestActions implements Serializable {
 
     public void rejectSocialWorkspaces() throws ClientException {
         List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
-        processSocialWorkspaces(list, "obsolete");
+        processSocialWorkspaces(list, "delete");
     }
 
     protected void processSocialWorkspaces(List<DocumentModel> list,

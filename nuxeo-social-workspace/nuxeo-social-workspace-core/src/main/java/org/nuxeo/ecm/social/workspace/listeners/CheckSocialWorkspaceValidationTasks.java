@@ -31,8 +31,6 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.repository.Repository;
-import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
@@ -40,12 +38,12 @@ import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
+ * Listener that processes "checkExpiredTasksSignal" events which are generated
+ * each day by Scheduler Service. If there is a Social Workspace that wasn't
+ * validated and associated validation task is expired, then it will be marked
+ * as deleted.
  *
- * Listener that processes "checkExpiredTasksSignal" events which are
- * generated each day by Scheduler Service. If there is a Social
- * Workspace that wasn't validated and associated validation task is
- * expired, then the access will be blocked.
+ * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 public class CheckSocialWorkspaceValidationTasks implements EventListener {
 
@@ -55,24 +53,22 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
 
     private static final Log log = LogFactory.getLog(CheckSocialWorkspaceValidationTasks.class);
 
+    public static final String QUERY_SELECT_NOT_VALIDATED_SOCIAL_WORKSPACES = "SELECT * FROM SocialWorkspace "
+            + "WHERE ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState = 'project'";
+
     public void handleEvent(Event event) throws ClientException {
         if (!"checkExpiredTasksSignal".equals(event.getName())) {
             return;
         }
-        CoreSession session = null;
         try {
-            session = openSession();
-            // get the list with all social workspaces
-            DocumentModelList list = session.query("Select * FROM SocialWorkspace");
+            CoreSession session = event.getContext().getCoreSession();
+            // get the list with all not validated social workspaces
+            DocumentModelList list = session.query(QUERY_SELECT_NOT_VALIDATED_SOCIAL_WORKSPACES);
             for (DocumentModel doc : list) {
                 checkTasksFor(doc);
             }
         } catch (Exception e) {
             log.debug("failed to open session", e);
-        } finally {
-            if (session != null) {
-                Repository.close(session);
-            }
         }
     }
 
@@ -92,9 +88,8 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
                     task.cancel();
                     canceledTasks.add(task);
                 } catch (Exception e) {
-                    log.warn(
-                            "failed to invalidate social workspace"
-                                    + doc.getTitle(), e);
+                    log.warn("failed to invalidate social workspace"
+                            + doc.getTitle(), e);
                 }
             }
         }
@@ -113,12 +108,6 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
             automationService = Framework.getService(AutomationService.class);
         }
         return automationService;
-    }
-
-    protected static CoreSession openSession() throws Exception {
-        RepositoryManager repositoryManager = Framework.getService(RepositoryManager.class);
-        Repository repository = repositoryManager.getDefaultRepository();
-        return repository.open();
     }
 
     protected JbpmService getJbpmService() {

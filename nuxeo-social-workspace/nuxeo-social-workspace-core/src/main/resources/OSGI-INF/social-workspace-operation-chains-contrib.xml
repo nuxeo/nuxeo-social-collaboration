@@ -30,19 +30,8 @@ Social Workspace &lt;a href="${docUrl}"&gt;${Document.title}&lt;/a&gt; was creat
     </chain>
     <chain id="SocialWorkspaceNotValidatedChain">
       <operation id="Context.FetchDocument"/>
-      <operation id="Document.SetACE">
-        <param type="string" name="permission">Everything</param>
-        <param type="string" name="user">administrators</param>
-        <param type="string" name="acl">local</param>
-        <param type="boolean" name="grant">true</param>
-        <param type="boolean" name="overwrite">false</param>
-      </operation>
-      <operation id="Document.SetACE">
-        <param type="string" name="permission">Everything</param>
-        <param type="string" name="user">Everyone</param>
-        <param type="string" name="acl">local</param>
-        <param type="boolean" name="grant">false</param>
-        <param type="boolean" name="overwrite">false</param>
+      <operation id="Document.SetLifeCycle">
+        <param type="string" name="value">delete</param>
       </operation>
       <operation id="Notification.SendMail">
         <param type="string" name="from">expr:Env["mail.from"]</param>

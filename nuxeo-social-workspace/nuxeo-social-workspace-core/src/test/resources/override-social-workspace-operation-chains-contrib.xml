@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.test.social.workspace.operation.chains">
+
+  <!--
+   This is the same contribution as org.nuxeo.ecm.social.workspace.operation.chains
+   without the SendMail operation
+  -->
+
+  <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="chains">
+    <chain id="SocialWorkspaceCreatedChain" replace="true">
+      <operation id="Context.FetchDocument"/>
+      <operation id="Context.SetVar">
+        <param type="string" name="name">admins</param>
+        <param type="object" name="value">group:administrators</param>
+      </operation>
+      <operation id="Workflow.CreateTask">
+        <param type="string" name="task name">validateSocialWorkspace</param>
+        <param type="date" name="due date">expr:CurrentDate.days(Env['social.workspace.expire']==null?15:Env['social.workspace.expire']).date</param>
+        <param type="string" name="directive">VERIFICATION</param>
+        <param type="string" name="comment">Please validate social workspace</param>
+        <param type="string" name="variable name for actors prefixed ids">admins</param>
+        <param type="boolean" name="create one task per actor">true</param>
+      </operation>
+    </chain>
+    <chain id="SocialWorkspaceNotValidatedChain" replace="true">
+      <operation id="Context.FetchDocument"/>
+      <operation id="Document.SetLifeCycle">
+        <param type="string" name="value">delete</param>
+      </operation>
+    </chain>
+  </extension>
+
+</component>
