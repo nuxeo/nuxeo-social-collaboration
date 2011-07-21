@@ -275,6 +275,26 @@ public class TestCreateSocialDocumentListener {
         assertEquals("deleted", doc.getCurrentLifeCycleState());
     }
 
+    @Test
+    public void testTaskDueDate() throws ClientException {
+        DocumentModel wk1 = createDocumentModel(session.getRootDocument().getPathAsString(), "willBeExpired",
+                SOCIAL_WORKSPACE_TYPE);
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 15);
+
+        // Change task due date at two days before
+        List<TaskInstance> tasks = jbpmService.getTaskInstances(
+                wk1, null, (JbpmListFilter) null);
+        assertEquals(1, tasks.size());
+        TaskInstance task = tasks.get(0);
+
+        Calendar dueDate = Calendar.getInstance();
+        dueDate.setTime(task.getDueDate());
+
+        assertEquals(cal.get(Calendar.DATE), dueDate.get(Calendar.DATE));
+    }
+
     protected void removeValidationTasks(DocumentModel doc) {
         List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
         try {
