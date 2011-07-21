@@ -47,6 +47,8 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.platform.types.Type;
+import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
 import org.nuxeo.ecm.social.workspace.helper.SocialDocumentStatusInfoHandler;
 import org.nuxeo.ecm.webengine.forms.FormData;
@@ -56,7 +58,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * WebEngine handler for library gadget requests.
- *
+ * 
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @Path("/social")
@@ -75,7 +77,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      * parameters:
      * <ul>
      * <li>docRef: parent document identifier (may be a path or an id)
-     * <li>pageSize:  number of documents per page</li>
+     * <li>pageSize: number of documents per page</li>
      * <li>page: index of the current page</li>
      * <li>queryText (optional): search term</li>
      * </ul>
@@ -199,20 +201,56 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     /**
      * return the html form for creation of a folder
+     * @throws Exception 
      */
     @GET
-    @Path("createFolderForm")
-    public Object createFolderForm(@QueryParam("docRef") String ref)
+    @Path("createDocumentForm")
+    public Object createDocumentForm(@QueryParam("docRef") String ref,
+            @QueryParam("doctype") String docTypeId) throws Exception {
+        DocumentRef docRef = getDocumentRef(ref);
+        CoreSession session = ctx.getCoreSession();
+        DocumentModel currentDoc = session.getDocument(docRef);
+
+        return getView("create_document_form").arg("currentDoc", currentDoc).arg(
+                "docType", getTypeService().getType(docTypeId));
+    }
+
+    /**
+     * return the html form that proposes a the type of document the user wants
+     * to create.
+     */
+    @GET
+    @Path("selectDocTypeToCreate")
+    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref)
             throws ClientException {
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
-        return getView("create_document_form").arg("currentDoc", currentDoc);
+        TypeManager typeService = getTypeService();
+        Map<String, List<Type>> types = typeService.getTypeMapForDocumentType(
+                currentDoc.getType(), currentDoc);
+
+        return getView("select_doc_type").arg("currentDoc", currentDoc).arg(
+                "docTypes", types).arg("categories", types.keySet());
+    }
+
+    protected TypeManager getTypeService() throws ClientException {
+        TypeManager typeService;
+        try {
+            typeService = Framework.getService(TypeManager.class);
+        } catch (Exception e) {
+            throw new ClientException(e.getMessage(), e);
+        }
+        if (typeService == null) {
+            throw new ClientException(
+                    "Can't fetch the typeService, please contact your administrator");
+        }
+        return typeService;
     }
 
     @POST
-    @Path("createFolder")
-    public Object createFolder(@Context HttpServletRequest request)
+    @Path("createDocument")
+    public Object createDocument(@Context HttpServletRequest request)
             throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
@@ -225,7 +263,11 @@ public class SocialWebEngineRoot extends ModuleRoot {
         formData.fillDocument(newDoc);
         newDoc = session.createDocument(newDoc);
         session.save();
-        return buildDocumentList(newDoc.getId(), 0, 0, null);
+        if (newDoc.isFolder()) {
+            return buildDocumentList(newDoc.getId(), 0, 0, null);
+        } else {
+            return buildDocumentList(parent.getId(), 0, 0, null);
+        }
     }
 
     protected PaginableDocumentModelList getChildren(DocumentModel doc,
@@ -330,8 +372,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     // better way to do this ?
-    private static List<String> getPublishableDocs(DocumentModel socialWorkspace,
-            DocumentModelList docs, boolean isPublic) throws  ClientException {
+    private static List<String> getPublishableDocs(
+            DocumentModel socialWorkspace, DocumentModelList docs,
+            boolean isPublic) throws ClientException {
         CoreSession session = socialWorkspace.getCoreSession();
         boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue("social:isPublic");
 

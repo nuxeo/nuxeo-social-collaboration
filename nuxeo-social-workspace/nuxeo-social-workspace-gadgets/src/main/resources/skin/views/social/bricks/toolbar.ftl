@@ -1,5 +1,6 @@
 <div class="links">
-	<a href="${This.path}/createFolderForm?docRef=${currentDoc.id}" class="addPopup"><img src="${skinPath}/icons/add_folder.gif" alt="create folder"/></a>
+	<a href="${This.path}/selectDocTypeToCreate?docRef=${currentDoc.id}" class="addPopup"><img src="${skinPath}/icons/add_document.gif" alt="create document"/></a>
+	<a href="${This.path}/createDocumentForm?docRef=${currentDoc.id}&doctype=Folder" class="addPopup"><img src="${skinPath}/icons/add_folder.gif" alt="create folder"/></a>
 	<a href="javascript: documentList('${currentDoc.id}', ${page})"><img src="${skinPath}/icons/refresh.png" alt="refresh"/></a>
 
 	<#if parent?? >

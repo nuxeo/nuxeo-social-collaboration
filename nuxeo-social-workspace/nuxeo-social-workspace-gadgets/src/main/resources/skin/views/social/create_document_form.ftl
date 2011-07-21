@@ -5,10 +5,10 @@
 <link href="${skinPath}/css/create_document.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<form class="createDocument" action="${This.path}/createFolder" method="post" enctype="application/x-www-form-urlencoded" target="_parent">
-<h3>Add a folder in ${currentDoc.title} </h3>
+<form class="createDocument" action="${This.path}/createDocument" method="post" enctype="multipart/form-data" target="_parent">
+<h3>Add a ${docType.label} in ${currentDoc.title} </h3>
 <table>
-<tr>
+<tr>test
 <td>Title</td>
 <td><input class="border input" type="text" name="dc:title" /></td>
 </tr>
@@ -16,12 +16,13 @@
 <td>Description</td>
 <td><textarea class="border input" name="dc:description" rows="5"></textarea></td>
 </tr>
+<tr>
 </table>
 <div class="actions">
-<input class="border" type="submit" name="createFolder" value="Create" onclick="parent.submitForm(this);return false;"/>
+<input class="border" type="submit" name="createDocument" value="Create" onclick="parent.submitForm(this);return false;"/>
 <button class="border" name="cancel" value="Cancel" type="button" onclick="parent.jQuery.fancybox.close()">Cancel</button>
-<input type="hidden" name="doctype" value="Folder" />
 <input type="hidden" name="docRef" value="${currentDoc.id}" />
+<input type="hidden" name="doctype" value="${docType.id}" />
 </div>
 
 </form>
