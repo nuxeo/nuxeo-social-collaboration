@@ -185,7 +185,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * remove the document specified in request
+     * Remove the document specified in request
      */
     @POST
     @Path("deleteDocument")
@@ -200,8 +200,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * return the html form for creation of a folder
-     * @throws Exception 
+     * Return the html form for creation of a document
+     * 
+     * @param ref : target document where the document will be created
+     * @param docTypeId : doctype id of the document
+     * @return
+     * @throws Exception
      */
     @GET
     @Path("createDocumentForm")
@@ -216,8 +220,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * return the html form that proposes a the type of document the user wants
-     * to create.
+     * return a form to select a doctype the user wants to create
      */
     @GET
     @Path("selectDocTypeToCreate")
@@ -248,6 +251,15 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return typeService;
     }
 
+    /**
+     * Create the document given a post request where input item name is the
+     * field name ("dc:title", ...) and "docRef" value is the target document
+     * where to create the given document
+     * 
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @POST
     @Path("createDocument")
     public Object createDocument(@Context HttpServletRequest request)
