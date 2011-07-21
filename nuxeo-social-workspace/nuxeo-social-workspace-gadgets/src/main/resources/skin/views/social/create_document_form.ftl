@@ -8,7 +8,7 @@
 <form class="createDocument" action="${This.path}/createDocument" method="post" enctype="multipart/form-data" target="_parent">
 <h3>Add a ${docType.label} in ${currentDoc.title} </h3>
 <table>
-<tr>test
+<tr>
 <td>Title</td>
 <td><input class="border input" type="text" name="dc:title" /></td>
 </tr>
