@@ -3,9 +3,9 @@
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
+ *
  * (LGPL) version 2.1 which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl.html
- *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
@@ -15,6 +15,8 @@
  *     eugen
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
+
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
+ * 
  */
 
 @Operation(id = SocialProviderOperation.ID, category = Constants.CAT_FETCH, label = "Social Provider", description = "Social Provider")
@@ -90,6 +92,9 @@ public class SocialProviderOperation {
 
     @Param(name = "socialWorkspacePath", required = true)
     protected String socialWorkspacePath;
+
+    @Param(name = "onlyPublicDocuments", required = false)
+    protected String onlyPublicDocuments;
 
     @Param(name = "queryParams", required = false)
     protected StringList strParameters;
@@ -141,7 +146,14 @@ public class SocialProviderOperation {
             return EMPTY_LIST;
         }
 
-        String s = " ecm:path STARTSWITH '" + socialWorkspacePath + "'";
+        String finalPath = socialWorkspacePath;
+
+        if (onlyPublicDocuments != null
+                && Boolean.parseBoolean(onlyPublicDocuments)) {
+            finalPath += "/" + PUBLIC_SECTION_RELATIVE_PATH;
+        }
+
+        String s = " ecm:path STARTSWITH '" + finalPath + "'";
 
         if (query != null) {
             if (query.toUpperCase().contains("WHERE")) {

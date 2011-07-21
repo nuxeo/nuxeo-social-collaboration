@@ -48,5 +48,13 @@
       <icon>user_socialworkspaces.png</icon>
     </internalGadget>
 
+      <internalGadget name="publicdocuments" disabled="false">
+      <mountPoint>/publicdocuments</mountPoint>
+      <directory>publicdocuments</directory>
+      <entryPoint>publicdocuments.xml</entryPoint>
+      <category>Nuxeo</category>
+      <icon>publicdocuments.png</icon>
+    </internalGadget>
+
   </extension>
 </component>

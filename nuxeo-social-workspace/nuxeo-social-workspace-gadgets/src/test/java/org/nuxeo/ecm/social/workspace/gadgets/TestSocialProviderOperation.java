@@ -17,14 +17,14 @@
 package org.nuxeo.ecm.social.workspace.gadgets;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
+import static org.junit.Assert.assertNotNull;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -33,14 +33,16 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.event.EventService;import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.SocialConstants;import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
-import org.nuxeo.runtime.api.Framework;import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
@@ -48,7 +50,7 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
+ * 
  */
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
@@ -137,4 +139,29 @@ public class TestSocialProviderOperation {
         assertEquals(1, result.size()); // return only the public article
     }
 
+    @Test
+    public void testOnlyPublicDocumentsParameters() throws Exception {
+        OperationContext ctx = new OperationContext(session);
+        assertNotNull(ctx);
+
+        OperationChain chain = new OperationChain("fakeChain");
+        OperationParameters oParams = new OperationParameters(
+                SocialProviderOperation.ID);
+        oParams.set("query", "select * from Article");
+        oParams.set("socialWorkspacePath", "/sws2");
+        oParams.set("onlyPublicDocuments", "true");
+        chain.add(oParams);
+
+        DocumentModelList result = (DocumentModelList) service.run(ctx, chain);
+        assertEquals(2, result.size());
+
+        oParams.set("onlyPublicDocuments", "false");
+        result = (DocumentModelList) service.run(ctx, chain);
+        assertEquals(6, result.size());
+
+        oParams.set("onlyPublicDocuments", "wrong string for a boolean");
+        result = (DocumentModelList) service.run(ctx, chain);
+        assertEquals(6, result.size());
+
+    }
 }
