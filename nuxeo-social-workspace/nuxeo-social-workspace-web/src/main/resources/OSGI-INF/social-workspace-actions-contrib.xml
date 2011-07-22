@@ -27,7 +27,7 @@
 
     <action
       id="SocialWorkspacesRequests"
-      link="/incl/functional_administration/social_workspace_requests.xhtml"
+      link="/incl/social_workspace_administration/social_workspace_requests.xhtml"
       label="label.socialworkspace.requests"
       order="10">
       <category>SocialWorkspacesAdministration_sub_tab</category>
