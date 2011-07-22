@@ -5,11 +5,11 @@
   <h:form id="editSocialWorkspaceGroups">
     <h2>#{messages['label.social.workspace.groups.administrator']}</h2>
     <nxl:layout name="social_workspace_group" mode="edit"
-                value="#{socialWorkspaceGroupManagerActions.administratorsGroup}"/>
+                value="#{manageSocialWorkspaceActions.administratorsGroup}"/>
 
     <h2>#{messages['label.social.workspace.groups.member']}</h2>
     <nxl:layout name="social_workspace_group" mode="edit"
-                value="#{socialWorkspaceGroupManagerActions.membersGroup}"/>
+                value="#{manageSocialWorkspaceActions.membersGroup}"/>
 
     <table class="dataInput">
       <tbody>
@@ -18,7 +18,7 @@
         <td>
           <h:commandButton
                   value="#{messages['command.save']}"
-                  action="#{socialWorkspaceGroupManagerActions.updateGroups}"
+                  action="#{manageSocialWorkspaceActions.updateGroups}"
                   styleClass="button"/>
         </td>
       </tr>

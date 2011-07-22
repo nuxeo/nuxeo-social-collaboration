@@ -46,8 +46,8 @@ function publishDocument(targetRef, public){
 	loadContent(getBasePath() + '/' + "publishDocument", data);
 }
 
-function goToDocument(path) {
-	window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + path + "@view_documents";
+function goToDocument(path, viewId) {
+	window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + path + "@" + viewId;
 }
 
 // load navigation info from context form

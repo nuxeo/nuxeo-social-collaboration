@@ -18,6 +18,7 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.PAGE;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,18 +29,19 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 
 /**
- * Bean to manage both groups of a social workspace.
- *
+ * Bean to manage social workspace actions.
+ * 
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.1
  */
-@Name("socialWorkspaceGroupManagerActions")
+@Name("manageSocialWorkspaceActions")
 @Scope(PAGE)
 @Install(precedence = FRAMEWORK)
 public class ManageSocialWorkspaceActions {
@@ -47,6 +49,8 @@ public class ManageSocialWorkspaceActions {
     public static final String GROUPS_SAVE_COMPLETED_LABEL = "label.social.workspace.faces.saveCompleted";
 
     public static final String GROUPS_SAVE_ERROR_LABEL = "label.social.workspace.faces.saveError";
+
+    public static final String FULLSCREEN_VIEW_ID = "fullscreen";
 
     private static final Log log = LogFactory.getLog(ManageSocialWorkspaceActions.class);
 
@@ -65,6 +69,9 @@ public class ManageSocialWorkspaceActions {
 
     @In(create = true)
     protected ResourcesAccessor resourcesAccessor;
+
+    @In(create = true)
+    protected CoreSession documentManager;
 
     public DocumentModel getAdministratorsGroup() throws ClientException {
         if (administratorsGroup == null) {
@@ -100,6 +107,22 @@ public class ManageSocialWorkspaceActions {
             facesMessages.add(
                     StatusMessage.Severity.FATAL,
                     resourcesAccessor.getMessages().get(GROUPS_SAVE_ERROR_LABEL));
+        }
+    }
+
+    /**
+     * Navigate to the Dashboard of the Social Workspace if the document belong
+     * to one of it, else navigate to the default view of the current document.
+     */
+    public String backToDashboard() throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        DocumentModel superSpace = documentManager.getSuperSpace(currentDocument);
+
+        if (superSpace.hasFacet(SOCIAL_WORKSPACE_FACET)) {
+            return navigationContext.navigateToDocument(superSpace,
+                    FULLSCREEN_VIEW_ID);
+        } else {
+            return navigationContext.navigateToDocument(superSpace);
         }
     }
 

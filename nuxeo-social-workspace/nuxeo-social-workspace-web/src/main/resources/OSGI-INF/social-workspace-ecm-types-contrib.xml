@@ -27,6 +27,9 @@
         <type>File</type>
         <type>Note</type>
       </subtypes>
+      <views>
+        <view id="fullscreen" value="view_social_collaboration_dashboard" />
+      </views>
     </type>
 
     <type id="Article">
@@ -53,6 +56,9 @@
         <layout>article</layout>
         <layout>note</layout>
       </layouts>
+      <views>
+        <view id="fullscreen" value="view_social_wokspace_articles" />
+      </views>
     </type>
 
     <type id="News">
@@ -79,6 +85,9 @@
         <layout>article</layout>
         <layout>note</layout>
       </layouts>
+      <views>
+        <view id="fullscreen" value="view_social_wokspace_news_item" />
+      </views>
     </type>
 
 

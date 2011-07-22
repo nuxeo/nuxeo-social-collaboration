@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<nxthemes:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxthemes="http://nuxeo.org/nxthemes"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:nxh="http://nuxeo.org/nxweb/html"
+  xmlns:nxl="http://nuxeo.org/nxforms/layout">
+
+  <ui:define name="page title">
+    <h:outputText value="#{nuxeoApplicationName} - Article - #{nxd:titleOrId(currentDocument)}"/>
+  </ui:define>
+
+  <ui:define name="bookmark">
+    <link rel="bookmark" href="#{navigationContext.currentDocumentFullUrl}"/>
+  </ui:define>
+
+  <ui:define name="body">
+
+  <h:form id="socialWorkspaceFullScreenListForm">
+   <nxu:set var="actions"
+      value="#{webActions.getActionsList('SOCIAL_WORKSPACE_FULLSCREEN')}"
+      cache="true">	
+      <c:if test="#{!empty actions}">
+        <nxu:dataList layout="simple" var="action" value="#{actions}">
+          <nxh:commandLink action="#{action.getLink()}"
+            immediate="#{action.immediate}">
+            <h:graphicImage value="#{action.icon}"
+              rendered="#{not empty action.icon}"
+              title="#{messages[action.label]}"
+              alt="#{messages[action.label]}"
+              styleClass="smallIcon" />
+          </nxh:commandLink>
+        </nxu:dataList>
+      </c:if>
+   </nxu:set>
+  </h:form>    
+
+  <nxl:layout name="social_workspace_article" mode="view"
+                value="#{currentDocument}"/> toto  
+  </ui:define>
+</nxthemes:composition>

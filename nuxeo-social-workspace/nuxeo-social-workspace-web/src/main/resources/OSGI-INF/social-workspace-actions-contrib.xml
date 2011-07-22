@@ -7,6 +7,16 @@
     point="actions">
 
 	<action
+      id="BackToDashboard"
+      link="${manageSocialWorkspaceActions.backToDashboard()}"
+      label="label.social.workspace.backtodashboard"
+      immediate="false"
+      icon="/icons/back_to_social_workspace_dashboard.png"
+      order="10">
+      <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
+    </action>
+
+  <action
       id="SocialWorkspacesAdministration"
       link="view_admin-fragment.xhtml"
       label="label.social.workspace.administration"

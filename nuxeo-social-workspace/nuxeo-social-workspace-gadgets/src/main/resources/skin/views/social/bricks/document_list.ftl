@@ -26,7 +26,7 @@
       <#if doc.isFolder>
         <td><a href="javascript: documentList('${doc.id}')" class="navigation">${doc.title}</a></td>
       <#else>
-        <td><a href="javascript: goToDocument('${doc.path}')" class="navigation">${doc.title}</a></td>
+        <td><a href="javascript: goToDocument('${doc.path}', '${fullscreen_views[doc.id]}')" class="navigation">${doc.title}</a></td>
       </#if>
       <td>${doc["dc:modified"]?string("yyyy-MM-dd HH:mm")}</td>
       <td>${doc["dc:creator"]}</td>

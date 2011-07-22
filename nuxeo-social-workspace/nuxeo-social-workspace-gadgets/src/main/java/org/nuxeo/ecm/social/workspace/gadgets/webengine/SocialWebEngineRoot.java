@@ -16,10 +16,10 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +54,7 @@ import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.schema.TypeService;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
+import org.nuxeo.ecm.platform.types.TypeView;
 import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
 import org.nuxeo.ecm.social.workspace.helper.SocialDocumentStatusInfoHandler;
 import org.nuxeo.ecm.webengine.forms.FormData;
@@ -119,8 +120,6 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
         DocumentModel doc = session.getDocument(docRef);
         args.put("currentDoc", doc);
-        // FIXME: typo (documet -> document)
-        args.put("documetListPath", getPath() + "/documentList");
 
         PaginableDocumentModelList docs;
         DocumentModel socialWorkspace = null;
@@ -156,6 +155,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         args.put("removable", getDocsWithDeleteRight(docs));
         args.put("isPublicSocialWorkspace",
                 (Boolean) socialWorkspace.getPropertyValue("social:isPublic"));
+        args.put("fullscreen_views", getFullscreenViews(docs));
 
         // add navigation arguments
         args.put("page", docs.getCurrentPageIndex());
@@ -443,4 +443,33 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
         return docsIdResult;
     }
+
+    protected static Map<String, String> getFullscreenViews(
+            DocumentModelList docs) throws ClientException {
+        Map<String, String> viewResults = new HashMap<String, String>();
+        if (docs.size() == 0) {
+            return viewResults;
+        }
+
+        TypeManager typeManager;
+        try {
+            typeManager = Framework.getService(TypeManager.class);
+        } catch (Exception e) {
+            throw new ClientException(e.getMessage(), e);
+        }
+
+        for (DocumentModel doc : docs) {
+            Type type = typeManager.getType(doc.getType());
+            TypeView view = type.getView(
+                    "fullscreen");
+            if (view != null) {
+                viewResults.put(doc.getId(), view.getValue());
+            } else {
+                viewResults.put(doc.getId(), type.getDefaultView());
+            }
+        }
+
+        return viewResults;
+    }
+
 }
