@@ -14,7 +14,7 @@
 </tr>
 <tr>
 <td>Description</td>
-<td><textarea class="border input" name="dc:description" rows="5"></textarea></td>
+<td><textarea class="border input" name="dc:description" rows="2"></textarea></td>
 </tr>
 <#if coreType.hasSchema("note")>
 <tr>

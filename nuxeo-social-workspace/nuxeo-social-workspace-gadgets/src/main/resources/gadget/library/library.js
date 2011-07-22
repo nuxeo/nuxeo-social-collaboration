@@ -28,9 +28,9 @@ function deleteDocument(targetRef){
 
 function confirmPublishDocument(targetRef, targetTitle, public){
 	if ( public ) {
-		message = 'Publish public the document "' +  targetTitle + '" ?';
+		message = 'Make the document "' +  targetTitle + '" public?';
 	} else {
-		message = 'Publish private the document "' +  targetTitle + '" ?';
+		message = 'Restrict the document "' +  targetTitle + '" to the social workspace?';
 	}
 	code = 'publishDocument( \'' + targetRef + '\', ' + public + ' );' ;
 	showConfirmationPopup(message, code);

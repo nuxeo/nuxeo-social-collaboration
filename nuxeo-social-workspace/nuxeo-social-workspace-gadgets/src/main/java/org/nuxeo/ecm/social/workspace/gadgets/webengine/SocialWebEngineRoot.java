@@ -154,6 +154,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
         args.put("publishablePrivate",
                 getPublishableDocs(socialWorkspace, docs, false));
         args.put("removable", getDocsWithDeleteRight(docs));
+        args.put("isPublicSocialWorkspace",
+                (Boolean) socialWorkspace.getPropertyValue("social:isPublic"));
 
         // add navigation arguments
         args.put("page", docs.getCurrentPageIndex());
@@ -213,11 +215,6 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     /**
      * Return the html form for creation of a document
-     * 
-     * @param ref : target document where the document will be created
-     * @param docTypeId : doctype id of the document
-     * @return
-     * @throws Exception
      */
     @GET
     @Path("createDocumentForm")
@@ -271,10 +268,6 @@ public class SocialWebEngineRoot extends ModuleRoot {
      * Create the document given a post request where input item name is the
      * field name ("dc:title", ...) and "docRef" value is the target document
      * where to create the given document
-     * 
-     * @param request
-     * @return
-     * @throws Exception
      */
     @POST
     @Path("createDocument")
