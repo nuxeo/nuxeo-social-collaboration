@@ -17,6 +17,9 @@
 package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +50,8 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.schema.DocumentType;
+import org.nuxeo.ecm.core.schema.TypeService;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
@@ -148,6 +153,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 getPublishableDocs(socialWorkspace, docs, true));
         args.put("publishablePrivate",
                 getPublishableDocs(socialWorkspace, docs, false));
+        args.put("removable", getDocsWithDeleteRight(docs));
 
         // add navigation arguments
         args.put("page", docs.getCurrentPageIndex());
@@ -195,7 +201,13 @@ public class SocialWebEngineRoot extends ModuleRoot {
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
         CoreSession session = ctx.getCoreSession();
-        session.removeDocument(docRef);
+
+        if (session.getAllowedStateTransitions(docRef).contains(
+                DELETE_TRANSITION)) {
+            session.followTransition(docRef, DELETE_TRANSITION);
+        } else {
+            session.removeDocument(docRef);
+        }
         return documentList(request);
     }
 
@@ -215,8 +227,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
 
+        DocumentType coreType = TypeService.getSchemaManager().getDocumentType(
+                docTypeId);
+
         return getView("create_document_form").arg("currentDoc", currentDoc).arg(
-                "docType", getTypeService().getType(docTypeId));
+                "docType", getTypeService().getType(docTypeId)).arg("coreType",
+                coreType);
     }
 
     /**
@@ -383,8 +399,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return automationService;
     }
 
-    // better way to do this ?
-    private static List<String> getPublishableDocs(
+    protected static List<String> getPublishableDocs(
             DocumentModel socialWorkspace, DocumentModelList docs,
             boolean isPublic) throws ClientException {
         CoreSession session = socialWorkspace.getCoreSession();
@@ -416,4 +431,23 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return list;
     }
 
+    protected static List<String> getDocsWithDeleteRight(DocumentModelList docs)
+            throws ClientException {
+        List<String> docsIdResult = new ArrayList<String>();
+        if (docs.size() == 0) {
+            return docsIdResult;
+        }
+
+        CoreSession session = docs.get(0).getCoreSession();
+        for (DocumentModel doc : docs) {
+            if (session.hasPermission(doc.getRef(), REMOVE)
+                    && session.hasPermission(
+                            session.getParentDocumentRef(doc.getRef()),
+                            REMOVE_CHILDREN)) {
+                docsIdResult.add(doc.getId());
+            }
+        }
+
+        return docsIdResult;
+    }
 }

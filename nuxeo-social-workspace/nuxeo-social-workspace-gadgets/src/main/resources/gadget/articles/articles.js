@@ -56,9 +56,6 @@ function displayListOfArticles(entries,nxParams){
       html += entry.title;
       html += '</a></p>';
       var text = entry.properties["note:note"];
-      if (text == null) {
-        text = "";
-      }
       text = text.substring(0, text.length > 300 ? 300 : text.length);
       html += '<p>' + text + '</p>';
       html += '</div>';

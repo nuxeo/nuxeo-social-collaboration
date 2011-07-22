@@ -31,8 +31,9 @@
 			<td>${doc["dc:modified"]?string("yyyy-MM-dd HH:mm")}</td>
 			<td>${doc["dc:creator"]}</td>
 			<td>
-				<a href="javascript: confirmDeleteDocument('${doc.id}' , '${doc.title}' )"><img src="${contextPath}/icons/action_delete.gif" alt="remove"></a>
-
+				<#if removable?seq_contains(doc.id)>
+                  <a href="javascript: confirmDeleteDocument('${doc.id}' , '${doc.title}' )"><img src="${contextPath}/icons/action_delete.gif" alt="remove"></a>
+				</#if>
 				<#if publishablePublic?seq_contains(doc.id)>
 					<a href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', true )"><img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></a>
 				</#if>

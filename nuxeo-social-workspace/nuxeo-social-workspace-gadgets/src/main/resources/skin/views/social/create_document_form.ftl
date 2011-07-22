@@ -16,7 +16,12 @@
 <td>Description</td>
 <td><textarea class="border input" name="dc:description" rows="5"></textarea></td>
 </tr>
+<#if coreType.hasSchema("note")>
 <tr>
+<td>Content</td>
+<td><textarea class="border input" name="note:note" rows="5"></textarea></td>
+</tr>
+</#if>
 </table>
 <div class="actions">
 <input class="border" type="submit" name="createDocument" value="Create" onclick="parent.submitForm(this);return false;"/>
