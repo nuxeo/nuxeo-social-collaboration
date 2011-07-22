@@ -87,16 +87,19 @@ public class UserRelationshipActions implements Serializable {
     }
 
     protected void addRelationshipWithSelectedUser(String type) {
-        userRelationshipService.addRelation(getCurrentUser(),
-                getSelectedUser(), type);
-        setFacesMessage("label.social.user.relationship.addRelation.success");
-        Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
+        if (userRelationshipService.addRelation(getCurrentUser(),
+                getSelectedUser(), type)) {
+            setFacesMessage("label.social.user.relationship.addRelation.success");
+            Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
+        }
     }
 
     protected void removeRelationship(String type) {
-        userRelationshipService.removeRelation(getCurrentUser(),
-                getSelectedUser(), type);
-        Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
+        if (userRelationshipService.removeRelation(getCurrentUser(),
+                getSelectedUser(), type)) {
+            setFacesMessage("label.social.user.relationship.removeRelation.success");
+            Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
+        }
     }
 
     public boolean isActiveRelationship(String type) throws ClientException {

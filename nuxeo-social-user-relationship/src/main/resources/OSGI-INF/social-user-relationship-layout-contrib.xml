@@ -1,31 +1,34 @@
 <component name="org.nuxeo.ecm.social.user.relationship.layout">
-  <widget name="user_relationship_add" type="template">
-    <labels>
-      <label mode="any" />
-    </labels>
-    <fields>
-      <field />
-    </fields>
-    <properties mode="any">
-      <property name="template">/widgets/user_relationship_add_widget_template.xhtml</property>
-    </properties>
-    <widgetModes>
-      <mode value="edit">hidden</mode>
-    </widgetModes>
-  </widget>
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+    point="widgets">
+    <widget name="user_relationship_add" type="template">
+      <labels>
+        <label mode="any" />
+      </labels>
+      <fields>
+        <field />
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/user_relationship_add_widget_template.xhtml</property>
+      </properties>
+      <widgetModes>
+        <mode value="edit">hidden</mode>
+      </widgetModes>
+    </widget>
 
-  <widget name="user_relationship_contacts" type="template">
-    <labels>
-      <label mode="any" />
-    </labels>
-    <fields>
-      <field />
-    </fields>
-    <properties mode="any">
-      <property name="template">/widgets/user_relationship_contacts_widget_template.xhtml</property>
-    </properties>
-    <widgetModes>
-      <mode value="any">view</mode>
-    </widgetModes>
-  </widget>
+    <widget name="user_relationship_contacts" type="template">
+      <labels>
+        <label mode="any" />
+      </labels>
+      <fields>
+        <field />
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/user_relationship_contacts_widget_template.xhtml</property>
+      </properties>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
+    </widget>
+  </extension>
 </component>
