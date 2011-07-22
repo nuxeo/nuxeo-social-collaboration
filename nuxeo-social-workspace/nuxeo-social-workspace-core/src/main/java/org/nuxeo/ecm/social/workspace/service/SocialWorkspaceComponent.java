@@ -19,7 +19,6 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
@@ -28,30 +27,25 @@ import org.nuxeo.runtime.model.DefaultComponent;
  */
 public class SocialWorkspaceComponent extends DefaultComponent implements
         SocialWorkspaceService {
-    public static final String VALIDATION_TIME_EP = "socialWorkspaceValidation";
+    public static final String CONFIGURATION_EP = "configuration";
 
-    private int validationTime = 15;
+    private int validationDays = 15;
 
     @Override
     public int getValidationDays() {
-        return validationTime;
-    }
-
-    @Override
-    public void setValidationDays(int daysCount) throws ClientException {
-        if (daysCount <= 0) {
-            throw new ClientException("Time parameter should be positive");
-        }
-        validationTime = daysCount;
+        return validationDays;
     }
 
     @Override
     public void registerContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
-        if (VALIDATION_TIME_EP.equals(extensionPoint)) {
-            SocialWorkspaceValidationDescriptor socialWorkspaceValidation = (SocialWorkspaceValidationDescriptor) contribution;
-            setValidationDays(socialWorkspaceValidation.getDays());
+        if (CONFIGURATION_EP.equals(extensionPoint)) {
+            ConfigurationDescriptor config = (ConfigurationDescriptor) contribution;
+            if (config.getValidationTimeInDays() > 0) {
+                validationDays = config.getValidationTimeInDays();
+            }
         }
     }
+
 }

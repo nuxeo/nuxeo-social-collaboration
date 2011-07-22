@@ -24,12 +24,12 @@ import java.io.Serializable;
 import org.nuxeo.common.xmap.annotation.XNode;
 import org.nuxeo.common.xmap.annotation.XObject;
 
-@XObject(value = "socialWorkspaceValidation")
-public class SocialWorkspaceValidationDescriptor implements Serializable {
-    @XNode("@days")
-    private int days;
+@XObject(value = "configuration")
+public class ConfigurationDescriptor implements Serializable {
+    @XNode("validationTimeInDays")
+    private int validationTimeInDays = -1;
 
-    public int getDays() {
-        return days;
+    public int getValidationTimeInDays() {
+        return validationTimeInDays;
     }
 }

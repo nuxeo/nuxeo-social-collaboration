@@ -19,22 +19,17 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
-import org.nuxeo.ecm.core.api.ClientException;
-
 /**
  * Service interface for Social Workspace
  */
 public interface SocialWorkspaceService {
 
     /**
-     * Gets the number of days before social workspace expiration.
+     * Gets the number of days before a social workspace expires without
+     * validation.
      *
-     * @return number of days, 15 by default
+     * @return number of days
      */
     int getValidationDays();
 
-    /**
-     * Sets the number of daysCount before social workspace expiration.
-     */
-    void setValidationDays(int daysCount) throws ClientException;
 }
