@@ -7,7 +7,7 @@
     point="actions">
 
 	<action
-      id="FunctionalAdministration"
+      id="SocialWorkspacesAdministration"
       link="view_admin-fragment.xhtml"
       label="label.social.workspace.administration"
       order="150">
@@ -20,7 +20,7 @@
       link="/incl/functional_administration/social_workspace_requests.xhtml"
       label="label.socialworkspace.requests"
       order="10">
-      <category>FunctionalAdministration_sub_tab</category>
+      <category>SocialWorkspacesAdministration_sub_tab</category>
       <filter-id>only_for_manager</filter-id>
     </action>
 
