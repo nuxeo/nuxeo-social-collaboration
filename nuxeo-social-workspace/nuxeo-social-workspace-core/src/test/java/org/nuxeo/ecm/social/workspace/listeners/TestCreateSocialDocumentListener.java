@@ -59,6 +59,8 @@ import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -82,6 +84,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-notifications-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-operation-chains-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-event-handlers-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-service-contrib.xml",
         "org.nuxeo.ecm.automation.core",
         "org.nuxeo.ecm.platform.jbpm.automation",
         "org.nuxeo.ecm.automation.features", CORE_BUNDLE_NAME,
@@ -276,13 +279,16 @@ public class TestCreateSocialDocumentListener {
     }
 
     @Test
-    public void testTaskDueDate() throws ClientException {
+    public void testTaskDueDate() throws Exception {
         DocumentModel wk1 = createDocumentModel(
                 session.getRootDocument().getPathAsString(), "willBeExpired",
                 SOCIAL_WORKSPACE_TYPE);
 
+        int validation = Framework.getService(SocialWorkspaceService.class).getValidationDays();
+        assertEquals(15, validation);
+
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 15);
+        cal.add(Calendar.DATE, validation);
 
         // Change task due date at two days before
         List<TaskInstance> tasks = jbpmService.getTaskInstances(wk1, null,
