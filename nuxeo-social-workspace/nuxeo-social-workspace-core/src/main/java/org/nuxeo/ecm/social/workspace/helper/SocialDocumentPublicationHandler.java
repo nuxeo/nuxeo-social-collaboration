@@ -63,10 +63,11 @@ public class SocialDocumentPublicationHandler {
 
     protected DocumentModel currentProxy;
 
-    static final String ENDOFPRIVATESOCIALSECTIONPATH = "/" + SOCIAL_SECTION_NAME;
+    static final String ENDOFPRIVATESOCIALSECTIONPATH = "/"
+            + SOCIAL_SECTION_NAME;
 
-    static final String ENDOFPUBLICSOCIALSECTIONPATH = ENDOFPRIVATESOCIALSECTIONPATH + "/"
-            + PUBLIC_SOCIAL_SECTION_NAME;
+    static final String ENDOFPUBLICSOCIALSECTIONPATH = ENDOFPRIVATESOCIALSECTIONPATH
+            + "/" + PUBLIC_SOCIAL_SECTION_NAME;
 
     /**
      *
@@ -178,12 +179,13 @@ public class SocialDocumentPublicationHandler {
     }
 
     /**
-     * Creates or updates and moves a proxy of the handled social document
-     * in a private social section.
+     * Creates or updates and moves a proxy of the handled social document in a
+     * private social section.
      *
      * @return the proxy created or updated
      */
-    public DocumentModel publishPrivatelySocialDocument() throws ClientException {
+    public DocumentModel publishPrivatelySocialDocument()
+            throws ClientException {
         if (currentSocialDocument != null
                 && ARTICLE_TYPE.equals(currentSocialDocument.getType())) {
             unpublishSocialDocument();
@@ -256,8 +258,8 @@ public class SocialDocumentPublicationHandler {
     }
 
     /**
-     * Creates or updates and moves a proxy of the handled social document
-     * in a public social section.
+     * Creates or updates and moves a proxy of the handled social document in a
+     * public social section.
      *
      * @return the proxy created or updated
      */

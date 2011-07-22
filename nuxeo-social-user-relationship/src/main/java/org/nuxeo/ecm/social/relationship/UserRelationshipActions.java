@@ -37,8 +37,7 @@ import org.nuxeo.ecm.webapp.security.UserManagementActions;
 @Name("userRelationshipAction")
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class UserRelationshipActions implements
-        Serializable {
+public class UserRelationshipActions implements Serializable {
 
     private static final Log log = LogFactory.getLog(UserRelationshipActions.class);
 
@@ -71,7 +70,8 @@ public class UserRelationshipActions implements
     protected List<String> relationshipsWithSelectedUser;
 
     public boolean isAlreadyConnected() throws ClientException {
-        return !isCurrentUser() && !getRelationshipsWithSelectedUser().isEmpty();
+        return !isCurrentUser()
+                && !getRelationshipsWithSelectedUser().isEmpty();
     }
 
     public boolean isCurrentUser() {
@@ -87,14 +87,15 @@ public class UserRelationshipActions implements
     }
 
     protected void addRelationshipWithSelectedUser(String type) {
-        userRelationshipService.addRelation(getCurrentUser(), getSelectedUser(), type);
+        userRelationshipService.addRelation(getCurrentUser(),
+                getSelectedUser(), type);
         setFacesMessage("label.social.user.relationship.addRelation.success");
         Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
     }
 
     protected void removeRelationship(String type) {
-        userRelationshipService.removeRelation(getCurrentUser(), getSelectedUser(),
-                type);
+        userRelationshipService.removeRelation(getCurrentUser(),
+                getSelectedUser(), type);
         Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
     }
 
@@ -116,7 +117,7 @@ public class UserRelationshipActions implements
         }
     }
 
-    @Observer( { USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
     public void resetUserRelationship() {
         relationshipsWithSelectedUser = null;
     }

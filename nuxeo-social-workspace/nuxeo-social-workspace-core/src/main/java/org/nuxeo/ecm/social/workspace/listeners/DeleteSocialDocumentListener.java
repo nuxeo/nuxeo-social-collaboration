@@ -29,10 +29,10 @@ public class DeleteSocialDocumentListener implements EventListener {
             // CoreSession session = ctx.getCoreSession();
 
             if (ctx.hasProperty(LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION)
-                    && LifeCycleConstants.DELETE_TRANSITION.equals(ctx.getProperty(LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION)
-                            )) {
+                    && LifeCycleConstants.DELETE_TRANSITION.equals(ctx.getProperty(LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION))) {
                 CoreSession session = ctx.getCoreSession();
-                SocialDocumentPublicationHandler remover = new SocialDocumentPublicationHandler(session,socialDocument);
+                SocialDocumentPublicationHandler remover = new SocialDocumentPublicationHandler(
+                        session, socialDocument);
                 remover.unpublishSocialDocument();
             }
         }

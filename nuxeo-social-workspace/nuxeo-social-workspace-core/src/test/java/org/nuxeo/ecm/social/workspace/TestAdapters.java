@@ -49,7 +49,7 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(CoreFeature.class)
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
-@Deploy( { "org.nuxeo.ecm.platform.content.template",
+@Deploy({ "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.platform.dublincore",
         "org.nuxeo.ecm.platform.usermanager",
         "org.nuxeo.ecm.platform.usermanager.api",

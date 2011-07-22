@@ -78,7 +78,8 @@ public class GetUserSocialWorkspaceStatus {
         obj.element("status", status);
         obj.element("title", sws.getPropertyValue("dc:title"));
         obj.element("description", sws.getPropertyValue("dc:description"));
-        return new InputStreamBlob(new ByteArrayInputStream(obj.toString().getBytes("UTF-8")), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(
+                obj.toString().getBytes("UTF-8")), "application/json");
     }
 
 }

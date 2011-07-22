@@ -23,7 +23,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * Class to provide some useful methods
- * 
+ *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.1
  */
@@ -45,7 +45,8 @@ public class SocialWorkspaceHelper {
         // Helper class
     }
 
-    public static String getSocialWorkspaceAdministratorsGroupName(DocumentModel doc) {
+    public static String getSocialWorkspaceAdministratorsGroupName(
+            DocumentModel doc) {
         return doc.getId() + ADMINISTRATORS_SUFFIX;
     }
 
@@ -53,7 +54,8 @@ public class SocialWorkspaceHelper {
         return doc.getId() + MEMBERS_SUFFIX;
     }
 
-    public static String getSocialWorkspaceAdministratorsGroupLabel(DocumentModel doc) {
+    public static String getSocialWorkspaceAdministratorsGroupLabel(
+            DocumentModel doc) {
         try {
             return ADMINISTRATORS_LABEL_PREFIX + doc.getTitle();
         } catch (ClientException e) {

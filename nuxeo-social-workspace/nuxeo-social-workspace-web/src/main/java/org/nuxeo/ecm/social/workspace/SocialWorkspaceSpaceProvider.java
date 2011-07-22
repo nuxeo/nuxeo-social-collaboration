@@ -43,8 +43,8 @@ public class SocialWorkspaceSpaceProvider extends AbstractSpaceProvider {
 
     @Override
     protected Space doGetSpace(CoreSession session,
-            DocumentModel contextDocument, String spaceName, Map<String, String> parameters)
-            throws SpaceException {
+            DocumentModel contextDocument, String spaceName,
+            Map<String, String> parameters) throws SpaceException {
         if (spaceName == null || spaceName.isEmpty()) {
             spaceName = DEFAULT_SPACE_NAME;
         }

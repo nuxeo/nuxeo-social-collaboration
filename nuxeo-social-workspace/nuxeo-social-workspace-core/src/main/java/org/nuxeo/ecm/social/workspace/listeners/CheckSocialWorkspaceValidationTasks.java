@@ -88,8 +88,9 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
                     task.cancel();
                     canceledTasks.add(task);
                 } catch (Exception e) {
-                    log.warn("failed to invalidate social workspace"
-                            + doc.getTitle(), e);
+                    log.warn(
+                            "failed to invalidate social workspace"
+                                    + doc.getTitle(), e);
                 }
             }
         }

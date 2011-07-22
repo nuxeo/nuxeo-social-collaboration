@@ -73,9 +73,8 @@ public class TestRemoveSocialDocument {
         DocumentModel privateNews = createDocumentModelInSession(
                 socialWorkspace.getPathAsString(), "A private News",
                 SocialConstants.NEWS_TYPE);
-        createDocumentModelInSession(
-                socialWorkspace.getPathAsString(), "Another private News",
-                SocialConstants.NEWS_TYPE);
+        createDocumentModelInSession(socialWorkspace.getPathAsString(),
+                "Another private News", SocialConstants.NEWS_TYPE);
         DocumentModel pubsec = session.getDocument(new PathRef(
                 socialWorkspace.getPathAsString() + "/" + SOCIAL_SECTION_NAME));
         assertNotNull(pubsec);

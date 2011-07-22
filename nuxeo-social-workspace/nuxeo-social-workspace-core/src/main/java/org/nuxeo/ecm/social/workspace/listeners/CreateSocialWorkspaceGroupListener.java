@@ -43,13 +43,13 @@ import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Class to handle social workspace document creation. It automatically creates two
- * groups :
+ * Class to handle social workspace document creation. It automatically creates
+ * two groups :
  * <ul>
  * <li>{doc_id}_administrators : with an EVERYTHING permission</li>
  * <li>{doc_id}_members : with a READ_WRITE permission</li>
  * </ul>
- * 
+ *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.1
  */
@@ -88,13 +88,15 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
                 SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc),
                 SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(doc),
                 ctx.getPrincipal().getName());
-        createGroup(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc),
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(doc), null);
+        createGroup(
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc),
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(doc),
+                null);
     }
 
     /**
      * Create a group, and if exists add the principal as a member.
-     * 
+     *
      * @param groupName group name you want to create
      * @param groupLabel group label that can be null
      * @param principal null is you do not want to add a member
@@ -125,7 +127,8 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         }
     }
 
-    protected ACL createSocialWorkspaceACL(ACP acp, DocumentModel doc) throws ClientException {
+    protected ACL createSocialWorkspaceACL(ACP acp, DocumentModel doc)
+            throws ClientException {
         ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
         grantSpecificSocialWorkspaceRights(doc, acl);
         acl.add(new ACE(SecurityConstants.EVERYONE,

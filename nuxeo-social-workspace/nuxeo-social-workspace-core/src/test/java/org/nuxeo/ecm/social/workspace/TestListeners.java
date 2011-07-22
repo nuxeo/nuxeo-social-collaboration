@@ -93,7 +93,8 @@ public class TestListeners {
         String membersGroupName = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws);
         DocumentModel membersGroup = userManager.getGroupModel(membersGroupName);
         assertNotNull(membersGroup);
-        assertEquals(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(sws),
+        assertEquals(
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(sws),
                 membersGroup.getProperty(userManager.getGroupSchemaName(),
                         userManager.getGroupLabelField()));
 

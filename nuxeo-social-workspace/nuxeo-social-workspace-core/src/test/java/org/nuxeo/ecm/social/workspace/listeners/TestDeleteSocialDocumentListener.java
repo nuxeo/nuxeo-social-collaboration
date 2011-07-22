@@ -70,9 +70,8 @@ public class TestDeleteSocialDocumentListener {
                 socialWorkspace.getPathAsString(), "A private News",
                 SocialConstants.NEWS_TYPE);
 
-        createDocumentModelInSession(
-                socialWorkspace.getPathAsString(), "AAA another private News",
-                SocialConstants.NEWS_TYPE);
+        createDocumentModelInSession(socialWorkspace.getPathAsString(),
+                "AAA another private News", SocialConstants.NEWS_TYPE);
 
         String queryToGetProxy = String.format(
                 "Select * from News where ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted' and ecm:name = '%s'",

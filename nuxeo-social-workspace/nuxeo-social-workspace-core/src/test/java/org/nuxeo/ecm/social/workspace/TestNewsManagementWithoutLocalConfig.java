@@ -32,7 +32,6 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.security.ACP;
-import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
@@ -46,8 +45,8 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import com.google.inject.Inject;
 
 /**
- * This test case aims to test the case where "userManager.getDefaultGroup()"
- * is not configured in Nuxeo distribution.
+ * This test case aims to test the case where "userManager.getDefaultGroup()" is
+ * not configured in Nuxeo distribution.
  *
  * @author rlegall@nuxeo.com
  */
@@ -56,7 +55,6 @@ import com.google.inject.Inject;
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.social.workspace.core" })
-
 public class TestNewsManagementWithoutLocalConfig {
 
     private static final String BASE_WORKSPACE_NAME = "base";
@@ -84,8 +82,7 @@ public class TestNewsManagementWithoutLocalConfig {
                 pubsec.getPathAsString(), PUBLIC_SOCIAL_SECTION_NAME));
 
         ACP acp = pubsec.getACP();
-        assertFalse(acp.getAccess(userManager.getDefaultGroup(),
-                READ).toBoolean());
+        assertFalse(acp.getAccess(userManager.getDefaultGroup(), READ).toBoolean());
         assertFalse(acp.getAccess("u,uuie,", READ_WRITE).toBoolean());
         assertTrue(
                 "The members of the social workspace should have the READ_WRIGHT right",
@@ -98,8 +95,7 @@ public class TestNewsManagementWithoutLocalConfig {
 
         acp = publicPubsec.getACP();
         assertTrue(acp.getAccess("u,uuie,", READ).toBoolean());
-        assertTrue(acp.getAccess(userManager.getDefaultGroup(),
-                READ).toBoolean());
+        assertTrue(acp.getAccess(userManager.getDefaultGroup(), READ).toBoolean());
         assertTrue(acp.getAccess(
                 SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
                 READ_WRITE).toBoolean());

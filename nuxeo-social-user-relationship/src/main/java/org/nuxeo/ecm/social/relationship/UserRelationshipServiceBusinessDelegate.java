@@ -31,13 +31,15 @@ public class UserRelationshipServiceBusinessDelegate implements Serializable {
     protected UserRelationshipService userRelationshipService;
 
     @Unwrap
-    public UserRelationshipService getUserRelationshipService() throws ClientException {
+    public UserRelationshipService getUserRelationshipService()
+            throws ClientException {
         if (null == userRelationshipService) {
             try {
                 userRelationshipService = Framework.getService(UserRelationshipService.class);
             } catch (Exception e) {
                 throw new ClientException(
-                        "Error while trying to acquire UserRelationshipService", e);
+                        "Error while trying to acquire UserRelationshipService",
+                        e);
             }
 
             if (null == userRelationshipService) {

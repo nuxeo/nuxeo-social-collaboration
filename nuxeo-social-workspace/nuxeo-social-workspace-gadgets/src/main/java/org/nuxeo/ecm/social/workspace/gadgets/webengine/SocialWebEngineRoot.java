@@ -64,7 +64,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * WebEngine handler for library gadget requests.
- * 
+ *
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @Path("/social")
@@ -460,8 +460,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
         for (DocumentModel doc : docs) {
             Type type = typeManager.getType(doc.getType());
-            TypeView view = type.getView(
-                    "fullscreen");
+            TypeView view = type.getView("fullscreen");
             if (view != null) {
                 viewResults.put(doc.getId(), view.getValue());
             } else {

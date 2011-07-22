@@ -16,7 +16,13 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_INFO;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_IS_RESTRICTED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,8 +75,10 @@ public class JoinSocialWorkspaceRequest {
         boolean isRestricted = (Boolean) sws.getPropertyValue(FIELD_SOCIAL_IS_RESTRICTED);
 
         if (isRestricted) {
-            if ( SocialGroupsManagement.isRequestPending(sws, currentUser)) {
-                log.debug(String.format("there is already a join request from '%s' on '%s' ", currentUser, sws.getPathAsString()));
+            if (SocialGroupsManagement.isRequestPending(sws, currentUser)) {
+                log.debug(String.format(
+                        "there is already a join request from '%s' on '%s' ",
+                        currentUser, sws.getPathAsString()));
                 return;
             }
 

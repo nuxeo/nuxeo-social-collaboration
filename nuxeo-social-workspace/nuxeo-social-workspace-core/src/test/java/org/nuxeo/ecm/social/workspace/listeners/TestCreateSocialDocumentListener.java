@@ -74,7 +74,7 @@ import com.google.inject.Inject;
 @Features(PlatformFeature.class)
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 // no listener configured
-@Deploy( {
+@Deploy({
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-core-types-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-life-cycle-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-content-template-contrib.xml",
@@ -86,7 +86,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.platform.jbpm.automation",
         "org.nuxeo.ecm.automation.features", CORE_BUNDLE_NAME,
         TESTING_BUNDLE_NAME })
-@LocalDeploy( { "org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml" })
+@LocalDeploy({ "org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml" })
 public class TestCreateSocialDocumentListener {
 
     private static final Log log = LogFactory.getLog(TestCreateSocialDocumentListener.class);
@@ -277,15 +277,16 @@ public class TestCreateSocialDocumentListener {
 
     @Test
     public void testTaskDueDate() throws ClientException {
-        DocumentModel wk1 = createDocumentModel(session.getRootDocument().getPathAsString(), "willBeExpired",
+        DocumentModel wk1 = createDocumentModel(
+                session.getRootDocument().getPathAsString(), "willBeExpired",
                 SOCIAL_WORKSPACE_TYPE);
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 15);
 
         // Change task due date at two days before
-        List<TaskInstance> tasks = jbpmService.getTaskInstances(
-                wk1, null, (JbpmListFilter) null);
+        List<TaskInstance> tasks = jbpmService.getTaskInstances(wk1, null,
+                (JbpmListFilter) null);
         assertEquals(1, tasks.size());
         TaskInstance task = tasks.get(0);
 

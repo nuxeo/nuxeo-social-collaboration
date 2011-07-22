@@ -44,6 +44,7 @@ import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
 public class CreateSocialDocumentListener implements PostCommitEventListener {
 
     private static final String PUBLIC = "Public";
+
     Log log = LogFactory.getLog(CreateSocialDocumentListener.class);
 
     @Override
@@ -80,15 +81,13 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
             if (ctx.hasProperty(PUBLIC)) {
                 publishSocialDocumentInPublicSection(session, socialDocument);
             } else {
-                publishSocialDocumentInPrivateSection(session,
-                        socialDocument);
+                publishSocialDocumentInPrivateSection(session, socialDocument);
             }
         }
     }
 
-    protected void publishSocialDocumentInPrivateSection(
-            CoreSession session, DocumentModel socialDocument)
-            throws ClientException {
+    protected void publishSocialDocumentInPrivateSection(CoreSession session,
+            DocumentModel socialDocument) throws ClientException {
         SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
                 session, socialDocument);
         publisher.publishPrivatelySocialDocument();

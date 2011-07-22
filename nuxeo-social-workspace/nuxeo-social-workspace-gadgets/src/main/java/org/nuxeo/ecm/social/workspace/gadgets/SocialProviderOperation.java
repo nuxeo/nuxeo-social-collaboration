@@ -133,7 +133,8 @@ public class SocialProviderOperation {
         }
 
         try {
-            DocumentModel sws = session.getDocument(new PathRef(socialWorkspacePath));
+            DocumentModel sws = session.getDocument(new PathRef(
+                    socialWorkspacePath));
         } catch (Exception exception) {
             log.warn("failed to load social workspace (" + socialWorkspacePath
                     + ") ", exception);
