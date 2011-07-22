@@ -10,19 +10,21 @@
     <provide interface="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService" />
   </service>
 
-  <extension-point name="socialWorkspaceValidation">
+  <extension-point name="configuration">
     <documentation>
-      This extension can be used to configure the default days before a social workspace expires
+      This extension can be used to configure some social workspace behaviors.
 
       Sample:
       <code>
         <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceComponent"
-    point="socialWorkspaceValidation">
-          <socialWorkspaceValidation days="15" />
+    point="configuration">
+          <configuration>
+            <validationTimeInDays>15</validationTimeInDays>
+          </configuration>
         </extension>
       </code>
     </documentation>
-    <object class="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceValidationDescriptor" />
+    <object class="org.nuxeo.ecm.social.workspace.service.ConfigurationDescriptor" />
   </extension-point>
 
 </component>
