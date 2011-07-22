@@ -17,7 +17,11 @@
         <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">
           <div class="opensocial_buttons">
             <ul>
-              <li><a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a></li>
+              <li>
+                <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">
+                  #{messages['label.opensocial.container.change.layout']}
+                </a>
+              </li>
               <li><a id="addGadgetButton" href="#{baseURL}site/gadgets">#{messages['label.opensocial.container.add.gadget']}</a></li>
             </ul>
           </div>

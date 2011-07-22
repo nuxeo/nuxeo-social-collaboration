@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="My socialworkspaces"
-    description="Lists user socialworkspaces."
-    author="rlg" author_email="rlg@nuxeo.com"
->
-    >
+  <ModulePrefs title="My Social Workspaces"
+    description="Lists user Social Workspace."
+    author="Ronan Le Gall" author_email="rlg@nuxeo.com">
+    
     <Require feature="nuxeo" />
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
