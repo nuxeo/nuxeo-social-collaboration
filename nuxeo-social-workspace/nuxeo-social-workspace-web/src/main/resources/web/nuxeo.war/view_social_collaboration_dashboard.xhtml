@@ -23,7 +23,12 @@
   <ui:define name="body">
     <h1>#{nxd:titleOrId(currentDocument)}</h1>
     <div>
-     <ui:include src="/incl/tabs/social_workspace_dashboard.xhtml"/>
+      <c:if test="#{socialWorkspaceActions.isCurrentUserMemberOrAdministratorOfCurrentSocialWorkspace()}">
+        <ui:include src="/incl/tabs/social_workspace_private_dashboard.xhtml"/>
+      </c:if>
+      <c:if test="#{!socialWorkspaceActions.isCurrentUserMemberOrAdministratorOfCurrentSocialWorkspace()}">
+        <ui:include src="/incl/tabs/social_workspace_public_dashboard.xhtml"/>
+      </c:if>
     </div>
   </ui:define>
 </nxthemes:composition>

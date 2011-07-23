@@ -3,9 +3,15 @@
 
   <extension target="org.nuxeo.ecm.spaces.core.spacemanager.service"
     point="spaceProviders">
-    <spaceProvider name="socialWorkspaceSpaceProvider">
+    <spaceProvider name="socialWorkspacePrivateDashboardSpaceProvider">
       <class>
-        org.nuxeo.ecm.social.workspace.SocialWorkspaceSpaceProvider
+        org.nuxeo.ecm.social.workspace.spaces.SocialWorkspacePrivateSpaceProvider
+      </class>
+    </spaceProvider>
+
+    <spaceProvider name="socialWorkspacePublicDashboardSpaceProvider">
+      <class>
+        org.nuxeo.ecm.social.workspace.spaces.SocialWorkspacePublicSpaceProvider
       </class>
     </spaceProvider>
   </extension>

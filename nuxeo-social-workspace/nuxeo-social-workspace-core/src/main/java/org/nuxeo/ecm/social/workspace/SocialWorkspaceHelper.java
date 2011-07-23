@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
 /**
  * Class to provide some useful methods
@@ -75,6 +76,24 @@ public class SocialWorkspaceHelper {
             log.debug("Exception occurred:", e);
             return null;
         }
+    }
+
+    public static boolean isMemberOfSocialWorkspace(NuxeoPrincipal principal,
+            DocumentModel socialWorkspace) {
+        String memberGroup = getSocialWorkspaceMembersGroupName(socialWorkspace);
+        return principal.isMemberOf(memberGroup);
+    }
+
+    public static boolean isAdministratorOfSocialWorkspace(
+            NuxeoPrincipal principal, DocumentModel socialWorkspace) {
+        String memberGroup = getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
+        return principal.isMemberOf(memberGroup);
+    }
+
+    public static boolean isMemberOrAdministratorOfSocialWorkspace(
+            NuxeoPrincipal principal, DocumentModel socialWorkspace) {
+        return isMemberOfSocialWorkspace(principal, socialWorkspace)
+                || isAdministratorOfSocialWorkspace(principal, socialWorkspace);
     }
 
 }
