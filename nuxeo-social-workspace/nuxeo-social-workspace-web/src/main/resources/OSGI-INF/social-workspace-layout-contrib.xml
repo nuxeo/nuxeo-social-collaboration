@@ -122,7 +122,6 @@
       </rows>
     </layout>
 
-
     <layout name="article_summary_layout">
       <templates>
         <template mode="any">/layouts/layout_summary_template.xhtml</template>
@@ -154,8 +153,8 @@
       </rows>
     </layout>
 
-     <layout name="requests_summary_layout">
-     <properties mode="any">
+    <layout name="requests_summary_layout">
+      <properties mode="any">
         <property name="showListingHeader">true</property>
         <property name="showRowEvenOddClass">true</property>
       </properties>
@@ -241,7 +240,7 @@
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
     point="widgets">
 
-    <widget name="social_isPublic" type="checkbox">
+    <widget name="social_isPublic" type="template">
       <labels>
         <label mode="any">label.widget.social.isPublic</label>
       </labels>
@@ -252,23 +251,16 @@
       <fields>
         <field>soc:isPublic</field>
       </fields>
-    </widget>
-
-     <widget name="social_isPublicArticle" type="checkbox">
-      <labels>
-        <label mode="any">label.widget.social.isPublic</label>
-      </labels>
-      <helpLabels>
-         <label mode="any">label.widget.social.isPublicArticle.info</label>
-       </helpLabels>
-      <translated>true</translated>
-      <fields>
-        <field>soc:isPublic</field>
-      </fields>
+      <properties mode="any">
+        <property name="template">
+          /widgets/boolean_radio_widget_template.xhtml
+        </property>
+      </properties>
     </widget>
 
 
-    <widget name="social_isRestricted" type="checkbox">
+
+    <widget name="social_isRestricted" type="template">
       <labels>
         <label mode="any">label.widget.social.isRestricted</label>
       </labels>
@@ -279,6 +271,11 @@
       <fields>
         <field>soc:isRestricted</field>
       </fields>
+      <properties mode="any">
+        <property name="template">
+          /widgets/boolean_radio_widget_template.xhtml
+        </property>
+      </properties>
     </widget>
 
     <widget name="article_picture" type="file">
@@ -358,7 +355,7 @@
       </widgetModes>
     </widget>
 
-      <widget name="social_public_or_private" type="template">
+    <widget name="social_public_or_private" type="template">
         <translated>true</translated>
       <labels>
         <label mode="any">social.document.publication</label>
