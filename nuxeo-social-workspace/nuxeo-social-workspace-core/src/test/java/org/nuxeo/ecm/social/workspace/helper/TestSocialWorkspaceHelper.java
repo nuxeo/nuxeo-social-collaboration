@@ -1,10 +1,10 @@
 /*
- * (C) Copyright 2011 Nuxeo SA (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2006-2011 Nuxeo SA (http://nuxeo.com/) and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
  * (LGPL) version 2.1 which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl.html
+ * http://www.gnu.org/licenses/lgpl-2.1.html
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -51,7 +51,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.core" })
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
 public class TestSocialWorkspaceHelper {
-    
+
     @Inject
     protected CoreSession session;
 
@@ -68,27 +68,33 @@ public class TestSocialWorkspaceHelper {
 
     @Before
     public void setup() throws Exception {
-        socialWorkspace = createDocumentModel(session, 
+        socialWorkspace = createDocumentModel(session,
                 session.getRootDocument().getPathAsString(),
                 "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
 
         String AdministratorGroup = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
         NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
         principal.getGroups().add(AdministratorGroup);
-   
+
     }
 
     @Test
     public void testShouldReturnGroupNames() {
         String idSW = socialWorkspace.getId();
         String labelSW = socialWorkspace.getName();
-        
-        assertEquals(idSW + "_administrators", SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace));
-        assertEquals("Administrators of " + labelSW, SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(socialWorkspace));
-        assertEquals(idSW + "_members", SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace));
-        assertEquals("Members of " + labelSW, SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(socialWorkspace));
+
+        assertEquals(
+                idSW + "_administrators",
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace));
+        assertEquals(
+                "Administrators of " + labelSW,
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(socialWorkspace));
+        assertEquals(
+                idSW + "_members",
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace));
+        assertEquals(
+                "Members of " + labelSW,
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(socialWorkspace));
     }
-    
-    
 
 }

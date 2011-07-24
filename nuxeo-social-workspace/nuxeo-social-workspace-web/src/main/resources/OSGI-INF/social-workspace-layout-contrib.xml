@@ -346,12 +346,8 @@
         <label mode="any"></label>
       </labels>
       <translated>false</translated>
-      <properties mode="any">
-        <property name="display">buttons</property>
-        <property name="category">SOCIAL_DOCUMENT_SUMMARY_PUBLICATION_ACTIONS</property>
-      </properties>
       <widgetModes>
-        <mode value="any" >#{currentDocument.isProxy()?'hidden':'view'}</mode>
+        <mode value="any" >#{currentDocument.isProxy() ? 'hidden' : 'view'}</mode>
       </widgetModes>
     </widget>
 
@@ -366,7 +362,7 @@
          <properties mode="any">
          <property name="required">true</property>
          <property name="template">
-           /widgets/publicaton_radio_widget_template.xhtml
+           /widgets/publication_radio_widget_template.xhtml
          </property>
 
          </properties>

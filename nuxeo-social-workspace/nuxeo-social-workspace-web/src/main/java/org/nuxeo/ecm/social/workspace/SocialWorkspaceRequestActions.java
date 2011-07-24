@@ -16,9 +16,10 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 
 import java.io.Serializable;
@@ -29,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jbpm.taskmgmt.exe.TaskInstance;
@@ -38,7 +40,6 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
 import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager;
 import org.nuxeo.runtime.api.Framework;
 
@@ -46,22 +47,20 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
-@Name("requestActions")
+@Name("socialWorkspaceRequestActions")
 @Scope(ScopeType.CONVERSATION)
-public class RequestActions implements Serializable {
+@Install(precedence = FRAMEWORK)
+public class SocialWorkspaceRequestActions implements Serializable {
 
     private static final long serialVersionUID = -7362146679190186610L;
 
-    private static final Log log = LogFactory.getLog(RequestActions.class);
+    private static final Log log = LogFactory.getLog(SocialWorkspaceRequestActions.class);
 
     @In(create = true, required = false)
     protected transient CoreSession documentManager;
 
     @In(create = true)
     protected transient DocumentsListsManager documentsListsManager;
-
-    @In(create = true)
-    protected transient UserManager userManager;
 
     @In(create = true)
     protected transient NavigationContext navigationContext;

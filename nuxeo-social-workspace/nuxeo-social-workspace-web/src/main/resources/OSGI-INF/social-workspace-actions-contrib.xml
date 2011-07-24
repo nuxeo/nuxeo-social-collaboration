@@ -34,12 +34,12 @@
       <filter-id>only_for_manager</filter-id>
     </action>
 
-    <action id="AcceptSocialWorkspace" label="Accept" enabled="true" order="0" link="#{requestActions.acceptSocialWorkspaces()}">
+    <action id="AcceptSocialWorkspace" label="Accept" enabled="true" order="0" link="#{socialWorkspaceRequestActions.acceptSocialWorkspaces()}">
       <category>MODERATE_SOCIAL_WORKSPACE</category>
       <filter-id>only_for_manager</filter-id>
       <filter-id>moderate_social_workspace</filter-id>
     </action>
-    <action id="RejectSocialWorkspace" label="Reject" enabled="true" order="0" link="#{requestActions.rejectSocialWorkspaces()}">
+    <action id="RejectSocialWorkspace" label="Reject" enabled="true" order="0" link="#{socialWorkspaceRequestActions.rejectSocialWorkspaces()}">
       <category>MODERATE_SOCIAL_WORKSPACE</category>
       <filter-id>only_for_manager</filter-id>
       <filter-id>moderate_social_workspace</filter-id>
@@ -59,13 +59,13 @@
       <filter-id>workspace_administrator</filter-id>
     </action>
 
-    <action id="REQUEST_ACCEPT" link="#{requestActions.accept}"
+    <action id="REQUEST_ACCEPT" link="#{socialWorkspaceRequestActions.accept}"
       label="command.manage.requests.accept" icon="/icons/file.gif">
       <category>MANAGE_REQUESTS</category>
       <filter-id>isPendingRequest</filter-id>
     </action>
 
-    <action id="REQUEST_REJECT" link="#{requestActions.reject}"
+    <action id="REQUEST_REJECT" link="#{socialWorkspaceRequestActions.reject}"
       label="command.manage.requests.reject" icon="/icons/file.gif">
       <category>MANAGE_REQUESTS</category>
       <filter-id>isPendingRequest</filter-id>
@@ -84,20 +84,6 @@
       <filter-id>social_workspace</filter-id>
     </action>
 
-    <action id="MAKE_NEWS_PUBLIC" link="#{SocialPublishing.publishAsPublic()}"
-      label="command.publish.publicly" icon="" order="17">
-      <category>SOCIAL_DOCUMENT_SUMMARY_PUBLICATION_ACTIONS</category>
-      <filter-id>publishing</filter-id>
-      <filter-id>canBePublishAsPublic</filter-id>
-    </action>
-
-    <action id="MAKE_NEWS_PRIVATE" link="#{SocialPublishing.publishAsPrivate()}"
-      label="command.publish.privately" icon="" order="17">
-      <category>SOCIAL_DOCUMENT_SUMMARY_PUBLICATION_ACTIONS</category>
-      <filter-id>publishing</filter-id>
-      <filter-id>canBePublishAsPrivate</filter-id>
-    </action>
-
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
@@ -105,7 +91,7 @@
 
     <filter id="moderate_social_workspace">
       <rule grant="true">
-        <condition>#{requestActions.enableSocialWorkspaceActions()}</condition>
+        <condition>#{socialWorkspaceRequestActions.enableSocialWorkspaceActions()}</condition>
         <condition>#{documentsListsManager.isWorkingListEmpty("CURRENT_SELECTION") == false}</condition>
       </rule>
     </filter>
@@ -144,7 +130,7 @@
     <filter id="isPendingRequest">
       <rule grant="true">
         <condition>
-          #{requestActions.enableRequestActions()}
+          #{socialWorkspaceRequestActions.enableRequestActions()}
         </condition>
       </rule>
     </filter>
@@ -172,7 +158,7 @@
     <filter id="canBePublishAsPrivate">
       <rule grant="true">
         <condition>
-          #{!SocialPublishing.isPrivate()}
+          #{!socialPublishingActions.isPrivate()}
         </condition>
       </rule>
     </filter>
@@ -181,7 +167,7 @@
       <rule grant="true">
 
         <condition>
-          #{SocialPublishing.isPrivate()}
+          #{socialPublishingActions.isPrivate()}
         </condition>
 
       </rule>

@@ -28,20 +28,20 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
  * This class gives method to make the document public or private into the
  * constrains of social workspace. The document must be part of a social
  * workspace and be a social document.
- * 
+ *
  * A document is public if it's published into the public section. Except for an
  * article render a social document visible only for the community is to publish
  * the document into the private section.
- * 
+ *
  * For an article this is just to have no proxy into the public section. The
  * source document himself will be the document exposed.
- * 
+ *
  * In the documentation about method of this class, when we reference to a
  * social document, we implicitly talking about the social document handle by
  * the instance of the class set into the contructor.
- * 
+ *
  * @author Benjamin JALON <bjalon@nuxeo.com>
- * 
+ *
  */
 public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
 
@@ -120,8 +120,11 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
         return publicSocialSection;
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#restrictToSocialWorkspaceMembers()
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#
+     * restrictToSocialWorkspaceMembers()
      */
     @Override
     public DocumentModel restrictToSocialWorkspaceMembers()
@@ -152,8 +155,12 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
 
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#makePublic()
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#makePublic
+     * ()
      */
     @Override
     public DocumentModel makePublic() throws ClientException {
@@ -219,24 +226,33 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
 
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#getDocumentPublic()
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#
+     * getDocumentPublic()
      */
     @Override
     public DocumentModel getDocumentPublic() throws ClientException {
         return getPublicProxy();
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#isPublic()
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#isPublic()
      */
     @Override
     public boolean isPublic() throws ClientException {
         return getDocumentPublic() != null;
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#getDocumentRestrictedToMembers()
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#
+     * getDocumentRestrictedToMembers()
      */
     @Override
     public DocumentModel getDocumentRestrictedToMembers()
@@ -252,16 +268,22 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
         return getPrivateProxy();
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#isRestrictedToMembers()
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#
+     * isRestrictedToMembers()
      */
     @Override
     public boolean isRestrictedToMembers() throws ClientException {
         return getDocumentRestrictedToMembers() != null;
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#isDocumentInSocialWorkspace()
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#
+     * isDocumentInSocialWorkspace()
      */
     @Override
     public boolean isDocumentInSocialWorkspace() {
@@ -284,7 +306,7 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
             exposedDocument = getSession().publishDocument(sourceDocument,
                     getPublicProxy());
             getSession().save();
-            return exposedDocument; 
+            return exposedDocument;
         }
 
         if (!exposedDocument.isProxy() && !isMakePublic) {
@@ -307,11 +329,14 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
                     targetSection.getRef(), exposedDocument.getName());
         }
         getSession().save();
-        return exposedDocument; 
+        return exposedDocument;
     }
 
-    /* (non-Javadoc)
-     * @see org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#getType()
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter#getType()
      */
     @Override
     public String getType() {

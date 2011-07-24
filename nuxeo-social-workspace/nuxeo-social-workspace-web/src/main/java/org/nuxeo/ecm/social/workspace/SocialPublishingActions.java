@@ -15,9 +15,13 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
-import static org.jboss.seam.ScopeType.PAGE;
+import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 
+import java.io.Serializable;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
@@ -25,37 +29,28 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
-import org.nuxeo.ecm.platform.ui.web.api.WebActions;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapterImpl;
 import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
  * This seam action bean is used to create or update a proxy of the current
  * social document.
- * 
+ *
  * @author rlegall
  */
-@Name("SocialPublishing")
-@Scope(PAGE)
+@Name("socialPublishingActions")
+@Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class SocialPublishingActions {
+public class SocialPublishingActions implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private static final Log log = LogFactory.getLog(SocialPublishingActions.class);
 
     @In(create = true)
-    protected UserManager userManager;
-
-    @In(create = true)
-    protected NavigationContext navigationContext;
-
-    @In(create = true, required = false)
-    protected transient CoreSession documentManager;
-
-    @In(create = true)
-    protected transient WebActions webActions;
+    protected transient NavigationContext navigationContext;
 
     // FIXME: find a better name
     protected Boolean privatelyPublish;
@@ -94,30 +89,29 @@ public class SocialPublishingActions {
     /**
      * Used to specify if the current social document is publish in private
      * social section.
-     * 
+     *
      * @return true if the current social document got a proxy in a private
      *         social section or if it's newly created, false if the current
      *         social document got a proxy in a public social section.
      */
     public boolean isPrivatelyPublish() throws ClientException {
         if (privatelyPublish == null) {
-            privatelyPublish = Boolean.valueOf(isPrivate());
+            privatelyPublish = isPrivate();
         }
-        return privatelyPublish.booleanValue();
+        return privatelyPublish;
     }
 
     /**
      * Sets the type of publication for the current social document. True to
      * publish it in a private social section, false to publish it in a public
      * social section.
-     * 
+     *
      * @param privatelyPublish true to choose a private publication, false to
      *            choose a public publication.
      */
     // FIXME: it this really the intended behaviour?
     // FIXME: find a better name
     public void setPrivatelyPublish(boolean privatelyPublish) {
-        privatelyPublish = new Boolean(privatelyPublish);
         if (privatelyPublish) {
             removeMarkAsPublic();
         } else {
@@ -137,7 +131,6 @@ public class SocialPublishingActions {
         if (documentToMark == null) {
             documentToMark = navigationContext.getCurrentDocument();
         }
-
         documentToMark.putContextData(ScopeType.REQUEST, "Public", Boolean.TRUE);
     }
 

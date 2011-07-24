@@ -24,11 +24,11 @@ import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
 
 /**
- * Factory instantiating {@link SocialDocumentAdapterImpl} adapter if the document type is
- * {@code SocialDocument}.
-
+ * Factory instantiating {@link SocialDocumentAdapterImpl} adapter if the
+ * document type is {@code SocialDocument}.
+ *
  * @author Benjamin JALON <bjalon@nuxeo.com>
- * 
+ *
  */
 public class SocialDocumentAdapterFactory implements DocumentAdapterFactory {
 

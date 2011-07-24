@@ -14,7 +14,6 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
@@ -37,7 +36,6 @@ import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapterImpl;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -99,13 +97,13 @@ public class TestUpdateSocialDocumentListener {
                 SocialConstants.NEWS_TYPE, false);
         SocialDocumentAdapter socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
         DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
-        
+
         newsItem = updateTitle(newsItem, "Test1");
         socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
         DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
         assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-        
+
         socialDocument.makePublic();
         exposedDocument = socialDocument.getDocumentPublic();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
@@ -114,15 +112,15 @@ public class TestUpdateSocialDocumentListener {
         newsItem = updateTitle(newsItem, "Test2");
         exposedDocument = socialDocument.getDocumentPublic();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-//        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        // assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
 
         socialDocument.restrictToSocialWorkspaceMembers();
         exposedDocument = socialDocument.getDocumentRestrictedToMembers();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-//        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-        
+        // assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+
     }
-    
+
     @Test
     public void testProxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
             throws Exception {
@@ -132,18 +130,18 @@ public class TestUpdateSocialDocumentListener {
                 SocialConstants.ARTICLE_TYPE, false);
         SocialDocumentAdapter socialDocument = article.getAdapter(SocialDocumentAdapter.class);
         DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
-        
+
         article = updateTitle(article, "Test1");
         DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
         assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-        
+
         socialDocument.makePublic();
         exposedDocument = socialDocument.getDocumentPublic();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
         assertNotSame(intialExposedDocument.getId(), exposedDocument.getId());
         // Id change for Article when visibility change
-        
+
         intialExposedDocument = exposedDocument;
         article = updateTitle(article, "Test2");
         exposedDocument = socialDocument.getDocumentPublic();
@@ -157,18 +155,20 @@ public class TestUpdateSocialDocumentListener {
         // Id change for Article when visibility change
 
     }
-    
-    protected DocumentModel updateTitle(DocumentModel doc, String value) throws Exception {
+
+    protected DocumentModel updateTitle(DocumentModel doc, String value)
+            throws Exception {
         SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
         doc.setPropertyValue("dc:title", value);
         if (socialDocument.isPublic()) {
-            doc.putContextData(ScopeType.REQUEST, SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
         }
         doc = session.saveDocument(doc);
         session.save(); // fire post commit event listener
         session.save(); // flush the session to retrieve document
         Framework.getService(EventService.class).waitForAsyncCompletion(0);
         return doc;
-        
+
     }
 }

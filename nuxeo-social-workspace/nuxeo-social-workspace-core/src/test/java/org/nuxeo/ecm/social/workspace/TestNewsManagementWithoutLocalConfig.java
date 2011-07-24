@@ -68,34 +68,35 @@ public class TestNewsManagementWithoutLocalConfig {
 
     @Inject
     protected UserManager userManager;
-    
+
     protected DocumentModel socialWorkspace;
-    
+
     @Before
     public void setup() throws Exception {
         DocumentModel workspace = createDocumentModel(session,
                 session.getRootDocument().getPathAsString(),
                 BASE_WORKSPACE_NAME, "Workspace");
-        
+
         socialWorkspace = createDocumentModel(session,
                 workspace.getPathAsString(), TEST_NAME_SOCIAL_WORKSPACE,
                 SOCIAL_WORKSPACE_TYPE);
-        
+
     }
 
     @Test
     public void testRightsOnSocialSections() throws Exception {
-        
+
         DocumentModel privateSection = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/" + PRIVATE_SECTION_RELATIVE_PATH));
+                socialWorkspace.getPathAsString() + "/"
+                        + PRIVATE_SECTION_RELATIVE_PATH));
         assertNotNull(privateSection);
         DocumentModel publicSection = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/" +  PUBLIC_SECTION_RELATIVE_PATH));
+                socialWorkspace.getPathAsString() + "/"
+                        + PUBLIC_SECTION_RELATIVE_PATH));
         assertNotNull(privateSection);
 
         ACP acp = privateSection.getACP();
-        assertFalse(acp.getAccess(userManager.getDefaultGroup(),
-                READ).toBoolean());
+        assertFalse(acp.getAccess(userManager.getDefaultGroup(), READ).toBoolean());
 
         assertFalse(acp.getAccess("u,uuie,", READ_WRITE).toBoolean());
         assertTrue(

@@ -56,13 +56,14 @@ public class SocialGroupsManagement {
 
     public static final String TEMPLATE_JOIN_REQUEST_REJECTED = "templates/joinRequestRejected.ftl";
 
-    static AutomationService automationService;
+    private static AutomationService automationService;
 
-    static UserManager userManager;
+    private static UserManager userManager;
 
     private static final Log log = LogFactory.getLog(SocialGroupsManagement.class);
 
     private SocialGroupsManagement() {
+        // helper class
     }
 
     public static boolean acceptMember(DocumentModel sws, String user)

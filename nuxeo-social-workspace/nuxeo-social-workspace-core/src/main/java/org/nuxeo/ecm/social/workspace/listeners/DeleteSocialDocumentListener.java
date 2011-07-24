@@ -34,7 +34,7 @@ public class DeleteSocialDocumentListener implements EventListener {
         if (!DELETE_TRANSITION.equals(ctx.getProperty(TRANSTION_EVENT_OPTION_TRANSITION))) {
             return;
         }
-        
+
         CoreSession session = ctx.getCoreSession();
 
         SocialDocumentAdapter socialDocument = document.getAdapter(SocialDocumentAdapter.class);

@@ -20,9 +20,9 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
 import org.junit.Test;
@@ -130,10 +130,12 @@ public class TestNewsManagement {
                 workspace.getPathAsString(), TEST_NAME_SOCIAL_WORKSPACE,
                 SOCIAL_WORKSPACE_TYPE);
         DocumentModel pubsec = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/" + PRIVATE_SECTION_RELATIVE_PATH));
+                socialWorkspace.getPathAsString() + "/"
+                        + PRIVATE_SECTION_RELATIVE_PATH));
         assertNotNull(pubsec);
         DocumentModel publicPubsec = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/" + PUBLIC_SECTION_RELATIVE_PATH));
+                socialWorkspace.getPathAsString() + "/"
+                        + PUBLIC_SECTION_RELATIVE_PATH));
 
         ACP acp = pubsec.getACP();
         assertFalse(acp.getAccess(userManager.getDefaultGroup(),

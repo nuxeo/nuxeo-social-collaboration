@@ -16,9 +16,11 @@
 
 package org.nuxeo.ecm.social.workspace;
 
-import static org.jboss.seam.ScopeType.PAGE;
+import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
+
+import java.io.Serializable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,9 +45,11 @@ import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
  * @since 5.4.1
  */
 @Name("manageSocialWorkspaceActions")
-@Scope(PAGE)
+@Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class ManageSocialWorkspaceActions {
+public class ManageSocialWorkspaceActions implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String GROUPS_SAVE_COMPLETED_LABEL = "label.social.workspace.faces.saveCompleted";
 

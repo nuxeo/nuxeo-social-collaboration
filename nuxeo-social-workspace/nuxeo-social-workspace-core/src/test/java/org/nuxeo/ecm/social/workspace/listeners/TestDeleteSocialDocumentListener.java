@@ -73,10 +73,10 @@ public class TestDeleteSocialDocumentListener {
     @Before
     public void setup() throws Exception {
 
-        socialWorkspace = createDocumentModel(session, 
+        socialWorkspace = createDocumentModel(session,
                 session.getRootDocument().getPathAsString(),
                 "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
-        
+
         String AdministratorGroup = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
         NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
         principal.getGroups().add(AdministratorGroup);
@@ -91,11 +91,11 @@ public class TestDeleteSocialDocumentListener {
     public void testShouldCleanupOfProxiesForNewsAtDeletionTime()
             throws Exception {
 
-        DocumentModel privateNews1 = createSocialDocument(session, 
+        DocumentModel privateNews1 = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A private News",
                 SocialConstants.NEWS_TYPE, false);
 
-        DocumentModel privateNews2 = createSocialDocument(session, 
+        DocumentModel privateNews2 = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "AAA another private News",
                 SocialConstants.NEWS_TYPE, false);
 
@@ -107,7 +107,7 @@ public class TestDeleteSocialDocumentListener {
         assertEquals(0, getNumberOfProxy(privateNews1));
         assertEquals(1, getNumberOfProxy(privateNews2));
 
-        DocumentModel publicNews = createSocialDocument(session, 
+        DocumentModel publicNews = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A public news",
                 SocialConstants.NEWS_TYPE, true);
         assertEquals(1, getNumberOfProxy(publicNews));
@@ -135,10 +135,10 @@ public class TestDeleteSocialDocumentListener {
                 LifeCycleConstants.DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(privateArticle1));
 
-        DocumentModel publicArticle = createSocialDocument(session, 
+        DocumentModel publicArticle = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A public news",
                 SocialConstants.NEWS_TYPE, true);
-        
+
         assertEquals(1, getNumberOfProxy(publicArticle));
         session.followTransition(publicArticle.getRef(),
                 LifeCycleConstants.DELETE_TRANSITION);
@@ -152,8 +152,10 @@ public class TestDeleteSocialDocumentListener {
 
     protected int getNumberOfProxy(DocumentModel doc) throws ClientException {
         int result = 0;
-        result = result + session.getProxies(doc.getRef(), publicSection.getRef()).size();
-        result = result + session.getProxies(doc.getRef(), privateSection.getRef()).size();
+        result = result
+                + session.getProxies(doc.getRef(), publicSection.getRef()).size();
+        result = result
+                + session.getProxies(doc.getRef(), privateSection.getRef()).size();
         return result;
 
     }

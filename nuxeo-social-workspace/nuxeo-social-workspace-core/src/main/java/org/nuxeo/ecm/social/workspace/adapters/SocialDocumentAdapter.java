@@ -33,7 +33,7 @@ public interface SocialDocumentAdapter {
     /**
      * Return the public proxy of the source document if the source document is
      * public else return null.
-     * 
+     *
      */
     public abstract DocumentModel getDocumentPublic() throws ClientException;
 
@@ -42,10 +42,10 @@ public interface SocialDocumentAdapter {
     /**
      * If source document is not an Article return the private proxy of the
      * source document if the source document is private else return null
-     * 
+     *
      * If is the source document is an Article return the source document if
      * private else return null.
-     * 
+     *
      */
     public abstract DocumentModel getDocumentRestrictedToMembers()
             throws ClientException;

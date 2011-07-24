@@ -20,8 +20,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

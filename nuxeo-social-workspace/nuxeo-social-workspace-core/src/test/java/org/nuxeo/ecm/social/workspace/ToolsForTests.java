@@ -27,12 +27,12 @@ import org.nuxeo.runtime.api.Framework;
  *
  */
 public class ToolsForTests {
-    
+
     /**
-     * Create document and wait for all post-commit listener execution 
+     * Create document and wait for all post-commit listener execution
      */
-    public static DocumentModel createDocumentModel(CoreSession session, String pathAsString,
-            String name, String type) throws Exception {
+    public static DocumentModel createDocumentModel(CoreSession session,
+            String pathAsString, String name, String type) throws Exception {
         DocumentModel doc = session.createDocumentModel(pathAsString, name,
                 type);
         doc = session.createDocument(doc);
@@ -43,14 +43,16 @@ public class ToolsForTests {
     }
 
     /**
-     * Create document and wait for all post-commit listener execution 
+     * Create document and wait for all post-commit listener execution
      */
-    public static DocumentModel createSocialDocument(CoreSession session, String pathAsString,
-            String name, String type, boolean isPublic) throws Exception {
+    public static DocumentModel createSocialDocument(CoreSession session,
+            String pathAsString, String name, String type, boolean isPublic)
+            throws Exception {
         DocumentModel doc = session.createDocumentModel(pathAsString, name,
                 type);
         if (isPublic) {
-            doc.putContextData(ScopeType.REQUEST, SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
         }
         doc = session.createDocument(doc);
         session.save(); // fire post commit event listener
@@ -58,7 +60,5 @@ public class ToolsForTests {
         Framework.getService(EventService.class).waitForAsyncCompletion();
         return doc;
     }
-
-
 
 }

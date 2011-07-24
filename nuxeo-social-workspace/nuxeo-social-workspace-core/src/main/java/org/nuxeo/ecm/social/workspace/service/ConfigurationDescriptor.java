@@ -27,7 +27,7 @@ import org.nuxeo.common.xmap.annotation.XObject;
 @XObject(value = "configuration")
 public class ConfigurationDescriptor implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @XNode("validationTimeInDays")
     private int validationTimeInDays = -1;
 

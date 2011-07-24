@@ -36,12 +36,13 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
  * Class to handle "Social Document" publication after creation or update. It
  * publishes documents in sections define within
  * "social-workspace-content-template-core.xml"
- * 
+ *
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
- * 
+ *
  */
 
-public class VisibilitySocialDocumentListener implements PostCommitEventListener {
+public class VisibilitySocialDocumentListener implements
+        PostCommitEventListener {
 
     protected static final Log log = LogFactory.getLog(VisibilitySocialDocumentListener.class);
 
@@ -59,7 +60,7 @@ public class VisibilitySocialDocumentListener implements PostCommitEventListener
     }
 
     public void handleEvent(Event event) throws ClientException {
-        
+
         EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext)) {
             return;
@@ -73,8 +74,8 @@ public class VisibilitySocialDocumentListener implements PostCommitEventListener
         initSocialDocument(document, initAsPublic);
     }
 
-    protected void initSocialDocument(DocumentModel document, boolean initAsPublic)
-            throws ClientException {
+    protected void initSocialDocument(DocumentModel document,
+            boolean initAsPublic) throws ClientException {
         if (initAsPublic) {
             document.getAdapter(SocialDocumentAdapter.class).makePublic();
         } else {

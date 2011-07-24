@@ -151,7 +151,8 @@ public class TestListeners {
 
     protected DocumentModel getTheProxyOfTheNews(DocumentModel sws)
             throws ClientException {
-        String path = sws.getPathAsString() + "/" + PRIVATE_SECTION_RELATIVE_PATH;
+        String path = sws.getPathAsString() + "/"
+                + PRIVATE_SECTION_RELATIVE_PATH;
         DocumentRef pathRef = new PathRef(path);
         return session.getDocument(pathRef);
     }
