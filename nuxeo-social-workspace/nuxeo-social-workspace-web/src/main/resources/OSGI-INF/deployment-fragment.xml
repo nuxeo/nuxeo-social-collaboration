@@ -23,6 +23,11 @@
       <to-view-id>/view_social_wokspace_articles.xhtml</to-view-id>
       <redirect />
     </navigation-case>
+    <navigation-case>
+      <from-outcome>view_social_wokspace_news_item</from-outcome>
+      <to-view-id>/view_social_wokspace_news_item.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
   </extension>
 
   <install>

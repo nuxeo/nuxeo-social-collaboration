@@ -53,7 +53,7 @@ function displayListOfArticles(entries,nxParams){
       html += NXGadgetContext.clientSideBaseUrl;
       html += "nxpath/default";
       html += entry.path;
-      html += "@view_documents";
+      html += "@view_social_wokspace_news_item";
       html += "\" >";
       html += entry.title;
       html += '</a></p>';

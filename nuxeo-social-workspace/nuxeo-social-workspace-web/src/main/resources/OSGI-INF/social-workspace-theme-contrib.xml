@@ -29,6 +29,10 @@
         <theme>social-collaboration/dashboard</theme>
       </view>
 
+      <view id="/view_social_wokspace_news_item.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
    </application>
   </extension>
 

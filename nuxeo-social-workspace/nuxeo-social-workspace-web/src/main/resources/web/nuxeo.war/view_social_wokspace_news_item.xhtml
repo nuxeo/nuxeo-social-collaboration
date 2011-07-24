@@ -20,11 +20,10 @@
   <ui:define name="body">
 
     <ui:include src="/incl/fullscreen_main_actions.xhtml"/>
-    Coucou
 
-    <h:form id="articleLayout">
-      <nxl:layout name="article" mode="view" value="#{currentDocument}"/>
+    <h:form id="newsItemLayout">
+      <nxl:layout name="news" mode="view" value="#{currentDocument}"/>
     </h:form>
-
+       
   </ui:define>
 </nxthemes:composition>
