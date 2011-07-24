@@ -83,7 +83,8 @@ public class SocialPublishingActions implements Serializable {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
 
         SocialDocumentAdapter socialDocument = currentDocument.getAdapter(SocialDocumentAdapter.class);
-        return socialDocument.isRestrictedToMembers();
+        // There is no sense to ask for visibility of socialDocument before his creation but needed to fix unit test
+        return socialDocument == null || socialDocument.isRestrictedToMembers();
     }
 
     /**

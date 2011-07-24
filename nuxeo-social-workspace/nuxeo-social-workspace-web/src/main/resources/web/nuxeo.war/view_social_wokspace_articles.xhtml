@@ -20,7 +20,8 @@
   <ui:define name="body">
 
     <ui:include src="/incl/fullscreen_main_actions.xhtml"/>
-    Coucou
+    
+    <h1><h:outputText value="#{currentDocument.dublincore.title}"/></h1>
 
     <h:form id="articleLayout">
       <nxl:layout name="article" mode="view" value="#{currentDocument}"/>

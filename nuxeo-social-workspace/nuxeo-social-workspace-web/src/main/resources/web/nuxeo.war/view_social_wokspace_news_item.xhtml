@@ -21,6 +21,8 @@
 
     <ui:include src="/incl/fullscreen_main_actions.xhtml"/>
 
+    <h1><h:outputText value="#{currentDocument.dublincore.title}"/></h1>
+
     <h:form id="newsItemLayout">
       <nxl:layout name="news" mode="view" value="#{currentDocument}"/>
     </h:form>
