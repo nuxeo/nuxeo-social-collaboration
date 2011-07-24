@@ -74,9 +74,9 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         initSocialDocument(document, initHasPublic);
     }
 
-    protected void initSocialDocument(DocumentModel document, boolean initHasPublic)
+    protected void initSocialDocument(DocumentModel document, boolean initAsPublic)
             throws ClientException {
-        if (initHasPublic) {
+        if (initAsPublic) {
             document.getAdapter(SocialDocumentAdapter.class).makePublic();
         } else {
             document.getAdapter(SocialDocumentAdapter.class).restrictToSocialWorkspaceMembers();

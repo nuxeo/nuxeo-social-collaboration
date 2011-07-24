@@ -89,6 +89,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-operation-chains-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-event-handlers-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-listener-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-service-contrib.xml",
         "org.nuxeo.ecm.automation.core",
         "org.nuxeo.ecm.platform.jbpm.automation",
         "org.nuxeo.ecm.automation.features", CORE_BUNDLE_NAME,
