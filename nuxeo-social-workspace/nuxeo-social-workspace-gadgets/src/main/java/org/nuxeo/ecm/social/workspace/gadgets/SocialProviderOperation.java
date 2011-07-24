@@ -43,7 +43,7 @@ import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.platform.query.core.CoreQueryPageProviderDescriptor;
 import org.nuxeo.ecm.platform.query.nxql.CoreQueryDocumentPageProvider;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>

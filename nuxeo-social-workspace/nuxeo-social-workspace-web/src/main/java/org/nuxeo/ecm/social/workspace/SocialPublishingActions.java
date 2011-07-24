@@ -18,8 +18,6 @@ package org.nuxeo.ecm.social.workspace;
 import static org.jboss.seam.ScopeType.PAGE;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
@@ -32,22 +30,19 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.ui.web.api.WebActions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
-import org.nuxeo.ecm.social.workspace.helper.SocialDocumentStatusInfoHandler;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
 import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
  * This seam action bean is used to create or update a proxy of the current
  * social document.
- *
+ * 
  * @author rlegall
  */
 @Name("SocialPublishing")
 @Scope(PAGE)
 @Install(precedence = FRAMEWORK)
 public class SocialPublishingActions {
-
-    private static final Log log = LogFactory.getLog(SocialPublishingActions.class);
 
     @In(create = true)
     protected UserManager userManager;
@@ -68,13 +63,12 @@ public class SocialPublishingActions {
      * create or update a proxy of the current social document in the public
      * social section associated to its type.
      */
-    public void publishAsPublic() {
-        DocumentModel currentSocialDocument = navigationContext.getCurrentDocument();
-        SocialDocumentPublicationHandler publishingHandler = new SocialDocumentPublicationHandler(
-                documentManager, currentSocialDocument);
-        publishingHandler.publishPubliclySocialDocument();
+    public void publishAsPublic() throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        SocialDocumentAdapter socialDocument = currentDocument.getAdapter(SocialDocumentAdapter.class);
+        socialDocument.makePublic();
         Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED,
-                currentSocialDocument);
+                currentDocument);
     }
 
     /**
@@ -82,32 +76,29 @@ public class SocialPublishingActions {
      * social section associated to its type.
      */
     public void publishAsPrivate() throws ClientException {
-        DocumentModel currentSocialDocument = navigationContext.getCurrentDocument();
-        SocialDocumentPublicationHandler publishingHandler = new SocialDocumentPublicationHandler(
-                documentManager, currentSocialDocument);
-        publishingHandler.publishPrivatelySocialDocument();
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        SocialDocumentAdapter socialDocument = currentDocument.getAdapter(SocialDocumentAdapter.class);
+        socialDocument.restrictToSocialWorkspaceMembers();
         Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED,
-                currentSocialDocument);
+                currentDocument);
     }
 
-    public boolean isPrivate() {
-        DocumentModel socialDocument = navigationContext.getCurrentDocument();
+    public boolean isPrivate() throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
 
-        SocialDocumentStatusInfoHandler publishingHandler = new SocialDocumentStatusInfoHandler(
-                documentManager, socialDocument);
-        return publishingHandler.isPrivate();
+        SocialDocumentAdapter socialDocument = currentDocument.getAdapter(SocialDocumentAdapter.class);
+        return socialDocument.isRestrictedToMembers();
     }
 
     /**
      * Used to specify if the current social document is publish in private
      * social section.
-     *
+     * 
      * @return true if the current social document got a proxy in a private
      *         social section or if it's newly created, false if the current
      *         social document got a proxy in a public social section.
      */
-    // FIXME: find a better name
-    public boolean isPrivatelyPublish() {
+    public boolean isPrivatelyPublish() throws ClientException {
         if (privatelyPublish == null) {
             privatelyPublish = Boolean.valueOf(isPrivate());
         }
@@ -118,7 +109,7 @@ public class SocialPublishingActions {
      * Sets the type of publication for the current social document. True to
      * publish it in a private social section, false to publish it in a public
      * social section.
-     *
+     * 
      * @param privatelyPublish true to choose a private publication, false to
      *            choose a public publication.
      */

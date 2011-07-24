@@ -39,7 +39,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -122,6 +122,7 @@ public class TestSocialProviderOperation {
         // remove current user from admins of sws2
         DocumentModel sws = session.getDocument(new PathRef("/sws2"));
         DocumentModel group = userManager.getGroupModel(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws));
+        @SuppressWarnings("unchecked")
         List<String> list = (List<String>) group.getProperty(
                 userManager.getGroupSchemaName(), "members");
         list.remove(session.getPrincipal().getName());

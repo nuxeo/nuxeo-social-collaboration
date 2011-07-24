@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,7 +78,7 @@ public class TestAdapters {
     public void testRequestAdapter() throws Exception {
         DocumentModel request = session.createDocumentModel(
                 session.getRootDocument().getPathAsString(), "request",
-                TYPE_REQUEST);
+                REQUEST_DOC_TYPE);
         request.setPropertyValue(FIELD_REQUEST_TYPE, REQUEST_TYPE_JOIN);
         assertNotNull(request);
         request = session.createDocument(request);

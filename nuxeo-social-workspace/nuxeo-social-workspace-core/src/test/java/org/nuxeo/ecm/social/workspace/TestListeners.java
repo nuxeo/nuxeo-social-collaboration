@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_SECTION_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
 import java.io.Serializable;
@@ -42,6 +42,7 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.core.versioning.VersioningService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -150,7 +151,7 @@ public class TestListeners {
 
     protected DocumentModel getTheProxyOfTheNews(DocumentModel sws)
             throws ClientException {
-        String path = sws.getPathAsString() + "/" + SOCIAL_SECTION_NAME;
+        String path = sws.getPathAsString() + "/" + PRIVATE_SECTION_RELATIVE_PATH;
         DocumentRef pathRef = new PathRef(path);
         return session.getDocument(pathRef);
     }

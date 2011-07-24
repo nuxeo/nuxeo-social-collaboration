@@ -11,11 +11,10 @@
     <factoryBinding name="SocialWorkspaceFactory"
       factoryName="SimpleTemplateFactory" targetType="SocialWorkspace">
       <template>
-        <templateItem typeName="SocialSection" id="social-section"
+        <templateItem typeName="SocialSection" id="private-section"
           title="Social Section" description="Private publication space"/>
-        <templateItem typeName="SocialSection" id="public"
-          title="Public Social Section" description="Public publication space"
-          path="social-section"/>
+        <templateItem typeName="SocialSection" id="public-section"
+          title="Public Social Section" description="Public publication space"/>
       </template>
     </factoryBinding>
   </extension>

@@ -22,9 +22,7 @@ package org.nuxeo.ecm.social.workspace;
  */
 public class SocialConstants {
 
-    public static final String ARTICLE_TYPE = "Article";
-
-    public static final String TYPE_REQUEST = "Request";
+    public static final String REQUEST_DOC_TYPE = "Request";
 
     public static final String REQUEST_ROOT_NAME = "requests";
 
@@ -44,9 +42,13 @@ public class SocialConstants {
 
     public static final String FIELD_REQUEST_PROCESSED_COMMENT = "req:processedComment";
 
-    public static final String ARTICLE_PICTURE_FIELD = "art:picture";
+    public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
+
+    public static final String ARTICLE_TYPE = "Article";
 
     public static final String ARTICLE_SCHEMA = "article";
+    
+    public static final String ARTICLE_PICTURE_FIELD = "art:picture";
 
     public static final String FIELD_DC_TITLE = "dc:title";
 
@@ -67,14 +69,12 @@ public class SocialConstants {
     public static final String SOCIAL_DOCUMENT_FACET = "SocialDocument";
 
     public static final String NEWS_TYPE = "News";
-
-    public static final String SOCIAL_SECTION_NAME = "social-section";
-
-    public static final String PUBLIC_SOCIAL_SECTION_NAME = "public";
-
+    
     public static final String SOCIAL_SECTION_TYPE = "SocialSection";
 
-    public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
+    public static final String PRIVATE_SECTION_RELATIVE_PATH = "private-section/";
+
+    public static final String PUBLIC_SECTION_RELATIVE_PATH = "public-section/";
 
     private SocialConstants() {
     }

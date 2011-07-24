@@ -18,7 +18,7 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 
 import java.io.Serializable;
@@ -81,7 +81,7 @@ public class RequestActions implements Serializable {
         DocumentModel sws = navigationContext.getCurrentDocument();
         for (DocumentModel doc : list) {
             try {
-                if (TYPE_REQUEST.equals(doc.getType())) {
+                if (REQUEST_DOC_TYPE.equals(doc.getType())) {
                     String userName = (String) doc.getPropertyValue(FIELD_REQUEST_USERNAME);
                     boolean ok = true;
                     boolean accept = "accept".equals(transition);

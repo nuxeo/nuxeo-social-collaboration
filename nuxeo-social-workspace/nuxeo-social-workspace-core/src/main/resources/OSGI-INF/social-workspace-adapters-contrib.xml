@@ -11,6 +11,12 @@
       factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
   </extension>
 
+  <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService"
+    point="adapters">
+    <adapter class="org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter"
+      factory="org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapterFactory" />
+  </extension>
+
    <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService"
     point="adapters">
     <adapter class="org.nuxeo.ecm.social.workspace.adapters.RequestAdapter"

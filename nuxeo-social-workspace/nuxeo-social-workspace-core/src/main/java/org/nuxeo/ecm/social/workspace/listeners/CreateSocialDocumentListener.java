@@ -18,27 +18,26 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
 /**
- * Class to handle "Social Document" faceted document publication after creation
- * or update. It publishes documents in sections define within
+ * Class to handle "Social Document" publication after creation or update. It
+ * publishes documents in sections define within
  * "social-workspace-content-template-core.xml"
- *
+ * 
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
- *
+ * 
  */
 
 public class CreateSocialDocumentListener implements PostCommitEventListener {
@@ -52,52 +51,36 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
         if (events.containsEventName(DOCUMENT_CREATED)
                 || events.containsEventName(DOCUMENT_UPDATED)) {
             for (Event event : events) {
-                if (isCreateOrModifiedDocEvent(event)) {
+                if (DOCUMENT_CREATED.equals(event.getName())
+                        || DOCUMENT_UPDATED.equals(event.getName())) {
                     handleEvent(event);
                 }
             }
         }
     }
 
-    protected boolean isCreateOrModifiedDocEvent(Event event) {
-        String eventName = event.getName();
-        return DOCUMENT_CREATED.equals(eventName)
-                || DOCUMENT_UPDATED.equals(eventName);
-    }
-
     public void handleEvent(Event event) throws ClientException {
+        
         EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext)) {
             return;
         }
-        DocumentModel socialDocument = ((DocumentEventContext) ctx).getSourceDocument();
-        if (socialDocument == null || socialDocument.isProxy()) {
+        DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
+        if (!SocialWorkspaceHelper.isSocialDocument(document)) {
             return;
         }
-        if (socialDocument.hasFacet(SOCIAL_DOCUMENT_FACET)) {
 
-            CoreSession session = ctx.getCoreSession();
+        boolean initHasPublic = ctx.hasProperty(PUBLIC);
+        initSocialDocument(document, initHasPublic);
+    }
 
-            if (ctx.hasProperty(PUBLIC)) {
-                publishSocialDocumentInPublicSection(session, socialDocument);
-            } else {
-                publishSocialDocumentInPrivateSection(session, socialDocument);
-            }
+    protected void initSocialDocument(DocumentModel document, boolean initHasPublic)
+            throws ClientException {
+        if (initHasPublic) {
+            document.getAdapter(SocialDocumentAdapter.class).makePublic();
+        } else {
+            document.getAdapter(SocialDocumentAdapter.class).restrictToSocialWorkspaceMembers();
         }
-    }
-
-    protected void publishSocialDocumentInPrivateSection(CoreSession session,
-            DocumentModel socialDocument) throws ClientException {
-        SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
-                session, socialDocument);
-        publisher.publishPrivatelySocialDocument();
-    }
-
-    protected void publishSocialDocumentInPublicSection(CoreSession session,
-            DocumentModel socialDocument) {
-        SocialDocumentPublicationHandler publisher = new SocialDocumentPublicationHandler(
-                session, socialDocument);
-        publisher.publishPubliclySocialDocument();
     }
 
 }

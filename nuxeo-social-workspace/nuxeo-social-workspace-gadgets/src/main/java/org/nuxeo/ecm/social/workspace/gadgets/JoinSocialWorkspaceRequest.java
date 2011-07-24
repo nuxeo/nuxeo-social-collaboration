@@ -22,7 +22,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERN
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_IS_RESTRICTED;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.TYPE_REQUEST;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -85,7 +85,7 @@ public class JoinSocialWorkspaceRequest {
             DocumentRef requestRootPath = new PathRef(sws.getPathAsString(),
                     REQUEST_ROOT_NAME);
             DocumentModel request = session.createDocumentModel(
-                    requestRootPath.toString(), currentUser, TYPE_REQUEST);
+                    requestRootPath.toString(), currentUser, REQUEST_DOC_TYPE);
             request.setPropertyValue(FIELD_REQUEST_USERNAME, currentUser);
             request.setPropertyValue(FIELD_REQUEST_TYPE, REQUEST_TYPE_JOIN);
             request.setPropertyValue(FIELD_REQUEST_INFO, sws.getId());

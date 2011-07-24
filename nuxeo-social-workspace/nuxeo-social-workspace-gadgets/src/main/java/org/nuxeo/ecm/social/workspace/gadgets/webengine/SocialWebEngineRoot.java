@@ -19,7 +19,6 @@ package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,8 +54,7 @@ import org.nuxeo.ecm.core.schema.TypeService;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
-import org.nuxeo.ecm.social.workspace.helper.SocialDocumentPublicationHandler;
-import org.nuxeo.ecm.social.workspace.helper.SocialDocumentStatusInfoHandler;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
@@ -180,14 +178,17 @@ public class SocialWebEngineRoot extends ModuleRoot {
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
 
         DocumentModel target = session.getDocument(docRef);
-        SocialDocumentPublicationHandler handler = new SocialDocumentPublicationHandler(
-                session, target);
+        SocialDocumentAdapter socialDocument = target.getAdapter(SocialDocumentAdapter.class);
+
+        if (socialDocument == null) {
+            throw new ClientException("Can't fetch social document.");
+        }
 
         boolean isPublic = "true".equals(formData.getString("public"));
         if (isPublic) {
-            handler.publishPubliclySocialDocument();
+            socialDocument.makePublic();
         } else {
-            handler.publishPrivatelySocialDocument();
+            socialDocument.restrictToSocialWorkspaceMembers();
         }
         return documentList(request);
     }
@@ -395,7 +396,6 @@ public class SocialWebEngineRoot extends ModuleRoot {
     protected static List<String> getPublishableDocs(
             DocumentModel socialWorkspace, DocumentModelList docs,
             boolean isPublic) throws ClientException {
-        CoreSession session = socialWorkspace.getCoreSession();
         boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue("social:isPublic");
 
         List<String> list = new ArrayList<String>();
@@ -403,19 +403,16 @@ public class SocialWebEngineRoot extends ModuleRoot {
         if (isPublicSocialWorkspace) {
             if (isPublic) { // is public publication
                 for (DocumentModel doc : docs) {
-                    SocialDocumentStatusInfoHandler handler = new SocialDocumentStatusInfoHandler(
-                            session, doc);
-                    if (handler.isPrivate()
-                            && doc.hasFacet(SOCIAL_DOCUMENT_FACET)) {
+                    SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
+                    if (socialDocument != null
+                            && socialDocument.isRestrictedToMembers()) {
                         list.add(doc.getId());
                     }
                 }
             } else { // is private publication
                 for (DocumentModel doc : docs) {
-                    SocialDocumentStatusInfoHandler handler = new SocialDocumentStatusInfoHandler(
-                            session, doc);
-                    if (handler.isPublic()
-                            && doc.hasFacet(SOCIAL_DOCUMENT_FACET)) {
+                    SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
+                    if (socialDocument != null && socialDocument.isPublic()) {
                         list.add(doc.getId());
                     }
                 }
