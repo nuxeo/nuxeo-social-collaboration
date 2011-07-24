@@ -31,6 +31,7 @@ import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.ui.web.api.WebActions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapterImpl;
 import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**

@@ -28,6 +28,7 @@ import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
@@ -41,8 +42,6 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
  */
 
 public class CreateSocialDocumentListener implements PostCommitEventListener {
-
-    private static final String PUBLIC = "Public";
 
     Log log = LogFactory.getLog(CreateSocialDocumentListener.class);
 
@@ -70,8 +69,8 @@ public class CreateSocialDocumentListener implements PostCommitEventListener {
             return;
         }
 
-        boolean initHasPublic = ctx.hasProperty(PUBLIC);
-        initSocialDocument(document, initHasPublic);
+        boolean initAsPublic = ctx.hasProperty(SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA);
+        initSocialDocument(document, initAsPublic);
     }
 
     protected void initSocialDocument(DocumentModel document, boolean initAsPublic)

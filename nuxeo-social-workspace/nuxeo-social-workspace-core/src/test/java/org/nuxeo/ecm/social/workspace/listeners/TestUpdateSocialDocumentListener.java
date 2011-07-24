@@ -1,10 +1,10 @@
 /*
- * (C) Copyright 2011 Nuxeo SA (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2011 Nuxeo SA (http:nuxeo.com/) and contributors.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
  * (LGPL) version 2.1 which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl.html
+ * http:www.gnu.org/licenses/lgpl.html
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,12 +14,17 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
+import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -30,7 +35,11 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.workspace.SocialConstants;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapterImpl;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -85,71 +94,80 @@ public class TestUpdateSocialDocumentListener {
     public void testProxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateNews()
             throws Exception {
 
-//        DocumentModel newsItem = createSocialDocument(session,
-//                socialWorkspace.getPathAsString(), "A private News",
-//                SocialConstants.NEWS_TYPE, false);
-//        SocialDocumentAdapter socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
-//        DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        DocumentModel newsItem = createSocialDocument(session,
+                socialWorkspace.getPathAsString(), "A private News",
+                SocialConstants.NEWS_TYPE, false);
+        SocialDocumentAdapter socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
+        DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
         
-//        newsItem = updateTitle(newsItem, "Test1");
-//        socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
-//        DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
-////        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-//        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-//        
-//        socialDocument.makePublic();
-//        exposedDocument = socialDocument.getDocumentPublic();
-//        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-////        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-//
-//        newsItem = updateTitle(newsItem, "Test2");
-//        exposedDocument = socialDocument.getDocumentPublic();
-//        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-////        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-//
-//        socialDocument.restrictToSocialWorkspaceMembers();
-//        exposedDocument = socialDocument.getDocumentRestrictedToMembers();
-//        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-////        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-//        
+        newsItem = updateTitle(newsItem, "Test1");
+        socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
+        DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
+        
+        socialDocument.makePublic();
+        exposedDocument = socialDocument.getDocumentPublic();
+        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
+        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+
+        newsItem = updateTitle(newsItem, "Test2");
+        exposedDocument = socialDocument.getDocumentPublic();
+        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
+//        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+
+        socialDocument.restrictToSocialWorkspaceMembers();
+        exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
+//        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        
     }
     
     @Test
     public void testProxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
             throws Exception {
 
-//        DocumentModel article = createSocialDocument(session,
-//                socialWorkspace.getPathAsString(), "A private Article",
-//                SocialConstants.ARTICLE_TYPE, false);
-//        SocialDocumentAdapter socialDocument = article.getAdapter(SocialDocumentAdapter.class);
-//        DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
-//        
-//        article = updateTitle(article, "Test1");
-//        DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
-//        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-//        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-//        
-//        socialDocument.makePublic();
-//        exposedDocument = socialDocument.getDocumentPublic();
-//        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-////        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-//
-//        article = updateTitle(article, "Test2");
-//        exposedDocument = socialDocument.getDocumentPublic();
-//        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-////        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
-//
-//        socialDocument.restrictToSocialWorkspaceMembers();
-//        exposedDocument = socialDocument.getDocumentRestrictedToMembers();
-//        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-////        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        DocumentModel article = createSocialDocument(session,
+                socialWorkspace.getPathAsString(), "A private Article",
+                SocialConstants.ARTICLE_TYPE, false);
+        SocialDocumentAdapter socialDocument = article.getAdapter(SocialDocumentAdapter.class);
+        DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
         
+        article = updateTitle(article, "Test1");
+        DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
+        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        
+        socialDocument.makePublic();
+        exposedDocument = socialDocument.getDocumentPublic();
+        assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
+        assertNotSame(intialExposedDocument.getId(), exposedDocument.getId());
+        // Id change for Article when visibility change
+        
+        intialExposedDocument = exposedDocument;
+        article = updateTitle(article, "Test2");
+        exposedDocument = socialDocument.getDocumentPublic();
+        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
+        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+
+        socialDocument.restrictToSocialWorkspaceMembers();
+        exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
+        assertNotSame(intialExposedDocument.getId(), exposedDocument.getId());
+        // Id change for Article when visibility change
+
     }
     
     protected DocumentModel updateTitle(DocumentModel doc, String value) throws Exception {
+        SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
         doc.setPropertyValue("dc:title", value);
+        if (socialDocument.isPublic()) {
+            doc.putContextData(ScopeType.REQUEST, SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
+        }
         doc = session.saveDocument(doc);
-        session.save();
+        session.save(); // fire post commit event listener
+        session.save(); // flush the session to retrieve document
+        Framework.getService(EventService.class).waitForAsyncCompletion(0);
         return doc;
         
     }

@@ -63,6 +63,7 @@ import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapterImpl;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.listeners.CheckSocialWorkspaceValidationTasks;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -191,7 +192,7 @@ public class TestVisibilityManagement {
         assertTrue(socialDocument.getDocumentRestrictedToMembers().isProxy());
         checkRestricted(socialDocument.getDocumentRestrictedToMembers());
     }
-    
+
     @Test
     public void testShouldCreatePrivateProxyForSocialDocumentWithFacetAdded()
             throws ClientException {
@@ -213,7 +214,8 @@ public class TestVisibilityManagement {
         DocumentModel socialDocumentFacetedNotePublic = session.createDocumentModel(
                 socialWorkspacePath, "Social Document Note2", "Note");
         socialDocumentFacetedNotePublic.addFacet(SOCIAL_DOCUMENT_FACET);
-        socialDocumentFacetedNotePublic.putContextData(ScopeType.REQUEST, "Public", Boolean.TRUE);
+        socialDocumentFacetedNotePublic.putContextData(ScopeType.REQUEST,
+                SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
         socialDocumentFacetedNotePublic = session.createDocument(socialDocumentFacetedNotePublic);
         session.save();
 
@@ -261,7 +263,8 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void testShouldNotCreatePrivateProxyForArticlePrivate() throws Exception {
+    public void testShouldNotCreatePrivateProxyForArticlePrivate()
+            throws Exception {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, false);
 
@@ -293,9 +296,9 @@ public class TestVisibilityManagement {
 
     }
 
-
     @Test
-    public void testShouldNotCreatePrivateProxyForArticlePublic() throws Exception {
+    public void testShouldNotCreatePrivateProxyForArticlePublic()
+            throws Exception {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, true);
 

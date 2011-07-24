@@ -10,7 +10,6 @@
       </operation>
       <operation id="Workflow.CreateTask">
         <param type="string" name="task name">validateSocialWorkspace</param>
-        <param type="date" name="due date">expr:CurrentDate.days(org.nuxeo.runtime.api.Framework.getService(org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService).getValidationDays()).date</param>
         <param type="string" name="directive">VERIFICATION</param>
         <param type="string" name="comment">Please validate social workspace</param>
         <param type="string" name="variable name for actors prefixed ids">admins</param>

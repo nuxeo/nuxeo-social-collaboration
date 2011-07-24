@@ -36,7 +36,8 @@ public class ToolsForTests {
         DocumentModel doc = session.createDocumentModel(pathAsString, name,
                 type);
         doc = session.createDocument(doc);
-        session.save();
+        session.save(); // fire post commit event listener
+        session.save(); // flush the session to retrieve document
         Framework.getService(EventService.class).waitForAsyncCompletion();
         return doc;
     }
@@ -49,10 +50,11 @@ public class ToolsForTests {
         DocumentModel doc = session.createDocumentModel(pathAsString, name,
                 type);
         if (isPublic) {
-            doc.putContextData(ScopeType.REQUEST, "Public", Boolean.TRUE);
+            doc.putContextData(ScopeType.REQUEST, SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
         }
         doc = session.createDocument(doc);
-        session.save();
+        session.save(); // fire post commit event listener
+        session.save(); // flush the session to retrieve document
         Framework.getService(EventService.class).waitForAsyncCompletion();
         return doc;
     }

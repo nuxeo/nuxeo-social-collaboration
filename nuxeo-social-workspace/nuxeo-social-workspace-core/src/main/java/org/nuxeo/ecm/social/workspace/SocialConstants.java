@@ -75,6 +75,8 @@ public class SocialConstants {
     public static final String PRIVATE_SECTION_RELATIVE_PATH = "private-section/";
 
     public static final String PUBLIC_SECTION_RELATIVE_PATH = "public-section/";
+    
+    public static final String PUBLIC_KEY_FOR_CONTEXT_DATA = "Public";
 
     private SocialConstants() {
     }
