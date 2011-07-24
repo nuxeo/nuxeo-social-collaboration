@@ -41,9 +41,9 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
  * 
  */
 
-public class CreateSocialDocumentListener implements PostCommitEventListener {
+public class VisibilitySocialDocumentListener implements PostCommitEventListener {
 
-    Log log = LogFactory.getLog(CreateSocialDocumentListener.class);
+    protected static final Log log = LogFactory.getLog(VisibilitySocialDocumentListener.class);
 
     @Override
     public void handleEvent(EventBundle events) throws ClientException {
