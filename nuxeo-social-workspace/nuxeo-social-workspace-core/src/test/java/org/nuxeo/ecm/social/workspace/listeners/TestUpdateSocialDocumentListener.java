@@ -124,48 +124,47 @@ public class TestUpdateSocialDocumentListener {
     @Test
     public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
             throws Exception {
-
         DocumentModel article = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A private Article",
                 SocialConstants.ARTICLE_TYPE, false);
         SocialDocumentAdapter socialDocument = article.getAdapter(SocialDocumentAdapter.class);
-        DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        DocumentModel initialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
 
         article = updateTitle(article, "Test1");
+        socialDocument = article.getAdapter(SocialDocumentAdapter.class);
         DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
         socialDocument.makePublic();
         exposedDocument = socialDocument.getDocumentPublic();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-        assertNotSame(intialExposedDocument.getId(), exposedDocument.getId());
+        assertNotSame(initialExposedDocument.getId(), exposedDocument.getId());
         // Id change for Article when visibility change
 
-        intialExposedDocument = exposedDocument;
+        initialExposedDocument = exposedDocument;
         article = updateTitle(article, "Test2");
+        socialDocument = article.getAdapter(SocialDocumentAdapter.class);
         exposedDocument = socialDocument.getDocumentPublic();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
         socialDocument.restrictToSocialWorkspaceMembers();
         exposedDocument = socialDocument.getDocumentRestrictedToMembers();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-        assertNotSame(intialExposedDocument.getId(), exposedDocument.getId());
+        assertNotSame(initialExposedDocument.getId(), exposedDocument.getId());
         // Id change for Article when visibility change
 
     }
 
     protected DocumentModel updateTitle(DocumentModel doc, String value)
             throws Exception {
-        SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
+        doc.getContextData().clearScope(ScopeType.DEFAULT);
         doc.setPropertyValue("dc:title", value);
         doc = session.saveDocument(doc);
         session.save(); // fire post commit event listener
         eventService.waitForAsyncCompletion();
         session.save(); // flush the session to retrieve document
-        Framework.getService(EventService.class).waitForAsyncCompletion(0);
-        return doc;
-
+        return session.getDocument(doc.getRef());
     }
 }
