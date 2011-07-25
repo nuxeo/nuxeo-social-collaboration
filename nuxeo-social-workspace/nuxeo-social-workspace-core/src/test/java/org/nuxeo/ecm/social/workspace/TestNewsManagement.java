@@ -19,7 +19,7 @@ package org.nuxeo.ecm.social.workspace;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
@@ -76,12 +76,12 @@ public class TestNewsManagement {
                 TEST_NAME_SOCIAL_WORKSPACE, SOCIAL_WORKSPACE_TYPE);
 
         DocumentModel wrongNews = createDocumentModelInSession("/",
-                "Unpublishable Novelty", NEWS_TYPE);
+                "Unpublishable Novelty", NEWS_ITEM_TYPE);
 
         assertTrue(wrongNews.hasFacet(SOCIAL_DOCUMENT_FACET));
 
         DocumentModel correctDirectNews = session.createDocumentModel("/"
-                + TEST_NAME_SOCIAL_WORKSPACE, "Publishable Novelty", NEWS_TYPE);
+                + TEST_NAME_SOCIAL_WORKSPACE, "Publishable Novelty", NEWS_ITEM_TYPE);
         correctDirectNews = session.createDocument(correctDirectNews);
         session.save();
 
@@ -92,7 +92,7 @@ public class TestNewsManagement {
 
         DocumentModel anOtherPublishableNews = createDocumentModelInSession(
                 folderInSocialWorkspace.getPathAsString(),
-                "another publishable news", NEWS_TYPE);
+                "another publishable news", NEWS_ITEM_TYPE);
         assertNotNull(
                 "A news could be created in a Folder within a SocialWorkspace",
                 anOtherPublishableNews);

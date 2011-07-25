@@ -35,7 +35,7 @@
     point="types">
     <types>
       <type name="SocialWorkspace">default</type>
-      <type name="News">default</type>
+      <type name="NewsItem">default</type>
       <type name="Article">default</type>
       <type name="Request">requestLifecycle</type>
     </types>

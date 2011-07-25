@@ -22,7 +22,7 @@
       </layouts>
       <subtypes>
         <type>Folder</type>
-        <type>News</type>
+        <type>NewsItem</type>
         <type>Article</type>
         <type>File</type>
         <type>Note</type>
@@ -64,15 +64,15 @@
       </views>
     </type>
 
-    <type id="News">
-      <label>News</label>
+    <type id="NewsItem">
+      <label>NewsItem</label>
       <icon>/icons/note.gif</icon>
       <bigIcon>/icons/note_100.png</bigIcon>
       <category>SimpleDocument</category>
       <default-view>view_documents</default-view>
       <layouts mode="any">
         <layout>heading</layout>
-        <layout>news</layout>
+        <layout>news_item</layout>
         <layout>note</layout>
       </layouts>
       <layouts mode="summary">
@@ -80,12 +80,11 @@
       </layouts>
       <layouts mode="edit">
         <layout>heading</layout>
-        <layout>news</layout>
+        <layout>news_item</layout>
         <layout>note</layout>
         <layout>dublincore</layout>
       </layouts>
       <layouts mode="view">
-        <layout>article</layout>
         <layout>note</layout>
       </layouts>
       <views>
@@ -103,7 +102,7 @@
     <type id="Folder">
       <subtypes>
         <type>Article</type>
-        <type>News</type>
+        <type>NewsItem</type>
         <type>Article</type>
         <type>File</type>
         <type>Note</type>

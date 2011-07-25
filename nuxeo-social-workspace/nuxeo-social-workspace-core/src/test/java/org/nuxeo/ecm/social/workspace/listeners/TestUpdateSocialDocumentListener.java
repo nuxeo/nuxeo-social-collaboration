@@ -94,7 +94,7 @@ public class TestUpdateSocialDocumentListener {
 
         DocumentModel newsItem = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A private News",
-                SocialConstants.NEWS_TYPE, false);
+                SocialConstants.NEWS_ITEM_TYPE, false);
         SocialDocumentAdapter socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
         DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
 

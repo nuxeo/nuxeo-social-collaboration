@@ -177,7 +177,7 @@
 
     <filter id="publishing">
       <rule grant="true">
-        <type>News</type>
+        <type>NewsItem</type>
       </rule>
     </filter>
 

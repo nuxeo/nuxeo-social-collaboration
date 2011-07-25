@@ -68,7 +68,7 @@ public class SocialConstants {
 
     public static final String SOCIAL_DOCUMENT_FACET = "SocialDocument";
 
-    public static final String NEWS_TYPE = "News";
+    public static final String NEWS_ITEM_TYPE = "NewsItem";
 
     public static final String SOCIAL_SECTION_TYPE = "SocialSection";
 

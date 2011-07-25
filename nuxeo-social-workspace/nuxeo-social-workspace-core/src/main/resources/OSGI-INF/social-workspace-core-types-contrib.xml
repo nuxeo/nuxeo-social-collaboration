@@ -28,7 +28,7 @@
       <facet name="SocialDocument" />
     </doctype>
 
-    <doctype name="News" extends="Note">
+    <doctype name="NewsItem" extends="Note">
       <facet name="SocialDocument" />
     </doctype>
 

@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.CORE_BUNDLE_NAME;
 import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.TESTING_BUNDLE_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
@@ -163,7 +163,7 @@ public class TestVisibilityManagement {
     public void testShouldCreatePrivateProxyForSocialDocumentPrivate()
             throws Exception {
         DocumentModel privateNews = createSocialDocument(session,
-                socialWorkspacePath, "private news", NEWS_TYPE, false);
+                socialWorkspacePath, "private news", NEWS_ITEM_TYPE, false);
 
         SocialDocumentAdapter socialDocument = privateNews.getAdapter(SocialDocumentAdapter.class);
 
@@ -232,7 +232,7 @@ public class TestVisibilityManagement {
     public void testShouldCreatePrivateProxyForSocialDocumentPublic()
             throws Exception {
         DocumentModel privateNews = createSocialDocument(session,
-                socialWorkspacePath, "private news", NEWS_TYPE, true);
+                socialWorkspacePath, "private news", NEWS_ITEM_TYPE, true);
 
         SocialDocumentAdapter socialDocument = privateNews.getAdapter(SocialDocumentAdapter.class);
 

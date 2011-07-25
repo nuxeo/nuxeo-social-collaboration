@@ -20,7 +20,7 @@ package org.nuxeo.ecm.social.workspace;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
@@ -115,7 +115,7 @@ public class TestListeners {
                 SOCIAL_WORKSPACE_NAME, SOCIAL_WORKSPACE_TYPE);
 
         DocumentModel nominalNews = createDocumentModel(sws.getPathAsString(),
-                "nominal news", NEWS_TYPE);
+                "nominal news", NEWS_ITEM_TYPE);
         DocumentModel publicationOfTheNews = getTheProxyOfTheNews(sws);
         assertNotNull("There should exist a proxy of the doc \"nominal news\"",
                 publicationOfTheNews);

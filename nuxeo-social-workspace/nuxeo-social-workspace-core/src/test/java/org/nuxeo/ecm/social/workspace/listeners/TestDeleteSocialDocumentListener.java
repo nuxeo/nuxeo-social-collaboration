@@ -93,11 +93,11 @@ public class TestDeleteSocialDocumentListener {
 
         DocumentModel privateNews1 = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A private News",
-                SocialConstants.NEWS_TYPE, false);
+                SocialConstants.NEWS_ITEM_TYPE, false);
 
         DocumentModel privateNews2 = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "AAA another private News",
-                SocialConstants.NEWS_TYPE, false);
+                SocialConstants.NEWS_ITEM_TYPE, false);
 
         assertEquals(1, getNumberOfProxy(privateNews1));
         assertEquals(1, getNumberOfProxy(privateNews2));
@@ -109,7 +109,7 @@ public class TestDeleteSocialDocumentListener {
 
         DocumentModel publicNews = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A public news",
-                SocialConstants.NEWS_TYPE, true);
+                SocialConstants.NEWS_ITEM_TYPE, true);
         assertEquals(1, getNumberOfProxy(publicNews));
 
         session.followTransition(publicNews.getRef(),
@@ -137,7 +137,7 @@ public class TestDeleteSocialDocumentListener {
 
         DocumentModel publicArticle = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A public news",
-                SocialConstants.NEWS_TYPE, true);
+                SocialConstants.NEWS_ITEM_TYPE, true);
 
         assertEquals(1, getNumberOfProxy(publicArticle));
         session.followTransition(publicArticle.getRef(),
