@@ -21,14 +21,13 @@ import java.io.Serializable;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.model.PropertyException;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
-public class BaseAdapter {
+public abstract class BaseAdapter {
 
-    final DocumentModel doc;
+    protected final DocumentModel doc;
 
     public BaseAdapter(DocumentModel doc) {
         this.doc = doc;
@@ -37,8 +36,6 @@ public class BaseAdapter {
     protected Object getDocProperty(DocumentModel doc, String xpath) {
         try {
             return doc.getPropertyValue(xpath);
-        } catch (PropertyException e) {
-            throw new ClientRuntimeException(e);
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -48,8 +45,6 @@ public class BaseAdapter {
             Serializable value) {
         try {
             doc.setPropertyValue(xpath, value);
-        } catch (PropertyException e) {
-            throw new ClientRuntimeException(e);
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }

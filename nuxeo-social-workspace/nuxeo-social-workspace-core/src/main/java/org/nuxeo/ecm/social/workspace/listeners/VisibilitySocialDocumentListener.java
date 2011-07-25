@@ -17,7 +17,7 @@
 package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,7 +29,7 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
 /**
@@ -85,9 +85,9 @@ public class VisibilitySocialDocumentListener implements
     protected void updateSocialDocumentVisibility(DocumentModel document,
             boolean isPublic) throws ClientException {
         if (isPublic) {
-            document.getAdapter(SocialDocumentAdapter.class).makePublic();
+            toSocialDocument(document).makePublic();
         } else {
-            document.getAdapter(SocialDocumentAdapter.class).restrictToSocialWorkspaceMembers();
+            toSocialDocument(document).restrictToMembers();
         }
     }
 

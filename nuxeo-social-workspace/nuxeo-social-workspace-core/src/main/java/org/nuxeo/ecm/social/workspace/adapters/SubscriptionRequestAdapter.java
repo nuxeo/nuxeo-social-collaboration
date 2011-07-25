@@ -29,11 +29,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
-public class RequestAdapterImpl extends BaseAdapter implements RequestAdapter {
+public class SubscriptionRequestAdapter extends BaseAdapter implements SubscriptionRequest {
 
-    public RequestAdapterImpl(DocumentModel doc) {
+    public SubscriptionRequestAdapter(DocumentModel doc) {
         super(doc);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

@@ -16,25 +16,63 @@
  */
 package org.nuxeo.ecm.social.workspace.adapters;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_DC_AUTHOR;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_DC_CREATED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_DC_TITLE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_NOTE_NOTE;
+
 import java.util.Calendar;
+
+import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
-public interface ArticleAdapter {
+public class ArticleAdapter extends BaseAdapter implements Article {
 
-    String getTitle();
+    public ArticleAdapter(DocumentModel doc) {
+        super(doc);
+    }
 
-    void setTitle(String text);
+    @Override
+    public String getAuthor() {
+        return (String) getDocProperty(doc, FIELD_DC_AUTHOR);
+    }
 
-    String getContent();
+    @Override
+    public Calendar getCreated() {
+        return (Calendar) getDocProperty(doc, FIELD_DC_CREATED);
+    }
 
-    void setContent(String text);
+    @Override
+    public String getTitle() {
+        return (String) getDocProperty(doc, FIELD_DC_TITLE);
+    }
 
-    String getAuthor();
+    @Override
+    public String getContent() {
+        return (String) getDocProperty(doc, FIELD_NOTE_NOTE);
+    }
 
-    Calendar getCreated();
+    @Override
+    public String getFirstNCharacters(int n) {
+        String s = getContent();
+        if (s != null) {
+            int length = s.length();
+            return s.substring(0, n < length ? n : length);
+        }
+        return "";
+    }
 
-    String getFirstNCharacters(int n);
+    @Override
+    public void setTitle(String text) {
+        setDocProperty(doc, FIELD_DC_TITLE, text);
+    }
+
+    @Override
+    public void setContent(String text) {
+        setDocProperty(doc, FIELD_NOTE_NOTE, text);
+    }
+
 }

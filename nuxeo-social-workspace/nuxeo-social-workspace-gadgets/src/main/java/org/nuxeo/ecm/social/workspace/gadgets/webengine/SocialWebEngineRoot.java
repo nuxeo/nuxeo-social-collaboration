@@ -19,7 +19,7 @@ package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,8 +55,8 @@ import org.nuxeo.ecm.core.schema.TypeService;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
-import org.nuxeo.ecm.webengine.forms.FormData;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
@@ -180,7 +180,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
 
         DocumentModel target = session.getDocument(docRef);
-        SocialDocumentAdapter socialDocument = target.getAdapter(SocialDocumentAdapter.class);
+        SocialDocument socialDocument = toSocialDocument(target);
 
         if (socialDocument == null) {
             throw new ClientException("Can't fetch social document.");
@@ -190,7 +190,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         if (isPublic) {
             socialDocument.makePublic();
         } else {
-            socialDocument.restrictToSocialWorkspaceMembers();
+            socialDocument.restrictToMembers();
         }
         return documentList(request);
     }
@@ -405,7 +405,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         if (isPublicSocialWorkspace) {
             if (isPublic) { // is public publication
                 for (DocumentModel doc : docs) {
-                    SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
+                    SocialDocument socialDocument = toSocialDocument(doc);
                     if (socialDocument != null
                             && socialDocument.isRestrictedToMembers()) {
                         list.add(doc.getId());
@@ -413,7 +413,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 }
             } else { // is private publication
                 for (DocumentModel doc : docs) {
-                    SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
+                    SocialDocument socialDocument = toSocialDocument(doc);
                     if (socialDocument != null && socialDocument.isPublic()) {
                         list.add(doc.getId());
                     }

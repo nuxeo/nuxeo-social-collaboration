@@ -39,7 +39,7 @@ import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.adapters.RequestAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
 
@@ -151,7 +151,7 @@ public class SocialGroupsManagement {
     public static void notifyAdmins(DocumentModel request) throws Exception {
         CoreSession session = CoreInstance.getInstance().getSession(
                 request.getSessionId());
-        RequestAdapter requestAdapter = request.getAdapter(RequestAdapter.class);
+        SubscriptionRequest requestAdapter = request.getAdapter(SubscriptionRequest.class);
 
         DocumentModel socialWorkspace = session.getDocument(new IdRef(
                 requestAdapter.getInfo()));

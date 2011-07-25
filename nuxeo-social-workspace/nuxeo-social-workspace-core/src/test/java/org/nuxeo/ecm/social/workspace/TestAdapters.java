@@ -32,8 +32,8 @@ import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.ecm.social.workspace.adapters.ArticleAdapter;
-import org.nuxeo.ecm.social.workspace.adapters.RequestAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.Article;
+import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -69,7 +69,7 @@ public class TestAdapters {
         article = session.createDocument(article);
         session.save();
 
-        ArticleAdapter adapter = article.getAdapter(ArticleAdapter.class);
+        Article adapter = article.getAdapter(Article.class);
         assertNotNull(adapter);
         assertNotNull(adapter.getCreated());
     }
@@ -84,7 +84,7 @@ public class TestAdapters {
         request = session.createDocument(request);
         session.save();
 
-        RequestAdapter adapter = request.getAdapter(RequestAdapter.class);
+        SubscriptionRequest adapter = request.getAdapter(SubscriptionRequest.class);
         assertNotNull(adapter);
         assertNotNull(adapter.getType());
     }

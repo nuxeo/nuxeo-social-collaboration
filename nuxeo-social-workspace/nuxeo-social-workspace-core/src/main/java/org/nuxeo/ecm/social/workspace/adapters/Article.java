@@ -19,29 +19,22 @@ package org.nuxeo.ecm.social.workspace.adapters;
 import java.util.Calendar;
 
 /**
- * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
+ * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
-public interface RequestAdapter {
+public interface Article {
 
-    String getUsername();
+    String getTitle();
 
-    void setUserName(String value);
+    void setTitle(String text);
 
-    String getType();
+    String getContent();
 
-    void setType(String value);
+    void setContent(String text);
 
-    String getInfo();
+    String getAuthor();
 
-    void setInfo(String value);
+    Calendar getCreated();
 
-    Calendar getProcessedDate();
-
-    void setProcessedDate(Calendar value);
-
-    String getProcessedComment();
-
-    void setProcessedComment(String value);
-
+    String getFirstNCharacters(int n);
 }

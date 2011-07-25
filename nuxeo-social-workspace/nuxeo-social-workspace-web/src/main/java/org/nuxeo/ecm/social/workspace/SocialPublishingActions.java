@@ -17,6 +17,7 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.io.Serializable;
 
@@ -27,11 +28,10 @@ import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
-import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
@@ -52,16 +52,13 @@ public class SocialPublishingActions implements Serializable {
     @In(create = true)
     protected transient NavigationContext navigationContext;
 
-    // FIXME: find a better name
-    protected Boolean privatelyPublish;
-
     /**
      * create or update a proxy of the current social document in the public
      * social section associated to its type.
      */
     public void makePublic() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        SocialDocumentAdapter socialDocument = currentDocument.getAdapter(SocialDocumentAdapter.class);
+        SocialDocument socialDocument = toSocialDocument(currentDocument);
         socialDocument.makePublic();
         Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED,
                 currentDocument);
@@ -73,8 +70,8 @@ public class SocialPublishingActions implements Serializable {
      */
     public void restrictToSocialWorkspace() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        SocialDocumentAdapter socialDocument = currentDocument.getAdapter(SocialDocumentAdapter.class);
-        socialDocument.restrictToSocialWorkspaceMembers();
+        SocialDocument socialDocument = toSocialDocument(currentDocument);
+        socialDocument.restrictToMembers();
         Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED,
                 currentDocument);
     }

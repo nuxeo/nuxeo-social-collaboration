@@ -29,7 +29,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FAC
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
+import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +42,6 @@ import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -62,7 +61,7 @@ import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.listeners.CheckSocialWorkspaceValidationTasks;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -151,11 +150,11 @@ public class TestVisibilityManagement {
 
         DocumentModel note = createDocumentModel(session, socialWorkspacePath,
                 "wrong place of creation", "Note");
-        assertNull(note.getAdapter(SocialDocumentAdapter.class));
+        assertNull(toSocialDocument(note));
 
         DocumentModel outOfSocialWorkspace = createDocumentModel(session, "/",
                 "wrong place of creation", ARTICLE_TYPE);
-        assertNull(outOfSocialWorkspace.getAdapter(SocialDocumentAdapter.class));
+        assertNull(toSocialDocument(outOfSocialWorkspace));
 
     }
 
@@ -165,31 +164,31 @@ public class TestVisibilityManagement {
         DocumentModel privateNews = createSocialDocument(session,
                 socialWorkspacePath, "private news", NEWS_ITEM_TYPE, false);
 
-        SocialDocumentAdapter socialDocument = privateNews.getAdapter(SocialDocumentAdapter.class);
+        SocialDocument socialDocument = toSocialDocument(privateNews);
 
         assertTrue(socialDocument.isDocumentInSocialWorkspace());
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentPublic());
-        assertNotNull(socialDocument.getDocumentRestrictedToMembers());
-        assertTrue(socialDocument.getDocumentRestrictedToMembers().isProxy());
-        checkRestricted(socialDocument.getDocumentRestrictedToMembers());
+        assertNull(socialDocument.getPublicDocument());
+        assertNotNull(socialDocument.getRestrictedDocument());
+        assertTrue(socialDocument.getRestrictedDocument().isProxy());
+        checkRestricted(socialDocument.getRestrictedDocument());
 
         socialDocument.makePublic();
         assertFalse(socialDocument.isRestrictedToMembers());
         assertTrue(socialDocument.isPublic());
-        assertNotNull(socialDocument.getDocumentPublic());
-        assertNull(socialDocument.getDocumentRestrictedToMembers());
-        assertTrue(socialDocument.getDocumentPublic().isProxy());
-        checkPublic(socialDocument.getDocumentPublic());
+        assertNotNull(socialDocument.getPublicDocument());
+        assertNull(socialDocument.getRestrictedDocument());
+        assertTrue(socialDocument.getPublicDocument().isProxy());
+        checkPublic(socialDocument.getPublicDocument());
 
-        socialDocument.restrictToSocialWorkspaceMembers();
+        socialDocument.restrictToMembers();
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentPublic());
-        assertNotNull(socialDocument.getDocumentRestrictedToMembers());
-        assertTrue(socialDocument.getDocumentRestrictedToMembers().isProxy());
-        checkRestricted(socialDocument.getDocumentRestrictedToMembers());
+        assertNull(socialDocument.getPublicDocument());
+        assertNotNull(socialDocument.getRestrictedDocument());
+        assertTrue(socialDocument.getRestrictedDocument().isProxy());
+        checkRestricted(socialDocument.getRestrictedDocument());
     }
 
     @Test
@@ -206,13 +205,13 @@ public class TestVisibilityManagement {
         socialDocumentFacetedNotePrivate = session.getDocument(socialDocumentFacetedNotePrivate.getRef());
 
 
-        SocialDocumentAdapter socialDocument = socialDocumentFacetedNotePrivate.getAdapter(SocialDocumentAdapter.class);
+        SocialDocument socialDocument = toSocialDocument(socialDocumentFacetedNotePrivate);
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentPublic());
-        assertNotNull(socialDocument.getDocumentRestrictedToMembers());
-        assertTrue(socialDocument.getDocumentRestrictedToMembers().isProxy());
-        checkRestricted(socialDocument.getDocumentRestrictedToMembers());
+        assertNull(socialDocument.getPublicDocument());
+        assertNotNull(socialDocument.getRestrictedDocument());
+        assertTrue(socialDocument.getRestrictedDocument().isProxy());
+        checkRestricted(socialDocument.getRestrictedDocument());
 
         DocumentModel socialDocumentFacetedNotePublic = session.createDocumentModel(
                 socialWorkspacePath, "Social Document Note2", "Note");
@@ -224,13 +223,13 @@ public class TestVisibilityManagement {
         session.save();
         socialDocumentFacetedNotePublic = session.getDocument(socialDocumentFacetedNotePublic.getRef());
 
-        socialDocument = socialDocumentFacetedNotePublic.getAdapter(SocialDocumentAdapter.class);
+        socialDocument = toSocialDocument(socialDocumentFacetedNotePublic);
         assertFalse(socialDocument.isRestrictedToMembers());
         assertTrue(socialDocument.isPublic());
-        assertNotNull(socialDocument.getDocumentPublic());
-        assertTrue(socialDocument.getDocumentPublic().isProxy());
-        assertNull(socialDocument.getDocumentRestrictedToMembers());
-        checkPublic(socialDocument.getDocumentPublic());
+        assertNotNull(socialDocument.getPublicDocument());
+        assertTrue(socialDocument.getPublicDocument().isProxy());
+        assertNull(socialDocument.getRestrictedDocument());
+        checkPublic(socialDocument.getPublicDocument());
 
     }
 
@@ -240,31 +239,31 @@ public class TestVisibilityManagement {
         DocumentModel privateNews = createSocialDocument(session,
                 socialWorkspacePath, "private news", NEWS_ITEM_TYPE, true);
 
-        SocialDocumentAdapter socialDocument = privateNews.getAdapter(SocialDocumentAdapter.class);
+        SocialDocument socialDocument = toSocialDocument(privateNews);
 
         assertFalse(socialDocument.isRestrictedToMembers());
         assertTrue(socialDocument.isPublic());
-        assertNotNull(socialDocument.getDocumentPublic());
-        assertNull(socialDocument.getDocumentRestrictedToMembers());
-        assertTrue(socialDocument.getDocumentPublic().isProxy());
-        checkPublic(socialDocument.getDocumentPublic());
+        assertNotNull(socialDocument.getPublicDocument());
+        assertNull(socialDocument.getRestrictedDocument());
+        assertTrue(socialDocument.getPublicDocument().isProxy());
+        checkPublic(socialDocument.getPublicDocument());
 
-        socialDocument.restrictToSocialWorkspaceMembers();
+        socialDocument.restrictToMembers();
         assertTrue(socialDocument.isDocumentInSocialWorkspace());
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentPublic());
-        assertNotNull(socialDocument.getDocumentRestrictedToMembers());
-        assertTrue(socialDocument.getDocumentRestrictedToMembers().isProxy());
-        checkRestricted(socialDocument.getDocumentRestrictedToMembers());
+        assertNull(socialDocument.getPublicDocument());
+        assertNotNull(socialDocument.getRestrictedDocument());
+        assertTrue(socialDocument.getRestrictedDocument().isProxy());
+        checkRestricted(socialDocument.getRestrictedDocument());
 
         socialDocument.makePublic();
         assertFalse(socialDocument.isRestrictedToMembers());
         assertTrue(socialDocument.isPublic());
-        assertNotNull(socialDocument.getDocumentPublic());
-        assertNull(socialDocument.getDocumentRestrictedToMembers());
-        assertTrue(socialDocument.getDocumentPublic().isProxy());
-        checkPublic(socialDocument.getDocumentPublic());
+        assertNotNull(socialDocument.getPublicDocument());
+        assertNull(socialDocument.getRestrictedDocument());
+        assertTrue(socialDocument.getPublicDocument().isProxy());
+        checkPublic(socialDocument.getPublicDocument());
     }
 
     @Test
@@ -273,31 +272,31 @@ public class TestVisibilityManagement {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, false);
 
-        SocialDocumentAdapter socialDocument = privateArticle.getAdapter(SocialDocumentAdapter.class);
+        SocialDocument socialDocument = toSocialDocument(privateArticle);
 
         assertTrue(socialDocument.isDocumentInSocialWorkspace());
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentPublic());
-        assertNotNull(socialDocument.getDocumentRestrictedToMembers());
-        assertFalse(socialDocument.getDocumentRestrictedToMembers().isProxy());
-        checkRestricted(socialDocument.getDocumentRestrictedToMembers());
+        assertNull(socialDocument.getPublicDocument());
+        assertNotNull(socialDocument.getRestrictedDocument());
+        assertFalse(socialDocument.getRestrictedDocument().isProxy());
+        checkRestricted(socialDocument.getRestrictedDocument());
 
         socialDocument.makePublic();
         assertFalse(socialDocument.isRestrictedToMembers());
         assertTrue(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentRestrictedToMembers());
-        assertNotNull(socialDocument.getDocumentPublic());
-        assertTrue(socialDocument.getDocumentPublic().isProxy());
-        checkPublic(socialDocument.getDocumentPublic());
+        assertNull(socialDocument.getRestrictedDocument());
+        assertNotNull(socialDocument.getPublicDocument());
+        assertTrue(socialDocument.getPublicDocument().isProxy());
+        checkPublic(socialDocument.getPublicDocument());
 
-        socialDocument.restrictToSocialWorkspaceMembers();
+        socialDocument.restrictToMembers();
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentPublic());
-        assertNotNull(socialDocument.getDocumentRestrictedToMembers());
-        assertFalse(socialDocument.getDocumentRestrictedToMembers().isProxy());
-        checkRestricted(socialDocument.getDocumentRestrictedToMembers());
+        assertNull(socialDocument.getPublicDocument());
+        assertNotNull(socialDocument.getRestrictedDocument());
+        assertFalse(socialDocument.getRestrictedDocument().isProxy());
+        checkRestricted(socialDocument.getRestrictedDocument());
 
     }
 
@@ -307,31 +306,31 @@ public class TestVisibilityManagement {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, true);
 
-        SocialDocumentAdapter socialDocument = privateArticle.getAdapter(SocialDocumentAdapter.class);
+        SocialDocument socialDocument = toSocialDocument(privateArticle);
 
         assertFalse(socialDocument.isRestrictedToMembers());
         assertTrue(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentRestrictedToMembers());
-        assertNotNull(socialDocument.getDocumentPublic());
-        assertTrue(socialDocument.getDocumentPublic().isProxy());
-        checkPublic(socialDocument.getDocumentPublic());
+        assertNull(socialDocument.getRestrictedDocument());
+        assertNotNull(socialDocument.getPublicDocument());
+        assertTrue(socialDocument.getPublicDocument().isProxy());
+        checkPublic(socialDocument.getPublicDocument());
 
-        socialDocument.restrictToSocialWorkspaceMembers();
+        socialDocument.restrictToMembers();
         assertTrue(socialDocument.isDocumentInSocialWorkspace());
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentPublic());
-        assertNotNull(socialDocument.getDocumentRestrictedToMembers());
-        assertFalse(socialDocument.getDocumentRestrictedToMembers().isProxy());
-        checkRestricted(socialDocument.getDocumentRestrictedToMembers());
+        assertNull(socialDocument.getPublicDocument());
+        assertNotNull(socialDocument.getRestrictedDocument());
+        assertFalse(socialDocument.getRestrictedDocument().isProxy());
+        checkRestricted(socialDocument.getRestrictedDocument());
 
         socialDocument.makePublic();
         assertFalse(socialDocument.isRestrictedToMembers());
         assertTrue(socialDocument.isPublic());
-        assertNull(socialDocument.getDocumentRestrictedToMembers());
-        assertNotNull(socialDocument.getDocumentPublic());
-        assertTrue(socialDocument.getDocumentPublic().isProxy());
-        checkPublic(socialDocument.getDocumentPublic());
+        assertNull(socialDocument.getRestrictedDocument());
+        assertNotNull(socialDocument.getPublicDocument());
+        assertTrue(socialDocument.getPublicDocument().isProxy());
+        checkPublic(socialDocument.getPublicDocument());
     }
 
     @Test

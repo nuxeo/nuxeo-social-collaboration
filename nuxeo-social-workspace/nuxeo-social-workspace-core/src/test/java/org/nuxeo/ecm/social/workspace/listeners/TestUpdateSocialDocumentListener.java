@@ -18,7 +18,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
+import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +35,8 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
-import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -95,27 +94,27 @@ public class TestUpdateSocialDocumentListener {
         DocumentModel newsItem = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A private News",
                 NEWS_ITEM_TYPE, false);
-        SocialDocumentAdapter socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
-        DocumentModel initialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        SocialDocument socialDocument = toSocialDocument(newsItem);
+        DocumentModel initialExposedDocument = socialDocument.getRestrictedDocument();
 
         newsItem = updateTitle(newsItem, "Test1");
-        socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
-        DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        socialDocument = toSocialDocument(newsItem);
+        DocumentModel exposedDocument = socialDocument.getRestrictedDocument();
         assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
 
         socialDocument.makePublic();
-        exposedDocument = socialDocument.getDocumentPublic();
+        exposedDocument = socialDocument.getPublicDocument();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
         assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
         newsItem = updateTitle(newsItem, "Test2");
-        exposedDocument = socialDocument.getDocumentPublic();
+        exposedDocument = socialDocument.getPublicDocument();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
         assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
-        socialDocument.restrictToSocialWorkspaceMembers();
-        exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        socialDocument.restrictToMembers();
+        exposedDocument = socialDocument.getRestrictedDocument();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
         assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
@@ -127,30 +126,30 @@ public class TestUpdateSocialDocumentListener {
         DocumentModel article = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A private Article",
                 SocialConstants.ARTICLE_TYPE, false);
-        SocialDocumentAdapter socialDocument = article.getAdapter(SocialDocumentAdapter.class);
-        DocumentModel initialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        SocialDocument socialDocument = toSocialDocument(article);
+        DocumentModel initialExposedDocument = socialDocument.getRestrictedDocument();
 
         article = updateTitle(article, "Test1");
-        socialDocument = article.getAdapter(SocialDocumentAdapter.class);
-        DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        socialDocument = toSocialDocument(article);
+        DocumentModel exposedDocument = socialDocument.getRestrictedDocument();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
         assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
         socialDocument.makePublic();
-        exposedDocument = socialDocument.getDocumentPublic();
+        exposedDocument = socialDocument.getPublicDocument();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
         assertNotSame(initialExposedDocument.getId(), exposedDocument.getId());
         // Id change for Article when visibility change
 
         initialExposedDocument = exposedDocument;
         article = updateTitle(article, "Test2");
-        socialDocument = article.getAdapter(SocialDocumentAdapter.class);
-        exposedDocument = socialDocument.getDocumentPublic();
+        socialDocument = toSocialDocument(article);
+        exposedDocument = socialDocument.getPublicDocument();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
         assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
-        socialDocument.restrictToSocialWorkspaceMembers();
-        exposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        socialDocument.restrictToMembers();
+        exposedDocument = socialDocument.getRestrictedDocument();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
         assertNotSame(initialExposedDocument.getId(), exposedDocument.getId());
         // Id change for Article when visibility change

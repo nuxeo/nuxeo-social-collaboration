@@ -30,7 +30,8 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 
 /**
  * Class to provide around Social Workspace.
@@ -86,6 +87,24 @@ public class SocialWorkspaceHelper {
         }
     }
 
+    public static boolean isMemberOfSocialWorkspace(NuxeoPrincipal principal,
+            DocumentModel socialWorkspace) {
+        String memberGroup = getSocialWorkspaceMembersGroupName(socialWorkspace);
+        return principal.isMemberOf(memberGroup);
+    }
+
+    public static boolean isAdministratorOfSocialWorkspace(
+            NuxeoPrincipal principal, DocumentModel socialWorkspace) {
+        String memberGroup = getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
+        return principal.isMemberOf(memberGroup);
+    }
+
+    public static boolean isMemberOrAdministratorOfSocialWorkspace(
+            NuxeoPrincipal principal, DocumentModel socialWorkspace) {
+        return isMemberOfSocialWorkspace(principal, socialWorkspace)
+                || isAdministratorOfSocialWorkspace(principal, socialWorkspace);
+    }
+
     public static boolean isSocialWorkspace(DocumentModel doc) {
         return doc != null && doc.hasFacet(SOCIAL_WORKSPACE_FACET);
     }
@@ -101,8 +120,7 @@ public class SocialWorkspaceHelper {
      */
     public static DocumentModel getSocialWorkspaceContainer(
             CoreSession session, DocumentRef docRef) throws ClientException {
-        List<DocumentModel> parents = null;
-        parents = session.getParentDocuments(docRef);
+        List<DocumentModel> parents = session.getParentDocuments(docRef);
 
         for (DocumentModel parent : parents) {
             if (isSocialWorkspace(parent)) {
@@ -113,23 +131,18 @@ public class SocialWorkspaceHelper {
         return null;
     }
 
-    public static PathRef getPrivateSectionPath(DocumentModel socialWorkspace)
-            throws ClientException {
-
+    public static PathRef getPrivateSectionPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
-            throw new ClientException(
+            throw new IllegalArgumentException(
                     "Given social workspace is null, can't return the private section");
         }
-
         return new PathRef(socialWorkspace.getPathAsString() + "/"
                 + PRIVATE_SECTION_RELATIVE_PATH);
     }
 
-    public static PathRef getPublicSectionPath(DocumentModel socialWorkspace)
-            throws ClientException {
-
+    public static PathRef getPublicSectionPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
-            throw new ClientException(
+            throw new IllegalArgumentException(
                     "Given social workspace is null, can't return the private section");
         }
 
@@ -145,6 +158,10 @@ public class SocialWorkspaceHelper {
     public static DocumentModel getPublicSection(CoreSession session,
             DocumentModel socialWorkspace) throws ClientException {
         return session.getDocument(getPublicSectionPath(socialWorkspace));
+    }
+
+    public static SocialDocument toSocialDocument(DocumentModel doc) {
+        return doc.getAdapter(SocialDocument.class);
     }
 
 }
