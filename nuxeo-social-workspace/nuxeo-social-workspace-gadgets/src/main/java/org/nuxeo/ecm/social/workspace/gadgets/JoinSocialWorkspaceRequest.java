@@ -19,7 +19,7 @@ package org.nuxeo.ecm.social.workspace.gadgets;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_INFO;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_IS_RESTRICTED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
@@ -72,7 +72,7 @@ public class JoinSocialWorkspaceRequest {
 
         String currentUser = session.getPrincipal().getName();
 
-        boolean isRestricted = (Boolean) sws.getPropertyValue(FIELD_SOCIAL_IS_RESTRICTED);
+        boolean isRestricted = (Boolean) sws.getPropertyValue(FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION);
 
         if (isRestricted) {
             if (SocialGroupsManagement.isRequestPending(sws, currentUser)) {

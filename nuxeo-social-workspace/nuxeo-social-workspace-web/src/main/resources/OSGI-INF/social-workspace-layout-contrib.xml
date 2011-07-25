@@ -293,7 +293,7 @@
        </helpLabels>
       <translated>true</translated>
       <fields>
-        <field>socialw:isRestricted</field>
+        <field>socialw:approveSubscription</field>
       </fields>
       <properties mode="any">
         <property name="template">

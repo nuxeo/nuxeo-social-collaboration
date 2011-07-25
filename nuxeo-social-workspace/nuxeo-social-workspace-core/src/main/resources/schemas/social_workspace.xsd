@@ -5,7 +5,7 @@
 
   <xs:element name="isPublic" type="xs:boolean" default="false" />
 
-  <!-- if true all join request are accepted automatically -->
-  <xs:element name="isRestricted" type="xs:boolean"  default="false"/>
+  <!-- if true all subscription requests need to be validated by the administrators -->
+  <xs:element name="approveSubscription" type="xs:boolean"  default="true"/>
 
 </xs:schema>
