@@ -6,7 +6,7 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-	<action
+  <action
       id="BackToDashboard"
       link="${manageSocialWorkspaceActions.backToDashboard()}"
       label="label.social.workspace.backtodashboard"
@@ -14,6 +14,32 @@
       icon="/icons/back_to_social_workspace_dashboard.png"
       order="10">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
+    </action>
+
+  <action
+      id="GoToDMView"
+      link="${navigationContext.navigateToDocument(currentDocument)}"
+      label="label.social.workspace.gotodmview"
+      immediate="false"
+      icon="/icons/goto_dm.png"
+      order="10">
+      <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
+    </action>
+
+  <action
+      id="GoToFullScreenViewForDocument"
+      link="${navigationContext.navigateToDocument(currentDocument, 'fullscreen')}"
+      label="label.social.workspace.gotofullscreen"
+      immediate="false"
+      icon="/icons/fullscreen.png"
+      order="10">
+      <category>DOCUMENT_UPPER_ACTION</category>
+      <filter id="hasFullscreenView">
+        <rule grant="true">
+          <facet>SocialDocument</facet>
+          <facet>SocialWorkspace</facet>
+        </rule>
+      </filter>
     </action>
 
   <action

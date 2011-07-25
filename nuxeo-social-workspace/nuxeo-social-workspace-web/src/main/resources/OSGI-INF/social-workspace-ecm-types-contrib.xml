@@ -44,7 +44,7 @@
         <layout>note</layout>
       </layouts>
       <layouts mode="summary">
-        <layout>article_summary_layout</layout>
+        <layout>summary_layout</layout>
       </layouts>
       <layouts mode="edit">
         <layout>heading</layout>
@@ -55,6 +55,9 @@
       <layouts mode="view">
         <layout>article</layout>
         <layout>note</layout>
+      </layouts>
+      <layouts mode="fullscreen">
+        <layout>fullscreen</layout>
       </layouts>
       <views>
         <view id="fullscreen" value="view_social_wokspace_articles" />
@@ -73,7 +76,7 @@
         <layout>note</layout>
       </layouts>
       <layouts mode="summary">
-        <layout>article_summary_layout</layout>
+        <layout>summary_layout</layout>
       </layouts>
       <layouts mode="edit">
         <layout>heading</layout>

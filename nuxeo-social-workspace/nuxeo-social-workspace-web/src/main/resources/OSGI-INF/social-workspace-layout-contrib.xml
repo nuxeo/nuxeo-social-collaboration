@@ -122,7 +122,7 @@
       </rows>
     </layout>
 
-    <layout name="article_summary_layout">
+    <layout name="summary_layout">
       <templates>
         <template mode="any">/layouts/layout_summary_template.xhtml</template>
       </templates>
@@ -149,6 +149,29 @@
         </row>
         <row>
           <widget>summary_current_document_single_tasks</widget>
+        </row>
+      </rows>
+    </layout>
+
+    <layout name="fullscreen">
+      <templates>
+        <template mode="any">/layouts/layout_summary_template.xhtml</template>
+      </templates>
+      <rows>
+      <row>
+      </row>
+        <row>
+          <widget>summary_current_document_description</widget>
+          <widget>article_text_with_picture</widget>
+          <widget>summary_current_document_files</widget>
+          <widget>summary_current_document_comments</widget>
+        </row>
+        <row>
+          <widget>summary_current_document_dublincore</widget>
+          <widget>summary_current_document_relations</widget>
+        </row>
+        <row>
+          <widget>summary_current_document_publications</widget>
         </row>
       </rows>
     </layout>
