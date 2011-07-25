@@ -2,17 +2,12 @@
 
 .content { font: normal 11px / 14px 'Lucida Grande',Verdana,Arial,sans-serif ; height: 100% }
 
-h3 { border-bottom: 1px solid #ddd; margin: 8px 0; padding: 0 0 10px }
+.header { border-bottom: 1px solid #ddd; margin: 2px 0 5px; padding: 0 0 5px }
+.header h3 { float: left; margin: 3px 0 0 }
 
 .toolBox { padding: 2px 0 10px }
-	.breadcrumb { float: left; width: 85% ; font-size: 9px}
-	.links { float: right }
-
-input.searchBox {
-    font: 11px 'Lucida Grande',Verdana,Arial,sans-serif;
-    padding: 1px 0;
-    float: left;
-}
+.breadcrumb { font-size: 9px }
+.links { float: right }
 
 .dataList { background: none repeat scroll 0 0 white; border-collapse: collapse; margin: 0; width: 100% }
   .dataList thead th { border-bottom: 1px solid #C7C7C7; color: #666666; font-size: 11px; font-weight: normal; padding: 5px 3px; text-align: left }
@@ -46,10 +41,18 @@ margin-left:5px;
 }
 
 /* search box */
+input.searchBox { font: 11px 'Lucida Grande',Verdana,Arial,sans-serif; padding: 1px 3px 0 1px; float: left }
 
 /* STYLES SEARCH FIELD */
-.customSearchBox .wideDefinition {border: 1px solid #ccc; padding: 2px 0 2px 2px; width: 150px;}
-.customSearchBox .searchBox {background: none transparent; border:none; width: 130px;}
-.customSearchBox { float: left }
+.customSearchBox { float: right }
+.customSearchBox form { margin: 0 10px 0 0 }
+.customSearchBox .wideDefinition { border: 1px solid #ccc; padding: 2px 0 2px 2px }
+.customSearchBox .searchBox { background: none transparent; border: none; width: 95px }
 .customSearchBox .button {background: transparent url(custom_search.png) no-repeat left center; border:none; cursor: pointer; width: 20px;}
 
+/* Tooltips */
+
+a.button { text-decoration: none; position: relative }
+a.disabled { cursor: default }
+.tooltip { text-decoration: none; margin-left: -999em; position: absolute; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 3px; color: #333; padding: 5px 5px 5px 23px !important;}
+a.button:hover .tooltip { text-decoration: none; box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1); font-family: Lucida,Geneva,sans-serif; right: 1em; margin-left: 0; position: absolute; top: 1em; width: 120px; z-index: 999;}

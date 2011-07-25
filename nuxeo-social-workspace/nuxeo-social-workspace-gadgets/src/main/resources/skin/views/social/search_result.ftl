@@ -1,5 +1,6 @@
-<h3>${Context.getMessage("label.social.workspace")}: ${socialWorkspace.title}</h3>
-<div class="toolBox">
-	<#include "@bricks/search_box">
+<div class="header">
+  <h3>${socialWorkspace.title}</h3>
+  <#include "@bricks/search_box">
+  <div class="clear"></div>
 </div>
 <#include "@bricks/document_list">

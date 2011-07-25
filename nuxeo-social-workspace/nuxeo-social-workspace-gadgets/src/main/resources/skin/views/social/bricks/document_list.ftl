@@ -32,28 +32,28 @@
       <td>${doc["dc:creator"]}</td>
       <td>
         <#if removable?seq_contains(doc.id)>
-          <a class='button' href="javascript: confirmDeleteDocument('${doc.id}' , '${doc.title}' )">
+          <a class="button" href="javascript:confirmDeleteDocument('${doc.id}' , '${doc.title}' )">
             <img src="${contextPath}/icons/action_delete.gif" alt="remove"></img>
-            <span>Remove the document</span>
+            <div class="tooltip">Remove the document</div>
           </a>
         </#if>
         <#if isPublicSocialWorkspace>
           <#if publishablePublic?seq_contains(doc.id)>
-            <a class='button' href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', true )">
+            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${doc.title}', true )">
               <img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></img>
-              <span>Make this document public</span>
+              <div class="tooltip">Make this document public</div>
             </a>
           </#if>
           <#if publishablePrivate?seq_contains(doc.id)>
-            <a class='button' href="javascript: confirmPublishDocument('${doc.id}', '${doc.title}', false )">
+            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${doc.title}', false )">
               <img src="${skinPath}/icons/publish_to_social_workspace.png" alt="make it public"></img>
-              <span>restrict to the Social Workspace</span>
+              <div class="tooltip">restrict to the Social Workspace</div>
             </a>
           </#if>
         <#else>
-          <a class='button' href="#">
+          <a class="button disabled" href="#">
             <img src="${skinPath}/icons/publish_to_all_disabled.png" alt="publish public"></img>
-            <span>Social Workspace is private, you can't make documents public</span>
+            <div class="tooltip">Social Workspace is private, you can't make documents public</div>
           </a>
         </#if>
 

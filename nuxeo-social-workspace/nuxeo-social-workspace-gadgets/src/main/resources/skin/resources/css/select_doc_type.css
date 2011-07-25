@@ -1,0 +1,18 @@
+.selectDocType { font: normal 11px / 14px 'Lucida Grande',Verdana,Arial,sans-serif ; height: 100% }
+
+h3 { border-bottom: 1px solid #ddd; margin: 8px 0; padding: 0 0 10px }
+
+.wide { width: 100% }
+.labelColumn { width: 110px }
+
+.documentType { border: 1px solid #eee; border-radius: 5px; display: block; margin: 3px; padding: 4px 5px 0 3px; text-decoration: none; vertical-align: middle; width: 80%; }
+.documentType:hover { border-color: #333 }
+.documentType img { padding: 0 3px 5px 0; vertical-align: middle }
+
+.border { border: 1px solid #ddd }
+.actions { margin-top: 5px; text-align: center }
+.actions input, .actions button {background-color: #fefefe; cursor: pointer}
+.actions input:hover, .actions button:hover {border-color:#333}
+
+.center { text-align: center }
+table.create { margin: auto }

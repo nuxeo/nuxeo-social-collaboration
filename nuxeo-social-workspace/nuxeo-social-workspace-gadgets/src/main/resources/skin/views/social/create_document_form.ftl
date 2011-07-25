@@ -7,7 +7,8 @@
 <body>
 <form class="createDocument" action="${This.path}/createDocument" method="post" enctype="multipart/form-data" target="_parent">
 <h3>Add a ${docType.label} in ${currentDoc.title} </h3>
-<table>
+<div class="center">
+<table class="create">
 <tr>
 <td>Title</td>
 <td><input class="border input" type="text" name="dc:title" /></td>
@@ -28,6 +29,7 @@
 <button class="border" name="cancel" value="Cancel" type="button" onclick="parent.jQuery.fancybox.close()">Cancel</button>
 <input type="hidden" name="docRef" value="${currentDoc.id}" />
 <input type="hidden" name="doctype" value="${docType.id}" />
+</div>
 </div>
 
 </form>

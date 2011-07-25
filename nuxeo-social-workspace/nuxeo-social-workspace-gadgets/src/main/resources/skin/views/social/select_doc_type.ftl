@@ -13,14 +13,14 @@
 
 <h4>Choose Document Type to Create</h4>
 
-<table>
+<table class="wide">
   <tr>
   <#list categories as category>
     <#assign docTypesList = docTypes[category]>
-      <td>${category}</td>
+      <td class="labelColumn">${category}</td>
       <#list docTypesList as docType>
       	<td>
-      	  <a href="${This.path}/createDocumentForm?docRef=${currentDoc.id}&doctype=${docType.id}">
+      	  <a class="documentType" href="${This.path}/createDocumentForm?docRef=${currentDoc.id}&doctype=${docType.id}">
       	    <img src="${contextPath}${docType.icon}" alt="create ${docType.id}"/>  ${docType.label}
       	  </a>
       	</td>
@@ -28,6 +28,10 @@
   </tr>
   </#list>
 </table>
+<div class="actions">
+<button class="border" name="cancel" value="Cancel" type="button" onclick="parent.jQuery.fancybox.close()">Cancel</button>
+<input type="hidden" name="docRef" value="${currentDoc.id}" />
+</div>
 </#if>
 
 </form>

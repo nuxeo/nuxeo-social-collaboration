@@ -1,9 +1,12 @@
-.createDocument { font:normal 12px "Lucida Grande", Helvetica, sans-serif }
+.createDocument{ font:normal 12px "Lucida Grande", Helvetica, sans-serif }
 .createDocument h3 {  border-bottom: 1px solid #eee; font-size: 13px; padding: 0 0 10px }
 .createDocument .border { border: 1px solid #ddd }
 .createDocument input.input, .createDocument textarea.input { width: 180px }
 .createDocument td { vertical-align: top }
-.createDocument .actions { margin-top: 5px; text-align: right }
+.createDocument .actions { margin-top: 5px }
 .createDocument .actions input, .createDocument .actions button {background-color: #fefefe; cursor: pointer}
 .createDocument .actions input:hover, .createDocument .actions button:hover {border-color:#333}
+textarea { font-size:11px }
 
+.center { text-align: center }
+table.create { margin: auto }
