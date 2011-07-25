@@ -116,7 +116,7 @@ public class TestDeleteSocialDocumentListener {
                 LifeCycleConstants.DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(publicNews));
 
-        String query = String.format("Select * from News where ecm:isProxy = 1");
+        String query = String.format("Select * from NewsItem where ecm:isProxy = 1");
         DocumentModelList proxies = session.query(query);
         assertEquals(1, proxies.size());
 
@@ -144,7 +144,7 @@ public class TestDeleteSocialDocumentListener {
                 LifeCycleConstants.DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(publicArticle));
 
-        String query = String.format("Select * from News where ecm:isProxy = 1");
+        String query = String.format("Select * from NewsItem where ecm:isProxy = 1");
         DocumentModelList proxies = session.query(query);
         assertEquals(0, proxies.size());
 
