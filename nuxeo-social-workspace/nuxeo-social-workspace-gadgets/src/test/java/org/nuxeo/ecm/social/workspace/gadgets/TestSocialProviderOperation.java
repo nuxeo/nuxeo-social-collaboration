@@ -17,7 +17,7 @@
 package org.nuxeo.ecm.social.workspace.gadgets;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
 
 import java.util.List;
 
@@ -33,14 +33,14 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.event.EventService;import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
-import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.ecm.social.workspace.SocialConstants;import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.runtime.api.Framework;import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
@@ -91,10 +91,13 @@ public class TestSocialProviderOperation {
         // create two articles in 2nd social workspace
         DocumentModel article1 = session.createDocumentModel("/sws2",
                 "article1", "Article");
-        article1.putContextData(ScopeType.REQUEST, "Public", Boolean.TRUE);
+        article1.setPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, true);
         article1.setPropertyValue("dc:title", "Public Article");
         article1 = session.createDocument(article1);
         session.save();
+        Framework.getService(EventService.class).waitForAsyncCompletion();
+        session.save();
+        article1 = session.getDocument(article1.getRef());
 
         DocumentModel article2 = session.createDocumentModel("/sws2",
                 "article2", "Article");
