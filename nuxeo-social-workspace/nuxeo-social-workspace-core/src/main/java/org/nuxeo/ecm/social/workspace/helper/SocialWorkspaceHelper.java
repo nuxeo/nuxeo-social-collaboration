@@ -140,13 +140,11 @@ public class SocialWorkspaceHelper {
     public static DocumentModel getPrivateSection(CoreSession session,
             DocumentModel socialWorkspace) throws ClientException {
         return session.getDocument(getPrivateSectionPath(socialWorkspace));
-
     }
 
     public static DocumentModel getPublicSection(CoreSession session,
             DocumentModel socialWorkspace) throws ClientException {
         return session.getDocument(getPublicSectionPath(socialWorkspace));
-
     }
 
 }

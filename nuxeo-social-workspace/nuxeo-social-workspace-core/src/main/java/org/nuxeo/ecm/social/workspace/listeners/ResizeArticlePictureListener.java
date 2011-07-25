@@ -16,7 +16,7 @@
 
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_PICTURE_FIELD;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.CONTENT_PICTURE_PICTURE_FIELD;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 
 import java.io.Serializable;
@@ -56,7 +56,7 @@ public class ResizeArticlePictureListener implements EventListener {
             return;
         }
 
-        Blob image = (Blob) doc.getPropertyValue(ARTICLE_PICTURE_FIELD);
+        Blob image = (Blob) doc.getPropertyValue(CONTENT_PICTURE_PICTURE_FIELD);
         if (image == null) {
             return;
         }
@@ -79,7 +79,7 @@ public class ResizeArticlePictureListener implements EventListener {
             image = service.resize(image, "jpg", (int) (width * scale),
                     (int) (height * scale), info.getDepth());
             image.setMimeType("image/jpeg"); // XXX : Should be automatic
-            doc.setPropertyValue(ARTICLE_PICTURE_FIELD, (Serializable) image);
+            doc.setPropertyValue(CONTENT_PICTURE_PICTURE_FIELD, (Serializable) image);
         }
     }
 

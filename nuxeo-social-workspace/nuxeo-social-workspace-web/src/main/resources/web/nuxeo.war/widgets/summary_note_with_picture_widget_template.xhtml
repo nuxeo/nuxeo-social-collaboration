@@ -10,10 +10,10 @@
     <c:set var="cssClass" value="#{nxu:test(!empty widget.properties.cssClass, widget.properties.cssClass, '')}" />
 
     <div class="#{cssClass}">
-      <c:if test="#{!empty currentDocument.art.picture}">
+      <c:if test="#{!empty currentDocument.contentpict.picture}">
         <c:set var="float" value="#{nxu:test(!empty widget.properties.float, widget.properties.float, 'left')}" />
         <c:set var="margin" value="#{nxu:test(float == 'right', 'left', 'right')}" />
-        <img src="#{nxd:fileUrl('downloadFile', currentDocument, 'art:picture', field_2)}" alt="#{field_2}" style="float: #{float}; margin-#{margin}: 10px;" />
+        <img src="#{nxd:fileUrl('downloadFile', currentDocument, 'contentpict:picturename', field_2)}" alt="#{field_2}" style="float: #{float}; margin-#{margin}: 10px;" />
       </c:if>
 
       <c:choose>
@@ -28,7 +28,7 @@
         </c:when>
         <c:otherwise>
           <pre>
-               <h:outputText value="#{field_0}"/>
+            <h:outputText value="#{field_0}"/>
           </pre>
         </c:otherwise>
       </c:choose>

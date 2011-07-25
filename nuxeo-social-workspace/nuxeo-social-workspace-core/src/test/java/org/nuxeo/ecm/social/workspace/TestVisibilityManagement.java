@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.CORE_BUNDLE_NAME;
 import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.TESTING_BUNDLE_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
@@ -160,7 +160,7 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void testShouldCreatePrivateProxyForSocialDocumentPrivate()
+    public void shouldCreatePrivateProxyForSocialDocumentPrivate()
             throws Exception {
         DocumentModel privateNews = createSocialDocument(session,
                 socialWorkspacePath, "private news", NEWS_ITEM_TYPE, false);
@@ -193,7 +193,7 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void testShouldCreatePrivateProxyForSocialDocumentWithFacetAdded()
+    public void shouldCreatePrivateProxyForSocialDocumentWithFacetAdded()
             throws ClientException {
 
         DocumentModel socialDocumentFacetedNotePrivate = session.createDocumentModel(
@@ -201,6 +201,10 @@ public class TestVisibilityManagement {
         socialDocumentFacetedNotePrivate.addFacet(SOCIAL_DOCUMENT_FACET);
         socialDocumentFacetedNotePrivate = session.createDocument(socialDocumentFacetedNotePrivate);
         session.save();
+        eventService.waitForAsyncCompletion();
+        session.save();
+        socialDocumentFacetedNotePrivate = session.getDocument(socialDocumentFacetedNotePrivate.getRef());
+
 
         SocialDocumentAdapter socialDocument = socialDocumentFacetedNotePrivate.getAdapter(SocialDocumentAdapter.class);
         assertTrue(socialDocument.isRestrictedToMembers());
@@ -213,10 +217,12 @@ public class TestVisibilityManagement {
         DocumentModel socialDocumentFacetedNotePublic = session.createDocumentModel(
                 socialWorkspacePath, "Social Document Note2", "Note");
         socialDocumentFacetedNotePublic.addFacet(SOCIAL_DOCUMENT_FACET);
-        socialDocumentFacetedNotePublic.putContextData(ScopeType.REQUEST,
-                SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
+        socialDocumentFacetedNotePublic.setPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, true);
         socialDocumentFacetedNotePublic = session.createDocument(socialDocumentFacetedNotePublic);
         session.save();
+        eventService.waitForAsyncCompletion();
+        session.save();
+        socialDocumentFacetedNotePublic = session.getDocument(socialDocumentFacetedNotePublic.getRef());
 
         socialDocument = socialDocumentFacetedNotePublic.getAdapter(SocialDocumentAdapter.class);
         assertFalse(socialDocument.isRestrictedToMembers());
@@ -229,7 +235,7 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void testShouldCreatePrivateProxyForSocialDocumentPublic()
+    public void shouldCreatePrivateProxyForSocialDocumentPublic()
             throws Exception {
         DocumentModel privateNews = createSocialDocument(session,
                 socialWorkspacePath, "private news", NEWS_ITEM_TYPE, true);
@@ -262,7 +268,7 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void testShouldNotCreatePrivateProxyForArticlePrivate()
+    public void shouldNotCreatePrivateProxyForArticlePrivate()
             throws Exception {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, false);
@@ -296,7 +302,7 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void testShouldNotCreatePrivateProxyForArticlePublic()
+    public void shouldNotCreatePrivateProxyForArticlePublic()
             throws Exception {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, true);

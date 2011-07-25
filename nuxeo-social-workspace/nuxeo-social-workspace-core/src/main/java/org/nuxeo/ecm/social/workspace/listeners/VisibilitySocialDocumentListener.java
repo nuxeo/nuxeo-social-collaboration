@@ -38,13 +38,14 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
  * "social-workspace-content-template-core.xml"
  *
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
- *
  */
 
 public class VisibilitySocialDocumentListener implements
         PostCommitEventListener {
 
-    protected static final Log log = LogFactory.getLog(VisibilitySocialDocumentListener.class);
+    private static final Log log = LogFactory.getLog(VisibilitySocialDocumentListener.class);
+
+    public static final String ALREADY_PROCESSED = VisibilitySocialDocumentListener.class.getName();
 
     @Override
     public void handleEvent(EventBundle events) throws ClientException {
@@ -66,17 +67,24 @@ public class VisibilitySocialDocumentListener implements
             return;
         }
         DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
+        if (ctx.hasProperty(ALREADY_PROCESSED)) {
+            return;
+        }
+
         if (!SocialWorkspaceHelper.isSocialDocument(document)) {
             return;
         }
 
-        boolean initAsPublic = ctx.hasProperty(SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA);
-        initSocialDocument(document, initAsPublic);
+        document.putContextData(ALREADY_PROCESSED, true);
+
+        Boolean isPublic = (Boolean) document.getPropertyValue(SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC);
+        updateSocialDocumentVisibility(document, isPublic == null ? false
+                : isPublic);
     }
 
-    protected void initSocialDocument(DocumentModel document,
-            boolean initAsPublic) throws ClientException {
-        if (initAsPublic) {
+    protected void updateSocialDocumentVisibility(DocumentModel document,
+            boolean isPublic) throws ClientException {
+        if (isPublic) {
             document.getAdapter(SocialDocumentAdapter.class).makePublic();
         } else {
             document.getAdapter(SocialDocumentAdapter.class).restrictToSocialWorkspaceMembers();

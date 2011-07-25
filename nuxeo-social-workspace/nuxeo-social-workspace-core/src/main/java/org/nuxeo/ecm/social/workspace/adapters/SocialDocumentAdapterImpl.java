@@ -16,13 +16,16 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
 
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.listeners.VisibilitySocialDocumentListener;
 
 /**
  * This class gives method to make the document public or private into the
@@ -38,7 +41,7 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
  *
  * In the documentation about method of this class, when we reference to a
  * social document, we implicitly talking about the social document handle by
- * the instance of the class set into the contructor.
+ * the instance of the class set into the constructor.
  *
  * @author Benjamin JALON <bjalon@nuxeo.com>
  *
@@ -56,8 +59,6 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
     private CoreSession session;
 
     /**
-     * @param getSession() all documents modification will be made through this
-     *            getSession().
      * @param sourceDocument on which social publications need to be performed
      */
     public SocialDocumentAdapterImpl(DocumentModel sourceDocument)
@@ -129,6 +130,7 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
     @Override
     public DocumentModel restrictToSocialWorkspaceMembers()
             throws ClientException {
+        setIsPublicField(false);
 
         DocumentModel privateProxy = getPrivateProxy();
         if (privateProxy != null) {
@@ -152,7 +154,6 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
                 sourceDocument, getPrivateSection());
         getSession().save();
         return exposedDocument;
-
     }
 
     /*
@@ -164,6 +165,7 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
      */
     @Override
     public DocumentModel makePublic() throws ClientException {
+        setIsPublicField(true);
 
         DocumentModel publicProxy = getPublicProxy();
         if (publicProxy != null) {
@@ -180,6 +182,14 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
                 sourceDocument, getPublicSection());
         getSession().save();
         return exposedDocument;
+    }
+
+    protected void setIsPublicField(boolean value) throws ClientException {
+        sourceDocument.setPropertyValue(
+                SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, value);
+        sourceDocument.putContextData(
+                VisibilitySocialDocumentListener.ALREADY_PROCESSED, true);
+        sourceDocument = session.saveDocument(sourceDocument);
     }
 
     protected DocumentModel getPublicProxy() throws ClientException {
@@ -245,7 +255,7 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
      */
     @Override
     public boolean isPublic() throws ClientException {
-        return getDocumentPublic() != null;
+        return (Boolean) sourceDocument.getPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC);
     }
 
     /*
@@ -276,7 +286,7 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
      */
     @Override
     public boolean isRestrictedToMembers() throws ClientException {
-        return getDocumentRestrictedToMembers() != null;
+        return !((Boolean) sourceDocument.getPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC));
     }
 
     /*
@@ -298,10 +308,10 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
      * point to the last version of the target document.
      */
     protected DocumentModel updateExposedDocument(
-            DocumentModel exposedDocument, boolean isMakePublic)
+            DocumentModel exposedDocument, boolean isPublic)
             throws ClientException {
 
-        if (!exposedDocument.isProxy() && isMakePublic) {
+        if (!exposedDocument.isProxy() && isPublic) {
             // => Article
             exposedDocument = getSession().publishDocument(sourceDocument,
                     getPublicProxy());
@@ -309,12 +319,12 @@ public class SocialDocumentAdapterImpl implements SocialDocumentAdapter {
             return exposedDocument;
         }
 
-        if (!exposedDocument.isProxy() && !isMakePublic) {
+        if (!exposedDocument.isProxy() && !isPublic) {
             return exposedDocument;
         }
 
-        DocumentModel targetSection = null;
-        if (isMakePublic) {
+        DocumentModel targetSection;
+        if (isPublic) {
             targetSection = getPublicSection();
         } else {
             targetSection = getPrivateSection();

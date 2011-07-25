@@ -13,7 +13,7 @@
       Seam context.
     </documentation>
 
-    <widgetType name="summary_social_document_publication_action">
+    <widgetType name="summary_social_document_visibility_action">
       <configuration>
         <sinceVersion>5.4.3</sinceVersion>
         <title>Publication of social document</title>
@@ -40,7 +40,7 @@
         org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
       </handler-class>
       <property name="template">
-        /widgets/news_publication_widget_template.xhtml
+        /widgets/social_document_visibility_widget_template.xhtml
       </property>
     </widgetType>
   </extension>
@@ -63,10 +63,10 @@
           <widget>subjects</widget>
         </row>
         <row>
-          <widget>social_isPublic</widget>
+          <widget>social_workspace_is_public</widget>
         </row>
         <row>
-          <widget>social_isRestricted</widget>
+          <widget>social_workspace_is_restricted</widget>
         </row>
         <row>
           <widget>expired</widget>
@@ -103,10 +103,10 @@
       </templates>
       <rows>
         <row>
-          <widget>social_public_or_private</widget>
+          <widget>social_document_visibility</widget>
         </row>
         <row>
-          <widget>article_picture</widget>
+          <widget>content_picture</widget>
         </row>
       </rows>
     </layout>
@@ -117,7 +117,10 @@
       </templates>
       <rows>
         <row>
-          <widget>social_public_or_private</widget>
+          <widget>social_document_visibility</widget>
+        </row>
+        <row>
+          <widget>content_picture</widget>
         </row>
       </rows>
     </layout>
@@ -131,13 +134,13 @@
       </row>
         <row>
           <widget>summary_current_document_description</widget>
-          <widget>article_text_with_picture</widget>
+          <widget>summary_note_with_picture</widget>
           <widget>summary_current_document_files</widget>
           <widget>summary_current_document_dublincore</widget>
           <widget>summary_current_document_comments</widget>
         </row>
         <row>
-          <widget>publish_news</widget>
+          <widget>summary_social_document_visibility_action</widget>
           <widget>summary_current_document_lc_and_version</widget>
           <widget>summary_current_document_actions</widget>
           <widget>summary_current_document_custom_actions</widget>
@@ -162,7 +165,7 @@
       </row>
         <row>
           <widget>summary_current_document_description</widget>
-          <widget>article_text_with_picture</widget>
+          <widget>summary_note_with_picture</widget>
           <widget>summary_current_document_files</widget>
           <widget>summary_current_document_comments</widget>
         </row>
@@ -263,7 +266,7 @@
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
     point="widgets">
 
-    <widget name="social_isPublic" type="template">
+    <widget name="social_workspace_is_public" type="template">
       <labels>
         <label mode="any">label.widget.social.isPublic</label>
       </labels>
@@ -272,7 +275,7 @@
        </helpLabels>
       <translated>true</translated>
       <fields>
-        <field>soc:isPublic</field>
+        <field>socialw:isPublic</field>
       </fields>
       <properties mode="any">
         <property name="template">
@@ -281,9 +284,7 @@
       </properties>
     </widget>
 
-
-
-    <widget name="social_isRestricted" type="template">
+    <widget name="social_workspace_is_restricted" type="template">
       <labels>
         <label mode="any">label.widget.social.isRestricted</label>
       </labels>
@@ -292,7 +293,7 @@
        </helpLabels>
       <translated>true</translated>
       <fields>
-        <field>soc:isRestricted</field>
+        <field>socialw:isRestricted</field>
       </fields>
       <properties mode="any">
         <property name="template">
@@ -301,14 +302,14 @@
       </properties>
     </widget>
 
-    <widget name="article_picture" type="file">
+    <widget name="content_picture" type="file">
       <labels>
         <label mode="any">label.widget.article.picture</label>
       </labels>
       <translated>true</translated>
       <fields>
-        <field>art:picture</field>
-        <field>art:picturename</field>
+        <field>contentpict:picture</field>
+        <field>contentpict:picturename</field>
       </fields>
       <properties widgetMode="edit">
         <property name="styleClass">dataInputText</property>
@@ -316,11 +317,11 @@
       </properties>
     </widget>
 
-    <widget name="article_text_with_picture" type="template">
+    <widget name="summary_note_with_picture" type="template">
       <fields>
         <field>note:note</field>
         <field>note:mime_type</field>
-        <field>art:picturename</field>
+        <field>contentpict:picturename</field>
       </fields>
       <properties mode="view">
         <property name="translatedHtml">
@@ -330,11 +331,40 @@
         <property name="float">left</property>
       </properties>
       <properties mode="any">
-        <property name="template">/widgets/article_summary_widget_template.xhtml</property>
+        <property name="template">/widgets/summary_note_with_picture_widget_template.xhtml</property>
       </properties>
       <widgetModes>
         <mode value="any">view</mode>
       </widgetModes>
+    </widget>
+
+    <widget name="summary_social_document_visibility_action" type="summary_social_document_visibility_action">
+      <labels>
+        <label mode="any"></label>
+      </labels>
+      <translated>false</translated>
+      <fields>
+        <field>socialdoc:isPublic</field>
+      </fields>
+      <widgetModes>
+        <mode value="any" >#{currentDocument.isProxy() ? 'hidden' : 'view'}</mode>
+      </widgetModes>
+    </widget>
+
+    <widget name="social_document_visibility" type="template">
+      <labels>
+        <label mode="any">social.document.publication</label>
+      </labels>
+      <translated>true</translated>
+      <fields>
+        <field>socialdoc:isPublic</field>
+      </fields>
+      <properties mode="any">
+        <property name="required">true</property>
+        <property name="template">
+          /widgets/visibility_radio_widget_template.xhtml
+        </property>
+      </properties>
     </widget>
 
     <widget name="request_user_email" type="template">
@@ -363,33 +393,6 @@
         <mode value="any">view</mode>
       </widgetModes>
     </widget>
-
-    <widget name="publish_news" type="summary_social_document_publication_action">
-      <labels>
-        <label mode="any"></label>
-      </labels>
-      <translated>false</translated>
-      <widgetModes>
-        <mode value="any" >#{currentDocument.isProxy() ? 'hidden' : 'view'}</mode>
-      </widgetModes>
-    </widget>
-
-    <widget name="social_public_or_private" type="template">
-        <translated>true</translated>
-      <labels>
-        <label mode="any">social.document.publication</label>
-      </labels>
-         <fields>
-          <field></field>
-        </fields>
-         <properties mode="any">
-         <property name="required">true</property>
-         <property name="template">
-           /widgets/publication_radio_widget_template.xhtml
-         </property>
-
-         </properties>
-      </widget>
 
   </extension>
 

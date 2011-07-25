@@ -7,18 +7,22 @@
   xmlns:nxl="http://nuxeo.org/nxforms/layout" id="#{widget.id}">
 
   <c:if test="#{widget.mode == 'edit' }">
-    <h:selectOneRadio value="#{socialPublishingActions.privatelyPublish}" id="#{widget.id}_checkbox">
-      <f:selectItem itemValue="#{true}" itemLabel="#{messages['label.summary.private']}" />
-      <f:selectItem itemValue="#{false}" itemLabel="#{messages['label.summary.public']}" />
+    <h:selectOneRadio value="#{field}" id="#{widget.id}_checkbox">
+      <f:selectItem itemValue="#{false}" itemLabel="#{messages['label.summary.restricted']}" />
+      <f:selectItem itemValue="#{true}" itemLabel="#{messages['label.summary.public']}" />
     </h:selectOneRadio>
     <h:message styleClass="errorMessage" for="#{widget.id}_checkbox"
       id="#{widget.id}_message" />
   </c:if>
 
   <c:if test="#{widget.mode == 'view' }">
-    <h:outputText rendered="#{socialPublishingActions.privatelyPublish}" value="#{messages['label.summary.private']}" />
-    <h:outputText rendered="#{!socialPublishingActions.privatelyPublish}"
-      value="#{messages['label.summary.public']}" />
+    <c:if test="#{field}">
+      <h:outputText value="#{messages['label.summary.public']}" />
+    </c:if>
+
+    <c:if test="#{not field}">
+      <h:outputText value="#{messages['label.summary.restricted']}" />
+    </c:if>
   </c:if>
 
 </f:subview>

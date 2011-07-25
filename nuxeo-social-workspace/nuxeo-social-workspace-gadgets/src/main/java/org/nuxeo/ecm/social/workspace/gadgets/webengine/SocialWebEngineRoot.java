@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +56,6 @@ import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapter;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocumentAdapterImpl;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
@@ -152,8 +152,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
         args.put("publishablePrivate",
                 getPublishableDocs(socialWorkspace, docs, false));
         args.put("removable", getDocsWithDeleteRight(docs));
-        args.put("isPublicSocialWorkspace",
-                (Boolean) socialWorkspace.getPropertyValue("social:isPublic"));
+        args.put(
+                "isPublicSocialWorkspace",
+                socialWorkspace.getPropertyValue(FIELD_SOCIAL_WORKSPACE_IS_PUBLIC));
         args.put("fullscreen_views", getFullscreenViews(docs));
 
         // add navigation arguments
@@ -397,7 +398,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     protected static List<String> getPublishableDocs(
             DocumentModel socialWorkspace, DocumentModelList docs,
             boolean isPublic) throws ClientException {
-        boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue("social:isPublic");
+        boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue(FIELD_SOCIAL_WORKSPACE_IS_PUBLIC);
 
         List<String> list = new ArrayList<String>();
 

@@ -130,7 +130,7 @@
             <property name="useFirstWidgetLabelAsColumnHeader">true</property>
             <property name="columnStyleClass"></property>
             <property name="label">IsPublic</property>
-            <property name="sortPropertyName">social:isPublic</property>
+            <property name="sortPropertyName">socialw:isPublic</property>
           </properties>
           <widget>isPublic</widget>
         </column>

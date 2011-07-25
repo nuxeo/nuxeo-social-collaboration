@@ -6,7 +6,8 @@
   <extension target="org.nuxeo.ecm.core.schema.TypeService"
     point="schema">
     <schema name="social_workspace" prefix="socialw" src="schemas/social_workspace.xsd" />
-    <schema name="article" prefix="art" src="schemas/article.xsd" />
+    <schema name="social_document" prefix="socialdoc" src="schemas/social_document.xsd" />
+    <schema name="content_picture" prefix="contentpict" src="schemas/content_picture.xsd" />
     <schema name="request" prefix="req" src="schemas/request.xsd" />
   </extension>
 
@@ -17,6 +18,7 @@
     </facet>
 
     <facet name="SocialDocument">
+      <schema name="social_document" />
     </facet>
 
     <doctype name="SocialWorkspace" extends="Workspace">
@@ -24,11 +26,12 @@
     </doctype>
 
     <doctype name="Article" extends="Note">
-      <schema name="article" />
+      <schema name="content_picture" />
       <facet name="SocialDocument" />
     </doctype>
 
     <doctype name="NewsItem" extends="Note">
+      <schema name="content_picture" />
       <facet name="SocialDocument" />
     </doctype>
 

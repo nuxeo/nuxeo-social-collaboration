@@ -1,14 +1,11 @@
 <?xml version="1.0"?>
-<xs:schema targetNamespace="http://www.nuxeo.org/ecm/schemas/article/"
+<xs:schema targetNamespace="http://www.nuxeo.org/ecm/schemas/content_picture/"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:nxs="http://www.nuxeo.org/ecm/schemas/article/">
+  xmlns:nxs="http://www.nuxeo.org/ecm/schemas/content_picture/">
 
   <xs:include schemaLocation="core-types.xsd" />
 
   <xs:element name="picturename" type="xs:string" />
   <xs:element name="picture" type="nxs:content" />
-
-  <xs:element name="catchphrase" type="xs:string" />
-
 
 </xs:schema>

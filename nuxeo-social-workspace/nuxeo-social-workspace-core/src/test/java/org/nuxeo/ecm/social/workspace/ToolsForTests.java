@@ -50,10 +50,7 @@ public class ToolsForTests {
             throws Exception {
         DocumentModel doc = session.createDocumentModel(pathAsString, name,
                 type);
-        if (isPublic) {
-            doc.putContextData(ScopeType.REQUEST,
-                    SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
-        }
+        doc.setPropertyValue(SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, isPublic);
         doc = session.createDocument(doc);
         session.save(); // fire post commit event listener
         session.save(); // flush the session to retrieve document

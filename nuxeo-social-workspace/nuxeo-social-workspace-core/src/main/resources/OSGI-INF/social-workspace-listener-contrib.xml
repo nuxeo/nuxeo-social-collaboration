@@ -25,8 +25,8 @@
       <event>beforeDocumentModification</event>
     </listener>
 
-    <listener name="createSocialDocumentListener" async="false"
-      postCommit="true"
+    <listener name="createSocialDocumentListener" async="true"
+      postCommit="false"
       class="org.nuxeo.ecm.social.workspace.listeners.VisibilitySocialDocumentListener"
       priority="200">
       <event>documentCreated</event>

@@ -17,20 +17,20 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_SCHEMA;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_SCHEMA;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_SCHEMA;
 
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
+import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;import org.nuxeo.ecm.social.workspace.SocialConstants;
 
 /**
- * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
+ * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
 public class AdapterFactory implements DocumentAdapterFactory {
 
     @Override
     public Object getAdapter(DocumentModel doc, Class<?> itf) {
-        if (itf == ArticleAdapter.class && doc.hasSchema(ARTICLE_SCHEMA)) {
+        if (itf == ArticleAdapter.class && ARTICLE_TYPE.equals(doc.getType())) {
             return new ArticleAdapterImpl(doc);
         }
         if (itf == RequestAdapter.class && doc.hasSchema(REQUEST_SCHEMA)) {

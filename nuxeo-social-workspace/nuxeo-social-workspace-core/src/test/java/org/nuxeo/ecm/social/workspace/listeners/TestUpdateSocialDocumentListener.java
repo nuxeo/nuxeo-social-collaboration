@@ -16,7 +16,7 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
 
@@ -89,40 +89,40 @@ public class TestUpdateSocialDocumentListener {
     }
 
     @Test
-    public void testProxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateNews()
+    public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateNews()
             throws Exception {
 
         DocumentModel newsItem = createSocialDocument(session,
                 socialWorkspace.getPathAsString(), "A private News",
-                SocialConstants.NEWS_ITEM_TYPE, false);
+                NEWS_ITEM_TYPE, false);
         SocialDocumentAdapter socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
-        DocumentModel intialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
+        DocumentModel initialExposedDocument = socialDocument.getDocumentRestrictedToMembers();
 
         newsItem = updateTitle(newsItem, "Test1");
         socialDocument = newsItem.getAdapter(SocialDocumentAdapter.class);
         DocumentModel exposedDocument = socialDocument.getDocumentRestrictedToMembers();
-        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
 
         socialDocument.makePublic();
         exposedDocument = socialDocument.getDocumentPublic();
         assertEquals("Test1", exposedDocument.getPropertyValue("dc:title"));
-        assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
         newsItem = updateTitle(newsItem, "Test2");
         exposedDocument = socialDocument.getDocumentPublic();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-        // assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
         socialDocument.restrictToSocialWorkspaceMembers();
         exposedDocument = socialDocument.getDocumentRestrictedToMembers();
         assertEquals("Test2", exposedDocument.getPropertyValue("dc:title"));
-        // assertEquals(intialExposedDocument.getId(), exposedDocument.getId());
+        assertEquals(initialExposedDocument.getId(), exposedDocument.getId());
 
     }
 
     @Test
-    public void testProxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
+    public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
             throws Exception {
 
         DocumentModel article = createSocialDocument(session,
@@ -160,12 +160,9 @@ public class TestUpdateSocialDocumentListener {
             throws Exception {
         SocialDocumentAdapter socialDocument = doc.getAdapter(SocialDocumentAdapter.class);
         doc.setPropertyValue("dc:title", value);
-        if (socialDocument.isPublic()) {
-            doc.putContextData(ScopeType.REQUEST,
-                    SocialConstants.PUBLIC_KEY_FOR_CONTEXT_DATA, Boolean.TRUE);
-        }
         doc = session.saveDocument(doc);
         session.save(); // fire post commit event listener
+        eventService.waitForAsyncCompletion();
         session.save(); // flush the session to retrieve document
         Framework.getService(EventService.class).waitForAsyncCompletion(0);
         return doc;
