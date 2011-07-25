@@ -10,7 +10,7 @@
     <h:outputText class="summary_locked" value="#{messages['label.summary.restricted']}"/>
       <h:outputText value=" | " />
       <h:commandLink value="#{messages['command.makePublic']}"
-        action="#{socialPublishingActions.makePublic()}"
+        action="#{socialDocumentVisibilityActions.makePublic()}"
         immediate="true" />
   </c:if>
 
@@ -19,7 +19,7 @@
     <h:outputText class="summary_unlocked" value="#{messages['label.summary.public']} "/>
       <h:outputText value=" | " />
       <h:commandLink value="#{messages['command.restrictToSocialWorkspace']}"
-        action="#{socialPublishingActions.restrictToSocialWorkspace()}"
+        action="#{socialDocumentVisibilityActions.restrictToMembers()}"
         immediate="true" />
   </c:if>
 </div>

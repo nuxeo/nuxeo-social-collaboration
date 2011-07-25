@@ -40,14 +40,14 @@ import org.nuxeo.ecm.webapp.helpers.EventNames;
  *
  * @author rlegall
  */
-@Name("socialPublishingActions")
+@Name("socialDocumentVisibilityActions")
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class SocialPublishingActions implements Serializable {
+public class SocialDocumentVisibilityActions implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Log log = LogFactory.getLog(SocialPublishingActions.class);
+    private static final Log log = LogFactory.getLog(SocialDocumentVisibilityActions.class);
 
     @In(create = true)
     protected transient NavigationContext navigationContext;
@@ -68,7 +68,7 @@ public class SocialPublishingActions implements Serializable {
      * create or update a proxy of the current social document in the private
      * social section associated to its type.
      */
-    public void restrictToSocialWorkspace() throws ClientException {
+    public void restrictToMembers() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
         SocialDocument socialDocument = toSocialDocument(currentDocument);
         socialDocument.restrictToMembers();

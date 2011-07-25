@@ -175,29 +175,5 @@
       </rule>
     </filter>
 
-    <filter id="publishing">
-      <rule grant="true">
-        <type>NewsItem</type>
-      </rule>
-    </filter>
-
-    <filter id="canBePublishAsPrivate">
-      <rule grant="true">
-        <condition>
-          #{!socialPublishingActions.isPrivate()}
-        </condition>
-      </rule>
-    </filter>
-
-    <filter id="canBePublishAsPublic">
-      <rule grant="true">
-
-        <condition>
-          #{socialPublishingActions.isPrivate()}
-        </condition>
-
-      </rule>
-    </filter>
-
   </extension>
 </component>
