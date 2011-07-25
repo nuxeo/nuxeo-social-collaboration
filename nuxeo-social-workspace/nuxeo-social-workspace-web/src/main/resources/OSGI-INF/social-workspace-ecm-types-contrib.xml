@@ -60,7 +60,7 @@
         <layout>fullscreen</layout>
       </layouts>
       <views>
-        <view id="fullscreen" value="view_social_wokspace_articles" />
+        <view id="fullscreen" value="view_social_workspace_articles" />
       </views>
     </type>
 
@@ -88,7 +88,7 @@
         <layout>note</layout>
       </layouts>
       <views>
-        <view id="fullscreen" value="view_social_wokspace_news_item" />
+        <view id="fullscreen" value="view_social_workspace_news_item" />
       </views>
     </type>
 

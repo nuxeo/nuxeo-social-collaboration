@@ -51,7 +51,7 @@ function displayListOfArticles(entries,nxParams){
       html += NXGadgetContext.clientSideBaseUrl;
       html += "nxpath/default";
       html += entry.path;
-      html += "@view_social_wokspace_articles";
+      html += "@view_social_workspace_articles";
       html += "\" >";
       html += entry.title;
       html += '</a></p>';
