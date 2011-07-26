@@ -79,7 +79,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=document_create:nxl_social_workspace_heading:nxw_social_isPublic:nxw_social_isPublic_checkbox:0</td>
+	<td>id=document_create:nxl_social_workspace_heading:nxw_social_workspace_is_public:nxw_social_workspace_is_public_checkbox:0</td>
 	<td></td>
 </tr>
 <tr>
@@ -105,22 +105,17 @@
 <!-- create news -->
 <tr>
 	<td>open</td>
-	<td>nxpath/default/default-domain/workspaces/testPublicationWorkspace/testPublicationSW@view_documents?tabIds=%3ATAB_CONTENT</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=New</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=News</td>
+	<td>nxpath/default/default-domain/workspaces/testPublicationWorkspace/testPublicationSW/news-items-root@view_documents?tabIds=%3ATAB_CONTENT</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=News</td>
+	<td>id=document_create:create_doc_CANCEL_DOCUMENT_CREATION</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Create a News Item</td>
 	<td></td>
 </tr>
 <tr>
