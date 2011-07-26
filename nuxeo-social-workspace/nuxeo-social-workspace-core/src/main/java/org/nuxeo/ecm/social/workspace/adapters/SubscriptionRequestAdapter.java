@@ -29,7 +29,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
-public class SubscriptionRequestAdapter extends BaseAdapter implements SubscriptionRequest {
+public class SubscriptionRequestAdapter extends BaseAdapter implements
+        SubscriptionRequest {
 
     public SubscriptionRequestAdapter(DocumentModel doc) {
         super(doc);

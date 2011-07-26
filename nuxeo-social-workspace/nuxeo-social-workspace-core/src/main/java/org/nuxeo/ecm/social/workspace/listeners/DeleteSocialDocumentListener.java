@@ -2,7 +2,8 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -44,8 +45,8 @@ public class DeleteSocialDocumentListener implements EventListener {
     /**
      * Remove social document publication into social workspace if needed.
      */
-    public void cleanProxy(CoreSession session,
-            SocialDocument socialDocument) throws ClientException {
+    public void cleanProxy(CoreSession session, SocialDocument socialDocument)
+            throws ClientException {
         DocumentModel publicProxy = socialDocument.getPublicDocument();
         if (publicProxy != null) {
             session.removeDocument(publicProxy.getRef());

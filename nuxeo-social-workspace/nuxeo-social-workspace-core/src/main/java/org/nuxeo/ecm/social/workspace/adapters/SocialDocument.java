@@ -52,12 +52,14 @@ public interface SocialDocument {
     boolean isPublic() throws ClientException;
 
     /**
-     * Returns {@code true} if this document is restricted to a {@code SocialWorkspace} members, {@code false} otherwise.
+     * Returns {@code true} if this document is restricted to a
+     * {@code SocialWorkspace} members, {@code false} otherwise.
      */
     boolean isRestrictedToMembers() throws ClientException;
 
     /**
-     * Make this document public. It will be visible from non-members of the {@code SocialWorkspace}.
+     * Make this document public. It will be visible from non-members of the
+     * {@code SocialWorkspace}.
      */
     DocumentModel makePublic() throws ClientException;
 

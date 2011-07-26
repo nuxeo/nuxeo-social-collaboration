@@ -19,7 +19,8 @@ package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +57,7 @@ import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;import org.nuxeo.ecm.webengine.forms.FormData;
+import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;

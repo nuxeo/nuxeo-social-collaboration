@@ -16,6 +16,11 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
+
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
@@ -23,12 +28,7 @@ import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
-
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 /**
  * Class to handle "Social Document" publication after creation or update. It
@@ -73,7 +73,7 @@ public class VisibilitySocialDocumentListener implements
 
         document.putContextData(ALREADY_PROCESSED, true);
 
-        Boolean isPublic = (Boolean) document.getPropertyValue(SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC);
+        Boolean isPublic = (Boolean) document.getPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC);
         updateSocialDocumentVisibility(document, isPublic == null ? false
                 : isPublic);
     }

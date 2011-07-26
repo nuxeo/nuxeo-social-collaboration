@@ -24,12 +24,14 @@ import static org.junit.Assert.assertTrue;
 import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.CORE_BUNDLE_NAME;
 import static org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants.TESTING_BUNDLE_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
+import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,7 +206,6 @@ public class TestVisibilityManagement {
         session.save();
         socialDocumentFacetedNotePrivate = session.getDocument(socialDocumentFacetedNotePrivate.getRef());
 
-
         SocialDocument socialDocument = toSocialDocument(socialDocumentFacetedNotePrivate);
         assertTrue(socialDocument.isRestrictedToMembers());
         assertFalse(socialDocument.isPublic());
@@ -216,7 +217,8 @@ public class TestVisibilityManagement {
         DocumentModel socialDocumentFacetedNotePublic = session.createDocumentModel(
                 socialWorkspacePath, "Social Document Note2", "Note");
         socialDocumentFacetedNotePublic.addFacet(SOCIAL_DOCUMENT_FACET);
-        socialDocumentFacetedNotePublic.setPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, true);
+        socialDocumentFacetedNotePublic.setPropertyValue(
+                FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, true);
         socialDocumentFacetedNotePublic = session.createDocument(socialDocumentFacetedNotePublic);
         session.save();
         eventService.waitForAsyncCompletion();
@@ -267,8 +269,7 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void shouldNotCreatePrivateProxyForArticlePrivate()
-            throws Exception {
+    public void shouldNotCreatePrivateProxyForArticlePrivate() throws Exception {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, false);
 
@@ -301,8 +302,7 @@ public class TestVisibilityManagement {
     }
 
     @Test
-    public void shouldNotCreatePrivateProxyForArticlePublic()
-            throws Exception {
+    public void shouldNotCreatePrivateProxyForArticlePublic() throws Exception {
         DocumentModel privateArticle = createSocialDocument(session,
                 socialWorkspacePath, "privatenews", ARTICLE_TYPE, true);
 

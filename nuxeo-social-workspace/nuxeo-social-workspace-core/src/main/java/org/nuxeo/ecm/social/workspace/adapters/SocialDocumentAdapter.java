@@ -104,8 +104,7 @@ public class SocialDocumentAdapter implements SocialDocument {
     }
 
     @Override
-    public DocumentModel restrictToMembers()
-            throws ClientException {
+    public DocumentModel restrictToMembers() throws ClientException {
         setIsPublicField(false);
 
         DocumentModel privateProxy = getPrivateProxy();
@@ -215,8 +214,7 @@ public class SocialDocumentAdapter implements SocialDocument {
     }
 
     @Override
-    public DocumentModel getRestrictedDocument()
-            throws ClientException {
+    public DocumentModel getRestrictedDocument() throws ClientException {
         if (ARTICLE_TYPE.equals(sourceDocument.getType())) {
             if (!isPublic()) {
                 return sourceDocument;

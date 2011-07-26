@@ -39,17 +39,14 @@ public class SocialConstants {
 
     public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
 
-
     // Social Document
     public static final String SOCIAL_DOCUMENT_FACET = "SocialDocument";
 
     public static final String FIELD_SOCIAL_DOCUMENT_IS_PUBLIC = "socialdoc:isPublic";
 
-
     public static final String ARTICLE_TYPE = "Article";
 
     public static final String NEWS_ITEM_TYPE = "NewsItem";
-
 
     public static final String CONTENT_PICTURE_PICTURE_FIELD = "contentpict:picture";
 
@@ -60,7 +57,6 @@ public class SocialConstants {
     public static final String FIELD_DC_CREATED = "dc:created";
 
     public static final String FIELD_DC_AUTHOR = "dc:author";
-
 
     // Subscription Request
     public static final String REQUEST_DOC_TYPE = "Request";

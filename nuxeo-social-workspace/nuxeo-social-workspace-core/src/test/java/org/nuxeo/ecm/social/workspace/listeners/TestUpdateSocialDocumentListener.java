@@ -16,9 +16,11 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
+import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.junit.Before;
 import org.junit.Test;

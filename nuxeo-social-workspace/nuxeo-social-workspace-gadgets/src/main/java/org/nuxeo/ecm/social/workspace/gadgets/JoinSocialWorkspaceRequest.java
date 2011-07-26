@@ -20,9 +20,9 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_INFO;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

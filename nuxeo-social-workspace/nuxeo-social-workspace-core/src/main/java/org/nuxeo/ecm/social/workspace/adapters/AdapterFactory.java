@@ -16,10 +16,15 @@
  */
 package org.nuxeo.ecm.social.workspace.adapters;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_SCHEMA;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_SCHEMA;
 
-import org.apache.commons.logging.Log;import org.apache.commons.logging.LogFactory;import org.nuxeo.ecm.core.api.ClientException;import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;import org.nuxeo.ecm.social.workspace.SocialConstants;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
+import org.nuxeo.ecm.social.workspace.SocialConstants;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
