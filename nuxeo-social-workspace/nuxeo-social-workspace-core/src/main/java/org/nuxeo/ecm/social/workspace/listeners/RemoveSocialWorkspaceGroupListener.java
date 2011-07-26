@@ -16,14 +16,14 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -31,8 +31,7 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- *
- * remove social workspace associated groups
+ * Remove social workspace associated groups
  * <ul>
  * <li>{doc_id}_administrators</li>
  * <li>{doc_id}_members</li>
@@ -44,47 +43,43 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class RemoveSocialWorkspaceGroupListener implements EventListener {
 
-    protected UserManager userManager;
+    private UserManager userManager;
 
     private static final Log log = LogFactory.getLog(RemoveSocialWorkspaceGroupListener.class);
 
     public void handleEvent(Event event) throws ClientException {
-        if (!event.getName().equals(DocumentEventTypes.DOCUMENT_REMOVED)) {
+        if (!DOCUMENT_REMOVED.equals(event.getName())) {
             return;
         }
 
-        DocumentEventContext ctx = (DocumentEventContext) event.getContext();
+        EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext)) {
             return;
         }
 
-        DocumentModel doc = ctx.getSourceDocument();
-
-        if (!doc.hasFacet(SOCIAL_WORKSPACE_FACET)) {
+        DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
+        if (!SocialWorkspaceHelper.isSocialWorkspace(doc)) {
             return;
         }
 
-        String groupName = null;
+        deleteGroup(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc));
+        deleteGroup(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc));
+    }
+
+    private void deleteGroup(String groupName) {
         try {
-            groupName = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc);
-            getUserManager().deleteGroup(groupName);
-        } catch (ClientException e) {
-            log.warn("Cannot delete group: " + groupName, e);
-        }
-        try {
-            groupName = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc);
             getUserManager().deleteGroup(groupName);
         } catch (ClientException e) {
             log.warn("Cannot delete group: " + groupName, e);
         }
     }
 
-    protected UserManager getUserManager() {
+    private UserManager getUserManager() throws ClientException {
         if (userManager == null) {
             try {
                 userManager = Framework.getService(UserManager.class);
             } catch (Exception e) {
-                log.error("Cannot instantiate userManager", e);
+                throw new ClientException(e);
             }
         }
         return userManager;
