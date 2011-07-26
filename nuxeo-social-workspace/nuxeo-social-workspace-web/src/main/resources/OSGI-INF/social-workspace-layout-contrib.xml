@@ -359,6 +359,9 @@
       <fields>
         <field>socialdoc:isPublic</field>
       </fields>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
       <properties mode="any">
         <property name="required">true</property>
         <property name="template">

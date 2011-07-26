@@ -16,11 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
@@ -29,8 +24,11 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
-import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 /**
  * Class to handle "Social Document" publication after creation or update. It
@@ -42,8 +40,6 @@ import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
 public class VisibilitySocialDocumentListener implements
         PostCommitEventListener {
-
-    private static final Log log = LogFactory.getLog(VisibilitySocialDocumentListener.class);
 
     public static final String ALREADY_PROCESSED = VisibilitySocialDocumentListener.class.getName();
 

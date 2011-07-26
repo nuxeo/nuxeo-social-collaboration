@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace.helper;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ROOT_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
@@ -148,6 +149,16 @@ public class SocialWorkspaceHelper {
 
         return new PathRef(socialWorkspace.getPathAsString() + "/"
                 + PUBLIC_SECTION_RELATIVE_PATH);
+    }
+
+    public static PathRef getNewsRootPath(DocumentModel socialWorkspace) {
+        if (socialWorkspace == null) {
+            throw new IllegalArgumentException(
+                    "Given social workspace is null, can't return the private section");
+        }
+
+        return new PathRef(socialWorkspace.getPathAsString() + "/"
+                + NEWS_ROOT_RELATIVE_PATH);
     }
 
     public static DocumentModel getPrivateSection(CoreSession session,

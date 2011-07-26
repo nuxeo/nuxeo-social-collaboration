@@ -14,6 +14,11 @@
       icon="/icons/back_to_social_workspace_dashboard.png"
       order="10">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
+      <filter id="socialDocument">
+        <rule grant="true">
+          <facet>SocialDocument</facet>
+        </rule>
+      </filter>
     </action>
 
   <action
@@ -24,6 +29,12 @@
       icon="/icons/goto_dm.png"
       order="10">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
+      <filter id="hasFullscreenView">
+        <rule grant="true">
+          <facet>SocialDocument</facet>
+          <facet>SocialWorkspace</facet>
+        </rule>
+      </filter>
     </action>
 
   <action
@@ -41,6 +52,27 @@
         </rule>
       </filter>
     </action>
+
+    <action id="newNewsItem" link="#{documentActions.createDocument('NewsItem')}"
+      label="command.create.news.item" icon="/icons/action_add.gif">
+      <category>SUBVIEW_UPPER_LIST</category>
+      <filter id="newNewsItem">
+        <rule grant="true">
+          <permission>AddChildren</permission>
+          <type>NewsRoot</type>
+        </rule>
+      </filter>
+    </action>
+
+  <action
+      id="SocialWorkspacesAdministration"
+      link="view_admin-fragment.xhtml"
+      label="label.social.workspace.administration"
+      order="150">
+      <category>NUXEO_ADMIN</category>
+      <filter-id>only_for_manager</filter-id>
+    </action>
+
 
   <action
       id="SocialWorkspacesAdministration"

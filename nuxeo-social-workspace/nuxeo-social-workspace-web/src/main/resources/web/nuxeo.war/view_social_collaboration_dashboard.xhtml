@@ -21,6 +21,8 @@
   </ui:define>
 
   <ui:define name="body">
+    <ui:include src="/incl/fullscreen_main_actions.xhtml"/>
+
     <h1>#{nxd:titleOrId(currentDocument)}</h1>
     <div>
       <c:if test="#{!socialWorkspaceActions.isCurrentUserMemberOrAdministratorOfCurrentSocialWorkspace()}">

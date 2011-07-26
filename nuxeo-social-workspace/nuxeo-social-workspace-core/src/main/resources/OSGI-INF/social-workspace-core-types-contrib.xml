@@ -25,6 +25,9 @@
       <facet name="SocialWorkspace" />
     </doctype>
 
+    <doctype name="NewsRoot" extends="Folder">
+    </doctype>
+
     <doctype name="Article" extends="Note">
       <schema name="content_picture" />
       <facet name="SocialDocument" />

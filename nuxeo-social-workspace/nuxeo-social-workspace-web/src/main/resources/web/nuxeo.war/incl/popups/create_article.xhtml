@@ -1,0 +1,44 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:nxthemes="http://nuxeo.org/nxthemes"
+  xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+  xmlns:rich="http://richfaces.org/rich">
+
+
+    <rich:modalPanel id="createArticle" autosized="true"
+    onmaskclick="Richfaces.hideModalPanel('createArticle')">
+
+
+    <f:facet name="header">
+      <h:outputText value="#{messages['title.create.article']}"/>
+    </f:facet>
+
+    <f:facet name="controls">
+      <h:panelGroup>
+        <h:graphicImage value="/icons/action_delete_mini_over.png"
+          id="hideCreateArticlePanel" />
+        <rich:componentControl for="createArticle"
+          attachTo="hideCreateArticlePanel" operation="hide" event="onclick" />
+      </h:panelGroup>
+    </f:facet>
+
+
+    <div id="content">
+      <h:form enctype="multipart/form-data" id="createArticleRichUploadForm">
+
+      <nxl:documentLayout mode="create" value="#{currentDocument}" />
+
+        <h:commandButton class="button"
+          value="#{messages['command.upload']}"
+          action="#{FileManageActions.validate}" />
+        <h:commandButton class="button"
+          value="#{messages['command.cancel']}"
+          action="#{navigationContext.goBack()}" immediate="true" />
+      </h:form>
+    </div>
+
+  </rich:modalPanel>
+</div>

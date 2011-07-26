@@ -16,28 +16,23 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import java.security.Principal;
+import java.util.Arrays;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.security.ACP;
-import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
+import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -47,6 +42,19 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
+
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
@@ -54,10 +62,6 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.core" })
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
 public class TestNewsManagement {
-
-    private static final String BASE_WORKSPACE_NAME = "base";
-
-    public static final String TEST_NAME_SOCIAL_WORKSPACE = "socialworkspace";
 
     @Inject
     protected CoreSession session;
@@ -68,98 +72,90 @@ public class TestNewsManagement {
     @Inject
     protected FeaturesRunner featuresRunner;
 
-    @Test
-    public void testFacetOnNews() throws ClientException {
-        // initialize the context by creating socialWorkspace
-        createDocumentModelInSession(
+    protected DocumentModel socialWorkspace;
+
+    protected Principal nobody;
+
+    protected Principal applicationMember;
+
+    protected Principal swMember;
+
+    protected Principal swAdministrator;
+
+    @Before
+    public void setup() throws Exception {
+
+        socialWorkspace = createDocumentModel(session,
                 session.getRootDocument().getPathAsString(),
-                TEST_NAME_SOCIAL_WORKSPACE, SOCIAL_WORKSPACE_TYPE);
+                "SocialWorkspace", SOCIAL_WORKSPACE_TYPE);
 
-        DocumentModel wrongNews = createDocumentModelInSession("/",
-                "Unpublishable Novelty", NEWS_ITEM_TYPE);
+        nobody = new NuxeoPrincipalImpl("user");
+        applicationMember = createUserWithGroup(userManager.getDefaultGroup());
+        swMember = createUserWithGroup(getSocialWorkspaceMembersGroupName(socialWorkspace));
+        swAdministrator = createUserWithGroup(getSocialWorkspaceAdministratorsGroupName(socialWorkspace));
 
-        assertTrue(wrongNews.hasFacet(SOCIAL_DOCUMENT_FACET));
+        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
+        principal.getGroups().add(getSocialWorkspaceAdministratorsGroupName(socialWorkspace));
 
-        DocumentModel correctDirectNews = session.createDocumentModel("/"
-                + TEST_NAME_SOCIAL_WORKSPACE, "Publishable Novelty", NEWS_ITEM_TYPE);
-        correctDirectNews = session.createDocument(correctDirectNews);
-        session.save();
-
-        assertTrue(correctDirectNews.hasFacet(SOCIAL_DOCUMENT_FACET));
-
-        DocumentModel folderInSocialWorkspace = createDocumentModelInSession(
-                "/" + TEST_NAME_SOCIAL_WORKSPACE, "Folder", "Folder");
-
-        DocumentModel anOtherPublishableNews = createDocumentModelInSession(
-                folderInSocialWorkspace.getPathAsString(),
-                "another publishable news", NEWS_ITEM_TYPE);
-        assertNotNull(
-                "A news could be created in a Folder within a SocialWorkspace",
-                anOtherPublishableNews);
-        assertTrue(
-                "A news created in a Folder of a SocialWorkspace should have the SocialDocument facet",
-                anOtherPublishableNews.hasFacet(SOCIAL_DOCUMENT_FACET));
-
-        DocumentModel aNoteInFolderWithinSocialWorkspace = createDocumentModelInSession(
-                "", "a lambda not", "Note");
-
-        assertNotNull(
-                "A document with out a socialDocument facet could be created in a Folder within a SocialWorkspace",
-                aNoteInFolderWithinSocialWorkspace);
-        assertFalse(
-                "A document with out a socialDocument facet created in a Folder of a SocialWorkspace shouldn't have the SocialDocument facet",
-                aNoteInFolderWithinSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
-
-    }
-
-    private DocumentModel createDocumentModelInSession(String pathAsString,
-            String name, String type) throws ClientException {
-        DocumentModel sws = session.createDocumentModel(pathAsString, name,
-                type);
-        sws = session.createDocument(sws);
-        session.save();
-        return sws;
     }
 
     @Test
-    public void testRightsOnSocialSections() throws Exception {
-        DocumentModel workspace = createDocumentModelInSession(
-                session.getRootDocument().getPathAsString(),
-                BASE_WORKSPACE_NAME, "Workspace");
-        DocumentModel socialWorkspace = createDocumentModelInSession(
-                workspace.getPathAsString(), TEST_NAME_SOCIAL_WORKSPACE,
-                SOCIAL_WORKSPACE_TYPE);
-        DocumentModel pubsec = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/"
-                        + PRIVATE_SECTION_RELATIVE_PATH));
-        assertNotNull(pubsec);
-        DocumentModel publicPubsec = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/"
-                        + PUBLIC_SECTION_RELATIVE_PATH));
+    public void testSocialWorkspaceRights() throws Exception {
 
-        ACP acp = pubsec.getACP();
-        assertFalse(acp.getAccess(userManager.getDefaultGroup(),
-                SecurityConstants.READ).toBoolean());
-        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ_WRITE).toBoolean());
-        assertTrue(
-                "The members of the social workspace should have the READ_WRIGHT right",
-                acp.getAccess(
-                        SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
-                        SecurityConstants.READ_WRITE).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
-                SecurityConstants.READ).toBoolean());
-
-        acp = publicPubsec.getACP();
-        assertFalse(acp.getAccess("u,uuie,", SecurityConstants.READ).toBoolean());
-        assertTrue(acp.getAccess(userManager.getDefaultGroup(),
-                SecurityConstants.READ).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
-                SecurityConstants.READ_WRITE).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
-                SecurityConstants.READ_WRITE).toBoolean());
+        assertFalse(session.hasPermission(nobody, socialWorkspace.getRef(), READ));
+        assertFalse(session.hasPermission(applicationMember, socialWorkspace.getRef(), READ));
+        assertTrue(session.hasPermission(swMember, socialWorkspace.getRef(), READ_WRITE));
+        assertFalse(session.hasPermission(swMember, socialWorkspace.getRef(), EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, socialWorkspace.getRef(), EVERYTHING));
     }
 
+    @Test
+    public void testPublicSectionRights() throws Exception {
+
+        PathRef publicSectionPath = SocialWorkspaceHelper.getPublicSectionPath(socialWorkspace);
+        assertTrue(session.exists(publicSectionPath));
+        assertNotNull(session.getDocument(publicSectionPath));
+
+        assertFalse(session.hasPermission(nobody, publicSectionPath, READ));
+        assertTrue(session.hasPermission(applicationMember, publicSectionPath, READ));
+        assertFalse(session.hasPermission(applicationMember, publicSectionPath, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicSectionPath, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicSectionPath, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicSectionPath, EVERYTHING));
+    }
+
+    @Test
+    public void testPrivateSectionRights() throws Exception {
+
+        PathRef privateSectionPath = SocialWorkspaceHelper.getPrivateSectionPath(socialWorkspace);
+        assertTrue(session.exists(privateSectionPath));
+        assertNotNull(session.getDocument(privateSectionPath));
+
+        assertFalse(session.hasPermission(nobody, privateSectionPath, READ));
+        assertFalse(session.hasPermission(applicationMember, privateSectionPath, READ));
+        assertTrue(session.hasPermission(swMember, privateSectionPath, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, privateSectionPath, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, privateSectionPath, EVERYTHING));
+    }
+
+    @Test
+    public void testNewsRootRights() throws Exception {
+
+        PathRef newsRootPath = SocialWorkspaceHelper.getNewsRootPath(socialWorkspace);
+        assertTrue(session.exists(newsRootPath));
+        assertNotNull(session.getDocument(newsRootPath));
+
+        assertFalse(session.hasPermission(nobody, newsRootPath, READ));
+        assertFalse(session.hasPermission(applicationMember, newsRootPath, READ));
+        assertTrue(session.hasPermission(swMember, newsRootPath, READ));
+        assertFalse(session.hasPermission(swMember, newsRootPath, WRITE));
+        assertFalse(session.hasPermission(swMember, newsRootPath, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, newsRootPath, EVERYTHING));
+    }
+
+    protected Principal createUserWithGroup(String groupName) throws ClientException {
+        NuxeoPrincipalImpl user = new NuxeoPrincipalImpl("user");
+        user.allGroups = Arrays.asList(groupName);
+        return user;
+    }
 }

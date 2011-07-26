@@ -93,6 +93,28 @@
     </type>
 
 
+    <type id="NewsRoot">
+      <label>NewsRoot</label>
+      <icon>/icons/news_root.gif</icon>
+      <bigIcon>/icons/news_root_100.png</bigIcon>
+      <default-view>view_documents</default-view>
+      <layouts mode="any">
+        <layout>heading</layout>
+      </layouts>
+      <layouts mode="summary">
+        <layout>summary_layout</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>heading</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>heading</layout>
+      </layouts>
+      <subtypes>
+        <type>NewsItem</type>
+      </subtypes>
+    </type>
+
     <type id="Workspace">
       <subtypes>
         <type>SocialWorkspace</type>
@@ -101,8 +123,6 @@
 
     <type id="Folder">
       <subtypes>
-        <type>Article</type>
-        <type>NewsItem</type>
         <type>Article</type>
         <type>File</type>
         <type>Note</type>

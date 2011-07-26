@@ -16,7 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
-import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.EventService;

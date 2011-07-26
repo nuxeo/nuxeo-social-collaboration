@@ -16,9 +16,6 @@
 
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_ACL_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
-
 import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
@@ -40,6 +37,11 @@ import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
+
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_ACL_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 
 /**
  * Class to handle social workspace document creation. It automatically creates
@@ -83,6 +85,8 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
 
         handleACPOnSocialSections(doc, session);
 
+        updateRightsForNewsRoot(doc, session);
+
         createGroup(
                 SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc),
                 SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(doc),
@@ -124,6 +128,17 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         } catch (ClientException e) {
             log.error("Cannot create group " + groupName, e);
         }
+    }
+
+    protected void updateRightsForNewsRoot(DocumentModel socialWorkspace, CoreSession session) throws ClientException {
+        PathRef newsRootPath = SocialWorkspaceHelper.getNewsRootPath(socialWorkspace);
+        DocumentModel newsRoot = session.getDocument(newsRootPath);
+
+        ACP acp = newsRoot.getACP();
+        ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
+        acl.add(new ACE(getSocialWorkspaceMembersGroupName(socialWorkspace), WRITE, false));
+        newsRoot.setACP(acp, true);
+        session.saveDocument(newsRoot);
     }
 
     protected ACL createSocialWorkspaceACL(ACP acp, DocumentModel doc)

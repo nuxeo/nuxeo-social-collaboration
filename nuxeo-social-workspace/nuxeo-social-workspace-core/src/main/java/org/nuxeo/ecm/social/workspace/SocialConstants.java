@@ -80,6 +80,8 @@ public class SocialConstants {
 
     public static final String PUBLIC_SECTION_RELATIVE_PATH = "public-section/";
 
+    public static final String NEWS_ROOT_RELATIVE_PATH = "news-root/";
+
     private SocialConstants() {
     }
 
