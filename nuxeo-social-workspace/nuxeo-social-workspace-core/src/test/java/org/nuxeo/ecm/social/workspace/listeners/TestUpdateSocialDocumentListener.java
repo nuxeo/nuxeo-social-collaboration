@@ -29,15 +29,16 @@ import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -58,35 +59,29 @@ public class TestUpdateSocialDocumentListener {
     protected CoreSession session;
 
     @Inject
-    protected UserManager userManager;
-
-    @Inject
-    protected FeaturesRunner featuresRunner;
-
-    @Inject
     protected EventService eventService;
 
-    protected DocumentModel socialWorkspace;
+    protected DocumentModel socialWorkspaceDoc;
 
-    DocumentModel privateSection;
+    protected DocumentModel privateSection;
 
-    DocumentModel publicSection;
+    protected DocumentModel publicSection;
 
     @Before
     public void setup() throws Exception {
-
-        socialWorkspace = createDocumentModel(session,
+        socialWorkspaceDoc = createDocumentModel(session,
                 session.getRootDocument().getPathAsString(),
                 "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
+        SocialWorkspace socialWorkspace = SocialWorkspaceHelper.toSocialWorkspace(socialWorkspaceDoc);
 
-        String AdministratorGroup = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
+        String AdministratorGroup = socialWorkspace.getAdministratorsGroupName();
         NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
         principal.getGroups().add(AdministratorGroup);
 
-        publicSection = SocialWorkspaceHelper.getPublicSection(session,
-                socialWorkspace);
-        privateSection = SocialWorkspaceHelper.getPrivateSection(session,
-                socialWorkspace);
+        publicSection = session.getDocument(new PathRef(
+                socialWorkspace.getPublicSectionPath()));
+        privateSection = session.getDocument(new PathRef(
+                socialWorkspace.getPrivateSectionPath()));
     }
 
     @Test
@@ -94,7 +89,7 @@ public class TestUpdateSocialDocumentListener {
             throws Exception {
 
         DocumentModel newsItem = createSocialDocument(session,
-                socialWorkspace.getPathAsString(), "A private News",
+                socialWorkspaceDoc.getPathAsString(), "A private News",
                 NEWS_ITEM_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(newsItem);
         DocumentModel initialExposedDocument = socialDocument.getRestrictedDocument();
@@ -126,7 +121,7 @@ public class TestUpdateSocialDocumentListener {
     public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
             throws Exception {
         DocumentModel article = createSocialDocument(session,
-                socialWorkspace.getPathAsString(), "A private Article",
+                socialWorkspaceDoc.getPathAsString(), "A private Article",
                 SocialConstants.ARTICLE_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(article);
         DocumentModel initialExposedDocument = socialDocument.getRestrictedDocument();

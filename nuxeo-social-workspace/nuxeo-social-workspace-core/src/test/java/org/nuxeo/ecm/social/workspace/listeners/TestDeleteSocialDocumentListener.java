@@ -18,6 +18,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,15 +29,14 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -55,36 +55,27 @@ public class TestDeleteSocialDocumentListener {
     @Inject
     protected CoreSession session;
 
-    @Inject
-    protected UserManager userManager;
+    protected DocumentModel socialWorkspaceDoc;
 
-    @Inject
-    protected FeaturesRunner featuresRunner;
+    protected DocumentModel privateSection;
 
-    @Inject
-    protected EventService eventService;
-
-    protected DocumentModel socialWorkspace;
-
-    DocumentModel privateSection;
-
-    DocumentModel publicSection;
+    protected DocumentModel publicSection;
 
     @Before
     public void setup() throws Exception {
-
-        socialWorkspace = createDocumentModel(session,
+        socialWorkspaceDoc = createDocumentModel(session,
                 session.getRootDocument().getPathAsString(),
                 "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
 
-        String AdministratorGroup = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
+        String AdministratorGroup = socialWorkspace.getAdministratorsGroupName();
         NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
         principal.getGroups().add(AdministratorGroup);
 
-        publicSection = SocialWorkspaceHelper.getPublicSection(session,
-                socialWorkspace);
-        privateSection = SocialWorkspaceHelper.getPrivateSection(session,
-                socialWorkspace);
+        publicSection = session.getDocument(new PathRef(
+                socialWorkspace.getPublicSectionPath()));
+        privateSection = session.getDocument(new PathRef(
+                socialWorkspace.getPrivateSectionPath()));
     }
 
     @Test
@@ -92,12 +83,13 @@ public class TestDeleteSocialDocumentListener {
             throws Exception {
 
         DocumentModel privateNews1 = createSocialDocument(session,
-                socialWorkspace.getPathAsString(), "A private News",
+                socialWorkspaceDoc.getPathAsString(), "A private News",
                 SocialConstants.NEWS_ITEM_TYPE, false);
 
         DocumentModel privateNews2 = createSocialDocument(session,
-                socialWorkspace.getPathAsString(), "AAA another private News",
-                SocialConstants.NEWS_ITEM_TYPE, false);
+                socialWorkspaceDoc.getPathAsString(),
+                "AAA another private News", SocialConstants.NEWS_ITEM_TYPE,
+                false);
 
         assertEquals(1, getNumberOfProxy(privateNews1));
         assertEquals(1, getNumberOfProxy(privateNews2));
@@ -108,7 +100,7 @@ public class TestDeleteSocialDocumentListener {
         assertEquals(1, getNumberOfProxy(privateNews2));
 
         DocumentModel publicNews = createSocialDocument(session,
-                socialWorkspace.getPathAsString(), "A public news",
+                socialWorkspaceDoc.getPathAsString(), "A public news",
                 SocialConstants.NEWS_ITEM_TYPE, true);
         assertEquals(1, getNumberOfProxy(publicNews));
 
@@ -127,7 +119,7 @@ public class TestDeleteSocialDocumentListener {
             throws Exception {
 
         DocumentModel privateArticle1 = createSocialDocument(session,
-                socialWorkspace.getPathAsString(), "A private News",
+                socialWorkspaceDoc.getPathAsString(), "A private News",
                 SocialConstants.ARTICLE_TYPE, false);
 
         assertEquals(0, getNumberOfProxy(privateArticle1));
@@ -136,7 +128,7 @@ public class TestDeleteSocialDocumentListener {
         assertEquals(0, getNumberOfProxy(privateArticle1));
 
         DocumentModel publicArticle = createSocialDocument(session,
-                socialWorkspace.getPathAsString(), "A public news",
+                socialWorkspaceDoc.getPathAsString(), "A public news",
                 SocialConstants.NEWS_ITEM_TYPE, true);
 
         assertEquals(1, getNumberOfProxy(publicArticle));

@@ -19,10 +19,10 @@ package org.nuxeo.ecm.social.workspace.gadgets;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_INFO;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,9 +72,9 @@ public class JoinSocialWorkspaceRequest {
 
         String currentUser = session.getPrincipal().getName();
 
-        boolean isRestricted = (Boolean) sws.getPropertyValue(FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION);
+        boolean mustApproveSubscription = toSocialWorkspace(sws).mustApproveSubscription();
 
-        if (isRestricted) {
+        if (mustApproveSubscription) {
             if (SocialGroupsManagement.isRequestPending(sws, currentUser)) {
                 log.debug(String.format(
                         "there is already a join request from '%s' on '%s' ",

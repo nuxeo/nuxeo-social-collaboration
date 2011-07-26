@@ -21,10 +21,9 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +38,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -69,7 +68,7 @@ public class TestNewsManagementWithoutLocalConfig {
     @Inject
     protected UserManager userManager;
 
-    protected DocumentModel socialWorkspace;
+    protected DocumentModel socialWorkspaceDoc;
 
     @Before
     public void setup() throws Exception {
@@ -77,22 +76,20 @@ public class TestNewsManagementWithoutLocalConfig {
                 session.getRootDocument().getPathAsString(),
                 BASE_WORKSPACE_NAME, "Workspace");
 
-        socialWorkspace = createDocumentModel(session,
+        socialWorkspaceDoc = createDocumentModel(session,
                 workspace.getPathAsString(), TEST_NAME_SOCIAL_WORKSPACE,
                 SOCIAL_WORKSPACE_TYPE);
-
     }
 
     @Test
     public void testRightsOnSocialSections() throws Exception {
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
 
         DocumentModel privateSection = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/"
-                        + PRIVATE_SECTION_RELATIVE_PATH));
+                socialWorkspace.getPrivateSectionPath()));
         assertNotNull(privateSection);
         DocumentModel publicSection = session.getDocument(new PathRef(
-                socialWorkspace.getPathAsString() + "/"
-                        + PUBLIC_SECTION_RELATIVE_PATH));
+                socialWorkspace.getPublicSectionPath()));
         assertNotNull(privateSection);
 
         ACP acp = privateSection.getACP();
@@ -101,21 +98,16 @@ public class TestNewsManagementWithoutLocalConfig {
         assertFalse(acp.getAccess("u,uuie,", READ_WRITE).toBoolean());
         assertTrue(
                 "The members of the social workspace should have the READ_WRIGHT right",
-                acp.getAccess(
-                        SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
-                        READ_WRITE).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
+                acp.getAccess(socialWorkspace.getMembersGroupName(), READ_WRITE).toBoolean());
+        assertTrue(acp.getAccess(socialWorkspace.getAdministratorsGroupName(),
                 READ).toBoolean());
 
         acp = publicSection.getACP();
         assertTrue(acp.getAccess("u,uuie,", READ).toBoolean());
         assertTrue(acp.getAccess(userManager.getDefaultGroup(), READ).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
+        assertTrue(acp.getAccess(socialWorkspace.getMembersGroupName(),
                 READ_WRITE).toBoolean());
-        assertTrue(acp.getAccess(
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
+        assertTrue(acp.getAccess(socialWorkspace.getAdministratorsGroupName(),
                 READ_WRITE).toBoolean());
     }
 

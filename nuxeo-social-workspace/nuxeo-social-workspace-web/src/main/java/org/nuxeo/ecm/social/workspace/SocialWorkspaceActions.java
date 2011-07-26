@@ -29,6 +29,7 @@ import org.jboss.seam.annotations.Scope;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
 /**
@@ -48,16 +49,14 @@ public class SocialWorkspaceActions implements Serializable {
     @In(create = true)
     protected transient NuxeoPrincipal currentUser;
 
-    public boolean isCurrentUserMemberOrAdministratorOfCurrentSocialWorkspace() {
-        DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        return isUserMemberOrAdministratorOfSocialWorkspace(currentUser,
-                currentDocument);
+    public SocialWorkspace toSocialWorkspace(DocumentModel doc) {
+        return SocialWorkspaceHelper.toSocialWorkspace(doc);
     }
 
-    public boolean isUserMemberOrAdministratorOfSocialWorkspace(
-            NuxeoPrincipal principal, DocumentModel socialWorkspace) {
-        return SocialWorkspaceHelper.isMemberOrAdministratorOfSocialWorkspace(
-                principal, socialWorkspace);
+    public boolean isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        SocialWorkspace socialWorkspace = toSocialWorkspace(currentDocument);
+        return socialWorkspace.isAdministratorOrMember(currentUser);
     }
 
 }

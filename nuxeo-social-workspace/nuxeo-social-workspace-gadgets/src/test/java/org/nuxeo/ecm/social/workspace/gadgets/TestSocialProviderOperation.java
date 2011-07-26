@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace.gadgets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -126,7 +127,8 @@ public class TestSocialProviderOperation {
 
         // remove current user from admins of sws2
         DocumentModel sws = session.getDocument(new PathRef("/sws2"));
-        DocumentModel group = userManager.getGroupModel(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws));
+        SocialWorkspace socialWorkspace = toSocialWorkspace(sws);
+        DocumentModel group = userManager.getGroupModel(socialWorkspace.getAdministratorsGroupName());
         @SuppressWarnings("unchecked")
         List<String> list = (List<String>) group.getProperty(
                 userManager.getGroupSchemaName(), "members");

@@ -19,11 +19,12 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
 /**
- * Default implementation of @{see SocialWorkspaceService} service
+ * Default implementation of {@see SocialWorkspaceService} service.
  */
 public class SocialWorkspaceComponent extends DefaultComponent implements
         SocialWorkspaceService {
@@ -46,6 +47,14 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 validationDays = config.getValidationTimeInDays();
             }
         }
+    }
+
+    @Override
+    public void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace) {
+    }
+
+    @Override
+    public void makeSocialWorkspacePrivate(SocialWorkspace socialWorkspace) {
     }
 
 }

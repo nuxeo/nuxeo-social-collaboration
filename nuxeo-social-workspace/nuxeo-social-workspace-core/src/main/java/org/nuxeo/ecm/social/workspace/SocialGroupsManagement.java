@@ -17,6 +17,7 @@
 package org.nuxeo.ecm.social.workspace;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.InputStream;
 import java.util.List;
@@ -31,7 +32,6 @@ import org.nuxeo.ecm.automation.core.operations.notification.SendMail;
 import org.nuxeo.ecm.automation.core.scripting.Expression;
 import org.nuxeo.ecm.automation.core.scripting.Scripting;
 import org.nuxeo.ecm.automation.core.util.StringList;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -39,8 +39,8 @@ import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -68,45 +68,34 @@ public class SocialGroupsManagement {
 
     public static boolean acceptMember(DocumentModel sws, String user)
             throws Exception {
-        DocumentModel principal = getUserManager().getUserModel(user);
+        UserManager userManager = getUserManager();
+        NuxeoPrincipal principal = userManager.getPrincipal(user);
 
-        @SuppressWarnings("unchecked")
-        List<String> groups = (List<String>) principal.getProperty(
-                getUserManager().getUserSchemaName(), "groups");
-        if (groups.contains(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws))) {
+        SocialWorkspace socialWorkspace = toSocialWorkspace(sws);
+        if (socialWorkspace.isAdministrator(principal)) {
             log.info(String.format("%s is already an administrator of %s (%s)",
                     user, sws.getTitle(), sws.getPathAsString()));
             return false;
         }
-        String membersGroup = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws);
-        if (groups.contains(membersGroup)) { // already a member
+        if (socialWorkspace.isMember(principal)) {
             log.info(String.format("%s is already a member of %s (%s)", user,
                     sws.getTitle(), sws.getPathAsString()));
             return false;
         }
-        groups.add(membersGroup);
-        principal.setProperty(getUserManager().getUserSchemaName(), "groups",
+
+        List<String> groups = principal.getGroups();
+        groups.add(socialWorkspace.getMembersGroupName());
+
+        DocumentModel userModel = principal.getModel();
+        userModel.setProperty(getUserManager().getUserSchemaName(), "groups",
                 groups);
-        getUserManager().updateUser(principal);
+        userManager.updateUser(userModel);
         return true;
-    }
-
-    public static boolean isMember(DocumentModel sws, String user)
-            throws Exception {
-        NuxeoPrincipal nuxeoPrincipal = getUserManager().getPrincipal(user);
-        List<String> groups = nuxeoPrincipal.getGroups();
-        if (groups.contains(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws))) {
-            return true;
-        }
-
-        String membersGroup = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws);
-        return groups.contains(membersGroup);
     }
 
     public static boolean isRequestPending(DocumentModel sws, String user)
             throws Exception {
-        CoreSession session = CoreInstance.getInstance().getSession(
-                sws.getSessionId());
+        CoreSession session = sws.getCoreSession();
         String queryTemplate = "SELECT * FROM Request WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
         String query = String.format(queryTemplate, REQUEST_TYPE_JOIN, user,
                 sws.getId());
@@ -116,8 +105,7 @@ public class SocialGroupsManagement {
 
     public static void notifyUser(DocumentModel socialWorkspace,
             String username, boolean accepted) throws Exception {
-        CoreSession session = CoreInstance.getInstance().getSession(
-                socialWorkspace.getSessionId());
+        CoreSession session = socialWorkspace.getCoreSession();
         NuxeoPrincipal principal = getUserManager().getPrincipal(username);
         String email = principal.getEmail();
 
@@ -149,13 +137,12 @@ public class SocialGroupsManagement {
     }
 
     public static void notifyAdmins(DocumentModel request) throws Exception {
-        CoreSession session = CoreInstance.getInstance().getSession(
-                request.getSessionId());
+        CoreSession session = request.getCoreSession();
         SubscriptionRequest requestAdapter = request.getAdapter(SubscriptionRequest.class);
 
         DocumentModel socialWorkspace = session.getDocument(new IdRef(
                 requestAdapter.getInfo()));
-        String adminGroupName = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
+        String adminGroupName = toSocialWorkspace(socialWorkspace).getAdministratorsGroupName();
         NuxeoGroup adminGroup = getUserManager().getGroup(adminGroupName);
         List<String> admins = adminGroup.getMemberUsers();
         if (admins == null || admins.isEmpty()) {

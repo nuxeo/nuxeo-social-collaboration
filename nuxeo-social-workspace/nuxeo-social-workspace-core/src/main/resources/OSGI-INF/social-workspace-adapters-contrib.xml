@@ -7,20 +7,17 @@
 
   <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService"
     point="adapters">
-    <adapter class="org.nuxeo.ecm.social.workspace.adapters.Article"
-      factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
-  </extension>
 
-  <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService"
-    point="adapters">
+    <adapter class="org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace"
+      factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
     <adapter class="org.nuxeo.ecm.social.workspace.adapters.SocialDocument"
       factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
-  </extension>
-
-   <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService"
-    point="adapters">
+    <adapter class="org.nuxeo.ecm.social.workspace.adapters.Article"
+      factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
     <adapter class="org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest"
       factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
+
   </extension>
+
 
 </component>

@@ -16,6 +16,17 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+
 import java.security.Principal;
 import java.util.Arrays;
 
@@ -34,26 +45,13 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
-
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
@@ -72,7 +70,7 @@ public class TestNewsManagement {
     @Inject
     protected FeaturesRunner featuresRunner;
 
-    protected DocumentModel socialWorkspace;
+    protected DocumentModel socialWorkspaceDoc;
 
     protected Principal nobody;
 
@@ -85,75 +83,96 @@ public class TestNewsManagement {
     @Before
     public void setup() throws Exception {
 
-        socialWorkspace = createDocumentModel(session,
-                session.getRootDocument().getPathAsString(),
-                "SocialWorkspace", SOCIAL_WORKSPACE_TYPE);
+        socialWorkspaceDoc = createDocumentModel(session,
+                session.getRootDocument().getPathAsString(), "SocialWorkspace",
+                SOCIAL_WORKSPACE_TYPE);
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
 
         nobody = new NuxeoPrincipalImpl("user");
         applicationMember = createUserWithGroup(userManager.getDefaultGroup());
-        swMember = createUserWithGroup(getSocialWorkspaceMembersGroupName(socialWorkspace));
-        swAdministrator = createUserWithGroup(getSocialWorkspaceAdministratorsGroupName(socialWorkspace));
+        swMember = createUserWithGroup(socialWorkspace.getMembersGroupName());
+        swAdministrator = createUserWithGroup(socialWorkspace.getAdministratorsGroupName());
 
         NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
-        principal.getGroups().add(getSocialWorkspaceAdministratorsGroupName(socialWorkspace));
+        principal.getGroups().add(socialWorkspace.getAdministratorsGroupName());
 
     }
 
     @Test
     public void testSocialWorkspaceRights() throws Exception {
 
-        assertFalse(session.hasPermission(nobody, socialWorkspace.getRef(), READ));
-        assertFalse(session.hasPermission(applicationMember, socialWorkspace.getRef(), READ));
-        assertTrue(session.hasPermission(swMember, socialWorkspace.getRef(), READ_WRITE));
-        assertFalse(session.hasPermission(swMember, socialWorkspace.getRef(), EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, socialWorkspace.getRef(), EVERYTHING));
+        assertFalse(session.hasPermission(nobody, socialWorkspaceDoc.getRef(),
+                READ));
+        assertFalse(session.hasPermission(applicationMember,
+                socialWorkspaceDoc.getRef(), READ));
+        assertTrue(session.hasPermission(swMember, socialWorkspaceDoc.getRef(),
+                READ_WRITE));
+        assertFalse(session.hasPermission(swMember,
+                socialWorkspaceDoc.getRef(), EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator,
+                socialWorkspaceDoc.getRef(), EVERYTHING));
     }
 
     @Test
     public void testPublicSectionRights() throws Exception {
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
+        PathRef publicSectionPathRef = new PathRef(
+                socialWorkspace.getPublicSectionPath());
+        assertTrue(session.exists(publicSectionPathRef));
+        assertNotNull(session.getDocument(publicSectionPathRef));
 
-        PathRef publicSectionPath = SocialWorkspaceHelper.getPublicSectionPath(socialWorkspace);
-        assertTrue(session.exists(publicSectionPath));
-        assertNotNull(session.getDocument(publicSectionPath));
-
-        assertFalse(session.hasPermission(nobody, publicSectionPath, READ));
-        assertTrue(session.hasPermission(applicationMember, publicSectionPath, READ));
-        assertFalse(session.hasPermission(applicationMember, publicSectionPath, READ_WRITE));
-        assertTrue(session.hasPermission(swMember, publicSectionPath, READ_WRITE));
-        assertFalse(session.hasPermission(swMember, publicSectionPath, EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, publicSectionPath, EVERYTHING));
+        assertFalse(session.hasPermission(nobody, publicSectionPathRef, READ));
+        assertTrue(session.hasPermission(applicationMember,
+                publicSectionPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember,
+                publicSectionPathRef, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicSectionPathRef,
+                READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicSectionPathRef,
+                EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef,
+                EVERYTHING));
     }
 
     @Test
     public void testPrivateSectionRights() throws Exception {
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
+        PathRef privateSectionPathRef = new PathRef(
+                socialWorkspace.getPrivateSectionPath());
+        assertTrue(session.exists(privateSectionPathRef));
+        assertNotNull(session.getDocument(privateSectionPathRef));
 
-        PathRef privateSectionPath = SocialWorkspaceHelper.getPrivateSectionPath(socialWorkspace);
-        assertTrue(session.exists(privateSectionPath));
-        assertNotNull(session.getDocument(privateSectionPath));
-
-        assertFalse(session.hasPermission(nobody, privateSectionPath, READ));
-        assertFalse(session.hasPermission(applicationMember, privateSectionPath, READ));
-        assertTrue(session.hasPermission(swMember, privateSectionPath, READ_WRITE));
-        assertFalse(session.hasPermission(swMember, privateSectionPath, EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, privateSectionPath, EVERYTHING));
+        assertFalse(session.hasPermission(nobody, privateSectionPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember,
+                privateSectionPathRef, READ));
+        assertTrue(session.hasPermission(swMember, privateSectionPathRef,
+                READ_WRITE));
+        assertFalse(session.hasPermission(swMember, privateSectionPathRef,
+                EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator,
+                privateSectionPathRef, EVERYTHING));
     }
 
     @Test
     public void testNewsRootRights() throws Exception {
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
+        PathRef newsRootPathRef = new PathRef(socialWorkspace.getNewsRootPath());
 
-        PathRef newsRootPath = SocialWorkspaceHelper.getNewsRootPath(socialWorkspace);
-        assertTrue(session.exists(newsRootPath));
-        assertNotNull(session.getDocument(newsRootPath));
+        assertTrue(session.exists(newsRootPathRef));
+        assertNotNull(session.getDocument(newsRootPathRef));
 
-        assertFalse(session.hasPermission(nobody, newsRootPath, READ));
-        assertFalse(session.hasPermission(applicationMember, newsRootPath, READ));
-        assertTrue(session.hasPermission(swMember, newsRootPath, READ));
-        assertFalse(session.hasPermission(swMember, newsRootPath, WRITE));
-        assertFalse(session.hasPermission(swMember, newsRootPath, EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, newsRootPath, EVERYTHING));
+        assertFalse(session.hasPermission(nobody, newsRootPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, newsRootPathRef,
+                READ));
+        assertTrue(session.hasPermission(swMember, newsRootPathRef, READ));
+        assertFalse(session.hasPermission(swMember, newsRootPathRef, WRITE));
+        assertFalse(session.hasPermission(swMember, newsRootPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, newsRootPathRef,
+                EVERYTHING));
     }
 
-    protected Principal createUserWithGroup(String groupName) throws ClientException {
+    protected Principal createUserWithGroup(String groupName)
+            throws ClientException {
         NuxeoPrincipalImpl user = new NuxeoPrincipalImpl("user");
         user.allGroups = Arrays.asList(groupName);
         return user;

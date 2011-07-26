@@ -23,6 +23,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.listeners.VisibilitySocialDocumentListener;
@@ -37,7 +38,7 @@ public class SocialDocumentAdapter implements SocialDocument {
 
     protected DocumentModel sourceDocument;
 
-    protected DocumentModel socialWorkspace;
+    protected SocialWorkspace socialWorkspace;
 
     protected DocumentModel privateSocialSection;
 
@@ -66,38 +67,28 @@ public class SocialDocumentAdapter implements SocialDocument {
                             + sourceDocument.getPathAsString());
         }
 
-        socialWorkspace = SocialWorkspaceHelper.getSocialWorkspaceContainer(
+        DocumentModel socialWorkspaceDoc = SocialWorkspaceHelper.getSocialWorkspaceContainer(
                 getSession(), sourceDocument.getRef());
-        if (socialWorkspace == null) {
+        if (socialWorkspaceDoc == null) {
             throw new ClientException(
                     "Given document is not into a social workspace");
         }
-
+        socialWorkspace = SocialWorkspaceHelper.toSocialWorkspace(socialWorkspaceDoc);
     }
 
     protected DocumentModel getPrivateSection() throws ClientException {
-        DocumentRef pathRef = SocialWorkspaceHelper.getPrivateSectionPath(socialWorkspace);
+        DocumentRef pathRef = new PathRef(
+                socialWorkspace.getPrivateSectionPath());
         if (privateSocialSection == null) {
-            if (!getSession().exists(pathRef)) {
-                throw new ClientException(
-                        "Private section of the following social "
-                                + "workspace has not been created, please check : "
-                                + socialWorkspace.getPathAsString());
-            }
             privateSocialSection = getSession().getDocument(pathRef);
         }
         return privateSocialSection;
     }
 
     protected DocumentModel getPublicSection() throws ClientException {
-        DocumentRef pathRef = SocialWorkspaceHelper.getPublicSectionPath(socialWorkspace);
+        DocumentRef pathRef = new PathRef(
+                socialWorkspace.getPublicSectionPath());
         if (publicSocialSection == null) {
-            if (!getSession().exists(pathRef)) {
-                throw new ClientException(
-                        "Public section of the following social "
-                                + "workspace has not been created, please check : "
-                                + socialWorkspace.getPathAsString());
-            }
             publicSocialSection = getSession().getDocument(pathRef);
         }
         return publicSocialSection;

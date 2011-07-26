@@ -17,6 +17,8 @@
 package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +29,7 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -58,12 +60,13 @@ public class RemoveSocialWorkspaceGroupListener implements EventListener {
         }
 
         DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
-        if (!SocialWorkspaceHelper.isSocialWorkspace(doc)) {
+        if (!isSocialWorkspace(doc)) {
             return;
         }
 
-        deleteGroup(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc));
-        deleteGroup(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc));
+        SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
+        deleteGroup(socialWorkspace.getAdministratorsGroupName());
+        deleteGroup(socialWorkspace.getMembersGroupName());
     }
 
     private void deleteGroup(String groupName) {

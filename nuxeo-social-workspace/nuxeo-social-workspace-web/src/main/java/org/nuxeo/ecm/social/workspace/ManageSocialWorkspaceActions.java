@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace;
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
 
@@ -35,7 +36,6 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 
 /**
@@ -64,10 +64,10 @@ public class ManageSocialWorkspaceActions implements Serializable {
     protected DocumentModel membersGroup;
 
     @In(create = true)
-    protected UserManager userManager;
+    protected transient UserManager userManager;
 
     @In(create = true)
-    protected NavigationContext navigationContext;
+    protected transient NavigationContext navigationContext;
 
     @In(create = true, required = false)
     protected FacesMessages facesMessages;
@@ -76,18 +76,22 @@ public class ManageSocialWorkspaceActions implements Serializable {
     protected ResourcesAccessor resourcesAccessor;
 
     @In(create = true)
-    protected CoreSession documentManager;
+    protected transient CoreSession documentManager;
 
     public DocumentModel getAdministratorsGroup() throws ClientException {
         if (administratorsGroup == null) {
-            administratorsGroup = userManager.getGroupModel(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(navigationContext.getCurrentDocument()));
+            DocumentModel currentDocument = navigationContext.getCurrentDocument();
+            administratorsGroup = userManager.getGroupModel(toSocialWorkspace(
+                    currentDocument).getAdministratorsGroupName());
         }
         return administratorsGroup;
     }
 
     public DocumentModel getMembersGroup() throws ClientException {
         if (membersGroup == null) {
-            membersGroup = userManager.getGroupModel(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(navigationContext.getCurrentDocument()));
+            DocumentModel currentDocument = navigationContext.getCurrentDocument();
+            membersGroup = userManager.getGroupModel(toSocialWorkspace(
+                    currentDocument).getMembersGroupName());
         }
         return membersGroup;
     }

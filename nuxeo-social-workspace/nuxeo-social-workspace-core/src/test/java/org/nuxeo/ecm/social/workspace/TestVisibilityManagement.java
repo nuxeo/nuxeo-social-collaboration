@@ -32,6 +32,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WOR
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +65,7 @@ import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.listeners.CheckSocialWorkspaceValidationTasks;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -128,13 +129,14 @@ public class TestVisibilityManagement {
     @Before
     public void setUp() throws Exception {
 
-        DocumentModel socialWorkspace = createDocumentModel(session, "/",
+        DocumentModel socialWorkspaceDoc = createDocumentModel(session, "/",
                 SOCIAL_WORKSPACE_NAME, SOCIAL_WORKSPACE_TYPE);
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
 
-        socialWorkspacePath = socialWorkspace.getPathAsString();
+        socialWorkspacePath = socialWorkspaceDoc.getPathAsString();
 
-        String memberGroup = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace);
-        String AdministratorGroup = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
+        String memberGroup = socialWorkspace.getMembersGroupName();
+        String AdministratorGroup = socialWorkspace.getAdministratorsGroupName();
 
         NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
         principal.getGroups().add(AdministratorGroup);

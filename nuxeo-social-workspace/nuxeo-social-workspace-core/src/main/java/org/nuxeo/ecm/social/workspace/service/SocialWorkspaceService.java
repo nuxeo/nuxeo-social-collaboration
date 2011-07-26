@@ -19,8 +19,10 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+
 /**
- * Service interface for Social Workspace
+ * Service interface for Social Workspace.
  */
 public interface SocialWorkspaceService {
 
@@ -31,5 +33,9 @@ public interface SocialWorkspaceService {
      * @return number of days
      */
     int getValidationDays();
+
+    void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace);
+
+    void makeSocialWorkspacePrivate(SocialWorkspace socialWorkspace);
 
 }

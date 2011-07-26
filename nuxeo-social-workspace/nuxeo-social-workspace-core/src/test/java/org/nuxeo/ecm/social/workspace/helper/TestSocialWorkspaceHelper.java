@@ -19,20 +19,19 @@ package org.nuxeo.ecm.social.workspace.helper;
 import static org.junit.Assert.assertEquals;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -55,46 +54,30 @@ public class TestSocialWorkspaceHelper {
     @Inject
     protected CoreSession session;
 
-    @Inject
-    protected UserManager userManager;
+    protected DocumentModel socialWorkspaceDoc;
 
-    @Inject
-    protected FeaturesRunner featuresRunner;
-
-    @Inject
-    protected EventService eventService;
-
-    protected DocumentModel socialWorkspace;
+    protected SocialWorkspace socialWorkspace;
 
     @Before
     public void setup() throws Exception {
-        socialWorkspace = createDocumentModel(session,
+        socialWorkspaceDoc = createDocumentModel(session,
                 session.getRootDocument().getPathAsString(),
                 "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
-
-        String AdministratorGroup = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
-        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
-        principal.getGroups().add(AdministratorGroup);
-
+        socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
     }
 
     @Test
     public void testShouldReturnGroupNames() {
-        String idSW = socialWorkspace.getId();
-        String labelSW = socialWorkspace.getName();
+        String idSW = socialWorkspaceDoc.getId();
+        String labelSW = socialWorkspaceDoc.getName();
 
-        assertEquals(
-                idSW + "_administrators",
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace));
-        assertEquals(
-                "Administrators of " + labelSW,
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(socialWorkspace));
-        assertEquals(
-                idSW + "_members",
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace));
-        assertEquals(
-                "Members of " + labelSW,
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(socialWorkspace));
+        assertEquals(idSW + "_administrators",
+                socialWorkspace.getAdministratorsGroupName());
+        assertEquals("Administrators of " + labelSW,
+                socialWorkspace.getAdministratorsGroupLabel());
+        assertEquals(idSW + "_members", socialWorkspace.getMembersGroupName());
+        assertEquals("Members of " + labelSW,
+                socialWorkspace.getMembersGroupLabel());
     }
 
 }

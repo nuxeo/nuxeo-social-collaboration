@@ -17,9 +17,9 @@
 
 package org.nuxeo.ecm.social.workspace.helper;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ROOT_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ROOT_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
@@ -31,9 +31,8 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 
 /**
  * Class to provide around Social Workspace.
@@ -73,7 +72,7 @@ public class SocialWorkspaceHelper {
         } catch (ClientException e) {
             log.warn("Cannot retrieve document title to build administrators group label: "
                     + doc.getId());
-            log.debug("Exception occurred:", e);
+            log.debug(e, e);
             return null;
         }
     }
@@ -84,27 +83,9 @@ public class SocialWorkspaceHelper {
         } catch (ClientException e) {
             log.warn("Cannot retrieve document title to build members group label: "
                     + doc.getId());
-            log.debug("Exception occurred:", e);
+            log.debug(e, e);
             return null;
         }
-    }
-
-    public static boolean isMemberOfSocialWorkspace(NuxeoPrincipal principal,
-            DocumentModel socialWorkspace) {
-        String memberGroup = getSocialWorkspaceMembersGroupName(socialWorkspace);
-        return principal.isMemberOf(memberGroup);
-    }
-
-    public static boolean isAdministratorOfSocialWorkspace(
-            NuxeoPrincipal principal, DocumentModel socialWorkspace) {
-        String memberGroup = getSocialWorkspaceAdministratorsGroupName(socialWorkspace);
-        return principal.isMemberOf(memberGroup);
-    }
-
-    public static boolean isMemberOrAdministratorOfSocialWorkspace(
-            NuxeoPrincipal principal, DocumentModel socialWorkspace) {
-        return isMemberOfSocialWorkspace(principal, socialWorkspace)
-                || isAdministratorOfSocialWorkspace(principal, socialWorkspace);
     }
 
     public static boolean isSocialWorkspace(DocumentModel doc) {
@@ -114,6 +95,14 @@ public class SocialWorkspaceHelper {
     public static boolean isSocialDocument(DocumentModel doc) {
         return doc != null && !doc.isProxy()
                 && doc.hasFacet(SOCIAL_DOCUMENT_FACET);
+    }
+
+    public static SocialWorkspace toSocialWorkspace(DocumentModel doc) {
+        return doc.getAdapter(SocialWorkspace.class);
+    }
+
+    public static SocialDocument toSocialDocument(DocumentModel doc) {
+        return doc.getAdapter(SocialDocument.class);
     }
 
     /**
@@ -133,47 +122,33 @@ public class SocialWorkspaceHelper {
         return null;
     }
 
-    public static PathRef getPrivateSectionPath(DocumentModel socialWorkspace) {
+    public static String getPrivateSectionPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
             throw new IllegalArgumentException(
                     "Given social workspace is null, can't return the private section");
         }
-        return new PathRef(socialWorkspace.getPathAsString() + "/"
-                + PRIVATE_SECTION_RELATIVE_PATH);
+        return socialWorkspace.getPathAsString() + "/"
+                + PRIVATE_SECTION_RELATIVE_PATH;
     }
 
-    public static PathRef getPublicSectionPath(DocumentModel socialWorkspace) {
-        if (socialWorkspace == null) {
-            throw new IllegalArgumentException(
-                    "Given social workspace is null, can't return the private section");
-        }
-
-        return new PathRef(socialWorkspace.getPathAsString() + "/"
-                + PUBLIC_SECTION_RELATIVE_PATH);
-    }
-
-    public static PathRef getNewsRootPath(DocumentModel socialWorkspace) {
+    public static String getPublicSectionPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
             throw new IllegalArgumentException(
                     "Given social workspace is null, can't return the private section");
         }
 
-        return new PathRef(socialWorkspace.getPathAsString() + "/"
-                + NEWS_ROOT_RELATIVE_PATH);
+        return socialWorkspace.getPathAsString() + "/"
+                + PUBLIC_SECTION_RELATIVE_PATH;
     }
 
-    public static DocumentModel getPrivateSection(CoreSession session,
-            DocumentModel socialWorkspace) throws ClientException {
-        return session.getDocument(getPrivateSectionPath(socialWorkspace));
-    }
+    public static String getNewsRootPath(DocumentModel socialWorkspace) {
+        if (socialWorkspace == null) {
+            throw new IllegalArgumentException(
+                    "Given social workspace is null, can't return the private section");
+        }
 
-    public static DocumentModel getPublicSection(CoreSession session,
-            DocumentModel socialWorkspace) throws ClientException {
-        return session.getDocument(getPublicSectionPath(socialWorkspace));
-    }
-
-    public static SocialDocument toSocialDocument(DocumentModel doc) {
-        return doc.getAdapter(SocialDocument.class);
+        return socialWorkspace.getPathAsString() + "/"
+                + NEWS_ROOT_RELATIVE_PATH;
     }
 
 }

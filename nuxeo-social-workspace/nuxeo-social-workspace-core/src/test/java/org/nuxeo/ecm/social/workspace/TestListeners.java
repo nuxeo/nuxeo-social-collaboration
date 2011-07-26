@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
 
@@ -42,7 +43,7 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.core.versioning.VersioningService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -81,21 +82,20 @@ public class TestListeners {
         DocumentModel sws = createDocumentModel(
                 session.getRootDocument().getPathAsString(),
                 SOCIAL_WORKSPACE_NAME, "SocialWorkspace");
+        SocialWorkspace socialWorkspace = toSocialWorkspace(sws);
 
         assertNotNull(userManager);
-        String adminGroupName = SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws);
+        String adminGroupName = socialWorkspace.getAdministratorsGroupName();
         DocumentModel adminGroup = userManager.getGroupModel(adminGroupName);
         assertNotNull(adminGroup);
-        assertEquals(
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(sws),
+        assertEquals(socialWorkspace.getAdministratorsGroupLabel(),
                 adminGroup.getProperty(userManager.getGroupSchemaName(),
                         userManager.getGroupLabelField()));
 
-        String membersGroupName = SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws);
+        String membersGroupName = socialWorkspace.getMembersGroupName();
         DocumentModel membersGroup = userManager.getGroupModel(membersGroupName);
         assertNotNull(membersGroup);
-        assertEquals(
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(sws),
+        assertEquals(socialWorkspace.getMembersGroupLabel(),
                 membersGroup.getProperty(userManager.getGroupSchemaName(),
                         userManager.getGroupLabelField()));
 

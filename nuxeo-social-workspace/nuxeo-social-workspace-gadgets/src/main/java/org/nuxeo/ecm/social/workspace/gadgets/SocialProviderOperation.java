@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.Constants;
@@ -36,7 +37,6 @@ import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.SortInfo;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
@@ -45,7 +45,6 @@ import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.platform.query.core.CoreQueryPageProviderDescriptor;
 import org.nuxeo.ecm.platform.query.nxql.CoreQueryDocumentPageProvider;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -132,8 +131,7 @@ public class SocialProviderOperation {
             targetPageSize = new Long(pageSize);
         }
 
-        if (socialWorkspacePath == null
-                && socialWorkspacePath.trim().length() == 0) {
+        if (StringUtils.isBlank(socialWorkspacePath)) {
             return EMPTY_LIST;
         }
 
@@ -188,27 +186,6 @@ public class SocialProviderOperation {
             }
         }
         return sortInfos;
-    }
-
-    protected boolean isMember(String principal, DocumentModel sws) {
-        if (principal == null || sws == null) {
-            return false;
-        }
-        if (userManager == null) {
-            return false;
-        }
-        try {
-            NuxeoPrincipal nuxeoPrincipal = userManager.getPrincipal(principal);
-            if (nuxeoPrincipal.isMemberOf(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(sws))) {
-                return true;
-            }
-            if (nuxeoPrincipal.isMemberOf(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(sws))) {
-                return true;
-            }
-        } catch (Exception e) {
-            log.debug("can't find the principal: " + principal, e);
-        }
-        return false;
     }
 
 }

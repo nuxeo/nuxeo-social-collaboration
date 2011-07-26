@@ -49,4 +49,9 @@ public abstract class BaseAdapter {
             throw new ClientRuntimeException(e);
         }
     }
+
+    public DocumentModel getDocument() {
+        return doc;
+    }
+
 }

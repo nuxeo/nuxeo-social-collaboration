@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010 Nuxeo SAS (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2011 Nuxeo SAS (http://nuxeo.com/) and contributors.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
@@ -11,10 +11,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  * Contributors:
- * Nuxeo - initial API and implementation
+ *     Nuxeo - initial API and implementation
  */
 
 package org.nuxeo.ecm.social.workspace.listeners;
+
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_ACL_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.util.Arrays;
 
@@ -35,17 +40,13 @@ import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.api.Framework;
 
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_ACL_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
-
 /**
  * Class to handle social workspace document creation. It automatically creates
- * two groups :
+ * two groups:
  * <ul>
  * <li>{doc_id}_administrators : with an EVERYTHING permission</li>
  * <li>{doc_id}_members : with a READ_WRITE permission</li>
@@ -130,13 +131,15 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         }
     }
 
-    protected void updateRightsForNewsRoot(DocumentModel socialWorkspace, CoreSession session) throws ClientException {
-        PathRef newsRootPath = SocialWorkspaceHelper.getNewsRootPath(socialWorkspace);
+    protected void updateRightsForNewsRoot(DocumentModel socialWorkspaceDoc,
+            CoreSession session) throws ClientException {
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
+        PathRef newsRootPath = new PathRef(socialWorkspace.getNewsRootPath());
         DocumentModel newsRoot = session.getDocument(newsRootPath);
 
         ACP acp = newsRoot.getACP();
         ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
-        acl.add(new ACE(getSocialWorkspaceMembersGroupName(socialWorkspace), WRITE, false));
+        acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
         newsRoot.setACP(acp, true);
         session.saveDocument(newsRoot);
     }
@@ -144,7 +147,8 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
     protected ACL createSocialWorkspaceACL(ACP acp, DocumentModel doc)
             throws ClientException {
         ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
-        grantSpecificSocialWorkspaceRights(doc, acl);
+        SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
+        grantSpecificSocialWorkspaceRights(socialWorkspace, acl);
         acl.add(new ACE(SecurityConstants.EVERYONE,
                 SecurityConstants.EVERYTHING, false));
         return acl;
@@ -162,9 +166,10 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         return userManager;
     }
 
-    protected void handleACPOnSocialSections(DocumentModel socialWorkspace,
+    protected void handleACPOnSocialSections(DocumentModel socialWorkspaceDoc,
             CoreSession session) throws ClientException {
-        PathRef ref = SocialWorkspaceHelper.getPublicSectionPath(socialWorkspace);
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
+        PathRef ref = new PathRef(socialWorkspace.getPublicSectionPath());
         DocumentModel publicSection = session.getDocument(ref);
 
         grantReadRightForEveryOneOnSocialSection(socialWorkspace, session,
@@ -172,15 +177,12 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
     }
 
     protected void grantSpecificSocialWorkspaceRights(
-            DocumentModel socialWorkspace, ACL acl) throws ClientException {
+            SocialWorkspace socialWorkspace, ACL acl) throws ClientException {
         grantEverythingToAdministrator(acl);
-        acl.add(new ACE(
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspace),
+        acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(),
                 SecurityConstants.EVERYTHING, true));
-        acl.add(new ACE(
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspace),
+        acl.add(new ACE(socialWorkspace.getMembersGroupName(),
                 SecurityConstants.READ_WRITE, true));
-
     }
 
     protected void grantEverythingToAdministrator(ACL acl)
@@ -191,7 +193,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
     }
 
     protected void grantReadRightForEveryOneOnSocialSection(
-            DocumentModel socialWorkspace, CoreSession session,
+            SocialWorkspace socialWorkspace, CoreSession session,
             DocumentModel publicSocialSection) throws ClientException {
 
         ACP acpPublicSection = new ACPImpl();

@@ -18,13 +18,14 @@ package org.nuxeo.ecm.social.workspace.adapters;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_SCHEMA;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
-import org.nuxeo.ecm.social.workspace.SocialConstants;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -36,19 +37,22 @@ public class AdapterFactory implements DocumentAdapterFactory {
 
     @Override
     public Object getAdapter(DocumentModel doc, Class<?> itf) {
-        if (itf == Article.class && ARTICLE_TYPE.equals(doc.getType())) {
-            return new ArticleAdapter(doc);
+        if (doc.hasFacet(SOCIAL_WORKSPACE_FACET)) {
+            return new SocialWorkspaceAdapter(doc);
         }
-        if (itf == SubscriptionRequest.class && doc.hasSchema(REQUEST_SCHEMA)) {
-            return new SubscriptionRequestAdapter(doc);
-        }
-        if (doc.hasFacet(SocialConstants.SOCIAL_DOCUMENT_FACET)) {
+        if (doc.hasFacet(SOCIAL_DOCUMENT_FACET)) {
             try {
                 return new SocialDocumentAdapter(doc);
             } catch (ClientException e) {
                 log.error(e.getMessage() + " : Adapter returned is null");
                 log.debug(e, e);
             }
+        }
+        if (itf == Article.class && ARTICLE_TYPE.equals(doc.getType())) {
+            return new ArticleAdapter(doc);
+        }
+        if (itf == SubscriptionRequest.class && doc.hasSchema(REQUEST_SCHEMA)) {
+            return new SubscriptionRequestAdapter(doc);
         }
         return null;
     }
