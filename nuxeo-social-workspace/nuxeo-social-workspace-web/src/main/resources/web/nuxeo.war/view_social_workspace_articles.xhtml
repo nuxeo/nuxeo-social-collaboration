@@ -19,6 +19,13 @@
 
   <ui:define name="body">
 
-coucou
+    <ui:include src="/incl/fullscreen_main_actions.xhtml"/>
+
+    <h1><h:outputText value="#{nxd:titleOrId(currentDocument)}"/></h1>
+
+    <h:form id="documentLayout">
+      <nxl:documentLayout mode="fullscreen" value="#{currentDocument}" />
+    </h:form>
+
   </ui:define>
 </nxthemes:composition>
