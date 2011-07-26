@@ -25,7 +25,7 @@
       <facet name="SocialWorkspace" />
     </doctype>
 
-    <doctype name="NewsRoot" extends="Folder">
+    <doctype name="NewsItemsRoot" extends="Folder">
     </doctype>
 
     <doctype name="Article" extends="Note">

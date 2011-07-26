@@ -87,16 +87,18 @@
       <layouts mode="view">
         <layout>note</layout>
       </layouts>
+      <layouts mode="fullscreen">
+        <layout>fullscreen</layout>
+      </layouts>
       <views>
         <view id="fullscreen" value="view_social_workspace_news_item" />
       </views>
     </type>
 
 
-    <type id="NewsRoot">
-      <label>NewsRoot</label>
-      <icon>/icons/news_root.gif</icon>
-      <bigIcon>/icons/news_root_100.png</bigIcon>
+    <type id="NewsItemsRoot">
+      <label>NewsItemsRoot</label>
+      <icon>/icons/news_items_root.png</icon>
       <default-view>view_documents</default-view>
       <layouts mode="any">
         <layout>heading</layout>

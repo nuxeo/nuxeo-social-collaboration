@@ -154,20 +154,20 @@ public class TestNewsManagement {
     }
 
     @Test
-    public void testNewsRootRights() throws Exception {
+    public void testNewsItemsRootRights() throws Exception {
         SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
-        PathRef newsRootPathRef = new PathRef(socialWorkspace.getNewsRootPath());
+        PathRef newsItemsRootPathRef = new PathRef(socialWorkspace.getNewsItemsRootPath());
 
-        assertTrue(session.exists(newsRootPathRef));
-        assertNotNull(session.getDocument(newsRootPathRef));
+        assertTrue(session.exists(newsItemsRootPathRef));
+        assertNotNull(session.getDocument(newsItemsRootPathRef));
 
-        assertFalse(session.hasPermission(nobody, newsRootPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember, newsRootPathRef,
+        assertFalse(session.hasPermission(nobody, newsItemsRootPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, newsItemsRootPathRef,
                 READ));
-        assertTrue(session.hasPermission(swMember, newsRootPathRef, READ));
-        assertFalse(session.hasPermission(swMember, newsRootPathRef, WRITE));
-        assertFalse(session.hasPermission(swMember, newsRootPathRef, EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, newsRootPathRef,
+        assertTrue(session.hasPermission(swMember, newsItemsRootPathRef, READ));
+        assertFalse(session.hasPermission(swMember, newsItemsRootPathRef, WRITE));
+        assertFalse(session.hasPermission(swMember, newsItemsRootPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, newsItemsRootPathRef,
                 EVERYTHING));
     }
 

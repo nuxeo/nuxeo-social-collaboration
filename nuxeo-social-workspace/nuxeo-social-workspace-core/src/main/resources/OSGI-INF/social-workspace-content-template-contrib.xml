@@ -15,7 +15,7 @@
           title="Social Section" description="Private publication space"/>
         <templateItem typeName="SocialSection" id="public-section"
           title="Public Social Section" description="Public publication space"/>
-        <templateItem typeName="NewsRoot" id="news-root"
+        <templateItem typeName="NewsItemsRoot" id="news-root"
           title="News Container" description="Contains all news items from this Social Workspace"/>
       </template>
     </factoryBinding>

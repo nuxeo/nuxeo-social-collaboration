@@ -90,6 +90,6 @@ public interface SocialWorkspace {
     /**
      * Returns the path of the News Items root of this Social Workspace.
      */
-    String getNewsRootPath();
+    String getNewsItemsRootPath();
 
 }

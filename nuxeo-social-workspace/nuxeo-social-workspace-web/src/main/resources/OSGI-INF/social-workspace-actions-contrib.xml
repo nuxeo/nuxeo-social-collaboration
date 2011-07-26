@@ -59,7 +59,7 @@
       <filter id="newNewsItem">
         <rule grant="true">
           <permission>AddChildren</permission>
-          <type>NewsRoot</type>
+          <type>NewsItemsRoot</type>
         </rule>
       </filter>
     </action>

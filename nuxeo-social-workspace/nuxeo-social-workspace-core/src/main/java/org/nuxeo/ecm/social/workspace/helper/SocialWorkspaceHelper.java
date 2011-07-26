@@ -141,7 +141,7 @@ public class SocialWorkspaceHelper {
                 + PUBLIC_SECTION_RELATIVE_PATH;
     }
 
-    public static String getNewsRootPath(DocumentModel socialWorkspace) {
+    public static String getNewsItemsRootPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
             throw new IllegalArgumentException(
                     "Given social workspace is null, can't return the private section");

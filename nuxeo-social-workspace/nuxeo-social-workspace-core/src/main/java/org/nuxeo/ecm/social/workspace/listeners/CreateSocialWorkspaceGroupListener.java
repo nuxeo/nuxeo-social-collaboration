@@ -86,7 +86,7 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
 
         handleACPOnSocialSections(doc, session);
 
-        updateRightsForNewsRoot(doc, session);
+        updateRightsForNewsItemsRoot(doc, session);
 
         createGroup(
                 SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc),
@@ -131,17 +131,17 @@ public class CreateSocialWorkspaceGroupListener implements EventListener {
         }
     }
 
-    protected void updateRightsForNewsRoot(DocumentModel socialWorkspaceDoc,
+    protected void updateRightsForNewsItemsRoot(DocumentModel socialWorkspaceDoc,
             CoreSession session) throws ClientException {
         SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
-        PathRef newsRootPath = new PathRef(socialWorkspace.getNewsRootPath());
-        DocumentModel newsRoot = session.getDocument(newsRootPath);
+        PathRef newsItemsRootPath = new PathRef(socialWorkspace.getNewsItemsRootPath());
+        DocumentModel newsItemsRoot = session.getDocument(newsItemsRootPath);
 
-        ACP acp = newsRoot.getACP();
+        ACP acp = newsItemsRoot.getACP();
         ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
         acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
-        newsRoot.setACP(acp, true);
-        session.saveDocument(newsRoot);
+        newsItemsRoot.setACP(acp, true);
+        session.saveDocument(newsItemsRoot);
     }
 
     protected ACL createSocialWorkspaceACL(ACP acp, DocumentModel doc)

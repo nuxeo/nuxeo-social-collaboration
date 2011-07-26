@@ -93,8 +93,8 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public String getNewsRootPath() {
-        return SocialWorkspaceHelper.getNewsRootPath(doc);
+    public String getNewsItemsRootPath() {
+        return SocialWorkspaceHelper.getNewsItemsRootPath(doc);
     }
 
 }
