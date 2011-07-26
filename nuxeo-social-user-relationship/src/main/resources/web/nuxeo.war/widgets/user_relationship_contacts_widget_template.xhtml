@@ -1,15 +1,13 @@
 <f:subview xmlns:nxu="http://nuxeo.org/nxweb/util"
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:nxu="http://nuxeo.org/nxweb/util"
-  xmlns:c="http://java.sun.com/jstl/core"
-  xmlns:a4j="http://richfaces.org/a4j"
   id="#{widget.id}">
 
   <nxu:dataTable id="table_relations_#{widget.id}" var="relation"
     value="#{userRelationshipAction.relationshipsFromSelectedUser}">
     <nxu:column>
-      <h:outputText value="#{nxu:userFullName(relation)}" />
+        <h:graphicImage value="/icons/user.gif" alt="user.gif" />
+        <h:outputText value="#{nxu:userFullName(relation)}" />
     </nxu:column>
   </nxu:dataTable>
 

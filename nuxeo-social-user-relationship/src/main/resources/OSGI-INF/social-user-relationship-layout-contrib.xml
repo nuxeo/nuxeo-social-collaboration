@@ -1,6 +1,71 @@
 <component name="org.nuxeo.ecm.social.user.relationship.layout">
+
+  <require>org.nuxeo.ecm.user.center.profile.layouts</require>
+
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+    point="layouts">
+
+    <!-- override summary layout from user_profile -->
+    <layout name="summary_user_profile_layout">
+      <templates>
+        <template mode="any">/layouts/layout_summary_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <widget>summary_user_profile</widget>
+        </row>
+        <row>
+          <widget>summary_user_relationship</widget>
+        </row>
+      </rows>
+    </layout>
+
+    <layout name="user_relationship">
+      <templates>
+        <template mode="any">/layouts/layout_default_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <widget>user_relationship_add</widget>
+        </row>
+        <row>
+          <widget>user_relationship_contacts</widget>
+        </row>
+      </rows>
+    </layout>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+    point="widgettypes">
+    <widgetType name="summary_user_relationship">
+      <configuration>
+        <sinceVersion>5.4.3</sinceVersion>
+        <title>User Relationships Summary</title>
+        <description>
+          <p>This widgets displays the user_relationship layout.</p>
+        </description>
+        <categories>
+          <category>summary</category>
+        </categories>
+        <supportedModes>
+          <mode>view</mode>
+        </supportedModes>
+        <!-- no configurable properties -->
+      </configuration>
+      <handler-class>
+        org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
+      </handler-class>
+      <property name="template">
+        /widgets/summary/user_relationship_widget_template.xhtml
+      </property>
+    </widgetType>
+  </extension>
+
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
     point="widgets">
+
+    <widget name="summary_user_relationship" type="summary_user_relationship" />
+
     <widget name="user_relationship_add" type="template">
       <labels>
         <label mode="any" />
@@ -18,8 +83,9 @@
 
     <widget name="user_relationship_contacts" type="template">
       <labels>
-        <label mode="any" />
+        <label mode="any">label.audit.endDate</label>
       </labels>
+      <translated>true</translated>
       <fields>
         <field />
       </fields>

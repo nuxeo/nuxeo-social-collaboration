@@ -1,0 +1,13 @@
+<div class="description_block"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxl="http://nuxeo.org/nxforms/layout">
+
+  <c:if test="#{!empty userManagementActions.selectedUser}">
+    <h3 class="summaryTitle">
+      <h:outputText value="#{messages['label.social.user.relationship']}" />
+    </h3>
+    <nxl:layout name="user_relationship" value="#{userManagementActions.selectedUser}" mode="view" />
+  </c:if>
+
+</div>

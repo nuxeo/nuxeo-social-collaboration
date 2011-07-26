@@ -2,7 +2,6 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:c="http://java.sun.com/jstl/core"
-  xmlns:nxu="http://nuxeo.org/nxweb/util"
   xmlns:a4j="http://richfaces.org/a4j"
   id="#{widget.id}" rendered="#{widget.mode == 'view' }">
 
@@ -10,7 +9,6 @@
     div#add_relationship_#{widget.id} {
       position: absolute;
       border: 1px solid #333;
-      width: 100px;
       background-color: white;
       z-index:1000;
     }
@@ -21,6 +19,8 @@
 
     #add_relationship_#{widget.id} table input{
       margin-right: 10px;
+      margin-left: 20px;
+      float: right;
     }
   </style>
 
@@ -80,26 +80,20 @@ TODO: This part using jQuery Fancybox is temporarly disabled, we use a custom sm
         </div>
       </c:if>
 
-      <a4j:jsFunction name="refresh_add_relationship_#{widget.id}" reRender="user_relationship_#{widget.id}" />
-      <script type="text/javascript">
-        var btn = jQuery("#add_relationship_#{widget.id}_btn");
-        var div = jQuery("#add_relationship_#{widget.id}");
-
-        btn.click(function() {
-          return false;
-        });
-        btn.mouseenter(function() {
-          div.fadeIn(500);
-        });
-        div.mouseleave(function() {
-          jQuery("#add_relationship_#{widget.id}").fadeOut(500, refresh_add_relationship_#{widget.id});
-        });
-      </script>
-      <a4j:log />
-
-      <a id="add_relationship_#{widget.id}_btn">
-        <h:outputText value="#{userRelationshipAction.alreadyConnected ? messages['action.social.user.relationship.join'] : messages['action.social.user.relationship.addNew']}" />
-      </a>
+      <a4j:outputPanel styleClass="action_bar" id="add_relationship_#{widget.id}_btn">
+        <script type="text/javasript">
+          var btn = jQuery("#add_relationship_#{widget.id}_btn");
+          btn.click(function() {
+            return false;
+          });
+          btn.mouseenter(function() {
+            div.fadeIn(500);
+          });
+        </script>
+        <a class="button" id="add_relationship_#{widget.id}_btn">
+          <h:outputText value="#{userRelationshipAction.alreadyConnected ? messages['action.social.user.relationship.join'] : messages['action.social.user.relationship.addNew']}" />
+        </a>
+      </a4j:outputPanel>
 
       <div id="add_relationship_#{widget.id}" style="display: none;">
         <a4j:status>
@@ -108,6 +102,13 @@ TODO: This part using jQuery Fancybox is temporarly disabled, we use a custom sm
           </f:facet>
         </a4j:status>
         <a4j:outputPanel id="add_relationship_#{widget.id}">
+          <script type="text/javasript">
+            var div = jQuery("#add_relationship_#{widget.id}");
+
+            div.mouseleave(function() {
+              jQuery("#add_relationship_#{widget.id}").fadeOut(500);
+            });
+          </script>
           <nxu:dataTable id="#{widget.id}_add_relationship"
             value="#{userRelationshipService.kinds}" var="kind"
             rendered="#{!(userRelationshipAction.currentUser)}">
@@ -116,7 +117,7 @@ TODO: This part using jQuery Fancybox is temporarly disabled, we use a custom sm
               <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipAction.relationshipCheckboxChanged}"
                 value="#{userRelationshipAction.isActiveRelationship(kind)}">
                 <a4j:support event="onchange"
-                  reRender="add_relationship_#{widget.id},facesStatusMessagePanel">
+                  reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
                   <f:param name="selectedKind" value="#{kind}" />
                 </a4j:support>
                 <h:outputText value="#{kind}" />
