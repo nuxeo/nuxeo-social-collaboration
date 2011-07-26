@@ -6,21 +6,21 @@
     <internalGadget name="articles" disabled="false">
       <mountPoint>/articles</mountPoint>
       <entryPoint>articles.xml</entryPoint>
-      <category>Nuxeo</category>
+      <category>gadget.category.social.workspace</category>
       <icon>gadget-article.png</icon>
     </internalGadget>
 
     <internalGadget name="publicarticles" disabled="false">
       <mountPoint>/publicarticles</mountPoint>
       <entryPoint>publicarticles.xml</entryPoint>
-      <category>Nuxeo</category>
+      <category>gadget.category.social.workspace.private</category>
       <icon>gadget-article.png</icon>
     </internalGadget>
 
    <internalGadget name="news" disabled="false">
       <mountPoint>/news</mountPoint>
       <entryPoint>news.xml</entryPoint>
-      <category>Nuxeo</category>
+      <category>gadget.category.social.workspace</category>
       <icon>gadget-news.png</icon>
     </internalGadget>
 
@@ -28,7 +28,7 @@
       <mountPoint>/join</mountPoint>
       <directory>join</directory>
       <entryPoint>join.xml</entryPoint>
-      <category>Nuxeo</category>
+      <category>gadget.category.social.workspace</category>
       <icon>gadget-join.png</icon>
     </internalGadget>
 
@@ -36,7 +36,7 @@
       <mountPoint>/library</mountPoint>
       <directory>library</directory>
       <entryPoint>library.xml</entryPoint>
-      <category>Nuxeo</category>
+      <category>gadget.category.social.workspace</category>
       <icon>gadget-library.png</icon>
     </internalGadget>
 
@@ -44,7 +44,7 @@
       <mountPoint>/usersocialworkspaces</mountPoint>
       <directory>usersocialworkspaces</directory>
       <entryPoint>usersocialworkspaces.xml</entryPoint>
-      <category>Nuxeo</category>
+      <category>gadget.category.social.workspace.private</category>
       <icon>user_socialworkspaces.png</icon>
     </internalGadget>
 
@@ -52,7 +52,7 @@
       <mountPoint>/publicdocuments</mountPoint>
       <directory>publicdocuments</directory>
       <entryPoint>publicdocuments.xml</entryPoint>
-      <category>Nuxeo</category>
+      <category>gadget.category.social.workspace</category>
       <icon>publicdocuments.png</icon>
     </internalGadget>
 
