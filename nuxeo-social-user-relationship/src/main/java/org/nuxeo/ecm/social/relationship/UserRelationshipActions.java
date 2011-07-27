@@ -30,7 +30,7 @@ import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.ecm.webapp.security.UserManagementActions;
 
 /**
- * Social Friendships action bean.
+ * Social User Relationship action bean.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  */
@@ -38,6 +38,8 @@ import org.nuxeo.ecm.webapp.security.UserManagementActions;
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
 public class UserRelationshipActions implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Log log = LogFactory.getLog(UserRelationshipActions.class);
 

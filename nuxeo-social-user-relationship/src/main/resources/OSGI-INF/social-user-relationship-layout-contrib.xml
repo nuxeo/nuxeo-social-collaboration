@@ -33,6 +33,26 @@
         </row>
       </rows>
     </layout>
+
+    <layout name="relationships_listing">
+      <templates>
+        <template mode="any">/layouts/layout_listing_template.xhtml</template>
+      </templates>
+      <columns>
+        <column>
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+          </properties>
+          <widget>user_relationship_profile_picture</widget>
+        </column>
+        <column>
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+          </properties>
+          <widget>user_relationship_username</widget>
+        </column>
+      </columns>
+    </layout>
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
@@ -91,6 +111,30 @@
       </fields>
       <properties mode="any">
         <property name="template">/widgets/user_relationship_contacts_widget_template.xhtml</property>
+      </properties>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
+    </widget>
+
+    <widget name="user_relationship_profile_picture" type="template">
+      <fields>
+        <field>data</field>
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/user_relationship_profile_picture_widget_template.xhtml</property>
+      </properties>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
+    </widget>
+
+    <widget name="user_relationship_username" type="template">
+      <fields>
+        <field>data</field>
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/user_relationship_profile_username_widget_template.xhtml</property>
       </properties>
       <widgetModes>
         <mode value="any">view</mode>

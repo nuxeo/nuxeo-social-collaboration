@@ -1,0 +1,23 @@
+<f:subview id="relation_picture_subview_#{widget.id}"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:nxd="http://nuxeo.org/nxweb/document"
+  xmlns:h="http://java.sun.com/jsf/html">
+
+  <nxu:set var="profileModel" value="#{userProfileActions.getUserProfileDocument(field)}" />
+
+  <c:if test="#{empty profileModel.profile.avatar}">
+    <h2>XXX</h2>
+  </c:if>
+
+  <c:if test="#{not empty profileModel.profile.avatar}">
+    <nxu:set var="image_url"
+    value="#{nxd:fileUrl('downloadFile', profileModel, 'profile:avatar', profileModel.profile.avatar.filename)}">
+    <img src="#{image_url}"
+      title="#{field.filename}" alt="#{field.filename}"
+      width="#{widget.properties['width']}" />
+  </nxu:set>
+  </c:if>
+
+</f:subview>

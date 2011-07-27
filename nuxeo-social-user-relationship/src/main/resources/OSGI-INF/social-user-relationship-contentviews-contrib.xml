@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.user.relationship.contentviews">
+
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+    point="providers">
+
+    <genericPageProvider name="user_relationships"
+      class="org.nuxeo.ecm.social.relationship.provider.UserRelationshipPageProvider">
+      <pageSize>20</pageSize>
+    </genericPageProvider>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
+    point="contentViews">
+
+    <contentView name="user_relationships">
+      <emptySentence>label.userManager.emptyUserList</emptySentence>
+      <translateEmptySentence>true</translateEmptySentence>
+      <pageProvider name="user_relationships">
+        <parameter>#{currentUser.model.id}</parameter>
+        <parameter>#{userRelationshipNetworkActions.searchString}</parameter>
+      </pageProvider>
+      <showPageSizeSelector>false</showPageSizeSelector>
+      <showRefreshCommand>false</showRefreshCommand>
+      <useGlobalPageSize>false</useGlobalPageSize>
+      <reset>
+        <event>UserRelationshipChanged</event>
+      </reset>
+      <cacheKey>only_one_cache</cacheKey>
+      <cacheSize>1</cacheSize>
+      <resultLayouts>
+        <layout name="relationships_listing" showCSVExport="false"
+          showPDFExport="false" />
+      </resultLayouts>
+    </contentView>
+
+  </extension>
+
+</component>

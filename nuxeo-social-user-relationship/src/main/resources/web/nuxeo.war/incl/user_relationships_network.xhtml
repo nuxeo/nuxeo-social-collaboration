@@ -1,0 +1,57 @@
+<a4j:outputPanel xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:c="http://java.sun.com/jstl/core"
+   xmlns:a4j="http://richfaces.org/a4j"
+   xmlns:nxu="http://nuxeo.org/nxweb/util"
+   id="user_relationships_network">
+
+  <nxu:set var="contentViewName" value="user_relationships" >
+
+  <div class="tabsContent">
+    <ui:decorate template="/incl/content_view.xhtml">
+      <ui:define name="content_view_header">
+        <a4j:region id="search_user_relationships_region">
+          <!-- search form -->
+          <a4j:form id="searchForm">
+            <h:inputText id="searchText"
+              value="#{userRelationshipNetworkActions.searchString}"
+              onkeydown="if(event.keyCode == 13 ||event.keyCode == 9 ){return false;}"
+              styleClass="directoryFilter">
+              <a4j:support event="onkeyup"
+                reRender="user_relationships_network"
+                requestDelay="1000" action="#{contentViewActions.refreshAndRewind(contentViewName)}"
+                ignoreDupResponses="true" eventsQueue="userSearchQueue" />
+            </h:inputText>
+            <f:verbatim>&amp;nbsp;</f:verbatim>
+            <a4j:commandButton id="searchButton"
+              value="#{messages['command.search']}"
+              action="#{contentViewActions.refreshAndRewind(contentViewName)}" styleClass="button"
+              reRender="user_relationships_network" />
+            <a4j:commandButton id="clearButton"
+              value="#{messages['command.clearSearch']}"
+              action="#{userRelationshipNetworkActions.clearSearch}" styleClass="button"
+              reRender="user_relationships_network,searchForm" />
+            <a4j:status>
+              <f:facet name="start">
+                <h:graphicImage value="/img/standart_waiter.gif" />
+              </f:facet>
+            </a4j:status>
+          </a4j:form>
+        </a4j:region>
+      </ui:define>
+
+      <ui:define name="pageNavigationControls" >
+        <ui:include src="/pagination/a4jPageNavigationControls.xhtml">
+          <ui:param name="contentIdToBeReRendered"
+            value="#{contentViewRenderId}_resultsPanel,#{contentViewRenderId}_contentViewActionsPanel" />
+        </ui:include>
+      </ui:define>
+
+      <ui:define name="content_view_syndication_buttons" />
+    </ui:decorate>
+  </div>
+
+  </nxu:set>
+
+</a4j:outputPanel>

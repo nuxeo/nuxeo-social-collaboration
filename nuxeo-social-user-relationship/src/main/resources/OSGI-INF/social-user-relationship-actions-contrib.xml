@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.user.relationship.actions">
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="actions">
+
+    <action id="relationship_network" link="user_center_fragment.xhtml"
+      label="user.center.relationship.network" icon="/icons/users_groups.png" order="15">
+      <category>USER_CENTER</category>
+    </action>
+
+    <action id="relationship_network_tab" link="/incl/user_relationships_network.xhtml"
+      label="user.center.relationship.network.tab" order="10">
+      <category>relationship_network_sub_tab</category>
+    </action>
+
+  </extension>
+
+</component>
