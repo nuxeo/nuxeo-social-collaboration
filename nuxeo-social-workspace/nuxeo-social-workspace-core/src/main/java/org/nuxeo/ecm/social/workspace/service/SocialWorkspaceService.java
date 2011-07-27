@@ -34,6 +34,9 @@ public interface SocialWorkspaceService {
      */
     int getValidationDays();
 
+    void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
+            String principalName);
+
     void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace);
 
     void makeSocialWorkspacePrivate(SocialWorkspace socialWorkspace);

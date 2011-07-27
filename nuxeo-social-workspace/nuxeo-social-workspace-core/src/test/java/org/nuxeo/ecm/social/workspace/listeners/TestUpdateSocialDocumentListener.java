@@ -17,18 +17,13 @@ package org.nuxeo.ecm.social.workspace.listeners;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.common.collections.ScopeType;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
@@ -36,10 +31,9 @@ import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
+import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
-import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -53,15 +47,11 @@ import com.google.inject.Inject;
 @Deploy({ "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.social.workspace.core" })
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
-public class TestUpdateSocialDocumentListener {
-
-    @Inject
-    protected CoreSession session;
+public class TestUpdateSocialDocumentListener extends
+        AbstractSocialWorkspaceTest {
 
     @Inject
     protected EventService eventService;
-
-    protected DocumentModel socialWorkspaceDoc;
 
     protected DocumentModel privateSection;
 
@@ -69,14 +59,8 @@ public class TestUpdateSocialDocumentListener {
 
     @Before
     public void setup() throws Exception {
-        socialWorkspaceDoc = createDocumentModel(session,
-                session.getRootDocument().getPathAsString(),
-                "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
-        SocialWorkspace socialWorkspace = SocialWorkspaceHelper.toSocialWorkspace(socialWorkspaceDoc);
-
-        String AdministratorGroup = socialWorkspace.getAdministratorsGroupName();
-        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
-        principal.getGroups().add(AdministratorGroup);
+        socialWorkspace = createSocialWorkspace("Socialworkspace for test");
+        socialWorkspaceDoc = socialWorkspace.getDocument();
 
         publicSection = session.getDocument(new PathRef(
                 socialWorkspace.getPublicSectionPath()));
@@ -88,7 +72,7 @@ public class TestUpdateSocialDocumentListener {
     public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateNews()
             throws Exception {
 
-        DocumentModel newsItem = createSocialDocument(session,
+        DocumentModel newsItem = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(), "A private News",
                 NEWS_ITEM_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(newsItem);
@@ -120,7 +104,7 @@ public class TestUpdateSocialDocumentListener {
     @Test
     public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
             throws Exception {
-        DocumentModel article = createSocialDocument(session,
+        DocumentModel article = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(), "A private Article",
                 SocialConstants.ARTICLE_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(article);

@@ -3,9 +3,12 @@ package org.nuxeo.ecm.social.workspace.adapters;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
 
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * Default implementation of {@see SocialWorkspace}.
@@ -18,6 +21,12 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     public SocialWorkspaceAdapter(DocumentModel doc) {
         super(doc);
+    }
+
+    @Override
+    public void initialize(String principalName) {
+        getSocialWorkspaceService().initializeSocialWorkspace(this,
+                principalName);
     }
 
     @Override
@@ -34,10 +43,12 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public void makePublic() {
+        getSocialWorkspaceService().makeSocialWorkspacePublic(this);
     }
 
     @Override
     public void makePrivate() {
+        getSocialWorkspaceService().makeSocialWorkspacePrivate(this);
     }
 
     @Override
@@ -95,6 +106,39 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     @Override
     public String getNewsItemsRootPath() {
         return SocialWorkspaceHelper.getNewsItemsRootPath(doc);
+    }
+
+    @Override
+    public String getPublicDashboardSpacePath() {
+        return doc.getPath().append("dashboardSpacesRoot").append(
+                "publicDashboardSpace").toString();
+    }
+
+    @Override
+    public String getPrivateDashboardSpacePath() {
+        return doc.getPath().append("dashboardSpacesRoot").append(
+                "privateDashboardSpace").toString();
+    }
+
+    @Override
+    public DocumentModel getDocument() {
+        return doc;
+    }
+
+    @Override
+    public void setDocument(DocumentModel doc) {
+        if (!this.doc.getId().equals(doc.getId())) {
+            throw new ClientRuntimeException("");
+        }
+        this.doc = doc;
+    }
+
+    private SocialWorkspaceService getSocialWorkspaceService() {
+        try {
+            return Framework.getService(SocialWorkspaceService.class);
+        } catch (Exception e) {
+            throw new ClientRuntimeException(e);
+        }
     }
 
 }

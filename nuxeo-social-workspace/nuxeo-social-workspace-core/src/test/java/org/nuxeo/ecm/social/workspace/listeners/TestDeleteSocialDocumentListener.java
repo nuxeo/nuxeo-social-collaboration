@@ -15,34 +15,26 @@
 package org.nuxeo.ecm.social.workspace.listeners;
 
 import static junit.framework.Assert.assertEquals;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.LifeCycleConstants;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
+import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
-import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
-
-import com.google.inject.Inject;
 
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
@@ -50,12 +42,8 @@ import com.google.inject.Inject;
 @Deploy({ "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.social.workspace.core" })
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
-public class TestDeleteSocialDocumentListener {
-
-    @Inject
-    protected CoreSession session;
-
-    protected DocumentModel socialWorkspaceDoc;
+public class TestDeleteSocialDocumentListener extends
+        AbstractSocialWorkspaceTest {
 
     protected DocumentModel privateSection;
 
@@ -63,14 +51,8 @@ public class TestDeleteSocialDocumentListener {
 
     @Before
     public void setup() throws Exception {
-        socialWorkspaceDoc = createDocumentModel(session,
-                session.getRootDocument().getPathAsString(),
-                "Socialworkspace for test", SOCIAL_WORKSPACE_TYPE);
-        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
-
-        String AdministratorGroup = socialWorkspace.getAdministratorsGroupName();
-        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
-        principal.getGroups().add(AdministratorGroup);
+        socialWorkspace = createSocialWorkspace("SocialWorkspace for test");
+        socialWorkspaceDoc = socialWorkspace.getDocument();
 
         publicSection = session.getDocument(new PathRef(
                 socialWorkspace.getPublicSectionPath()));
@@ -81,12 +63,11 @@ public class TestDeleteSocialDocumentListener {
     @Test
     public void testShouldCleanupOfProxiesForNewsAtDeletionTime()
             throws Exception {
-
-        DocumentModel privateNews1 = createSocialDocument(session,
+        DocumentModel privateNews1 = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(), "A private News",
                 SocialConstants.NEWS_ITEM_TYPE, false);
 
-        DocumentModel privateNews2 = createSocialDocument(session,
+        DocumentModel privateNews2 = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(),
                 "AAA another private News", SocialConstants.NEWS_ITEM_TYPE,
                 false);
@@ -99,7 +80,7 @@ public class TestDeleteSocialDocumentListener {
         assertEquals(0, getNumberOfProxy(privateNews1));
         assertEquals(1, getNumberOfProxy(privateNews2));
 
-        DocumentModel publicNews = createSocialDocument(session,
+        DocumentModel publicNews = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(), "A public news",
                 SocialConstants.NEWS_ITEM_TYPE, true);
         assertEquals(1, getNumberOfProxy(publicNews));
@@ -117,8 +98,7 @@ public class TestDeleteSocialDocumentListener {
     @Test
     public void testShouldCleanupOfProxiesForArticleAtDeletionTime()
             throws Exception {
-
-        DocumentModel privateArticle1 = createSocialDocument(session,
+        DocumentModel privateArticle1 = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(), "A private News",
                 SocialConstants.ARTICLE_TYPE, false);
 
@@ -127,7 +107,7 @@ public class TestDeleteSocialDocumentListener {
                 LifeCycleConstants.DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(privateArticle1));
 
-        DocumentModel publicArticle = createSocialDocument(session,
+        DocumentModel publicArticle = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(), "A public news",
                 SocialConstants.NEWS_ITEM_TYPE, true);
 
@@ -149,7 +129,6 @@ public class TestDeleteSocialDocumentListener {
         result = result
                 + session.getProxies(doc.getRef(), privateSection.getRef()).size();
         return result;
-
     }
 
 }

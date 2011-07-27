@@ -35,8 +35,6 @@ public class SocialConstants {
 
     public static final String PUBLIC_SECTION_RELATIVE_PATH = "public-section/";
 
-    public static final String SOCIAL_WORKSPACE_ACL_NAME = "socialWorkspaceAcl";
-
     public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
 
     // Social Document

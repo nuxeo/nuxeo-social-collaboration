@@ -29,13 +29,9 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createDocumentModel;
-import static org.nuxeo.ecm.social.workspace.ToolsForTests.createSocialDocument;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,9 +41,7 @@ import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -63,7 +57,6 @@ import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
 import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.listeners.CheckSocialWorkspaceValidationTasks;
@@ -97,77 +90,61 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.automation.features", CORE_BUNDLE_NAME,
         TESTING_BUNDLE_NAME })
 @LocalDeploy({ "org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml" })
-public class TestVisibilityManagement {
+public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     private static final Log log = LogFactory.getLog(TestVisibilityManagement.class);
 
     public static final String SOCIAL_WORKSPACE_NAME = "sws";
 
     @Inject
-    protected CoreSession session;
-
-    @Inject
-    protected UserManager userManager;
-
-    @Inject
     protected JbpmService jbpmService;
-
-    @Inject
-    protected AutomationService automationService;
 
     @Inject
     protected EventService eventService;
 
-    protected String socialWorkspacePath;
+    protected DocumentModel socialWorkspaceDoc;
 
-    protected NuxeoPrincipalImpl notMember;
+    protected SocialWorkspace socialWorkspace;
 
-    protected NuxeoPrincipalImpl member;
+    protected NuxeoPrincipal notMember;
 
-    protected NuxeoPrincipalImpl administrator;
+    protected NuxeoPrincipal member;
+
+    protected NuxeoPrincipal administrator;
 
     @Before
     public void setUp() throws Exception {
+        socialWorkspace = createSocialWorkspace(SOCIAL_WORKSPACE_NAME, true);
+        socialWorkspaceDoc = socialWorkspace.getDocument();
 
-        DocumentModel socialWorkspaceDoc = createDocumentModel(session, "/",
-                SOCIAL_WORKSPACE_NAME, SOCIAL_WORKSPACE_TYPE);
-        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
-
-        socialWorkspacePath = socialWorkspaceDoc.getPathAsString();
-
-        String memberGroup = socialWorkspace.getMembersGroupName();
-        String AdministratorGroup = socialWorkspace.getAdministratorsGroupName();
-
-        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
-        principal.getGroups().add(AdministratorGroup);
+        String membersGroup = socialWorkspace.getMembersGroupName();
+        String administratorsGroup = socialWorkspace.getAdministratorsGroupName();
 
         notMember = new NuxeoPrincipalImpl("notMember");
-        member = new NuxeoPrincipalImpl("member");
-        member.allGroups = Arrays.asList(memberGroup);
-        assertTrue(member.getAllGroups().contains(memberGroup));
-        administrator = new NuxeoPrincipalImpl("administratorOfSW");
-        administrator.allGroups = Arrays.asList(AdministratorGroup);
+        member = createUserWithGroup("member", membersGroup);
+        assertTrue(member.getAllGroups().contains(membersGroup));
+        administrator = createUserWithGroup("administratorOfSW",
+                administratorsGroup);
     }
 
     @Test
     public void testShouldNotBeSocialDocument() throws Exception {
-
-        DocumentModel note = createDocumentModel(session, socialWorkspacePath,
+        DocumentModel note = createDocument(
+                socialWorkspaceDoc.getPathAsString(),
                 "wrong place of creation", "Note");
         assertNull(toSocialDocument(note));
 
-        DocumentModel outOfSocialWorkspace = createDocumentModel(session, "/",
+        DocumentModel outOfSocialWorkspace = createDocument("/",
                 "wrong place of creation", ARTICLE_TYPE);
         assertNull(toSocialDocument(outOfSocialWorkspace));
-
     }
 
     @Test
     public void shouldCreatePrivateProxyForSocialDocumentPrivate()
             throws Exception {
-        DocumentModel privateNews = createSocialDocument(session,
-                socialWorkspacePath, "private news", NEWS_ITEM_TYPE, false);
-
+        DocumentModel privateNews = createSocialDocument(
+                socialWorkspaceDoc.getPathAsString(), "private news",
+                NEWS_ITEM_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(privateNews);
 
         assertTrue(socialDocument.isDocumentInSocialWorkspace());
@@ -197,10 +174,10 @@ public class TestVisibilityManagement {
 
     @Test
     public void shouldCreatePrivateProxyForSocialDocumentWithFacetAdded()
-            throws ClientException {
-
+            throws Exception {
         DocumentModel socialDocumentFacetedNotePrivate = session.createDocumentModel(
-                socialWorkspacePath, "Social Document Note1", "Note");
+                socialWorkspaceDoc.getPathAsString(), "Social Document Note1",
+                "Note");
         socialDocumentFacetedNotePrivate.addFacet(SOCIAL_DOCUMENT_FACET);
         socialDocumentFacetedNotePrivate = session.createDocument(socialDocumentFacetedNotePrivate);
         session.save();
@@ -217,7 +194,8 @@ public class TestVisibilityManagement {
         checkRestricted(socialDocument.getRestrictedDocument());
 
         DocumentModel socialDocumentFacetedNotePublic = session.createDocumentModel(
-                socialWorkspacePath, "Social Document Note2", "Note");
+                socialWorkspaceDoc.getPathAsString(), "Social Document Note2",
+                "Note");
         socialDocumentFacetedNotePublic.addFacet(SOCIAL_DOCUMENT_FACET);
         socialDocumentFacetedNotePublic.setPropertyValue(
                 FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, true);
@@ -240,8 +218,9 @@ public class TestVisibilityManagement {
     @Test
     public void shouldCreatePrivateProxyForSocialDocumentPublic()
             throws Exception {
-        DocumentModel privateNews = createSocialDocument(session,
-                socialWorkspacePath, "private news", NEWS_ITEM_TYPE, true);
+        DocumentModel privateNews = createSocialDocument(
+                socialWorkspaceDoc.getPathAsString(), "private news",
+                NEWS_ITEM_TYPE, true);
 
         SocialDocument socialDocument = toSocialDocument(privateNews);
 
@@ -272,8 +251,9 @@ public class TestVisibilityManagement {
 
     @Test
     public void shouldNotCreatePrivateProxyForArticlePrivate() throws Exception {
-        DocumentModel privateArticle = createSocialDocument(session,
-                socialWorkspacePath, "privatenews", ARTICLE_TYPE, false);
+        DocumentModel privateArticle = createSocialDocument(
+                socialWorkspaceDoc.getPathAsString(), "privatenews",
+                ARTICLE_TYPE, false);
 
         SocialDocument socialDocument = toSocialDocument(privateArticle);
 
@@ -305,8 +285,9 @@ public class TestVisibilityManagement {
 
     @Test
     public void shouldNotCreatePrivateProxyForArticlePublic() throws Exception {
-        DocumentModel privateArticle = createSocialDocument(session,
-                socialWorkspacePath, "privatenews", ARTICLE_TYPE, true);
+        DocumentModel privateArticle = createSocialDocument(
+                socialWorkspaceDoc.getPathAsString(), "privatenews",
+                ARTICLE_TYPE, true);
 
         SocialDocument socialDocument = toSocialDocument(privateArticle);
 
@@ -339,7 +320,7 @@ public class TestVisibilityManagement {
     public void testModeratedSocialWorkspaceCreation() throws Exception {
         assertNotNull(jbpmService);
 
-        DocumentModel moderated = createDocumentModel(session,
+        DocumentModel moderated = createDocument(
                 session.getRootDocument().getPathAsString(), "willBeApproved",
                 SOCIAL_WORKSPACE_TYPE);
         assertEquals("project", moderated.getCurrentLifeCycleState());
@@ -360,9 +341,8 @@ public class TestVisibilityManagement {
         assertNotNull(tasks);
         assertTrue(tasks.isEmpty());
 
-        moderated = createDocumentModel(session,
-                session.getRootDocument().getPathAsString(), "willBeRejected",
-                SOCIAL_WORKSPACE_TYPE);
+        moderated = createDocument(session.getRootDocument().getPathAsString(),
+                "willBeRejected", SOCIAL_WORKSPACE_TYPE);
         assertEquals("project", moderated.getCurrentLifeCycleState());
         assertFalse(jbpmService.getTaskInstances(moderated, null,
                 (JbpmListFilter) null).isEmpty());
@@ -377,7 +357,7 @@ public class TestVisibilityManagement {
 
     @Test
     public void testSocialWorkspaceCreationExpiration() throws Exception {
-        DocumentModel socialWorkspace = createDocumentModel(session,
+        DocumentModel socialWorkspace = createDocument(
                 session.getRootDocument().getPathAsString(), "willBeExpired",
                 SOCIAL_WORKSPACE_TYPE);
         String id = socialWorkspace.getId();
@@ -405,7 +385,7 @@ public class TestVisibilityManagement {
 
     @Test
     public void testTaskDueDate() throws Exception {
-        DocumentModel wk1 = createDocumentModel(session,
+        DocumentModel wk1 = createDocument(
                 session.getRootDocument().getPathAsString(), "willBeExpired",
                 SOCIAL_WORKSPACE_TYPE);
 

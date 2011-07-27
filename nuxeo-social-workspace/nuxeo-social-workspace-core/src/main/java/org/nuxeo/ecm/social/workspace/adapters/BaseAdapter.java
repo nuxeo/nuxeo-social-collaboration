@@ -27,7 +27,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
  */
 public abstract class BaseAdapter {
 
-    protected final DocumentModel doc;
+    protected DocumentModel doc;
 
     public BaseAdapter(DocumentModel doc) {
         this.doc = doc;
@@ -48,10 +48,6 @@ public abstract class BaseAdapter {
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
-    }
-
-    public DocumentModel getDocument() {
-        return doc;
     }
 
 }

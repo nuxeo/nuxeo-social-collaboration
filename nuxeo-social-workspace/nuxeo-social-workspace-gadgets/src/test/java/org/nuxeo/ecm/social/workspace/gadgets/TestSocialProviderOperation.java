@@ -51,7 +51,7 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- * 
+ *
  */
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)

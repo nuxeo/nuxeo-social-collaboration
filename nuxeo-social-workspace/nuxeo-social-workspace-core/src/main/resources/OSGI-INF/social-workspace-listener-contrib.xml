@@ -3,17 +3,18 @@
 
   <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
     point="listener">
-    <listener name="createSocialWorkspaceGroupListener" async="false"
+    <listener name="socialWorkspaceListener" async="false"
       postCommit="false"
-      class="org.nuxeo.ecm.social.workspace.listeners.CreateSocialWorkspaceGroupListener"
-      priority="100">
+      class="org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener"
+      priority="150">
       <event>documentCreated</event>
+      <event>documentModified</event>
     </listener>
 
     <listener name="removeSocialWorkspaceGroupListener" async="false"
       postCommit="false"
       class="org.nuxeo.ecm.social.workspace.listeners.RemoveSocialWorkspaceGroupListener"
-      priority="100">
+      priority="150">
       <event>documentRemoved</event>
     </listener>
 

@@ -48,7 +48,7 @@ import org.nuxeo.ecm.platform.usermanager.UserManager;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- * 
+ *
  */
 
 @Operation(id = SocialProviderOperation.ID, category = Constants.CAT_FETCH, label = "Social Provider", description = "Social Provider")

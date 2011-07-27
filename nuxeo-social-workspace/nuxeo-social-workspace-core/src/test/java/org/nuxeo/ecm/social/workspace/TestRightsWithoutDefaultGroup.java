@@ -22,7 +22,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 
 import java.security.Principal;
 
@@ -39,15 +38,19 @@ import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.test.runner.LocalDeploy;
 
+/**
+ * This test case aims to test the case where "userManager.getDefaultGroup()" is
+ * not configured in Nuxeo distribution.
+ *
+ * @author rlegall@nuxeo.com
+ */
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.social.workspace.core" })
-@LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
-public class TestRights extends AbstractSocialWorkspaceTest {
+public class TestRightsWithoutDefaultGroup extends AbstractSocialWorkspaceTest {
 
     protected Principal nobody;
 
@@ -72,20 +75,6 @@ public class TestRights extends AbstractSocialWorkspaceTest {
     }
 
     @Test
-    public void testSocialWorkspaceRights() throws Exception {
-        assertFalse(session.hasPermission(nobody, socialWorkspaceDoc.getRef(),
-                READ));
-        assertFalse(session.hasPermission(applicationMember,
-                socialWorkspaceDoc.getRef(), READ));
-        assertTrue(session.hasPermission(swMember, socialWorkspaceDoc.getRef(),
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember,
-                socialWorkspaceDoc.getRef(), EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator,
-                socialWorkspaceDoc.getRef(), EVERYTHING));
-    }
-
-    @Test
     public void testPublicSectionRights() throws Exception {
         PathRef publicSectionPathRef = new PathRef(
                 socialWorkspace.getPublicSectionPath());
@@ -106,7 +95,7 @@ public class TestRights extends AbstractSocialWorkspaceTest {
 
         socialWorkspace.makePublic();
 
-        assertFalse(session.hasPermission(nobody, publicSectionPathRef, READ));
+        assertTrue(session.hasPermission(nobody, publicSectionPathRef, READ));
         assertTrue(session.hasPermission(applicationMember,
                 publicSectionPathRef, READ));
         assertFalse(session.hasPermission(applicationMember,
@@ -116,43 +105,6 @@ public class TestRights extends AbstractSocialWorkspaceTest {
         assertFalse(session.hasPermission(swMember, publicSectionPathRef,
                 EVERYTHING));
         assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef,
-                EVERYTHING));
-    }
-
-    @Test
-    public void testPrivateSectionRights() throws Exception {
-        PathRef privateSectionPathRef = new PathRef(
-                socialWorkspace.getPrivateSectionPath());
-        assertTrue(session.exists(privateSectionPathRef));
-        assertNotNull(session.getDocument(privateSectionPathRef));
-
-        assertFalse(session.hasPermission(nobody, privateSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                privateSectionPathRef, READ));
-        assertTrue(session.hasPermission(swMember, privateSectionPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, privateSectionPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator,
-                privateSectionPathRef, EVERYTHING));
-    }
-
-    @Test
-    public void testNewsItemsRootRights() throws Exception {
-        PathRef newsItemsRootPathRef = new PathRef(
-                socialWorkspace.getNewsItemsRootPath());
-
-        assertTrue(session.exists(newsItemsRootPathRef));
-        assertNotNull(session.getDocument(newsItemsRootPathRef));
-
-        assertFalse(session.hasPermission(nobody, newsItemsRootPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                newsItemsRootPathRef, READ));
-        assertTrue(session.hasPermission(swMember, newsItemsRootPathRef, READ));
-        assertFalse(session.hasPermission(swMember, newsItemsRootPathRef, WRITE));
-        assertFalse(session.hasPermission(swMember, newsItemsRootPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, newsItemsRootPathRef,
                 EVERYTHING));
     }
 

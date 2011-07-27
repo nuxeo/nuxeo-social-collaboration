@@ -1,5 +1,6 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
 /**
@@ -10,6 +11,18 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
  * @since 5.4.3
  */
 public interface SocialWorkspace {
+
+    /**
+     * Initialize this Social Workspace:
+     * <ul>
+     * <li>create related groups</li>
+     * <li>put specific ACLs</li>
+     * </ul>
+     *
+     * @param principalName the name of the Principal initializing the Social
+     *            Workspace
+     */
+    void initialize(String principalName);
 
     /**
      * Returns {@code true} if this Social Workspace is public, {@code false}
@@ -91,5 +104,27 @@ public interface SocialWorkspace {
      * Returns the path of the News Items root of this Social Workspace.
      */
     String getNewsItemsRootPath();
+
+    /**
+     * Returns the path of the public Dashboard Space of this Social Workspace.
+     */
+    String getPublicDashboardSpacePath();
+
+    /**
+     * Returns the path of the private Dashboard Space of this Social Workspace.
+     */
+    String getPrivateDashboardSpacePath();
+
+    /**
+     * Returns the underlying {@DocumentModel}.
+     */
+    DocumentModel getDocument();
+
+    /**
+     * Sets the underlying {@DocumentModel}.
+     * <p>
+     * Must be the same document (same id), otherwise throw a RuntimeException.
+     */
+    void setDocument(DocumentModel doc);
 
 }
