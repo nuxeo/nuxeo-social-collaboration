@@ -35,6 +35,12 @@ public class SocialConstants {
 
     public static final String PUBLIC_SECTION_RELATIVE_PATH = "public-section/";
 
+    public static final String DASHBOARD_SPACES_ROOT_NAME = "social";
+
+    public static final String PRIVATE_DASHBOARD_SPACE_NAME = "privateDashboardSpace";
+
+    public static final String PUBLIC_DASHBOARD_SPACE_NAME = "publicDashboardSpace";
+
     public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
 
     // Social Document

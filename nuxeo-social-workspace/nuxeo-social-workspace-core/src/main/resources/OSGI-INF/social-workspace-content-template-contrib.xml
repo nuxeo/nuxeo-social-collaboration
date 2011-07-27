@@ -17,6 +17,12 @@
           title="Public Social Section" description="Public publication space"/>
         <templateItem typeName="NewsItemsRoot" id="news-root"
           title="News Items Container" description="Contains all news items from this Social Workspace"/>
+        <templateItem typeName="HiddenFolder" id="social"
+          title="Dashboard Spaces container" description="Contains the public and private Dashboard Space"/>
+        <templateItem typeName="Space" id="privateDashboardSpace" path="social"
+          title="Private Dashboard" description="Contains the private Dashboard"/>
+        <templateItem typeName="Space" id="publicDashboardSpace" path="social"
+          title="Public Dashboard" description="Contains the public Dashboard"/>
       </template>
     </factoryBinding>
   </extension>

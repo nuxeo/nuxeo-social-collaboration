@@ -106,6 +106,11 @@ public interface SocialWorkspace {
     String getNewsItemsRootPath();
 
     /**
+     * Returns the path of the Dashboard spaces root of this Social Workspace.
+     */
+    String getDashboardsSpaceRootPath();
+
+    /**
      * Returns the path of the public Dashboard Space of this Social Workspace.
      */
     String getPublicDashboardSpacePath();
