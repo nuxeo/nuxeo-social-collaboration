@@ -360,7 +360,8 @@
         <field>socialdoc:isPublic</field>
       </fields>
       <widgetModes>
-        <mode value="any">view</mode>
+        <mode value="edit" >#{currentUser.isMemberOf('administrators') ? 'edit' : 'view'}</mode>
+        <mode value="create" >#{currentUser.isMemberOf('administrators') ? 'edit' : 'view'}</mode>
       </widgetModes>
       <properties mode="any">
         <property name="required">true</property>
