@@ -26,8 +26,9 @@ import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.spaces.api.Constants;import org.nuxeo.ecm.spaces.api.Space;import org.nuxeo.ecm.spaces.api.SpaceManager;
-import org.nuxeo.ecm.spaces.impl.docwrapper.DocSpaceImpl;import org.nuxeo.opensocial.container.shared.layout.api.LayoutHelper;import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.ecm.spaces.api.Constants;
+import org.nuxeo.ecm.spaces.api.Space;
+import org.nuxeo.opensocial.container.shared.layout.api.LayoutHelper;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
@@ -52,8 +53,8 @@ public class InitializeSocialWorkspaceDashboardsListener implements
         }
     }
 
-    private void initializeDashboards(CoreSession session,
-            DocumentModel doc) throws ClientException {
+    private void initializeDashboards(CoreSession session, DocumentModel doc)
+            throws ClientException {
         Space space = doc.getAdapter(Space.class);
         space.initLayout(LayoutHelper.buildLayout(LayoutHelper.Preset.X_2_66_33));
         // add initial gadgets

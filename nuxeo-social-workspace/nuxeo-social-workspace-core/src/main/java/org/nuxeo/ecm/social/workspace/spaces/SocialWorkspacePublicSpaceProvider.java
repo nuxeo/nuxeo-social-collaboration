@@ -1,15 +1,19 @@
 package org.nuxeo.ecm.social.workspace.spaces;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_DASHBOARD_SPACE_NAME;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;import java.util.Map;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_DASHBOARD_SPACE_NAME;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+
+import java.util.Map;
 
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
-import org.nuxeo.ecm.spaces.api.AbstractSpaceProvider;import org.nuxeo.ecm.spaces.api.Space;
-import org.nuxeo.ecm.spaces.api.SpaceProvider;import org.nuxeo.ecm.spaces.api.exceptions.SpaceException;
+import org.nuxeo.ecm.spaces.api.AbstractSpaceProvider;
+import org.nuxeo.ecm.spaces.api.Space;
+import org.nuxeo.ecm.spaces.api.exceptions.SpaceException;
 
 /**
  * Creates the default Public {@link Space} for a Social Workspace.
@@ -31,7 +35,9 @@ public class SocialWorkspacePublicSpaceProvider extends AbstractSpaceProvider {
                 return doc.getAdapter(Space.class);
             } else {
                 // assume dashboard spaces root
-                DocumentModel doc = session.getDocument(new PathRef(contextDocument.getPathAsString() + "/" + PUBLIC_DASHBOARD_SPACE_NAME));
+                DocumentModel doc = session.getDocument(new PathRef(
+                        contextDocument.getPathAsString() + "/"
+                                + PUBLIC_DASHBOARD_SPACE_NAME));
                 return doc.getAdapter(Space.class);
             }
         } catch (ClientException e) {

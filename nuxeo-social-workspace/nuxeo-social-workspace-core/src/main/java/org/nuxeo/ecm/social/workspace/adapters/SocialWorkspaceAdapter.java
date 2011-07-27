@@ -1,12 +1,16 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_ROOT_NAME;import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_DASHBOARD_SPACE_NAME;import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_DASHBOARD_SPACE_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_ROOT_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_DASHBOARD_SPACE_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_DASHBOARD_SPACE_NAME;
 
-import org.nuxeo.common.utils.Path;import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.social.workspace.SocialConstants;import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.runtime.api.Framework;
 
@@ -115,12 +119,14 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public String getPublicDashboardSpacePath() {
-        return new Path(getDashboardsSpaceRootPath()).append(PUBLIC_DASHBOARD_SPACE_NAME).toString();
+        return new Path(getDashboardsSpaceRootPath()).append(
+                PUBLIC_DASHBOARD_SPACE_NAME).toString();
     }
 
     @Override
     public String getPrivateDashboardSpacePath() {
-        return new Path(getDashboardsSpaceRootPath()).append(PRIVATE_DASHBOARD_SPACE_NAME).toString();
+        return new Path(getDashboardsSpaceRootPath()).append(
+                PRIVATE_DASHBOARD_SPACE_NAME).toString();
     }
 
     @Override
