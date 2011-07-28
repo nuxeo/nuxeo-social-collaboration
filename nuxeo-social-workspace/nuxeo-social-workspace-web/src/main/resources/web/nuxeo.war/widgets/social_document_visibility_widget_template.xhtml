@@ -8,7 +8,7 @@
   <c:if test="#{!field}">
     <h:outputText value="#{messages['label.summary.visibility.intro']} "/>
     <h:outputText class="summary_locked" value="#{messages['label.summary.restricted']}"/>
-    <c:if test="#{!currentUser.isMemberOf('administrators')}">
+    <c:if test="#{widgetProperty_isActionVisible}">
       <h:outputText value=" | " />
       <h:commandLink value="#{messages['command.makePublic']}"
         action="#{socialDocumentVisibilityActions.makePublic()}"
@@ -19,11 +19,11 @@
   <c:if test="#{field}">
     <h:outputText value="#{messages['label.summary.visibility.intro']} "/>
     <h:outputText class="summary_unlocked" value="#{messages['label.summary.public']} "/>
-    <c:if test="#{!currentUser.isMemberOf('administrators')}">
+    <c:if test="#{widgetProperty_isActionVisible}">
       <h:outputText value=" | " />
-      <h:commandLink value="#{messages['command.restrictToSocialWorkspace']}"
-        action="#{socialDocumentVisibilityActions.restrictToMembers()}"
-        immediate="true" />
+        <h:commandLink value="#{messages['command.restrictToSocialWorkspace']}"
+          action="#{socialDocumentVisibilityActions.restrictToMembers()}"
+          immediate="true" />
     </c:if>
   </c:if>
 </div>

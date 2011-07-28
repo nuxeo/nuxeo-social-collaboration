@@ -11,6 +11,8 @@
       The widget types from this contribution are intended to be used in the
       summary view. All these widgets are bound to the currentDocument in the
       Seam context.
+      You have the possibility to let access to only administrator to change
+      the visibility, with the parameter "isOnlyAdministrators"
     </documentation>
 
     <widgetType name="summary_social_document_visibility_action">
@@ -43,6 +45,7 @@
         /widgets/social_document_visibility_widget_template.xhtml
       </property>
     </widgetType>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
@@ -125,7 +128,7 @@
       </rows>
     </layout>
 
-    <layout name="summary_layout">
+    <layout name="social_document_summary_layout">
       <templates>
         <template mode="any">/layouts/layout_summary_template.xhtml</template>
       </templates>
@@ -156,6 +159,36 @@
       </rows>
     </layout>
 
+    <layout name="news_item_summary_layout">
+      <templates>
+        <template mode="any">/layouts/layout_summary_template.xhtml</template>
+      </templates>
+      <rows>
+      <row>
+      </row>
+        <row>
+          <widget>summary_current_document_description</widget>
+          <widget>summary_note_with_picture</widget>
+          <widget>summary_current_document_files</widget>
+          <widget>summary_current_document_dublincore</widget>
+          <widget>summary_current_document_comments</widget>
+        </row>
+        <row>
+          <widget>summary_news_item_visibility_action</widget>
+          <widget>summary_current_document_lc_and_version</widget>
+          <widget>summary_current_document_actions</widget>
+          <widget>summary_current_document_custom_actions</widget>
+          <widget>summary_current_document_tagging</widget>
+          <widget>summary_current_document_relations</widget>
+        </row>
+        <row>
+          <widget>summary_current_document_publications</widget>
+        </row>
+        <row>
+          <widget>summary_current_document_single_tasks</widget>
+        </row>
+      </rows>
+    </layout>
     <layout name="fullscreen">
       <templates>
         <template mode="any">/layouts/layout_summary_template.xhtml</template>
@@ -349,6 +382,25 @@
       <widgetModes>
         <mode value="any" >#{currentDocument.isProxy() ? 'hidden' : 'view'}</mode>
       </widgetModes>
+      <properties widgetMode="any">
+        <property name="isActionVisible">true</property>
+      </properties>
+    </widget>
+
+    <widget name="summary_news_item_visibility_action" type="summary_social_document_visibility_action">
+      <labels>
+        <label mode="any"></label>
+      </labels>
+      <translated>false</translated>
+      <fields>
+        <field>socialdoc:isPublic</field>
+      </fields>
+      <widgetModes>
+        <mode value="any" >#{currentDocument.isProxy() ? 'hidden' : 'view'}</mode>
+      </widgetModes>
+      <properties widgetMode="any">
+        <property name="isActionVisible">#{currentUser.isAdministrator()}</property>
+      </properties>
     </widget>
 
     <widget name="social_document_visibility" type="template">
