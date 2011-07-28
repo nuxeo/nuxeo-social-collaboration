@@ -2,10 +2,12 @@
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:nxu="http://nuxeo.org/nxweb/util"
-  xmlns:nxd="http://nuxeo.org/nxweb/document"
+  xmlns:a4j="http://richfaces.org/a4j"
   xmlns:h="http://java.sun.com/jsf/html">
 
   <c:set var="userSchema" value="#{userManager.userSchemaName}" />
-  <h:outputText value="#{nxu:userDisplayName(field.id, field[userSchema].firstName, field[userSchema].lastName)}" />
+  <a4j:commandLink action="#{userManagementActions.viewUser(field.id)}" reRender="usersPanel">
+    <h:outputText value="#{nxu:userDisplayName(field.id, field[userSchema].firstName, field[userSchema].lastName)}" />
+  </a4j:commandLink>
 
 </f:subview>
