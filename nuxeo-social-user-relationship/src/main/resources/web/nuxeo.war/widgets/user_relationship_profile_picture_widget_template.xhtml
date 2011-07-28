@@ -5,19 +5,23 @@
   xmlns:nxd="http://nuxeo.org/nxweb/document"
   xmlns:h="http://java.sun.com/jsf/html">
 
-  <nxu:set var="profileModel" value="#{userProfileActions.getUserProfileDocument(field)}" />
+  <nxu:set var="profileModel" value="#{userProfileActions.getUserProfileDocument(field.id)}" >
+  <nxu:set var="profile" value="userprofile">
 
-  <c:if test="#{empty profileModel.profile.avatar}">
-    <h2>XXX</h2>
+  <c:if test="#{empty profileModel[profile].avatar}">
+    Dummy content
   </c:if>
 
-  <c:if test="#{not empty profileModel.profile.avatar}">
+  <c:if test="#{not empty profileModel[profile].avatar}">
     <nxu:set var="image_url"
-    value="#{nxd:fileUrl('downloadFile', profileModel, 'profile:avatar', profileModel.profile.avatar.filename)}">
+    value="#{nxd:fileUrl('downloadFile', profileModel, 'userprofile:avatar', profileModel[profile].avatar.filename)}">
     <img src="#{image_url}"
-      title="#{field.filename}" alt="#{field.filename}"
+      title="#{profileModel[profile].avatar.filename}" alt="#{profileModel[profile].avatar.filename}"
       width="#{widget.properties['width']}" />
   </nxu:set>
   </c:if>
+
+  </nxu:set>
+  </nxu:set>
 
 </f:subview>
