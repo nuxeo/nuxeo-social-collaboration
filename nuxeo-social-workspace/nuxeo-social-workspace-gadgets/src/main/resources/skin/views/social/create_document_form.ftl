@@ -6,11 +6,11 @@
 </head>
 <body>
 <form class="createDocument" action="${This.path}/createDocument" method="post" enctype="multipart/form-data" target="_parent">
-<h3>Add a ${docType.label} in ${currentDoc.title} </h3>
+<h3>Ajouter un ${docType.label} dans ${currentDoc.title} </h3>
 <div class="center">
 <table class="create">
 <tr>
-<td>Title</td>
+<td>Titre</td>
 <td><input class="border input" type="text" name="dc:title" /></td>
 </tr>
 <tr>
@@ -25,8 +25,8 @@
 </#if>
 </table>
 <div class="actions">
-<input class="border" type="submit" name="createDocument" value="Create" onclick="parent.submitForm(this);return false;"/>
-<button class="border" name="cancel" value="Cancel" type="button" onclick="parent.jQuery.fancybox.close()">Cancel</button>
+<input class="border" type="submit" name="createDocument" value="Créer" onclick="parent.submitForm(this);return false;"/>
+<button class="border" name="cancel" value="Cancel" type="button" onclick="parent.jQuery.fancybox.close()">Annuler</button>
 <input type="hidden" name="docRef" value="${currentDoc.id}" />
 <input type="hidden" name="doctype" value="${docType.id}" />
 </div>

@@ -36,7 +36,7 @@
         <img src="${clientSideBaseUrl}img/standart_waiter.gif">
      </div>
      <div class="content" id="content">
-        Library gadget
+        __MSG_label.gadget.library.out.of.dashboard__
      </div>
   </body>
 </html>
