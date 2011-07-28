@@ -16,12 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
@@ -31,6 +25,10 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.api.Framework;
+
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 /**
  * Remove social workspace associated groups
@@ -47,10 +45,9 @@ public class RemoveSocialWorkspaceGroupListener implements EventListener {
 
     private UserManager userManager;
 
-    private static final Log log = LogFactory.getLog(RemoveSocialWorkspaceGroupListener.class);
-
     public void handleEvent(Event event) throws ClientException {
-        if (!DOCUMENT_REMOVED.equals(event.getName())) {
+        if (!DOCUMENT_REMOVED.equals(event.getName())
+                && event.getContext() instanceof DocumentEventContext) {
             return;
         }
 
@@ -64,20 +61,17 @@ public class RemoveSocialWorkspaceGroupListener implements EventListener {
             return;
         }
 
-        SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
-        deleteGroup(socialWorkspace.getAdministratorsGroupName());
-        deleteGroup(socialWorkspace.getMembersGroupName());
+        deleteGroups(doc);
     }
 
-    private void deleteGroup(String groupName) {
-        try {
-            getUserManager().deleteGroup(groupName);
-        } catch (ClientException e) {
-            log.warn("Cannot delete group: " + groupName, e);
-        }
+    protected void deleteGroups(DocumentModel doc) throws ClientException {
+            SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
+
+            getUserManager().deleteGroup(socialWorkspace.getAdministratorsGroupName());
+            getUserManager().deleteGroup(socialWorkspace.getMembersGroupName());
     }
 
-    private UserManager getUserManager() throws ClientException {
+    protected UserManager getUserManager() throws ClientException {
         if (userManager == null) {
             try {
                 userManager = Framework.getService(UserManager.class);
