@@ -19,12 +19,46 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 
 /**
  * Service interface for Social Workspace.
  */
 public interface SocialWorkspaceService {
+
+    void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Returns the {@code SocialWorkspace} container of the given document if it
+     * is in a Social Workspace even if the user does not have right on it,
+     * {@code null} otherwise.
+     * <p>
+     * The underlying {@code DocumentModel} is detached.
+     */
+    SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc);
+
+    /**
+     * Returns the {@code SocialWorkspace} container of the given document if it
+     * is part of a Social Workspace, {@code null} otherwise.
+     */
+    SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc);
+
+    /**
+     * Makes the given {@code socialWorkspace} public.
+     * <p>
+     * Puts the correct rights so that non-members can view public documents and
+     * publci dashboard.
+     */
+    void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace);
+
+    /**
+     * Makes the given {@code socialWorkspace} private.
+     * <p>
+     * Restricts rights for non-members users.
+     */
+    void makeSocialWorkspacePrivate(SocialWorkspace socialWorkspace);
 
     /**
      * Gets the number of days before a social workspace expires without
@@ -33,12 +67,5 @@ public interface SocialWorkspaceService {
      * @return number of days
      */
     int getValidationDays();
-
-    void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
-            String principalName);
-
-    void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace);
-
-    void makeSocialWorkspacePrivate(SocialWorkspace socialWorkspace);
 
 }

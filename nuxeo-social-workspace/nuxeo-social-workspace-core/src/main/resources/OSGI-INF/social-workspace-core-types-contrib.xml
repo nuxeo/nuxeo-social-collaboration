@@ -51,6 +51,9 @@
       <facet name="HiddenInNavigation" />
     </doctype>
 
+    <doctype name="DashboardSpacesContainer" extends="HiddenFolder">
+    </doctype>
+
   </extension>
 
 </component>

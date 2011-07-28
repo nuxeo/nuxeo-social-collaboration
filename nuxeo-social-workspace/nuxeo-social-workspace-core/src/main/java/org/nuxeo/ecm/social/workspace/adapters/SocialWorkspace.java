@@ -108,7 +108,7 @@ public interface SocialWorkspace {
     /**
      * Returns the path of the Dashboard spaces root of this Social Workspace.
      */
-    String getDashboardsSpaceRootPath();
+    String getDashboardSpacesRootPath();
 
     /**
      * Returns the path of the public Dashboard Space of this Social Workspace.

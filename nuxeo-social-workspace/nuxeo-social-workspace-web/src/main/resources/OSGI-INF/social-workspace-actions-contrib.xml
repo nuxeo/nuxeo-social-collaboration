@@ -6,66 +6,43 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-  <action
-      id="BackToDashboard"
-      link="${manageSocialWorkspaceActions.backToDashboard()}"
+    <action id="BackToDashboard"
+      link="#{socialWorkspaceActions.backToDashboard()}"
       label="label.social.workspace.backtodashboard"
       immediate="false"
       icon="/icons/back_to_social_workspace_dashboard.png"
       order="10">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
-      <filter id="socialDocument">
-        <rule grant="true">
-          <facet>SocialDocument</facet>
-        </rule>
-      </filter>
+      <filter-id>social_document</filter-id>
     </action>
 
-  <action
-      id="GoToDMView"
-      link="${navigationContext.navigateToDocument(currentDocument)}"
+    <action id="GoToDMView"
+      link="#{socialWorkspaceActions.navigateToDMView()}"
       label="label.social.workspace.gotodmview"
       immediate="false"
       icon="/icons/goto_dm.png"
       order="10">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
-      <filter id="hasFullscreenView">
-        <rule grant="true">
-          <facet>SocialDocument</facet>
-          <facet>SocialWorkspace</facet>
-        </rule>
-      </filter>
+      <filter-id>has_fullscreen_view</filter-id>
     </action>
 
-  <action
-      id="GoToFullScreenViewForDocument"
-      link="${navigationContext.navigateToDocument(currentDocument, 'fullscreen')}"
+    <action id="GoToFullScreenViewForDocument"
+      link="#{socialWorkspaceActions.navigateToFullscreenView()}"
       label="label.social.workspace.gotofullscreen"
       immediate="false"
       icon="/icons/fullscreen.png"
       order="10">
       <category>DOCUMENT_UPPER_ACTION</category>
-      <filter id="hasFullscreenView">
-        <rule grant="true">
-          <facet>SocialDocument</facet>
-          <facet>SocialWorkspace</facet>
-        </rule>
-      </filter>
+      <filter-id>has_fullscreen_view</filter-id>
     </action>
 
     <action id="newNewsItem" link="#{documentActions.createDocument('NewsItem')}"
       label="command.create.news.item" icon="/icons/action_add.gif">
       <category>SUBVIEW_UPPER_LIST</category>
-      <filter id="newNewsItem">
-        <rule grant="true">
-          <permission>AddChildren</permission>
-          <type>NewsItemsRoot</type>
-        </rule>
-      </filter>
+      <filter-id>new_news_item</filter-id>
     </action>
 
-  <action
-      id="SocialWorkspacesAdministration"
+    <action id="SocialWorkspacesAdministration"
       link="view_admin-fragment.xhtml"
       label="label.social.workspace.administration"
       order="150">
@@ -74,8 +51,7 @@
     </action>
 
 
-  <action
-      id="SocialWorkspacesAdministration"
+    <action id="SocialWorkspacesAdministration"
       link="view_admin-fragment.xhtml"
       label="label.social.workspace.administration"
       order="150">
@@ -83,8 +59,7 @@
       <filter-id>only_for_manager</filter-id>
     </action>
 
-    <action
-      id="SocialWorkspacesRequests"
+    <action id="SocialWorkspacesRequests"
       link="/incl/social_workspace_administration/social_workspace_requests.xhtml"
       label="label.socialworkspace.requests"
       order="10">
@@ -170,6 +145,32 @@
     <filter id="not_social_workspace">
       <rule grant="false">
         <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="social_document">
+      <rule grant="true">
+        <facet>SocialDocument</facet>
+      </rule>
+    </filter>
+
+    <filter id="not_social_document">
+      <rule grant="false">
+        <facet>SocialDocument</facet>
+      </rule>
+    </filter>
+
+    <filter id="has_fullscreen_view">
+      <rule grant="true">
+        <facet>SocialDocument</facet>
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="new_news_item">
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <type>NewsItemsRoot</type>
       </rule>
     </filter>
 

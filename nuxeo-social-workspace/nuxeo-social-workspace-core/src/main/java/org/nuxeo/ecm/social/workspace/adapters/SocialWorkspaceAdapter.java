@@ -113,19 +113,19 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public String getDashboardsSpaceRootPath() {
+    public String getDashboardSpacesRootPath() {
         return doc.getPath().append(DASHBOARD_SPACES_ROOT_NAME).toString();
     }
 
     @Override
     public String getPublicDashboardSpacePath() {
-        return new Path(getDashboardsSpaceRootPath()).append(
+        return new Path(getDashboardSpacesRootPath()).append(
                 PUBLIC_DASHBOARD_SPACE_NAME).toString();
     }
 
     @Override
     public String getPrivateDashboardSpacePath() {
-        return new Path(getDashboardsSpaceRootPath()).append(
+        return new Path(getDashboardSpacesRootPath()).append(
                 PRIVATE_DASHBOARD_SPACE_NAME).toString();
     }
 

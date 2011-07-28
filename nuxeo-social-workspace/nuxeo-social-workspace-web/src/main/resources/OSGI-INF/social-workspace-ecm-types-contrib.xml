@@ -22,14 +22,10 @@
       </layouts>
       <subtypes>
         <type>Folder</type>
-        <type>NewsItem</type>
         <type>Article</type>
         <type>File</type>
         <type>Note</type>
       </subtypes>
-      <views>
-        <view id="fullscreen" value="view_social_collaboration_dashboard" />
-      </views>
     </type>
 
     <type id="Article">
@@ -128,5 +124,16 @@
       </subtypes>
     </type>
 
+    <type id="DashboardSpacesContainer">
+      <label>DashboardSpacesContainer</label>
+      <icon>/icons/social_workspace.png</icon>
+      <bigIcon>/icons/social_workspace_100.png</bigIcon>
+      <default-view>view_documents</default-view>
+      <views>
+        <view id="fullscreen" value="dashboard" />
+      </views>
+    </type>
+
   </extension>
+
 </component>

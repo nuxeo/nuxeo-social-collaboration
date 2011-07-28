@@ -23,8 +23,11 @@ import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -34,6 +37,8 @@ import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.impl.DocumentModelImpl;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
@@ -65,6 +70,36 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     private UserManager userManager;
 
     private int validationDays = 15;
+
+    @Override
+    public SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc) {
+        try {
+            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(doc);
+            finder.runUnrestricted();
+            if (finder.socialWorkspace != null) {
+                return toSocialWorkspace(finder.socialWorkspace);
+            }
+            return null;
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    @Override
+    public SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc) {
+        try {
+            CoreSession session = doc.getCoreSession();
+            List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
+            for (DocumentModel parent : parents) {
+                if (isSocialWorkspace(parent)) {
+                    return toSocialWorkspace(parent);
+                }
+            }
+            return null;
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
 
     @Override
     public int getValidationDays() {
@@ -143,7 +178,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             ACP acp = doc.getACP();
-            addSocialWorkspaceACL(acp, socialWorkspace);
+            ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
+            addSocialWorkspaceACL(acl, socialWorkspace);
             doc.setACP(acp, true);
             doc.getCoreSession().saveDocument(doc);
         } catch (ClientException e) {
@@ -151,15 +187,13 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
     }
 
-    private void addSocialWorkspaceACL(ACP acp, SocialWorkspace socialWorkspace) {
-        ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
+    private void addSocialWorkspaceACL(ACL acl, SocialWorkspace socialWorkspace) {
         addEverythingForAdministratorsACE(acl);
         acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(),
                 SecurityConstants.EVERYTHING, true));
         acl.add(new ACE(socialWorkspace.getMembersGroupName(),
                 SecurityConstants.READ_WRITE, true));
         acl.add(new ACE(EVERYONE, SecurityConstants.EVERYTHING, false));
-        acp.addACL(acl);
     }
 
     private void addEverythingForAdministratorsACE(ACL acl) {
@@ -193,8 +227,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             doc.putContextData(SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
-            addReadRightOnPublicSection(session, socialWorkspace);
-            addReadRightOnPublicDashboard(session, socialWorkspace);
+            makePublicSectionReadable(session, socialWorkspace);
+            makePublicDashboardReadable(session, socialWorkspace);
             doc = session.saveDocument(doc);
             session.save();
             socialWorkspace.setDocument(doc);
@@ -203,42 +237,46 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
     }
 
-    private void addReadRightOnPublicSection(CoreSession session,
+    private void makePublicSectionReadable(CoreSession session,
             SocialWorkspace socialWorkspace) throws ClientException {
         PathRef publicSectionRef = new PathRef(
                 socialWorkspace.getPublicSectionPath());
-        if (!session.exists(publicSectionRef)) {
-            return;
-        }
         DocumentModel publicSection = session.getDocument(publicSectionRef);
 
         ACP acp = publicSection.getACP();
         ACL acl = acp.getOrCreateACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
         acl.clear();
-        String defaultGroup = userManager.getDefaultGroup();
-        defaultGroup = defaultGroup == null ? EVERYONE : defaultGroup;
-        acl.add(new ACE(defaultGroup, READ, true));
+        addReadForDefaultGroup(acl);
         publicSection.setACP(acp, true);
         session.saveDocument(publicSection);
     }
 
-    private void addReadRightOnPublicDashboard(CoreSession session,
-            SocialWorkspace socialWorkspace) throws ClientException {
-        PathRef publicDashboardSpaceRef = new PathRef(
-                socialWorkspace.getPublicDashboardSpacePath());
-        if (!session.exists(publicDashboardSpaceRef)) {
-            return;
-        }
-        DocumentModel publicDashboardSpace = session.getDocument(publicDashboardSpaceRef);
-
-        ACP acp = publicDashboardSpace.getACP();
-        ACL acl = acp.getOrCreateACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
-        acl.clear();
-        String defaultGroup = userManager.getDefaultGroup();
+    private void addReadForDefaultGroup(ACL acl) {
+        String defaultGroup = getUserManager().getDefaultGroup();
         defaultGroup = defaultGroup == null ? EVERYONE : defaultGroup;
         acl.add(new ACE(defaultGroup, READ, true));
-        publicDashboardSpace.setACP(acp, true);
-        session.saveDocument(publicDashboardSpace);
+    }
+
+    private void makePublicDashboardReadable(CoreSession session,
+            SocialWorkspace socialWorkspace) throws ClientException {
+        PathRef dashboardSpacesRootRef = new PathRef(
+                socialWorkspace.getDashboardSpacesRootPath());
+        DocumentModel dashboardSpacesRoot = session.getDocument(dashboardSpacesRootRef);
+        ACP acp = dashboardSpacesRoot.getACP();
+        ACL acl = acp.getOrCreateACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
+        acl.clear();
+        addReadForDefaultGroup(acl);
+        dashboardSpacesRoot.setACP(acp, true);
+        session.saveDocument(dashboardSpacesRoot);
+
+        PathRef privateDashboardSpaceRef = new PathRef(
+                socialWorkspace.getPrivateDashboardSpacePath());
+        DocumentModel privateDashboardSpace = session.getDocument(privateDashboardSpaceRef);
+        acp = privateDashboardSpace.getACP();
+        acl = acp.getOrCreateACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
+        addSocialWorkspaceACL(acl, socialWorkspace);
+        privateDashboardSpace.setACP(acp, true);
+        session.saveDocument(privateDashboardSpace);
     }
 
     @Override
@@ -249,8 +287,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             doc.putContextData(SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
-            removeReadRightOnPublicSection(session, socialWorkspace);
-            removeReadRightOnPublicDashboard(session, socialWorkspace);
+            makePublicSectionUnreadable(session, socialWorkspace);
+            makePublicDashboardUnreadable(session, socialWorkspace);
             doc = session.saveDocument(doc);
             session.save();
             socialWorkspace.setDocument(doc);
@@ -259,15 +297,10 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
     }
 
-    private void removeReadRightOnPublicSection(CoreSession session,
+    private void makePublicSectionUnreadable(CoreSession session,
             SocialWorkspace socialWorkspace) throws ClientException {
         PathRef publicSectionRef = new PathRef(
                 socialWorkspace.getPublicSectionPath());
-        if (!session.exists(publicSectionRef)) {
-            log.warn("The public section '" + publicSectionRef.toString()
-                    + "' does not exist");
-            return;
-        }
         DocumentModel publicSection = session.getDocument(publicSectionRef);
 
         ACP acp = publicSection.getACP();
@@ -276,21 +309,49 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         session.saveDocument(publicSection);
     }
 
-    private void removeReadRightOnPublicDashboard(CoreSession session,
+    private void makePublicDashboardUnreadable(CoreSession session,
             SocialWorkspace socialWorkspace) throws ClientException {
-        PathRef publicDashboardSpaceRef = new PathRef(
-                socialWorkspace.getPublicSectionPath());
-        if (!session.exists(publicDashboardSpaceRef)) {
-            log.warn("The public dashboard space '"
-                    + publicDashboardSpaceRef.toString() + "' does not exist");
-            return;
-        }
-        DocumentModel publicDashboardSpace = session.getDocument(publicDashboardSpaceRef);
-
-        ACP acp = publicDashboardSpace.getACP();
+        PathRef dashboardSpacesRootRef = new PathRef(
+                socialWorkspace.getDashboardSpacesRootPath());
+        DocumentModel dashboardSpacesRoot = session.getDocument(dashboardSpacesRootRef);
+        ACP acp = dashboardSpacesRoot.getACP();
         acp.removeACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
-        publicDashboardSpace.setACP(acp, true);
-        session.saveDocument(publicDashboardSpace);
+        dashboardSpacesRoot.setACP(acp, true);
+        session.saveDocument(dashboardSpacesRoot);
+
+        PathRef privateDashboardSpaceRef = new PathRef(
+                socialWorkspace.getPrivateDashboardSpacePath());
+        DocumentModel privateDashboardSpace = session.getDocument(privateDashboardSpaceRef);
+        acp = privateDashboardSpace.getACP();
+        acp.removeACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
+        privateDashboardSpace.setACP(acp, true);
+        session.saveDocument(privateDashboardSpace);
+    }
+
+    public static class SocialWorkspaceFinder extends UnrestrictedSessionRunner {
+
+        private final DocumentModel doc;
+
+        public DocumentModel socialWorkspace;
+
+        protected SocialWorkspaceFinder(DocumentModel doc) {
+            super(doc.getCoreSession());
+            this.doc = doc;
+        }
+
+        @Override
+        public void run() throws ClientException {
+            List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
+            for (DocumentModel parent : parents) {
+                if (isSocialWorkspace(parent)) {
+                    socialWorkspace = parent;
+                    if (socialWorkspace instanceof DocumentModelImpl) {
+                        ((DocumentModelImpl) socialWorkspace).detach(true);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 }

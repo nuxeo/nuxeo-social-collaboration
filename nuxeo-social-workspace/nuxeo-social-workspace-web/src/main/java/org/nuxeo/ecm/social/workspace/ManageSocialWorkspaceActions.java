@@ -55,8 +55,6 @@ public class ManageSocialWorkspaceActions implements Serializable {
 
     public static final String GROUPS_SAVE_ERROR_LABEL = "label.social.workspace.faces.saveError";
 
-    public static final String FULLSCREEN_VIEW_ID = "fullscreen";
-
     private static final Log log = LogFactory.getLog(ManageSocialWorkspaceActions.class);
 
     protected DocumentModel administratorsGroup;
@@ -74,9 +72,6 @@ public class ManageSocialWorkspaceActions implements Serializable {
 
     @In(create = true)
     protected ResourcesAccessor resourcesAccessor;
-
-    @In(create = true)
-    protected transient CoreSession documentManager;
 
     public DocumentModel getAdministratorsGroup() throws ClientException {
         if (administratorsGroup == null) {
@@ -116,22 +111,6 @@ public class ManageSocialWorkspaceActions implements Serializable {
             facesMessages.add(
                     StatusMessage.Severity.FATAL,
                     resourcesAccessor.getMessages().get(GROUPS_SAVE_ERROR_LABEL));
-        }
-    }
-
-    /**
-     * Navigate to the Dashboard of the Social Workspace if the document belong
-     * to one of it, else navigate to the default view of the current document.
-     */
-    public String backToDashboard() throws ClientException {
-        DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        DocumentModel superSpace = documentManager.getSuperSpace(currentDocument);
-
-        if (superSpace.hasFacet(SOCIAL_WORKSPACE_FACET)) {
-            return navigationContext.navigateToDocument(superSpace,
-                    FULLSCREEN_VIEW_ID);
-        } else {
-            return navigationContext.navigateToDocument(superSpace);
         }
     }
 

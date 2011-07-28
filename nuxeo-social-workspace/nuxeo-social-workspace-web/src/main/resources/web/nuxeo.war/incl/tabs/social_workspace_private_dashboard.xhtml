@@ -10,6 +10,7 @@
   <nxu:set var="repositoryName" value="#{currentDocument.repositoryName}">
   <nxu:set var="spaceProviderName" value="socialWorkspacePrivateDashboardSpaceProvider">
   <nxu:set var="documentContextId" value="#{currentDocument.id}">
+  <nxu:set var="applicationContextPath" value="#{socialWorkspaceActions.socialWorkspaceContainer.document.path}">
 
     <ui:decorate template="/incl/opensocial_container_template.xhtml">
 
@@ -30,6 +31,7 @@
 
     </ui:decorate>
 
+  </nxu:set>
   </nxu:set>
   </nxu:set>
   </nxu:set>

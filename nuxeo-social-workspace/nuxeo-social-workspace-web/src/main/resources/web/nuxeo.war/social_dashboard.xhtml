@@ -25,10 +25,10 @@
 
     <h1>#{nxd:titleOrId(currentDocument)}</h1>
     <div>
-      <c:if test="#{!socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
+      <c:if test="#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
         <ui:include src="/incl/tabs/social_workspace_private_dashboard.xhtml"/>
       </c:if>
-      <c:if test="#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
+      <c:if test="#{!socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
         <ui:include src="/incl/tabs/social_workspace_public_dashboard.xhtml"/>
       </c:if>
     </div>

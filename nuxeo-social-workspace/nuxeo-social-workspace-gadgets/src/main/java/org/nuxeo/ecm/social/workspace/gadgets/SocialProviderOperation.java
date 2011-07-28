@@ -66,9 +66,6 @@ public class SocialProviderOperation {
     protected CoreSession session;
 
     @Context
-    protected UserManager userManager;
-
-    @Context
     protected PageProviderService pps;
 
     @Param(name = "providerName", required = false)
@@ -132,15 +129,6 @@ public class SocialProviderOperation {
         }
 
         if (StringUtils.isBlank(socialWorkspacePath)) {
-            return EMPTY_LIST;
-        }
-
-        try {
-            DocumentModel sws = session.getDocument(new PathRef(
-                    socialWorkspacePath));
-        } catch (Exception exception) {
-            log.warn("failed to load social workspace (" + socialWorkspacePath
-                    + ") ", exception);
             return EMPTY_LIST;
         }
 

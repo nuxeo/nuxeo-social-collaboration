@@ -21,7 +21,7 @@
   <extension target="org.nuxeo.theme.services.ThemeService" point="applications">
     <application root="${org.nuxeo.ecm.contextPath}" template-engine="jsf-facelets">
 
-      <view id="/view_social_collaboration_dashboard.xhtml">
+      <view id="/social_dashboard.xhtml">
         <theme>social-collaboration/dashboard</theme>
       </view>
 

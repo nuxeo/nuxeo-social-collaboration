@@ -43,6 +43,8 @@ public class SocialConstants {
 
     public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
 
+    public static final String DASHBOARD_SPACES_CONTAINER_TYPE = "DashboardSpacesContainer";
+
     // Social Document
     public static final String SOCIAL_DOCUMENT_FACET = "SocialDocument";
 

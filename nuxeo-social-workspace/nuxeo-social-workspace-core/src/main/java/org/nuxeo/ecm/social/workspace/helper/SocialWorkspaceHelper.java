@@ -105,23 +105,6 @@ public class SocialWorkspaceHelper {
         return doc.getAdapter(SocialDocument.class);
     }
 
-    /**
-     * Return the Social Workspace container of the given document. If the
-     * document is not part of a Social Workspace, return null.
-     */
-    public static DocumentModel getSocialWorkspaceContainer(
-            CoreSession session, DocumentRef docRef) throws ClientException {
-        List<DocumentModel> parents = session.getParentDocuments(docRef);
-
-        for (DocumentModel parent : parents) {
-            if (isSocialWorkspace(parent)) {
-                return parent;
-            }
-        }
-
-        return null;
-    }
-
     public static String getPrivateSectionPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
             throw new IllegalArgumentException(

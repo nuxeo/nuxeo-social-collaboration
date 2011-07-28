@@ -19,14 +19,14 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
 
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
-import org.nuxeo.ecm.social.workspace.listeners.VisibilitySocialDocumentListener;
+import org.nuxeo.ecm.social.workspace.listeners.VisibilitySocialDocumentListener;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;import org.nuxeo.runtime.api.Framework;
 
 /**
  * Default implementation of {@link SocialDocument}.
@@ -67,13 +67,11 @@ public class SocialDocumentAdapter implements SocialDocument {
                             + sourceDocument.getPathAsString());
         }
 
-        DocumentModel socialWorkspaceDoc = SocialWorkspaceHelper.getSocialWorkspaceContainer(
-                getSession(), sourceDocument.getRef());
-        if (socialWorkspaceDoc == null) {
+        socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspaceContainer(sourceDocument);
+        if (socialWorkspace == null) {
             throw new ClientException(
                     "Given document is not into a social workspace");
         }
-        socialWorkspace = SocialWorkspaceHelper.toSocialWorkspace(socialWorkspaceDoc);
     }
 
     protected DocumentModel getPrivateSection() throws ClientException {
@@ -279,6 +277,14 @@ public class SocialDocumentAdapter implements SocialDocument {
             session = sourceDocument.getCoreSession();
         }
         return session;
+    }
+
+    private SocialWorkspaceService getSocialWorkspaceService() {
+        try {
+            return Framework.getService(SocialWorkspaceService.class);
+        } catch (Exception e) {
+            throw new ClientRuntimeException(e);
+        }
     }
 
 }
