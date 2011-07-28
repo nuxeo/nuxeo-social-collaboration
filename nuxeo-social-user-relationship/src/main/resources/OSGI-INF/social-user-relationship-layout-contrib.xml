@@ -103,7 +103,7 @@
 
     <widget name="user_relationship_contacts" type="template">
       <labels>
-        <label mode="any">label.audit.endDate</label>
+        <label mode="any">label.social.user.widget.relationships</label>
       </labels>
       <translated>true</translated>
       <fields>
