@@ -5,15 +5,15 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 
 import java.util.Arrays;
 
-import org.nuxeo.ecm.core.api.ClientException;
+import org.junit.runner.RunWith;import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.EventService;
-import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
+import org.nuxeo.ecm.core.test.CoreFeature;import org.nuxeo.ecm.core.test.DefaultRepositoryInit;import org.nuxeo.ecm.core.test.annotations.BackendType;import org.nuxeo.ecm.core.test.annotations.Granularity;import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.api.Framework;import org.nuxeo.runtime.test.runner.Deploy;import org.nuxeo.runtime.test.runner.Features;import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import com.google.inject.Inject;
 
@@ -21,6 +21,24 @@ import com.google.inject.Inject;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
+@RunWith(FeaturesRunner.class)
+@Features(CoreFeature.class)
+@RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
+@Deploy({
+        "org.nuxeo.ecm.platform.api",
+        "org.nuxeo.ecm.platform.dublincore",
+        "org.nuxeo.ecm.directory",
+        "org.nuxeo.ecm.directory.sql",
+        "org.nuxeo.ecm.directory.types.contrib",
+        "org.nuxeo.ecm.platform.usermanager.api",
+        "org.nuxeo.ecm.platform.usermanager",
+        "org.nuxeo.ecm.platform.test:test-usermanagerimpl/directory-config.xml",
+        "org.nuxeo.ecm.platform.picture.core:OSGI-INF/picturebook-schemas-contrib.xml",
+        "org.nuxeo.ecm.platform.content.template",
+        "org.nuxeo.ecm.opensocial.spaces",
+        "org.nuxeo.ecm.social.workspace.core",
+        "org.nuxeo.ecm.platform.content.template"
+})
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject

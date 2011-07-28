@@ -55,7 +55,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
 import org.nuxeo.ecm.platform.jbpm.JbpmService;
-import org.nuxeo.ecm.platform.test.PlatformFeature;
+import org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants;import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -71,24 +71,15 @@ import com.google.inject.Inject;
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
  *
  */
-@RunWith(FeaturesRunner.class)
-@Features(PlatformFeature.class)
-@RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
+
 // no listener configured
 @Deploy({
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-core-types-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-life-cycle-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-content-template-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-adapters-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-notifications-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-operation-chains-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-event-handlers-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-listener-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:OSGI-INF/social-workspace-service-contrib.xml",
         "org.nuxeo.ecm.automation.core",
         "org.nuxeo.ecm.platform.jbpm.automation",
-        "org.nuxeo.ecm.automation.features", CORE_BUNDLE_NAME,
-        TESTING_BUNDLE_NAME })
+        "org.nuxeo.ecm.automation.features",
+        JbpmUTConstants.CORE_BUNDLE_NAME,
+        JbpmUTConstants.TESTING_BUNDLE_NAME
+})
 @LocalDeploy({ "org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml" })
 public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 

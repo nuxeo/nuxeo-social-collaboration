@@ -38,10 +38,6 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
-@RunWith(FeaturesRunner.class)
-@Features(PlatformFeature.class)
-@RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
-@Deploy("org.nuxeo.ecm.social.workspace.core")
 public class TestAddRemoveSocialWorkspaceGroups extends
         AbstractSocialWorkspaceTest {
 

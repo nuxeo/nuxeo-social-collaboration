@@ -36,11 +36,6 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
-@RunWith(FeaturesRunner.class)
-@Features(PlatformFeature.class)
-@RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.social.workspace.core" })
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
 public class TestDeleteSocialDocumentListener extends
         AbstractSocialWorkspaceTest {

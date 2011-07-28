@@ -43,11 +43,6 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
-@RunWith(FeaturesRunner.class)
-@Features(PlatformFeature.class)
-@RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.social.workspace.core" })
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml")
 public class TestAdapters extends AbstractSocialWorkspaceTest {
 

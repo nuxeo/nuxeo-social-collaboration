@@ -45,11 +45,6 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
  *
  * @author rlegall@nuxeo.com
  */
-@RunWith(FeaturesRunner.class)
-@Features(PlatformFeature.class)
-@RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.social.workspace.core" })
 public class TestRightsWithoutDefaultGroup extends AbstractSocialWorkspaceTest {
 
     protected Principal nobody;
