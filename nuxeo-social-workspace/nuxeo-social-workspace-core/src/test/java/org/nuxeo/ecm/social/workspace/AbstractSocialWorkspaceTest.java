@@ -5,15 +5,24 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 
 import java.util.Arrays;
 
-import org.junit.runner.RunWith;import org.nuxeo.ecm.core.api.ClientException;
+import org.junit.runner.RunWith;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.EventService;
-import org.nuxeo.ecm.core.test.CoreFeature;import org.nuxeo.ecm.core.test.DefaultRepositoryInit;import org.nuxeo.ecm.core.test.annotations.BackendType;import org.nuxeo.ecm.core.test.annotations.Granularity;import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
+import org.nuxeo.ecm.core.test.CoreFeature;
+import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.annotations.BackendType;
+import org.nuxeo.ecm.core.test.annotations.Granularity;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.runtime.api.Framework;import org.nuxeo.runtime.test.runner.Deploy;import org.nuxeo.runtime.test.runner.Features;import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import com.google.inject.Inject;
 
@@ -37,8 +46,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.opensocial.spaces",
         "org.nuxeo.ecm.social.workspace.core",
-        "org.nuxeo.ecm.platform.content.template"
-})
+        "org.nuxeo.ecm.platform.content.template" })
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
