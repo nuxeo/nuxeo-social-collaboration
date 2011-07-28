@@ -46,8 +46,7 @@ public class RemoveSocialWorkspaceGroupListener implements EventListener {
     private UserManager userManager;
 
     public void handleEvent(Event event) throws ClientException {
-        if (!DOCUMENT_REMOVED.equals(event.getName())
-                && event.getContext() instanceof DocumentEventContext) {
+        if (!DOCUMENT_REMOVED.equals(event.getName())) {
             return;
         }
 
@@ -64,14 +63,14 @@ public class RemoveSocialWorkspaceGroupListener implements EventListener {
         deleteGroups(doc);
     }
 
-    protected void deleteGroups(DocumentModel doc) throws ClientException {
+    private void deleteGroups(DocumentModel doc) throws ClientException {
             SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
 
             getUserManager().deleteGroup(socialWorkspace.getAdministratorsGroupName());
             getUserManager().deleteGroup(socialWorkspace.getMembersGroupName());
     }
 
-    protected UserManager getUserManager() throws ClientException {
+    private UserManager getUserManager() throws ClientException {
         if (userManager == null) {
             try {
                 userManager = Framework.getService(UserManager.class);
