@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Join Us"
     description="Join to Social Workspace gadget"
-    author="ei" author_email="ei@nuxeo.com"
+    author="Eugen Ionica" author_email="ei@nuxeo.com"
     height="420">
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
@@ -39,43 +39,43 @@
    //};
 
    var NXRequestParams = {
-   		operationId : 'SocialWorkspace.UserStatus',
-   		operationParams : {
-   		 socialWorkspacePath : socialWorkspacePath
-   		},
-   		entityType : 'blob',
-   		operationContext : {},
-   		operationCallback : displayStatut
+       operationId : 'SocialWorkspace.UserStatus',
+       operationParams : {
+        socialWorkspacePath : socialWorkspacePath
+       },
+       entityType : 'blob',
+       operationContext : {},
+       operationCallback : displayStatut
    }
 
 
 
-	function disableButton() {
-		_gel("statusMessage").innerHTML = "__MSG_label.request.registered__";
-	    _gel("joinButton").style.display = 'none';
-	}
+  function disableButton() {
+    _gel("statusMessage").innerHTML = "__MSG_label.request.registered__";
+      _gel("joinButton").style.display = 'none';
+  }
 
    function displaySocialWorkspaceDescription(entries) {
-   		msg = ""
-   		if ( entries.length > 0 ) {
-   			msg = entries[0].properties["dc:description"];
-   		}
-   		_gel("socialWorkspaceDescription").innerHTML = msg;
-   		gadgets.window.adjustHeight();
+       msg = ""
+       if ( entries.length > 0 ) {
+         msg = entries[0].properties["dc:description"];
+       }
+       _gel("socialWorkspaceDescription").innerHTML = msg;
+       gadgets.window.adjustHeight();
    }
 
    function displayStatut(response, nxParams) {
-   		statute = response.data["status"];
-   		_gel("socialWorkspaceDescription").innerHTML = response.data["description"];
-		if ( "REQUEST_PENDING" == statute ) {
-			_gel("statusMessage").innerHTML = "__MSG_label.request.alreadyRegistered__";
-			_gel("joinButton").style.display = 'none';
-		}
-		if ( "MEMBER" == statute ) {
-			_gel("statusMessage").innerHTML = "__MSG_label.request.alreadyMember__";
-			_gel("joinButton").style.display = 'none';
-		}
-		gadgets.window.adjustHeight();
+       statute = response.data["status"];
+       _gel("socialWorkspaceDescription").innerHTML = response.data["description"];
+    if ( "REQUEST_PENDING" == statute ) {
+      _gel("statusMessage").innerHTML = "__MSG_label.request.alreadyRegistered__";
+      _gel("joinButton").style.display = 'none';
+    }
+    if ( "MEMBER" == statute ) {
+      _gel("statusMessage").innerHTML = "__MSG_label.request.alreadyMember__";
+      _gel("joinButton").style.display = 'none';
+    }
+    gadgets.window.adjustHeight();
    }
 
    // execute automation request onload
@@ -85,16 +85,16 @@
    } );
 
    var NXJoinRequestParams = {
-   		operationId : 'Social.Join',
-   		operationParams : {
-   		 socialWorkspacePath : socialWorkspacePath
-   		},
-   		operationContext : {},
-   		operationCallback : disableButton
+       operationId : 'Social.Join',
+       operationParams : {
+        socialWorkspacePath : socialWorkspacePath
+       },
+       operationContext : {},
+       operationCallback : disableButton
    }
 
    function joinSocialWorkspace() {
-   	    doAutomationRequest(NXJoinRequestParams);
+         doAutomationRequest(NXJoinRequestParams);
    };
 
   </script>

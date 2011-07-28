@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
   <ModulePrefs title="News"
-    description="Diplay articles list using Nuxeo REST Automation API "
-    author="rlg" author_email="rlg@nuxeo.com"
+    description="Display News of the Social Workspace"
+    author="Ronan Le Gall" author_email="rlg@nuxeo.com"
     height="420">
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
