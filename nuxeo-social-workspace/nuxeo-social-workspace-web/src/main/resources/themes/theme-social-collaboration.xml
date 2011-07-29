@@ -61,7 +61,7 @@
       <width>100%</width>
     </layout>
     <layout element="page[1]/section[2]/cell[1]">
-      <padding>20px 20px 180px</padding>
+      <padding>20px 35px 180px</padding>
     </layout>
     <layout element="page[1]/section[3]">
       <width>100%</width>
@@ -1116,11 +1116,11 @@
       </selector>
       <!-- Style for Resume Tab -->
       <selector path="h3.summaryTitle">
-        <border-bottom preset="summary (Social Collaboration borders)" />
         <color preset="summary.titles (Social Collaboration colors)" />
         <font preset="title3 (Social Collaboration fonts)"/>
-        <margin>0px 0px 10px 0px</margin>
-        <padding>17px 0px 3px 0px</padding>
+        <margin>0 0 10px 0</margin>
+        <padding>0 0 3px</padding>
+        <text-transform>uppercase</text-transform>
       </selector>
       <selector path=".dublincore_block table.floatingLeftTable">
         <margin-right>100px</margin-right>
@@ -1165,6 +1165,9 @@
       </selector>
       <selector path=".relation_block">
       </selector>
+      <selector path=".description_block">
+        <padding>0px 0px 20px</padding>
+      </selector>
       <selector path=".lockFile_block, .restoreFile_block">
         <padding>0px 0px 10px</padding>
       </selector>
@@ -1183,10 +1186,11 @@
         <border preset="summary.actions (Social Collaboration borders)" />
         <padding>3px</padding>
       </selector>
-      <selector path=".actions_block">
+      <selector path=".actions_block, content_block">
         <border preset="summary.actions (Social Collaboration borders)" />
-        <padding>10px 7px 3px</padding>
+        <padding>10px</padding>
         <margin>10px 0</margin>
+        <border-radius>5px</border-radius>
       </selector>
       <selector path=".comments_block .commentBlock">
         <border>none</border>
@@ -1215,6 +1219,11 @@
         <width>62%</width>
         <padding-top>10px</padding-top>
       </selector>
+      <selector path=".summary_div_0 p">
+       <color preset="paragraph (Social Collaboration colors)" />
+      <font-size>110%</font-size>
+      <line-height>150%</line-height>
+      </selector>
       <selector path=".summary_div_1">
         <float>right</float>
         <width>33%</width>
@@ -1226,6 +1235,9 @@
       </selector>
       <selector path=".summary_div_2">
         <clear>both</clear>
+      </selector>
+      <selector path="#socialWorkspaceFullScreenListForm">
+        <text-align>right</text-align>
       </selector>
       <selector path=".bigIcon">
         <width>50px</width>

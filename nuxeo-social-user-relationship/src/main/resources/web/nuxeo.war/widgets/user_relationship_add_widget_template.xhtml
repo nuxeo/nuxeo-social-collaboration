@@ -23,66 +23,30 @@
       float: right;
     }
   </style>
-
-  <a4j:region>
-  <a4j:form>
-  <a4j:outputPanel id="userRelationPanel">
-
-    <!-- current user is you -->
-    <a4j:commandButton rendered="#{userRelationshipAction.currentUser}" disabled="true"
-      styleClass="button" value="#{messages['action.social.user.relationship.isYou']}" />
+  <c:set var="andLabel" value=" #{messages['label.and']} " scope="page" />
+  <c:set var="displayedName" value="#{nxu:test(empty userManagementActions.selectedUser.user.firstName, userManagementActions.selectedUser.id, userManagementActions.selectedUser.user.firstName)}" scope="page" />
+  <a4j:outputPanel id="userRelationPanel" >
 
     <a4j:outputPanel rendered="#{!userRelationshipAction.currentUser}" id="user_relationship_#{widget.id}">
-      <c:if test="#{false}">
-        <!--
-
-TODO: This part using jQuery Fancybox is temporarly disabled, we use a custom small popup for the moment.
-
-        -->
-        <script type="text/javascript">
-          jQuery("#add_relationship_#{widget.id}").fancybox({
-            'type'    : 'inline'
-          });
-        </script>
-
-        <!-- Fancy box version ... -->
-        <a id="add_relationship_#{widget.id}"
-          href="#add_relationship_#{widget.id}">
-          <h:outputText value="#{userRelationshipAction.alreadyConnected ? messages['action.social.user.relationship.join'] : messages['action.social.user.relationship.addNew']}" />
-        </a>
-
-        <!-- in a fancybox -->
-        <div style="display: none;">
-          <div id="add_relationship_#{widget.id}">
-            <a4j:status>
-              <f:facet name="start">
-                <h:graphicImage value="/img/standart_waiter.gif" />
-              </f:facet>
-            </a4j:status>
-            <a4j:outputPanel id="add_relationship_#{widget.id}">
-              <nxu:dataTable id="#{widget.id}_add_relationship"
-                value="#{userRelationshipService.kinds}" var="kind"
-                rendered="#{!(userRelationshipAction.currentUser)}">
-
-                <nxu:column>
-                  <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipAction.relationshipCheckboxChanged}"
-                    value="#{userRelationshipAction.isActiveRelationship(kind)}">
-                    <a4j:support event="onchange"
-                      reRender="add_relationship_#{widget.id},facesStatusMessagePanel">
-                      <f:param name="selectedKind" value="#{kind}" />
-                    </a4j:support>
-                    <h:outputText value="#{kind}" />
-                  </h:selectBooleanCheckbox>
-                </nxu:column>
-              </nxu:dataTable>
-            </a4j:outputPanel>
-          </div>
-        </div>
-      </c:if>
 
       <a4j:outputPanel styleClass="action_bar" id="add_relationship_#{widget.id}_btn">
+        <h:outputFormat value="#{messages['action.social.user.relationship.not.in.relation']}" rendered="#{not userRelationshipAction.alreadyConnected}">
+          <f:param value="#{displayedName}" />
+        </h:outputFormat>
+
+        <a4j:outputPanel rendered="#{userRelationshipAction.alreadyConnected}">
+          <h:outputFormat value="#{messages['action.social.user.relationship.in.relation']} ">
+            <f:param value="#{displayedName}" />
+          </h:outputFormat>
+
+          <c:forEach var="relation" items="#{userRelationshipAction.relationshipsWithSelectedUser}" varStatus="status">
+            <c:if test="#{!status.first}">#{status.last ? andLabel : ', '}</c:if>
+            <h:outputText value="#{relation}" />
+          </c:forEach>
+        </a4j:outputPanel>
+
         <script type="text/javasript">
-          var btn = jQuery("#add_relationship_#{widget.id}_btn");
+          var btn = jQuery(".relationship_#{widget.id}_button");
           btn.click(function() {
             return false;
           });
@@ -90,9 +54,16 @@ TODO: This part using jQuery Fancybox is temporarly disabled, we use a custom sm
             div.fadeIn(500);
           });
         </script>
-        <a class="button" id="add_relationship_#{widget.id}_btn">
-          <h:outputText value="#{userRelationshipAction.alreadyConnected ? messages['action.social.user.relationship.join'] : messages['action.social.user.relationship.addNew']}" />
-        </a>
+        <a4j:outputPanel rendered="#{not userRelationshipAction.alreadyConnected}">
+          <a class="button relationship_#{widget.id}_button">
+            <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
+          </a>
+        </a4j:outputPanel>
+        <a4j:outputPanel rendered="#{userRelationshipAction.alreadyConnected}">
+          <a class="button relationship_#{widget.id}_button">
+            <h:outputText value="#{messages['action.social.user.relationship.join']}" />
+          </a>
+        </a4j:outputPanel>
       </a4j:outputPanel>
 
       <div id="add_relationship_#{widget.id}" style="display: none;">
@@ -129,6 +100,4 @@ TODO: This part using jQuery Fancybox is temporarly disabled, we use a custom sm
     </a4j:outputPanel>
 
   </a4j:outputPanel>
-  </a4j:form>
-  </a4j:region>
 </f:subview>

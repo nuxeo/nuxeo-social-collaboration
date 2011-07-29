@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 
 import net.sf.json.JSONObject;
 
-import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -37,7 +36,7 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;
-import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -51,26 +50,26 @@ public class GetUserSocialWorkspaceStatus {
 
     public static final String ID = "SocialWorkspace.UserStatus";
 
-    protected OperationContext ctx;
-
     @Context
     protected CoreSession session;
 
-    @Param(name = "socialWorkspacePath", required = true)
-    protected String socialWorkspacePath;
+    @Context
+    protected SocialWorkspaceService socialWorkspaceService;
+
+    @Param(name = "contextPath", required = true)
+    protected String contextPath;
 
     @OperationMethod
     public Blob run() throws Exception {
         NuxeoPrincipal currentUser = (NuxeoPrincipal) session.getPrincipal();
-        DocumentModel sws = session.getDocument(new PathRef(socialWorkspacePath));
-        SocialWorkspace socialWorkspace = toSocialWorkspace(sws);
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(session, new PathRef(contextPath));
         if (socialWorkspace.isAdministratorOrMember(currentUser)) {
-            return buildResponse(sws, Status.MEMBER);
+            return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
         }
-        if (SocialGroupsManagement.isRequestPending(sws, currentUser.getName())) {
-            return buildResponse(sws, Status.REQUEST_PENDING);
+        if (SocialGroupsManagement.isRequestPending(socialWorkspace.getDocument(), currentUser.getName())) {
+            return buildResponse(socialWorkspace.getDocument(), Status.REQUEST_PENDING);
         }
-        return buildResponse(sws, Status.NOT_MEMBER);
+        return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
     }
 
     protected Blob buildResponse(DocumentModel sws, Status status)

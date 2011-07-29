@@ -10,6 +10,7 @@
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
+  <#include "context-prefs.ftl"/>
   <Content type="html">
 
 <![CDATA[
@@ -23,6 +24,7 @@
   ${jsContext}
 
   <script src="${specDirectoryUrl}default-automation-request.js"></script>
+  <script src="${specDirectoryUrl}context-management.js"></script>
   <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
   <script type="text/javascript" language="javascript" src="publicarticles.js"></script>
 

@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSP
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.impl.DocumentModelImpl;
@@ -73,8 +75,16 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     @Override
     public SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc) {
+        return getDetachedSocialWorkspaceContainer(doc.getCoreSession(),
+                doc.getRef());
+    }
+
+    @Override
+    public SocialWorkspace getDetachedSocialWorkspaceContainer(
+            CoreSession session, DocumentRef docRef) {
         try {
-            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(doc);
+            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session,
+                    docRef);
             finder.runUnrestricted();
             if (finder.socialWorkspace != null) {
                 return toSocialWorkspace(finder.socialWorkspace);
@@ -119,7 +129,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
+    public void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
             String principalName) {
         createSocialWorkspaceGroups(socialWorkspace, principalName);
         initializeSocialWorkspaceRights(socialWorkspace);
@@ -158,6 +168,20 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             userManager.updateGroup(group);
         } catch (GroupAlreadyExistsException e) {
             log.info("Group already exists : " + groupName);
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    @Override
+    public void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
+        deleteGroup(socialWorkspace.getAdministratorsGroupName());
+        deleteGroup(socialWorkspace.getMembersGroupName());
+    }
+
+    private void deleteGroup(String groupName) {
+        try {
+            getUserManager().deleteGroup(groupName);
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -214,6 +238,76 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
             newsItemsRoot.setACP(acp, true);
             session.saveDocument(newsItemsRoot);
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    @Override
+    public void addSocialWorkspaceAdministrator(
+            SocialWorkspace socialWorkspace, String principalName) {
+        addMemberToGroup(principalName,
+                socialWorkspace.getAdministratorsGroupName());
+    }
+
+    @Override
+    public void addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName) {
+        addMemberToGroup(principalName, socialWorkspace.getMembersGroupName());
+    }
+
+    @Override
+    public void removeSocialWorkspaceAdministrator(
+            SocialWorkspace socialWorkspace, String principalName) {
+        removeMemberFromGroup(principalName,
+                socialWorkspace.getMembersGroupName());
+    }
+
+    @Override
+    public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName) {
+        removeMemberFromGroup(principalName,
+                socialWorkspace.getAdministratorsGroupName());
+    }
+
+    private void addMemberToGroup(String principalName, String groupName) {
+        try {
+            if (!StringUtils.isBlank(principalName)) {
+                UserManager userManager = getUserManager();
+                DocumentModel group = userManager.getGroupModel(groupName);
+                String groupSchemaName = userManager.getGroupSchemaName();
+                String groupMembersField = userManager.getGroupMembersField();
+                List<String> groupMembers = (List<String>) group.getProperty(
+                        groupSchemaName, groupMembersField);
+                if (groupMembers == null) {
+                    groupMembers = new ArrayList<String>();
+                }
+                groupMembers.add(principalName);
+                group.setProperty(groupSchemaName, groupMembersField,
+                        groupMembers);
+                userManager.updateGroup(group);
+            }
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    private void removeMemberFromGroup(String principalName, String groupName) {
+        try {
+            if (!StringUtils.isBlank(principalName)) {
+                UserManager userManager = getUserManager();
+                DocumentModel group = userManager.getGroupModel(groupName);
+                String groupSchemaName = userManager.getGroupSchemaName();
+                String groupMembersField = userManager.getGroupMembersField();
+                List<String> groupMembers = (List<String>) group.getProperty(
+                        groupSchemaName, groupMembersField);
+                if (groupMembers != null) {
+                    groupMembers.remove(principalName);
+                    group.setProperty(groupSchemaName, groupMembersField,
+                            groupMembers);
+                    userManager.updateGroup(group);
+                }
+            }
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -330,18 +424,18 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     public static class SocialWorkspaceFinder extends UnrestrictedSessionRunner {
 
-        private final DocumentModel doc;
+        private final DocumentRef docRef;
 
         public DocumentModel socialWorkspace;
 
-        protected SocialWorkspaceFinder(DocumentModel doc) {
-            super(doc.getCoreSession());
-            this.doc = doc;
+        protected SocialWorkspaceFinder(CoreSession session, DocumentRef docRef) {
+            super(session);
+            this.docRef = docRef;
         }
 
         @Override
         public void run() throws ClientException {
-            List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
+            List<DocumentModel> parents = session.getParentDocuments(docRef);
             for (DocumentModel parent : parents) {
                 if (isSocialWorkspace(parent)) {
                     socialWorkspace = parent;

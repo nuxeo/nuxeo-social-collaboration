@@ -28,9 +28,10 @@ import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
@@ -61,12 +62,8 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
             return;
         }
         try {
-            CoreSession session = event.getContext().getCoreSession();
-            // get the list with all not validated social workspaces
-            DocumentModelList list = session.query(QUERY_SELECT_NOT_VALIDATED_SOCIAL_WORKSPACES);
-            for (DocumentModel doc : list) {
-                checkTasksFor(doc);
-            }
+            UnrestrictedSocialWorkspaceValidationTasksChecker checker = new UnrestrictedSocialWorkspaceValidationTasksChecker();
+            checker.runUnrestricted();
         } catch (Exception e) {
             log.debug("failed to open session", e);
         }
@@ -120,6 +117,25 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
             }
         }
         return jbpmService;
+    }
+
+    protected class UnrestrictedSocialWorkspaceValidationTasksChecker extends
+            UnrestrictedSessionRunner {
+
+        protected UnrestrictedSocialWorkspaceValidationTasksChecker()
+                throws Exception {
+            super(
+                    Framework.getService(RepositoryManager.class).getDefaultRepository().getName());
+        }
+
+        @Override
+        public void run() throws ClientException {
+            // get the list with all not validated social workspaces
+            DocumentModelList list = session.query(QUERY_SELECT_NOT_VALIDATED_SOCIAL_WORKSPACES);
+            for (DocumentModel doc : list) {
+                checkTasksFor(doc);
+            }
+        }
     }
 
 }

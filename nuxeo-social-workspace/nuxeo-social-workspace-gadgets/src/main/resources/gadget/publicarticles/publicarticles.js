@@ -4,7 +4,7 @@ var prefs = new gadgets.Prefs();
 var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
   operationParams : { query : "Select * from Article WHERE ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted'",
        pageSize : 5,
-       socialWorkspacePath : getSocialWorkspacePath()
+       contextPath : getTargetContextPath()
   },  // parameters for the chain or operation
   operationContext : {},                                                // context
   operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
@@ -18,17 +18,6 @@ var NXRequestParams={ operationId : 'Social.Provider',            // id of opera
                    { type: 'text', field: 'note:note', label: '__MSG_label.article.abstract__'}
                    ]
 };
-
-function getSocialWorkspacePath() {
-  if (typeof gadgets.nuxeo === 'undefined') {
-    return '';
-  }
-  var path = gadgets.nuxeo.getNuxeoContainerContext().container.parameters.applicationContextPath;
-  if (typeof path === 'undefined') {
-    path = '';
-  }
-  return path;
-}
 
 function displayArticles(entries, nxParams) {
 

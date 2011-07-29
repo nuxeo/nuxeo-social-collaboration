@@ -7,6 +7,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_DASHBOARD_S
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_DASHBOARD_SPACE_NAME;
 
 import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -28,9 +29,17 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public void initialize(String principalName) {
-        getSocialWorkspaceService().initializeSocialWorkspace(this,
-                principalName);
+    public String getTitle() {
+        try {
+            return doc.getTitle();
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getPath() {
+        return doc.getPathAsString();
     }
 
     @Override
@@ -60,6 +69,22 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
         Boolean approveSubscription = (Boolean) getDocProperty(doc,
                 FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION);
         return approveSubscription == null ? false : approveSubscription;
+    }
+
+    public void addAdministrator(NuxeoPrincipal principal) {
+
+    }
+
+    public void addMember(NuxeoPrincipal principal) {
+
+    }
+
+    public void removeAdministrator(NuxeoPrincipal principal) {
+
+    }
+
+    public void removeMember(NuxeoPrincipal principal) {
+
     }
 
     @Override

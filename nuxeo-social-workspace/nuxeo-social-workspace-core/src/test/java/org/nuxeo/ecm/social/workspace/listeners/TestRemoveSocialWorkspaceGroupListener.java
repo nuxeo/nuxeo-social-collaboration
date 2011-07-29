@@ -16,6 +16,9 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,10 +36,6 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import com.google.inject.Inject;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>

@@ -16,8 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +42,7 @@ import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.platform.query.core.CoreQueryPageProviderDescriptor;
 import org.nuxeo.ecm.platform.query.nxql.CoreQueryDocumentPageProvider;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -68,6 +66,9 @@ public class SocialProviderOperation {
     @Context
     protected PageProviderService pps;
 
+    @Context
+    protected SocialWorkspaceService socialWorkspaceService;
+
     @Param(name = "providerName", required = false)
     protected String providerName;
 
@@ -86,8 +87,8 @@ public class SocialProviderOperation {
     @Param(name = "sortInfo", required = false)
     protected StringList sortInfoAsStringList;
 
-    @Param(name = "socialWorkspacePath", required = true)
-    protected String socialWorkspacePath;
+    @Param(name = "contextPath", required = true)
+    protected String contextPath;
 
     @Param(name = "onlyPublicDocuments", required = false)
     protected String onlyPublicDocuments;
@@ -128,31 +129,35 @@ public class SocialProviderOperation {
             targetPageSize = new Long(pageSize);
         }
 
-        if (StringUtils.isBlank(socialWorkspacePath)) {
+        if (StringUtils.isBlank(contextPath)) {
             return EMPTY_LIST;
         }
 
-        String finalPath = socialWorkspacePath;
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(session, new PathRef(contextPath));
 
-        if (onlyPublicDocuments != null
-                && Boolean.parseBoolean(onlyPublicDocuments)) {
-            finalPath += "/" + PUBLIC_SECTION_RELATIVE_PATH;
-        }
+        if (socialWorkspace != null) {
+            String finalPath = socialWorkspace.getDocument().getPathAsString();
 
-        String s = " ecm:path STARTSWITH '" + finalPath + "'";
-
-        if (query != null) {
-            if (query.toUpperCase().contains("WHERE")) {
-                query += " AND " + s;
-            } else {
-                query += " WHERE " + s;
+            if (onlyPublicDocuments != null
+                    && Boolean.parseBoolean(onlyPublicDocuments)) {
+                finalPath = socialWorkspace.getPublicSectionPath();
             }
-            CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
-            desc.setPattern(query);
-            return new PaginableDocumentModelListImpl(
-                    (PageProvider<DocumentModel>) pps.getPageProvider(
-                            providerName, desc, sortInfos, targetPageSize,
-                            new Long(page), props, parameters));
+
+            String s = " ecm:path STARTSWITH '" + finalPath + "'";
+
+            if (query != null) {
+                if (query.toUpperCase().contains("WHERE")) {
+                    query += " AND " + s;
+                } else {
+                    query += " WHERE " + s;
+                }
+                CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
+                desc.setPattern(query);
+                return new PaginableDocumentModelListImpl(
+                        (PageProvider<DocumentModel>) pps.getPageProvider(
+                                providerName, desc, sortInfos, targetPageSize,
+                                new Long(page), props, parameters));
+            }
         }
         return EMPTY_LIST;
     }

@@ -13,7 +13,7 @@
       <c:if test="#{!empty currentDocument.contentpict.picture}">
         <c:set var="float" value="#{nxu:test(!empty widget.properties.float, widget.properties.float, 'left')}" />
         <c:set var="margin" value="#{nxu:test(float == 'right', 'left', 'right')}" />
-        <img src="#{nxd:fileUrl('downloadFile', currentDocument, 'contentpict:picture', field_2)}" alt="#{field_2}" style="float: #{float}; margin-#{margin}: 10px;" />
+        <img src="#{nxd:fileUrl('downloadFile', currentDocument, 'contentpict:picture', field_2)}" alt="#{field_2}" style="float: #{float}; margin-#{margin}:15px; margin-bottom: 10px;" />
       </c:if>
 
       <c:choose>

@@ -19,7 +19,9 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 
 /**
@@ -27,8 +29,26 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
  */
 public interface SocialWorkspaceService {
 
-    void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
+    /**
+     * Handles a Social Workspace creation:
+     * <ul>
+     * <li>create related groups</li>
+     * <li>put specific ACLs</li>
+     * </ul>
+     *
+     * @param principalName the name of the Principal initializing the Social
+     *            Workspace
+     */
+    void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
             String principalName);
+
+    /**
+     * Handles a Social Workspace deletion:
+     * <ul>
+     * <li>remove related groups</li>
+     * </ul>
+     */
+    void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace);
 
     /**
      * Returns the {@code SocialWorkspace} container of the given document if it
@@ -40,10 +60,44 @@ public interface SocialWorkspaceService {
     SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc);
 
     /**
+     * Returns the {@code SocialWorkspace} container of the given document ref
+     * if it is in a Social Workspace even if the user does not have right on
+     * it, {@code null} otherwise.
+     * <p>
+     * The underlying {@code DocumentModel} is detached.
+     */
+    SocialWorkspace getDetachedSocialWorkspaceContainer(CoreSession session,
+            DocumentRef docRef);
+
+    /**
      * Returns the {@code SocialWorkspace} container of the given document if it
      * is part of a Social Workspace, {@code null} otherwise.
      */
     SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc);
+
+    /**
+     * Adds a user to the @{code socialWorkspace} administrators group.
+     */
+    void addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Adds a user to the @{code socialWorkspace} members group.
+     */
+    void addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Removes a user from the @{code socialWorkspace} administrators group.
+     */
+    void removeSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Removes a user from the @{code socialWorkspace} members group.
+     */
+    void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName);
 
     /**
      * Makes the given {@code socialWorkspace} public.
