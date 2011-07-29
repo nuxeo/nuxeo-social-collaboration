@@ -135,27 +135,29 @@ public class SocialProviderOperation {
 
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(session, new PathRef(contextPath));
 
-        String finalPath = socialWorkspace.getDocument().getPathAsString();
+        if (socialWorkspace != null) {
+            String finalPath = socialWorkspace.getDocument().getPathAsString();
 
-        if (onlyPublicDocuments != null
-                && Boolean.parseBoolean(onlyPublicDocuments)) {
-            finalPath = socialWorkspace.getPublicSectionPath();
-        }
-
-        String s = " ecm:path STARTSWITH '" + finalPath + "'";
-
-        if (query != null) {
-            if (query.toUpperCase().contains("WHERE")) {
-                query += " AND " + s;
-            } else {
-                query += " WHERE " + s;
+            if (onlyPublicDocuments != null
+                    && Boolean.parseBoolean(onlyPublicDocuments)) {
+                finalPath = socialWorkspace.getPublicSectionPath();
             }
-            CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
-            desc.setPattern(query);
-            return new PaginableDocumentModelListImpl(
-                    (PageProvider<DocumentModel>) pps.getPageProvider(
-                            providerName, desc, sortInfos, targetPageSize,
-                            new Long(page), props, parameters));
+
+            String s = " ecm:path STARTSWITH '" + finalPath + "'";
+
+            if (query != null) {
+                if (query.toUpperCase().contains("WHERE")) {
+                    query += " AND " + s;
+                } else {
+                    query += " WHERE " + s;
+                }
+                CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
+                desc.setPattern(query);
+                return new PaginableDocumentModelListImpl(
+                        (PageProvider<DocumentModel>) pps.getPageProvider(
+                                providerName, desc, sortInfos, targetPageSize,
+                                new Long(page), props, parameters));
+            }
         }
         return EMPTY_LIST;
     }
