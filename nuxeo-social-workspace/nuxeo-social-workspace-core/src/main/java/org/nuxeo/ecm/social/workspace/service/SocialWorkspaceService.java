@@ -76,6 +76,30 @@ public interface SocialWorkspaceService {
     SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc);
 
     /**
+     * Adds a user to the @{code socialWorkspace} administrators group.
+     */
+    void addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Adds a user to the @{code socialWorkspace} members group.
+     */
+    void addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Removes a user from the @{code socialWorkspace} administrators group.
+     */
+    void removeSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Removes a user from the @{code socialWorkspace} members group.
+     */
+    void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
      * Makes the given {@code socialWorkspace} public.
      * <p>
      * Puts the correct rights so that non-members can view public documents and

@@ -13,6 +13,16 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 public interface SocialWorkspace {
 
     /**
+     * Returns the title of this Social Workspace.
+     */
+    String getTitle();
+
+    /**
+     * Returns the full path of this Social Workspace.
+     */
+    String getPath();
+
+    /**
      * Returns {@code true} if this Social Workspace is public, {@code false}
      * otherwise.
      */
@@ -39,6 +49,26 @@ public interface SocialWorkspace {
      * an administrator approval, {@code false} otherwise.
      */
     boolean mustApproveSubscription();
+
+    /**
+     * Adds a user to this Social Workspace administrators group.
+     */
+    void addAdministrator(String principalName);
+
+    /**
+     * Adds a user to this Social Workspace members group.
+     */
+    void addMember(String principalName);
+
+    /**
+     * Removes a user from this Social Workspace administrators group.
+     */
+    void removeAdministrator(String principalName);
+
+    /**
+     * Removes a user from this Social Workspace members group.
+     */
+    void removeMember(String principalName);
 
     /**
      * Returns true if the given {@code principal} is administrator of this

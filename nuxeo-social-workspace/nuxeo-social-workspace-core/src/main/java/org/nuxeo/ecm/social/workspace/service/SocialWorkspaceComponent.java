@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSP
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -237,6 +238,76 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
             newsItemsRoot.setACP(acp, true);
             session.saveDocument(newsItemsRoot);
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    @Override
+    public void addSocialWorkspaceAdministrator(
+            SocialWorkspace socialWorkspace, String principalName) {
+        addMemberToGroup(principalName,
+                socialWorkspace.getAdministratorsGroupName());
+    }
+
+    @Override
+    public void addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName) {
+        addMemberToGroup(principalName, socialWorkspace.getMembersGroupName());
+    }
+
+    @Override
+    public void removeSocialWorkspaceAdministrator(
+            SocialWorkspace socialWorkspace, String principalName) {
+        removeMemberFromGroup(principalName,
+                socialWorkspace.getMembersGroupName());
+    }
+
+    @Override
+    public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+            String principalName) {
+        removeMemberFromGroup(principalName,
+                socialWorkspace.getAdministratorsGroupName());
+    }
+
+    private void addMemberToGroup(String principalName, String groupName) {
+        try {
+            if (!StringUtils.isBlank(principalName)) {
+                UserManager userManager = getUserManager();
+                DocumentModel group = userManager.getGroupModel(groupName);
+                String groupSchemaName = userManager.getGroupSchemaName();
+                String groupMembersField = userManager.getGroupMembersField();
+                List<String> groupMembers = (List<String>) group.getProperty(
+                        groupSchemaName, groupMembersField);
+                if (groupMembers == null) {
+                    groupMembers = new ArrayList<String>();
+                }
+                groupMembers.add(principalName);
+                group.setProperty(groupSchemaName, groupMembersField,
+                        groupMembers);
+                userManager.updateGroup(group);
+            }
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    private void removeMemberFromGroup(String principalName, String groupName) {
+        try {
+            if (!StringUtils.isBlank(principalName)) {
+                UserManager userManager = getUserManager();
+                DocumentModel group = userManager.getGroupModel(groupName);
+                String groupSchemaName = userManager.getGroupSchemaName();
+                String groupMembersField = userManager.getGroupMembersField();
+                List<String> groupMembers = (List<String>) group.getProperty(
+                        groupSchemaName, groupMembersField);
+                if (groupMembers != null) {
+                    groupMembers.remove(principalName);
+                    group.setProperty(groupSchemaName, groupMembersField,
+                            groupMembers);
+                    userManager.updateGroup(group);
+                }
+            }
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }

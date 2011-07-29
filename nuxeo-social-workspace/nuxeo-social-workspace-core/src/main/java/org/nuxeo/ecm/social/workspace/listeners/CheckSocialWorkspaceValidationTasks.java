@@ -62,8 +62,7 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
             return;
         }
         try {
-            UnrestrictedSocialWorkspaceValidationTasksChecker checker =
-                    new UnrestrictedSocialWorkspaceValidationTasksChecker();
+            UnrestrictedSocialWorkspaceValidationTasksChecker checker = new UnrestrictedSocialWorkspaceValidationTasksChecker();
             checker.runUnrestricted();
         } catch (Exception e) {
             log.debug("failed to open session", e);
@@ -86,8 +85,9 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
                     task.cancel();
                     canceledTasks.add(task);
                 } catch (Exception e) {
-                    log.warn("failed to invalidate social workspace"
-                            + doc.getTitle(), e);
+                    log.warn(
+                            "failed to invalidate social workspace"
+                                    + doc.getTitle(), e);
                 }
             }
         }
@@ -124,7 +124,8 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
 
         protected UnrestrictedSocialWorkspaceValidationTasksChecker()
                 throws Exception {
-            super(Framework.getService(RepositoryManager.class).getDefaultRepository().getName());
+            super(
+                    Framework.getService(RepositoryManager.class).getDefaultRepository().getName());
         }
 
         @Override
