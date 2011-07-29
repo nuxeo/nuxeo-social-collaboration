@@ -9,15 +9,15 @@
   <nxu:set var="profile" value="userprofile">
 
   <c:if test="#{empty profileModel[profile].avatar}">
-    Dummy content
+    <h:graphicImage value="/icons/missing_avatar.png"
+      title="Missing profile avatar" alt="Missing profile avatar" />
   </c:if>
 
   <c:if test="#{not empty profileModel[profile].avatar}">
     <nxu:set var="image_url"
     value="#{nxd:fileUrl('downloadFile', profileModel, 'userprofile:avatar', profileModel[profile].avatar.filename)}">
     <img src="#{image_url}"
-      title="#{profileModel[profile].avatar.filename}" alt="#{profileModel[profile].avatar.filename}"
-      width="#{widget.properties['width']}" />
+      title="#{profileModel[profile].avatar.filename}" alt="#{profileModel[profile].avatar.filename}" />
   </nxu:set>
   </c:if>
 
