@@ -30,11 +30,13 @@
     <a4j:outputPanel rendered="#{!userRelationshipAction.currentUser}" id="user_relationship_#{widget.id}">
 
       <a4j:outputPanel styleClass="action_bar" id="add_relationship_#{widget.id}_btn">
-        <h:outputFormat value="#{messages['action.social.user.relationship.not.in.relation']}" rendered="#{not userRelationshipAction.alreadyConnected}">
-          <f:param value="#{displayedName}" />
-        </h:outputFormat>
+        <a4j:outputPanel styleClass="relationship_label" rendered="#{not userRelationshipAction.alreadyConnected}">
+          <h:outputFormat value="#{messages['action.social.user.relationship.not.in.relation']}">
+            <f:param value="#{displayedName}" />
+          </h:outputFormat>
+        </a4j:outputPanel>
 
-        <a4j:outputPanel rendered="#{userRelationshipAction.alreadyConnected}">
+        <a4j:outputPanel styleClass="relationship_label" rendered="#{userRelationshipAction.alreadyConnected}">
           <h:outputFormat value="#{messages['action.social.user.relationship.in.relation']} ">
             <f:param value="#{displayedName}" />
           </h:outputFormat>
