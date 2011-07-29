@@ -28,12 +28,6 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public void initialize(String principalName) {
-        getSocialWorkspaceService().initializeSocialWorkspace(this,
-                principalName);
-    }
-
-    @Override
     public boolean isPublic() {
         Boolean isPublic = (Boolean) getDocProperty(doc,
                 FIELD_SOCIAL_WORKSPACE_IS_PUBLIC);

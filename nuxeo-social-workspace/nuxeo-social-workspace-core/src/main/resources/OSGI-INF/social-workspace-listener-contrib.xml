@@ -10,6 +10,7 @@
       priority="150">
       <event>documentCreated</event>
       <event>documentModified</event>
+      <event>documentRemoved</event>
     </listener>
 
     <listener name="initializeSocialWorkspaceDashboardsListener" async="false"
@@ -17,13 +18,6 @@
       class="org.nuxeo.ecm.social.workspace.listeners.InitializeSocialWorkspaceDashboardsListener"
       priority="200">
       <event>documentCreated</event>
-    </listener>
-
-    <listener name="removeSocialWorkspaceGroupListener" async="false"
-      postCommit="false"
-      class="org.nuxeo.ecm.social.workspace.listeners.RemoveSocialWorkspaceGroupListener"
-      priority="150">
-      <event>documentRemoved</event>
     </listener>
 
     <listener name="resizeArticlePictureListener" async="false"

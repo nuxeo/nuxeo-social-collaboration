@@ -29,8 +29,26 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
  */
 public interface SocialWorkspaceService {
 
-    void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
+    /**
+     * Handles a Social Workspace creation:
+     * <ul>
+     * <li>create related groups</li>
+     * <li>put specific ACLs</li>
+     * </ul>
+     *
+     * @param principalName the name of the Principal initializing the Social
+     *            Workspace
+     */
+    void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
             String principalName);
+
+    /**
+     * Handles a Social Workspace deletion:
+     * <ul>
+     * <li>remove related groups</li>
+     * </ul>
+     */
+    void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace);
 
     /**
      * Returns the {@code SocialWorkspace} container of the given document if it

@@ -23,14 +23,10 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELA
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 

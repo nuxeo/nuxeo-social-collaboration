@@ -36,7 +36,8 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentRef;import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.impl.DocumentModelImpl;
 import org.nuxeo.ecm.core.api.security.ACE;
@@ -73,13 +74,16 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     @Override
     public SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc) {
-        return getDetachedSocialWorkspaceContainer(doc.getCoreSession(), doc.getRef());
+        return getDetachedSocialWorkspaceContainer(doc.getCoreSession(),
+                doc.getRef());
     }
 
     @Override
-   public SocialWorkspace getDetachedSocialWorkspaceContainer(CoreSession session, DocumentRef docRef) {
+    public SocialWorkspace getDetachedSocialWorkspaceContainer(
+            CoreSession session, DocumentRef docRef) {
         try {
-            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session, docRef);
+            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session,
+                    docRef);
             finder.runUnrestricted();
             if (finder.socialWorkspace != null) {
                 return toSocialWorkspace(finder.socialWorkspace);
@@ -124,7 +128,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
+    public void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
             String principalName) {
         createSocialWorkspaceGroups(socialWorkspace, principalName);
         initializeSocialWorkspaceRights(socialWorkspace);
@@ -163,6 +167,20 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             userManager.updateGroup(group);
         } catch (GroupAlreadyExistsException e) {
             log.info("Group already exists : " + groupName);
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    @Override
+    public void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
+        deleteGroup(socialWorkspace.getAdministratorsGroupName());
+        deleteGroup(socialWorkspace.getMembersGroupName());
+    }
+
+    private void deleteGroup(String groupName) {
+        try {
+            getUserManager().deleteGroup(groupName);
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }

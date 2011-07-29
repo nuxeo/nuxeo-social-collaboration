@@ -13,18 +13,6 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 public interface SocialWorkspace {
 
     /**
-     * Initialize this Social Workspace:
-     * <ul>
-     * <li>create related groups</li>
-     * <li>put specific ACLs</li>
-     * </ul>
-     *
-     * @param principalName the name of the Principal initializing the Social
-     *            Workspace
-     */
-    void initialize(String principalName);
-
-    /**
      * Returns {@code true} if this Social Workspace is public, {@code false}
      * otherwise.
      */

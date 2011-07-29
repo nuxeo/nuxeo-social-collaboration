@@ -17,6 +17,7 @@
 package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
@@ -24,17 +25,18 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.runtime.api.Framework;
 
 /**
- * Listener handling creation and modification of a SocialWorkspace.
- * <p>
- *
+ * Listener handling creation, modification and deletion of a Social Workspace.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
@@ -64,23 +66,38 @@ public class SocialWorkspaceListener implements EventListener {
         doc.putContextData(DO_NOT_PROCESS, true);
         SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
         if (DOCUMENT_CREATED.equals(event.getName())) {
-            initializeSocialWorkspace(socialWorkspace, ctx);
+            handleSocialWorkspaceCreation(socialWorkspace, ctx);
         } else if (DOCUMENT_UPDATED.equals(event.getName())) {
             updateSocialWorkspaceVisibility(socialWorkspace);
+        } else if (DOCUMENT_REMOVED.equals(event.getName())) {
+            handleSocialWorkspaceDeletion(socialWorkspace);
         }
     }
 
-    protected void initializeSocialWorkspace(SocialWorkspace socialWorkspace,
+    private void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
             EventContext ctx) throws ClientException {
-        socialWorkspace.initialize(ctx.getPrincipal().getName());
+        getSocialWorkspaceService().handleSocialWorkspaceCreation(
+                socialWorkspace, ctx.getPrincipal().getName());
     }
 
-    protected void updateSocialWorkspaceVisibility(
-            SocialWorkspace socialWorkspace) {
+    private void updateSocialWorkspaceVisibility(SocialWorkspace socialWorkspace) {
         if (socialWorkspace.isPublic()) {
             socialWorkspace.makePublic();
         } else if (socialWorkspace.isPrivate()) {
             socialWorkspace.makePrivate();
+        }
+    }
+
+    private void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
+        getSocialWorkspaceService().handleSocialWorkspaceDeletion(
+                socialWorkspace);
+    }
+
+    private SocialWorkspaceService getSocialWorkspaceService() {
+        try {
+            return Framework.getService(SocialWorkspaceService.class);
+        } catch (Exception e) {
+            throw new ClientRuntimeException(e);
         }
     }
 
