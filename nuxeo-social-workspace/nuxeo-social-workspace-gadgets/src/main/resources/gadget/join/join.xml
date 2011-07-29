@@ -41,7 +41,7 @@
    var NXRequestParams = {
        operationId : 'SocialWorkspace.UserStatus',
        operationParams : {
-        socialWorkspacePath : socialWorkspacePath
+        contextPath : socialWorkspacePath
        },
        entityType : 'blob',
        operationContext : {},
@@ -87,7 +87,7 @@
    var NXJoinRequestParams = {
        operationId : 'Social.Join',
        operationParams : {
-        socialWorkspacePath : socialWorkspacePath
+        contextPath : socialWorkspacePath
        },
        operationContext : {},
        operationCallback : disableButton

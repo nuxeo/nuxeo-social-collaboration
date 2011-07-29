@@ -24,9 +24,8 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
-import org.apache.commons.logging.Log;
+import org.apache.commons.lang.StringUtils;import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -36,8 +35,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;
+import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -51,28 +49,26 @@ public class JoinSocialWorkspaceRequest {
     private static final Log log = LogFactory.getLog(JoinSocialWorkspaceRequest.class);
 
     @Context
-    protected OperationContext ctx;
-
-    @Context
-    protected UserManager userManager;
-
-    @Context
     protected CoreSession session;
 
-    @Param(name = "socialWorkspacePath", required = true)
-    protected String socialWorkspacePath;
+    @Context
+    protected SocialWorkspaceService socialWorkspaceService;
+
+    @Param(name = "contextPath", required = true)
+    protected String contextPath;
 
     @OperationMethod
     public void run() throws Exception {
-        if (socialWorkspacePath == null
-                || socialWorkspacePath.trim().length() == 0) { // nothing to do
+        if (StringUtils.isBlank(contextPath)) { // nothing to do
             return;
         }
-        DocumentModel sws = session.getDocument(new PathRef(socialWorkspacePath));
+
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(session, new PathRef(contextPath));
+        DocumentModel sws = socialWorkspace.getDocument();
 
         String currentUser = session.getPrincipal().getName();
 
-        boolean mustApproveSubscription = toSocialWorkspace(sws).mustApproveSubscription();
+        boolean mustApproveSubscription = socialWorkspace.mustApproveSubscription();
 
         if (mustApproveSubscription) {
             if (SocialGroupsManagement.isRequestPending(sws, currentUser)) {

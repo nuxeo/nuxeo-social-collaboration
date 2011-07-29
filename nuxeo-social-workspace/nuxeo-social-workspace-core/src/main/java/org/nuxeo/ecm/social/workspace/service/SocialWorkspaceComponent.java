@@ -36,7 +36,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.DocumentRef;import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.impl.DocumentModelImpl;
 import org.nuxeo.ecm.core.api.security.ACE;
@@ -73,8 +73,13 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     @Override
     public SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc) {
+        return getDetachedSocialWorkspaceContainer(doc.getCoreSession(), doc.getRef());
+    }
+
+    @Override
+   public SocialWorkspace getDetachedSocialWorkspaceContainer(CoreSession session, DocumentRef docRef) {
         try {
-            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(doc);
+            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session, docRef);
             finder.runUnrestricted();
             if (finder.socialWorkspace != null) {
                 return toSocialWorkspace(finder.socialWorkspace);
@@ -330,18 +335,18 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     public static class SocialWorkspaceFinder extends UnrestrictedSessionRunner {
 
-        private final DocumentModel doc;
+        private final DocumentRef docRef;
 
         public DocumentModel socialWorkspace;
 
-        protected SocialWorkspaceFinder(DocumentModel doc) {
-            super(doc.getCoreSession());
-            this.doc = doc;
+        protected SocialWorkspaceFinder(CoreSession session, DocumentRef docRef) {
+            super(session);
+            this.docRef = docRef;
         }
 
         @Override
         public void run() throws ClientException {
-            List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
+            List<DocumentModel> parents = session.getParentDocuments(docRef);
             for (DocumentModel parent : parents) {
                 if (isSocialWorkspace(parent)) {
                     socialWorkspace = parent;

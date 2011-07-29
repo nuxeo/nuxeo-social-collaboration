@@ -119,7 +119,7 @@ public class TestSocialProviderOperation {
         OperationParameters oParams = new OperationParameters(
                 SocialProviderOperation.ID);
         oParams.set("query", "select * from Article where ecm:isProxy = 0");
-        oParams.set("socialWorkspacePath", "/sws2");
+        oParams.set("contextPath", "/sws2");
         chain.add(oParams);
 
         DocumentModelList result = (DocumentModelList) service.run(ctx, chain);
@@ -150,7 +150,7 @@ public class TestSocialProviderOperation {
         OperationParameters oParams = new OperationParameters(
                 SocialProviderOperation.ID);
         oParams.set("query", "select * from Article");
-        oParams.set("socialWorkspacePath", "/sws2");
+        oParams.set("contextPath", "/sws2");
         oParams.set("onlyPublicDocuments", "true");
         chain.add(oParams);
 

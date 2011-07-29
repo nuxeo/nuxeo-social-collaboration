@@ -5,7 +5,7 @@ var NXRequestParams={ operationId : 'Social.Provider',            // id of opera
   operationParams : { query : "Select * from NewsItem WHERE ecm:currentLifeCycleState <> 'deleted'" +
       "AND ecm:isProxy = 1",
        pageSize : 5,
-       socialWorkspacePath : getTargetContextPath(),
+       contextPath : getTargetContextPath(),
        sortInfo : "dc:modified 1"
   },  // parameters for the chain or operation
   operationContext : {},                                                // context

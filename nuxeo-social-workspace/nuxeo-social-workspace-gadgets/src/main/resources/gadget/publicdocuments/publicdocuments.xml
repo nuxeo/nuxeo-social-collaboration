@@ -32,7 +32,7 @@
       var NXRequestParams={ operationId : 'Social.Provider',         // id of operation or chain to execute
         operationParams : { query : "Select * from Document WHERE ecm:currentLifeCycleState <> 'deleted'",
              pageSize : 5,
-             socialWorkspacePath : getTargetContextPath(),
+             contextPath : getTargetContextPath(),
              onlyPublicDocuments : "true",                           //restrict the research to public-section
              sortInfo : "dc:modified 1"
         },  // parameters for the chain or operation

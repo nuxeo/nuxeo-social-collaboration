@@ -19,7 +19,9 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 
 /**
@@ -38,6 +40,16 @@ public interface SocialWorkspaceService {
      * The underlying {@code DocumentModel} is detached.
      */
     SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc);
+
+    /**
+     * Returns the {@code SocialWorkspace} container of the given document ref
+     * if it is in a Social Workspace even if the user does not have right on
+     * it, {@code null} otherwise.
+     * <p>
+     * The underlying {@code DocumentModel} is detached.
+     */
+    SocialWorkspace getDetachedSocialWorkspaceContainer(CoreSession session,
+            DocumentRef docRef);
 
     /**
      * Returns the {@code SocialWorkspace} container of the given document if it
