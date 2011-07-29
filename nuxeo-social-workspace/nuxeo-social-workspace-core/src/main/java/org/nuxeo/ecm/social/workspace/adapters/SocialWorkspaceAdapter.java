@@ -71,20 +71,24 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
         return approveSubscription == null ? false : approveSubscription;
     }
 
-    public void addAdministrator(NuxeoPrincipal principal) {
-
+    @Override
+    public void addAdministrator(String principalName) {
+        getSocialWorkspaceService().addSocialWorkspaceAdministrator(this, principalName);
     }
 
-    public void addMember(NuxeoPrincipal principal) {
-
+    @Override
+    public void addMember(String principalName) {
+        getSocialWorkspaceService().addSocialWorkspaceMember(this, principalName);
     }
 
-    public void removeAdministrator(NuxeoPrincipal principal) {
-
+    @Override
+    public void removeAdministrator(String principalName) {
+        getSocialWorkspaceService().removeSocialWorkspaceAdministrator(this, principalName);
     }
 
-    public void removeMember(NuxeoPrincipal principal) {
-
+    @Override
+    public void removeMember(String principalName) {
+        getSocialWorkspaceService().removeSocialWorkspaceMember(this, principalName);
     }
 
     @Override
