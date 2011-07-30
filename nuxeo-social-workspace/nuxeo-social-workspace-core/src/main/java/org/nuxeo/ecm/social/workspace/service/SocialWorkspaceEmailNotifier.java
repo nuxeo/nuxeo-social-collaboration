@@ -160,7 +160,7 @@ public class SocialWorkspaceEmailNotifier {
         }
 
         OperationContext ctx = new OperationContext(session);
-        ctx.setInput(socialWorkspace);
+        ctx.setInput(socialWorkspace.getDocument());
         OperationChain chain = new OperationChain("sendEMail");
         chain.add(SendMail.ID).set("from", "admin@nuxeo.org").set("to", email).set(
                 "subject", subject).set("HTML", true).set("message", template);

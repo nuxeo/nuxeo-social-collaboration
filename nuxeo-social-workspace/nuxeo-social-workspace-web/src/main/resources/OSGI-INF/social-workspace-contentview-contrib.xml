@@ -194,7 +194,7 @@
         </labels>
         <translated>false</translated>
         <fields>
-          <field>data.social.isPublic</field>
+          <field>data.socialw.isPublic</field>
         </fields>
         <properties mode="any"/>
       </widget>
