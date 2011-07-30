@@ -47,15 +47,6 @@
           </c:forEach>
         </a4j:outputPanel>
 
-        <script type="text/javasript">
-          var btn = jQuery(".relationship_#{widget.id}_button");
-          btn.click(function() {
-            return false;
-          });
-          btn.mouseenter(function() {
-            div.fadeIn(500);
-          });
-        </script>
         <a4j:outputPanel rendered="#{not userRelationshipAction.alreadyConnected}">
           <a class="button relationship_#{widget.id}_button">
             <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
@@ -66,6 +57,15 @@
             <h:outputText value="#{messages['action.social.user.relationship.join']}" />
           </a>
         </a4j:outputPanel>
+        <script type="text/javasript">
+          var btn = jQuery(".relationship_#{widget.id}_button");
+          btn.click(function() {
+            return false;
+          });
+          btn.mouseenter(function() {
+            div.fadeIn(500);
+          });
+        </script>
       </a4j:outputPanel>
 
       <div id="add_relationship_#{widget.id}" style="display: none;">
@@ -75,20 +75,13 @@
           </f:facet>
         </a4j:status>
         <a4j:outputPanel id="add_relationship_#{widget.id}">
-          <script type="text/javasript">
-            var div = jQuery("#add_relationship_#{widget.id}");
-
-            div.mouseleave(function() {
-              jQuery("#add_relationship_#{widget.id}").fadeOut(500);
-            });
-          </script>
           <nxu:dataTable id="#{widget.id}_add_relationship"
             value="#{userRelationshipService.kinds}" var="kind"
             rendered="#{!(userRelationshipAction.currentUser)}">
 
             <nxu:column>
               <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipAction.relationshipCheckboxChanged}"
-                value="#{userRelationshipAction.isActiveRelationship(kind)}">
+                value="#{userRelationshipAction.getAllRelationshipsState[kind]}">
                 <a4j:support event="onchange"
                   reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
                   <f:param name="selectedKind" value="#{kind}" />
@@ -97,6 +90,13 @@
               </h:selectBooleanCheckbox>
             </nxu:column>
           </nxu:dataTable>
+          <script type="text/javasript">
+            var div = jQuery("#add_relationship_#{widget.id}");
+
+            div.mouseleave(function() {
+              jQuery("#add_relationship_#{widget.id}").fadeOut(500);
+            });
+          </script>
         </a4j:outputPanel>
       </div>
     </a4j:outputPanel>

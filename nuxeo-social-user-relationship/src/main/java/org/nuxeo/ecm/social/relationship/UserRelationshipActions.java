@@ -5,7 +5,9 @@ import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.webapp.security.UserManagementActions.USER_SELECTED_CHANGED;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ValueChangeEvent;
 
@@ -71,6 +73,8 @@ public class UserRelationshipActions implements Serializable {
 
     protected List<String> relationshipsWithSelectedUser;
 
+    protected Map<String, Boolean> allRelationshipsState;
+
     public boolean isAlreadyConnected() throws ClientException {
         return !isCurrentUser()
                 && !getRelationshipsWithSelectedUser().isEmpty();
@@ -108,6 +112,16 @@ public class UserRelationshipActions implements Serializable {
         return getRelationshipsWithSelectedUser().contains(type);
     }
 
+    public Map<String, Boolean> getAllRelationshipsState() throws ClientException {
+        if (allRelationshipsState == null) {
+            allRelationshipsState = new HashMap<String, Boolean>();
+            for(String kind : userRelationshipService.getKinds()) {
+                allRelationshipsState.put(kind, isActiveRelationship(kind));
+            }
+        }
+        return allRelationshipsState;
+    }
+
     public List<String> getRelationshipsFromSelectedUser() {
         return userRelationshipService.getTargets(getSelectedUser());
     }
@@ -125,6 +139,7 @@ public class UserRelationshipActions implements Serializable {
     @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
     public void resetUserRelationship() {
         relationshipsWithSelectedUser = null;
+        allRelationshipsState = null;
     }
 
     protected String getCurrentUser() {
