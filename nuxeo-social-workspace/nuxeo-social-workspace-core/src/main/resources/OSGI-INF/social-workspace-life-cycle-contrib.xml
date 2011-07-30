@@ -6,7 +6,7 @@
   <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
     point="lifecycle">
 
-    <lifecycle name="requestLifecycle" defaultInitial="pending">
+    <lifecycle name="subscriptionRequestLifecycle" defaultInitial="pending">
       <transitions>
         <transition name="accept" destinationState="accepted">
           <description>Accept the registration request</description>
@@ -37,7 +37,7 @@
       <type name="SocialWorkspace">default</type>
       <type name="NewsItem">default</type>
       <type name="Article">default</type>
-      <type name="Request">requestLifecycle</type>
+      <type name="SubscriptionRequest">subscriptionRequestLifecycle</type>
     </types>
   </extension>
 

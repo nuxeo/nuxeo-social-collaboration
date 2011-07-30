@@ -17,10 +17,11 @@
 package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_PENDING_STATE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
+import static org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager.CURRENT_DOCUMENT_SELECTION;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,14 +33,20 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Events;
 import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
 import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
 import org.nuxeo.ecm.platform.jbpm.JbpmService;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager;
 import org.nuxeo.runtime.api.Framework;
 
@@ -47,14 +54,16 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
  */
-@Name("socialWorkspaceRequestActions")
+@Name("socialWorkspaceSubscriptionRequestActions")
 @Scope(ScopeType.CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class SocialWorkspaceRequestActions implements Serializable {
+public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
 
     private static final long serialVersionUID = -7362146679190186610L;
 
-    private static final Log log = LogFactory.getLog(SocialWorkspaceRequestActions.class);
+    private static final Log log = LogFactory.getLog(SocialWorkspaceSubscriptionRequestActions.class);
+
+    public static final String SUBSCRIPTION_REQUESTS_UPDATED = "subscriptionRequestsUpdated";
 
     @In(create = true, required = false)
     protected transient CoreSession documentManager;
@@ -65,56 +74,69 @@ public class SocialWorkspaceRequestActions implements Serializable {
     @In(create = true)
     protected transient NavigationContext navigationContext;
 
+    @In(create = true)
+    protected transient ContentViewActions contentViewActions;
+
     public void accept() throws ClientException {
-        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
-        processSelectedRequests(list, "accept");
+        List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
+        processSelectedSubscriptionRequests(list, true);
     }
 
     public void reject() throws ClientException {
-        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
-        processSelectedRequests(list, "reject");
+        List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
+        processSelectedSubscriptionRequests(list, false);
     }
 
-    protected void processSelectedRequests(List<DocumentModel> list,
-            String transition) throws ClientException {
-        DocumentModel sws = navigationContext.getCurrentDocument();
+    protected void processSelectedSubscriptionRequests(
+            List<DocumentModel> list, boolean accept) throws ClientException {
+        SocialWorkspace socialWorkspace = SocialWorkspaceHelper.toSocialWorkspace(navigationContext.getCurrentDocument());
         for (DocumentModel doc : list) {
-            try {
-                if (REQUEST_DOC_TYPE.equals(doc.getType())) {
-                    String userName = (String) doc.getPropertyValue(FIELD_REQUEST_USERNAME);
-                    boolean ok = true;
-                    boolean accept = "accept".equals(transition);
-                    if (accept) {
-                        ok = SocialGroupsManagement.acceptMember(sws, userName);
-                    }
-                    if (ok) {
-                        doc.followTransition(transition);
-                        SocialGroupsManagement.notifyUser(sws, userName, accept);
-                    }
-
-                }
-            } catch (Exception e) {
-                log.debug("failed to process the request ... " + doc.getId(), e);
+            if (SUBSCRIPTION_REQUEST_TYPE.equals(doc.getType())) {
+                SubscriptionRequest subscriptionRequest = doc.getAdapter(SubscriptionRequest.class);
+                processSubscriptionRequest(socialWorkspace,
+                        subscriptionRequest, accept);
             }
         }
         documentManager.save();
+        Events.instance().raiseEvent(SUBSCRIPTION_REQUESTS_UPDATED);
+    }
+
+    protected void processSubscriptionRequest(SocialWorkspace socialWorkspace,
+            SubscriptionRequest subscriptionRequest, boolean accept) {
+        try {
+            if (accept) {
+                socialWorkspace.acceptSubscriptionRequest(subscriptionRequest);
+            } else {
+                socialWorkspace.rejectSubscriptionRequest(subscriptionRequest);
+            }
+        } catch (Exception e) {
+            log.warn(String.format("Unable to process request for %s: %s",
+                    subscriptionRequest.getDocument(), e.getMessage()));
+            log.debug(e, e);
+        }
     }
 
     public boolean enableRequestActions() throws ClientException {
-        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
         if (list.size() == 0) {
             return false;
         }
         for (DocumentModel doc : list) {
-            if (!"pending".equals(doc.getCurrentLifeCycleState())) {
+            if (!SUBSCRIPTION_REQUEST_PENDING_STATE.equals(doc.getCurrentLifeCycleState())) {
                 return false;
             }
         }
         return true;
     }
 
+    @Observer(SUBSCRIPTION_REQUESTS_UPDATED)
+    public void onSubscriptionRequestsUpdated() {
+        contentViewActions.refreshOnSeamEvent(SUBSCRIPTION_REQUESTS_UPDATED);
+        contentViewActions.resetPageProviderOnSeamEvent(SUBSCRIPTION_REQUESTS_UPDATED);
+    }
+
     public boolean enableSocialWorkspaceActions() throws ClientException {
-        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
         if (list.size() == 0) {
             return false;
         }
@@ -127,12 +149,12 @@ public class SocialWorkspaceRequestActions implements Serializable {
     }
 
     public void acceptSocialWorkspaces() throws ClientException {
-        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
         processSocialWorkspaces(list, "approve");
     }
 
     public void rejectSocialWorkspaces() throws ClientException {
-        List<DocumentModel> list = documentsListsManager.getWorkingList(DocumentsListsManager.CURRENT_DOCUMENT_SELECTION);
+        List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
         processSocialWorkspaces(list, "delete");
     }
 

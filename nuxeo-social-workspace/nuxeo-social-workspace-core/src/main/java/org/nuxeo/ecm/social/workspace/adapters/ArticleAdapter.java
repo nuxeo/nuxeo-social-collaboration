@@ -16,10 +16,10 @@
  */
 package org.nuxeo.ecm.social.workspace.adapters;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_DC_AUTHOR;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_DC_CREATED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_DC_TITLE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_NOTE_NOTE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DC_AUTHOR_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DC_CREATED_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DC_TITLE_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NOTE_NOTE_PROPERTY;
 
 import java.util.Calendar;
 
@@ -37,22 +37,22 @@ public class ArticleAdapter extends BaseAdapter implements Article {
 
     @Override
     public String getAuthor() {
-        return (String) getDocProperty(doc, FIELD_DC_AUTHOR);
+        return (String) getDocProperty(doc, DC_AUTHOR_PROPERTY);
     }
 
     @Override
     public Calendar getCreated() {
-        return (Calendar) getDocProperty(doc, FIELD_DC_CREATED);
+        return (Calendar) getDocProperty(doc, DC_CREATED_PROPERTY);
     }
 
     @Override
     public String getTitle() {
-        return (String) getDocProperty(doc, FIELD_DC_TITLE);
+        return (String) getDocProperty(doc, DC_TITLE_PROPERTY);
     }
 
     @Override
     public String getContent() {
-        return (String) getDocProperty(doc, FIELD_NOTE_NOTE);
+        return (String) getDocProperty(doc, NOTE_NOTE_PROPERTY);
     }
 
     @Override
@@ -67,12 +67,12 @@ public class ArticleAdapter extends BaseAdapter implements Article {
 
     @Override
     public void setTitle(String text) {
-        setDocProperty(doc, FIELD_DC_TITLE, text);
+        setDocProperty(doc, DC_TITLE_PROPERTY, text);
     }
 
     @Override
     public void setContent(String text) {
-        setDocProperty(doc, FIELD_NOTE_NOTE, text);
+        setDocProperty(doc, NOTE_NOTE_PROPERTY, text);
     }
 
 }

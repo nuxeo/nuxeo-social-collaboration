@@ -22,9 +22,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
@@ -177,7 +177,7 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
                 "Note");
         socialDocumentFacetedNotePublic.addFacet(SOCIAL_DOCUMENT_FACET);
         socialDocumentFacetedNotePublic.setPropertyValue(
-                FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, true);
+                SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, true);
         socialDocumentFacetedNotePublic = session.createDocument(socialDocumentFacetedNotePublic);
         session.save();
         eventService.waitForAsyncCompletion();

@@ -16,7 +16,7 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
@@ -147,7 +147,7 @@ public class SocialDocumentAdapter implements SocialDocument {
 
     protected void setIsPublicField(boolean value) throws ClientException {
         sourceDocument.setPropertyValue(
-                SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, value);
+                SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, value);
         sourceDocument.putContextData(
                 VisibilitySocialDocumentListener.ALREADY_PROCESSED, true);
         sourceDocument = session.saveDocument(sourceDocument);
@@ -203,7 +203,7 @@ public class SocialDocumentAdapter implements SocialDocument {
 
     @Override
     public boolean isPublic() throws ClientException {
-        return (Boolean) sourceDocument.getPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC);
+        return (Boolean) sourceDocument.getPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class SocialDocumentAdapter implements SocialDocument {
 
     @Override
     public boolean isRestrictedToMembers() throws ClientException {
-        return !((Boolean) sourceDocument.getPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC));
+        return !((Boolean) sourceDocument.getPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY));
     }
 
     @Override

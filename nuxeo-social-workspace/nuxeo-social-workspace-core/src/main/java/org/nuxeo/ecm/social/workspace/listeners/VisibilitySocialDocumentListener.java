@@ -18,7 +18,7 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.nuxeo.ecm.core.api.ClientException;
@@ -73,7 +73,7 @@ public class VisibilitySocialDocumentListener implements
 
         document.putContextData(ALREADY_PROCESSED, true);
 
-        Boolean isPublic = (Boolean) document.getPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC);
+        Boolean isPublic = (Boolean) document.getPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY);
         updateSocialDocumentVisibility(document, isPublic == null ? false
                 : isPublic);
     }

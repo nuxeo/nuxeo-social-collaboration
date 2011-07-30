@@ -18,7 +18,7 @@ package org.nuxeo.ecm.social.workspace.gadgets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.util.List;
@@ -94,7 +94,7 @@ public class TestSocialProviderOperation {
         // create two articles in 2nd social workspace
         DocumentModel article1 = session.createDocumentModel("/sws2",
                 "article1", "Article");
-        article1.setPropertyValue(FIELD_SOCIAL_DOCUMENT_IS_PUBLIC, true);
+        article1.setPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, true);
         article1.setPropertyValue("dc:title", "Public Article");
         article1 = session.createDocument(article1);
         session.save();

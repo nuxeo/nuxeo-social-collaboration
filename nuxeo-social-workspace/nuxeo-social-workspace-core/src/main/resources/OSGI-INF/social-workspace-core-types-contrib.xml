@@ -8,7 +8,7 @@
     <schema name="social_workspace" prefix="socialw" src="schemas/social_workspace.xsd" />
     <schema name="social_document" prefix="socialdoc" src="schemas/social_document.xsd" />
     <schema name="content_picture" prefix="contentpict" src="schemas/content_picture.xsd" />
-    <schema name="request" prefix="req" src="schemas/request.xsd" />
+    <schema name="subscription_request" prefix="req" src="schemas/subscription_request.xsd" />
   </extension>
 
   <extension target="org.nuxeo.ecm.core.schema.TypeService"
@@ -25,6 +25,13 @@
       <facet name="SocialWorkspace" />
     </doctype>
 
+    <doctype name="SocialSection" extends="Section">
+      <facet name="HiddenInNavigation" />
+    </doctype>
+
+    <doctype name="DashboardSpacesContainer" extends="HiddenFolder">
+    </doctype>
+
     <doctype name="NewsItemsRoot" extends="Folder">
     </doctype>
 
@@ -38,20 +45,9 @@
       <facet name="SocialDocument" />
     </doctype>
 
-    <doctype name="Request" extends="Document">
+    <doctype name="SubscriptionRequest" extends="Document">
       <schema name="dublincore" />
-      <schema name="request" />
-    </doctype>
-
-    <doctype name="RequestRoot" extends="Folder">
-      <facet name="HiddenInNavigation" />
-    </doctype>
-
-    <doctype name="SocialSection" extends="Section">
-      <facet name="HiddenInNavigation" />
-    </doctype>
-
-    <doctype name="DashboardSpacesContainer" extends="HiddenFolder">
+      <schema name="subscription_request" />
     </doctype>
 
   </extension>

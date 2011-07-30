@@ -2,9 +2,9 @@ package org.nuxeo.ecm.social.workspace.adapters;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_ROOT_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_DASHBOARD_SPACE_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_DASHBOARD_SPACE_NAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -29,6 +29,11 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
+    public String getId() {
+        return doc.getId();
+    }
+
+    @Override
     public String getTitle() {
         try {
             return doc.getTitle();
@@ -45,7 +50,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     @Override
     public boolean isPublic() {
         Boolean isPublic = (Boolean) getDocProperty(doc,
-                FIELD_SOCIAL_WORKSPACE_IS_PUBLIC);
+                SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY);
         return isPublic == null ? false : isPublic;
     }
 
@@ -72,23 +77,27 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public void addAdministrator(String principalName) {
-        getSocialWorkspaceService().addSocialWorkspaceAdministrator(this, principalName);
+    public boolean addAdministrator(String principalName) {
+        return getSocialWorkspaceService().addSocialWorkspaceAdministrator(
+                this, principalName);
     }
 
     @Override
-    public void addMember(String principalName) {
-        getSocialWorkspaceService().addSocialWorkspaceMember(this, principalName);
+    public boolean addMember(String principalName) {
+        return getSocialWorkspaceService().addSocialWorkspaceMember(this,
+                principalName);
     }
 
     @Override
     public void removeAdministrator(String principalName) {
-        getSocialWorkspaceService().removeSocialWorkspaceAdministrator(this, principalName);
+        getSocialWorkspaceService().removeSocialWorkspaceAdministrator(this,
+                principalName);
     }
 
     @Override
     public void removeMember(String principalName) {
-        getSocialWorkspaceService().removeSocialWorkspaceMember(this, principalName);
+        getSocialWorkspaceService().removeSocialWorkspaceMember(this,
+                principalName);
     }
 
     @Override
@@ -98,7 +107,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public boolean isMember(NuxeoPrincipal principal) {
-        return principal.isMemberOf(getAdministratorsGroupName());
+        return principal.isMemberOf(getMembersGroupName());
     }
 
     @Override
@@ -156,6 +165,32 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     public String getPrivateDashboardSpacePath() {
         return new Path(getDashboardSpacesRootPath()).append(
                 PRIVATE_DASHBOARD_SPACE_NAME).toString();
+    }
+
+    @Override
+    public void handleSubscriptionRequest(String principalName) {
+        getSocialWorkspaceService().handleSubscriptionRequest(this,
+                principalName);
+    }
+
+    @Override
+    public boolean isSubscriptionRequestPending(String principalName) {
+        return getSocialWorkspaceService().isSubscriptionRequestPending(this,
+                principalName);
+    }
+
+    @Override
+    public void acceptSubscriptionRequest(
+            SubscriptionRequest subscriptionRequest) {
+        getSocialWorkspaceService().acceptSubscriptionRequest(this,
+                subscriptionRequest);
+    }
+
+    @Override
+    public void rejectSubscriptionRequest(
+            SubscriptionRequest subscriptionRequest) {
+        getSocialWorkspaceService().rejectSubscriptionRequest(this,
+                subscriptionRequest);
     }
 
     @Override

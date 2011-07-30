@@ -16,15 +16,8 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_INFO;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_ROOT_NAME;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
-
-import org.apache.commons.lang.StringUtils;import org.apache.commons.logging.Log;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -32,10 +25,9 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -63,36 +55,9 @@ public class JoinSocialWorkspaceRequest {
             return;
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(session, new PathRef(contextPath));
-        DocumentModel sws = socialWorkspace.getDocument();
-
-        String currentUser = session.getPrincipal().getName();
-
-        boolean mustApproveSubscription = socialWorkspace.mustApproveSubscription();
-
-        if (mustApproveSubscription) {
-            if (SocialGroupsManagement.isRequestPending(sws, currentUser)) {
-                log.debug(String.format(
-                        "there is already a join request from '%s' on '%s' ",
-                        currentUser, sws.getPathAsString()));
-                return;
-            }
-
-            DocumentRef requestRootPath = new PathRef(sws.getPathAsString(),
-                    REQUEST_ROOT_NAME);
-            DocumentModel request = session.createDocumentModel(
-                    requestRootPath.toString(), currentUser, REQUEST_DOC_TYPE);
-            request.setPropertyValue(FIELD_REQUEST_USERNAME, currentUser);
-            request.setPropertyValue(FIELD_REQUEST_TYPE, REQUEST_TYPE_JOIN);
-            request.setPropertyValue(FIELD_REQUEST_INFO, sws.getId());
-            request = session.createDocument(request);
-            session.save();
-            SocialGroupsManagement.notifyAdmins(request);
-        } else { // restricted social workspace ; request will be validated by
-                 // admin
-            SocialGroupsManagement.acceptMember(sws, currentUser);
-            SocialGroupsManagement.notifyUser(sws, currentUser, true);
-        }
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+                session, new PathRef(contextPath));
+        socialWorkspace.handleSubscriptionRequest(session.getPrincipal().getName());
     }
 
 }

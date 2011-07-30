@@ -352,7 +352,7 @@
         <field>note:mime_type</field>
         <field>contentpict:picturename</field>
       </fields>
-      <properties mode="view">
+      <properties widgetMode="view">
         <property name="translatedHtml">
           #{noteActions.translateImageLinks(field_0)}
         </property>
@@ -419,16 +419,13 @@
       </properties>
     </widget>
 
-    <widget name="request_user_email" type="template">
+    <widget name="request_user_email" type="text">
       <labels>
         <label mode="any">email</label>
       </labels>
       <fields>
-         <field>data.dc.creator</field>
+         <field>data.req.userEmail</field>
       </fields>
-      <properties mode="any">
-        <property name="template">/widgets/request_user_email_widget_template.xhtml</property>
-      </properties>
       <widgetModes>
         <mode value="any">view</mode>
       </widgetModes>

@@ -18,6 +18,8 @@ package org.nuxeo.ecm.social.workspace.adapters;
 
 import java.util.Calendar;
 
+import org.nuxeo.ecm.core.api.DocumentModel;
+
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
@@ -43,5 +45,7 @@ public interface SubscriptionRequest {
     String getProcessedComment();
 
     void setProcessedComment(String value);
+
+    DocumentModel getDocument();
 
 }

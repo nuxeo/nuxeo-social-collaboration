@@ -13,6 +13,11 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 public interface SocialWorkspace {
 
     /**
+     * Returns the id of this Social Workspace.
+     */
+    String getId();
+
+    /**
      * Returns the title of this Social Workspace.
      */
     String getTitle();
@@ -53,15 +58,21 @@ public interface SocialWorkspace {
     /**
      * Adds a user to this Social Workspace administrators group.
      */
-    void addAdministrator(String principalName);
+    boolean addAdministrator(String principalName);
 
     /**
      * Adds a user to this Social Workspace members group.
+     *
+     * @return {@code true} if the user was successfully added to the members
+     *         group, {@code false} otherwise.
      */
-    void addMember(String principalName);
+    boolean addMember(String principalName);
 
     /**
      * Removes a user from this Social Workspace administrators group.
+     *
+     * @return {@code true} if the user was successfully added to the
+     *         administrators group, {@code false} otherwise.
      */
     void removeAdministrator(String principalName);
 
@@ -137,6 +148,27 @@ public interface SocialWorkspace {
      * Returns the path of the private Dashboard Space of this Social Workspace.
      */
     String getPrivateDashboardSpacePath();
+
+    /**
+     * Handles a Subscription Request for the given {@code principalName}.
+     */
+    void handleSubscriptionRequest(String principalName);
+
+    /**
+     * Returns {@code true} if there is a pending Subscription Request for the
+     * given {@code principalName}, {@code false} otherwise.
+     */
+    boolean isSubscriptionRequestPending(String principalName);
+
+    /**
+     * Accepts this {@code subscriptionRequest}.
+     */
+    void acceptSubscriptionRequest(SubscriptionRequest subscriptionRequest);
+
+    /**
+     * Rejects this {@code subscriptionRequest}.
+     */
+    void rejectSubscriptionRequest(SubscriptionRequest subscriptionRequest);
 
     /**
      * Returns the underlying {@DocumentModel}.

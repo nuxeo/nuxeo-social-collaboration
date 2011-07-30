@@ -19,9 +19,9 @@ package org.nuxeo.ecm.social.workspace;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_DOC_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.REQUEST_TYPE_JOIN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE_JOIN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE_PROPERTY;
 
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -55,8 +55,9 @@ public class TestAdapters extends AbstractSocialWorkspaceTest {
     public void testRequestAdapter() throws Exception {
         DocumentModel request = session.createDocumentModel(
                 session.getRootDocument().getPathAsString(), "request",
-                REQUEST_DOC_TYPE);
-        request.setPropertyValue(FIELD_REQUEST_TYPE, REQUEST_TYPE_JOIN);
+                SUBSCRIPTION_REQUEST_TYPE);
+        request.setPropertyValue(SUBSCRIPTION_REQUEST_TYPE_PROPERTY,
+                SUBSCRIPTION_REQUEST_TYPE_JOIN);
         assertNotNull(request);
         request = session.createDocument(request);
         session.save();

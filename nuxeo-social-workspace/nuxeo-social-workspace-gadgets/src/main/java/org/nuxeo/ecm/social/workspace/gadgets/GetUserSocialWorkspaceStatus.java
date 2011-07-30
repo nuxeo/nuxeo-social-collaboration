@@ -16,8 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
-
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 
@@ -35,8 +33,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
-import org.nuxeo.ecm.social.workspace.SocialGroupsManagement;
-import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -62,12 +60,14 @@ public class GetUserSocialWorkspaceStatus {
     @OperationMethod
     public Blob run() throws Exception {
         NuxeoPrincipal currentUser = (NuxeoPrincipal) session.getPrincipal();
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+                session, new PathRef(contextPath));
         if (socialWorkspace.isAdministratorOrMember(currentUser)) {
             return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
         }
-        if (SocialGroupsManagement.isRequestPending(socialWorkspace.getDocument(), currentUser.getName())) {
-            return buildResponse(socialWorkspace.getDocument(), Status.REQUEST_PENDING);
+        if (socialWorkspace.isSubscriptionRequestPending(currentUser.getName())) {
+            return buildResponse(socialWorkspace.getDocument(),
+                    Status.REQUEST_PENDING);
         }
         return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
     }

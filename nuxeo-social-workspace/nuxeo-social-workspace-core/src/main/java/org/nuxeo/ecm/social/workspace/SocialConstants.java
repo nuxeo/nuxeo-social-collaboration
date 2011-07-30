@@ -29,7 +29,7 @@ public class SocialConstants {
 
     public static final String FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION = "socialw:approveSubscription";
 
-    public static final String FIELD_SOCIAL_WORKSPACE_IS_PUBLIC = "socialw:isPublic";
+    public static final String SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY = "socialw:isPublic";
 
     public static final String PRIVATE_SECTION_RELATIVE_PATH = "private-section/";
 
@@ -48,42 +48,52 @@ public class SocialConstants {
     // Social Document
     public static final String SOCIAL_DOCUMENT_FACET = "SocialDocument";
 
-    public static final String FIELD_SOCIAL_DOCUMENT_IS_PUBLIC = "socialdoc:isPublic";
+    public static final String SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY = "socialdoc:isPublic";
 
     public static final String ARTICLE_TYPE = "Article";
 
     public static final String NEWS_ITEM_TYPE = "NewsItem";
 
-    public static final String CONTENT_PICTURE_PICTURE_FIELD = "contentpict:picture";
+    public static final String NEWS_ROOT_RELATIVE_PATH = "news-root/";
 
-    public static final String FIELD_DC_TITLE = "dc:title";
+    public static final String CONTENT_PICTURE_PICTURE_PROPERTY = "contentpict:picture";
 
-    public static final String FIELD_NOTE_NOTE = "note:note";
+    public static final String DC_TITLE_PROPERTY = "dc:title";
 
-    public static final String FIELD_DC_CREATED = "dc:created";
+    public static final String NOTE_NOTE_PROPERTY = "note:note";
 
-    public static final String FIELD_DC_AUTHOR = "dc:author";
+    public static final String DC_CREATED_PROPERTY = "dc:created";
+
+    public static final String DC_AUTHOR_PROPERTY = "dc:author";
 
     // Subscription Request
-    public static final String REQUEST_DOC_TYPE = "Request";
+    public static final String SUBSCRIPTION_REQUEST_TYPE = "SubscriptionRequest";
 
-    public static final String REQUEST_ROOT_NAME = "requests";
+    public static final String SUBSCRIPTION_REQUEST_SCHEMA = "subscription_request";
 
-    public static final String REQUEST_SCHEMA = "request";
+    public static final String SUBSCRIPTION_REQUEST_TYPE_JOIN = "joinRequest";
 
-    public static final String REQUEST_TYPE_JOIN = "joinRequest";
+    public static final String SUBSCRIPTION_REQUEST_USERNAME_PROPERTY = "req:username";
 
-    public static final String FIELD_REQUEST_USERNAME = "req:username";
+    public static final String SUBSCRIPTION_REQUEST_USER_EMAIL_PROPERTY = "req:userEmail";
 
-    public static final String FIELD_REQUEST_TYPE = "req:type";
+    public static final String SUBSCRIPTION_REQUEST_TYPE_PROPERTY = "req:type";
 
-    public static final String FIELD_REQUEST_INFO = "req:info";
+    public static final String SUBSCRIPTION_REQUEST_INFO_PROPERTY = "req:info";
 
-    public static final String FIELD_REQUEST_PROCESSED_DATE = "req:processedDate";
+    public static final String SUBSCRIPTION_REQUEST_PROCESSED_DATE_PROPERTY = "req:processedDate";
 
-    public static final String FIELD_REQUEST_PROCESSED_COMMENT = "req:processedComment";
+    public static final String SUBSCRIPTION_REQUEST_PROCESSED_COMMENT_PROPERTY = "req:processedComment";
 
-    public static final String NEWS_ROOT_RELATIVE_PATH = "news-root/";
+    public static final String SUBSCRIPTION_REQUEST_PENDING_STATE = "pending";
+
+    public static final String SUBSCRIPTION_REQUEST_ACCEPTED_STATE = "accepted";
+
+    public static final String SUBSCRIPTION_REQUEST_REJECTED_STATE = "rejected";
+
+    public static final String SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION = "accept";
+
+    public static final String SUBSCRIPTION_REQUEST_REJECT_TRANSITION = "reject";
 
     private SocialConstants() {
     }

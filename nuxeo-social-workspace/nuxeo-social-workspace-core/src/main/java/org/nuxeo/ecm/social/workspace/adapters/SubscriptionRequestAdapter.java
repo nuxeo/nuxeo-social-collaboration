@@ -16,11 +16,11 @@
  */
 package org.nuxeo.ecm.social.workspace.adapters;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_INFO;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_PROCESSED_COMMENT;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_PROCESSED_DATE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_REQUEST_USERNAME;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_INFO_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_PROCESSED_COMMENT_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_PROCESSED_DATE_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_USERNAME_PROPERTY;
 
 import java.util.Calendar;
 
@@ -38,52 +38,60 @@ public class SubscriptionRequestAdapter extends BaseAdapter implements
 
     @Override
     public String getUsername() {
-        return (String) getDocProperty(doc, FIELD_REQUEST_USERNAME);
+        return (String) getDocProperty(doc,
+                SUBSCRIPTION_REQUEST_USERNAME_PROPERTY);
     }
 
     @Override
     public void setUserName(String value) {
-        setDocProperty(doc, FIELD_REQUEST_USERNAME, value);
+        setDocProperty(doc, SUBSCRIPTION_REQUEST_USERNAME_PROPERTY, value);
     }
 
     @Override
     public String getType() {
-        return (String) getDocProperty(doc, FIELD_REQUEST_TYPE);
+        return (String) getDocProperty(doc, SUBSCRIPTION_REQUEST_TYPE_PROPERTY);
     }
 
     @Override
     public void setType(String value) {
-        setDocProperty(doc, FIELD_REQUEST_TYPE, value);
+        setDocProperty(doc, SUBSCRIPTION_REQUEST_TYPE_PROPERTY, value);
     }
 
     @Override
     public String getInfo() {
-        return (String) getDocProperty(doc, FIELD_REQUEST_INFO);
+        return (String) getDocProperty(doc, SUBSCRIPTION_REQUEST_INFO_PROPERTY);
     }
 
     @Override
     public void setInfo(String value) {
-        setDocProperty(doc, FIELD_REQUEST_INFO, value);
+        setDocProperty(doc, SUBSCRIPTION_REQUEST_INFO_PROPERTY, value);
     }
 
     @Override
     public Calendar getProcessedDate() {
-        return (Calendar) getDocProperty(doc, FIELD_REQUEST_PROCESSED_DATE);
+        return (Calendar) getDocProperty(doc,
+                SUBSCRIPTION_REQUEST_PROCESSED_DATE_PROPERTY);
     }
 
     @Override
     public void setProcessedDate(Calendar value) {
-        setDocProperty(doc, FIELD_REQUEST_PROCESSED_DATE, value);
+        setDocProperty(doc, SUBSCRIPTION_REQUEST_PROCESSED_DATE_PROPERTY, value);
     }
 
     @Override
     public String getProcessedComment() {
-        return (String) getDocProperty(doc, FIELD_REQUEST_PROCESSED_COMMENT);
+        return (String) getDocProperty(doc,
+                SUBSCRIPTION_REQUEST_PROCESSED_COMMENT_PROPERTY);
     }
 
     @Override
     public void setProcessedComment(String value) {
-        setDocProperty(doc, FIELD_REQUEST_PROCESSED_COMMENT, value);
+        setDocProperty(doc, SUBSCRIPTION_REQUEST_PROCESSED_COMMENT_PROPERTY,
+                value);
+    }
+
+    public DocumentModel getDocument() {
+        return doc;
     }
 
 }

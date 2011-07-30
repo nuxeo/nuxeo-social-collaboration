@@ -9,17 +9,16 @@
     <coreQueryPageProvider>
       <property name="coreSession">#{documentManager}</property>
       <pattern>
-        SELECT * FROM Request WHERE ecm:path STARTSWITH ?
+        SELECT * FROM SubscriptionRequest WHERE req:info = ?
       </pattern>
-      <parameter>#{currentDocument.pathAsString}</parameter>
+      <parameter>#{currentDocument.id}</parameter>
       <pageSize>20</pageSize>
     </coreQueryPageProvider>
 
     <cacheKey>#{currentDocument.id}</cacheKey>
     <cacheSize>10</cacheSize>
     <refresh>
-      <event>documentChanged</event>
-      <event>documentChildrenChanged</event>
+      <event>subscriptionRequestsUpdated</event>
     </refresh>
 
     <resultLayouts>
@@ -53,6 +52,7 @@
       </resultLayouts>
     </contentView>
   </extension>
+
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager" point="layouts">
     <layout name="SocialWorkspaces@cvListingLayout">
       <templates>

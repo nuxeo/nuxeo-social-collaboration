@@ -80,8 +80,8 @@ public abstract class AbstractSocialWorkspaceTest {
             String type, boolean isPublic) throws Exception {
         DocumentModel doc = session.createDocumentModel(pathAsString, name,
                 type);
-        doc.setPropertyValue(SocialConstants.FIELD_SOCIAL_DOCUMENT_IS_PUBLIC,
-                isPublic);
+        doc.setPropertyValue(
+                SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, isPublic);
         doc = session.createDocument(doc);
         session.save(); // fire post commit event listener
         session.save(); // flush the session to retrieve document

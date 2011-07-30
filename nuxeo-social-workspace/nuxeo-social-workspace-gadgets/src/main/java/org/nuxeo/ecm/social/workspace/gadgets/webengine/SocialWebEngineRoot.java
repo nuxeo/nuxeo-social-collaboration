@@ -19,7 +19,7 @@ package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.util.ArrayList;
@@ -155,7 +155,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         args.put("removable", getDocsWithDeleteRight(docs));
         args.put(
                 "isPublicSocialWorkspace",
-                socialWorkspace.getPropertyValue(FIELD_SOCIAL_WORKSPACE_IS_PUBLIC));
+                socialWorkspace.getPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY));
         args.put("fullscreen_views", getFullscreenViews(docs));
 
         // add navigation arguments
@@ -399,7 +399,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     protected static List<String> getPublishableDocs(
             DocumentModel socialWorkspace, DocumentModelList docs,
             boolean isPublic) throws ClientException {
-        boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue(FIELD_SOCIAL_WORKSPACE_IS_PUBLIC);
+        boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY);
 
         List<String> list = new ArrayList<String>();
 

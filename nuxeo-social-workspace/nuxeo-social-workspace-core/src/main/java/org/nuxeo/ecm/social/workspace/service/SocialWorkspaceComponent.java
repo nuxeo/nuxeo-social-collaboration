@@ -22,7 +22,7 @@ package org.nuxeo.ecm.social.workspace.service;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSPACE_IS_PUBLIC;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
@@ -48,8 +48,10 @@ import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener;
 import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
@@ -71,7 +73,21 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     private UserManager userManager;
 
+    private SubscriptionRequestHandler subscriptionRequestHandler;
+
     private int validationDays = 15;
+
+    @Override
+    public void activate(ComponentContext context) throws Exception {
+        super.activate(context);
+        subscriptionRequestHandler = new DefaultSubscriptionRequestHandler();
+    }
+
+    @Override
+    public void deactivate(ComponentContext context) throws Exception {
+        super.deactivate(context);
+        subscriptionRequestHandler = null;
+    }
 
     @Override
     public SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc) {
@@ -244,16 +260,17 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public void addSocialWorkspaceAdministrator(
+    public boolean addSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, String principalName) {
-        addMemberToGroup(principalName,
+        return addMemberToGroup(principalName,
                 socialWorkspace.getAdministratorsGroupName());
     }
 
     @Override
-    public void addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+    public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             String principalName) {
-        addMemberToGroup(principalName, socialWorkspace.getMembersGroupName());
+        return addMemberToGroup(principalName,
+                socialWorkspace.getMembersGroupName());
     }
 
     @Override
@@ -270,7 +287,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 socialWorkspace.getAdministratorsGroupName());
     }
 
-    private void addMemberToGroup(String principalName, String groupName) {
+    @SuppressWarnings("unchecked")
+    private boolean addMemberToGroup(String principalName, String groupName) {
         try {
             if (!StringUtils.isBlank(principalName)) {
                 UserManager userManager = getUserManager();
@@ -282,16 +300,21 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 if (groupMembers == null) {
                     groupMembers = new ArrayList<String>();
                 }
-                groupMembers.add(principalName);
-                group.setProperty(groupSchemaName, groupMembersField,
-                        groupMembers);
-                userManager.updateGroup(group);
+                if (!groupMembers.contains(principalName)) {
+                    groupMembers.add(principalName);
+                    group.setProperty(groupSchemaName, groupMembersField,
+                            groupMembers);
+                    userManager.updateGroup(group);
+                    return true;
+                }
             }
+            return false;
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void removeMemberFromGroup(String principalName, String groupName) {
         try {
             if (!StringUtils.isBlank(principalName)) {
@@ -317,7 +340,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     public void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace) {
         try {
             DocumentModel doc = socialWorkspace.getDocument();
-            doc.setPropertyValue(FIELD_SOCIAL_WORKSPACE_IS_PUBLIC, true);
+            doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, true);
             doc.putContextData(SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
@@ -377,7 +400,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     public void makeSocialWorkspacePrivate(SocialWorkspace socialWorkspace) {
         try {
             DocumentModel doc = socialWorkspace.getDocument();
-            doc.setPropertyValue(FIELD_SOCIAL_WORKSPACE_IS_PUBLIC, false);
+            doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, false);
             doc.putContextData(SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
@@ -422,7 +445,36 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         session.saveDocument(privateDashboardSpace);
     }
 
-    public static class SocialWorkspaceFinder extends UnrestrictedSessionRunner {
+    @Override
+    public void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
+            String principalName) {
+        subscriptionRequestHandler.handleSubscriptionRequestFor(
+                socialWorkspace, principalName);
+    }
+
+    @Override
+    public boolean isSubscriptionRequestPending(
+            SocialWorkspace socialWorkspace, String principalName) {
+        return subscriptionRequestHandler.isSubscriptionRequestPending(
+                socialWorkspace, principalName);
+    }
+
+    @Override
+    public void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
+            SubscriptionRequest subscriptionRequest) {
+        subscriptionRequestHandler.acceptSubscriptionRequest(socialWorkspace,
+                subscriptionRequest);
+    }
+
+    @Override
+    public void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
+            SubscriptionRequest subscriptionRequest) {
+        subscriptionRequestHandler.rejectSubscriptionRequest(socialWorkspace,
+                subscriptionRequest);
+    }
+
+    private static class SocialWorkspaceFinder extends
+            UnrestrictedSessionRunner {
 
         private final DocumentRef docRef;
 
@@ -446,6 +498,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 }
             }
         }
+
     }
 
 }

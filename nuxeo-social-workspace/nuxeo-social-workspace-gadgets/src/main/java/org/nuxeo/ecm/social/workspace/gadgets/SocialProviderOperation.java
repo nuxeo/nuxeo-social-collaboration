@@ -136,7 +136,8 @@ public class SocialProviderOperation {
             return EMPTY_LIST;
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+                session, new PathRef(contextPath));
 
         if (socialWorkspace != null) {
             String finalPath = socialWorkspace.getDocument().getPathAsString();
@@ -146,7 +147,8 @@ public class SocialProviderOperation {
                 finalPath = socialWorkspace.getPublicSectionPath();
             }
 
-            String s = " ecm:path STARTSWITH " + prepareStringLiteral(finalPath, true, true);
+            String s = " ecm:path STARTSWITH "
+                    + prepareStringLiteral(finalPath, true, true);
 
             if (query != null) {
                 if (query.toUpperCase().contains("WHERE")) {

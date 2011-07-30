@@ -19,7 +19,9 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 
 import java.io.Serializable;
 
@@ -34,7 +36,8 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
@@ -65,14 +68,11 @@ public class SocialWorkspaceActions implements Serializable {
         return SocialWorkspaceHelper.toSocialWorkspace(doc);
     }
 
-    public boolean isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() throws ClientException {
+    public boolean isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()
+            throws ClientException {
         DocumentModel doc = navigationContext.getCurrentDocument();
-        if (DASHBOARD_SPACES_CONTAINER_TYPE.equals(doc.getType())) {
-            return socialWorkspaceService.getDetachedSocialWorkspaceContainer(doc).isAdministratorOrMember(currentUser);
-        } else {
-            SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
-            return socialWorkspace.isAdministratorOrMember(currentUser);
-        }
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(doc);
+        return socialWorkspace.isAdministratorOrMember(currentUser);
     }
 
     public SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc) {

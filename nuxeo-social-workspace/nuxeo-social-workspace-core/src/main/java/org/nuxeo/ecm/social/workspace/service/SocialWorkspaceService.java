@@ -23,6 +23,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 
 /**
  * Service interface for Social Workspace.
@@ -77,14 +78,20 @@ public interface SocialWorkspaceService {
 
     /**
      * Adds a user to the @{code socialWorkspace} administrators group.
+     *
+     * @return {@code true} if the user was successfully added to the
+     *         administrators group, {@code false} otherwise.
      */
-    void addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
+    boolean addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
             String principalName);
 
     /**
      * Adds a user to the @{code socialWorkspace} members group.
+     *
+     * @return {@code true} if the user was successfully added to the members
+     *         group, {@code false} otherwise.
      */
-    void addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
+    boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             String principalName);
 
     /**
@@ -121,5 +128,31 @@ public interface SocialWorkspaceService {
      * @return number of days
      */
     int getValidationDays();
+
+    /**
+     * Handles a Subscription Request on {@code socialWorkspace} for the given
+     * {@code principalName}.
+     */
+    void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Returns {@code true} if there is a pending Subscription Request for the
+     * given {@code principalName}, {@code false} otherwise.
+     */
+    boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace,
+            String principalName);
+
+    /**
+     * Accepts the {@code subscriptionRequest} for {@code socialWorkspace}.
+     */
+    void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
+            SubscriptionRequest subscriptionRequest);
+
+    /**
+     * Rejects the {@code subscriptionRequest} for {@code socialWorkspace}.
+     */
+    void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
+            SubscriptionRequest subscriptionRequest);
 
 }
