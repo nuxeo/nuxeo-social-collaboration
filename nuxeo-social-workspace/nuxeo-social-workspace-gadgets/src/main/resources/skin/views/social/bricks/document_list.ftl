@@ -1,6 +1,6 @@
 <div>
   <#if (docs?size == 0)>
-    No documents.
+    Aucun document.
   <#else>
   <div id="pageNavigationControls">
     <input type="image" onclick="javascript: documentList('${currentDoc.id}', 0,)" id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
@@ -14,9 +14,9 @@
     <thead>
       <tr>
         <th class="iconColumn"></th>
-        <th>${Context.getMessage("label.dublincore.title")}</th>
-        <th>${Context.getMessage("label.dublincore.modified")}</th>
-        <th>${Context.getMessage("label.dublincore.creator")}</th>
+        <th>Titre</th>
+        <th>Dernière modification</th>
+        <th>Auteur</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
@@ -34,26 +34,26 @@
         <#if removable?seq_contains(doc.id)>
           <a class="button" href="javascript:confirmDeleteDocument('${doc.id}' , '${doc.title}' )">
             <img src="${contextPath}/icons/action_delete.gif" alt="remove"></img>
-            <div class="tooltip">Remove the document</div>
+            <div class="tooltip">Effacer le document</div>
           </a>
         </#if>
         <#if isPublicSocialWorkspace>
           <#if publishablePublic?seq_contains(doc.id)>
             <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${doc.title}', true )">
               <img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></img>
-              <div class="tooltip">Make this document public</div>
+              <div class="tooltip">Rendre ce document public</div>
             </a>
           </#if>
           <#if publishablePrivate?seq_contains(doc.id)>
             <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${doc.title}', false )">
               <img src="${skinPath}/icons/publish_to_social_workspace.png" alt="make it public"></img>
-              <div class="tooltip">restrict to the Social Workspace</div>
+              <div class="tooltip">Restreindre l'accés de ce document à l'espace collaboratif</div>
             </a>
           </#if>
         <#else>
           <a class="button disabled" href="#">
             <img src="${skinPath}/icons/publish_to_all_disabled.png" alt="publish public"></img>
-            <div class="tooltip">Social Workspace is private, you can't make documents public</div>
+            <div class="tooltip">Cet espace collabortif est privé, aucun document ne peut être public</div>
           </a>
         </#if>
 

@@ -1,26 +1,5 @@
 var prefs = new gadgets.Prefs();
 
-// configure Automation REST call
-var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
-  operationParams : { query : "Select * from Article WHERE ecm:isProxy = 0 and ecm:currentLifeCycleState <> 'deleted'",
-       pageSize : 5,
-       contextPath : getTargetContextPath()
-  },  // parameters for the chain or operation
-  operationContext : {},                                                // context
-  operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
-  entityType : 'documents',                                             // result type : only document is supported for now
-  usePagination : true,                                                 // manage pagination or not
-  displayMethod : displayArticles,                                  // js method used to display the result
-  displayColumns : [ { type: 'builtin', field: 'icon'},                 // minimalist layout listing
-                   { type: 'builtin', field: 'titleWithLink', label: prefs.getMsg('label.dublincore.title')},
-                   { type: 'date', field: 'dc:modified', label: prefs.getMsg('label.dublincore.modified')},
-                   { type: 'text', field: 'dc:creator', label: prefs.getMsg('label.dublincore.creator')},
-                   { type: 'text', field: 'note:note', label: prefs.getMsg('label.article.abstract')}
-                   ],
-                   noEntryLabel: prefs.getMsg('label.gadget.no.document')
-};
-
-
 function displayArticles(entries, nxParams) {
 
   var html = "";

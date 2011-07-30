@@ -16,6 +16,8 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import static org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder.prepareStringLiteral;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +44,8 @@ import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.platform.query.core.CoreQueryPageProviderDescriptor;
 import org.nuxeo.ecm.platform.query.nxql.CoreQueryDocumentPageProvider;
-import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -143,7 +146,7 @@ public class SocialProviderOperation {
                 finalPath = socialWorkspace.getPublicSectionPath();
             }
 
-            String s = " ecm:path STARTSWITH '" + finalPath + "'";
+            String s = " ecm:path STARTSWITH " + prepareStringLiteral(finalPath, true, true);
 
             if (query != null) {
                 if (query.toUpperCase().contains("WHERE")) {
