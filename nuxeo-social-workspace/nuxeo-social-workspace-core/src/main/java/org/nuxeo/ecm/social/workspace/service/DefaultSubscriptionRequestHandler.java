@@ -79,60 +79,57 @@ public class DefaultSubscriptionRequestHandler implements
     public void handleSubscriptionRequestFor(
             final SocialWorkspace socialWorkspace, final String principalName) {
         try {
-            new UnrestrictedSessionRunner(
-                    socialWorkspace.getDocument().getRepositoryName()) {
+            String repositoryName = socialWorkspace.getDocument().getRepositoryName();
+            new UnrestrictedSessionRunner(repositoryName) {
                 @Override
                 public void run() throws ClientException {
-                    if (socialWorkspace.mustApproveSubscription()) {
-                        if (isSubscriptionRequestPending(socialWorkspace,
-                                principalName)) {
-                            return;
-                        }
-
-                        String subscriptionRequestName = socialWorkspace.getId()
-                                + "-" + principalName;
-                        DocumentModel subscriptionRequestsRoot = getSubscriptionRequestsRoot(
-                                session, socialWorkspace);
-                        DocumentModel request = session.createDocumentModel(
-                                subscriptionRequestsRoot.getPathAsString(),
-                                subscriptionRequestName,
-                                SUBSCRIPTION_REQUEST_TYPE);
-                        request.setPropertyValue(
-                                SUBSCRIPTION_REQUEST_USERNAME_PROPERTY,
-                                principalName);
-                        NuxeoPrincipal principal = getUserManager().getPrincipal(
-                                principalName);
-                        request.setPropertyValue(
-                                SUBSCRIPTION_REQUEST_USER_EMAIL_PROPERTY,
-                                principal.getEmail());
-                        request.setPropertyValue(
-                                SUBSCRIPTION_REQUEST_TYPE_PROPERTY,
-                                SUBSCRIPTION_REQUEST_TYPE_JOIN);
-                        request.setPropertyValue(
-                                SUBSCRIPTION_REQUEST_INFO_PROPERTY,
-                                socialWorkspace.getId());
-                        request = session.createDocument(request);
-                        session.save();
-
-                        EventContext ctx = new DocumentEventContext(session,
-                                null, request);
-                        getEventService().fireEvent(
-                                SUBSCRIPTION_REQUEST_CREATED_EVENT, ctx);
-                    } else {
-                        if (socialWorkspace.addMember(principalName)) {
-                            EventContext ctx = new DocumentEventContext(
-                                    session, null,
-                                    socialWorkspace.getDocument());
-                            ctx.setProperty(PRINCIPAL_NAME_PROPERTY,
-                                    principalName);
-                            getEventService().fireEvent(
-                                    SUBSCRIPTION_REQUEST_ACCEPTED_EVENT, ctx);
-                        }
-                    }
+                    handleSubscriptionRequestFor(session, socialWorkspace,
+                            principalName);
                 }
             }.runUnrestricted();
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
+        }
+    }
+
+    private void handleSubscriptionRequestFor(CoreSession session,
+            SocialWorkspace socialWorkspace, String principalName)
+            throws ClientException {
+        if (socialWorkspace.mustApproveSubscription()) {
+            if (isSubscriptionRequestPending(socialWorkspace, principalName)) {
+                return;
+            }
+
+            String subscriptionRequestName = socialWorkspace.getId() + "-"
+                    + principalName;
+            DocumentModel subscriptionRequestsRoot = getSubscriptionRequestsRoot(
+                    session, socialWorkspace);
+            DocumentModel request = session.createDocumentModel(
+                    subscriptionRequestsRoot.getPathAsString(),
+                    subscriptionRequestName, SUBSCRIPTION_REQUEST_TYPE);
+            request.setPropertyValue(SUBSCRIPTION_REQUEST_USERNAME_PROPERTY,
+                    principalName);
+            NuxeoPrincipal principal = getUserManager().getPrincipal(
+                    principalName);
+            request.setPropertyValue(SUBSCRIPTION_REQUEST_USER_EMAIL_PROPERTY,
+                    principal.getEmail());
+            request.setPropertyValue(SUBSCRIPTION_REQUEST_TYPE_PROPERTY,
+                    SUBSCRIPTION_REQUEST_TYPE_JOIN);
+            request.setPropertyValue(SUBSCRIPTION_REQUEST_INFO_PROPERTY,
+                    socialWorkspace.getId());
+            request = session.createDocument(request);
+            session.save();
+
+            EventContext ctx = new DocumentEventContext(session, null, request);
+            getEventService().fireEvent(SUBSCRIPTION_REQUEST_CREATED_EVENT, ctx);
+        } else {
+            if (socialWorkspace.addMember(principalName)) {
+                EventContext ctx = new DocumentEventContext(session, null,
+                        socialWorkspace.getDocument());
+                ctx.setProperty(PRINCIPAL_NAME_PROPERTY, principalName);
+                getEventService().fireEvent(
+                        SUBSCRIPTION_REQUEST_ACCEPTED_EVENT, ctx);
+            }
         }
     }
 
@@ -173,8 +170,8 @@ public class DefaultSubscriptionRequestHandler implements
             final SocialWorkspace socialWorkspace, final String principalName) {
         final List<DocumentModel> subscriptionRequests = new ArrayList<DocumentModel>();
         try {
-            new UnrestrictedSessionRunner(
-                    socialWorkspace.getDocument().getRepositoryName()) {
+            String repositoryName = socialWorkspace.getDocument().getRepositoryName();
+            new UnrestrictedSessionRunner(repositoryName) {
                 @Override
                 public void run() throws ClientException {
                     String queryTemplate = "SELECT * FROM SubscriptionRequest WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
@@ -194,27 +191,35 @@ public class DefaultSubscriptionRequestHandler implements
     public void acceptSubscriptionRequest(
             final SocialWorkspace socialWorkspace,
             final SubscriptionRequest subscriptionRequest) {
+
         try {
-            new UnrestrictedSessionRunner(
-                    subscriptionRequest.getDocument().getRepositoryName()) {
+            String repositoryName = subscriptionRequest.getDocument().getRepositoryName();
+            new UnrestrictedSessionRunner(repositoryName) {
                 @Override
                 public void run() throws ClientException {
-                    String principalName = subscriptionRequest.getUsername();
-                    if (socialWorkspace.addMember(subscriptionRequest.getUsername())) {
-                        DocumentModel request = session.getDocument(subscriptionRequest.getDocument().getRef());
-                        request.followTransition(SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION);
-                        session.saveDocument(request);
-                        session.save();
-                        EventContext ctx = new DocumentEventContext(session,
-                                null, socialWorkspace.getDocument());
-                        ctx.setProperty(PRINCIPAL_NAME_PROPERTY, principalName);
-                        getEventService().fireEvent(
-                                SUBSCRIPTION_REQUEST_ACCEPTED_EVENT, ctx);
-                    }
+                    acceptSubscriptionRequest(session, socialWorkspace,
+                            subscriptionRequest);
                 }
             }.runUnrestricted();
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
+        }
+    }
+
+    private void acceptSubscriptionRequest(CoreSession session,
+            SocialWorkspace socialWorkspace,
+            SubscriptionRequest subscriptionRequest) throws ClientException {
+        String principalName = subscriptionRequest.getUsername();
+        if (socialWorkspace.addMember(subscriptionRequest.getUsername())) {
+            DocumentModel request = session.getDocument(subscriptionRequest.getDocument().getRef());
+            request.followTransition(SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION);
+            session.saveDocument(request);
+            session.save();
+            EventContext ctx = new DocumentEventContext(session, null,
+                    socialWorkspace.getDocument());
+            ctx.setProperty(PRINCIPAL_NAME_PROPERTY, principalName);
+            getEventService().fireEvent(SUBSCRIPTION_REQUEST_ACCEPTED_EVENT,
+                    ctx);
         }
     }
 
@@ -223,25 +228,31 @@ public class DefaultSubscriptionRequestHandler implements
             final SocialWorkspace socialWorkspace,
             final SubscriptionRequest subscriptionRequest) {
         try {
-            new UnrestrictedSessionRunner(
-                    subscriptionRequest.getDocument().getRepositoryName()) {
+            String repositoryName = subscriptionRequest.getDocument().getRepositoryName();
+            new UnrestrictedSessionRunner(repositoryName) {
                 @Override
                 public void run() throws ClientException {
-                    String principalName = subscriptionRequest.getUsername();
-                    DocumentModel request = session.getDocument(subscriptionRequest.getDocument().getRef());
-                    request.followTransition(SUBSCRIPTION_REQUEST_REJECT_TRANSITION);
-                    session.saveDocument(request);
-                    session.save();
-                    EventContext ctx = new DocumentEventContext(session, null,
-                            socialWorkspace.getDocument());
-                    ctx.setProperty(PRINCIPAL_NAME_PROPERTY, principalName);
-                    getEventService().fireEvent(
-                            SUBSCRIPTION_REQUEST_REJECTED_EVENT, ctx);
+                    rejectSubscriptionRequest(session, socialWorkspace,
+                            subscriptionRequest);
                 }
             }.runUnrestricted();
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
+    }
+
+    private void rejectSubscriptionRequest(CoreSession session,
+            SocialWorkspace socialWorkspace,
+            SubscriptionRequest subscriptionRequest) throws ClientException {
+        String principalName = subscriptionRequest.getUsername();
+        DocumentModel request = session.getDocument(subscriptionRequest.getDocument().getRef());
+        request.followTransition(SUBSCRIPTION_REQUEST_REJECT_TRANSITION);
+        session.saveDocument(request);
+        session.save();
+        EventContext ctx = new DocumentEventContext(session, null,
+                socialWorkspace.getDocument());
+        ctx.setProperty(PRINCIPAL_NAME_PROPERTY, principalName);
+        getEventService().fireEvent(SUBSCRIPTION_REQUEST_REJECTED_EVENT, ctx);
     }
 
     private EventService getEventService() {
