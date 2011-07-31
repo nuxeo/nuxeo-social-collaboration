@@ -16,8 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder.prepareStringLiteral;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +44,8 @@ import org.nuxeo.ecm.platform.query.core.CoreQueryPageProviderDescriptor;
 import org.nuxeo.ecm.platform.query.nxql.CoreQueryDocumentPageProvider;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+
+import static org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder.prepareStringLiteral;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -156,15 +156,16 @@ public class SocialProviderOperation {
                 } else {
                     query += " WHERE " + s;
                 }
-                CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
-                desc.setPattern(query);
-                return new PaginableDocumentModelListImpl(
-                        (PageProvider<DocumentModel>) pps.getPageProvider(
-                                providerName, desc, sortInfos, targetPageSize,
-                                new Long(page), props, parameters));
             }
         }
-        return EMPTY_LIST;
+
+        CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
+        desc.setPattern(query);
+        return new PaginableDocumentModelListImpl(
+                (PageProvider<DocumentModel>) pps.getPageProvider(
+                        providerName, desc, sortInfos, targetPageSize,
+                        new Long(page), props, parameters));
+
     }
 
     protected List<SortInfo> manageSortParameter() {
