@@ -90,7 +90,12 @@ public class SocialWorkspaceActions implements Serializable {
      */
     public String backToDashboard() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        DocumentModel superSpace = documentManager.getSuperSpace(currentDocument);
+        DocumentModel sourceDocument = currentDocument;
+        if (currentDocument.isProxy()) {
+            sourceDocument = documentManager.getSourceDocument(currentDocument.getRef());
+        }
+
+        DocumentModel superSpace = documentManager.getSuperSpace(sourceDocument);
 
         if (isSocialWorkspace(superSpace)) {
             SocialWorkspace socialWorkspace = toSocialWorkspace(superSpace);
@@ -99,7 +104,7 @@ public class SocialWorkspaceActions implements Serializable {
             return navigationContext.navigateToDocument(dashboardSpacesRoot,
                     FULLSCREEN_VIEW_ID);
         } else {
-            return navigationContext.navigateToDocument(superSpace);
+            return navigationContext.navigateToDocument(currentDocument);
         }
     }
 
