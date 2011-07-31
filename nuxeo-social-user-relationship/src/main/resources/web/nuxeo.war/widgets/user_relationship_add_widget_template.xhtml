@@ -81,7 +81,7 @@
 
             <nxu:column>
               <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipAction.relationshipCheckboxChanged}"
-                value="#{userRelationshipAction.getAllRelationshipsState[kind]}">
+                value="#{userRelationshipAction.allRelationshipsState[kind]}">
                 <a4j:support event="onchange"
                   reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
                   <f:param name="selectedKind" value="#{kind}" />
