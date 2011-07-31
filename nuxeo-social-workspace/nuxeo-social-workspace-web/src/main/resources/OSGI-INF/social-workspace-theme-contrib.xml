@@ -33,6 +33,10 @@
         <theme>social-collaboration/dashboard</theme>
       </view>
 
+      <view id="/create_social_workspace_document.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
    </application>
   </extension>
 

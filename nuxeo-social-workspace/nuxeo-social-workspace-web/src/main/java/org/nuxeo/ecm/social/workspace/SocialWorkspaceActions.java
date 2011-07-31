@@ -17,12 +17,6 @@
 
 package org.nuxeo.ecm.social.workspace;
 
-import static org.jboss.seam.ScopeType.CONVERSATION;
-import static org.jboss.seam.annotations.Install.FRAMEWORK;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
-
 import java.io.Serializable;
 
 import org.jboss.seam.annotations.In;
@@ -33,11 +27,13 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+
+import static org.jboss.seam.ScopeType.CONVERSATION;
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
@@ -49,8 +45,6 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 public class SocialWorkspaceActions implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    public static final String FULLSCREEN_VIEW_ID = "fullscreen";
 
     @In(create = true)
     protected transient CoreSession documentManager;
@@ -82,55 +76,6 @@ public class SocialWorkspaceActions implements Serializable {
     public SocialWorkspace getSocialWorkspaceContainer() {
         DocumentModel doc = navigationContext.getCurrentDocument();
         return getSocialWorkspaceContainer(doc);
-    }
-
-    /**
-     * Navigate to the Dashboard of the Social Workspace if the document belong
-     * to one of it, else navigate to the default view of the current document.
-     */
-    public String backToDashboard() throws ClientException {
-        DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        DocumentModel sourceDocument = currentDocument;
-        if (currentDocument.isProxy()) {
-            sourceDocument = documentManager.getSourceDocument(currentDocument.getRef());
-        }
-
-        DocumentModel superSpace = documentManager.getSuperSpace(sourceDocument);
-
-        if (isSocialWorkspace(superSpace)) {
-            SocialWorkspace socialWorkspace = toSocialWorkspace(superSpace);
-            DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
-                    socialWorkspace.getDashboardSpacesRootPath()));
-            return navigationContext.navigateToDocument(dashboardSpacesRoot,
-                    FULLSCREEN_VIEW_ID);
-        } else {
-            return navigationContext.navigateToDocument(currentDocument);
-        }
-    }
-
-    public String navigateToDMView() throws ClientException {
-        DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        if (DASHBOARD_SPACES_CONTAINER_TYPE.equals(currentDocument.getType())) {
-            DocumentModel superSpace = documentManager.getSuperSpace(currentDocument);
-            return navigationContext.navigateToDocument(superSpace);
-        }
-        return navigationContext.navigateToDocument(currentDocument);
-    }
-
-    public String navigateToFullscreenView() throws ClientException {
-        DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        if (isSocialWorkspace(currentDocument)) {
-            SocialWorkspace socialWorkspace = toSocialWorkspace(currentDocument);
-            DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
-                    socialWorkspace.getDashboardSpacesRootPath()));
-            return navigationContext.navigateToDocument(dashboardSpacesRoot,
-                    FULLSCREEN_VIEW_ID);
-        } else if (isSocialDocument(currentDocument)) {
-            return navigationContext.navigateToDocument(currentDocument,
-                    FULLSCREEN_VIEW_ID);
-        } else {
-            return navigationContext.navigateToDocument(currentDocument);
-        }
     }
 
 }

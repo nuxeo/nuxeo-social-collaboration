@@ -7,7 +7,7 @@
     point="actions">
 
     <action id="BackToDashboard"
-      link="#{socialWorkspaceActions.backToDashboard()}"
+      link="#{fullscreenManagementActions.backToDashboard()}"
       label="label.social.workspace.backtodashboard"
       immediate="false"
       icon="/icons/back_to_social_workspace_dashboard.png"
@@ -17,17 +17,27 @@
     </action>
 
     <action id="GoToDMView"
-      link="#{socialWorkspaceActions.navigateToDMView()}"
+      link="#{fullscreenManagementActions.navigateToDMView()}"
       label="label.social.workspace.gotodmview"
       immediate="false"
       icon="/icons/goto_dm.png"
       order="10">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
-      <filter-id>has_fullscreen_view</filter-id>
+      <filter-id>is_social_workspace_administrator</filter-id>
+    </action>
+
+    <action id="FullScreenCreateNewDocument"
+      link="#{fullscreenManagementActions.createSameTypeDocument}"
+      label="label.social.workspace.create.same.type.document"
+      immediate="false"
+      icon="/icons/create_document.png"
+      order="10">
+      <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
+      <filter-id>has_write_right</filter-id>
     </action>
 
     <action id="GoToFullScreenViewForDocument"
-      link="#{socialWorkspaceActions.navigateToFullscreenView()}"
+      link="#{fullscreenManagementActions.navigateToFullscreenView()}"
       label="label.social.workspace.gotofullscreen"
       immediate="false"
       icon="/icons/fullscreen.png"
@@ -122,6 +132,15 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="filters">
 
+    <filter id="can_be_created_and_modified_in_fullscreen_view">
+      <rule grant="true">
+        <type>Article</type>
+        <type>NewsItem</type>
+        <type>File</type>
+        <type>Note</type>
+      </rule>
+    </filter>
+
     <filter id="moderate_social_workspace">
       <rule grant="true">
         <condition>#{socialWorkspaceSubscriptionRequestActions.enableSocialWorkspaceActions()}</condition>
@@ -164,6 +183,18 @@
       <rule grant="true">
         <facet>SocialDocument</facet>
         <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="is_social_workspace_administrator">
+      <rule grant="true">
+        <permission>Manage everything</permission>
+      </rule>
+    </filter>
+
+    <filter id="has_write_right">
+      <rule grant="true">
+        <permission>Write</permission>
       </rule>
     </filter>
 

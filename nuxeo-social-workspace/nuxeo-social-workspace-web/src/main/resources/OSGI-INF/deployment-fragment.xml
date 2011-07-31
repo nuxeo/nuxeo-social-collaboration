@@ -28,6 +28,11 @@
       <to-view-id>/view_social_workspace_news_item.xhtml</to-view-id>
       <redirect />
     </navigation-case>
+    <navigation-case>
+      <from-outcome>create_social_workspace_document</from-outcome>
+      <to-view-id>/create_social_workspace_document.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
   </extension>
 
   <install>
