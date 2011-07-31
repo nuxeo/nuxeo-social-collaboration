@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="My Social Workspaces"
-    description="Lists Social Workspace, that I'm member"
-    author="Ronan Le Gall" author_email="rlg@nuxeo.com">
+  <ModulePrefs title="Public Social Workspaces"
+    description="Gives the possibility to find public Social Workspaces"
+    author="Benjamin JALON" author_email="bjalon@nuxeo.com" height="280">
 
+    <Require feature="jquery" />
     <Require feature="nuxeo" />
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
@@ -16,7 +17,6 @@
 <![CDATA[
 <html>
   <head>
-
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}documentlists.css"/>
 
@@ -24,21 +24,18 @@
   ${jsContext}
 
   <script src="${specDirectoryUrl}default-automation-request.js"></script>
-  <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
   <script src="${specDirectoryUrl}context-management.js"></script>
+  <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
   <script src="${skinPath}/script/dashboard-navigation.js"></script>
 
-  <script type="text/javascript">
-    var prefs = new gadgets.Prefs();
+  <script>
+var prefs = new gadgets.Prefs();
 
-    var requestScope = getTargetContextPath();
-    // configure Automation REST call
-    var NXRequestParams = {
-      operationId: 'Document.PageProvider',
-      operationParams: {
-        providerName: 'user_socialworkspaces',
-        pageSize: 5
-      },
+function getPublicSociaWorkspaces() {
+  var pattern = jQuery('#queryText').val();
+
+  var NXRequestParams = { operationId:  'SocialWorkspace.GetPublicSocialWorkspaces',
+    operationParams: { pattern: pattern },
       operationContext: {},
       operationDocumentProperties: "common,dublincore",
       entityType: 'documents',
@@ -49,19 +46,29 @@
         {type: 'builtin', field: 'titleWithLink', label: '__MSG_label.dublincore.title__', view: 'social_dashboard'},
         {type: 'date', field: 'dc:modified', label: '__MSG_label.dublincore.modified__'},
         {type: 'text', field: 'dc:creator', label: '__MSG_label.dublincore.creator__'}
-      ],
-      noEntryLabel: '__MSG_label.gadget.no.document__'
-    };
+    ],
+    noEntryLabel: 'label.info.no.social.workspace.found' };
 
-    // execute automation request onload
-    gadgets.util.registerOnLoadHandler(function() {
-      initContextPathSettingsButton();
-      doAutomationRequest(NXRequestParams);
-    });
-  </script>
+    doAutomationRequest(NXRequestParams);
+}
 
-  </head>
-   <body>
+function displaySearchForm() {
+  var searchFormHtml = '<div class="wideDefinition">';
+  searchFormHtml += '<input class="searchBox" name="queryText" id="queryText" type="text"></input>';
+  searchFormHtml += '<a href="javascript:getPublicSociaWorkspaces()">' + prefs.getMsg('command.search') + '</a>';
+  searchFormHtml += '</div>';
+
+  jQuery('#search').html(searchFormHtml);
+}
+
+gadgets.util.registerOnLoadHandler(function() {displaySearchForm(); getPublicSociaWorkspaces();} );
+
+</script>
+
+
+ </head>
+ <body>
+   <div id="search"></div>
    <div class="tools">
      <#include "context-chooser-ui.ftl"/>
    </div>

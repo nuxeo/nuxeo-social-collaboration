@@ -19,6 +19,8 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import java.util.List;
+
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -154,5 +156,16 @@ public interface SocialWorkspaceService {
      */
     void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest);
+
+    /**
+     * Return matching public social workspace according the given pattern.
+     */
+    List<SocialWorkspace> searchDetachedPublicSocialWorkspaces(
+            CoreSession session, String pattern);
+
+    /**
+     * Return all public Social Workspaces.
+     */
+    List<SocialWorkspace> getDetachedPublicSocialWorkspaces(CoreSession session);
 
 }

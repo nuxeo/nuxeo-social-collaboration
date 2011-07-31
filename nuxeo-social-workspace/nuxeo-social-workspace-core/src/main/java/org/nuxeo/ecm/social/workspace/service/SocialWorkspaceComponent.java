@@ -19,13 +19,6 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +30,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
@@ -54,6 +48,14 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
+
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 /**
  * Default implementation of {@see SocialWorkspaceService} service.
@@ -76,6 +78,58 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     private SubscriptionRequestHandler subscriptionRequestHandler;
 
     private int validationDays = 15;
+
+    @Override
+    public List<SocialWorkspace> getDetachedPublicSocialWorkspaces(
+            CoreSession session) {
+        return searchDetachedPublicSocialWorkspaces(session, null);
+    }
+
+    @Override
+    public List<SocialWorkspace> searchDetachedPublicSocialWorkspaces(
+            CoreSession session, final String pattern) {
+
+        final List<SocialWorkspace> socialWorkspaces = new ArrayList<SocialWorkspace>();
+
+        UnrestrictedSessionRunner runner = new UnrestrictedSessionRunner(
+                session) {
+
+            private static final String ALL_PUBLIC_SOCIAL_WORKSPACE_QUERY = "SELECT * FROM Document "
+                    + "WHERE ecm:mixinType != 'HiddenInNavigation' "
+                    + "AND ecm:mixinType = '%s' "
+                    + "AND ecm:currentLifeCycleState !='deleted' "
+                    + "AND socialw:isPublic = 1 ";
+
+            private static final String FULL_TEXT_WHERE_CLAUSE = "AND ecm:fulltext = '%s' ";
+
+            private static final String ORDER_BY = "ORDER BY dc:title";
+
+            @Override
+            public void run() throws ClientException {
+                String query = String.format(ALL_PUBLIC_SOCIAL_WORKSPACE_QUERY,
+                        SOCIAL_WORKSPACE_FACET);
+                if (!(pattern == null) && !"".equals(pattern.trim())) {
+                    query = String.format(query + FULL_TEXT_WHERE_CLAUSE,
+                            pattern);
+                }
+                query += ORDER_BY;
+
+                DocumentModelList docs = session.query(query);
+                for (DocumentModel doc : docs) {
+                    ((DocumentModelImpl) doc).detach(true);
+                    socialWorkspaces.add(toSocialWorkspace(doc));
+                }
+            }
+        };
+
+        try {
+            runner.runUnrestricted();
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+
+        return socialWorkspaces;
+    }
 
     @Override
     public void activate(ComponentContext context) throws Exception {

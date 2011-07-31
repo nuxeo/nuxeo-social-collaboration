@@ -91,17 +91,26 @@ public abstract class AbstractSocialWorkspaceTest {
 
     protected SocialWorkspace createSocialWorkspace(String socialWorkspaceName,
             boolean isPublic) throws Exception {
+
+        SocialWorkspace sw = createSocialWorkspaceWithoutRightForUser(
+                socialWorkspaceName, isPublic);
+        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
+        principal.getGroups().add(sw.getAdministratorsGroupName());
+
+        return sw;
+    }
+
+    protected SocialWorkspace createSocialWorkspaceWithoutRightForUser(
+            String socialWorkspaceName, boolean isPublic) throws Exception {
         DocumentModel doc = createDocument(
                 session.getRootDocument().getPathAsString(),
                 socialWorkspaceName, SOCIAL_WORKSPACE_TYPE);
-        SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
-        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
-        principal.getGroups().add(socialWorkspace.getAdministratorsGroupName());
+        SocialWorkspace sw = toSocialWorkspace(doc);
 
         if (isPublic) {
-            socialWorkspace.makePublic();
+            sw.makePublic();
         }
-        return socialWorkspace;
+        return sw;
     }
 
     protected SocialWorkspace createSocialWorkspace(String socialWorkspaceName)

@@ -40,7 +40,7 @@
       <icon>gadget-library.png</icon>
     </internalGadget>
 
-      <internalGadget name="usersocialworkspaces" disabled="false">
+    <internalGadget name="usersocialworkspaces" disabled="false">
       <mountPoint>/usersocialworkspaces</mountPoint>
       <directory>usersocialworkspaces</directory>
       <entryPoint>usersocialworkspaces.xml</entryPoint>
@@ -54,6 +54,14 @@
       <entryPoint>publicdocuments.xml</entryPoint>
       <category>Espace collaboratif</category>
       <icon>publicdocuments.png</icon>
+    </internalGadget>
+
+    <internalGadget name="publicsocialworkspaces" disabled="false">
+      <mountPoint>/publicsocialworkspaces</mountPoint>
+      <directory>publicsocialworkspaces</directory>
+      <entryPoint>publicsocialworkspaces.xml</entryPoint>
+      <category>Espace collaboratif</category>
+      <icon>public_social_workspaces.png</icon>
     </internalGadget>
 
   </extension>

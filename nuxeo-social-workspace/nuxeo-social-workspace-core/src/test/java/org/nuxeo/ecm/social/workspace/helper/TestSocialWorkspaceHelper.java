@@ -16,12 +16,12 @@
  */
 package org.nuxeo.ecm.social.workspace.helper;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
@@ -32,7 +32,7 @@ public class TestSocialWorkspaceHelper extends AbstractSocialWorkspaceTest {
 
     @Before
     public void setup() throws Exception {
-        socialWorkspace = createSocialWorkspace("Socialworkspace for test");
+        socialWorkspace = createSocialWorkspace("Social Workspace for test");
         socialWorkspaceDoc = socialWorkspace.getDocument();
     }
 
