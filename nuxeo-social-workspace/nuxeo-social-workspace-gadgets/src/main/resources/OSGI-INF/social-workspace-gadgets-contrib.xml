@@ -6,14 +6,14 @@
     <internalGadget name="articles" disabled="false">
       <mountPoint>/articles</mountPoint>
       <entryPoint>articles.xml</entryPoint>
-      <category>Espace collaboratif</category>
+      <category>Espace collaboratif (privé)</category>
       <icon>gadget-article.png</icon>
     </internalGadget>
 
     <internalGadget name="publicarticles" disabled="false">
       <mountPoint>/publicarticles</mountPoint>
       <entryPoint>publicarticles.xml</entryPoint>
-      <category>Espace collaboratif (privé)</category>
+      <category>Espace collaboratif</category>
       <icon>gadget-article.png</icon>
     </internalGadget>
 
@@ -36,7 +36,7 @@
       <mountPoint>/library</mountPoint>
       <directory>library</directory>
       <entryPoint>library.xml</entryPoint>
-      <category>Espace collaboratif</category>
+      <category>Espace collaboratif (privé)</category>
       <icon>gadget-library.png</icon>
     </internalGadget>
 
