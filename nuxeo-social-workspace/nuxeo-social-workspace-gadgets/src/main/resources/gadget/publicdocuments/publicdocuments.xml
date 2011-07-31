@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="All Articles"
-    description="Diplay all Articles created into the Social Workspace"
+  <ModulePrefs title="All Public Documents"
+    description="Diplay all Public Document created into the Social Workspace"
     author="Ronan Le Gall" author_email="rlg@nuxeo.com"
     height="420">
     <Require feature="setprefs"/>
