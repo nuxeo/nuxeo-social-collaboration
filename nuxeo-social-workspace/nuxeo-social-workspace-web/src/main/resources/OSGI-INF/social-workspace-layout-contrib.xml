@@ -431,7 +431,7 @@
       </widgetModes>
     </widget>
 
-    <widget name="request_username" type="text">
+    <widget name="request_username" type="singleUserSuggestion">
       <labels>
         <label mode="any">label.username</label>
       </labels>
@@ -441,6 +441,12 @@
       <widgetModes>
         <mode value="any">view</mode>
       </widgetModes>
+      <properties widgetMode="view">
+        <property name="userSuggestionSearchType">USER_TYPE</property>
+        <property name="firstLabelField">username</property>
+        <property name="hideFirstLabel">true</property>
+        <property name="displayAction">view</property>
+      </properties>
     </widget>
 
   </extension>
