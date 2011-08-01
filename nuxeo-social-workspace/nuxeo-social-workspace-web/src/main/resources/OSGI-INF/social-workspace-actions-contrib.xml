@@ -11,7 +11,7 @@
       label="label.social.workspace.backtodashboard"
       immediate="false"
       icon="/icons/back_to_social_workspace_dashboard.png"
-      order="10">
+      order="20">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
       <filter-id>social_document</filter-id>
     </action>
@@ -31,7 +31,7 @@
       label="label.social.workspace.create.same.type.document"
       immediate="false"
       icon="/icons/create_document.png"
-      order="10">
+      order="30">
       <category>SOCIAL_WORKSPACE_FULLSCREEN</category>
       <filter-id>has_write_right</filter-id>
     </action>
