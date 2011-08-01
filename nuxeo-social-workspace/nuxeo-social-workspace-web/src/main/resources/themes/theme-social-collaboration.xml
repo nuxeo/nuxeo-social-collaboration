@@ -1146,6 +1146,7 @@
       </selector>
       <selector path=".content_block .labelColumn">
         <width>100px</width>
+        <display>none</display>
       </selector>
       <selector path=".content_block .actionsColumn">
         <width>20%</width>
@@ -1156,7 +1157,6 @@
       </selector>
       <selector path=".note_content_block">
         <padding>15px</padding>
-        <border preset="summary.noteBlock (Social Collaboration borders)"/>
         <margin>0 0 15px</margin>
       </selector>
       <selector path=".note_content_block span, .note_content_block p">
@@ -1166,7 +1166,8 @@
       <selector path=".relation_block">
       </selector>
       <selector path=".description_block">
-        <padding>0px 0px 20px</padding>
+        <padding>0px 0px 20px 15px</padding>
+        <font-size>120%</font-size>
       </selector>
       <selector path=".lockFile_block, .restoreFile_block">
         <padding>0px 0px 10px</padding>
@@ -1186,7 +1187,7 @@
         <border preset="summary.actions (Social Collaboration borders)" />
         <padding>3px</padding>
       </selector>
-      <selector path=".actions_block, content_block">
+      <selector path=".actions_block, .content_block, .metadata_block">
         <border preset="summary.actions (Social Collaboration borders)" />
         <padding>10px</padding>
         <margin>10px 0</margin>
@@ -1217,6 +1218,7 @@
       <selector path=".summary_div_0">
         <float>left</float>
         <width>62%</width>
+        <margin-top>20px</margin-top>
         <padding-top>10px</padding-top>
       </selector>
       <selector path=".summary_div_0 p">
@@ -1229,9 +1231,13 @@
         <width>33%</width>
         <padding>10px 0</padding>
       </selector>
+      <selector path=".summary_div_0 h3.summaryTitle, .content_block h3.summaryTitle">
+        <display>none</display>
+      </selector>
       <selector path=".summary_div_1 h3.summaryTitle">
         <color preset="summary.titles (Social Collaboration colors)" />
         <font-size>12px</font-size>
+        <padding-left>15px</padding-left>
       </selector>
       <selector path=".summary_div_2">
         <clear>both</clear>

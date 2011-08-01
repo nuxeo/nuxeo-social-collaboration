@@ -19,7 +19,7 @@
   <head>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}documentlists.css"/>
-  <link rel="stylesheet" type="text/css" href="publicsocialworspaces.css"/>
+  <link rel="stylesheet" type="text/css" href="publicsocialworkspaces.css"/>
 
   <!-- insert JS Context -->
   ${jsContext}
@@ -57,6 +57,7 @@ function displaySearchForm() {
   var searchFormHtml = '<div class="wideDefinition">';
   searchFormHtml += '<input class="searchBox" name="queryText" id="queryText" type="text"></input>';
   searchFormHtml += '<a href="javascript:getPublicSociaWorkspaces()">' + prefs.getMsg('command.search') + '</a>';
+  searchFormHtml += '<div class="clear"></div>';
   searchFormHtml += '</div>';
 
   jQuery('#search').html(searchFormHtml);

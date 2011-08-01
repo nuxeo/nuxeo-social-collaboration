@@ -3,7 +3,7 @@
   xmlns:a4j="http://richfaces.org/a4j"
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:h="http://java.sun.com/jsf/html"
-  id="#{widget.id}">
+  id="#{widget.id}" styleClass="relationList">
 
   <c:set var="displayedName" value="#{nxu:test(empty userManagementActions.selectedUser.user.firstName, userManagementActions.selectedUser.id, userManagementActions.selectedUser.user.firstName)}" scope="page" />
   <h:outputFormat value="#{messages['action.social.user.relationship.user.relations']}">
