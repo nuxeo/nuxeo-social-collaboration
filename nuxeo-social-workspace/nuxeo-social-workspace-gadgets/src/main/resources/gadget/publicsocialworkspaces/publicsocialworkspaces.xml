@@ -19,6 +19,7 @@
   <head>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}documentlists.css"/>
+  <link rel="stylesheet" type="text/css" href="publicsocialworspaces.css"/>
 
   <!-- insert JS Context -->
   ${jsContext}
@@ -68,8 +69,8 @@ gadgets.util.registerOnLoadHandler(function() {displaySearchForm(); getPublicSoc
 
  </head>
  <body>
-   <div id="search"></div>
    <div class="tools">
+     <div id="search"></div>
      <#include "context-chooser-ui.ftl"/>
    </div>
    <div id="content">
