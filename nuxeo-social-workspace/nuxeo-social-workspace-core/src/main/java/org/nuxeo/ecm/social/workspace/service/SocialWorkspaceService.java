@@ -19,6 +19,7 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -39,11 +40,10 @@ public interface SocialWorkspaceService {
      * <li>put specific ACLs</li>
      * </ul>
      *
-     * @param principalName the name of the Principal initializing the Social
-     *            Workspace
+     * @param principal the Principal initializing the Social Workspace
      */
     void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     /**
      * Handles a Social Workspace deletion:

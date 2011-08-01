@@ -77,7 +77,7 @@ public class SocialWorkspaceListener implements EventListener {
     private void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
             EventContext ctx) throws ClientException {
         getSocialWorkspaceService().handleSocialWorkspaceCreation(
-                socialWorkspace, ctx.getPrincipal().getName());
+                socialWorkspace, ctx.getPrincipal());
     }
 
     private void updateSocialWorkspaceVisibility(SocialWorkspace socialWorkspace) {

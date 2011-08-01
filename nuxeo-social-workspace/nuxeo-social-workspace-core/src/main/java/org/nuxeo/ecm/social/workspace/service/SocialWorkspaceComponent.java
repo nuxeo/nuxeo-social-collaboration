@@ -19,6 +19,15 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +41,8 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.impl.DocumentModelImpl;
@@ -48,14 +59,6 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
-
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 /**
  * Default implementation of {@see SocialWorkspaceService} service.
@@ -108,7 +111,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             public void run() throws ClientException {
                 String query = String.format(ALL_PUBLIC_SOCIAL_WORKSPACE_QUERY,
                         SOCIAL_WORKSPACE_FACET);
-                if (!(pattern == null) && !"".equals(pattern.trim())) {
+                if (!StringUtils.isBlank(pattern)) {
                     query = String.format(query + FULL_TEXT_WHERE_CLAUSE,
                             pattern);
                 }
@@ -199,22 +202,37 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
-            String principalName) {
-        createSocialWorkspaceGroups(socialWorkspace, principalName);
-        initializeSocialWorkspaceRights(socialWorkspace);
-        initializeNewsItemsRootRights(socialWorkspace);
-        if (socialWorkspace.isPublic()) {
-            makeSocialWorkspacePublic(socialWorkspace);
+    public void handleSocialWorkspaceCreation(
+            final SocialWorkspace socialWorkspace, final Principal principal) {
+        createSocialWorkspaceGroups(socialWorkspace, principal);
+        String repositoryName = socialWorkspace.getDocument().getRepositoryName();
+        try {
+            new UnrestrictedSessionRunner(repositoryName) {
+                @Override
+                public void run() throws ClientException {
+                    SocialWorkspace unrestrictedSocialWorkspace = toSocialWorkspace(session.getDocument(new IdRef(
+                            socialWorkspace.getId())));
+                    initializeSocialWorkspaceRights(unrestrictedSocialWorkspace);
+                    initializeNewsItemsRootRights(unrestrictedSocialWorkspace);
+                    if (unrestrictedSocialWorkspace.isPublic()) {
+                        makeSocialWorkspacePublic(unrestrictedSocialWorkspace);
+                    }
+                }
+            }.runUnrestricted();
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
         }
     }
 
     private void createSocialWorkspaceGroups(SocialWorkspace socialWorkspace,
-            String principalName) {
+            Principal principal) {
         createGroup(socialWorkspace.getAdministratorsGroupName(),
-                socialWorkspace.getAdministratorsGroupLabel(), principalName);
+                socialWorkspace.getAdministratorsGroupLabel(),
+                principal.getName());
         createGroup(socialWorkspace.getMembersGroupName(),
-                socialWorkspace.getMembersGroupLabel(), principalName);
+                socialWorkspace.getMembersGroupLabel(), principal.getName());
+        addGroupToPrincipal(socialWorkspace.getAdministratorsGroupName(),
+                principal);
     }
 
     private void createGroup(String groupName, String groupLabel,
@@ -238,6 +256,27 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             userManager.updateGroup(group);
         } catch (GroupAlreadyExistsException e) {
             log.info("Group already exists : " + groupName);
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    private void addGroupToPrincipal(String groupName, Principal principal) {
+        try {
+            if (principal instanceof NuxeoPrincipal) {
+                NuxeoPrincipal nuxeoPrincipal = (NuxeoPrincipal) principal;
+                DocumentModel user = nuxeoPrincipal.getModel();
+                UserManager userManager = getUserManager();
+                String userSchemaName = userManager.getUserSchemaName();
+                List<String> groups = (List<String>) user.getProperty(
+                        userSchemaName, "groups");
+                if (groups == null) {
+                    groups = new ArrayList<String>();
+                }
+                groups.add(groupName);
+                user.setProperty(userSchemaName, "groups", groups);
+                nuxeoPrincipal.setModel(user);
+            }
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -271,11 +310,12 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     private void initializeSocialWorkspaceRights(SocialWorkspace socialWorkspace) {
         try {
             DocumentModel doc = socialWorkspace.getDocument();
+            CoreSession session = doc.getCoreSession();
             ACP acp = doc.getACP();
             ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
             addSocialWorkspaceACL(acl, socialWorkspace);
             doc.setACP(acp, true);
-            doc.getCoreSession().saveDocument(doc);
+            session.saveDocument(doc);
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
