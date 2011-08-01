@@ -20,7 +20,7 @@
 package org.nuxeo.ecm.social.workspace.service;
 
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
@@ -205,9 +205,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     public void handleSocialWorkspaceCreation(
             final SocialWorkspace socialWorkspace, final Principal principal) {
         createSocialWorkspaceGroups(socialWorkspace, principal);
-        String repositoryName = socialWorkspace.getDocument().getRepositoryName();
+        CoreSession session = socialWorkspace.getDocument().getCoreSession();
         try {
-            new UnrestrictedSessionRunner(repositoryName) {
+            new UnrestrictedSessionRunner(session) {
                 @Override
                 public void run() throws ClientException {
                     SocialWorkspace unrestrictedSocialWorkspace = toSocialWorkspace(session.getDocument(new IdRef(
@@ -266,6 +266,10 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             if (principal instanceof NuxeoPrincipal) {
                 NuxeoPrincipal nuxeoPrincipal = (NuxeoPrincipal) principal;
                 DocumentModel user = nuxeoPrincipal.getModel();
+                if (user == null) {
+                    return;
+                }
+
                 UserManager userManager = getUserManager();
                 String userSchemaName = userManager.getUserSchemaName();
                 List<String> groups = (List<String>) user.getProperty(
@@ -345,6 +349,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
             ACP acp = newsItemsRoot.getACP();
             ACL acl = acp.getOrCreateACL(NEWS_ITEMS_ROOT_ACL_NAME);
+            acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(), EVERYTHING, true));
             acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
             newsItemsRoot.setACP(acp, true);
             session.saveDocument(newsItemsRoot);
