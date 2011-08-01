@@ -60,15 +60,6 @@
       <filter-id>only_for_manager</filter-id>
     </action>
 
-
-    <action id="SocialWorkspacesAdministration"
-      link="view_admin-fragment.xhtml"
-      label="label.social.workspace.administration"
-      order="150">
-      <category>NUXEO_ADMIN</category>
-      <filter-id>only_for_manager</filter-id>
-    </action>
-
     <action id="SocialWorkspacesRequests"
       link="/incl/social_workspace_administration/social_workspace_requests.xhtml"
       label="label.socialworkspace.requests"
