@@ -1,0 +1,72 @@
+<project name="nuxeo-social-collaboration-distribution" default="build" xmlns:nx="urn:nuxeo-build"
+  xmlns:artifact="urn:nuxeo-artifact">
+
+  <taskdef resource="org/nuxeo/build/antlib.xml" uri="urn:nuxeo-build" />
+  <taskdef resource="org/nuxeo/build/artifact/antlib.xml"
+    uri="urn:nuxeo-artifact" />
+
+  <target name="init" unless="init.done">
+    <property name="outdir" value="${maven.project.build.directory}" />
+    <property name="stagedir" value="${outdir}/stage" />
+    <property name="tomcat" value="nuxeo-social-collaboration-${maven.project.version}-tomcat" />
+    <property name="tomcatdir" value="${stagedir}/${tomcat}" />
+    <property name="bundles" value="${stagedir}/${tomcat}/nxserver/bundles" />
+
+    <antcall target="cleanoutput" />
+
+    <antcall target="expand" />
+    <property name="init.done" value="true" />
+
+  </target>
+
+  <target name="expand" unless="no.build">
+    <artifact:expand depth="3" />
+  </target>
+
+  <target name="build" depends="init">
+    <echo>Building Nuxeo Social Collaboration Distribution</echo>
+
+    <antcall target="build-standard" />
+    <antcall target="cleanstage" />
+  </target>
+
+  <target name="build-standard" description="Build default distribution"
+    depends="init">
+
+    <unzip dest="${stagedir}">
+          <artifact:resolveFile key="org.nuxeo.ecm.distribution:nuxeo-distribution-tomcat:${nuxeo.distribution.version}:zip"
+                                classifier="nuxeo-dm" />
+    </unzip>
+    <nx:rename from="${stagedir}/nuxeo-dm*" to="${tomcatdir}" />
+
+    <copy todir="${bundles}" overwrite="true">
+      <artifact:set>
+        <includes>
+          <artifact groupId="org.nuxeo.ecm.social" />
+          <artifact artifactId="nuxeo-user-relationship" />
+        </includes>
+      </artifact:set>
+    </copy>
+
+    <chmod dir="${tomcatdir}/bin" perm="750" includes="*.sh,*ctl" />
+
+    <zip destfile="${outdir}/${maven.project.artifactId}-${maven.project.version}-tomcat.zip"
+      basedir="${stagedir}"
+      includes="${tomcat}/**" />
+
+    <artifact:attach file="${outdir}/${maven.project.artifactId}-${maven.project.version}-tomcat.zip"
+       target="${maven.project.groupId}:${maven.project.artifactId}"
+       classifier="tomcat"
+       type="zip" />
+
+  </target>
+
+  <target name="cleanstage">
+    <delete dir="${stagedir}" />
+  </target>
+
+  <target name="cleanoutput">
+    <delete dir="${tomcatdir}"/>
+  </target>
+
+</project>

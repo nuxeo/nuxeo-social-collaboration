@@ -8,7 +8,6 @@
     <version>5.4.3-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <groupId>org.nuxeo.ecm.social</groupId>
   <artifactId>nuxeo-social-user-relationship</artifactId>
   <name>Nuxeo Social User's Relationship</name>
   <description>Nuxeo Social User's Relationship</description>
