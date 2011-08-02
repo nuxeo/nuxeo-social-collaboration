@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.friendships.test.directoryContrib">
+  <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
+    point="directories">
+
+    <directory name="actorRelationshipKindDirectory" remove="true" />
+
+    <directory name="actorRelationshipKindDirectory">
+      <schema>actor_relationship_kind</schema>
+      <dbDriver>org.hsqldb.jdbcDriver</dbDriver>
+      <dbUrl>jdbc:hsqldb:mem:memid</dbUrl>
+      <dbUser>sa</dbUser>
+      <dbPassword></dbPassword>
+      <cacheTimeout>3600</cacheTimeout>
+      <cacheMaxSize>1000</cacheMaxSize>
+      <table>actor_relationship_kind</table>
+      <idField>name</idField>
+      <autoincrementIdField>false</autoincrementIdField>
+      <createTablePolicy>on_missing_columns</createTablePolicy>
+    </directory>
+
+    <directory name="actorRelationshipDirectory" remove="true" />
+
+    <directory name="actorRelationshipDirectory">
+      <schema>actor_relationship</schema>
+      <dbDriver>org.hsqldb.jdbcDriver</dbDriver>
+      <dbUrl>jdbc:hsqldb:mem:memid</dbUrl>
+      <dbUser>sa</dbUser>
+      <dbPassword></dbPassword>
+      <cacheTimeout>3600</cacheTimeout>
+      <cacheMaxSize>1000</cacheMaxSize>
+      <table>actor_relationship</table>
+      <idField>id</idField>
+      <autoincrementIdField>true</autoincrementIdField>
+      <createTablePolicy>on_missing_columns</createTablePolicy>
+    </directory>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.user.relationship.service.UserRelationshipService"
+    point="types">
+    <kind name="friend" label="%s is friend with %s" />
+    <kind name="coworker" label="%s works with %s" />
+    <kind name="connected" label="%s is connected to %s" />
+    <kind name="relation" label="%s is in a relationship with %s" />
+  </extension>
+
+</component>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://nuxeo.org/schemas/friendships/friendships">
+
+  <xs:element name="id" type="xs:integer" />
+  <xs:element name="actor" type="xs:string" />
+  <xs:element name="target" type="xs:string" />
+  <xs:element name="kind" type="xs:string" />
+
+</xs:schema>
