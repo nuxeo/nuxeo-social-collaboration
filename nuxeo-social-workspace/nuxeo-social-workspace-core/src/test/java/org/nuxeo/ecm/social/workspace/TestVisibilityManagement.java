@@ -60,7 +60,7 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
- *
+ * 
  */
 
 // no listener configured
@@ -108,11 +108,6 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     @Test
     public void testShouldNotBeSocialDocument() throws Exception {
-        DocumentModel note = createDocument(
-                socialWorkspaceDoc.getPathAsString(),
-                "wrong place of creation", "Note");
-        assertNull(toSocialDocument(note));
-
         DocumentModel outOfSocialWorkspace = createDocument("/",
                 "wrong place of creation", ARTICLE_TYPE);
         assertNull(toSocialDocument(outOfSocialWorkspace));

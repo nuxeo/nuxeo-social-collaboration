@@ -59,6 +59,15 @@
       <event>checkExpiredTasksSignal</event>
     </listener>
 
+
+    <listener name="addSocialDocumentFacetListener" async="false"
+      postCommit="false"
+      class="org.nuxeo.ecm.social.workspace.listeners.AddSocialDocumentFacetListener"
+      priority="150">
+      <event>aboutToCreate</event>
+      <event>documentCreatedByCopy</event>
+      <event>documentMoved</event>
+    </listener>
   </extension>
 
 </component>
