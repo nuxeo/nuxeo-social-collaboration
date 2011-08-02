@@ -37,7 +37,7 @@
 
   </extension>
 
-  <extension target="org.nuxeo.ecm.user.relationship.service.UserRelationshipService"
+  <extension target="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService"
     point="types">
     <kind name="friend" label="%s is friend with %s" />
     <kind name="coworker" label="%s works with %s" />

@@ -17,7 +17,7 @@
  *      Nuxeo
  */
 
-package org.nuxeo.ecm.social.relationship.provider;
+package org.nuxeo.ecm.social.user.relationship.provider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.runtime.api.Framework;
 
 /**

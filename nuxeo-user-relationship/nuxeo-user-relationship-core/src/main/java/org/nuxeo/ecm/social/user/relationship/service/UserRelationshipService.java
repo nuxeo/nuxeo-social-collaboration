@@ -17,7 +17,7 @@
  *     Nuxeo
  */
 
-package org.nuxeo.ecm.user.relationship.service;
+package org.nuxeo.ecm.social.user.relationship.service;
 
 import java.util.List;
 

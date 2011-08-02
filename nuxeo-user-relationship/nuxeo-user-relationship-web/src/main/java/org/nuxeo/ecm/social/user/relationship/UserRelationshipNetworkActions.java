@@ -17,10 +17,10 @@
  *      Nuxeo
  */
 
-package org.nuxeo.ecm.social.relationship;
+package org.nuxeo.ecm.social.user.relationship;
 
 import static org.jboss.seam.ScopeType.CONVERSATION;
-import static org.nuxeo.ecm.social.relationship.UserRelationshipActions.USER_RELATIONSHIP_CHANGED;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipActions.USER_RELATIONSHIP_CHANGED;
 
 import java.io.Serializable;
 

@@ -17,12 +17,12 @@
  *     Nuxeo
  */
 
-package org.nuxeo.ecm.user.relationship.service;
+package org.nuxeo.ecm.social.user.relationship.service;
 
-import static org.nuxeo.ecm.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_ACTOR;
-import static org.nuxeo.ecm.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TARGET;
-import static org.nuxeo.ecm.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TYPE;
-import static org.nuxeo.ecm.user.relationship.UserRelationshipConstants.RELATIONSHIP_SCHEMA_NAME;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_ACTOR;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TARGET;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TYPE;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_SCHEMA_NAME;
 
 import java.io.Serializable;
 import java.util.ArrayList;

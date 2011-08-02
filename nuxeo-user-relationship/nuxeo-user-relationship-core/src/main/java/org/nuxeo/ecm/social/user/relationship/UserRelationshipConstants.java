@@ -17,7 +17,7 @@
  *     Nuxeo
  */
 
-package org.nuxeo.ecm.user.relationship;
+package org.nuxeo.ecm.social.user.relationship;
 
 /**
  * User relationship constants class

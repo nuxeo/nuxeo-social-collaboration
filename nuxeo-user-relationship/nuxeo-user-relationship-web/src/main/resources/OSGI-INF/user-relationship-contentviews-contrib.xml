@@ -5,7 +5,7 @@
     point="providers">
 
     <genericPageProvider name="user_relationships"
-      class="org.nuxeo.ecm.social.relationship.provider.UserRelationshipPageProvider">
+      class="org.nuxeo.ecm.social.user.relationship.provider.UserRelationshipPageProvider">
       <pageSize>20</pageSize>
     </genericPageProvider>
 

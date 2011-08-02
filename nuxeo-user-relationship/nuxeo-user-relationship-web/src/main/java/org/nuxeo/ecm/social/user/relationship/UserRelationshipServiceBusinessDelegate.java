@@ -1,4 +1,4 @@
-package org.nuxeo.ecm.social.relationship;
+package org.nuxeo.ecm.social.user.relationship;
 
 import static org.jboss.seam.ScopeType.CONVERSATION;
 
@@ -13,7 +13,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Unwrap;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
