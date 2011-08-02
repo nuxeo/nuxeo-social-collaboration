@@ -376,14 +376,14 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     public void removeSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, String principalName) {
         removeMemberFromGroup(principalName,
-                socialWorkspace.getMembersGroupName());
+                socialWorkspace.getAdministratorsGroupName());
     }
 
     @Override
     public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             String principalName) {
         removeMemberFromGroup(principalName,
-                socialWorkspace.getAdministratorsGroupName());
+                socialWorkspace.getMembersGroupName());
     }
 
     @SuppressWarnings("unchecked")
