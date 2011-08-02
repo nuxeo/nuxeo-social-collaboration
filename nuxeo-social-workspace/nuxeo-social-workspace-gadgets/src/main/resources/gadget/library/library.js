@@ -60,13 +60,16 @@ function loadContext() {
   return context;
 }
 
-// used from popup ( eg for create folder)
-function submitForm(element) {
-  form = element.form;
-  data = jQuery(form).serializeArray();
-  loadContent(jQuery(form).attr("action"),data);
-  jQuery.fancybox.close();
+
+// called when iframe  is loaded ; used for multipart forms ( see create_document_form.ftl)
+function iframeLoaded(iframe) {
+	text=jQuery(iframe).contents().find('body').html();
+	if ( !isEmpty(text ) ) {
+		 jQuery("#content").html(text);
+		jQuery.fancybox.close();
+	}
 }
+
 
 function loadContent(path, data) {
   jQuery.post(
@@ -86,7 +89,7 @@ function contentLoadedHandler(data){
   // intercept forms submit event and add custom behavior
   jQuery("form").submit(
     function(event){
-        event.preventDefault();
+      event.preventDefault();
       data = jQuery(this).serializeArray();
       data.push({
         name: 'pageSize' ,
@@ -116,7 +119,7 @@ function showConfirmationPopup(message, code ) {
     content,
     {
       'showCloseButton'  : false,
-          'autoDimensions'  : false,
+      'autoDimensions'  : false,
       'width'           : 350,
       'height'          : 'auto',
       'transitionIn'    : 'none',
@@ -146,5 +149,11 @@ function addPopupBoxTo(a) {
 function loadInitialContent() {
   documentList(getTargetContextPath());
 }
+
+function isEmpty(s) {
+    return (!s || s.length === 0 );
+}
+
+
 
 gadgets.util.registerOnLoadHandler(loadInitialContent);
