@@ -25,7 +25,6 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FA
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -53,35 +52,21 @@ public class SocialWorkspaceHelper {
     }
 
     public static String getSocialWorkspaceAdministratorsGroupName(
-            DocumentModel doc) {
-        return doc.getId() + ADMINISTRATORS_SUFFIX;
+            String docId) {
+        return docId + ADMINISTRATORS_SUFFIX;
     }
 
-    public static String getSocialWorkspaceMembersGroupName(DocumentModel doc) {
-        return doc.getId() + MEMBERS_SUFFIX;
+    public static String getSocialWorkspaceMembersGroupName(String docId) {
+        return docId + MEMBERS_SUFFIX;
     }
 
     public static String getSocialWorkspaceAdministratorsGroupLabel(
-            DocumentModel doc) {
-        try {
-            return ADMINISTRATORS_LABEL_PREFIX + doc.getTitle();
-        } catch (ClientException e) {
-            log.warn("Cannot retrieve document title to build administrators group label: "
-                    + doc.getId());
-            log.debug(e, e);
-            return null;
-        }
+            String docTitle) {
+        return ADMINISTRATORS_LABEL_PREFIX + docTitle;
     }
 
-    public static String getSocialWorkspaceMembersGroupLabel(DocumentModel doc) {
-        try {
-            return MEMBERS_LABEL_PREFIX + doc.getTitle();
-        } catch (ClientException e) {
-            log.warn("Cannot retrieve document title to build members group label: "
-                    + doc.getId());
-            log.debug(e, e);
-            return null;
-        }
+    public static String getSocialWorkspaceMembersGroupLabel(String docTitle) {
+        return MEMBERS_LABEL_PREFIX + docTitle;
     }
 
     public static boolean isSocialWorkspace(DocumentModel doc) {

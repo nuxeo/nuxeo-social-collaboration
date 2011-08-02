@@ -117,22 +117,30 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public String getAdministratorsGroupName() {
-        return SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc);
+        return SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc.getId());
     }
 
     @Override
     public String getAdministratorsGroupLabel() {
-        return SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(doc);
+        try {
+            return SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupLabel(doc.getTitle());
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
     }
 
     @Override
     public String getMembersGroupName() {
-        return SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc);
+        return SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc.getId());
     }
 
     @Override
     public String getMembersGroupLabel() {
-        return SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(doc);
+        try {
+            return SocialWorkspaceHelper.getSocialWorkspaceMembersGroupLabel(doc.getTitle());
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
     }
 
     @Override
