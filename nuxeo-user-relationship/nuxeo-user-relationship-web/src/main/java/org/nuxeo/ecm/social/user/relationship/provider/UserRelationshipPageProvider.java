@@ -103,7 +103,7 @@ public class UserRelationshipPageProvider extends
             relationships.addAll(getUserRelationshipService().getTargets(
                     getCurrentUser()));
         } else {
-            relationships.addAll(getUserRelationshipService().getTargetsWithPrefix(
+            relationships.addAll(getUserRelationshipService().getTargetsWithFulltext(
                     getCurrentUser(), searchString.trim()));
         }
     }

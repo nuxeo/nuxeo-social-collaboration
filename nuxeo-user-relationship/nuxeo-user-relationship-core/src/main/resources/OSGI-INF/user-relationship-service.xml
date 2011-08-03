@@ -16,7 +16,7 @@
   <extension-point name="types">
     <documentation>
       <code>
-        <kind name="friend" label="%s is friend with %s" />
+        <kind group="user" name="friend" label="%s is friend with %s" />
       </code>
     </documentation>
     <object

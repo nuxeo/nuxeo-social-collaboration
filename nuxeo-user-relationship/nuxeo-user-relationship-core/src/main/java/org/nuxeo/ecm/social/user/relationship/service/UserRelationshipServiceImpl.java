@@ -23,10 +23,12 @@ import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.R
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TARGET;
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TYPE;
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_SCHEMA_NAME;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.TYPE_FIELD_GROUP;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.TYPE_FIELD_NAME;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.TYPE_SCHEMA_NAME;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.list.UnmodifiableList;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -45,6 +46,7 @@ import org.nuxeo.ecm.directory.DirectoryException;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
@@ -70,7 +72,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     protected UserManager userManager;
 
-    protected Map<String, DocumentModel> registeredTypes;
+    protected Map<String, RelationshipKind> registeredTypes;
 
     @Override
     public void registerContribution(Object contribution,
@@ -118,11 +120,11 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public List<String> getTargetsOfKind(String actorId, String kind) {
+    public List<String> getTargetsOfKind(String actorId, RelationshipKind kind) {
         Map<String, Serializable> filters = new HashMap<String, Serializable>();
         filters.put(RELATIONSHIP_FIELD_ACTOR, actorId);
-        if (!StringUtils.isBlank(kind)) {
-            filters.put(RELATIONSHIP_FIELD_TYPE, kind);
+        if (!(kind == null || kind.isEmpty())) {
+            filters.put(RELATIONSHIP_FIELD_TYPE, kind.toString());
         }
         return buildListFromProperty(
                 queryRelationshipsDirectory(filters, false),
@@ -135,7 +137,8 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public List<String> getTargetsWithPrefix(String actorId, String targetPrefix) {
+    public List<String> getTargetsWithFulltext(String actorId,
+            String targetPrefix) {
         Map<String, Serializable> filters = new HashMap<String, Serializable>();
         filters.put(RELATIONSHIP_FIELD_ACTOR, actorId);
         filters.put(RELATIONSHIP_FIELD_TARGET, targetPrefix);
@@ -146,14 +149,23 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<String> getKinds() {
+    public List<RelationshipKind> getKinds() {
         if (registeredTypes == null) {
-            registeredTypes = new HashMap<String, DocumentModel>();
+            registeredTypes = new HashMap<String, RelationshipKind>();
             for (DocumentModel type : getAllTypesFromDirectory()) {
-                registeredTypes.put(type.getId(), type);
+                try {
+                    RelationshipKind kind = RelationshipKind.build(
+                            (String) type.getPropertyValue(TYPE_SCHEMA_NAME
+                                    + ":" + TYPE_FIELD_GROUP),
+                            (String) type.getPropertyValue(TYPE_SCHEMA_NAME
+                                    + ":" + TYPE_FIELD_NAME));
+                    registeredTypes.put(kind.toString(), kind);
+                } catch (ClientException e) {
+                    throw new ClientRuntimeException(e);
+                }
             }
         }
-        return UnmodifiableList.decorate(new ArrayList(registeredTypes.keySet()));
+        return UnmodifiableList.decorate(new ArrayList(registeredTypes.values()));
     }
 
     private DocumentModelList getAllTypesFromDirectory() {
@@ -177,7 +189,8 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public Boolean addRelation(String actorId, String targetId, String kind) {
+    public Boolean addRelation(String actorId, String targetId,
+            RelationshipKind kind) {
         if (kind == null) {
             throw new ClientRuntimeException("Type cannot be null");
         }
@@ -187,13 +200,12 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             relationshipsDirectory = getDirectoryService().open(
                     RELATIONSHIP_DIRECTORY_NAME);
             // try to get an existing entry
-            Map<String, String> relationship = new HashMap<String, String>();
+            Map<String, Serializable> relationship = new HashMap<String, Serializable>();
             relationship.put(RELATIONSHIP_FIELD_ACTOR, actorId);
             relationship.put(RELATIONSHIP_FIELD_TARGET, targetId);
-            relationship.put(RELATIONSHIP_FIELD_TYPE, kind);
+            relationship.put(RELATIONSHIP_FIELD_TYPE, kind.toString());
 
-            DocumentModelList relationships = relationshipsDirectory.query(new HashMap<String, Serializable>(
-                    relationship));
+            DocumentModelList relationships = relationshipsDirectory.query(relationship);
             if (relationships.isEmpty()) {
                 relationshipsDirectory.createEntry(new HashMap<String, Object>(
                         relationship));
@@ -219,7 +231,8 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public Boolean removeRelation(String actorId, String targetId, String kind) {
+    public Boolean removeRelation(String actorId, String targetId,
+            RelationshipKind kind) {
         Session relationshipDirectory = null;
         try {
             relationshipDirectory = getDirectoryService().open(
@@ -228,7 +241,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             Map<String, Serializable> filter = new HashMap<String, Serializable>();
             filter.put(RELATIONSHIP_FIELD_ACTOR, actorId);
             filter.put(RELATIONSHIP_FIELD_TARGET, targetId);
-            filter.put(RELATIONSHIP_FIELD_TYPE, kind);
+            filter.put(RELATIONSHIP_FIELD_TYPE, kind.toString());
 
             DocumentModelList relations = relationshipDirectory.query(filter);
             if (relations.isEmpty()) {
@@ -262,9 +275,14 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
         try {
             relationshipsDirectory = getDirectoryService().open(
                     RELATIONSHIP_DIRECTORY_NAME);
-            Set<String> fulltext = withFulltext ? filter.keySet()
-                    : Collections.<String> emptySet();
-            return relationshipsDirectory.query(filter, fulltext,
+
+            Set<String> fulltextFields = new HashSet<String>();
+            fulltextFields.add(RELATIONSHIP_FIELD_TYPE);
+            if (withFulltext) {
+                fulltextFields.addAll(filter.keySet());
+            }
+
+            return relationshipsDirectory.query(filter, fulltextFields,
                     getRelationshipsOrderBy());
         } catch (ClientException e) {
             throw new ClientRuntimeException(

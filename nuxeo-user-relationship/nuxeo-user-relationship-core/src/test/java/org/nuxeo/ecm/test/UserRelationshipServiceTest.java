@@ -17,6 +17,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -66,8 +67,8 @@ public class UserRelationshipServiceTest {
         String user3 = createUser("user3").getId();
         String user4 = createUser("user4").getId();
 
-        String relation = "relation";
-        String coworker = "coworker";
+        RelationshipKind relation = RelationshipKind.build("group", "relation");
+        RelationshipKind coworker = RelationshipKind.build("group", "coworker");
 
         assertTrue(relationshipService.addRelation(user1, user2, relation));
         assertTrue(relationshipService.addRelation(user1, user2, coworker));
@@ -79,11 +80,12 @@ public class UserRelationshipServiceTest {
         assertFalse(relationshipService.addRelation(user1, user4, coworker));
 
         assertEquals(3, relationshipService.getTargets(user1).size());
-        assertEquals(2, relationshipService.getRelationshipKinds(user1, user2).size());
+        assertEquals(2,
+                relationshipService.getRelationshipKinds(user1, user2).size());
 
         // is he into a relationship ?
-        List<String> user1Relations = relationshipService.getTargetsOfKind(user1,
-                relation);
+        List<String> user1Relations = relationshipService.getTargetsOfKind(
+                user1, relation);
         assertEquals(1, user1Relations.size());
         assertEquals("user2", user1Relations.get(0));
 
@@ -96,7 +98,41 @@ public class UserRelationshipServiceTest {
     }
 
     @Test
-    public void testRelationshipWithPrefix() throws ClientException {
+    public void testRelationshipKindsSearch() throws ClientException {
+        String user = "user_kindSearch";
+
+        RelationshipKind doc_read = RelationshipKind.build("doc", "read");
+        RelationshipKind doc_readWrite = RelationshipKind.build("doc",
+                "readWrite");
+
+        RelationshipKind user_friend = RelationshipKind.build("user", "friend");
+        RelationshipKind user_coworker = RelationshipKind.build("user",
+                "coworker");
+        RelationshipKind user_ignored = RelationshipKind.build("user",
+                "ignored");
+
+        assertTrue(relationshipService.addRelation(user, "user2", user_friend));
+        assertTrue(relationshipService.addRelation(user, "user2", user_coworker));
+        assertTrue(relationshipService.addRelation(user, "user3", user_friend));
+        assertTrue(relationshipService.addRelation(user, "user4", user_ignored));
+
+        assertTrue(relationshipService.addRelation(user, "doc1", doc_read));
+        assertTrue(relationshipService.addRelation(user, "doc2", doc_readWrite));
+        assertTrue(relationshipService.addRelation(user, "doc3", doc_read));
+
+        assertEquals(6, relationshipService.getTargets(user).size());
+        assertEquals(3, relationshipService.getTargetsOfKind(user,
+                RelationshipKind.buildFromGroup("user")).size());
+        assertEquals(1, relationshipService.getTargetsOfKind(user,
+                RelationshipKind.buildFromName("coworker")).size());
+        assertEquals(0, relationshipService.getTargetsOfKind(user,
+                RelationshipKind.buildFromName("unknown")).size());
+        assertEquals(0, relationshipService.getTargetsOfKind(user,
+                RelationshipKind.build("user", "unknown")).size());
+    }
+
+    @Test
+    public void testRelationshipWithFulltext() throws ClientException {
         final String USER_PREFIX = "user:";
         final String DOC_PREFIX = "doc:";
 
@@ -105,16 +141,18 @@ public class UserRelationshipServiceTest {
         String user3 = USER_PREFIX + createUser("user23").getId();
         String doc1 = DOC_PREFIX + createDoc("doc21").getId();
 
-        String read = "have_read";
-        String coworker = "coworker";
+        RelationshipKind read = RelationshipKind.build("document", "have_read");
+        RelationshipKind coworker = RelationshipKind.build("group", "relation");
 
         assertTrue(relationshipService.addRelation(user1, user3, coworker));
         assertTrue(relationshipService.addRelation(user1, user2, coworker));
         assertTrue(relationshipService.addRelation(user1, doc1, read));
 
         assertEquals(3, relationshipService.getTargets(user1).size());
-        assertEquals(2, relationshipService.getTargetsWithPrefix(user1, USER_PREFIX).size());
-        assertEquals(1, relationshipService.getTargetsWithPrefix(user1, DOC_PREFIX).size());
+        assertEquals(2, relationshipService.getTargetsWithFulltext(user1,
+                USER_PREFIX).size());
+        assertEquals(1, relationshipService.getTargetsWithFulltext(user1,
+                DOC_PREFIX).size());
     }
 
     protected DocumentModel createUser(String username) throws ClientException {

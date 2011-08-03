@@ -17,6 +17,7 @@
       <idField>name</idField>
       <autoincrementIdField>false</autoincrementIdField>
       <createTablePolicy>on_missing_columns</createTablePolicy>
+      <substringMatchType>subany</substringMatchType>
     </directory>
 
     <directory name="actorRelationshipDirectory" remove="true" />
@@ -33,6 +34,7 @@
       <idField>id</idField>
       <autoincrementIdField>true</autoincrementIdField>
       <createTablePolicy>on_missing_columns</createTablePolicy>
+      <substringMatchType>subany</substringMatchType>
     </directory>
 
   </extension>

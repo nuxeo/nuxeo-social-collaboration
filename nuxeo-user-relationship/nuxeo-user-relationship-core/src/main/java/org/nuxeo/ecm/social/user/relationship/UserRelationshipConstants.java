@@ -39,7 +39,9 @@ public class UserRelationshipConstants {
 
     public static final String RELATIONSHIP_FIELD_TYPE = "kind";
 
-    public static final String TYPE_SCHEMA_NAME = "actor_relationship_type";
+    public static final String TYPE_SCHEMA_NAME = "actor_relationship_kind";
+
+    public static final String TYPE_FIELD_GROUP = "group";
 
     public static final String TYPE_FIELD_NAME = "name";
 

@@ -2,6 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
   targetNamespace="http://nuxeo.org/schemas/friendships/type">
 
+  <xs:element name="group" type="xs:string"/>
   <xs:element name="name" type="xs:string"/>
   <xs:element name="label" type="xs:string"/>
 

@@ -21,6 +21,8 @@ package org.nuxeo.ecm.social.user.relationship.service;
 
 import java.util.List;
 
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+
 /**
  * Service to manage relations between entities.
  *
@@ -42,21 +44,21 @@ public interface UserRelationshipService {
     /**
      * Gets all targets that match the targetPrefix.
      */
-    List<String> getTargetsWithPrefix(String actorId, String targetPrefix);
+    List<String> getTargetsWithFulltext(String actorId, String targetPrefix);
 
     /**
      * Gets all targets of a specific relation.
      *
      * @param kind if null, it will return all targets {@see #getTargets}
      */
-    List<String> getTargetsOfKind(String actorId, String kind);
+    List<String> getTargetsOfKind(String actorId, RelationshipKind kind);
 
     /**
-     * Gets all declared user relationship types.
+     * Gets all registered relationship kinds.
      *
      * @return an UnmodifiableList with all user relationship types
      */
-    List<String> getKinds();
+    List<RelationshipKind> getKinds();
 
     /**
      * Adds a relation between two entities. If the relation already exists,
@@ -64,13 +66,13 @@ public interface UserRelationshipService {
      *
      * @return true if a new relation is create, false otherwise
      */
-    Boolean addRelation(String actorId, String targetId, String kind);
+    Boolean addRelation(String actorId, String targetId, RelationshipKind kind);
 
     /**
      * Removes a relationship composed by parameters.
      *
      * @return true if a relation has been deleted, false otherwise
      */
-    Boolean removeRelation(String actorId, String targetId, String kind);
+    Boolean removeRelation(String actorId, String targetId, RelationshipKind kind);
 
 }
