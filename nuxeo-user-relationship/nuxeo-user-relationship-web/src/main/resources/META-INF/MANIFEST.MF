@@ -4,7 +4,7 @@ Bundle-Name: Nuxeo Social User Relationship
 Bundle-SymbolicName: org.nuxeo.ecm.social.user.relationship;singleton:=true
 Bundle-Vendor: Nuxeo
 Bundle-Version: 1.0.0
-Nuxeo-Component: OSGI-INF/social-user-relationship-contrib.xml,
+Nuxeo-Component: OSGI-INF/user-relationship-contrib.xml,
  OSGI-INF/user-relationship-layout-contrib.xml,
  OSGI-INF/user-relationship-contentviews-contrib.xml,
  OSGI-INF/user-relationship-actions-contrib.xml

@@ -3,11 +3,14 @@ package org.nuxeo.ecm.social.user.relationship;
 import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Pojo to describe a relation's kind
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
+ * @since 5.4.3
  */
 public class RelationshipKind implements Serializable {
 
@@ -20,8 +23,8 @@ public class RelationshipKind implements Serializable {
     protected static final String SEPARATOR = ":";
 
     protected RelationshipKind(String group, String name) {
-        this.group = group;
-        this.name = name;
+        this.group = StringUtils.isBlank(group) ? "" : group;
+        this.name = StringUtils.isBlank(name) ? "" : name;
     }
 
     public static RelationshipKind build(String group, String kindName) {
@@ -30,6 +33,15 @@ public class RelationshipKind implements Serializable {
 
     public static RelationshipKind buildEmpty() {
         return new RelationshipKind("", "");
+    }
+
+    public static RelationshipKind buildFromString(String value) {
+        if (value.contains(SEPARATOR)) {
+            String[] splitted = StringUtils.split(value, SEPARATOR);
+            return new RelationshipKind(splitted[0], splitted[1]);
+        } else {
+            return null;
+        }
     }
 
     public static RelationshipKind buildFromGroup(String group) {
@@ -44,8 +56,26 @@ public class RelationshipKind implements Serializable {
         return StringUtils.isEmpty(group) && StringUtils.isEmpty(name);
     }
 
+    public String getGroup() {
+        return group;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return group + SEPARATOR + name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

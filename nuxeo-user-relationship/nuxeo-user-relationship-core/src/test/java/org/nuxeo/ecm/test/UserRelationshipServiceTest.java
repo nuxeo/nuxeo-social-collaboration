@@ -56,8 +56,11 @@ public class UserRelationshipServiceTest {
     }
 
     @Test
-    public void testTypes() {
-        assertEquals(4, relationshipService.getKinds().size());
+    public void testRegisteredTypes() {
+        assertEquals(5, relationshipService.getRegisteredKinds(null).size());
+        assertEquals(4, relationshipService.getRegisteredKinds("user").size());
+        assertEquals(1, relationshipService.getRegisteredKinds("other").size());
+        assertEquals(0, relationshipService.getRegisteredKinds("fake").size());
     }
 
     @Test

@@ -32,9 +32,9 @@ import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 public interface UserRelationshipService {
 
     /**
-     * Gets all existing type's relationship between an actor and a target.
+     * Gets all existing relationship kinds between an actor and a target.
      */
-    List<String> getRelationshipKinds(String actorId, String targetId);
+    List<RelationshipKind> getRelationshipKinds(String actorId, String targetId);
 
     /**
      * Gets all targets of an actor.
@@ -49,16 +49,19 @@ public interface UserRelationshipService {
     /**
      * Gets all targets of a specific relation.
      *
-     * @param kind if null, it will return all targets {@see #getTargets}
+     * @param kind if null, it will return all targets {@see #getTargets}, it
+     *            can be only filled with the group or the name
      */
     List<String> getTargetsOfKind(String actorId, RelationshipKind kind);
 
     /**
-     * Gets all registered relationship kinds.
+     * Gets registered (contributed with the extension point) relationship kinds
+     * depending of a group
      *
      * @return an UnmodifiableList with all user relationship types
+     * @param group can be null, or empty if you want to get all kinds
      */
-    List<RelationshipKind> getKinds();
+    List<RelationshipKind> getRegisteredKinds(String group);
 
     /**
      * Adds a relation between two entities. If the relation already exists,
@@ -69,10 +72,11 @@ public interface UserRelationshipService {
     Boolean addRelation(String actorId, String targetId, RelationshipKind kind);
 
     /**
-     * Removes a relationship composed by parameters.
+     * Removes a relationship composed by parameters
      *
      * @return true if a relation has been deleted, false otherwise
      */
-    Boolean removeRelation(String actorId, String targetId, RelationshipKind kind);
+    Boolean removeRelation(String actorId, String targetId,
+            RelationshipKind kind);
 
 }

@@ -43,7 +43,7 @@
 
           <c:forEach var="relation" items="#{userRelationshipAction.relationshipsWithSelectedUser}" varStatus="status">
             <c:if test="#{!status.first}">#{status.last ? andLabel : ', '}</c:if>
-            <h:outputText value="#{relation}" />
+            <h:outputText value="#{relation.name}" />
           </c:forEach>
         </a4j:outputPanel>
 
@@ -76,7 +76,7 @@
         </a4j:status>
         <a4j:outputPanel id="add_relationship_#{widget.id}">
           <nxu:dataTable id="#{widget.id}_add_relationship"
-            value="#{userRelationshipService.kinds}" var="kind"
+            value="#{userRelationshipAction.kinds}" var="kind"
             rendered="#{!(userRelationshipAction.currentUser)}">
 
             <nxu:column>
@@ -84,9 +84,9 @@
                 value="#{userRelationshipAction.allRelationshipsState[kind]}">
                 <a4j:support event="onchange"
                   reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
-                  <f:param name="selectedKind" value="#{kind}" />
+                  <f:param name="selectedKind" value="#{kind.toString()}" />
                 </a4j:support>
-                <h:outputText value="#{kind}" />
+                <h:outputText value="#{kind.name}" />
               </h:selectBooleanCheckbox>
             </nxu:column>
           </nxu:dataTable>

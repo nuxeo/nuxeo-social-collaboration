@@ -29,6 +29,7 @@ import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.T
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.list.UnmodifiableList;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -72,7 +74,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     protected UserManager userManager;
 
-    protected Map<String, RelationshipKind> registeredTypes;
+    protected HashMap<String, List<RelationshipKind>> registeredKinds;
 
     @Override
     public void registerContribution(Object contribution,
@@ -109,14 +111,22 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public List<String> getRelationshipKinds(String actorId, String targetId) {
+    public List<RelationshipKind> getRelationshipKinds(String actorId,
+            String targetId) {
         Map<String, Serializable> filters = new HashMap<String, Serializable>();
         filters.put(RELATIONSHIP_FIELD_ACTOR, actorId);
         filters.put(RELATIONSHIP_FIELD_TARGET, targetId);
 
-        return buildListFromProperty(
-                queryRelationshipsDirectory(filters, false),
-                RELATIONSHIP_SCHEMA_NAME, RELATIONSHIP_FIELD_TYPE);
+        Set<RelationshipKind> kinds = new HashSet<RelationshipKind>();
+        for (DocumentModel relation : queryRelationshipsDirectory(filters,
+                false)) {
+            try {
+                kinds.add(buildKindFromRelationshipModel(relation));
+            } catch (ClientException e) {
+                throw new ClientRuntimeException(e);
+            }
+        }
+        return new ArrayList<RelationshipKind>(kinds);
     }
 
     @Override
@@ -149,23 +159,41 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<RelationshipKind> getKinds() {
-        if (registeredTypes == null) {
-            registeredTypes = new HashMap<String, RelationshipKind>();
+    public List<RelationshipKind> getRegisteredKinds(String group) {
+        if (registeredKinds == null) {
+            registeredKinds = new HashMap<String, List<RelationshipKind>>();
             for (DocumentModel type : getAllTypesFromDirectory()) {
                 try {
-                    RelationshipKind kind = RelationshipKind.build(
-                            (String) type.getPropertyValue(TYPE_SCHEMA_NAME
-                                    + ":" + TYPE_FIELD_GROUP),
-                            (String) type.getPropertyValue(TYPE_SCHEMA_NAME
-                                    + ":" + TYPE_FIELD_NAME));
-                    registeredTypes.put(kind.toString(), kind);
+                    String kindGroup = (String) type.getPropertyValue(TYPE_SCHEMA_NAME
+                            + ":" + TYPE_FIELD_GROUP);
+                    String kindName = (String) type.getPropertyValue(TYPE_SCHEMA_NAME
+                            + ":" + TYPE_FIELD_NAME);
+                    RelationshipKind kind = RelationshipKind.build(kindGroup,
+                            kindName);
+
+                    if (!registeredKinds.containsKey(kindGroup)) {
+                        registeredKinds.put(kindGroup,
+                                new ArrayList<RelationshipKind>());
+                    }
+                    registeredKinds.get(kindGroup).add(kind);
                 } catch (ClientException e) {
                     throw new ClientRuntimeException(e);
                 }
             }
         }
-        return UnmodifiableList.decorate(new ArrayList(registeredTypes.values()));
+
+        List<RelationshipKind> allKinds = new ArrayList<RelationshipKind>();
+        if (StringUtils.isEmpty(group)) {
+            // Fill returned list with all registered RelationKind
+            for (List<RelationshipKind> kinds : registeredKinds.values()) {
+                allKinds.addAll(kinds);
+            }
+        } else {
+            allKinds = registeredKinds.get(group);
+        }
+
+        return allKinds != null ? UnmodifiableList.decorate(allKinds) :
+                Collections.<RelationshipKind>emptyList();
     }
 
     private DocumentModelList getAllTypesFromDirectory() {
@@ -310,6 +338,13 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             }
         }
         return new ArrayList<String>(values);
+    }
+
+    protected static RelationshipKind buildKindFromRelationshipModel(
+            DocumentModel relation) throws ClientException {
+        RelationshipKind kind = RelationshipKind.buildFromString((String) relation.getPropertyValue(RELATIONSHIP_SCHEMA_NAME
+                + ":" + RELATIONSHIP_FIELD_TYPE));
+        return kind;
     }
 
     protected static Map<String, String> getRelationshipsOrderBy() {

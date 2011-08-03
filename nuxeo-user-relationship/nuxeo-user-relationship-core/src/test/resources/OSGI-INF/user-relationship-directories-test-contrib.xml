@@ -41,10 +41,11 @@
 
   <extension target="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService"
     point="types">
-    <kind name="friend" label="%s is friend with %s" />
-    <kind name="coworker" label="%s works with %s" />
-    <kind name="connected" label="%s is connected to %s" />
-    <kind name="relation" label="%s is in a relationship with %s" />
+    <kind group="user" name="friend" label="%s is friend with %s" />
+    <kind group="user" name="coworker" label="%s works with %s" />
+    <kind group="user" name="connected" label="%s is connected to %s" />
+    <kind group="user" name="relation" label="%s is in a relationship with %s" />
+    <kind group="other" name="trucmuch" label="" />
   </extension>
 
 </component>
