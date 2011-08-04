@@ -97,7 +97,7 @@ public class UserRelationshipActions implements Serializable {
 
     protected void addRelationshipWithSelectedUser(String kind) {
         if (userRelationshipService.addRelation(getCurrentUser(),
-                getSelectedUser(), RelationshipKind.buildFromString(kind))) {
+                getSelectedUser(), RelationshipKind.fromString(kind))) {
             setFacesMessage("label.social.user.relationship.addRelation.success");
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
@@ -105,7 +105,7 @@ public class UserRelationshipActions implements Serializable {
 
     protected void removeRelationship(String kind) {
         if (userRelationshipService.removeRelation(getCurrentUser(),
-                getSelectedUser(), RelationshipKind.buildFromString(kind))) {
+                getSelectedUser(), RelationshipKind.fromString(kind))) {
             setFacesMessage("label.social.user.relationship.removeRelation.success");
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }

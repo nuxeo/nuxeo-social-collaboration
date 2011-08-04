@@ -168,8 +168,8 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
                             + ":" + TYPE_FIELD_GROUP);
                     String kindName = (String) type.getPropertyValue(TYPE_SCHEMA_NAME
                             + ":" + TYPE_FIELD_NAME);
-                    RelationshipKind kind = RelationshipKind.build(kindGroup,
-                            kindName);
+                    RelationshipKind kind = RelationshipKind.newInstance(
+                            kindGroup, kindName);
 
                     if (!registeredKinds.containsKey(kindGroup)) {
                         registeredKinds.put(kindGroup,
@@ -342,8 +342,9 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     protected static RelationshipKind buildKindFromRelationshipModel(
             DocumentModel relation) throws ClientException {
-        RelationshipKind kind = RelationshipKind.buildFromString((String) relation.getPropertyValue(RELATIONSHIP_SCHEMA_NAME
-                + ":" + RELATIONSHIP_FIELD_TYPE));
+        RelationshipKind kind = RelationshipKind.fromString(
+                (String) relation.getPropertyValue(RELATIONSHIP_SCHEMA_NAME + ":"
+                        + RELATIONSHIP_FIELD_TYPE));
         return kind;
     }
 

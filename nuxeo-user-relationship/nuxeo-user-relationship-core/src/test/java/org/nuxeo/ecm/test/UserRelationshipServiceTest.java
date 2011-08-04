@@ -70,8 +70,10 @@ public class UserRelationshipServiceTest {
         String user3 = createUser("user3").getId();
         String user4 = createUser("user4").getId();
 
-        RelationshipKind relation = RelationshipKind.build("group", "relation");
-        RelationshipKind coworker = RelationshipKind.build("group", "coworker");
+        RelationshipKind relation = RelationshipKind.newInstance("group",
+                "relation");
+        RelationshipKind coworker = RelationshipKind.newInstance("group",
+                "coworker");
 
         assertTrue(relationshipService.addRelation(user1, user2, relation));
         assertTrue(relationshipService.addRelation(user1, user2, coworker));
@@ -104,14 +106,15 @@ public class UserRelationshipServiceTest {
     public void testRelationshipKindsSearch() throws ClientException {
         String user = "user_kindSearch";
 
-        RelationshipKind doc_read = RelationshipKind.build("doc", "read");
-        RelationshipKind doc_readWrite = RelationshipKind.build("doc",
+        RelationshipKind doc_read = RelationshipKind.newInstance("doc", "read");
+        RelationshipKind doc_readWrite = RelationshipKind.newInstance("doc",
                 "readWrite");
 
-        RelationshipKind user_friend = RelationshipKind.build("user", "friend");
-        RelationshipKind user_coworker = RelationshipKind.build("user",
+        RelationshipKind user_friend = RelationshipKind.newInstance("user",
+                "friend");
+        RelationshipKind user_coworker = RelationshipKind.newInstance("user",
                 "coworker");
-        RelationshipKind user_ignored = RelationshipKind.build("user",
+        RelationshipKind user_ignored = RelationshipKind.newInstance("user",
                 "ignored");
 
         assertTrue(relationshipService.addRelation(user, "user2", user_friend));
@@ -125,13 +128,13 @@ public class UserRelationshipServiceTest {
 
         assertEquals(6, relationshipService.getTargets(user).size());
         assertEquals(3, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.buildFromGroup("user")).size());
+                RelationshipKind.fromGroup("user")).size());
         assertEquals(1, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.buildFromName("coworker")).size());
+                RelationshipKind.fromName("coworker")).size());
         assertEquals(0, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.buildFromName("unknown")).size());
+                RelationshipKind.fromName("unknown")).size());
         assertEquals(0, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.build("user", "unknown")).size());
+                RelationshipKind.newInstance("user", "unknown")).size());
     }
 
     @Test
@@ -144,8 +147,10 @@ public class UserRelationshipServiceTest {
         String user3 = USER_PREFIX + createUser("user23").getId();
         String doc1 = DOC_PREFIX + createDoc("doc21").getId();
 
-        RelationshipKind read = RelationshipKind.build("document", "have_read");
-        RelationshipKind coworker = RelationshipKind.build("group", "relation");
+        RelationshipKind read = RelationshipKind.newInstance("document",
+                "have_read");
+        RelationshipKind coworker = RelationshipKind.newInstance("group",
+                "relation");
 
         assertTrue(relationshipService.addRelation(user1, user3, coworker));
         assertTrue(relationshipService.addRelation(user1, user2, coworker));

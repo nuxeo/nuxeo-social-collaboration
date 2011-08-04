@@ -27,15 +27,11 @@ public class RelationshipKind implements Serializable {
         this.name = StringUtils.isBlank(name) ? "" : name;
     }
 
-    public static RelationshipKind build(String group, String kindName) {
+    public static RelationshipKind newInstance(String group, String kindName) {
         return new RelationshipKind(group, kindName);
     }
 
-    public static RelationshipKind buildEmpty() {
-        return new RelationshipKind("", "");
-    }
-
-    public static RelationshipKind buildFromString(String value) {
+    public static RelationshipKind fromString(String value) {
         if (value.contains(SEPARATOR)) {
             String[] splitted = StringUtils.split(value, SEPARATOR);
             return new RelationshipKind(splitted[0], splitted[1]);
@@ -44,12 +40,12 @@ public class RelationshipKind implements Serializable {
         }
     }
 
-    public static RelationshipKind buildFromGroup(String group) {
-        return build(group, "");
+    public static RelationshipKind fromGroup(String group) {
+        return newInstance(group, "");
     }
 
-    public static RelationshipKind buildFromName(String name) {
-        return build("", name);
+    public static RelationshipKind fromName(String name) {
+        return newInstance("", name);
     }
 
     public boolean isEmpty() {
