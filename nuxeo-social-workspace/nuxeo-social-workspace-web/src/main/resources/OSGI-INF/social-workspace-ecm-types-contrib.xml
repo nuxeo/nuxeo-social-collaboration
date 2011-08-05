@@ -58,9 +58,7 @@
       <views>
         <view id="fullscreen" value="view_social_workspace_articles" />
         <view id="after-create" value="view_social_workspace_articles"/>
-
-        <view id="social_collaboration" value="social_collaboration" />
-        <view id="after-create" value="view_social_workspace_articles"/>
+        <view id="edit_article" value="edit_article"/>
       </views>
     </type>
 
@@ -135,7 +133,9 @@
       <bigIcon>/icons/social_workspace_100.png</bigIcon>
       <default-view>view_documents</default-view>
       <views>
-        <view id="fullscreen" value="dashboard" />
+      <view id="fullscreen" value="dashboard" />
+       <view id="articles" value="articles"/>
+       <view id="news_items" value="news_items"/>
       </views>
     </type>
 

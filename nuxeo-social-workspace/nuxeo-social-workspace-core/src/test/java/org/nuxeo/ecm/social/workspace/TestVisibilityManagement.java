@@ -62,6 +62,7 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
+ *
  */
 // no listener configured
 @Deploy({ "org.nuxeo.ecm.automation.core",

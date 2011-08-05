@@ -9,7 +9,7 @@
   xmlns:nxh="http://nuxeo.org/nxweb/html"
   xmlns:nxl="http://nuxeo.org/nxforms/layout">
 
-  <ui:define name="page title">
+ <ui:define name="page title">
     <h:outputText value="#{nuxeoApplicationName} - #{nxd:titleOrId(currentDocument)}"/>
   </ui:define>
 
@@ -18,16 +18,15 @@
   </ui:define>
 
   <ui:define name="body">
-
-    <ui:include src="/incl/social_collaborative_title_and_actions.xhtml">
-      <ui:param name="view_container" value="news_items_social_collaboration_view"/>
-    </ui:include>
-
-    <h1><h:outputText value="#{nxd:titleOrId(currentDocument)}"/></h1>
-
-    <h:form id="documentLayout">
-      <nxl:documentLayout mode="fullscreen" value="#{currentDocument}" />
-    </h:form>
-
+    <ui:decorate template="incl/social_collaborative_title_and_actions.xhtml">
+      <ui:define name="social_collaboration_title" >
+        <h1>#{messages['label.actions.listing.news.items']} #{socialWorkspaceActions.socialWorkspaceContainer.title}</h1>
+      </ui:define>
+    </ui:decorate>
+    <div>
+      <nxu:set var="contentViewName" value="news_items_listing_view">
+        <ui:decorate template="/incl/content_view.xhtml" />
+      </nxu:set>
+    </div>
   </ui:define>
 </nxthemes:composition>

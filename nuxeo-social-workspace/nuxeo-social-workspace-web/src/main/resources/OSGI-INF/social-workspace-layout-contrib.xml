@@ -208,6 +208,44 @@
       </rows>
     </layout>
 
+    <layout name="article_listing">
+      <templates>
+        <template mode="any">/layouts/layout_listing_ajax_template.xhtml</template>
+      </templates>
+      <columns>
+        <column name="title_link">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="sortPropertyName">dc:title</property>
+            <property name="label">label.selection.column.title_link</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_social_document_consultation</widget>
+        </column>
+     </columns>
+    </layout>
+
+    <layout name="news_item_listing">
+      <templates>
+        <template mode="any">/layouts/layout_listing_ajax_template.xhtml</template>
+      </templates>
+      <columns>
+        <column name="title_link">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="sortPropertyName">dc:title</property>
+            <property name="label">label.selection.column.title_link</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_social_document_consultation</widget>
+        </column>
+     </columns>
+    </layout>
+
     <layout name="requests_summary_layout">
       <properties mode="any">
         <property name="showListingHeader">true</property>
@@ -290,6 +328,7 @@
         </row>
       </rows>
     </layout>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
@@ -447,6 +486,21 @@
         <property name="hideFirstLabel">true</property>
         <property name="displayAction">view</property>
       </properties>
+    </widget>
+
+    <widget name="listing_social_document_consultation" type="template">
+          <labels>
+            <label mode="any">actions</label>
+          </labels>
+          <fields>
+             <field>data</field>
+          </fields>
+          <widgetModes>
+            <mode value="any">view</mode>
+          </widgetModes>
+          <properties mode="any">
+             <property name="template">/widgets/listing_social_document_widget_template.xhtml</property>
+          </properties>
     </widget>
 
   </extension>

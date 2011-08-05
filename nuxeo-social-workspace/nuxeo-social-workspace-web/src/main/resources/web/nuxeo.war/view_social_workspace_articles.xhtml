@@ -19,7 +19,10 @@
 
   <ui:define name="body">
 
-    <ui:include src="/incl/fullscreen_main_actions.xhtml"/>
+    <ui:include src="/incl/social_collaborative_title_and_actions.xhtml">
+      <ui:param name="view_container" value="article_social_collaboration_view"/>
+    </ui:include>
+
 
     <h1><h:outputText value="#{nxd:titleOrId(currentDocument)}"/></h1>
 

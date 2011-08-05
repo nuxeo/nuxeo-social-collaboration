@@ -16,6 +16,13 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.jboss.seam.ScopeType.CONVERSATION;
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+
 import java.io.Serializable;
 
 import org.jboss.seam.annotations.In;
@@ -28,15 +35,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
-
-import static org.jboss.seam.ScopeType.CONVERSATION;
-import static org.jboss.seam.annotations.Install.FRAMEWORK;
-
-import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
@@ -46,6 +46,12 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
 public class FullscreenManagementActionsBean implements Serializable{
+
+    private static final String NEWS_ITEMS_VIEW = "news_items";
+
+    private static final String DELETE_TRANSITION = "delete";
+
+    private static final String ARTICLES_VIEW = "articles";
 
     private static final long serialVersionUID = 1L;
 
@@ -61,6 +67,11 @@ public class FullscreenManagementActionsBean implements Serializable{
 
     @In(create = true)
     protected transient DocumentActions documentActions;
+
+    @In(create = true)
+    protected transient SocialWorkspaceService socialWorkspaceService;
+
+
 
     /**
      * Navigate to the Dashboard of the Social Workspace if the document belong
@@ -111,6 +122,24 @@ public class FullscreenManagementActionsBean implements Serializable{
         }
     }
 
+    public String navigateToArticles() throws ClientException{
+        return navigateToListing(ARTICLES_VIEW);
+    }
+
+    protected String navigateToListing(String listingView)
+            throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getSocialWorkspaceContainer(currentDocument);
+        if (socialWorkspace!=null) {
+            DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
+                    socialWorkspace.getDashboardSpacesRootPath()));
+            return navigationContext.navigateToDocument(dashboardSpacesRoot,
+                    listingView);
+        } else {
+            return navigationContext.navigateToDocument(currentDocument);
+        }
+    }
+
     public String createNewDocument(String type) throws ClientException {
         DocumentModel currentDoc = navigationContext.getCurrentDocument();
         DocumentModel parentContainer = documentManager.getDocument(currentDoc.getParentRef());
@@ -122,5 +151,32 @@ public class FullscreenManagementActionsBean implements Serializable{
     public String createSameTypeDocument() throws ClientException {
         String type = navigationContext.getCurrentDocument().getType();
         return createNewDocument(type);
+    }
+
+    public void deleteSocialDocument(DocumentModel document) throws ClientException{
+        document.followTransition(DELETE_TRANSITION);
+        documentManager.save();
+
+    }
+
+    public String navigateToNewsItems() throws ClientException{
+        return navigateToListing(NEWS_ITEMS_VIEW);
+    }
+
+    public String editSocialDocument(DocumentModel document) throws ClientException{
+        //TODO to complete and implement correctly
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        if (isSocialWorkspace(currentDocument)) {
+            SocialWorkspace socialWorkspace = toSocialWorkspace(currentDocument);
+            DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
+                    socialWorkspace.getDashboardSpacesRootPath()));
+            return navigationContext.navigateToDocument(dashboardSpacesRoot,
+                    FULLSCREEN_VIEW_ID);
+        } else if (isSocialDocument(currentDocument)) {
+            return navigationContext.navigateToDocument(currentDocument,
+                    "edit_article");
+        } else {
+            return navigationContext.navigateToDocument(currentDocument);
+        }
     }
 }

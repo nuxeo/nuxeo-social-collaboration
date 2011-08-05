@@ -37,6 +37,18 @@
         <theme>social-collaboration/dashboard</theme>
       </view>
 
+     <view id="/articles.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
+     <view id="/edit_article.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
+     <view id="/news_items.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
    </application>
   </extension>
 

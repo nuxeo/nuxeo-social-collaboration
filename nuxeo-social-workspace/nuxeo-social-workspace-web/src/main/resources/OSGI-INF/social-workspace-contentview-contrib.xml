@@ -4,6 +4,7 @@
 <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
   point="contentViews">
 
+
   <contentView name="requests_view">
 
     <coreQueryPageProvider>
@@ -51,6 +52,59 @@
         <layout name="SocialWorkspaces@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png"/>
       </resultLayouts>
     </contentView>
+
+    <contentView name="article_listing_view">
+      <coreQueryPageProvider>
+        <property name="coreSession">#{documentManager}</property>
+        <pattern>
+          SELECT * FROM Article WHERE ecm:isProxy = 0
+          AND ecm:mixinType != 'HiddenInNavigation'
+          AND ecm:isCheckedInVersion = 0
+          AND ecm:currentLifeCycleState != 'deleted'
+          AND ecm:path STARTSWITH ?
+        </pattern>
+        <pageSize>20</pageSize>
+          <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}</parameter>
+      </coreQueryPageProvider>
+        <refresh>
+          <event>documentChanged</event>
+          <event>documentChildrenChanged</event>
+         </refresh>
+               <cacheKey>#{currentDocument.id}</cacheKey>
+        <cacheSize>10</cacheSize>
+        <selectionList>CURRENT_SELECTION</selectionList>
+      <resultLayouts>
+       <layout name="article_listing" title="document_listing"
+            translateTitle="false" iconPath="/icons/document_listing_icon.png" />
+      </resultLayouts>
+    </contentView>
+
+    <contentView name="news_items_listing_view">
+      <coreQueryPageProvider>
+        <property name="coreSession">#{documentManager}</property>
+        <pattern>
+          SELECT * FROM NewsItem WHERE ecm:isProxy = 0
+          AND ecm:mixinType != 'HiddenInNavigation'
+          AND ecm:isCheckedInVersion = 0
+          AND ecm:currentLifeCycleState != 'deleted'
+          AND ecm:path STARTSWITH ?
+        </pattern>
+        <pageSize>20</pageSize>
+          <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}</parameter>
+      </coreQueryPageProvider>
+        <refresh>
+          <event>documentChanged</event>
+          <event>documentChildrenChanged</event>
+         </refresh>
+               <cacheKey>#{currentDocument.id}</cacheKey>
+        <cacheSize>10</cacheSize>
+        <selectionList>CURRENT_SELECTION</selectionList>
+      <resultLayouts>
+       <layout name="news_item_listing" title="document_listing"
+            translateTitle="false" iconPath="/icons/document_listing_icon.png" />
+      </resultLayouts>
+    </contentView>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager" point="layouts">
