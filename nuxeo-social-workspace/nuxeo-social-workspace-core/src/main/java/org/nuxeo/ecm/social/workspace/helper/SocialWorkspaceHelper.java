@@ -23,9 +23,11 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELA
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 
@@ -39,25 +41,28 @@ public class SocialWorkspaceHelper {
 
     private static final Log log = LogFactory.getLog(SocialWorkspaceHelper.class);
 
-    public static final String ADMINISTRATORS_SUFFIX = "_administrators";
+    private static final String KIND_GROUP = "SocialWorkspace";
 
-    public static final String MEMBERS_SUFFIX = "_members";
+    private static final String SEPARATOR = "_";
 
-    public static final String ADMINISTRATORS_LABEL_PREFIX = "Administrators of ";
+    private static final String ADMINISTRATORS_SUFFIX = "administrators";
 
-    public static final String MEMBERS_LABEL_PREFIX = "Members of ";
+    private static final String MEMBERS_SUFFIX = "members";
+
+    private static final String ADMINISTRATORS_LABEL_PREFIX = "Administrators of ";
+
+    private static final String MEMBERS_LABEL_PREFIX = "Members of ";
 
     private SocialWorkspaceHelper() {
         // Helper class
     }
 
-    public static String getSocialWorkspaceAdministratorsGroupName(
-            String docId) {
-        return docId + ADMINISTRATORS_SUFFIX;
+    public static String getSocialWorkspaceAdministratorsGroupName(String docId) {
+        return docId + SEPARATOR + ADMINISTRATORS_SUFFIX;
     }
 
     public static String getSocialWorkspaceMembersGroupName(String docId) {
-        return docId + MEMBERS_SUFFIX;
+        return docId + SEPARATOR + MEMBERS_SUFFIX;
     }
 
     public static String getSocialWorkspaceAdministratorsGroupLabel(
@@ -67,6 +72,40 @@ public class SocialWorkspaceHelper {
 
     public static String getSocialWorkspaceMembersGroupLabel(String docTitle) {
         return MEMBERS_LABEL_PREFIX + docTitle;
+    }
+
+    public static boolean isValidSocialWorkspaceGroupName(String groupName) {
+        return !StringUtils.isBlank(groupName)
+                && (groupName.endsWith(getSocialWorkspaceAdministratorsGroupName("")) || groupName.endsWith(getSocialWorkspaceMembersGroupName("")));
+    }
+
+    public static RelationshipKind buildRelationKindFromGroupName(
+            String groupName) {
+        String name = StringUtils.split(groupName, SEPARATOR)[1];
+        if (MEMBERS_SUFFIX.equals(name)) {
+            return buildRelationMemberKind();
+        } else if (ADMINISTRATORS_SUFFIX.equals(name)) {
+            return buildRelationAdministratorKind();
+        }
+        log.warn("Trying to instanciate RelationshipKind from an unknown group: "
+                + groupName);
+        return null;
+    }
+
+    public static String getRelationDocIdFromGroupName(String groupName) {
+        return StringUtils.split(groupName, SEPARATOR)[0];
+    }
+
+    public static RelationshipKind buildRelationMemberKind() {
+        return RelationshipKind.newInstance(KIND_GROUP, MEMBERS_SUFFIX);
+    }
+
+    public static RelationshipKind buildRelationAdministratorKind() {
+        return RelationshipKind.newInstance(KIND_GROUP, ADMINISTRATORS_SUFFIX);
+    }
+
+    public static RelationshipKind buildRelationKind() {
+        return RelationshipKind.fromGroup(KIND_GROUP);
     }
 
     public static boolean isSocialWorkspace(DocumentModel doc) {

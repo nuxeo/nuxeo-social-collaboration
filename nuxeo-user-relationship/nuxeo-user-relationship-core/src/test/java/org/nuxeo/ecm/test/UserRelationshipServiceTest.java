@@ -161,6 +161,11 @@ public class UserRelationshipServiceTest {
                 USER_PREFIX).size());
         assertEquals(1, relationshipService.getTargetsWithFulltext(user1,
                 DOC_PREFIX).size());
+
+        assertEquals(2,
+                relationshipService.getTargetsWithFulltext(user1, "21").size());
+        assertEquals(1, relationshipService.getTargetsWithFulltext(user1, read,
+                "21").size());
     }
 
     protected DocumentModel createUser(String username) throws ClientException {

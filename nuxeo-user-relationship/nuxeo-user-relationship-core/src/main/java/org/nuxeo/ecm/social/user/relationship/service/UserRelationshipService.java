@@ -42,9 +42,14 @@ public interface UserRelationshipService {
     List<String> getTargets(String actorId);
 
     /**
-     * Gets all targets that match the targetPrefix.
+     * Gets all targets that match the targetPattern.
      */
-    List<String> getTargetsWithFulltext(String actorId, String targetPrefix);
+    List<String> getTargetsWithFulltext(String actorId, String targetPattern);
+
+    /**
+     * Gets all targets that match the targetPattern with the given kind.
+     */
+    List<String> getTargetsWithFulltext(String actorId, RelationshipKind kind, String targetPattern);
 
     /**
      * Gets all targets of a specific relation.

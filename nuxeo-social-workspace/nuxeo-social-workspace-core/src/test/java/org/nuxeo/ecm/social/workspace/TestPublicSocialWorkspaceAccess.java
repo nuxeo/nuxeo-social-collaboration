@@ -16,22 +16,20 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import java.security.Principal;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.UserPrincipal;
+import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.runtime.api.Framework;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
@@ -42,33 +40,35 @@ public class TestPublicSocialWorkspaceAccess extends
 
     @Before
     public void setup() throws Exception {
-
         Principal user = session.getPrincipal();
         assertFalse(((UserPrincipal) user).isAdministrator());
 
-        SocialWorkspace sw = createSocialWorkspaceWithoutRightForUser("marketing", true);
-        assertFalse(session.hasPermission(sw.getDocument().getRef(), READ));
+        createSocialWorkspace("marketing", true);
+        createSocialWorkspace("sales", false);
 
-        sw = createSocialWorkspace("sales", true);
-        assertTrue(session.hasPermission(sw.getDocument().getRef(), EVERYTHING));
+        session.getRootDocument().getACP().getOrCreateACL().add(new ACE("John", "READ", true));
+        session.setACP(session.getRootDocument().getRef(), session.getRootDocument().getACP(), true);
+        session.save();
     }
 
     @Test
     public void shouldReturnPublicSocialWorkspace() throws Exception {
-        // TODO : Try to find why query return all documents (no right check)
-//        String query = String.format("Select * From %s ", SocialConstants.SOCIAL_WORKSPACE_TYPE);
-//
-//        DocumentModelList docs = session.query(query);
-//        assertEquals(1, docs.size());
+        switchUser("John");
 
         SocialWorkspaceService service = Framework.getService(SocialWorkspaceService.class);
         List<SocialWorkspace> socialWorkspaces = service.getDetachedPublicSocialWorkspaces(session);
-        assertEquals(2, socialWorkspaces.size());
+        assertEquals(1, socialWorkspaces.size());
+
+        String query = String.format("Select * From %s ", SocialConstants.SOCIAL_WORKSPACE_TYPE);
+        DocumentModelList docs = session.query(query);
+        assertEquals(0, docs.size());
 
         // TODO : Try to find why query fulltext doesn't work
-//        socialWorkspaces = service.searchDetachedPublicSocialWorkspaces(
-//                session, "marketing");
-//        assertEquals(1, socialWorkspaces.size());
+        socialWorkspaces = service.searchDetachedPublicSocialWorkspaces(
+                session, "marketing");
+        assertEquals(1, socialWorkspaces.size());
+
+        switchBackToAdministrator();
     }
 
 }

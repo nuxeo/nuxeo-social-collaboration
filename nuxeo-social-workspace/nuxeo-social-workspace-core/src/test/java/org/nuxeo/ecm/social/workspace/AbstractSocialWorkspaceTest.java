@@ -18,11 +18,13 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
 
@@ -46,7 +48,9 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.opensocial.spaces",
         "org.nuxeo.ecm.social.workspace.core",
-        "org.nuxeo.ecm.platform.content.template" })
+        "org.nuxeo.ecm.platform.content.template",
+        "org.nuxeo.ecm.user.relationships"})
+@LocalDeploy( { "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml" })
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
@@ -54,6 +58,12 @@ public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
     protected UserManager userManager;
+
+    @Inject
+    protected UserRelationshipService userRelationshipService;
+
+    @Inject
+    protected FeaturesRunner featuresRunner;
 
     protected SocialWorkspace socialWorkspace;
 
@@ -66,6 +76,7 @@ public abstract class AbstractSocialWorkspaceTest {
             String type) throws Exception {
         DocumentModel doc = session.createDocumentModel(pathAsString, name,
                 type);
+        doc.setPropertyValue("dc:title", name);
         doc = session.createDocument(doc);
         session.save(); // fire post commit event listener
         session.save(); // flush the session to retrieve document
@@ -78,8 +89,7 @@ public abstract class AbstractSocialWorkspaceTest {
      */
     public DocumentModel createSocialDocument(String pathAsString, String name,
             String type, boolean isPublic) throws Exception {
-        DocumentModel doc = session.createDocumentModel(pathAsString, name,
-                type);
+        DocumentModel doc = session.createDocumentModel(pathAsString, name, type);
         doc.setPropertyValue(
                 SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, isPublic);
         doc = session.createDocument(doc);
@@ -91,17 +101,6 @@ public abstract class AbstractSocialWorkspaceTest {
 
     protected SocialWorkspace createSocialWorkspace(String socialWorkspaceName,
             boolean isPublic) throws Exception {
-
-        SocialWorkspace sw = createSocialWorkspaceWithoutRightForUser(
-                socialWorkspaceName, isPublic);
-        NuxeoPrincipal principal = (NuxeoPrincipal) session.getPrincipal();
-        principal.getGroups().add(sw.getAdministratorsGroupName());
-
-        return sw;
-    }
-
-    protected SocialWorkspace createSocialWorkspaceWithoutRightForUser(
-            String socialWorkspaceName, boolean isPublic) throws Exception {
         DocumentModel doc = createDocument(
                 session.getRootDocument().getPathAsString(),
                 socialWorkspaceName, SOCIAL_WORKSPACE_TYPE);
@@ -125,4 +124,11 @@ public abstract class AbstractSocialWorkspaceTest {
         return user;
     }
 
+    protected void switchUser(String username) {
+        featuresRunner.getFeature(CoreFeature.class).getRepository().switchUser(username);
+    }
+
+    protected void switchBackToAdministrator() {
+        featuresRunner.getFeature(CoreFeature.class).getRepository().switchToAdminUser("Administrator");
+    }
 }

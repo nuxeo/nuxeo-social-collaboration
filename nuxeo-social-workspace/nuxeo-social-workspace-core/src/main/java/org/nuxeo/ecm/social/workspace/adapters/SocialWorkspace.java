@@ -1,11 +1,13 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
+import java.util.List;
+
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
 /**
- * An object that wraps a {@code DocumentModel} having the facet
- * {@code SocialWorkspace}.
+ * An object that wraps a {@code DocumentModel} having the facet {@code
+ * SocialWorkspace}.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
@@ -98,6 +100,39 @@ public interface SocialWorkspace {
      * this Social Workspace, {@code false} otherwise.
      */
     boolean isAdministratorOrMember(NuxeoPrincipal principal);
+
+    /**
+     * Search through members of this social workspace that match with the
+     * passed pattern.
+     */
+    List<String> searchMembers(String pattern);
+
+    /**
+     * Search through administrators of this social workspace that match with
+     * the passed pattern.
+     */
+    List<String> searchAdministrators(String pattern);
+
+    /**
+     * Search through members and administrators of this social workspace that
+     * match with the passed pattern.
+     */
+    List<String> searchUsers(String pattern);
+
+    /**
+     * Gets all members of this social workspace.
+     */
+    List<String> getMembers();
+
+    /**
+     * Gets all administrators of this social workspace.
+     */
+    List<String> getAdministrators();
+
+    /**
+     * Gets all members and administrators of this social workspace
+     */
+    List<String> getUsers();
 
     /**
      * Returns this Social Workspace administrators group name.

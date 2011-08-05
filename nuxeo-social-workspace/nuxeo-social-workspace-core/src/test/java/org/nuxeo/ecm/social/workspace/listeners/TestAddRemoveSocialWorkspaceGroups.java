@@ -19,10 +19,10 @@ package org.nuxeo.ecm.social.workspace.listeners;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
 
 import org.junit.Test;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 
 /**
@@ -40,27 +40,18 @@ public class TestAddRemoveSocialWorkspaceGroups extends
         socialWorkspaceDoc = socialWorkspace.getDocument();
 
         assertNotNull(userManager);
-        String adminGroupName = socialWorkspace.getAdministratorsGroupName();
-        DocumentModel adminGroup = userManager.getGroupModel(adminGroupName);
-        assertNotNull(adminGroup);
-        assertEquals(socialWorkspace.getAdministratorsGroupLabel(),
-                adminGroup.getProperty(userManager.getGroupSchemaName(),
-                        userManager.getGroupLabelField()));
 
-        String membersGroupName = socialWorkspace.getMembersGroupName();
-        DocumentModel membersGroup = userManager.getGroupModel(membersGroupName);
-        assertNotNull(membersGroup);
-        assertEquals(socialWorkspace.getMembersGroupLabel(),
-                membersGroup.getProperty(userManager.getGroupSchemaName(),
-                        userManager.getGroupLabelField()));
+        String docId = socialWorkspace.getId();
+        assertEquals(1, userRelationshipService.getTargets(docId).size());
+        assertEquals(1, userRelationshipService.getTargetsOfKind(docId,
+                buildRelationAdministratorKind()).size());
+        assertEquals(0, userRelationshipService.getTargetsOfKind(docId,
+                buildRelationMemberKind()).size());
 
         session.removeDocument(socialWorkspaceDoc.getRef());
         session.save();
 
-        adminGroup = userManager.getGroupModel(adminGroupName);
-        assertNull(adminGroup);
-        membersGroup = userManager.getGroupModel(membersGroupName);
-        assertNull(membersGroup);
+        assertEquals(0, userRelationshipService.getTargets(docId).size());
     }
 
 }

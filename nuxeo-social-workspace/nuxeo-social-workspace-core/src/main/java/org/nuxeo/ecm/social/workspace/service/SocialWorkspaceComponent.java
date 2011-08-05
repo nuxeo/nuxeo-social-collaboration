@@ -20,10 +20,13 @@
 package org.nuxeo.ecm.social.workspace.service;
 
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
@@ -52,8 +55,11 @@ import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
@@ -81,6 +87,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     private SubscriptionRequestHandler subscriptionRequestHandler;
 
     private int validationDays = 15;
+
+    private UserRelationshipService relationshipService;
 
     @Override
     public List<SocialWorkspace> getDetachedPublicSocialWorkspaces(
@@ -204,7 +212,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public void handleSocialWorkspaceCreation(
             final SocialWorkspace socialWorkspace, final Principal principal) {
-        createSocialWorkspaceGroups(socialWorkspace, principal);
+        createBaseRelationshipsWithSocialWorkspace(socialWorkspace, principal);
         CoreSession session = socialWorkspace.getDocument().getCoreSession();
         try {
             new UnrestrictedSessionRunner(session) {
@@ -224,15 +232,14 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
     }
 
-    private void createSocialWorkspaceGroups(SocialWorkspace socialWorkspace,
-            Principal principal) {
-        createGroup(socialWorkspace.getAdministratorsGroupName(),
-                socialWorkspace.getAdministratorsGroupLabel(),
-                principal.getName());
-        createGroup(socialWorkspace.getMembersGroupName(),
-                socialWorkspace.getMembersGroupLabel(), principal.getName());
-        addGroupToPrincipal(socialWorkspace.getAdministratorsGroupName(),
-                principal);
+    private void createBaseRelationshipsWithSocialWorkspace(
+            SocialWorkspace socialWorkspace, Principal principal) {
+        addSocialWorkspaceAdministrator(socialWorkspace, principal.getName());
+        // This group is just added here to prevent user from re-login before
+        // matching
+        // this virtual group.
+        ((NuxeoPrincipal) principal).getAllGroups().add(
+                socialWorkspace.getAdministratorsGroupName());
     }
 
     private void createGroup(String groupName, String groupLabel,
@@ -288,16 +295,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     @Override
     public void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
-        deleteGroup(socialWorkspace.getAdministratorsGroupName());
-        deleteGroup(socialWorkspace.getMembersGroupName());
-    }
-
-    private void deleteGroup(String groupName) {
-        try {
-            getUserManager().deleteGroup(groupName);
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(e);
-        }
+        getUserRelationshipService().removeRelation(socialWorkspace.getId(),
+                null, SocialWorkspaceHelper.buildRelationKind());
     }
 
     protected UserManager getUserManager() {
@@ -349,7 +348,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
             ACP acp = newsItemsRoot.getACP();
             ACL acl = acp.getOrCreateACL(NEWS_ITEMS_ROOT_ACL_NAME);
-            acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(), EVERYTHING, true));
+            acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(),
+                    EVERYTHING, true));
             acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
             newsItemsRoot.setACP(acp, true);
             session.saveDocument(newsItemsRoot);
@@ -361,78 +361,47 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public boolean addSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, String principalName) {
-        return addMemberToGroup(principalName,
-                socialWorkspace.getAdministratorsGroupName());
+        return addPrincipalToSocialWorkspace(principalName,
+                socialWorkspace.getId(), buildRelationAdministratorKind());
     }
 
     @Override
     public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             String principalName) {
-        return addMemberToGroup(principalName,
-                socialWorkspace.getMembersGroupName());
+        return addPrincipalToSocialWorkspace(principalName,
+                socialWorkspace.getId(), buildRelationMemberKind());
     }
 
     @Override
     public void removeSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, String principalName) {
-        removeMemberFromGroup(principalName,
-                socialWorkspace.getAdministratorsGroupName());
+        removePrincipalFromSocialWorkspace(principalName,
+                socialWorkspace.getId(), buildRelationAdministratorKind());
     }
 
     @Override
     public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             String principalName) {
-        removeMemberFromGroup(principalName,
-                socialWorkspace.getMembersGroupName());
+        removePrincipalFromSocialWorkspace(principalName,
+                socialWorkspace.getId(), buildRelationMemberKind());
     }
 
-    @SuppressWarnings("unchecked")
-    private boolean addMemberToGroup(String principalName, String groupName) {
-        try {
-            if (!StringUtils.isBlank(principalName)) {
-                UserManager userManager = getUserManager();
-                DocumentModel group = userManager.getGroupModel(groupName);
-                String groupSchemaName = userManager.getGroupSchemaName();
-                String groupMembersField = userManager.getGroupMembersField();
-                List<String> groupMembers = (List<String>) group.getProperty(
-                        groupSchemaName, groupMembersField);
-                if (groupMembers == null) {
-                    groupMembers = new ArrayList<String>();
-                }
-                if (!groupMembers.contains(principalName)) {
-                    groupMembers.add(principalName);
-                    group.setProperty(groupSchemaName, groupMembersField,
-                            groupMembers);
-                    userManager.updateGroup(group);
-                    return true;
-                }
-            }
-            return false;
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(e);
-        }
+    private boolean addPrincipalToSocialWorkspace(String principalName,
+            String socialWorkspaceId, RelationshipKind kind) {
+        boolean added = getUserRelationshipService().addRelation(principalName,
+                socialWorkspaceId, kind);
+        added &= getUserRelationshipService().addRelation(socialWorkspaceId,
+                principalName, kind);
+        return added;
     }
 
-    @SuppressWarnings("unchecked")
-    private void removeMemberFromGroup(String principalName, String groupName) {
-        try {
-            if (!StringUtils.isBlank(principalName)) {
-                UserManager userManager = getUserManager();
-                DocumentModel group = userManager.getGroupModel(groupName);
-                String groupSchemaName = userManager.getGroupSchemaName();
-                String groupMembersField = userManager.getGroupMembersField();
-                List<String> groupMembers = (List<String>) group.getProperty(
-                        groupSchemaName, groupMembersField);
-                if (groupMembers != null) {
-                    groupMembers.remove(principalName);
-                    group.setProperty(groupSchemaName, groupMembersField,
-                            groupMembers);
-                    userManager.updateGroup(group);
-                }
-            }
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(e);
-        }
+    private boolean removePrincipalFromSocialWorkspace(String principalName,
+            String socialWorkspaceId, RelationshipKind kind) {
+        boolean removed = getUserRelationshipService().removeRelation(
+                principalName, socialWorkspaceId, kind);
+        removed |= getUserRelationshipService().removeRelation(
+                socialWorkspaceId, principalName, kind);
+        return removed;
     }
 
     @Override
@@ -570,6 +539,28 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             SubscriptionRequest subscriptionRequest) {
         subscriptionRequestHandler.rejectSubscriptionRequest(socialWorkspace,
                 subscriptionRequest);
+    }
+
+    @Override
+    public List<String> searchUsers(SocialWorkspace socialWorkspace,
+            RelationshipKind kind, String pattern) {
+        return getUserRelationshipService().getTargetsWithFulltext(
+                socialWorkspace.getId(), kind, pattern);
+    }
+
+    private UserRelationshipService getUserRelationshipService() {
+        if (relationshipService == null) {
+            try {
+                relationshipService = Framework.getService(UserRelationshipService.class);
+            } catch (Exception e) {
+                throw new ClientRuntimeException(e);
+            }
+        }
+        if (relationshipService == null) {
+            throw new ClientRuntimeException(
+                    "UserRelationship service is not registered.");
+        }
+        return relationshipService;
     }
 
     private static class SocialWorkspaceFinder extends

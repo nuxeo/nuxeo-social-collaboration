@@ -148,10 +148,21 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     @Override
     public List<String> getTargetsWithFulltext(String actorId,
-            String targetPrefix) {
+            String targetPattern) {
+        return getTargetsWithFulltext(actorId, null, targetPattern);
+    }
+
+    @Override
+    public List<String> getTargetsWithFulltext(String actorId,
+            RelationshipKind kind, String targetPattern) {
         Map<String, Serializable> filters = new HashMap<String, Serializable>();
         filters.put(RELATIONSHIP_FIELD_ACTOR, actorId);
-        filters.put(RELATIONSHIP_FIELD_TARGET, targetPrefix);
+        if (!(kind == null || kind.isEmpty())) {
+            filters.put(RELATIONSHIP_FIELD_KIND, kind.toString());
+        }
+        if (!StringUtils.isBlank(targetPattern)) {
+            filters.put(RELATIONSHIP_FIELD_TARGET, targetPattern);
+        }
         return buildListFromProperty(
                 queryRelationshipsDirectory(filters, true),
                 RELATIONSHIP_SCHEMA_NAME, RELATIONSHIP_FIELD_TARGET);
@@ -266,10 +277,14 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
             Map<String, Serializable> filter = new HashMap<String, Serializable>();
             filter.put(RELATIONSHIP_FIELD_ACTOR, actorId);
-            filter.put(RELATIONSHIP_FIELD_TARGET, targetId);
-            filter.put(RELATIONSHIP_FIELD_KIND, kind.toString());
+            if (!StringUtils.isBlank(targetId)) {
+                filter.put(RELATIONSHIP_FIELD_TARGET, targetId);
+            }
+            if (!(kind == null || kind.isEmpty())) {
+                filter.put(RELATIONSHIP_FIELD_KIND, kind.toString());
+            }
 
-            DocumentModelList relations = relationshipDirectory.query(filter);
+            DocumentModelList relations = relationshipDirectory.query(filter, filter.keySet());
             if (relations.isEmpty()) {
                 log.warn("Trying to delete a relationship that doesn't exists");
                 return false;

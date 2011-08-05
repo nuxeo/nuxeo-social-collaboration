@@ -5,6 +5,10 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.FIELD_SOCIAL_WORKSP
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_DASHBOARD_SPACE_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_DASHBOARD_SPACE_NAME;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
+
+import java.util.List;
 
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -113,6 +117,40 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     @Override
     public boolean isAdministratorOrMember(NuxeoPrincipal principal) {
         return isAdministrator(principal) || isMember(principal);
+    }
+
+    @Override
+    public List<String> searchMembers(String pattern) {
+        return getSocialWorkspaceService().searchUsers(this,
+                buildRelationMemberKind(), pattern);
+    }
+
+    @Override
+    public List<String> searchAdministrators(String pattern) {
+        return getSocialWorkspaceService().searchUsers(this,
+                buildRelationAdministratorKind(), pattern);
+    }
+
+    @Override
+    public List<String> searchUsers(String pattern) {
+        return getSocialWorkspaceService().searchUsers(this, null, pattern);
+    }
+
+    @Override
+    public List<String> getMembers() {
+        return getSocialWorkspaceService().searchUsers(this,
+                buildRelationMemberKind(), null);
+    }
+
+    @Override
+    public List<String> getAdministrators() {
+        return getSocialWorkspaceService().searchUsers(this,
+                buildRelationAdministratorKind(), null);
+    }
+
+    @Override
+    public List<String> getUsers() {
+        return getSocialWorkspaceService().searchUsers(this, null, null);
     }
 
     @Override

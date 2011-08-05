@@ -25,6 +25,7 @@ import java.util.List;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 
@@ -167,5 +168,14 @@ public interface SocialWorkspaceService {
      * Return all public Social Workspaces.
      */
     List<SocialWorkspace> getDetachedPublicSocialWorkspaces(CoreSession session);
+
+    /**
+     * Returns all matching users from a Social Workspace, or an empty list.
+     *
+     * @param kind can be null or empty to search through all users.
+     * @param pattern can be blank.
+     */
+    List<String> searchUsers(SocialWorkspace socialWorkspace,
+            RelationshipKind kind, String pattern);
 
 }

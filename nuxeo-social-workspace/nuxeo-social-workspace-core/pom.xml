@@ -114,5 +114,9 @@
       <artifactId>nuxeo-platform-imaging-core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.social</groupId>
+      <artifactId>nuxeo-user-relationship-core</artifactId>
+    </dependency>
   </dependencies>
 </project>
