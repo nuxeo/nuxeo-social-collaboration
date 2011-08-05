@@ -21,8 +21,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +44,7 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
 
@@ -59,7 +58,8 @@ import com.google.inject.Inject;
 @Deploy({ "org.nuxeo.ecm.social.workspace.core",
         "org.nuxeo.ecm.social.workspace.gadgets",
         "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
-        "org.nuxeo.ecm.platform.query.api" })
+        "org.nuxeo.ecm.platform.query.api", "org.nuxeo.ecm.user.relationships" })
+@LocalDeploy( { "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml" })
 public class TestSocialProviderOperation {
 
     @Inject
@@ -70,6 +70,9 @@ public class TestSocialProviderOperation {
 
     @Inject
     UserManager userManager;
+
+    @Inject
+    FeaturesRunner featuresRunner;
 
     @Before
     public void initRepo() throws Exception {
@@ -128,13 +131,6 @@ public class TestSocialProviderOperation {
         // remove current user from admins of sws2
         DocumentModel sws = session.getDocument(new PathRef("/sws2"));
         SocialWorkspace socialWorkspace = toSocialWorkspace(sws);
-        DocumentModel group = userManager.getGroupModel(socialWorkspace.getAdministratorsGroupName());
-        @SuppressWarnings("unchecked")
-        List<String> list = (List<String>) group.getProperty(
-                userManager.getGroupSchemaName(), "members");
-        list.remove(session.getPrincipal().getName());
-        group.setProperty(userManager.getGroupSchemaName(), "members", list);
-        userManager.updateGroup(group);
 
         oParams.set("query", "select * from Article where ecm:isProxy = 1");
         result = (DocumentModelList) service.run(ctx, chain);
@@ -155,15 +151,15 @@ public class TestSocialProviderOperation {
         chain.add(oParams);
 
         DocumentModelList result = (DocumentModelList) service.run(ctx, chain);
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
 
         oParams.set("onlyPublicDocuments", "false");
         result = (DocumentModelList) service.run(ctx, chain);
-        assertEquals(6, result.size());
+        assertEquals(3, result.size());
 
         oParams.set("onlyPublicDocuments", "wrong string for a boolean");
         result = (DocumentModelList) service.run(ctx, chain);
-        assertEquals(6, result.size());
+        assertEquals(3, result.size());
 
     }
 }

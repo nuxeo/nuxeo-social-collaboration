@@ -236,8 +236,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             SocialWorkspace socialWorkspace, Principal principal) {
         addSocialWorkspaceAdministrator(socialWorkspace, principal.getName());
         // This group is just added here to prevent user from re-login before
-        // matching
-        // this virtual group.
+        // matching this virtual group.
         ((NuxeoPrincipal) principal).getAllGroups().add(
                 socialWorkspace.getAdministratorsGroupName());
     }

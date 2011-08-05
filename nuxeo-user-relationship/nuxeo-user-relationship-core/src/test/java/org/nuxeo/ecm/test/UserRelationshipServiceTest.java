@@ -146,6 +146,7 @@ public class UserRelationshipServiceTest {
         String user2 = USER_PREFIX + createUser("user22").getId();
         String user3 = USER_PREFIX + createUser("user23").getId();
         String doc1 = DOC_PREFIX + createDoc("doc21").getId();
+        String doc2 = DOC_PREFIX + "doc22";
 
         RelationshipKind read = RelationshipKind.newInstance("document",
                 "have_read");
@@ -155,17 +156,20 @@ public class UserRelationshipServiceTest {
         assertTrue(relationshipService.addRelation(user1, user3, coworker));
         assertTrue(relationshipService.addRelation(user1, user2, coworker));
         assertTrue(relationshipService.addRelation(user1, doc1, read));
+        assertTrue(relationshipService.addRelation(user1, doc2, read));
 
-        assertEquals(3, relationshipService.getTargets(user1).size());
+        assertEquals(4, relationshipService.getTargets(user1).size());
         assertEquals(2, relationshipService.getTargetsWithFulltext(user1,
                 USER_PREFIX).size());
-        assertEquals(1, relationshipService.getTargetsWithFulltext(user1,
+        assertEquals(2, relationshipService.getTargetsWithFulltext(user1,
                 DOC_PREFIX).size());
 
         assertEquals(2,
-                relationshipService.getTargetsWithFulltext(user1, "21").size());
+                relationshipService.getTargetsWithFulltext(user1, "22").size());
+
         assertEquals(1, relationshipService.getTargetsWithFulltext(user1, read,
-                "21").size());
+                "22").size());
+
     }
 
     protected DocumentModel createUser(String username) throws ClientException {
