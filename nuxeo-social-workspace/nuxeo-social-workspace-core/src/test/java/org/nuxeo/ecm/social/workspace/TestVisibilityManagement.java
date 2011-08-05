@@ -62,9 +62,7 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
- * 
  */
-
 // no listener configured
 @Deploy({ "org.nuxeo.ecm.automation.core",
         "org.nuxeo.ecm.platform.jbpm.automation",
@@ -73,9 +71,9 @@ import com.google.inject.Inject;
 @LocalDeploy("org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml")
 public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
-    private static final Log log = LogFactory.getLog(TestVisibilityManagement.class);
-
     public static final String SOCIAL_WORKSPACE_NAME = "sws";
+
+    private static final Log log = LogFactory.getLog(TestVisibilityManagement.class);
 
     @Inject
     protected JbpmService jbpmService;

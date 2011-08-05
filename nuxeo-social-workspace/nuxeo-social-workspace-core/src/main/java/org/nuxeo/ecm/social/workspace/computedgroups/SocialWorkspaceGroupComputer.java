@@ -20,11 +20,11 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Social Workspace group computer to provide virtual groups.
- * <p/>
+ * <p>
  * We have two virtual groups:
  * - members of a social workspace
  * - administrators of a social workspace
- * <p/>
+ * <p>
  * It do not provide sub groups.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
