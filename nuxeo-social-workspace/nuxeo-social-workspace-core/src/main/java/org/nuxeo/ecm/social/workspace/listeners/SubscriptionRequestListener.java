@@ -42,7 +42,7 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceEmailNotifier;
  */
 public class SubscriptionRequestListener implements PostCommitEventListener {
 
-    private SocialWorkspaceEmailNotifier emailNotifier = new SocialWorkspaceEmailNotifier();
+    private final SocialWorkspaceEmailNotifier emailNotifier = new SocialWorkspaceEmailNotifier();
 
     @Override
     public void handleEvent(EventBundle eventBundle) throws ClientException {

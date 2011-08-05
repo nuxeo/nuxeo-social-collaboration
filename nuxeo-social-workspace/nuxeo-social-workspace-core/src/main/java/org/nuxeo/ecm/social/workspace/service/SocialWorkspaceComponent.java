@@ -334,11 +334,11 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     private void addEverythingForAdministratorsACE(ACL acl) {
         for (String adminGroup : getUserManager().getAdministratorsGroups()) {
-            acl.add(new ACE(adminGroup, SecurityConstants.EVERYTHING, true));
+            acl.add(new ACE(adminGroup, EVERYTHING, true));
         }
     }
 
-    private void initializeNewsItemsRootRights(SocialWorkspace socialWorkspace) {
+    private static void initializeNewsItemsRootRights(SocialWorkspace socialWorkspace) {
         try {
             CoreSession session = socialWorkspace.getDocument().getCoreSession();
             PathRef newsItemsRootPath = new PathRef(
@@ -481,7 +481,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
     }
 
-    private void makePublicSectionUnreadable(CoreSession session,
+    private static void makePublicSectionUnreadable(CoreSession session,
             SocialWorkspace socialWorkspace) throws ClientException {
         PathRef publicSectionRef = new PathRef(
                 socialWorkspace.getPublicSectionPath());
@@ -493,7 +493,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         session.saveDocument(publicSection);
     }
 
-    private void makePublicDashboardUnreadable(CoreSession session,
+    private static void makePublicDashboardUnreadable(CoreSession session,
             SocialWorkspace socialWorkspace) throws ClientException {
         PathRef dashboardSpacesRootRef = new PathRef(
                 socialWorkspace.getDashboardSpacesRootPath());

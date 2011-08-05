@@ -113,7 +113,7 @@ public interface SocialWorkspaceService {
      * Makes the given {@code socialWorkspace} public.
      * <p>
      * Puts the correct rights so that non-members can view public documents and
-     * publci dashboard.
+     * public dashboard.
      */
     void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace);
 

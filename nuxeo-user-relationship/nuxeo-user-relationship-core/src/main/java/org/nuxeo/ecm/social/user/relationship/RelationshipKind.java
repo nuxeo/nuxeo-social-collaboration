@@ -16,9 +16,9 @@ public class RelationshipKind implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected String group;
+    protected final String group;
 
-    protected String name;
+    protected final String name;
 
     protected static final String SEPARATOR = ":";
 

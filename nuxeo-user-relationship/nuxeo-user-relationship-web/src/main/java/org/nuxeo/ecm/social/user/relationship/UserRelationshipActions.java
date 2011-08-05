@@ -78,7 +78,7 @@ public class UserRelationshipActions implements Serializable {
 
     protected Map<RelationshipKind, Boolean> allRelationshipsState;
 
-    public boolean isAlreadyConnected() throws ClientException {
+    public boolean isAlreadyConnected() {
         return !isCurrentUser()
                 && !getRelationshipsWithSelectedUser().isEmpty();
     }
@@ -111,7 +111,7 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    public boolean isActiveRelationship(String type) throws ClientException {
+    public boolean isActiveRelationship(String type) {
         return getRelationshipsWithSelectedUser().contains(type);
     }
 

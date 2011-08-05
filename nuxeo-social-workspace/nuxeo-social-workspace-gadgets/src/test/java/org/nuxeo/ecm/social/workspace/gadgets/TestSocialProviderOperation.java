@@ -59,7 +59,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.gadgets",
         "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.query.api", "org.nuxeo.ecm.user.relationships" })
-@LocalDeploy( { "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml" })
+@LocalDeploy("org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml")
 public class TestSocialProviderOperation {
 
     @Inject

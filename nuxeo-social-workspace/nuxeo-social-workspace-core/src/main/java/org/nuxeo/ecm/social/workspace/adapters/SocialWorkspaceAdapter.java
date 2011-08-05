@@ -252,7 +252,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
         this.doc = doc;
     }
 
-    private SocialWorkspaceService getSocialWorkspaceService() {
+    private static SocialWorkspaceService getSocialWorkspaceService() {
         try {
             return Framework.getService(SocialWorkspaceService.class);
         } catch (Exception e) {

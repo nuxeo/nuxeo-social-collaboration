@@ -38,11 +38,10 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Listener add social document facet to documents, except those with foledrish
+ * Listener add social document facet to documents, except those with folderish
  * facet, when there are created, copied or moved in a social workspace.
  * 
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
- * 
  */
 public class AddSocialDocumentFacetListener implements EventListener {
 
@@ -81,7 +80,7 @@ public class AddSocialDocumentFacetListener implements EventListener {
         }
     }
 
-    private SocialWorkspaceService getSocialWorkspaceService() {
+    private static SocialWorkspaceService getSocialWorkspaceService() {
         try {
             return Framework.getService(SocialWorkspaceService.class);
         } catch (Exception e) {

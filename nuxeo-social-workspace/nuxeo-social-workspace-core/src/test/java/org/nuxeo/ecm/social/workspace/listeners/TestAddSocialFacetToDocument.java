@@ -57,7 +57,7 @@ public class TestAddSocialFacetToDocument extends
         assertTrue(noteInAFolderInASocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
         DocumentModel fileOutOfSocialWorkspace = createDocument("/",
-                "Regular File create at root leavel", "File");
+                "Regular File create at root level", "File");
         assertFalse(fileOutOfSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
         DocumentModel copy = session.copy(fileOutOfSocialWorkspace.getRef(),

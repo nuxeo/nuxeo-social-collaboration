@@ -21,6 +21,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
@@ -42,7 +45,6 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.event.impl.EventImpl;
@@ -68,7 +70,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.platform.jbpm.automation",
         "org.nuxeo.ecm.automation.features", JbpmUTConstants.CORE_BUNDLE_NAME,
         JbpmUTConstants.TESTING_BUNDLE_NAME })
-@LocalDeploy({ "org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml" })
+@LocalDeploy("org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml")
 public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     private static final Log log = LogFactory.getLog(TestVisibilityManagement.class);
@@ -186,7 +188,6 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
         assertTrue(socialDocument.getPublicDocument().isProxy());
         assertNull(socialDocument.getRestrictedDocument());
         checkPublic(socialDocument.getPublicDocument());
-
     }
 
     @Test
@@ -389,7 +390,7 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
                     canceledTasks.add(task);
                 }
             }
-            if (canceledTasks.size() > 0) {
+            if (!canceledTasks.isEmpty()) {
                 jbpmService.saveTaskInstances(canceledTasks);
             }
         } catch (Exception e) {
@@ -402,22 +403,22 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     protected void checkPublic(DocumentModel doc) throws ClientException {
         assertTrue(session.hasPermission(notMember, doc.getRef(),
-                SecurityConstants.READ));
+                READ));
         assertFalse(session.hasPermission(notMember, doc.getRef(),
-                SecurityConstants.READ_WRITE));
+                READ_WRITE));
         assertTrue(session.hasPermission(member, doc.getRef(),
-                SecurityConstants.READ_WRITE));
+                READ_WRITE));
         assertTrue(session.hasPermission(administrator, doc.getRef(),
-                SecurityConstants.EVERYTHING));
+                EVERYTHING));
     }
 
     protected void checkRestricted(DocumentModel doc) throws ClientException {
         assertFalse(session.hasPermission(notMember, doc.getRef(),
-                SecurityConstants.READ));
+                READ));
         assertTrue(session.hasPermission(member, doc.getRef(),
-                SecurityConstants.READ_WRITE));
+                READ_WRITE));
         assertTrue(session.hasPermission(administrator, doc.getRef(),
-                SecurityConstants.EVERYTHING));
+                EVERYTHING));
     }
 
 }

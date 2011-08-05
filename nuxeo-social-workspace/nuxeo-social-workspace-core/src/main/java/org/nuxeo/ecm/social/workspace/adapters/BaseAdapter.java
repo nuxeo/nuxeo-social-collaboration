@@ -29,11 +29,11 @@ public abstract class BaseAdapter {
 
     protected DocumentModel doc;
 
-    public BaseAdapter(DocumentModel doc) {
+    protected BaseAdapter(DocumentModel doc) {
         this.doc = doc;
     }
 
-    protected Object getDocProperty(DocumentModel doc, String xpath) {
+    protected static Object getDocProperty(DocumentModel doc, String xpath) {
         try {
             return doc.getPropertyValue(xpath);
         } catch (ClientException e) {
@@ -41,7 +41,7 @@ public abstract class BaseAdapter {
         }
     }
 
-    protected void setDocProperty(DocumentModel doc, String xpath,
+    protected static void setDocProperty(DocumentModel doc, String xpath,
             Serializable value) {
         try {
             doc.setPropertyValue(xpath, value);

@@ -136,7 +136,7 @@ public class DefaultSubscriptionRequestHandler implements
     /**
      * Returns the dashboard management document, creates it if needed.
      */
-    private DocumentModel getSubscriptionRequestsRoot(CoreSession session,
+    private static DocumentModel getSubscriptionRequestsRoot(CoreSession session,
             SocialWorkspace socialWorkspace) throws ClientException {
         String subscriptionRequestsRootPath = new Path(
                 socialWorkspace.getPath()).append(
@@ -144,13 +144,13 @@ public class DefaultSubscriptionRequestHandler implements
         DocumentRef subscriptionRequestsRootRef = new PathRef(
                 subscriptionRequestsRootPath);
 
-        if (!session.exists(subscriptionRequestsRootRef)) {
+        if (session.exists(subscriptionRequestsRootRef)) {
+            return session.getDocument(subscriptionRequestsRootRef);
+        } else {
             DocumentModel subscriptionRequestsRoot = session.createDocumentModel(
                     socialWorkspace.getPath(), SUBSCRIPTION_REQUESTS_ROOT_NAME,
                     SUBSCRIPTION_REQUESTS_ROOT_TYPE);
             return session.createDocument(subscriptionRequestsRoot);
-        } else {
-            return session.getDocument(subscriptionRequestsRootRef);
         }
     }
 

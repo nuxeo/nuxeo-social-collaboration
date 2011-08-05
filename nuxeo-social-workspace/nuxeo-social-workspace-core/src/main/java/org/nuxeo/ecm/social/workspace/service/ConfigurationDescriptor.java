@@ -24,7 +24,7 @@ import java.io.Serializable;
 import org.nuxeo.common.xmap.annotation.XNode;
 import org.nuxeo.common.xmap.annotation.XObject;
 
-@XObject(value = "configuration")
+@XObject("configuration")
 public class ConfigurationDescriptor implements Serializable {
     private static final long serialVersionUID = 1L;
 

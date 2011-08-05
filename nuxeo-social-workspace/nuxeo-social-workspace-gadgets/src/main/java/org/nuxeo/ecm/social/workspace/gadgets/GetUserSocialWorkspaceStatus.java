@@ -72,7 +72,7 @@ public class GetUserSocialWorkspaceStatus {
         return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
     }
 
-    protected Blob buildResponse(DocumentModel sws, Status status)
+    protected static Blob buildResponse(DocumentModel sws, Status status)
             throws ClientException, UnsupportedEncodingException {
         JSONObject obj = new JSONObject();
         obj.element("status", status);

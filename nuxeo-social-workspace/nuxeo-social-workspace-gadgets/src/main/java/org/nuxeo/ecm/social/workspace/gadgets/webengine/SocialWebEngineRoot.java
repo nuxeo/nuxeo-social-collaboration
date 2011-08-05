@@ -254,7 +254,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 "docTypes", types).arg("categories", types.keySet());
     }
 
-    protected TypeManager getTypeService() throws ClientException {
+    protected static TypeManager getTypeService() throws ClientException {
         TypeManager typeService;
         try {
             typeService = Framework.getService(TypeManager.class);
@@ -295,7 +295,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         }
     }
 
-    protected PaginableDocumentModelList getChildren(DocumentModel doc,
+    protected static PaginableDocumentModelList getChildren(DocumentModel doc,
             int pageSize, int page) throws Exception {
         CoreSession session = doc.getCoreSession();
 
@@ -315,7 +315,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 chain);
     }
 
-    protected PaginableDocumentModelList search(DocumentModel doc,
+    protected static PaginableDocumentModelList search(DocumentModel doc,
             int pageSize, int page, String queryText) throws Exception {
         CoreSession session = doc.getCoreSession();
 
@@ -339,7 +339,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      * Computes a list with the ancestors of the document specified within the
      * SocialWorkspace.
      */
-    protected List<DocumentModel> getAncestors(DocumentModel doc)
+    protected static List<DocumentModel> getAncestors(DocumentModel doc)
             throws ClientException {
         List<DocumentModel> list = new ArrayList<DocumentModel>();
         CoreSession session = doc.getCoreSession();
@@ -351,14 +351,14 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return list;
     }
 
-    protected boolean isSocialWorkspace(DocumentModel doc) {
+    protected static boolean isSocialWorkspace(DocumentModel doc) {
         if (doc == null) {
             return false;
         }
         return "SocialWorkspace".equals(doc.getType());
     }
 
-    protected DocumentRef getDocumentRef(String ref) {
+    protected static DocumentRef getDocumentRef(String ref) {
         DocumentRef docRef;
         if (ref != null && ref.startsWith("/")) { // doc identified by absolute
                                                   // path
@@ -427,7 +427,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     protected static List<String> getDocsWithDeleteRight(DocumentModelList docs)
             throws ClientException {
         List<String> docsIdResult = new ArrayList<String>();
-        if (docs.size() == 0) {
+        if (docs.isEmpty()) {
             return docsIdResult;
         }
 
@@ -447,7 +447,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     protected static Map<String, String> getFullscreenViews(
             DocumentModelList docs) throws ClientException {
         Map<String, String> viewResults = new HashMap<String, String>();
-        if (docs.size() == 0) {
+        if (docs.isEmpty()) {
             return viewResults;
         }
 

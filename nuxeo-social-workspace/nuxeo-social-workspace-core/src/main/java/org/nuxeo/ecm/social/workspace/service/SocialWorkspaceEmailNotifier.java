@@ -122,20 +122,20 @@ public class SocialWorkspaceEmailNotifier {
      * Sends email to the user referenced by the {@code principalName}
      * when his request is accepted.
      */
-    public void notifyUserForSubscriptionRequestAccepted(CoreSession sesion,
+    public void notifyUserForSubscriptionRequestAccepted(CoreSession session,
             SocialWorkspace socialWorkspace, String principalName)
             throws ClientException {
-        notifyUser(sesion, socialWorkspace, principalName, true);
+        notifyUser(session, socialWorkspace, principalName, true);
     }
 
     /**
      * Sends email to the user referenced by the {@code principalName}
      * when his request is rejected.
      */
-    public void notifyUserForSubscriptionRequestRejected(CoreSession sesion,
+    public void notifyUserForSubscriptionRequestRejected(CoreSession session,
             SocialWorkspace socialWorkspace, String principalName)
             throws ClientException {
-        notifyUser(sesion, socialWorkspace, principalName, false);
+        notifyUser(session, socialWorkspace, principalName, false);
     }
 
     private void notifyUser(CoreSession session,
@@ -175,7 +175,7 @@ public class SocialWorkspaceEmailNotifier {
         }
     }
 
-    private String loadTemplate(String key) {
+    private static String loadTemplate(String key) {
         InputStream io = SocialWorkspaceComponent.class.getClassLoader().getResourceAsStream(
                 key);
         if (io != null) {

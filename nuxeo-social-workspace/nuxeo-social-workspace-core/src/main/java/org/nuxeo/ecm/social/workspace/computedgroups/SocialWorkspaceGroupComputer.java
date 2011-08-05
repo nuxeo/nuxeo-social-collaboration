@@ -88,7 +88,7 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
                 relationshipService = Framework.getService(
                         UserRelationshipService.class);
             } catch (Exception e) {
-                log.warn("Cannot retrive UserRelationship Service");
+                log.warn("Cannot retrieve UserRelationship Service");
                 log.debug(e, e);
             }
         }

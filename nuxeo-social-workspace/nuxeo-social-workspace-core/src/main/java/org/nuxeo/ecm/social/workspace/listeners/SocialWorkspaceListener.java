@@ -74,13 +74,13 @@ public class SocialWorkspaceListener implements EventListener {
         }
     }
 
-    private void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
-            EventContext ctx) throws ClientException {
+    private static void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
+            EventContext ctx) {
         getSocialWorkspaceService().handleSocialWorkspaceCreation(
                 socialWorkspace, ctx.getPrincipal());
     }
 
-    private void updateSocialWorkspaceVisibility(SocialWorkspace socialWorkspace) {
+    private static void updateSocialWorkspaceVisibility(SocialWorkspace socialWorkspace) {
         if (socialWorkspace.isPublic()) {
             socialWorkspace.makePublic();
         } else if (socialWorkspace.isPrivate()) {
@@ -88,12 +88,12 @@ public class SocialWorkspaceListener implements EventListener {
         }
     }
 
-    private void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
+    private static void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
         getSocialWorkspaceService().handleSocialWorkspaceDeletion(
                 socialWorkspace);
     }
 
-    private SocialWorkspaceService getSocialWorkspaceService() {
+    private static SocialWorkspaceService getSocialWorkspaceService() {
         try {
             return Framework.getService(SocialWorkspaceService.class);
         } catch (Exception e) {

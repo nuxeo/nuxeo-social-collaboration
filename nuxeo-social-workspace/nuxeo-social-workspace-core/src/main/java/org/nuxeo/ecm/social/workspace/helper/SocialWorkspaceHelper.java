@@ -87,7 +87,7 @@ public class SocialWorkspaceHelper {
         } else if (ADMINISTRATORS_SUFFIX.equals(name)) {
             return buildRelationAdministratorKind();
         }
-        log.warn("Trying to instanciate RelationshipKind from an unknown group: "
+        log.warn("Trying to instantiate RelationshipKind from an unknown group: "
                 + groupName);
         return null;
     }

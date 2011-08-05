@@ -56,7 +56,7 @@ public class VisibilitySocialDocumentListener implements
         }
     }
 
-    public void handleEvent(Event event) throws ClientException {
+    public static void handleEvent(Event event) throws ClientException {
 
         EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext)) {
@@ -78,7 +78,7 @@ public class VisibilitySocialDocumentListener implements
                 : isPublic);
     }
 
-    protected void updateSocialDocumentVisibility(DocumentModel document,
+    protected static void updateSocialDocumentVisibility(DocumentModel document,
             boolean isPublic) throws ClientException {
         if (isPublic) {
             toSocialDocument(document).makePublic();

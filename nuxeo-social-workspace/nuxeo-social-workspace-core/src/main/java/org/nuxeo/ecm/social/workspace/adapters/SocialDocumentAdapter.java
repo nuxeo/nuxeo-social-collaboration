@@ -107,10 +107,10 @@ public class SocialDocumentAdapter implements SocialDocument {
 
         DocumentModel publicProxy = getPublicProxy();
         if (publicProxy != null) {
-            if (!ARTICLE_TYPE.equals(sourceDocument.getType())) {
-                return updateExposedDocument(publicProxy, false);
-            } else {
+            if (ARTICLE_TYPE.equals(sourceDocument.getType())) {
                 getSession().removeDocument(publicProxy.getRef());
+            } else {
+                return updateExposedDocument(publicProxy, false);
             }
         }
 
@@ -182,14 +182,14 @@ public class SocialDocumentAdapter implements SocialDocument {
     protected void validateDocumentVisibility(DocumentModelList proxies,
             boolean isPublicProxies) throws ClientException {
         if (proxies.size() > 1) {
-            String message = String.format("Too many published document :%s, please check."
+            String message = String.format("Too many published document: %s, please check."
                     + sourceDocument.getPathAsString());
             throw new ClientException(message);
         }
 
         if (!isPublicProxies && ARTICLE_TYPE.equals(sourceDocument.getType())
                 && proxies.size() == 1) {
-            String message = String.format("Article can't have a private proxy :%s, please check."
+            String message = String.format("Article can't have a private proxy: %s, please check."
                     + sourceDocument.getPathAsString());
             throw new ClientException(message);
         }
@@ -209,10 +209,10 @@ public class SocialDocumentAdapter implements SocialDocument {
     @Override
     public DocumentModel getRestrictedDocument() throws ClientException {
         if (ARTICLE_TYPE.equals(sourceDocument.getType())) {
-            if (!isPublic()) {
-                return sourceDocument;
-            } else {
+            if (isPublic()) {
                 return null;
+            } else {
+                return sourceDocument;
             }
         }
 
@@ -283,7 +283,7 @@ public class SocialDocumentAdapter implements SocialDocument {
         return session;
     }
 
-    private SocialWorkspaceService getSocialWorkspaceService() {
+    private static SocialWorkspaceService getSocialWorkspaceService() {
         try {
             return Framework.getService(SocialWorkspaceService.class);
         } catch (Exception e) {

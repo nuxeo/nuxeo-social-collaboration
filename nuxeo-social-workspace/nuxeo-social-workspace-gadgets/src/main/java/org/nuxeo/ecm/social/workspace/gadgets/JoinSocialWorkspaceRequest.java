@@ -50,7 +50,7 @@ public class JoinSocialWorkspaceRequest {
     protected String contextPath;
 
     @OperationMethod
-    public void run() throws Exception {
+    public void run() {
         if (StringUtils.isBlank(contextPath)) { // nothing to do
             return;
         }

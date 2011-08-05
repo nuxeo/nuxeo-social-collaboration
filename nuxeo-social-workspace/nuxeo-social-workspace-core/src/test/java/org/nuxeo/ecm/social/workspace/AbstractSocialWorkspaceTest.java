@@ -50,7 +50,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.core",
         "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.user.relationships"})
-@LocalDeploy( { "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml" })
+@LocalDeploy("org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml")
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
@@ -117,7 +117,7 @@ public abstract class AbstractSocialWorkspaceTest {
         return createSocialWorkspace(socialWorkspaceName, false);
     }
 
-    protected NuxeoPrincipal createUserWithGroup(String username,
+    protected static NuxeoPrincipal createUserWithGroup(String username,
             String... groups) throws ClientException {
         NuxeoPrincipalImpl user = new NuxeoPrincipalImpl(username);
         user.allGroups = Arrays.asList(groups);

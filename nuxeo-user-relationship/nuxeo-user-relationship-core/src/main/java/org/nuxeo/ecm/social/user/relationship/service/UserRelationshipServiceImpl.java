@@ -304,7 +304,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
                     relationshipDirectory.close();
                 } catch (DirectoryException e) {
                     log.error("Error while trying to close relationships directory");
-                    log.debug("Exception occured", e);
+                    log.debug("Exception occurred", e);
                 }
             }
         }
@@ -334,7 +334,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
                     relationshipsDirectory.close();
                 } catch (DirectoryException e) {
                     log.error("Error while trying to close relationships directory");
-                    log.debug("Exception occured", e);
+                    log.debug("Exception occurred", e);
                 }
             }
         }

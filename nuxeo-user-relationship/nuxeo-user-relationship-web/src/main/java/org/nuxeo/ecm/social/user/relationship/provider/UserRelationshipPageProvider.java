@@ -45,8 +45,7 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.4.3
  */
 public class UserRelationshipPageProvider extends
-        AbstractPageProvider<DocumentModel> implements
-        PageProvider<DocumentModel> {
+        AbstractPageProvider<DocumentModel> {
 
     private static final Log log = LogFactory.getLog(UserRelationshipPageProvider.class);
 

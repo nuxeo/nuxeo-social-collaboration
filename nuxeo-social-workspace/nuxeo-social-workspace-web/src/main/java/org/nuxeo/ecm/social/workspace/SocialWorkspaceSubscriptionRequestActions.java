@@ -52,18 +52,17 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 @Name("socialWorkspaceSubscriptionRequestActions")
 @Scope(ScopeType.CONVERSATION)
 @Install(precedence = FRAMEWORK)
 public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
 
+    public static final String SUBSCRIPTION_REQUESTS_UPDATED = "subscriptionRequestsUpdated";
+
     private static final long serialVersionUID = -7362146679190186610L;
 
     private static final Log log = LogFactory.getLog(SocialWorkspaceSubscriptionRequestActions.class);
-
-    public static final String SUBSCRIPTION_REQUESTS_UPDATED = "subscriptionRequestsUpdated";
 
     @In(create = true, required = false)
     protected transient CoreSession documentManager;
@@ -101,7 +100,7 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
         Events.instance().raiseEvent(SUBSCRIPTION_REQUESTS_UPDATED);
     }
 
-    protected void processSubscriptionRequest(SocialWorkspace socialWorkspace,
+    protected static void processSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest, boolean accept) {
         try {
             if (accept) {
@@ -118,7 +117,7 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
 
     public boolean enableRequestActions() throws ClientException {
         List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             return false;
         }
         for (DocumentModel doc : list) {
@@ -137,7 +136,7 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
 
     public boolean enableSocialWorkspaceActions() throws ClientException {
         List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             return false;
         }
         for (DocumentModel doc : list) {
@@ -175,7 +174,7 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
         documentManager.save();
     }
 
-    private void removeValidationTasks(DocumentModel doc) {
+    private static void removeValidationTasks(DocumentModel doc) {
         List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
         try {
             JbpmService jbpmService = Framework.getService(JbpmService.class);
@@ -187,7 +186,7 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
                     canceledTasks.add(task);
                 }
             }
-            if (canceledTasks.size() > 0) {
+            if (!canceledTasks.isEmpty()) {
                 jbpmService.saveTaskInstances(canceledTasks);
             }
         } catch (Exception e) {

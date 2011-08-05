@@ -58,12 +58,11 @@ public class SocialWorkspaceActions implements Serializable {
     @In(create = true)
     protected transient NuxeoPrincipal currentUser;
 
-    public SocialWorkspace toSocialWorkspace(DocumentModel doc) {
+    public static SocialWorkspace toSocialWorkspace(DocumentModel doc) {
         return SocialWorkspaceHelper.toSocialWorkspace(doc);
     }
 
-    public boolean isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()
-            throws ClientException {
+    public boolean isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() {
         DocumentModel doc = navigationContext.getCurrentDocument();
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(doc);
         return socialWorkspace.isAdministratorOrMember(currentUser);
