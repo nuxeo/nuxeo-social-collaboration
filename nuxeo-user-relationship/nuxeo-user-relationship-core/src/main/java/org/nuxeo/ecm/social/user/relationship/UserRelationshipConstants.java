@@ -37,13 +37,22 @@ public class UserRelationshipConstants {
 
     public static final String RELATIONSHIP_FIELD_TARGET = "target";
 
-    public static final String RELATIONSHIP_FIELD_TYPE = "kind";
+    public static final String RELATIONSHIP_FIELD_KIND = "kind";
 
-    public static final String TYPE_SCHEMA_NAME = "actor_relationship_kind";
+    public static final String KIND_SCHEMA_NAME = "actor_relationship_kind";
 
-    public static final String TYPE_FIELD_GROUP = "group";
+    public static final String KIND_FIELD_GROUP = "group";
 
-    public static final String TYPE_FIELD_NAME = "name";
+    public static final String KIND_FIELD_NAME = "name";
 
-    public static final String TYPE_FIELD_LABEL = "label";
+    public static final String KIND_FIELD_LABEL = "label";
+
+    public static final String RELATIONSHIP_PROPERTY_KIND = RELATIONSHIP_SCHEMA_NAME
+            + ":" + RELATIONSHIP_FIELD_KIND;
+
+    public static final String KIND_PROPERTY_GROUP = KIND_SCHEMA_NAME + ":"
+            + KIND_FIELD_GROUP;
+
+    public static final String KIND_PROPERTY_NAME = KIND_SCHEMA_NAME + ":"
+            + KIND_FIELD_NAME;
 }

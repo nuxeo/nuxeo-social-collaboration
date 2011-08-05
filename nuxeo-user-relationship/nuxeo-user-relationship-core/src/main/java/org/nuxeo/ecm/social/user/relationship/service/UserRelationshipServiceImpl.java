@@ -19,13 +19,13 @@
 
 package org.nuxeo.ecm.social.user.relationship.service;
 
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.KIND_PROPERTY_GROUP;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.KIND_PROPERTY_NAME;
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_ACTOR;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_KIND;
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TARGET;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TYPE;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_PROPERTY_KIND;
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_SCHEMA_NAME;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.TYPE_FIELD_GROUP;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.TYPE_FIELD_NAME;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.TYPE_SCHEMA_NAME;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -134,7 +134,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
         Map<String, Serializable> filters = new HashMap<String, Serializable>();
         filters.put(RELATIONSHIP_FIELD_ACTOR, actorId);
         if (!(kind == null || kind.isEmpty())) {
-            filters.put(RELATIONSHIP_FIELD_TYPE, kind.toString());
+            filters.put(RELATIONSHIP_FIELD_KIND, kind.toString());
         }
         return buildListFromProperty(
                 queryRelationshipsDirectory(filters, false),
@@ -164,10 +164,8 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             registeredKinds = new HashMap<String, List<RelationshipKind>>();
             for (DocumentModel type : getAllTypesFromDirectory()) {
                 try {
-                    String kindGroup = (String) type.getPropertyValue(TYPE_SCHEMA_NAME
-                            + ":" + TYPE_FIELD_GROUP);
-                    String kindName = (String) type.getPropertyValue(TYPE_SCHEMA_NAME
-                            + ":" + TYPE_FIELD_NAME);
+                    String kindGroup = (String) type.getPropertyValue(KIND_PROPERTY_GROUP);
+                    String kindName = (String) type.getPropertyValue(KIND_PROPERTY_NAME);
                     RelationshipKind kind = RelationshipKind.newInstance(
                             kindGroup, kindName);
 
@@ -192,8 +190,8 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             allKinds = registeredKinds.get(group);
         }
 
-        return allKinds != null ? UnmodifiableList.decorate(allKinds) :
-                Collections.<RelationshipKind>emptyList();
+        return allKinds != null ? UnmodifiableList.decorate(allKinds)
+                : Collections.<RelationshipKind> emptyList();
     }
 
     private DocumentModelList getAllTypesFromDirectory() {
@@ -231,7 +229,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             Map<String, Serializable> relationship = new HashMap<String, Serializable>();
             relationship.put(RELATIONSHIP_FIELD_ACTOR, actorId);
             relationship.put(RELATIONSHIP_FIELD_TARGET, targetId);
-            relationship.put(RELATIONSHIP_FIELD_TYPE, kind.toString());
+            relationship.put(RELATIONSHIP_FIELD_KIND, kind.toString());
 
             DocumentModelList relationships = relationshipsDirectory.query(relationship);
             if (relationships.isEmpty()) {
@@ -269,7 +267,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             Map<String, Serializable> filter = new HashMap<String, Serializable>();
             filter.put(RELATIONSHIP_FIELD_ACTOR, actorId);
             filter.put(RELATIONSHIP_FIELD_TARGET, targetId);
-            filter.put(RELATIONSHIP_FIELD_TYPE, kind.toString());
+            filter.put(RELATIONSHIP_FIELD_KIND, kind.toString());
 
             DocumentModelList relations = relationshipDirectory.query(filter);
             if (relations.isEmpty()) {
@@ -305,7 +303,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
                     RELATIONSHIP_DIRECTORY_NAME);
 
             Set<String> fulltextFields = new HashSet<String>();
-            fulltextFields.add(RELATIONSHIP_FIELD_TYPE);
+            fulltextFields.add(RELATIONSHIP_FIELD_KIND);
             if (withFulltext) {
                 fulltextFields.addAll(filter.keySet());
             }
@@ -342,9 +340,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     protected static RelationshipKind buildKindFromRelationshipModel(
             DocumentModel relation) throws ClientException {
-        RelationshipKind kind = RelationshipKind.fromString(
-                (String) relation.getPropertyValue(RELATIONSHIP_SCHEMA_NAME + ":"
-                        + RELATIONSHIP_FIELD_TYPE));
+        RelationshipKind kind = RelationshipKind.fromString((String) relation.getPropertyValue(RELATIONSHIP_PROPERTY_KIND));
         return kind;
     }
 
