@@ -63,7 +63,6 @@ public class TestPublicSocialWorkspaceAccess extends
         DocumentModelList docs = session.query(query);
         assertEquals(0, docs.size());
 
-        // TODO : Try to find why query fulltext doesn't work
         socialWorkspaces = service.searchDetachedPublicSocialWorkspaces(
                 session, "marketing");
         assertEquals(1, socialWorkspaces.size());
