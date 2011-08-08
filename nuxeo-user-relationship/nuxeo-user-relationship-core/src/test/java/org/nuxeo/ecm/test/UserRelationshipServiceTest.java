@@ -3,10 +3,12 @@ package org.nuxeo.ecm.test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -100,6 +102,27 @@ public class UserRelationshipServiceTest {
 
         user1Relations = relationshipService.getTargetsOfKind(user1, relation);
         assertEquals(0, user1Relations.size());
+    }
+
+    @Test
+    public void testRelationshipStringBuilder() {
+        String relation1 = "circle:";
+        String relation2 = ":friend";
+        String relation3 = "circle:friend";
+
+        RelationshipKind kind = RelationshipKind.fromString(relation1);
+        assertEquals("circle", kind.getGroup());
+        assertTrue(StringUtils.isEmpty(kind.getName()));
+
+        kind = RelationshipKind.fromString(relation2);
+        assertEquals("friend", kind.getName());
+        assertTrue(StringUtils.isEmpty(kind.getGroup()));
+
+        kind = RelationshipKind.fromString(relation3);
+        assertEquals("circle", kind.getGroup());
+        assertEquals("friend", kind.getName());
+
+        assertNull(RelationshipKind.fromString("circleFriend")); //Without separator char
     }
 
     @Test

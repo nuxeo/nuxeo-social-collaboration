@@ -32,9 +32,11 @@ public class RelationshipKind implements Serializable {
     }
 
     public static RelationshipKind fromString(String value) {
-        if (value.contains(SEPARATOR)) {
-            String[] splitted = StringUtils.split(value, SEPARATOR);
-            return new RelationshipKind(splitted[0], splitted[1]);
+        int pos = value.indexOf(SEPARATOR);
+        if (pos >= 0) {
+            String group = value.substring(0, pos);
+            String name = value.substring(pos + 1, value.length());
+            return new RelationshipKind(group, name);
         } else {
             return null;
         }
