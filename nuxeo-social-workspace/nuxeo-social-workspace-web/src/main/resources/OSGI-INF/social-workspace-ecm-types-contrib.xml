@@ -58,6 +58,9 @@
       <views>
         <view id="fullscreen" value="view_social_workspace_articles" />
         <view id="after-create" value="view_social_workspace_articles"/>
+
+        <view id="social_collaboration" value="social_collaboration" />
+        <view id="after-create" value="view_social_workspace_articles"/>
       </views>
     </type>
 

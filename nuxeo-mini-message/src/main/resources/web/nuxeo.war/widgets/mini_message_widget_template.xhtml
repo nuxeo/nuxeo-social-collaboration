@@ -1,0 +1,21 @@
+<f:subview xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:h="http://java.sun.com/jsf/html"
+  id="#{widget.id}">
+
+<style>
+  .ownMiniMessage {
+    background-color: yellow;
+  }
+</style>
+
+  <c:set var="cssClass" value="#{nxu:test(currentUser.name == field_0, 'ownMiniMessage', '')}" />
+  <div class="#{cssClass}">
+    <span>#{nxu:userFullName(field_0)}</span>
+    <span>#{field_1}</span>
+    <span>#{nxu:formatDateUsingBasicFormatter(field_2)}</span>
+  </div>
+
+</f:subview>

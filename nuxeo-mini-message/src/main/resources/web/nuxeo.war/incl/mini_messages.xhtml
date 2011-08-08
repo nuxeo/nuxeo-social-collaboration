@@ -1,0 +1,26 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxd="http://nuxeo.org/nxweb/document"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax">
+
+  <a4j:outputPanel id="miniMessagesPanel">
+    <h:form id="newMiniMessageForm">
+      <h:inputTextarea value="#{miniMessageActions.newMessage}" cols="30" rows="10" />
+      <p class="newMiniMessageActions">
+        <a4j:commandButton styleClass="button" value="#{messages['command.write']}"
+          action="#{miniMessageActions.createNewMiniMessage()}"
+          reRender="miniMessagesPanel" />
+      </p>
+    </h:form>
+
+    <nxu:set var="contentViewName" value="mini_messages_for_user">
+      <ui:decorate template="/incl/content_view.xhtml">
+      </ui:decorate>
+    </nxu:set>
+
+  </a4j:outputPanel>
+
+</div>

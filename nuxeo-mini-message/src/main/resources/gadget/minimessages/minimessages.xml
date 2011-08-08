@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Mini Messages"
+    description=""
+    author="troger" author_email="troger@nuxeo.com" height="280">
+    <#include "dynamic-translations.ftl"/>
+    <Require feature="dynamic-height" />
+    <#include "default-oauth-prefs.ftl"/>
+  </ModulePrefs>
+  <Content type="html">
+
+<![CDATA[
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
+  <link rel="stylesheet" type="text/css" href="minimessages.css"/>
+
+  <!-- insert JS Context -->
+  ${jsContext}
+
+  <script src="${specDirectoryUrl}default-automation-request.js"></script>
+
+  <script>
+    var prefs = new gadgets.Prefs();
+
+    var miniMessages = [];
+
+    function displayMiniMessages() {
+      var htmlContent = '';
+
+      for (var i = 0; i < miniMessages.length; i++) {
+        var cssClass = 'miniMessage';
+        if (miniMessages[i].isCurrentUserMiniMessage) {
+          cssClass += ' ownMiniMessage';
+        }
+        htmlContent += '<div class="' + cssClass + '">';
+        htmlContent += '<div>';
+        htmlContent += '<span>' + miniMessages[i].fullName + ' (' + miniMessages[i].actor + ')' + '</span>';
+        htmlContent += '</div>';
+        htmlContent += '<div>';
+        htmlContent += '<span>' + miniMessages[i].message + '</span>';
+        htmlContent += '</div>';
+        htmlContent += '<div>';
+        htmlContent += '<span>' + miniMessages[i].publishedDate + '</span>';
+        htmlContent += '</div>';
+        htmlContent += '</div>';
+      }
+
+      _gel('miniMessagesContainer').innerHTML = htmlContent;
+      gadgets.window.adjustHeight();
+    }
+
+    function loadMiniMessages() {
+      var NXRequestParams= { operationId : 'Services.GetMiniMessageForActor',
+        operationParams: {
+          language: prefs.getLang(),
+        },
+        operationContext: {},
+        operationCallback: function(response, params) {
+          miniMessages = response.data;
+          displayMiniMessages();
+        }
+      };
+
+      doAutomationRequest(NXRequestParams);
+    }
+
+    gadgets.util.registerOnLoadHandler(function() {
+      loadMiniMessages();
+      window.setInterval(loadMiniMessages, 30*1000);
+    });
+
+  </script>
+  </head>
+  <body>
+
+    <div id="content">
+      <div id="miniMessagesContainer">
+      </div>
+      <div class="navigationBar">
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+
+    <#include "default-request-controls.ftl"/>
+
+  </body>
+</html>
+]]>
+  </Content>
+</Module>

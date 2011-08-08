@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.ecm.social.mini.message.layouts">
+
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+    point="widgets">
+
+    <widget name="mini_message" type="template">
+      <labels>
+        <label mode="any" />
+      </labels>
+      <fields>
+        <field>data.actor</field>
+        <field>data.message</field>
+        <field>data.publishedDate</field>
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/mini_message_widget_template.xhtml</property>
+      </properties>
+      <widgetModes>
+        <mode value="edit">hidden</mode>
+      </widgetModes>
+    </widget>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+    point="layouts">
+
+    <layout name="mini_messages">
+      <templates>
+        <template mode="any">/layouts/layout_listing_template.xhtml</template>
+      </templates>
+      <columns>
+        <column>
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+          </properties>
+          <widget>mini_message</widget>
+        </column>
+      </columns>
+    </layout>
+
+  </extension>
+
+</component>

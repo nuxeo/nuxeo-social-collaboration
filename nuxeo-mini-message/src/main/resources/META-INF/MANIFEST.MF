@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Nuxeo Mini Message
+Bundle-SymbolicName: org.nuxeo.ecm.social.mini.message;singleton:=true
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Nuxeo-Component: OSGI-INF/mini-message-service.xml,
+ OSGI-INF/activity-stream-filters-contrib.xml,
+ OSGI-INF/operations-contrib.xml,
+ OSGI-INF/actions-contrib.xml,
+ OSGI-INF/pageproviders-contrib.xml,
+ OSGI-INF/contentviews-contrib.xml,
+ OSGI-INF/layouts-contrib.xml,
+ OSGI-INF/gadgets-contrib.xml
