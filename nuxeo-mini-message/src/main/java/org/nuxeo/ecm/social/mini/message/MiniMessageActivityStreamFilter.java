@@ -115,7 +115,7 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
         if (pageSize > 0) {
             query.setMaxResults(pageSize);
             if (currentPage > 0) {
-                query.setFirstResult((currentPage - 1) * pageSize);
+                query.setFirstResult(currentPage * pageSize);
             }
         }
         return query.getResultList();

@@ -73,7 +73,7 @@ public class TestMiniMessagePageProviders extends AbstractMiniMessageTest {
         PageProvider<MiniMessage> miniMessagePageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
                 PROVIDER_NAME, null, null, null, properties);
         assertNotNull(miniMessagePageProvider);
-        miniMessagePageProvider.setMaxPageSize(3);
+        miniMessagePageProvider.setPageSize(3);
 
         List<MiniMessage> miniMessages = miniMessagePageProvider.getCurrentPage();
         assertNotNull(miniMessages);

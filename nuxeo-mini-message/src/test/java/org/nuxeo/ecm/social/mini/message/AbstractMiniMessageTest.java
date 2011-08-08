@@ -112,7 +112,7 @@ public abstract class AbstractMiniMessageTest {
                 now.plusMinutes(10).toDate());
         miniMessageService.addMiniMessage(
                 "Fry",
-                "We‚Äôve lost power of the forward Gameboy! Mario not responding!",
+                "We've lost power of the forward Gameboy! Mario not responding!",
                 now.plusMinutes(15).toDate());
         miniMessageService.addMiniMessage("Zapp Brannigan",
                 "Kif, I have made it with a woman. Inform the men.",

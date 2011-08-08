@@ -56,8 +56,8 @@ public class MiniMessageForActorPageProvider extends
             long pageSize = getMinMaxPageSize();
             pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFor(
                     getActor(), getRelationshipKind(), (int) pageSize,
-                    (int) offset));
-            resultsCount = Long.MAX_VALUE - 1;
+                    (int) getCurrentPageIndex()));
+            resultsCount = Integer.MAX_VALUE - 1;
         }
         return pageMiniMessages;
     }
