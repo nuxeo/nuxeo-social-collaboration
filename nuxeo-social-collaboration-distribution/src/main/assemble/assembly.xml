@@ -27,7 +27,7 @@
     <echo>Building Nuxeo Social Collaboration Distribution</echo>
 
     <antcall target="build-standard" />
-    <antcall target="cleanstage" />
+    <!--<antcall target="cleanstage" />-->
   </target>
 
   <target name="build-standard" description="Build default distribution"
@@ -45,6 +45,10 @@
           <artifact groupId="org.nuxeo.ecm.social" />
         </includes>
       </artifact:set>
+    </copy>
+
+    <copy todir="${tomcatdir}/templates" overwrite="true">
+      <fileset dir="src/main/resources/templates/" />
     </copy>
 
     <chmod dir="${tomcatdir}/bin" perm="750" includes="*.sh,*ctl" />
