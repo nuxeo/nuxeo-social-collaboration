@@ -11,11 +11,19 @@
   }
 </style>
 
-  <c:set var="cssClass" value="#{nxu:test(currentUser.name == field_0, 'ownMiniMessage', '')}" />
+  <c:set var="cssClass" value="miniMessage #{nxu:test(currentUser.name == field_0, 'owner', '')}" />
   <div class="#{cssClass}">
-    <span>#{nxu:userFullName(field_0)}</span>
-    <span>#{field_1}</span>
-    <span>#{nxu:formatDateUsingBasicFormatter(field_2)}</span>
+    <div class="username">
+      <span>#{nxu:userFullName(field_0)}</span>
+    </div>
+    <div class="message">
+      <span>#{field_1}</span>
+    </div>
+    <div class="timestamp">
+      <span>#{nxu:formatDateUsingBasicFormatter(field_2)}</span>
+    </div>
+
+
   </div>
 
 </f:subview>

@@ -31,16 +31,16 @@
       for (var i = 0; i < miniMessages.length; i++) {
         var cssClass = 'miniMessage';
         if (miniMessages[i].isCurrentUserMiniMessage) {
-          cssClass += ' ownMiniMessage';
+          cssClass += ' owner';
         }
         htmlContent += '<div class="' + cssClass + '">';
-        htmlContent += '<div>';
+        htmlContent += '<div class="username">';
         htmlContent += '<span>' + miniMessages[i].fullName + ' (' + miniMessages[i].actor + ')' + '</span>';
         htmlContent += '</div>';
-        htmlContent += '<div>';
+        htmlContent += '<div class="message">';
         htmlContent += '<span>' + miniMessages[i].message + '</span>';
         htmlContent += '</div>';
-        htmlContent += '<div>';
+        htmlContent += '<div class="timestamp">';
         htmlContent += '<span>' + miniMessages[i].publishedDate + '</span>';
         htmlContent += '</div>';
         htmlContent += '</div>';
