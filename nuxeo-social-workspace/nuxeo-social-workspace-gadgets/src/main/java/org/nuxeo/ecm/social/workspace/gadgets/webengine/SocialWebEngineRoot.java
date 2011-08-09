@@ -63,8 +63,8 @@ import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * WebEngine handler for library gadget requests.
- *
+ * WebEngine handler for gadgets requests.
+ * 
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @Path("/social")

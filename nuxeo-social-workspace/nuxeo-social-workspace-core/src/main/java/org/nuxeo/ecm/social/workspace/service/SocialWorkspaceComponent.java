@@ -49,6 +49,7 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.impl.DocumentModelImpl;
+import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
@@ -338,7 +339,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
     }
 
-    private static void initializeNewsItemsRootRights(SocialWorkspace socialWorkspace) {
+    private static void initializeNewsItemsRootRights(
+            SocialWorkspace socialWorkspace) {
         try {
             CoreSession session = socialWorkspace.getDocument().getCoreSession();
             PathRef newsItemsRootPath = new PathRef(
@@ -545,6 +547,52 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             RelationshipKind kind, String pattern) {
         return getUserRelationshipService().getTargetsWithFulltext(
                 socialWorkspace.getId(), kind, pattern);
+    }
+
+    public List<String> searchMembers(SocialWorkspace socialWorkspace,
+            String pattern) {
+        // get members of the social workspace
+        List<String> list = searchUsers(socialWorkspace,
+                buildRelationMemberKind(), null);
+        return filterUsers(pattern, list);
+    }
+
+    public List<String> searchAdministrators(SocialWorkspace socialWorkspace,
+            String pattern) {
+        // get administrators of the social workspace
+        List<String> list = searchUsers(socialWorkspace,
+                buildRelationAdministratorKind(), null);
+        return filterUsers(pattern, list);
+    }
+
+    private List<String> filterUsers(String pattern, List<String> validNames) {
+        List<String> members = new ArrayList<String>();
+        DocumentModelList users = null;
+        // get users that match the pattern
+        try {
+            users = getUserManager().searchUsers(pattern);
+        } catch (ClientException e) {
+            log.warn("failed to get users that match pattern:" + pattern, e);
+        }
+        if (users != null) {
+            for (DocumentModel user : users) {
+                String name;
+                try {
+                    name = (String) user.getProperty(
+                            getUserManager().getUserSchemaName(),
+                            getUserManager().getUserIdField());
+                    if (validNames.contains(name)) {
+                        members.add(name);
+                    }
+                } catch (PropertyException e) {
+                    log.debug(e, e);
+                } catch (ClientException e) {
+                    log.debug(e, e);
+                }
+
+            }
+        }
+        return members;
     }
 
     private UserRelationshipService getUserRelationshipService() {

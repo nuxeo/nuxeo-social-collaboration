@@ -21,7 +21,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Default implementation of {@see SocialWorkspace}.
- *
+ * 
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
@@ -121,14 +121,12 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public List<String> searchMembers(String pattern) {
-        return getSocialWorkspaceService().searchUsers(this,
-                buildRelationMemberKind(), pattern);
+        return getSocialWorkspaceService().searchMembers(this, pattern);
     }
 
     @Override
     public List<String> searchAdministrators(String pattern) {
-        return getSocialWorkspaceService().searchUsers(this,
-                buildRelationAdministratorKind(), pattern);
+        return getSocialWorkspaceService().searchAdministrators(this, pattern);
     }
 
     @Override

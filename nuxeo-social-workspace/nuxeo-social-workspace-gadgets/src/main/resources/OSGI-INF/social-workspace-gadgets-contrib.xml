@@ -40,6 +40,13 @@
       <icon>gadget-library.png</icon>
     </internalGadget>
 
+    <internalGadget name="members" disabled="false">
+      <mountPoint>/members</mountPoint>
+      <directory>members</directory>
+      <entryPoint>members.xml</entryPoint>
+      <category>Espace collaboratif (privé)</category>
+    </internalGadget>
+
     <internalGadget name="usersocialworkspaces" disabled="false">
       <mountPoint>/usersocialworkspaces</mountPoint>
       <directory>usersocialworkspaces</directory>

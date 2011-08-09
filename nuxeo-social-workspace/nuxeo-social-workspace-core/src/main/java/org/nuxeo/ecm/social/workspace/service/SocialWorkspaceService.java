@@ -40,7 +40,7 @@ public interface SocialWorkspaceService {
      * <li>create related groups</li>
      * <li>put specific ACLs</li>
      * </ul>
-     *
+     * 
      * @param principal the Principal initializing the Social Workspace
      */
     void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
@@ -81,7 +81,7 @@ public interface SocialWorkspaceService {
 
     /**
      * Adds a user to the @{code socialWorkspace} administrators group.
-     *
+     * 
      * @return {@code true} if the user was successfully added to the
      *         administrators group, {@code false} otherwise.
      */
@@ -90,7 +90,7 @@ public interface SocialWorkspaceService {
 
     /**
      * Adds a user to the @{code socialWorkspace} members group.
-     *
+     * 
      * @return {@code true} if the user was successfully added to the members
      *         group, {@code false} otherwise.
      */
@@ -127,7 +127,7 @@ public interface SocialWorkspaceService {
     /**
      * Gets the number of days before a social workspace expires without
      * validation.
-     *
+     * 
      * @return number of days
      */
     int getValidationDays();
@@ -171,11 +171,26 @@ public interface SocialWorkspaceService {
 
     /**
      * Returns all matching users from a Social Workspace, or an empty list.
-     *
+     * 
      * @param kind can be null or empty to search through all users.
      * @param pattern can be blank.
      */
     List<String> searchUsers(SocialWorkspace socialWorkspace,
             RelationshipKind kind, String pattern);
 
+    /**
+     * Returns all matching members from a Social Workspace, or an empty list.
+     * 
+     * @param pattern can be blank.
+     */
+    List<String> searchMembers(SocialWorkspace socialWorkspace, String pattern);
+
+    /**
+     * Returns all matching administrators from a Social Workspace, or an empty
+     * list.
+     * 
+     * @param pattern can be blank.
+     */
+    List<String> searchAdministrators(SocialWorkspace socialWorkspace,
+            String pattern);
 }

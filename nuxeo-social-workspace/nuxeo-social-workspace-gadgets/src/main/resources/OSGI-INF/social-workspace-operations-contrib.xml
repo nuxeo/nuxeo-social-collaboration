@@ -19,6 +19,9 @@
   <operation
       class="org.nuxeo.ecm.social.workspace.gadgets.GetPublicSocialWorkspaces" />
 
+  <operation
+      class="org.nuxeo.ecm.social.workspace.gadgets.GetSocialWorkspaceMembers" />
+
   </extension>
 
 </component>

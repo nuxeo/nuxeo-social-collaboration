@@ -72,7 +72,7 @@ public class GetSocialWorkspaceMembers {
     public Blob run() throws Exception {
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
                 session, new PathRef(contextPath));
-        List<String> users = socialWorkspace.searchUsers(pattern);
+        List<String> users = socialWorkspace.searchMembers(pattern);
         return buildResponse(users);
     }
 
