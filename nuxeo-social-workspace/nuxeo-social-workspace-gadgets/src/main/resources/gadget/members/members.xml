@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Members"
+    description="Members"
+    author="Eugen Ionica" author_email="ei@nuxeo.com"
+    height="300">
+    <Require feature="setprefs"/>
+    <#include "dynamic-translations.ftl"/>
+    <Require feature="dynamic-height" />
+    <Require feature="settitle" />
+  </ModulePrefs>
+  <UserPref name="pageSize" display_name="Members per page" default_value="5"/>
+
+  <#include "context-prefs.ftl"/>
+  <Content type="html">
+
+<![CDATA[
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
+  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/documentlists.css"/>
+  <link rel="stylesheet" type="text/css" href="members.css"/>
+  <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}/css/jquery.fancybox.css" />
+
+  <!-- insert JS Context -->
+  ${jsContext}
+  <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,jquery.fancybox.js"></script>
+  <script src="${specDirectoryUrl}default-automation-request.js"></script>
+  <script type="text/javascript" src="${specDirectoryUrl}context-management.js"></script>
+  <script type="text/javascript">
+    var prefs  = new _IG_Prefs(__MODULE_ID__);
+  </script>
+  <script type="text/javascript" src="members.js"></script>
+  </head>
+
+  <body>
+     <div class="content" id="content">
+     	<#include "default-request-controls.ftl"/>
+     	<div class="tools">
+     		<div id="searchBox">
+     		<table>
+      			<tr>
+       				<td><input type="text" name="query" id ="query"></td>
+       				<td><input type="button" value="__MSG_command.search__" onclick="doSearch()"/></td>
+      			</tr>
+     		</table>
+     		</div>
+     	</div>
+     	<div id="list" style="display:none">
+        	<div id="pageNavigationControls">
+          		<input type="image" id="navFirstPage" src="${clientSideBaseUrl}icons/action_page_rewind.gif"/>
+          		<input type="image" id="navPrevPage" src="${clientSideBaseUrl}icons/action_page_previous.gif"/>
+          		<span class="currentPageStatus" id="pageInfo"></span>
+          		<input type="image" id="navNextPage" src="${clientSideBaseUrl}icons/action_page_next.gif"/>
+          		<input type="image" id="navLastPage" src="${clientSideBaseUrl}icons/action_page_fastforward.gif"/>
+         	</div>
+        	<div id="listData">
+          		<!-- here comes the list data -->
+        	</div>
+ 		</div>
+ 		<div id="message" style="display:none">
+ 		<div>
+     </div>
+  </body>
+</html>
+]]>
+
+  </Content>
+</Module>
