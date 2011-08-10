@@ -20,14 +20,15 @@
   </target>
 
   <target name="expand" unless="no.build">
-    <artifact:expand depth="3" />
+    <artifact:nuxeo-expand />
+    <!--<artifact:print output="${basedir}/dependency-tree.log" />-->
   </target>
 
   <target name="build" depends="init">
     <echo>Building Nuxeo Social Collaboration Distribution</echo>
 
     <antcall target="build-standard" />
-    <!--<antcall target="cleanstage" />-->
+    <antcall target="cleanstage" />
   </target>
 
   <target name="build-standard" description="Build default distribution"
@@ -43,6 +44,7 @@
       <artifact:set>
         <includes>
           <artifact groupId="org.nuxeo.ecm.social" />
+          <artifact groupId="org.nuxeo.ecm.platform" artifactId="nuxeo-activity" />
         </includes>
       </artifact:set>
     </copy>
