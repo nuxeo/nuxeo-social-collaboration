@@ -42,12 +42,12 @@
     <div>
       <c:if test="#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
         <ui:decorate template="/incl/tabs/social_workspace_private_dashboard.xhtml">
-          <ui:define name="social_workspace_dashboard_actions"></ui:define>
+          <ui:define name="social_workspace_dashboard_actions"/>
         </ui:decorate>
       </c:if>
       <c:if test="#{!socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
         <ui:decorate template="/incl/tabs/social_workspace_public_dashboard.xhtml">
-          <ui:define name="social_workspace_dashboard_actions"></ui:define>
+          <ui:define name="social_workspace_dashboard_actions"/>
         </ui:decorate>
       </c:if>
     </div>

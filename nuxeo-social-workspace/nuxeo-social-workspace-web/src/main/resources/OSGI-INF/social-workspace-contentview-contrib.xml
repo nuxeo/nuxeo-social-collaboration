@@ -30,7 +30,7 @@
     <selectionList>CURRENT_SELECTION</selectionList>
     <actions category="MANAGE_REQUESTS" />
 
-   </contentView>
+  </contentView>
 
     <contentView name="SocialWorkspaces">
       <coreQueryPageProvider>
@@ -53,57 +53,63 @@
       </resultLayouts>
     </contentView>
 
-    <contentView name="article_listing_view">
-      <coreQueryPageProvider>
-        <property name="coreSession">#{documentManager}</property>
-        <pattern>
-          SELECT * FROM Article WHERE ecm:isProxy = 0
-          AND ecm:mixinType != 'HiddenInNavigation'
-          AND ecm:isCheckedInVersion = 0
-          AND ecm:currentLifeCycleState != 'deleted'
-          AND ecm:path STARTSWITH ?
+  <contentView name="article_listing_view">
+    <coreQueryPageProvider>
+      <property name="coreSession">#{documentManager}</property>
+      <pattern>
+        SELECT *
+          FROM Article
+         WHERE ecm:isProxy = 0
+               AND ecm:mixinType != 'HiddenInNavigation'
+               AND ecm:isCheckedInVersion = 0
+               AND ecm:currentLifeCycleState != 'deleted'
+               AND ecm:path STARTSWITH ?
         </pattern>
-        <pageSize>20</pageSize>
-          <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}</parameter>
-      </coreQueryPageProvider>
-        <refresh>
-          <event>documentChanged</event>
-          <event>documentChildrenChanged</event>
-         </refresh>
-               <cacheKey>#{currentDocument.id}</cacheKey>
-        <cacheSize>10</cacheSize>
-        <selectionList>CURRENT_SELECTION</selectionList>
-      <resultLayouts>
-       <layout name="article_listing" title="document_listing"
-            translateTitle="false" iconPath="/icons/document_listing_icon.png" />
-      </resultLayouts>
-    </contentView>
+      <pageSize>20</pageSize>
+      <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}
+      </parameter>
+    </coreQueryPageProvider>
+    <refresh>
+      <event>documentChanged</event>
+      <event>documentChildrenChanged</event>
+    </refresh>
+    <cacheKey>#{currentDocument.id}</cacheKey>
+    <cacheSize>10</cacheSize>
+    <selectionList>CURRENT_SELECTION</selectionList>
+    <resultLayouts>
+      <layout name="article_listing" title="document_listing"
+        translateTitle="false" iconPath="/icons/document_listing_icon.png" />
+    </resultLayouts>
+  </contentView>
 
-    <contentView name="news_items_listing_view">
-      <coreQueryPageProvider>
-        <property name="coreSession">#{documentManager}</property>
-        <pattern>
-          SELECT * FROM NewsItem WHERE ecm:isProxy = 0
-          AND ecm:mixinType != 'HiddenInNavigation'
-          AND ecm:isCheckedInVersion = 0
-          AND ecm:currentLifeCycleState != 'deleted'
-          AND ecm:path STARTSWITH ?
-        </pattern>
-        <pageSize>20</pageSize>
-          <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}</parameter>
-      </coreQueryPageProvider>
-        <refresh>
-          <event>documentChanged</event>
-          <event>documentChildrenChanged</event>
-         </refresh>
-               <cacheKey>#{currentDocument.id}</cacheKey>
-        <cacheSize>10</cacheSize>
-        <selectionList>CURRENT_SELECTION</selectionList>
-      <resultLayouts>
-       <layout name="news_item_listing" title="document_listing"
-            translateTitle="false" iconPath="/icons/document_listing_icon.png" />
-      </resultLayouts>
-    </contentView>
+  <contentView name="news_items_listing_view">
+    <coreQueryPageProvider>
+      <property name="coreSession">#{documentManager}</property>
+      <pattern>
+        SELECT *
+          FROM NewsItem
+         WHERE ecm:isProxy = 0
+               AND ecm:mixinType != 'HiddenInNavigation'
+               AND ecm:isCheckedInVersion = 0
+               AND ecm:currentLifeCycleState != 'deleted'
+               AND ecm:path STARTSWITH ?
+      </pattern>
+      <pageSize>20</pageSize>
+      <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}
+      </parameter>
+    </coreQueryPageProvider>
+    <refresh>
+      <event>documentChanged</event>
+      <event>documentChildrenChanged</event>
+    </refresh>
+    <cacheKey>#{currentDocument.id}</cacheKey>
+    <cacheSize>10</cacheSize>
+    <selectionList>CURRENT_SELECTION</selectionList>
+    <resultLayouts>
+      <layout name="news_item_listing" title="document_listing"
+        translateTitle="false" iconPath="/icons/document_listing_icon.png" />
+    </resultLayouts>
+  </contentView>
 
   </extension>
 

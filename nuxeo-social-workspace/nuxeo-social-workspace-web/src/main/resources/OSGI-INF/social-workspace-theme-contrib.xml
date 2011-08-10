@@ -25,27 +25,23 @@
         <theme>social-collaboration/dashboard</theme>
       </view>
 
-      <view id="/view_social_workspace_articles.xhtml">
+      <view id="/view_social_document.xhtml">
         <theme>social-collaboration/dashboard</theme>
       </view>
 
-      <view id="/view_social_workspace_news_item.xhtml">
+      <view id="/create_social_document.xhtml">
         <theme>social-collaboration/dashboard</theme>
       </view>
 
-      <view id="/create_social_workspace_document.xhtml">
+      <view id="/articles.xhtml">
         <theme>social-collaboration/dashboard</theme>
       </view>
 
-     <view id="/articles.xhtml">
+      <view id="/edit_social_document.xhtml">
         <theme>social-collaboration/dashboard</theme>
       </view>
 
-     <view id="/edit_article.xhtml">
-        <theme>social-collaboration/dashboard</theme>
-      </view>
-
-     <view id="/news_items.xhtml">
+      <view id="/news_items.xhtml">
         <theme>social-collaboration/dashboard</theme>
       </view>
 
