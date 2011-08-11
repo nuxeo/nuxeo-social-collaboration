@@ -16,7 +16,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.nuxeo.ecm.platform</groupId>
+      <groupId>org.nuxeo.ecm.social</groupId>
       <artifactId>nuxeo-activity</artifactId>
     </dependency>
     <dependency>

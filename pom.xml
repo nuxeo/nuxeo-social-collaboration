@@ -19,6 +19,7 @@
   </properties>
 
   <modules>
+    <module>nuxeo-activity</module>
     <module>nuxeo-social-workspace</module>
     <module>nuxeo-user-relationship</module>
     <module>nuxeo-mini-message</module>
@@ -26,6 +27,11 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.nuxeo.ecm.social</groupId>
+        <artifactId>nuxeo-activity</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.social</groupId>
         <artifactId>nuxeo-social-workspace-core</artifactId>

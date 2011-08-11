@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.activity.ActivityStreamService">
+
+  <documentation>
+    @author Thomas Roger (troger@nuxeo.com)
+  </documentation>
+
+  <implementation
+    class="org.nuxeo.ecm.activity.ActivityStreamServiceImpl" />
+
+  <service>
+    <provide
+      interface="org.nuxeo.ecm.activity.ActivityStreamService" />
+  </service>
+
+  <extension-point name="activityStreamFilters">
+    <documentation>
+
+    </documentation>
+    <object
+      class="org.nuxeo.ecm.activity.ActivityStreamFilterDescriptor" />
+  </extension-point>
+
+  <require>org.nuxeo.ecm.core.persistence.PersistenceComponent</require>
+
+  <extension target="org.nuxeo.ecm.core.persistence.PersistenceComponent"
+	     point="hibernate">
+    <hibernateConfiguration name="nxactivities">
+      <datasource>nxactivities</datasource>
+      <properties>
+	     <property name="hibernate.hbm2ddl.auto">update</property>
+      </properties>
+    </hibernateConfiguration>
+  </extension>
+
+</component>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.activity.listeners">
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
+    point="listener">
+    <documentation>
+      Simple core event listener that call the ActivityStreamService
+      to save new Activity.
+    </documentation>
+
+    <listener name="activityStreamListener" async="true" postCommit="true"
+      class="org.nuxeo.ecm.activity.ActivityStreamListener"
+      priority="100">
+    </listener>
+
+  </extension>
+
+</component>

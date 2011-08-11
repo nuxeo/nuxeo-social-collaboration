@@ -44,7 +44,6 @@
       <artifact:set>
         <includes>
           <artifact groupId="org.nuxeo.ecm.social" />
-          <artifact groupId="org.nuxeo.ecm.platform" artifactId="nuxeo-activity" />
         </includes>
       </artifact:set>
     </copy>
