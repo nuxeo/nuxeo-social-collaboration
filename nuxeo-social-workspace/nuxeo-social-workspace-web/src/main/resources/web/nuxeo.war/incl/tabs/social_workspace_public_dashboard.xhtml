@@ -12,24 +12,23 @@
   <nxu:set var="documentContextId" value="#{currentDocument.id}">
   <nxu:set var="applicationContextPath" value="#{socialWorkspaceActions.socialWorkspaceContainer.document.path}">
 
-
     <ui:decorate template="/incl/opensocial_container_template.xhtml">
-
       <ui:define name="opensocial_container_actions">
-        <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">
-          <div class="opensocial_buttons">
-            <ul>
-              <li>
-                <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">
-                  #{messages['label.opensocial.container.change.layout']}
-                </a>
-              </li>
-              <li><a id="addGadgetButton" href="#{baseURL}site/gadgets">#{messages['label.opensocial.container.add.gadget']}</a></li>
-            </ul>
-          </div>
-        </c:if>
+        <ui:insert name="social_workspace_dashboard_actions">
+          <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">
+            <div class="opensocial_buttons">
+              <ul>
+                <li>
+                  <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">
+                    #{messages['label.opensocial.container.change.layout']}
+                  </a>
+                </li>
+                <li><a id="addGadgetButton" href="#{baseURL}site/gadgets">#{messages['label.opensocial.container.add.gadget']}</a></li>
+              </ul>
+            </div>
+          </c:if>
+        </ui:insert>
       </ui:define>
-
     </ui:decorate>
 
   </nxu:set>

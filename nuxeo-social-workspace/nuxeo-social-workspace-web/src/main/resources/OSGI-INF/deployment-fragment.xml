@@ -19,18 +19,28 @@
       <redirect />
     </navigation-case>
     <navigation-case>
-      <from-outcome>view_social_workspace_articles</from-outcome>
-      <to-view-id>/view_social_workspace_articles.xhtml</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>view_social_workspace_news_item</from-outcome>
-      <to-view-id>/view_social_workspace_news_item.xhtml</to-view-id>
+      <from-outcome>view_social_document</from-outcome>
+      <to-view-id>/view_social_document.xhtml</to-view-id>
       <redirect />
     </navigation-case>
     <navigation-case>
       <from-outcome>create_social_workspace_document</from-outcome>
-      <to-view-id>/create_social_workspace_document.xhtml</to-view-id>
+      <to-view-id>/create_social_document.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>articles</from-outcome>
+      <to-view-id>/articles.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>edit_social_document</from-outcome>
+      <to-view-id>/edit_social_document.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>news_items</from-outcome>
+      <to-view-id>/news_items.xhtml</to-view-id>
       <redirect />
     </navigation-case>
   </extension>

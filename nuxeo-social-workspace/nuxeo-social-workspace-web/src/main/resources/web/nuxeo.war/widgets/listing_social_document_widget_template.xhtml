@@ -1,0 +1,45 @@
+<div xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxh="http://nuxeo.org/nxweb/html"
+  xmlns:nxd="http://nuxeo.org/nxweb/document">
+
+
+
+  <c:if test="#{widget.mode == 'view'}">
+    <c:set var="cssClass"
+      value="#{nxu:test(!empty widget.properties.cssClass, widget.properties.cssClass, '')}" />
+
+    <div class="#{cssClass}">
+
+      <nxd:restDocumentLink document="#{field_0}"
+        view="#{navigationContext.navigateToDocument(field_0,'fullscreen')}">
+        <span id="title_#{field_0.dc.title}" title="#{field_0.dc.title}">
+          #{nxd:titleOrId(field_0)} </span>
+      </nxd:restDocumentLink>
+      <pre>
+        <h:outputText value="#{field_0.dc.description}" />
+      </pre>
+      <pre>
+        <h:outputText value="#{field_0.dc.created}" />
+        ,
+        <h:outputText value="#{field_0.dc.creator}" />
+      </pre>
+
+      <div style="clear: both;"></div>
+      <h:outputText
+        value="#{messages['label.social.workspace.actions']}" />
+      <br />
+      <h:commandLink
+        value="#{messages['label.action.social.document.delete']}"
+        action="#{fullscreenManagementActions.deleteSocialDocument(field)}"
+        immediate="true" />
+      <br />
+      <h:commandLink
+        value="#{messages['label.action.social.document.edit']}"
+        action="#{fullscreenManagementActions.editSocialDocument(field)}"
+        immediate="true" />
+    </div>
+  </c:if>
+</div>

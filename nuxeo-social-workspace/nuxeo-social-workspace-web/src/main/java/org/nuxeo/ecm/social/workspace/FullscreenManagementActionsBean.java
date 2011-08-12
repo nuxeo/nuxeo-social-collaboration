@@ -16,27 +16,31 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.jboss.seam.ScopeType.CONVERSATION;
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+
 import java.io.Serializable;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Events;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
-
-import static org.jboss.seam.ScopeType.CONVERSATION;
-import static org.jboss.seam.annotations.Install.FRAMEWORK;
-
-import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+import org.nuxeo.ecm.webapp.helpers.EventManager;
+import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
@@ -45,7 +49,19 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 @Name("fullscreenManagementActions")
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class FullscreenManagementActionsBean implements Serializable{
+public class FullscreenManagementActionsBean implements Serializable {
+
+    private static final String AFTER_SOCIAL_COLLABORATION_EDITION_VIEW = "after-social-collaboration-edition";
+
+    private static final String AFTER_SOCIAL_COLLABORATION_CREATION_VIEW = "after-social-collaboration-creation";
+
+    private static final String EDIT_SOCIAL_DOCUMENT_VIEW = "edit_social_document";
+
+    private static final String NEWS_ITEMS_VIEW = "news_items";
+
+    private static final String DELETE_TRANSITION = "delete";
+
+    private static final String ARTICLES_VIEW = "articles";
 
     private static final long serialVersionUID = 1L;
 
@@ -61,6 +77,9 @@ public class FullscreenManagementActionsBean implements Serializable{
 
     @In(create = true)
     protected transient DocumentActions documentActions;
+
+    @In(create = true)
+    protected transient SocialWorkspaceService socialWorkspaceService;
 
     /**
      * Navigate to the Dashboard of the Social Workspace if the document belong
@@ -111,16 +130,101 @@ public class FullscreenManagementActionsBean implements Serializable{
         }
     }
 
+    public String navigateToArticles() throws ClientException {
+        return navigateToListing(ARTICLES_VIEW);
+    }
+
+    protected String navigateToListing(String listingView)
+            throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getSocialWorkspaceContainer(currentDocument);
+        if (socialWorkspace != null) {
+            DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
+                    socialWorkspace.getDashboardSpacesRootPath()));
+            return navigationContext.navigateToDocument(dashboardSpacesRoot,
+                    listingView);
+        } else {
+            return navigationContext.navigateToDocument(currentDocument);
+        }
+    }
+
     public String createNewDocument(String type) throws ClientException {
-        DocumentModel currentDoc = navigationContext.getCurrentDocument();
-        DocumentModel parentContainer = documentManager.getDocument(currentDoc.getParentRef());
+        DocumentModel parentContainer = documentManager.getDocument(getRootSocialContainerPathRef(type));
         navigationContext.navigateToDocument(parentContainer);
         documentActions.createDocument(type);
         return FULLSCREEN_CREATE_VIEW;
     }
 
+    protected DocumentRef getRootSocialContainerPathRef(String type) {
+        DocumentModel currentDoc = navigationContext.getCurrentDocument();
+        SocialWorkspace socialContainer = socialWorkspaceService.getSocialWorkspaceContainer(currentDoc);
+
+        if (SocialConstants.NEWS_ITEM_TYPE.equals(type)) {
+            return new PathRef(socialContainer.getPath(),
+                    SocialConstants.NEWS_ROOT_RELATIVE_PATH);
+        }
+
+        return socialContainer.getDocument().getRef();
+
+    }
+
     public String createSameTypeDocument() throws ClientException {
         String type = navigationContext.getCurrentDocument().getType();
         return createNewDocument(type);
+    }
+
+    public void deleteSocialDocument(DocumentModel document)
+            throws ClientException {
+        document.followTransition(DELETE_TRANSITION);
+        documentManager.saveDocument(document);
+        DocumentModel parentDoc = documentManager.getDocument(document.getParentRef());
+        Events.instance().raiseEvent(EventNames.DOCUMENT_CHILDREN_CHANGED,
+                parentDoc);
+    }
+
+    public String navigateToNewsItems() throws ClientException {
+        return navigateToListing(NEWS_ITEMS_VIEW);
+    }
+
+    public String editSocialDocument() throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        return editSocialDocument(currentDocument);
+    }
+
+    public String editSocialDocument(DocumentModel document)
+            throws ClientException {
+        if (isSocialDocument(document)) {
+            return navigationContext.navigateToDocument(document,
+                    EDIT_SOCIAL_DOCUMENT_VIEW);
+        } else {
+            DocumentModel currentDocument = navigationContext.getCurrentDocument();
+            return navigationContext.navigateToDocument(currentDocument);
+        }
+
+    }
+
+    public String goBack() throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        if (currentDocument != null) {
+            navigationContext.setChangeableDocument(null);
+        } else {
+            navigationContext.resetCurrentContext();
+            EventManager.raiseEventsOnGoingHome();
+        }
+        return backToDashboard();
+    }
+
+    public String saveOncreate() throws ClientException {
+        documentActions.saveDocument();
+        DocumentModel currentDoc = navigationContext.getCurrentDocument();
+        return navigationContext.navigateToDocument(currentDoc,
+                AFTER_SOCIAL_COLLABORATION_CREATION_VIEW);
+    }
+
+    public String updateCurrentDocument() throws ClientException {
+        documentActions.updateCurrentDocument();
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        return navigationContext.navigateToDocument(currentDocument,
+                AFTER_SOCIAL_COLLABORATION_EDITION_VIEW);
     }
 }
