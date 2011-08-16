@@ -33,15 +33,14 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
-import org.nuxeo.ecm.activity.ActivityImpl;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
@@ -369,8 +368,10 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public boolean addSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, Principal principal) {
-        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationAdministratorKind())) {
+        if (addPrincipalToSocialWorkspace(
+                ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
+                buildRelationAdministratorKind())) {
             addSocialWorkspaceMember(socialWorkspace, principal);
             return true;
         }
@@ -380,37 +381,43 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
-        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationMemberKind())) {
-            addNewActivity(principal, socialWorkspace, buildRelationMemberKind());
+        if (addPrincipalToSocialWorkspace(
+                ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
+                buildRelationMemberKind())) {
+            addNewActivity(principal, socialWorkspace,
+                    buildRelationMemberKind());
             return true;
         }
         return false;
     }
 
-    private void addNewActivity(Principal principal, SocialWorkspace socialWorkspace, RelationshipKind kind) {
-        Activity activity = new ActivityImpl();
-        activity.setActor(ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()));
-        activity.setDisplayActor(socialWorkspace.getTitle());
-        activity.setObject(ActivityHelper.createUserActivityObject(principal.getName()));
-        activity.setDisplayObject(ActivityHelper.generateDisplayName(principal));
-        activity.setVerb(kind.toString());
-        activity.setPublishedDate(new Date());
+    private void addNewActivity(Principal principal,
+            SocialWorkspace socialWorkspace, RelationshipKind kind) {
+        Activity activity = new ActivityBuilder().actor(
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayActor(
+                socialWorkspace.getTitle()).verb(kind.toString()).object(
+                ActivityHelper.createUserActivityObject(principal.getName())).displayObject(
+                ActivityHelper.generateDisplayName(principal)).build();
         getActivityStreamService().addActivity(activity);
     }
 
     @Override
     public void removeSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, Principal principal) {
-        removePrincipalFromSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationAdministratorKind());
+        removePrincipalFromSocialWorkspace(
+                ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
+                buildRelationAdministratorKind());
     }
 
     @Override
     public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
-        removePrincipalFromSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationMemberKind());
+        removePrincipalFromSocialWorkspace(
+                ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
+                buildRelationMemberKind());
     }
 
     private boolean addPrincipalToSocialWorkspace(String principalName,

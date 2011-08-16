@@ -6,7 +6,6 @@ import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.C
 import static org.nuxeo.ecm.webapp.security.UserManagementActions.USER_SELECTED_CHANGED;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +25,8 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
-import org.nuxeo.ecm.activity.ActivityImpl;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
@@ -99,7 +98,8 @@ public class UserRelationshipActions implements Serializable {
     public List<RelationshipKind> getRelationshipsWithSelectedUser() {
         if (relationshipsWithSelectedUser == null) {
             relationshipsWithSelectedUser = userRelationshipService.getRelationshipKinds(
-                    ActivityHelper.createUserActivityObject(getCurrentUser()), ActivityHelper.createUserActivityObject(getSelectedUser()));
+                    ActivityHelper.createUserActivityObject(getCurrentUser()),
+                    ActivityHelper.createUserActivityObject(getSelectedUser()));
         }
         return relationshipsWithSelectedUser;
     }
@@ -108,27 +108,28 @@ public class UserRelationshipActions implements Serializable {
         String currentUser = ActivityHelper.createUserActivityObject(getCurrentUser());
         String selectedUser = ActivityHelper.createUserActivityObject(getSelectedUser());
         RelationshipKind relationshipKind = RelationshipKind.fromString(kind);
-        if (userRelationshipService.addRelation(currentUser,
-                selectedUser, relationshipKind)) {
+        if (userRelationshipService.addRelation(currentUser, selectedUser,
+                relationshipKind)) {
             setFacesMessage("label.social.user.relationship.addRelation.success");
             addNewRelationActivity(currentUser, selectedUser, relationshipKind);
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
     }
 
-    protected void addNewRelationActivity(String actorId, String targetId, RelationshipKind relationshipKind) {
-        Activity activity = new ActivityImpl();
-        activity.setActor(actorId);
-        activity.setDisplayActor(Functions.userFullName(actorId));
-        activity.setObject(Functions.userFullName(targetId));
-        activity.setVerb(relationshipKind.getGroup());
-        activity.setPublishedDate(new Date());
+    protected void addNewRelationActivity(String actorId, String targetId,
+            RelationshipKind relationshipKind) {
+        Activity activity = new ActivityBuilder().actor(actorId).displayActor(
+                Functions.userFullName(actorId)).verb(
+                relationshipKind.getGroup()).object(targetId).displayObject(
+                Functions.userFullName(targetId)).build();
         getActivityStreamService().addActivity(activity);
     }
 
     protected void removeRelationship(String kind) {
-        if (userRelationshipService.removeRelation(ActivityHelper.createUserActivityObject(getCurrentUser()),
-                ActivityHelper.createUserActivityObject(getSelectedUser()), RelationshipKind.fromString(kind))) {
+        if (userRelationshipService.removeRelation(
+                ActivityHelper.createUserActivityObject(getCurrentUser()),
+                ActivityHelper.createUserActivityObject(getSelectedUser()),
+                RelationshipKind.fromString(kind))) {
             setFacesMessage("label.social.user.relationship.removeRelation.success");
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
@@ -142,8 +143,7 @@ public class UserRelationshipActions implements Serializable {
             throws ClientException {
         if (allRelationshipsState == null) {
             allRelationshipsState = new HashMap<RelationshipKind, Boolean>();
-            for (RelationshipKind kind : userRelationshipService.getRegisteredKinds(
-                    null)) {
+            for (RelationshipKind kind : userRelationshipService.getRegisteredKinds(null)) {
                 allRelationshipsState.put(kind,
                         isActiveRelationship(kind.toString()));
             }
@@ -169,7 +169,7 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    @Observer( { USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
     public void resetUserRelationship() {
         relationshipsWithSelectedUser = null;
         allRelationshipsState = null;

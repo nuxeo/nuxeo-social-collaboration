@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
-import org.nuxeo.ecm.activity.ActivityImpl;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
@@ -52,12 +52,10 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     @Override
     public MiniMessage addMiniMessage(Principal principal, String message,
             Date publishedDate) {
-        Activity activity = new ActivityImpl();
-        activity.setVerb(VERB);
-        activity.setActor(ActivityHelper.createUserActivityObject(principal));
-        activity.setDisplayActor(ActivityHelper.generateDisplayName(principal));
-        activity.setObject(message);
-        activity.setPublishedDate(publishedDate);
+        Activity activity = new ActivityBuilder().actor(
+                ActivityHelper.createUserActivityObject(principal)).displayActor(
+                ActivityHelper.generateDisplayName(principal)).verb(VERB).object(
+                message).publishedDate(publishedDate).build();
         activity = getActivityStreamService().addActivity(activity);
         return MiniMessage.fromActivity(activity);
     }
@@ -71,7 +69,8 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     public List<MiniMessage> getMiniMessageFor(String actor,
             RelationshipKind relationshipKind, int pageSize, int currentPage) {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-        parameters.put(ACTOR_PARAMETER, ActivityHelper.createUserActivityObject(actor));
+        parameters.put(ACTOR_PARAMETER,
+                ActivityHelper.createUserActivityObject(actor));
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FOR_ACTOR);
         List<Activity> activities = getActivityStreamService().query(
                 MiniMessageActivityStreamFilter.ID, parameters, pageSize,
@@ -88,7 +87,8 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     public List<MiniMessage> getMiniMessageFrom(String actor, int pageSize,
             int currentPage) {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-        parameters.put(ACTOR_PARAMETER, ActivityHelper.createUserActivityObject(actor));
+        parameters.put(ACTOR_PARAMETER,
+                ActivityHelper.createUserActivityObject(actor));
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FROM_ACTOR);
         List<Activity> activities = getActivityStreamService().query(
                 MiniMessageActivityStreamFilter.ID, parameters, pageSize,

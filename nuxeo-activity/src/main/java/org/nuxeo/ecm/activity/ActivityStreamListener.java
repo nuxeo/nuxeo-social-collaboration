@@ -22,7 +22,7 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 import static org.nuxeo.ecm.core.schema.FacetNames.HIDDEN_IN_NAVIGATION;
 
-import java.util.Date;
+import java.security.Principal;
 
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
@@ -65,7 +65,8 @@ public class ActivityStreamListener implements PostCommitEventListener {
                     || DOCUMENT_REMOVED.equals(event.getName())
                     || DOCUMENT_UPDATED.equals(event.getName())) {
                 DocumentEventContext docEventContext = (DocumentEventContext) eventContext;
-                if (docEventContext.getSourceDocument().hasFacet(HIDDEN_IN_NAVIGATION)) {
+                if (docEventContext.getSourceDocument().hasFacet(
+                        HIDDEN_IN_NAVIGATION)) {
                     // Not really interested if document is not visible.
                     return;
                 }
@@ -77,24 +78,24 @@ public class ActivityStreamListener implements PostCommitEventListener {
 
     private Activity toActivity(DocumentEventContext docEventContext,
             Event event) {
-        Activity activity = new ActivityImpl();
-        activity.setActor(ActivityHelper.createUserActivityObject(docEventContext.getPrincipal().getName()));
-        activity.setDisplayActor(ActivityHelper.generateDisplayName(docEventContext.getPrincipal()));
-        activity.setVerb(event.getName());
-        activity.setPublishedDate(new Date());
+        Principal principal = docEventContext.getPrincipal();
         DocumentModel doc = docEventContext.getSourceDocument();
-        activity.setObject(ActivityHelper.createDocumentActivityObject(doc));
-        activity.setDisplayObject(getDocumentTitle(doc));
-        activity.setTarget(ActivityHelper.createDocumentActivityObject(
-                doc.getRepositoryName(), doc.getParentRef().toString()));
-        activity.setDisplayTarget(getDocumentTitle(docEventContext.getCoreSession(), doc.getParentRef()));
-        return activity;
+        return new ActivityBuilder().actor(
+                ActivityHelper.createUserActivityObject(principal)).displayActor(
+                ActivityHelper.generateDisplayName(principal)).verb(
+                event.getName()).object(
+                ActivityHelper.createDocumentActivityObject(doc)).displayObject(
+                getDocumentTitle(doc)).target(
+                ActivityHelper.createDocumentActivityObject(
+                        doc.getRepositoryName(), doc.getParentRef().toString())).displayTarget(
+                getDocumentTitle(docEventContext.getCoreSession(),
+                        doc.getParentRef())).build();
     }
 
     private String getDocumentTitle(DocumentModel doc) {
         try {
             return doc.getTitle();
-        } catch( ClientException e) {
+        } catch (ClientException e) {
             return doc.getId();
         }
     }
@@ -103,7 +104,7 @@ public class ActivityStreamListener implements PostCommitEventListener {
         try {
             DocumentModel doc = session.getDocument(docRef);
             return getDocumentTitle(doc);
-        } catch(ClientException e) {
+        } catch (ClientException e) {
             return docRef.toString();
         }
     }
