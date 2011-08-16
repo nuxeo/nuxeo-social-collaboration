@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -78,15 +79,15 @@ public class UserRelationshipPageProvider extends
             // post-filter the results "by hand" to handle pagination
             long pageSize = getMinMaxPageSize();
             if (pageSize == 0) {
-                for (String username : relationships) {
-                    addUsernameToRelationshipPage(username);
+                for (String relationship : relationships) {
+                    addUsernameToRelationshipPage(ActivityHelper.getUsername(relationship));
                 }
             } else {
                 // handle offset
                 if (offset <= resultsCount) {
                     for (int i = Long.valueOf(offset).intValue(); i < resultsCount
                             && i < offset + pageSize; i++) {
-                        addUsernameToRelationshipPage(relationships.get(i));
+                        addUsernameToRelationshipPage(ActivityHelper.getUsername(relationships.get(i)));
                     }
                 }
             }
@@ -153,7 +154,7 @@ public class UserRelationshipPageProvider extends
     protected String getCurrentUser() {
         Object[] params = getParameters();
         if (params.length >= 1) {
-            return (String) params[0];
+            return ActivityHelper.createUserActivityObject((String)params[0]);
         }
         return null;
     }
