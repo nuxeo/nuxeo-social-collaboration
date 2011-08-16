@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityImpl;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -64,6 +65,7 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
     @Test
     public void shouldRetrieveUserMiniMessages() throws ClientException {
         initializeSomeMiniMessagesAndRelations();
+        String benderUserEntity = ActivityHelper.createUserEntity("Bender");
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
                 "Bender", 0, 0);
@@ -73,27 +75,27 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         assertEquals(
                 "I don't tell you how to tell me what to do, so don't tell me how to do what you tell me to do!",
                 miniMessage.getMessage());
-        assertEquals("Bender", miniMessage.getActor());
+        assertEquals(benderUserEntity, miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(1);
         assertEquals("Oh wait, your serious. Let me laugh even harder.",
                 miniMessage.getMessage());
-        assertEquals("Bender", miniMessage.getActor());
+        assertEquals(benderUserEntity, miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(2);
         assertEquals("Lies, lies and slander!", miniMessage.getMessage());
-        assertEquals("Bender", miniMessage.getActor());
+        assertEquals(benderUserEntity, miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(3);
         assertEquals(
                 "This is the worst kind of discrimination: the kind against me!",
                 miniMessage.getMessage());
-        assertEquals("Bender", miniMessage.getActor());
+        assertEquals(benderUserEntity, miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(4);
         assertEquals("Of all the friends I've had... you're the first.",
                 miniMessage.getMessage());
-        assertEquals("Bender", miniMessage.getActor());
+        assertEquals(benderUserEntity, miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
     }
 

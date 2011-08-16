@@ -17,6 +17,8 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
+import java.security.Principal;
+
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 
@@ -29,10 +31,10 @@ import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 public interface SubscriptionRequestHandler {
 
     void handleSubscriptionRequestFor(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest);

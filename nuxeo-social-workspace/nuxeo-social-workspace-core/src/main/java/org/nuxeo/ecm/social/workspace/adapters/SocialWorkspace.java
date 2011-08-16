@@ -1,5 +1,6 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -60,7 +61,7 @@ public interface SocialWorkspace {
     /**
      * Adds a user to this Social Workspace administrators group.
      */
-    boolean addAdministrator(String principalName);
+    boolean addAdministrator(Principal principal);
 
     /**
      * Adds a user to this Social Workspace members group.
@@ -68,7 +69,7 @@ public interface SocialWorkspace {
      * @return {@code true} if the user was successfully added to the members
      *         group, {@code false} otherwise.
      */
-    boolean addMember(String principalName);
+    boolean addMember(Principal principal);
 
     /**
      * Removes a user from this Social Workspace administrators group.
@@ -76,12 +77,12 @@ public interface SocialWorkspace {
      * @return {@code true} if the user was successfully added to the
      *         administrators group, {@code false} otherwise.
      */
-    void removeAdministrator(String principalName);
+    void removeAdministrator(Principal principal);
 
     /**
      * Removes a user from this Social Workspace members group.
      */
-    void removeMember(String principalName);
+    void removeMember(Principal principal);
 
     /**
      * Returns true if the given {@code principal} is administrator of this
@@ -185,15 +186,15 @@ public interface SocialWorkspace {
     String getPrivateDashboardSpacePath();
 
     /**
-     * Handles a Subscription Request for the given {@code principalName}.
+     * Handles a Subscription Request for the given {@code principal}.
      */
-    void handleSubscriptionRequest(String principalName);
+    void handleSubscriptionRequest(Principal principal);
 
     /**
      * Returns {@code true} if there is a pending Subscription Request for the
-     * given {@code principalName}, {@code false} otherwise.
+     * given {@code principal}, {@code false} otherwise.
      */
-    boolean isSubscriptionRequestPending(String principalName);
+    boolean isSubscriptionRequestPending(Principal principal);
 
     /**
      * Accepts this {@code subscriptionRequest}.

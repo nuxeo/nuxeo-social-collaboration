@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.user.activity.stream.gadgets" version="1.0">
+
+  <extension target="org.nuxeo.opensocial.gadgets.service" point="gadget">
+
+    <internalGadget name="useractivitystream" disabled="false">
+      <mountPoint>/useractivitystream</mountPoint>
+      <entryPoint>useractivitystream.xml</entryPoint>
+      <category>Nuxeo</category>
+      <icon>gadget-useractivitystream.png</icon>
+    </internalGadget>
+
+  </extension>
+
+</component>

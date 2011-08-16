@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.user.activity.stream.pageproviders">
+
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+    point="providers">
+
+    <genericPageProvider name="activity_stream_for_actor"
+      class="org.nuxeo.ecm.social.activity.stream.ActivityStreamForActorPageProvider">
+      <pageSize>50</pageSize>
+    </genericPageProvider>
+
+  </extension>
+
+</component>

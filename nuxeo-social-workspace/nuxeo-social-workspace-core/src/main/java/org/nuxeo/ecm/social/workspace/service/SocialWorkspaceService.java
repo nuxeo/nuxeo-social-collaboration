@@ -40,7 +40,7 @@ public interface SocialWorkspaceService {
      * <li>create related groups</li>
      * <li>put specific ACLs</li>
      * </ul>
-     * 
+     *
      * @param principal the Principal initializing the Social Workspace
      */
     void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
@@ -81,33 +81,33 @@ public interface SocialWorkspaceService {
 
     /**
      * Adds a user to the @{code socialWorkspace} administrators group.
-     * 
+     *
      * @return {@code true} if the user was successfully added to the
      *         administrators group, {@code false} otherwise.
      */
     boolean addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     /**
      * Adds a user to the @{code socialWorkspace} members group.
-     * 
+     *
      * @return {@code true} if the user was successfully added to the members
      *         group, {@code false} otherwise.
      */
     boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     /**
      * Removes a user from the @{code socialWorkspace} administrators group.
      */
     void removeSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     /**
      * Removes a user from the @{code socialWorkspace} members group.
      */
     void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     /**
      * Makes the given {@code socialWorkspace} public.
@@ -127,24 +127,24 @@ public interface SocialWorkspaceService {
     /**
      * Gets the number of days before a social workspace expires without
      * validation.
-     * 
+     *
      * @return number of days
      */
     int getValidationDays();
 
     /**
      * Handles a Subscription Request on {@code socialWorkspace} for the given
-     * {@code principalName}.
+     * {@code principal}.
      */
     void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     /**
      * Returns {@code true} if there is a pending Subscription Request for the
-     * given {@code principalName}, {@code false} otherwise.
+     * given {@code principal}, {@code false} otherwise.
      */
     boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace,
-            String principalName);
+            Principal principal);
 
     /**
      * Accepts the {@code subscriptionRequest} for {@code socialWorkspace}.
@@ -171,7 +171,7 @@ public interface SocialWorkspaceService {
 
     /**
      * Returns all matching users from a Social Workspace, or an empty list.
-     * 
+     *
      * @param kind can be null or empty to search through all users.
      * @param pattern can be blank.
      */
@@ -180,7 +180,7 @@ public interface SocialWorkspaceService {
 
     /**
      * Returns all matching members from a Social Workspace, or an empty list.
-     * 
+     *
      * @param pattern can be blank.
      */
     List<String> searchMembers(SocialWorkspace socialWorkspace, String pattern);
@@ -188,7 +188,7 @@ public interface SocialWorkspaceService {
     /**
      * Returns all matching administrators from a Social Workspace, or an empty
      * list.
-     * 
+     *
      * @param pattern can be blank.
      */
     List<String> searchAdministrators(SocialWorkspace socialWorkspace,

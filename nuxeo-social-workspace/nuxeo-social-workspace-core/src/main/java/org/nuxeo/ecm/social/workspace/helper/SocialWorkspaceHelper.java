@@ -41,7 +41,7 @@ public class SocialWorkspaceHelper {
 
     private static final Log log = LogFactory.getLog(SocialWorkspaceHelper.class);
 
-    private static final String KIND_GROUP = "SocialWorkspace";
+    private static final String KIND_GROUP = "socialworkspace";
 
     private static final String SEPARATOR = "_";
 

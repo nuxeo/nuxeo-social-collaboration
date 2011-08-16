@@ -81,23 +81,23 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
         if (TYPES_EXTENSION_POINT.equals(extensionPoint)) {
-            addFriendshipType((UserRelationshipKindDescriptor) contribution);
+            addRelationshipKind((UserRelationshipKindDescriptor) contribution);
         }
     }
 
-    protected void addFriendshipType(UserRelationshipKindDescriptor type) {
+    protected void addRelationshipKind(UserRelationshipKindDescriptor type) {
         Session typeDirectory = null;
         try {
             typeDirectory = getDirectoryService().open(KIND_DIRECTORY_NAME);
 
-            // Add a new friendships type if not exists
+            // Add a new relationship kind if not exists
             if (null == typeDirectory.getEntry(type.getName())) {
                 typeDirectory.createEntry(type.getMap());
                 typeDirectory.commit();
             }
         } catch (ClientException e) {
             throw new ClientRuntimeException(
-                    "Unable to create a new friendship type", e);
+                    "Unable to create a new relationship kind", e);
         } finally {
             if (typeDirectory != null) {
                 try {
@@ -212,7 +212,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             return typesDirectory.getEntries();
         } catch (ClientException e) {
             throw new ClientRuntimeException(
-                    "Unable to fetch all friendship types", e);
+                    "Unable to fetch all relationsip kinds", e);
         } finally {
             if (typesDirectory != null) {
                 try {
@@ -247,7 +247,6 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
                 relationshipsDirectory.createEntry(new HashMap<String, Object>(
                         relationship));
                 relationshipsDirectory.commit();
-
                 return true;
             } else {
                 return false;
@@ -355,20 +354,13 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     protected static RelationshipKind buildKindFromRelationshipModel(
             DocumentModel relation) throws ClientException {
-        RelationshipKind kind = RelationshipKind.fromString((String) relation.getPropertyValue(RELATIONSHIP_PROPERTY_KIND));
-        return kind;
+        return RelationshipKind.fromString((String) relation.getPropertyValue(RELATIONSHIP_PROPERTY_KIND));
     }
 
     protected static Map<String, String> getRelationshipsOrderBy() {
         Map<String, String> order = new HashMap<String, String>();
         order.put(RELATIONSHIP_FIELD_TARGET, "desc");
         return order;
-    }
-
-    protected DocumentModel getUserModelFromFriendshipModel(
-            DocumentModel friendship, String field) throws ClientException {
-        return getUserManager().getUserModel(
-                friendship.getProperty(RELATIONSHIP_SCHEMA_NAME, field).toString());
     }
 
     protected UserManager getUserManager() {
@@ -392,4 +384,5 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
         }
         return directoryService;
     }
+
 }

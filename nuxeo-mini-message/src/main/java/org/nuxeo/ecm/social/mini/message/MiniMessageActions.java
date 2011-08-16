@@ -72,7 +72,7 @@ public class MiniMessageActions implements Serializable {
 
     public void createNewMiniMessage() {
         MiniMessageService miniMessageService = getMiniMessageService();
-        miniMessageService.addMiniMessage(currentUser.getName(), newMessage);
+        miniMessageService.addMiniMessage(currentUser, newMessage);
         Events.instance().raiseEvent(MINI_MESSAGE_CREATED_EVENT);
         newMessage = null;
     }

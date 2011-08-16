@@ -2,9 +2,11 @@ package org.nuxeo.ecm.social.user.relationship;
 
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.CIRCLE_RELATIONSHIP_KIND_GROUP;
 import static org.nuxeo.ecm.webapp.security.UserManagementActions.USER_SELECTED_CHANGED;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +25,20 @@ import org.jboss.seam.annotations.web.RequestParameter;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
+import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityImpl;
+import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
+import org.nuxeo.ecm.platform.ui.web.tag.fn.Functions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.ecm.webapp.security.UserManagementActions;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * Social User Relationship action bean.
@@ -46,7 +55,7 @@ public class UserRelationshipActions implements Serializable {
 
     private static final Log log = LogFactory.getLog(UserRelationshipActions.class);
 
-    private static final String RELATIONSHIP_KIND_GROUP = "circle";
+    public static final String USER_RELATIONSHIP_CHANGED = "UserRelationshipChanged";
 
     @In(create = true)
     protected transient UserRelationshipService userRelationshipService;
@@ -72,7 +81,7 @@ public class UserRelationshipActions implements Serializable {
     @RequestParameter
     protected String selectedKind;
 
-    public static final String USER_RELATIONSHIP_CHANGED = "UserRelationshipChanged";
+    protected transient ActivityStreamService activityStreamService;
 
     protected List<RelationshipKind> relationshipsWithSelectedUser;
 
@@ -90,22 +99,36 @@ public class UserRelationshipActions implements Serializable {
     public List<RelationshipKind> getRelationshipsWithSelectedUser() {
         if (relationshipsWithSelectedUser == null) {
             relationshipsWithSelectedUser = userRelationshipService.getRelationshipKinds(
-                    getCurrentUser(), getSelectedUser());
+                    ActivityHelper.createUserEntity(getCurrentUser()), ActivityHelper.createUserEntity(getSelectedUser()));
         }
         return relationshipsWithSelectedUser;
     }
 
     protected void addRelationshipWithSelectedUser(String kind) {
-        if (userRelationshipService.addRelation(getCurrentUser(),
-                getSelectedUser(), RelationshipKind.fromString(kind))) {
+        String currentUser = ActivityHelper.createUserEntity(getCurrentUser());
+        String selectedUser = ActivityHelper.createUserEntity(getSelectedUser());
+        RelationshipKind relationshipKind = RelationshipKind.fromString(kind);
+        if (userRelationshipService.addRelation(currentUser,
+                selectedUser, relationshipKind)) {
             setFacesMessage("label.social.user.relationship.addRelation.success");
+            addNewRelationActivity(currentUser, selectedUser, relationshipKind);
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
     }
 
+    protected void addNewRelationActivity(String actorId, String targetId, RelationshipKind relationshipKind) {
+        Activity activity = new ActivityImpl();
+        activity.setActor(actorId);
+        activity.setDisplayActor(Functions.userFullName(actorId));
+        activity.setObject(Functions.userFullName(targetId));
+        activity.setVerb(relationshipKind.getGroup());
+        activity.setPublishedDate(new Date());
+        getActivityStreamService().addActivity(activity);
+    }
+
     protected void removeRelationship(String kind) {
-        if (userRelationshipService.removeRelation(getCurrentUser(),
-                getSelectedUser(), RelationshipKind.fromString(kind))) {
+        if (userRelationshipService.removeRelation(ActivityHelper.createUserEntity(getCurrentUser()),
+                ActivityHelper.createUserEntity(getSelectedUser()), RelationshipKind.fromString(kind))) {
             setFacesMessage("label.social.user.relationship.removeRelation.success");
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
@@ -129,11 +152,11 @@ public class UserRelationshipActions implements Serializable {
     }
 
     public List<RelationshipKind> getKinds() {
-        return userRelationshipService.getRegisteredKinds(RELATIONSHIP_KIND_GROUP);
+        return userRelationshipService.getRegisteredKinds(CIRCLE_RELATIONSHIP_KIND_GROUP);
     }
 
     public List<String> getRelationshipsFromSelectedUser() {
-        return userRelationshipService.getTargets(getSelectedUser());
+        return userRelationshipService.getTargets(ActivityHelper.createUserEntity(getSelectedUser()));
     }
 
     public void relationshipCheckboxChanged(ValueChangeEvent event) {
@@ -163,5 +186,23 @@ public class UserRelationshipActions implements Serializable {
     protected void setFacesMessage(String msg) {
         facesMessages.add(StatusMessage.Severity.INFO,
                 resourcesAccessor.getMessages().get(msg));
+    }
+
+    protected ActivityStreamService getActivityStreamService()
+            throws ClientRuntimeException {
+        if (activityStreamService == null) {
+            try {
+                activityStreamService = Framework.getService(ActivityStreamService.class);
+            } catch (Exception e) {
+                final String errMsg = "Error connecting to ActivityStreamService. "
+                        + e.getMessage();
+                throw new ClientRuntimeException(errMsg, e);
+            }
+            if (activityStreamService == null) {
+                throw new ClientRuntimeException(
+                        "ActivityStreamService service not bound");
+            }
+        }
+        return activityStreamService;
     }
 }

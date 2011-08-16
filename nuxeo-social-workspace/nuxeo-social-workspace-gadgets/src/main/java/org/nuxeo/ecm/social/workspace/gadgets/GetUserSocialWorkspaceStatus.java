@@ -65,7 +65,7 @@ public class GetUserSocialWorkspaceStatus {
         if (socialWorkspace.isAdministratorOrMember(currentUser)) {
             return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
         }
-        if (socialWorkspace.isSubscriptionRequestPending(currentUser.getName())) {
+        if (socialWorkspace.isSubscriptionRequestPending(currentUser)) {
             return buildResponse(socialWorkspace.getDocument(),
                     Status.REQUEST_PENDING);
         }

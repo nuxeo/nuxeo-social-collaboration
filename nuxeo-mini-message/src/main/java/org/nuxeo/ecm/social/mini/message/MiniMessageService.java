@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.social.mini.message;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -35,14 +36,14 @@ public interface MiniMessageService {
      *
      * @return the newly created MiniMessage object.
      */
-    MiniMessage addMiniMessage(String actor, String message, Date publishedDate);
+    MiniMessage addMiniMessage(Principal principal, String message, Date publishedDate);
 
     /**
      * Add a new mini message.
      *
      * @return the newly created MiniMessage object.
      */
-    MiniMessage addMiniMessage(String actor, String message);
+    MiniMessage addMiniMessage(Principal principal, String message);
 
     /**
      * Returns the mini messages for the given {@code actor}. The

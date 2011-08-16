@@ -80,7 +80,7 @@ public class AddMiniMessage {
                 locale);
 
         MiniMessage miniMessage = miniMessageService.addMiniMessage(
-                session.getPrincipal().getName(), message, publishedDate);
+                session.getPrincipal(), message, publishedDate);
 
         NuxeoPrincipal principal = userManager.getPrincipal(miniMessage.getActor());
         String fullName = principal == null ? "" : principal.getFirstName()

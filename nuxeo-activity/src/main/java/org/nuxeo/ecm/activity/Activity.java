@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.activity;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Representation of an Activity.
@@ -35,6 +36,10 @@ public interface Activity {
 
     void setActor(String actor);
 
+    String getDisplayActor();
+
+    void setDisplayActor(String displayActor);
+
     String getVerb();
 
     void setVerb(String verb);
@@ -43,12 +48,22 @@ public interface Activity {
 
     void setObject(String object);
 
+    String getDisplayObject();
+
+    void setDisplayObject(String displayObject);
+
     String getTarget();
 
     void setTarget(String target);
 
+    String getDisplayTarget();
+
+    void setDisplayTarget(String displayTarget);
+
     Date getPublishedDate();
 
     void setPublishedDate(Date publishedDate);
+
+    Map<String, String> toMap();
 
 }

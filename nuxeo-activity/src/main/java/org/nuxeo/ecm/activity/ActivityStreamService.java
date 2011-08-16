@@ -19,6 +19,7 @@ package org.nuxeo.ecm.activity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -70,5 +71,7 @@ public interface ActivityStreamService {
      *             {@code filterId}.
      */
     List<Activity> query(String filterId, Map<String, Serializable> parameters);
+
+    String toFormattedMessage(Activity activity, Locale locale);
 
 }

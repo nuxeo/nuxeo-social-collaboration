@@ -8,6 +8,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.nuxeo.common.utils.Path;
@@ -21,7 +22,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Default implementation of {@see SocialWorkspace}.
- * 
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
@@ -81,27 +82,27 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public boolean addAdministrator(String principalName) {
+    public boolean addAdministrator(Principal principal) {
         return getSocialWorkspaceService().addSocialWorkspaceAdministrator(
-                this, principalName);
+                this, principal);
     }
 
     @Override
-    public boolean addMember(String principalName) {
+    public boolean addMember(Principal principal) {
         return getSocialWorkspaceService().addSocialWorkspaceMember(this,
-                principalName);
+                principal);
     }
 
     @Override
-    public void removeAdministrator(String principalName) {
+    public void removeAdministrator(Principal principal) {
         getSocialWorkspaceService().removeSocialWorkspaceAdministrator(this,
-                principalName);
+                principal);
     }
 
     @Override
-    public void removeMember(String principalName) {
+    public void removeMember(Principal principal) {
         getSocialWorkspaceService().removeSocialWorkspaceMember(this,
-                principalName);
+                principal);
     }
 
     @Override
@@ -212,15 +213,15 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public void handleSubscriptionRequest(String principalName) {
+    public void handleSubscriptionRequest(Principal principal) {
         getSocialWorkspaceService().handleSubscriptionRequest(this,
-                principalName);
+                principal);
     }
 
     @Override
-    public boolean isSubscriptionRequestPending(String principalName) {
+    public boolean isSubscriptionRequestPending(Principal principal) {
         return getSocialWorkspaceService().isSubscriptionRequestPending(this,
-                principalName);
+                principal);
     }
 
     @Override

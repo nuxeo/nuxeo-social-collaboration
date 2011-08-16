@@ -55,7 +55,6 @@
       <plugin>
         <groupId>org.nuxeo.build</groupId>
         <artifactId>nuxeo-distribution-tools</artifactId>
-        <version>1.10.1</version>
         <executions>
           <execution>
             <id>antbuild</id>

@@ -22,7 +22,7 @@ import java.util.Date;
 import org.nuxeo.ecm.activity.Activity;
 
 /**
- * Immutable oject representing a mini message.
+ * Immutable object representing a mini message.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
@@ -33,20 +33,23 @@ public final class MiniMessage {
 
     private String actor;
 
+    private String displayActor;
+
     private String message;
 
     private Date publishedDate;
 
-    private MiniMessage(long id, String actor, String message,
+    private MiniMessage(long id, String actor, String displayActor, String message,
             Date publishedDate) {
         this.id = id;
         this.actor = actor;
+        this.displayActor = displayActor;
         this.message = message;
         this.publishedDate = publishedDate;
     }
 
     public static MiniMessage fromActivity(Activity activity) {
-        return new MiniMessage(activity.getId(), activity.getActor(),
+        return new MiniMessage(activity.getId(), activity.getActor(), activity.getDisplayActor(),
                 activity.getObject(), activity.getPublishedDate());
     }
 
@@ -56,6 +59,10 @@ public final class MiniMessage {
 
     public String getActor() {
         return actor;
+    }
+
+    public String getDisplayActor() {
+        return displayActor;
     }
 
     public String getMessage() {

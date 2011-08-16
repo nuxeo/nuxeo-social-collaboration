@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUES
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_USERNAME_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_USER_EMAIL_PROPERTY;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,14 +78,14 @@ public class DefaultSubscriptionRequestHandler implements
 
     @Override
     public void handleSubscriptionRequestFor(
-            final SocialWorkspace socialWorkspace, final String principalName) {
+            final SocialWorkspace socialWorkspace, final Principal principal) {
         try {
             String repositoryName = socialWorkspace.getDocument().getRepositoryName();
             new UnrestrictedSessionRunner(repositoryName) {
                 @Override
                 public void run() throws ClientException {
                     handleSubscriptionRequestFor(session, socialWorkspace,
-                            principalName);
+                            principal);
                 }
             }.runUnrestricted();
         } catch (ClientException e) {
@@ -93,26 +94,25 @@ public class DefaultSubscriptionRequestHandler implements
     }
 
     private void handleSubscriptionRequestFor(CoreSession session,
-            SocialWorkspace socialWorkspace, String principalName)
+            SocialWorkspace socialWorkspace, Principal principal)
             throws ClientException {
         if (socialWorkspace.mustApproveSubscription()) {
-            if (isSubscriptionRequestPending(socialWorkspace, principalName)) {
+            if (isSubscriptionRequestPending(socialWorkspace, principal)) {
                 return;
             }
 
             String subscriptionRequestName = socialWorkspace.getId() + "-"
-                    + principalName;
+                    + principal.getName();
             DocumentModel subscriptionRequestsRoot = getSubscriptionRequestsRoot(
                     session, socialWorkspace);
             DocumentModel request = session.createDocumentModel(
                     subscriptionRequestsRoot.getPathAsString(),
                     subscriptionRequestName, SUBSCRIPTION_REQUEST_TYPE);
             request.setPropertyValue(SUBSCRIPTION_REQUEST_USERNAME_PROPERTY,
-                    principalName);
-            NuxeoPrincipal principal = getUserManager().getPrincipal(
-                    principalName);
+                    principal.getName());
+            NuxeoPrincipal nuxeoPrincipal = (NuxeoPrincipal) principal;
             request.setPropertyValue(SUBSCRIPTION_REQUEST_USER_EMAIL_PROPERTY,
-                    principal.getEmail());
+                    nuxeoPrincipal.getEmail());
             request.setPropertyValue(SUBSCRIPTION_REQUEST_TYPE_PROPERTY,
                     SUBSCRIPTION_REQUEST_TYPE_JOIN);
             request.setPropertyValue(SUBSCRIPTION_REQUEST_INFO_PROPERTY,
@@ -123,10 +123,10 @@ public class DefaultSubscriptionRequestHandler implements
             EventContext ctx = new DocumentEventContext(session, null, request);
             getEventService().fireEvent(SUBSCRIPTION_REQUEST_CREATED_EVENT, ctx);
         } else {
-            if (socialWorkspace.addMember(principalName)) {
+            if (socialWorkspace.addMember(principal)) {
                 EventContext ctx = new DocumentEventContext(session, null,
                         socialWorkspace.getDocument());
-                ctx.setProperty(PRINCIPAL_NAME_PROPERTY, principalName);
+                ctx.setProperty(PRINCIPAL_NAME_PROPERTY, principal.getName());
                 getEventService().fireEvent(
                         SUBSCRIPTION_REQUEST_ACCEPTED_EVENT, ctx);
             }
@@ -167,7 +167,7 @@ public class DefaultSubscriptionRequestHandler implements
 
     @Override
     public boolean isSubscriptionRequestPending(
-            final SocialWorkspace socialWorkspace, final String principalName) {
+            final SocialWorkspace socialWorkspace, final Principal principal) {
         final List<DocumentModel> subscriptionRequests = new ArrayList<DocumentModel>();
         try {
             String repositoryName = socialWorkspace.getDocument().getRepositoryName();
@@ -176,7 +176,7 @@ public class DefaultSubscriptionRequestHandler implements
                 public void run() throws ClientException {
                     String queryTemplate = "SELECT * FROM SubscriptionRequest WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
                     String query = String.format(queryTemplate,
-                            SUBSCRIPTION_REQUEST_TYPE_JOIN, principalName,
+                            SUBSCRIPTION_REQUEST_TYPE_JOIN, principal.getName(),
                             socialWorkspace.getId());
                     subscriptionRequests.addAll(session.query(query));
                 }
@@ -210,7 +210,7 @@ public class DefaultSubscriptionRequestHandler implements
             SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest) throws ClientException {
         String principalName = subscriptionRequest.getUsername();
-        if (socialWorkspace.addMember(subscriptionRequest.getUsername())) {
+        if (socialWorkspace.addMember(getUserManager().getPrincipal(principalName))) {
             DocumentModel request = session.getDocument(subscriptionRequest.getDocument().getRef());
             request.followTransition(SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION);
             session.saveDocument(request);

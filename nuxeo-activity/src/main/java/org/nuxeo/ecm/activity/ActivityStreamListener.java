@@ -17,11 +17,24 @@
 
 package org.nuxeo.ecm.activity;
 
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
+import static org.nuxeo.ecm.core.schema.FacetNames.HIDDEN_IN_NAVIGATION;
+
+import java.util.Date;
+
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
+import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.core.schema.FacetNames;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -33,40 +46,85 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class ActivityStreamListener implements PostCommitEventListener {
 
+    private ActivityStreamService activityStreamService;
+
     @Override
     public void handleEvent(EventBundle events) throws ClientException {
-        for (Event event : events) {
-            handleEvent(event);
-        }
-    }
-
-    protected void handleEvent(Event event) throws ClientException {
-        EventContext eventContext = event.getContext();
-        // if (eventContext instanceof ActivityEventContext) {
-        // ActivityEventContext activityEventContext = (ActivityEventContext)
-        // eventContext;
-        // Activity activity = activityEventContext.getActivity();
-        // getActivityStreamService().addActivity(activity);
-        // }
-        if (eventContext.getArguments().length > 0) {
-            Object o = eventContext.getArguments()[0];
-            if (o instanceof Activity) {
-                getActivityStreamService().addActivity((Activity) o);
+        if (events.containsEventName(DOCUMENT_CREATED)
+                || events.containsEventName(DOCUMENT_UPDATED)
+                || events.containsEventName(DOCUMENT_REMOVED)) {
+            for (Event event : events) {
+                handleEvent(event);
             }
         }
     }
 
-    protected Activity toActivity(Event event) {
-        return null;
+    private void handleEvent(Event event) throws ClientException {
+        EventContext eventContext = event.getContext();
+        if (eventContext instanceof DocumentEventContext) {
+            if (DOCUMENT_CREATED.equals(event.getName())
+                    || DOCUMENT_REMOVED.equals(event.getName())
+                    || DOCUMENT_UPDATED.equals(event.getName())) {
+                DocumentEventContext docEventContext = (DocumentEventContext) eventContext;
+                if (docEventContext.getSourceDocument().hasFacet(HIDDEN_IN_NAVIGATION)) {
+                    // Not really interested if document is not visible.
+                    return;
+                }
+                Activity activity = toActivity(docEventContext, event);
+                getActivityStreamService().addActivity(activity);
+            }
+        }
     }
 
-    protected ActivityStreamService getActivityStreamService()
-            throws ClientException {
+    private Activity toActivity(DocumentEventContext docEventContext,
+            Event event) {
+        Activity activity = new ActivityImpl();
+        activity.setActor(ActivityHelper.createUserEntity(docEventContext.getPrincipal().getName()));
+        activity.setDisplayActor(ActivityHelper.generateDisplayName(docEventContext.getPrincipal()));
+        activity.setVerb(event.getName());
+        activity.setPublishedDate(new Date());
+        DocumentModel doc = docEventContext.getSourceDocument();
+        activity.setObject(ActivityHelper.createDocumentEntity(doc));
+        activity.setDisplayObject(getDocumentTitle(doc));
+        activity.setTarget(ActivityHelper.createDocumentEntity(
+                doc.getRepositoryName(), doc.getParentRef().toString()));
+        activity.setDisplayTarget(getDocumentTitle(docEventContext.getCoreSession(), doc.getParentRef()));
+        return activity;
+    }
+
+    private String getDocumentTitle(DocumentModel doc) {
         try {
-            return Framework.getService(ActivityStreamService.class);
-        } catch (Exception e) {
-            throw new ClientException(e);
+            return doc.getTitle();
+        } catch( ClientException e) {
+            return doc.getId();
         }
+    }
+
+    private String getDocumentTitle(CoreSession session, DocumentRef docRef) {
+        try {
+            DocumentModel doc = session.getDocument(docRef);
+            return getDocumentTitle(doc);
+        } catch(ClientException e) {
+            return docRef.toString();
+        }
+    }
+
+    private ActivityStreamService getActivityStreamService()
+            throws ClientRuntimeException {
+        if (activityStreamService == null) {
+            try {
+                activityStreamService = Framework.getService(ActivityStreamService.class);
+            } catch (Exception e) {
+                final String errMsg = "Error connecting to ActivityStreamService. "
+                        + e.getMessage();
+                throw new ClientRuntimeException(errMsg, e);
+            }
+            if (activityStreamService == null) {
+                throw new ClientRuntimeException(
+                        "ActivityStreamService service not bound");
+            }
+        }
+        return activityStreamService;
     }
 
 }

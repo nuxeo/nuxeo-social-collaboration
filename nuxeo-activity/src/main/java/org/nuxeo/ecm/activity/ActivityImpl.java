@@ -17,7 +17,12 @@
 
 package org.nuxeo.ecm.activity;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,11 +51,17 @@ public class ActivityImpl implements Activity {
 
     private String actor;
 
+    private String displayActor;
+
     private String verb;
 
     private String object;
 
+    private String displayObject;
+
     private String target;
+
+    private String displayTarget;
 
     private Date publishedDate;
 
@@ -80,6 +91,17 @@ public class ActivityImpl implements Activity {
 
     @Column
     @Override
+    public String getDisplayActor() {
+        return displayActor;
+    }
+
+    @Override
+    public void setDisplayActor(String displayActor) {
+        this.displayActor = displayActor;
+    }
+
+    @Column
+    @Override
     public String getVerb() {
         return verb;
     }
@@ -102,6 +124,17 @@ public class ActivityImpl implements Activity {
 
     @Column
     @Override
+    public String getDisplayObject() {
+        return displayObject;
+    }
+
+    @Override
+    public void setDisplayObject(String displayObject) {
+        this.displayObject = displayObject;
+    }
+
+    @Column
+    @Override
     public String getTarget() {
         return target;
     }
@@ -111,8 +144,19 @@ public class ActivityImpl implements Activity {
         this.target = target;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column
+    @Override
+    public String getDisplayTarget() {
+        return displayTarget;
+    }
+
+    @Override
+    public void setDisplayTarget(String displayTarget) {
+        this.displayTarget = displayTarget;
+    }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     @Override
     public Date getPublishedDate() {
         return publishedDate;
@@ -121,6 +165,21 @@ public class ActivityImpl implements Activity {
     @Override
     public void setPublishedDate(Date publishedDate) {
         this.publishedDate = publishedDate;
+    }
+
+    @Override
+    public Map<String, String> toMap() {
+        Map<String, String> m = new HashMap<String, String>();
+        m.put("id", String.valueOf(id));
+        m.put("actor", actor);
+        m.put("displayActor", displayActor);
+        m.put("object", object);
+        m.put("displayObject", displayObject);
+        m.put("target", target);
+        m.put("displayTarget", displayTarget);
+        m.put("verb", verb);
+        m.put("publishedDate", publishedDate.toString());
+        return Collections.unmodifiableMap(m);
     }
 
     @Override
@@ -137,4 +196,5 @@ public class ActivityImpl implements Activity {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
 }

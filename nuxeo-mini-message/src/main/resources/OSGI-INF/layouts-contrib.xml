@@ -10,6 +10,7 @@
       </labels>
       <fields>
         <field>data.actor</field>
+        <field>data.displayActor</field>
         <field>data.message</field>
         <field>data.publishedDate</field>
       </fields>

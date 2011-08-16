@@ -17,16 +17,20 @@
 
 package org.nuxeo.ecm.social.mini.message;
 
+import java.security.Principal;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.test.CoreFeature;
@@ -35,6 +39,8 @@ import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.platform.usermanager.exceptions.UserAlreadyExistsException;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -72,6 +78,9 @@ public abstract class AbstractMiniMessageTest {
     protected EventService eventService;
 
     @Inject
+    protected UserManager userManager;
+
+    @Inject
     protected CoreSession session;
 
     @Before
@@ -88,36 +97,41 @@ public abstract class AbstractMiniMessageTest {
     protected void initializeSomeMiniMessagesAndRelations()
             throws ClientException {
         DateTime now = new DateTime();
-        miniMessageService.addMiniMessage("Bender",
+        Principal bender = createUser("Bender");
+        Principal leela = createUser("Leela");
+        Principal fry = createUser("Fry");
+        Principal zapp = createUser("Zapp Brannigan");
+
+        miniMessageService.addMiniMessage(bender,
                 "Of all the friends I've had... you're the first.",
                 now.toDate());
         miniMessageService.addMiniMessage(
-                "Bender",
+                bender,
                 "This is the worst kind of discrimination: the kind against me!",
                 now.plusMinutes(1).toDate());
-        miniMessageService.addMiniMessage("Bender", "Lies, lies and slander!",
+        miniMessageService.addMiniMessage(bender, "Lies, lies and slander!",
                 now.plusMinutes(2).toDate());
-        miniMessageService.addMiniMessage("Bender",
+        miniMessageService.addMiniMessage(bender,
                 "Oh wait, your serious. Let me laugh even harder.",
                 now.plusMinutes(3).toDate());
         miniMessageService.addMiniMessage(
-                "Bender",
+                bender,
                 "I don't tell you how to tell me what to do, so don't tell me how to do what you tell me to do!",
                 now.plusMinutes(4).toDate());
-        miniMessageService.addMiniMessage("Leela",
+        miniMessageService.addMiniMessage(leela,
                 "At the risk of sounding negative, no.",
                 now.plusMinutes(5).toDate());
-        miniMessageService.addMiniMessage("Fry",
+        miniMessageService.addMiniMessage(fry,
                 "When I'm with you, every day feels like double soup Tuesday.",
                 now.plusMinutes(10).toDate());
         miniMessageService.addMiniMessage(
-                "Fry",
+                fry,
                 "We've lost power of the forward Gameboy! Mario not responding!",
                 now.plusMinutes(15).toDate());
-        miniMessageService.addMiniMessage("Zapp Brannigan",
+        miniMessageService.addMiniMessage(zapp,
                 "Kif, I have made it with a woman. Inform the men.",
                 now.plusMinutes(20).toDate());
-        miniMessageService.addMiniMessage("Zapp Brannigan",
+        miniMessageService.addMiniMessage(zapp,
                 "I surrender, and volunteer for treason!",
                 now.plusMinutes(21).toDate());
 
@@ -125,15 +139,33 @@ public abstract class AbstractMiniMessageTest {
                 "friends");
         RelationshipKind coworkers = RelationshipKind.newInstance("circle",
                 "coworkers");
-        userRelationshipService.addRelation("Leela", "Bender", friends);
-        userRelationshipService.addRelation("Leela", "Fry", friends);
-        userRelationshipService.addRelation("Leela", "Zapp Brannigan",
+
+        String leelaUserEntity = ActivityHelper.createUserEntity(leela.getName());
+        String benderUserEntity = ActivityHelper.createUserEntity(bender.getName());
+        String fryUserEntity = ActivityHelper.createUserEntity(fry.getName());
+        String zappUserEntity = ActivityHelper.createUserEntity(zapp.getName());
+        userRelationshipService.addRelation(leelaUserEntity, benderUserEntity, friends);
+        userRelationshipService.addRelation(leelaUserEntity, fryUserEntity, friends);
+        userRelationshipService.addRelation(leelaUserEntity, zappUserEntity,
                 coworkers);
     }
 
     protected void changeUser(String username) {
         featuresRunner.getFeature(CoreFeature.class).getRepository().switchUser(
                 username);
+    }
+
+    protected Principal createUser(String username) throws ClientException {
+        DocumentModel user = userManager.getBareUserModel();
+        user.setPropertyValue("user:username", username);
+        try {
+            userManager.createUser(user);
+        } catch(UserAlreadyExistsException e) {
+            // do nothing
+        } finally {
+            session.save();
+        }
+        return userManager.getPrincipal(username);
     }
 
 }

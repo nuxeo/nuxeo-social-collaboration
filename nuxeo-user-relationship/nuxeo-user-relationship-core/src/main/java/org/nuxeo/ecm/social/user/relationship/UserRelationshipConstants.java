@@ -55,4 +55,7 @@ public class UserRelationshipConstants {
 
     public static final String KIND_PROPERTY_NAME = KIND_SCHEMA_NAME + ":"
             + KIND_FIELD_NAME;
+
+    // Default group for circle relations
+    public static final String CIRCLE_RELATIONSHIP_KIND_GROUP = "circle";
 }

@@ -61,9 +61,6 @@ public class GetMiniMessageForActor {
     @Context
     protected MiniMessageService miniMessageService;
 
-    @Context
-    protected UserManager userManager;
-
     @Param(name = "actor", required = false)
     protected String actor;
 
@@ -107,14 +104,10 @@ public class GetMiniMessageForActor {
                 actor, kind, pageSize, page);
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
         for (MiniMessage miniMessage : miniMessages) {
-            NuxeoPrincipal principal = userManager.getPrincipal(miniMessage.getActor());
-            String fullName = principal == null ? "" : principal.getFirstName()
-                    + " " + principal.getLastName();
-
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", miniMessage.getId());
             o.put("actor", miniMessage.getActor());
-            o.put("fullName", fullName);
+            o.put("fullName", miniMessage.getDisplayActor());
             o.put("message", miniMessage.getMessage());
             o.put("publishedDate",
                     dateFormat.format(miniMessage.getPublishedDate()));

@@ -17,20 +17,37 @@
 
 package org.nuxeo.ecm.activity;
 
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.common.utils.i18n.I18NUtils;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.persistence.PersistenceProviderFactory;
+import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
+import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
@@ -50,6 +67,16 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     public static final String ACTIVITIES_PROVIDER = "nxactivities";
 
     public static final String ACTIVITY_STREAM_FILTER_EP = "activityStreamFilters";
+
+    protected static final Map<String, String> LABELS_FOR_VERBS = new HashMap<String, String>();
+
+    static {
+        LABELS_FOR_VERBS.put(DOCUMENT_CREATED, "label.activity.documentCreated");
+        LABELS_FOR_VERBS.put(DOCUMENT_UPDATED, "label.activity.documentUpdated");
+        LABELS_FOR_VERBS.put(DOCUMENT_REMOVED, "label.activity.documentRemoved");
+        LABELS_FOR_VERBS.put("socialworkspace:members", "label.activity.socialworkspace");
+        LABELS_FOR_VERBS.put("circle", "label.activity.circle");
+    }
 
     protected final ThreadLocal<EntityManager> localEntityManager = new ThreadLocal<EntityManager>();
 
@@ -136,6 +163,9 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
 
     @Override
     public Activity addActivity(final Activity activity) {
+        if (activity.getPublishedDate() == null) {
+            activity.setPublishedDate(new Date());
+        }
         try {
             getOrCreatePersistenceProvider().run(true,
                     new PersistenceProvider.RunVoid() {
@@ -161,6 +191,38 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         } finally {
             localEntityManager.remove();
         }
+    }
+
+    @Override
+    public String toFormattedMessage(final Activity activity, Locale locale) {
+        Map<String, String> fields = activity.toMap();
+
+        if (!LABELS_FOR_VERBS.containsKey(activity.getVerb())) {
+            return activity.toString();
+        }
+
+        String labelKey = LABELS_FOR_VERBS.get(activity.getVerb());
+        String messageTemplate = I18NUtils.getMessageString("messages", labelKey,
+                null, locale);
+
+        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
+        Matcher m = pattern.matcher(messageTemplate);
+        while(m.find()) {
+            String param = m.group().replaceAll("[\\|$\\|{\\}]", "");
+            if (fields.containsKey(param)) {
+                String value = fields.get(param);
+                final String escapedValue = StringEscapeUtils.escapeHtml(value);
+                final String displayValue = StringEscapeUtils.escapeHtml(fields.get("display" + StringUtils.capitalize(param)));
+                if (ActivityHelper.isDocument(escapedValue)) {
+                    String url = VirtualHostHelper.getContextPathProperty() + "/nxdoc/" + ActivityHelper.getRepositoryName(escapedValue) + "/" + ActivityHelper.getDocumentId(escapedValue) + "/view_documents";
+                    value = "<a href=\"" + url + "\" target=\"_top\">" + StringEscapeUtils.escapeHtml(displayValue) + "</a>";
+                } else if (ActivityHelper.isUser(escapedValue)) {
+                    value = displayValue + " (" + ActivityHelper.getUsername(escapedValue) + ")";
+                }
+                messageTemplate = messageTemplate.replace(m.group(), value);
+            }
+        }
+        return messageTemplate;
     }
 
     public EntityManager getEntityManager() {

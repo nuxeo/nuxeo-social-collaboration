@@ -69,10 +69,9 @@ public interface UserRelationshipService {
     List<RelationshipKind> getRegisteredKinds(String group);
 
     /**
-     * Adds a relation between two entities. If the relation already exists,
-     * false will be returned.
+     * Adds a relation between two entities.
      *
-     * @return true if a new relation is create, false otherwise
+     * @return {@code true} if a new relation is created, {@code false} otherwise.
      */
     Boolean addRelation(String actorId, String targetId, RelationshipKind kind);
 

@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -67,10 +68,10 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testFriendshipsCreation() throws ClientException {
-        String user1 = createUser("user1").getId();
-        String user2 = createUser("user2").getId();
-        String user3 = createUser("user3").getId();
-        String user4 = createUser("user4").getId();
+        String user1 = ActivityHelper.createUserEntity(createUser("user1").getId());
+        String user2 = ActivityHelper.createUserEntity(createUser("user2").getId());
+        String user3 = ActivityHelper.createUserEntity(createUser("user3").getId());
+        String user4 = ActivityHelper.createUserEntity(createUser("user4").getId());
 
         RelationshipKind relation = RelationshipKind.newInstance("group",
                 "relation");
@@ -94,7 +95,7 @@ public class UserRelationshipServiceTest {
         List<String> user1Relations = relationshipService.getTargetsOfKind(
                 user1, relation);
         assertEquals(1, user1Relations.size());
-        assertEquals("user2", user1Relations.get(0));
+        assertEquals(user2, user1Relations.get(0));
 
         // They broke up ...
         assertFalse(relationshipService.removeRelation(user1, user3, relation));
@@ -127,7 +128,7 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testRelationshipKindsSearch() throws ClientException {
-        String user = "user_kindSearch";
+        String user = ActivityHelper.createUserEntity("user_kindSearch");
 
         RelationshipKind doc_read = RelationshipKind.newInstance("doc", "read");
         RelationshipKind doc_readWrite = RelationshipKind.newInstance("doc",
@@ -162,14 +163,11 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testRelationshipWithFulltext() throws ClientException {
-        final String USER_PREFIX = "user:";
-        final String DOC_PREFIX = "doc:";
-
-        String user1 = USER_PREFIX + createUser("user21").getId();
-        String user2 = USER_PREFIX + createUser("user22").getId();
-        String user3 = USER_PREFIX + createUser("user23").getId();
-        String doc1 = DOC_PREFIX + createDoc("doc21").getId();
-        String doc2 = DOC_PREFIX + "doc22";
+        String user1 = ActivityHelper.createUserEntity(createUser("user21").getId());
+        String user2 = ActivityHelper.createUserEntity(createUser("user22").getId());
+        String user3 = ActivityHelper.createUserEntity(createUser("user23").getId());
+        String doc1 = ActivityHelper.DOC_PREFIX + createDoc("doc21").getId();
+        String doc2 = ActivityHelper.DOC_PREFIX + "doc22";
 
         RelationshipKind read = RelationshipKind.newInstance("document",
                 "have_read");
@@ -183,12 +181,13 @@ public class UserRelationshipServiceTest {
 
         assertEquals(4, relationshipService.getTargets(user1).size());
         assertEquals(2, relationshipService.getTargetsWithFulltext(user1,
-                USER_PREFIX).size());
+                ActivityHelper.USER_PREFIX).size());
         assertEquals(2, relationshipService.getTargetsWithFulltext(user1,
-                DOC_PREFIX).size());
+                ActivityHelper.DOC_PREFIX).size());
 
+        List<String> targetsWithFulltext = relationshipService.getTargetsWithFulltext(user1, "22");
         assertEquals(2,
-                relationshipService.getTargetsWithFulltext(user1, "22").size());
+                targetsWithFulltext.size());
 
         assertEquals(1, relationshipService.getTargetsWithFulltext(user1, read,
                 "22").size());
