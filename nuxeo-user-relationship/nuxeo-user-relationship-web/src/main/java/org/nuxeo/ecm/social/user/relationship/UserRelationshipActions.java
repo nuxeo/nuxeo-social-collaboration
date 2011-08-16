@@ -99,14 +99,14 @@ public class UserRelationshipActions implements Serializable {
     public List<RelationshipKind> getRelationshipsWithSelectedUser() {
         if (relationshipsWithSelectedUser == null) {
             relationshipsWithSelectedUser = userRelationshipService.getRelationshipKinds(
-                    ActivityHelper.createUserEntity(getCurrentUser()), ActivityHelper.createUserEntity(getSelectedUser()));
+                    ActivityHelper.createUserActivityObject(getCurrentUser()), ActivityHelper.createUserActivityObject(getSelectedUser()));
         }
         return relationshipsWithSelectedUser;
     }
 
     protected void addRelationshipWithSelectedUser(String kind) {
-        String currentUser = ActivityHelper.createUserEntity(getCurrentUser());
-        String selectedUser = ActivityHelper.createUserEntity(getSelectedUser());
+        String currentUser = ActivityHelper.createUserActivityObject(getCurrentUser());
+        String selectedUser = ActivityHelper.createUserActivityObject(getSelectedUser());
         RelationshipKind relationshipKind = RelationshipKind.fromString(kind);
         if (userRelationshipService.addRelation(currentUser,
                 selectedUser, relationshipKind)) {
@@ -127,8 +127,8 @@ public class UserRelationshipActions implements Serializable {
     }
 
     protected void removeRelationship(String kind) {
-        if (userRelationshipService.removeRelation(ActivityHelper.createUserEntity(getCurrentUser()),
-                ActivityHelper.createUserEntity(getSelectedUser()), RelationshipKind.fromString(kind))) {
+        if (userRelationshipService.removeRelation(ActivityHelper.createUserActivityObject(getCurrentUser()),
+                ActivityHelper.createUserActivityObject(getSelectedUser()), RelationshipKind.fromString(kind))) {
             setFacesMessage("label.social.user.relationship.removeRelation.success");
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
@@ -156,7 +156,7 @@ public class UserRelationshipActions implements Serializable {
     }
 
     public List<String> getRelationshipsFromSelectedUser() {
-        return userRelationshipService.getTargets(ActivityHelper.createUserEntity(getSelectedUser()));
+        return userRelationshipService.getTargets(ActivityHelper.createUserActivityObject(getSelectedUser()));
     }
 
     public void relationshipCheckboxChanged(ValueChangeEvent event) {

@@ -27,7 +27,6 @@ import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.Quer
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.CIRCLE_RELATIONSHIP_KIND_GROUP;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,6 @@ import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
@@ -57,10 +55,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
-import org.nuxeo.launcher.config.ConfigurationGenerator;
-import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -131,42 +126,42 @@ public class TestUserActivityStreamFilter {
                 "friends");
         RelationshipKind coworkers = RelationshipKind.newInstance(CIRCLE_RELATIONSHIP_KIND_GROUP,
                 "coworkers");
-        String benderUserEntity = ActivityHelper.createUserEntity("Bender");
-        String leelaUserEntity = ActivityHelper.createUserEntity("Leela");
-        String fryUserEntity = ActivityHelper.createUserEntity("Fry");
-        String zappUserEntity = ActivityHelper.createUserEntity("Zapp");
-        userRelationshipService.addRelation(leelaUserEntity, benderUserEntity, friends);
-        userRelationshipService.addRelation(leelaUserEntity, fryUserEntity, friends);
-        userRelationshipService.addRelation(leelaUserEntity, zappUserEntity,
+        String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
+        String leelaActivityObject = ActivityHelper.createUserActivityObject("Leela");
+        String fryActivityObject = ActivityHelper.createUserActivityObject("Fry");
+        String zappActivityObject = ActivityHelper.createUserActivityObject("Zapp");
+        userRelationshipService.addRelation(leelaActivityObject, benderActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject, fryActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject, zappActivityObject,
                 coworkers);
 
         DateTime now = new DateTime();
         Activity activity = new ActivityImpl();
-        activity.setActor(benderUserEntity);
+        activity.setActor(benderActivityObject);
         activity.setObject("doc:default:docId1");
         activity.setVerb(DOCUMENT_CREATED);
         activity.setPublishedDate(now.toDate());
         activityStreamService.addActivity(activity);
         activity = new ActivityImpl();
-        activity.setActor(benderUserEntity);
+        activity.setActor(benderActivityObject);
         activity.setObject("doc:default:docId1");
         activity.setVerb(DOCUMENT_UPDATED);
         activity.setPublishedDate(now.plusHours(1).toDate());
         activityStreamService.addActivity(activity);
         activity = new ActivityImpl();
-        activity.setActor(fryUserEntity);
-        activity.setObject(benderUserEntity);
+        activity.setActor(fryActivityObject);
+        activity.setObject(benderActivityObject);
         activity.setVerb(CIRCLE_RELATIONSHIP_KIND_GROUP);
         activity.setPublishedDate(now.plusHours(2).toDate());
         activityStreamService.addActivity(activity);
         activity = new ActivityImpl();
-        activity.setActor(benderUserEntity);
-        activity.setObject(zappUserEntity);
+        activity.setActor(benderActivityObject);
+        activity.setObject(zappActivityObject);
         activity.setVerb(CIRCLE_RELATIONSHIP_KIND_GROUP);
         activity.setPublishedDate(now.plusHours(3).toDate());
         activityStreamService.addActivity(activity);
         activity = new ActivityImpl();
-        activity.setActor(benderUserEntity);
+        activity.setActor(benderActivityObject);
         activity.setObject("doc:default:docId1");
         activity.setVerb(DOCUMENT_REMOVED);
         activity.setPublishedDate(now.plusHours(4).toDate());
@@ -180,16 +175,16 @@ public class TestUserActivityStreamFilter {
         assertEquals(5, activities.size());
 
         activity = activities.get(0);
-        assertEquals(benderUserEntity, activity.getActor());
+        assertEquals(benderActivityObject, activity.getActor());
         assertEquals(DOCUMENT_REMOVED, activity.getVerb());
         assertEquals("doc:default:docId1", activity.getObject());
         activity = activities.get(1);
-        assertEquals(benderUserEntity, activity.getActor());
+        assertEquals(benderActivityObject, activity.getActor());
         assertEquals(CIRCLE_RELATIONSHIP_KIND_GROUP, activity.getVerb());
-        assertEquals(zappUserEntity, activity.getObject());
+        assertEquals(zappActivityObject, activity.getObject());
         activity = activities.get(2);
-        assertEquals(fryUserEntity, activity.getActor());
+        assertEquals(fryActivityObject, activity.getActor());
         assertEquals(CIRCLE_RELATIONSHIP_KIND_GROUP, activity.getVerb());
-        assertEquals(benderUserEntity, activity.getObject());
+        assertEquals(benderActivityObject, activity.getObject());
     }
 }

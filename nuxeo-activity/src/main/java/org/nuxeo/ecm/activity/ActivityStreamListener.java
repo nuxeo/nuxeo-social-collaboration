@@ -34,7 +34,6 @@ import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.core.schema.FacetNames;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -79,14 +78,14 @@ public class ActivityStreamListener implements PostCommitEventListener {
     private Activity toActivity(DocumentEventContext docEventContext,
             Event event) {
         Activity activity = new ActivityImpl();
-        activity.setActor(ActivityHelper.createUserEntity(docEventContext.getPrincipal().getName()));
+        activity.setActor(ActivityHelper.createUserActivityObject(docEventContext.getPrincipal().getName()));
         activity.setDisplayActor(ActivityHelper.generateDisplayName(docEventContext.getPrincipal()));
         activity.setVerb(event.getName());
         activity.setPublishedDate(new Date());
         DocumentModel doc = docEventContext.getSourceDocument();
-        activity.setObject(ActivityHelper.createDocumentEntity(doc));
+        activity.setObject(ActivityHelper.createDocumentActivityObject(doc));
         activity.setDisplayObject(getDocumentTitle(doc));
-        activity.setTarget(ActivityHelper.createDocumentEntity(
+        activity.setTarget(ActivityHelper.createDocumentActivityObject(
                 doc.getRepositoryName(), doc.getParentRef().toString()));
         activity.setDisplayTarget(getDocumentTitle(docEventContext.getCoreSession(), doc.getParentRef()));
         return activity;

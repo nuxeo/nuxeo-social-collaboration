@@ -369,8 +369,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public boolean addSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, Principal principal) {
-        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserEntity(principal.getName()),
-                ActivityHelper.createDocumentEntity(socialWorkspace.getDocument()), buildRelationAdministratorKind())) {
+        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationAdministratorKind())) {
             addSocialWorkspaceMember(socialWorkspace, principal);
             return true;
         }
@@ -380,8 +380,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
-        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserEntity(principal.getName()),
-                ActivityHelper.createDocumentEntity(socialWorkspace.getDocument()), buildRelationMemberKind())) {
+        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationMemberKind())) {
             addNewActivity(principal, socialWorkspace, buildRelationMemberKind());
             return true;
         }
@@ -390,9 +390,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     private void addNewActivity(Principal principal, SocialWorkspace socialWorkspace, RelationshipKind kind) {
         Activity activity = new ActivityImpl();
-        activity.setActor(ActivityHelper.createDocumentEntity(socialWorkspace.getDocument()));
+        activity.setActor(ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()));
         activity.setDisplayActor(socialWorkspace.getTitle());
-        activity.setObject(ActivityHelper.createUserEntity(principal.getName()));
+        activity.setObject(ActivityHelper.createUserActivityObject(principal.getName()));
         activity.setDisplayObject(ActivityHelper.generateDisplayName(principal));
         activity.setVerb(kind.toString());
         activity.setPublishedDate(new Date());
@@ -402,15 +402,15 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public void removeSocialWorkspaceAdministrator(
             SocialWorkspace socialWorkspace, Principal principal) {
-        removePrincipalFromSocialWorkspace(ActivityHelper.createUserEntity(principal.getName()),
-                ActivityHelper.createDocumentEntity(socialWorkspace.getDocument()), buildRelationAdministratorKind());
+        removePrincipalFromSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationAdministratorKind());
     }
 
     @Override
     public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
-        removePrincipalFromSocialWorkspace(ActivityHelper.createUserEntity(principal.getName()),
-                ActivityHelper.createDocumentEntity(socialWorkspace.getDocument()), buildRelationMemberKind());
+        removePrincipalFromSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationMemberKind());
     }
 
     private boolean addPrincipalToSocialWorkspace(String principalName,

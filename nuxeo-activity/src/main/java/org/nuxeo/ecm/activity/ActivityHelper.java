@@ -20,7 +20,6 @@ package org.nuxeo.ecm.activity;
 import java.security.Principal;
 
 import org.apache.commons.lang.StringUtils;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
@@ -40,47 +39,47 @@ public class ActivityHelper {
         // helper class
     }
 
-    public static boolean isUser(String entity) {
-        return entity.startsWith(USER_PREFIX);
+    public static boolean isUser(String activityObject) {
+        return activityObject.startsWith(USER_PREFIX);
     }
 
-    public static boolean isDocument(String entity) {
-        return entity.startsWith(DOC_PREFIX);
+    public static boolean isDocument(String activityObject) {
+        return activityObject.startsWith(DOC_PREFIX);
     }
 
-    public static String getUsername(String entity) {
-        return isUser(entity) ? entity.replaceAll(USER_PREFIX, "") : "";
+    public static String getUsername(String activityObject) {
+        return isUser(activityObject) ? activityObject.replaceAll(USER_PREFIX, "") : "";
     }
 
-    public static String getDocumentId(String entity) {
-        if (isDocument(entity)) {
-            String[] v = entity.split(":");
+    public static String getDocumentId(String activityObject) {
+        if (isDocument(activityObject)) {
+            String[] v = activityObject.split(":");
             return v[2];
         }
         return "";
     }
 
-    public static String getRepositoryName(String entity) {
-        if (isDocument(entity)) {
-            String[] v = entity.split(":");
+    public static String getRepositoryName(String activityObject) {
+        if (isDocument(activityObject)) {
+            String[] v = activityObject.split(":");
             return v[1];
         }
         return "";
     }
 
-    public static String createDocumentEntity(DocumentModel doc) {
-        return createDocumentEntity(doc.getRepositoryName(), doc.getId());
+    public static String createDocumentActivityObject(DocumentModel doc) {
+        return createDocumentActivityObject(doc.getRepositoryName(), doc.getId());
     }
 
-    public static String createDocumentEntity(String repositoryName, String docId) {
+    public static String createDocumentActivityObject(String repositoryName, String docId) {
         return DOC_PREFIX + repositoryName + SEPARATOR + docId;
     }
 
-    public static String createUserEntity(Principal principal) {
-        return createUserEntity(principal.getName());
+    public static String createUserActivityObject(Principal principal) {
+        return createUserActivityObject(principal.getName());
     }
 
-    public static String createUserEntity(String username) {
+    public static String createUserActivityObject(String username) {
         return USER_PREFIX + username;
     }
 

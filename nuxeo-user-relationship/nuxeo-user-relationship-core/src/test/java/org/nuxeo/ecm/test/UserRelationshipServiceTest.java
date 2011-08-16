@@ -68,10 +68,10 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testFriendshipsCreation() throws ClientException {
-        String user1 = ActivityHelper.createUserEntity(createUser("user1").getId());
-        String user2 = ActivityHelper.createUserEntity(createUser("user2").getId());
-        String user3 = ActivityHelper.createUserEntity(createUser("user3").getId());
-        String user4 = ActivityHelper.createUserEntity(createUser("user4").getId());
+        String user1 = ActivityHelper.createUserActivityObject(createUser("user1").getId());
+        String user2 = ActivityHelper.createUserActivityObject(createUser("user2").getId());
+        String user3 = ActivityHelper.createUserActivityObject(createUser("user3").getId());
+        String user4 = ActivityHelper.createUserActivityObject(createUser("user4").getId());
 
         RelationshipKind relation = RelationshipKind.newInstance("group",
                 "relation");
@@ -128,7 +128,7 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testRelationshipKindsSearch() throws ClientException {
-        String user = ActivityHelper.createUserEntity("user_kindSearch");
+        String user = ActivityHelper.createUserActivityObject("user_kindSearch");
 
         RelationshipKind doc_read = RelationshipKind.newInstance("doc", "read");
         RelationshipKind doc_readWrite = RelationshipKind.newInstance("doc",
@@ -163,9 +163,9 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testRelationshipWithFulltext() throws ClientException {
-        String user1 = ActivityHelper.createUserEntity(createUser("user21").getId());
-        String user2 = ActivityHelper.createUserEntity(createUser("user22").getId());
-        String user3 = ActivityHelper.createUserEntity(createUser("user23").getId());
+        String user1 = ActivityHelper.createUserActivityObject(createUser("user21").getId());
+        String user2 = ActivityHelper.createUserActivityObject(createUser("user22").getId());
+        String user3 = ActivityHelper.createUserActivityObject(createUser("user23").getId());
         String doc1 = ActivityHelper.DOC_PREFIX + createDoc("doc21").getId();
         String doc2 = ActivityHelper.DOC_PREFIX + "doc22";
 

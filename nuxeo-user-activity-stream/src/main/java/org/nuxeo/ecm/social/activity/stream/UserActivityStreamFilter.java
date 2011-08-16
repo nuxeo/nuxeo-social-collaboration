@@ -33,7 +33,6 @@ import javax.persistence.Query;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
-import org.nuxeo.ecm.activity.ActivityStreamListener;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
@@ -94,8 +93,8 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
         Query query;
         switch (queryType) {
             case ACTIVITY_STREAM_FOR_ACTOR:
-                List<String> actors = getUserRelationshipService().getTargetsOfKind(ActivityHelper.createUserEntity(actor), RelationshipKind.fromString("socialworkspace:members"));
-                actors.addAll(getUserRelationshipService().getTargetsOfKind(ActivityHelper.createUserEntity(actor), RelationshipKind.fromGroup("circle")));
+                List<String> actors = getUserRelationshipService().getTargetsOfKind(ActivityHelper.createUserActivityObject(actor), RelationshipKind.fromString("socialworkspace:members"));
+                actors.addAll(getUserRelationshipService().getTargetsOfKind(ActivityHelper.createUserActivityObject(actor), RelationshipKind.fromGroup("circle")));
                 if (actors.isEmpty()) {
                     return Collections.emptyList();
                 }

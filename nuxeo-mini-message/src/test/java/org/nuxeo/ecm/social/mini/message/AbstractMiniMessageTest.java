@@ -140,13 +140,13 @@ public abstract class AbstractMiniMessageTest {
         RelationshipKind coworkers = RelationshipKind.newInstance("circle",
                 "coworkers");
 
-        String leelaUserEntity = ActivityHelper.createUserEntity(leela.getName());
-        String benderUserEntity = ActivityHelper.createUserEntity(bender.getName());
-        String fryUserEntity = ActivityHelper.createUserEntity(fry.getName());
-        String zappUserEntity = ActivityHelper.createUserEntity(zapp.getName());
-        userRelationshipService.addRelation(leelaUserEntity, benderUserEntity, friends);
-        userRelationshipService.addRelation(leelaUserEntity, fryUserEntity, friends);
-        userRelationshipService.addRelation(leelaUserEntity, zappUserEntity,
+        String leelaActivityObject = ActivityHelper.createUserActivityObject(leela.getName());
+        String benderActivityObject = ActivityHelper.createUserActivityObject(bender.getName());
+        String fryActivityObject = ActivityHelper.createUserActivityObject(fry.getName());
+        String zappActivityObject = ActivityHelper.createUserActivityObject(zapp.getName());
+        userRelationshipService.addRelation(leelaActivityObject, benderActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject, fryActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject, zappActivityObject,
                 coworkers);
     }
 
