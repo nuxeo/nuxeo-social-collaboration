@@ -92,10 +92,9 @@ public class FullscreenManagementActionsBean implements Serializable {
             sourceDocument = documentManager.getSourceDocument(currentDocument.getRef());
         }
 
-        DocumentModel superSpace = documentManager.getSuperSpace(sourceDocument);
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(sourceDocument);
 
-        if (isSocialWorkspace(superSpace)) {
-            SocialWorkspace socialWorkspace = toSocialWorkspace(superSpace);
+        if (socialWorkspace != null) {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));
             return navigationContext.navigateToDocument(dashboardSpacesRoot,
@@ -137,7 +136,8 @@ public class FullscreenManagementActionsBean implements Serializable {
     protected String navigateToListing(String listingView)
             throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getSocialWorkspaceContainer(currentDocument);
+
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(currentDocument);
         if (socialWorkspace != null) {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));

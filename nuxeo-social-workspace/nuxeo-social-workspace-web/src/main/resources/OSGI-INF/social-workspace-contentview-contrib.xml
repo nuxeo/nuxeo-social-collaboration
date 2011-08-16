@@ -59,13 +59,15 @@
       <pattern>
         SELECT *
           FROM Article
-         WHERE ecm:isProxy = 0
+         WHERE ecm:isProxy = ?
                AND ecm:mixinType != 'HiddenInNavigation'
                AND ecm:isCheckedInVersion = 0
                AND ecm:currentLifeCycleState != 'deleted'
                AND ecm:path STARTSWITH ?
         </pattern>
       <pageSize>20</pageSize>
+      <parameter>#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() ? 0 : 1}
+      </parameter>
       <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}
       </parameter>
     </coreQueryPageProvider>
