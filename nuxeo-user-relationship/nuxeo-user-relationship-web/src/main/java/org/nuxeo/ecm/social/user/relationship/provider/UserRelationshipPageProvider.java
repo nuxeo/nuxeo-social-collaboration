@@ -19,10 +19,13 @@
 
 package org.nuxeo.ecm.social.user.relationship.provider;
 
+import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.CIRCLE_RELATIONSHIP_KIND_GROUP;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -35,6 +38,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.ecm.user.center.profile.UserProfileService;
 import org.nuxeo.runtime.api.Framework;
@@ -110,11 +114,14 @@ public class UserRelationshipPageProvider extends
         relationships = new ArrayList<String>();
 
         if (StringUtils.isBlank(searchString) || "*".equals(searchString)) {
-            relationships.addAll(getUserRelationshipService().getTargets(
-                    getCurrentUser()));
+            relationships.addAll(getUserRelationshipService().getTargetsOfKind(
+                    getCurrentUser(),
+                    RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP)));
         } else {
             relationships.addAll(getUserRelationshipService().getTargetsWithFulltext(
-                    getCurrentUser(), searchString.trim()));
+                    getCurrentUser(),
+                    RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP),
+                    searchString.trim()));
         }
     }
 
@@ -154,7 +161,7 @@ public class UserRelationshipPageProvider extends
     protected String getCurrentUser() {
         Object[] params = getParameters();
         if (params.length >= 1) {
-            return ActivityHelper.createUserActivityObject((String)params[0]);
+            return ActivityHelper.createUserActivityObject((String) params[0]);
         }
         return null;
     }
