@@ -73,16 +73,15 @@ public class SocialWorkspaceEmailNotifier {
             CoreSession session, DocumentModel subscriptionRequest)
             throws ClientException {
         SubscriptionRequest requestAdapter = subscriptionRequest.getAdapter(SubscriptionRequest.class);
-        DocumentModel socialWorkspace = session.getDocument(new IdRef(
+        DocumentModel socialWorkspaceDoc = session.getDocument(new IdRef(
                 requestAdapter.getInfo()));
-        String adminGroupName = toSocialWorkspace(socialWorkspace).getAdministratorsGroupName();
-        NuxeoGroup adminGroup = getUserManager().getGroup(adminGroupName);
-        List<String> admins = adminGroup.getMemberUsers();
+        SocialWorkspace socialWorkspace = toSocialWorkspace(socialWorkspaceDoc);
+        List<String> admins = socialWorkspace.getAdministrators();
         if (admins == null || admins.isEmpty()) {
             log.warn(String.format(
                     "No admin users for social workspace %s (%s) ",
                     socialWorkspace.getTitle(),
-                    socialWorkspace.getPathAsString()));
+                    socialWorkspace.getPath()));
             return;
         }
         StringList toList = new StringList();
@@ -103,7 +102,7 @@ public class SocialWorkspaceEmailNotifier {
         String template = loadTemplate(TEMPLATE_JOIN_REQUEST_RECEIVED);
 
         OperationContext ctx = new OperationContext(session);
-        ctx.setInput(socialWorkspace);
+        ctx.setInput(socialWorkspaceDoc);
         OperationChain chain = new OperationChain("sendEMail");
         chain.add(SendMail.ID).set("from", "admin@nuxeo.org").set("to", toList).set(
                 "subject", subject).set("HTML", true).set("message", template);
@@ -112,7 +111,7 @@ public class SocialWorkspaceEmailNotifier {
         } catch (Exception e) {
             String message = String.format(
                     "Failed to notify administrators of Social Workspace '%s': %s",
-                    socialWorkspace.getPath(), e.getMessage());
+                    socialWorkspaceDoc.getPath(), e.getMessage());
             log.warn(message);
             log.debug(e, e);
         }
