@@ -19,19 +19,23 @@
 
 package org.nuxeo.ecm.social.user.relationship.provider;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
-import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.user.center.profile.UserProfileService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -55,9 +59,13 @@ public class UserRelationshipPageProvider extends
 
     protected List<DocumentModel> relationshipPage;
 
-    protected UserRelationshipService service;
+    protected UserRelationshipService userRelationshipService;
 
     protected UserManager userManager;
+
+    protected UserProfileService userProfileService;
+
+    public static final String CORE_SESSION_PROPERTY = "coreSession";
 
     @Override
     public List<DocumentModel> getCurrentPage() {
@@ -88,7 +96,9 @@ public class UserRelationshipPageProvider extends
 
     protected void addUsernameToRelationshipPage(String username) {
         try {
-            relationshipPage.add(getUserManager().getUserModel(username));
+            DocumentModel userProfile = getUserProfileService().getUserProfile(
+                    getUserManager().getUserModel(username), getCoreSession());
+            relationshipPage.add(userProfile);
         } catch (ClientException e) {
             log.warn("Cannot get user model for:" + username, e);
         }
@@ -108,14 +118,14 @@ public class UserRelationshipPageProvider extends
     }
 
     protected UserRelationshipService getUserRelationshipService() {
-        if (service == null) {
+        if (userRelationshipService == null) {
             try {
-                service = Framework.getService(UserRelationshipService.class);
+                userRelationshipService = Framework.getService(UserRelationshipService.class);
             } catch (Exception e) {
                 log.warn("Failed to get UserRelationshipService", e);
             }
         }
-        return service;
+        return userRelationshipService;
     }
 
     protected UserManager getUserManager() {
@@ -129,10 +139,21 @@ public class UserRelationshipPageProvider extends
         return userManager;
     }
 
+    protected UserProfileService getUserProfileService() {
+        if (userProfileService == null) {
+            try {
+                userProfileService = Framework.getService(UserProfileService.class);
+            } catch (Exception e) {
+                log.warn("Failed to get UserProfileService", e);
+            }
+        }
+        return userProfileService;
+    }
+
     protected String getCurrentUser() {
         Object[] params = getParameters();
         if (params.length >= 1) {
-            return (String)params[0];
+            return (String) params[0];
         }
         return null;
     }
@@ -140,7 +161,7 @@ public class UserRelationshipPageProvider extends
     protected String getSearchString() {
         Object[] params = getParameters();
         if (params.length >= 2) {
-            return (String)params[1];
+            return (String) params[1];
         }
         return null;
     }
@@ -149,5 +170,14 @@ public class UserRelationshipPageProvider extends
     public void refresh() {
         super.refresh();
         relationships = null;
+    }
+
+    protected CoreSession getCoreSession() {
+        Map<String, Serializable> props = getProperties();
+        CoreSession coreSession = (CoreSession) props.get(CORE_SESSION_PROPERTY);
+        if (coreSession == null) {
+            throw new ClientRuntimeException("cannot find core session");
+        }
+        return coreSession;
     }
 }

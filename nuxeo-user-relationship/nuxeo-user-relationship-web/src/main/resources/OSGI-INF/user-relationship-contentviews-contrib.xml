@@ -20,6 +20,7 @@
       <pageProvider name="user_relationships">
         <parameter>#{currentUser.model.id}</parameter>
         <parameter>#{userRelationshipNetworkActions.searchString}</parameter>
+        <property name="coreSession">#{documentManager}</property>
       </pageProvider>
       <showPageSizeSelector>false</showPageSizeSelector>
       <showRefreshCommand>false</showRefreshCommand>

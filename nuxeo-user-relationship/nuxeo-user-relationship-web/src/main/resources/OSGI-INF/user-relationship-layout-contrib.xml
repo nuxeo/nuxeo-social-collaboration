@@ -43,7 +43,7 @@
           <properties mode="any">
             <property name="useFirstWidgetLabelAsColumnHeader">false</property>
           </properties>
-          <widget>user_relationship_profile_picture</widget>
+          <widget>user_relationship_avatar</widget>
         </column>
         <column>
           <properties mode="any">
@@ -117,18 +117,6 @@
       </widgetModes>
     </widget>
 
-    <widget name="user_relationship_profile_picture" type="template">
-      <fields>
-        <field>data</field>
-      </fields>
-      <properties mode="any">
-        <property name="template">/widgets/user_relationship_profile_picture_widget_template.xhtml</property>
-      </properties>
-      <widgetModes>
-        <mode value="any">view</mode>
-      </widgetModes>
-    </widget>
-
     <widget name="user_relationship_username" type="template">
       <fields>
         <field>data</field>
@@ -139,6 +127,25 @@
       <widgetModes>
         <mode value="any">view</mode>
       </widgetModes>
+    </widget>
+
+    <widget name="user_relationship_avatar" type="avatar">
+      <labels>
+        <label mode="any">label.userprofile.avatar</label>
+      </labels>
+      <translated>true</translated>
+      <helpLabels>
+        <label mode="edit">
+          helplabel.userprofile.avatar
+        </label>
+      </helpLabels>
+      <fields>
+        <field>data</field>
+        <field>data.userprofile.avatar</field>
+      </fields>
+      <properties mode="any">
+        <property name="file_property_name">userprofile:avatar</property>
+      </properties>
     </widget>
   </extension>
 </component>
