@@ -10,7 +10,8 @@
     <coreQueryPageProvider>
       <property name="coreSession">#{documentManager}</property>
       <pattern>
-        SELECT * FROM SubscriptionRequest WHERE req:info = ?
+        SELECT * FROM SubscriptionRequest WHERE ecm:isCheckedInVersion = 0
+        AND ecm:isProxy = 0 AND req:info = ?
       </pattern>
       <parameter>#{currentDocument.id}</parameter>
       <pageSize>20</pageSize>
