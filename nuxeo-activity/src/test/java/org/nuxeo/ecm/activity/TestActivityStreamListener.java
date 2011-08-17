@@ -19,6 +19,7 @@ package org.nuxeo.ecm.activity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.EventImpl;
@@ -81,43 +84,47 @@ public class TestActivityStreamListener {
 
     @Test
     public void shouldAddNewActivitiesThroughListener() throws ClientException {
-        Activity firstActivity = new ActivityImpl();
-        firstActivity.setActor("Administrator");
-        firstActivity.setVerb("tweeted");
-        firstActivity.setObject("yo");
-        firstActivity.setPublishedDate(new Date());
-        ActivityEventContext activityEventContext = new ActivityEventContext(
-                session, session.getPrincipal(), firstActivity);
-        Event event = new EventImpl("activityStreamEvent", activityEventContext);
-        eventService.fireEvent(event);
-
-        Activity secondActivity = new ActivityImpl();
-        secondActivity.setActor("bob");
-        secondActivity.setVerb("tweeted");
-        secondActivity.setObject("hello!");
-        secondActivity.setPublishedDate(new Date());
-        activityEventContext = new ActivityEventContext(session,
-                session.getPrincipal(), secondActivity);
-        event = new EventImpl("activityStreamEvent", activityEventContext);
-        eventService.fireEvent(event);
-
+        DocumentModel doc1 = session.createDocumentModel("/", "firstDocument", "File");
+        doc1 = session.createDocument(doc1);
         session.save();
+        DocumentModel doc2 = session.createDocumentModel("/", "secondDocument", "File");
+        doc2 = session.createDocument(doc2);
+        session.save();
+
+        doc1.setPropertyValue("dc:title", "A new Title");
+        session.saveDocument(doc1);
+        session.save();
+
         eventService.waitForAsyncCompletion();
 
         List<Activity> activities = activityStreamService.query(ActivityStreamService.ALL_ACTIVITIES, null);
         assertNotNull(activities);
-        assertEquals(2, activities.size());
+        assertEquals(3, activities.size());
+
+        String currentUser = ActivityHelper.createUserActivityObject(session.getPrincipal());
         Activity storedActivity = activities.get(0);
         assertEquals(1, storedActivity.getId());
-        assertEquals(firstActivity.getActor(), storedActivity.getActor());
-        assertEquals(firstActivity.getVerb(), storedActivity.getVerb());
-        assertEquals(firstActivity.getObject(), storedActivity.getObject());
+        assertEquals(currentUser, storedActivity.getActor());
+        assertEquals(DOCUMENT_CREATED, storedActivity.getVerb());
+        assertEquals(ActivityHelper.createDocumentActivityObject(doc1), storedActivity.getObject());
+        assertEquals("firstDocument", storedActivity.getDisplayObject());
+        assertEquals(ActivityHelper.createDocumentActivityObject(session.getRootDocument()), storedActivity.getTarget());
 
         storedActivity = activities.get(1);
         assertEquals(2, storedActivity.getId());
-        assertEquals(secondActivity.getActor(), storedActivity.getActor());
-        assertEquals(secondActivity.getVerb(), storedActivity.getVerb());
-        assertEquals(secondActivity.getObject(), storedActivity.getObject());
+        assertEquals(currentUser, storedActivity.getActor());
+        assertEquals(DOCUMENT_CREATED, storedActivity.getVerb());
+        assertEquals(ActivityHelper.createDocumentActivityObject(doc2), storedActivity.getObject());
+        assertEquals("secondDocument", storedActivity.getDisplayObject());
+        assertEquals(ActivityHelper.createDocumentActivityObject(session.getRootDocument()), storedActivity.getTarget());
+
+        storedActivity = activities.get(2);
+        assertEquals(3, storedActivity.getId());
+        assertEquals(currentUser, storedActivity.getActor());
+        assertEquals(DocumentEventTypes.DOCUMENT_UPDATED, storedActivity.getVerb());
+        assertEquals(ActivityHelper.createDocumentActivityObject(doc1), storedActivity.getObject());
+        assertEquals("A new Title", storedActivity.getDisplayObject());
+        assertEquals(ActivityHelper.createDocumentActivityObject(session.getRootDocument()), storedActivity.getTarget());
     }
 
 }
