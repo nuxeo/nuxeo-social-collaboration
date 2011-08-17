@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.platform.computedgroups.AbstractGroupComputer;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
@@ -39,17 +40,17 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
     @Override
     public List<String> getGroupsForUser(NuxeoPrincipalImpl nuxeoPrincipal)
             throws Exception {
-        String userId = nuxeoPrincipal.getModel().getId();
+        String user = ActivityHelper.createUserActivityObject(nuxeoPrincipal);
         List<String> groupsId = new ArrayList<String>();
         // member of a social workspace
-        for (String swId : getRelationshipService().getTargetsOfKind(userId,
+        for (String swId : getRelationshipService().getTargetsOfKind(user,
                 buildRelationMemberKind())) {
-            groupsId.add(getSocialWorkspaceMembersGroupName(swId));
+            groupsId.add(getSocialWorkspaceMembersGroupName(ActivityHelper.getDocumentId(swId)));
         }
         // administrator of a social workspace
-        for (String swId : getRelationshipService().getTargetsOfKind(userId,
+        for (String swId : getRelationshipService().getTargetsOfKind(user,
                 buildRelationAdministratorKind())) {
-            groupsId.add(getSocialWorkspaceAdministratorsGroupName(swId));
+            groupsId.add(getSocialWorkspaceAdministratorsGroupName(ActivityHelper.getDocumentId(swId)));
         }
         return groupsId;
     }
