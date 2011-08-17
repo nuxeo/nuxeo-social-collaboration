@@ -1,9 +1,9 @@
 package org.nuxeo.ecm.social.workspace.computedgroups;
 
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getRelationDocIdFromGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationKindFromGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getRelationDocIdFromGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isValidSocialWorkspaceGroupName;
@@ -22,9 +22,8 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Social Workspace group computer to provide virtual groups.
  * <p>
- * We have two virtual groups:
- * - members of a social workspace
- * - administrators of a social workspace
+ * We have two virtual groups: - members of a social workspace - administrators
+ * of a social workspace
  * <p>
  * It do not provide sub groups.
  *
@@ -34,8 +33,7 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
 
     protected UserRelationshipService relationshipService;
 
-    private static final Log log = LogFactory.getLog(
-            SocialWorkspaceGroupComputer.class);
+    private static final Log log = LogFactory.getLog(SocialWorkspaceGroupComputer.class);
 
     @Override
     public List<String> getGroupsForUser(NuxeoPrincipalImpl nuxeoPrincipal)
@@ -73,7 +71,8 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
 
     @Override
     public List<String> getParentsGroupNames(String groupName) throws Exception {
-        // Make a subgroup with social workspace group should not be implemented.
+        // Make a subgroup with social workspace group should not be
+        // implemented.
         return null;
     }
 
@@ -86,8 +85,7 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
     protected UserRelationshipService getRelationshipService() {
         if (relationshipService == null) {
             try {
-                relationshipService = Framework.getService(
-                        UserRelationshipService.class);
+                relationshipService = Framework.getService(UserRelationshipService.class);
             } catch (Exception e) {
                 log.warn("Cannot retrieve UserRelationship Service");
                 log.debug(e, e);

@@ -144,10 +144,12 @@ public abstract class AbstractMiniMessageTest {
         String benderActivityObject = ActivityHelper.createUserActivityObject(bender.getName());
         String fryActivityObject = ActivityHelper.createUserActivityObject(fry.getName());
         String zappActivityObject = ActivityHelper.createUserActivityObject(zapp.getName());
-        userRelationshipService.addRelation(leelaActivityObject, benderActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject, fryActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject, zappActivityObject,
-                coworkers);
+        userRelationshipService.addRelation(leelaActivityObject,
+                benderActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject,
+                fryActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject,
+                zappActivityObject, coworkers);
     }
 
     protected void changeUser(String username) {
@@ -160,7 +162,7 @@ public abstract class AbstractMiniMessageTest {
         user.setPropertyValue("user:username", username);
         try {
             userManager.createUser(user);
-        } catch(UserAlreadyExistsException e) {
+        } catch (UserAlreadyExistsException e) {
             // do nothing
         } finally {
             session.save();

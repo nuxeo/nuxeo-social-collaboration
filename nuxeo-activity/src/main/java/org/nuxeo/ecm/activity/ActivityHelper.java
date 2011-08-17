@@ -48,7 +48,8 @@ public class ActivityHelper {
     }
 
     public static String getUsername(String activityObject) {
-        return isUser(activityObject) ? activityObject.replaceAll(USER_PREFIX, "") : "";
+        return isUser(activityObject) ? activityObject.replaceAll(USER_PREFIX,
+                "") : "";
     }
 
     public static String getDocumentId(String activityObject) {
@@ -68,10 +69,12 @@ public class ActivityHelper {
     }
 
     public static String createDocumentActivityObject(DocumentModel doc) {
-        return createDocumentActivityObject(doc.getRepositoryName(), doc.getId());
+        return createDocumentActivityObject(doc.getRepositoryName(),
+                doc.getId());
     }
 
-    public static String createDocumentActivityObject(String repositoryName, String docId) {
+    public static String createDocumentActivityObject(String repositoryName,
+            String docId) {
         return DOC_PREFIX + repositoryName + SEPARATOR + docId;
     }
 
@@ -86,8 +89,10 @@ public class ActivityHelper {
     public static String generateDisplayName(Principal principal) {
         if (principal instanceof NuxeoPrincipal) {
             NuxeoPrincipal nuxeoPrincipal = (NuxeoPrincipal) principal;
-            if (!StringUtils.isBlank(nuxeoPrincipal.getFirstName()) || !StringUtils.isBlank(nuxeoPrincipal.getLastName())) {
-                return nuxeoPrincipal.getFirstName() + " " + nuxeoPrincipal.getLastName();
+            if (!StringUtils.isBlank(nuxeoPrincipal.getFirstName())
+                    || !StringUtils.isBlank(nuxeoPrincipal.getLastName())) {
+                return nuxeoPrincipal.getFirstName() + " "
+                        + nuxeoPrincipal.getLastName();
             }
         }
         return principal.getName();

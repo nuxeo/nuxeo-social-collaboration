@@ -38,7 +38,6 @@ import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -66,8 +65,8 @@ public class SocialWorkspaceEmailNotifier {
     private UserManager userManager;
 
     /**
-     * Sends email to the administrators of the Social Workspace
-     * referenced by the {@code subscriptionRequest}.
+     * Sends email to the administrators of the Social Workspace referenced by
+     * the {@code subscriptionRequest}.
      */
     public void notifyAdministratorsForNewSubscriptionRequest(
             CoreSession session, DocumentModel subscriptionRequest)
@@ -80,8 +79,7 @@ public class SocialWorkspaceEmailNotifier {
         if (admins == null || admins.isEmpty()) {
             log.warn(String.format(
                     "No admin users for social workspace %s (%s) ",
-                    socialWorkspace.getTitle(),
-                    socialWorkspace.getPath()));
+                    socialWorkspace.getTitle(), socialWorkspace.getPath()));
             return;
         }
         StringList toList = new StringList();
@@ -118,8 +116,8 @@ public class SocialWorkspaceEmailNotifier {
     }
 
     /**
-     * Sends email to the user referenced by the {@code principalName}
-     * when his request is accepted.
+     * Sends email to the user referenced by the {@code principalName} when his
+     * request is accepted.
      */
     public void notifyUserForSubscriptionRequestAccepted(CoreSession session,
             SocialWorkspace socialWorkspace, String principalName)
@@ -128,8 +126,8 @@ public class SocialWorkspaceEmailNotifier {
     }
 
     /**
-     * Sends email to the user referenced by the {@code principalName}
-     * when his request is rejected.
+     * Sends email to the user referenced by the {@code principalName} when his
+     * request is rejected.
      */
     public void notifyUserForSubscriptionRequestRejected(CoreSession session,
             SocialWorkspace socialWorkspace, String principalName)

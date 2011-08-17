@@ -46,8 +46,10 @@ public class TestPublicSocialWorkspaceAccess extends
         createSocialWorkspace("marketing", true);
         createSocialWorkspace("sales", false);
 
-        session.getRootDocument().getACP().getOrCreateACL().add(new ACE("John", "READ", true));
-        session.setACP(session.getRootDocument().getRef(), session.getRootDocument().getACP(), true);
+        session.getRootDocument().getACP().getOrCreateACL().add(
+                new ACE("John", "READ", true));
+        session.setACP(session.getRootDocument().getRef(),
+                session.getRootDocument().getACP(), true);
         session.save();
     }
 
@@ -59,7 +61,8 @@ public class TestPublicSocialWorkspaceAccess extends
         List<SocialWorkspace> socialWorkspaces = service.getDetachedPublicSocialWorkspaces(session);
         assertEquals(1, socialWorkspaces.size());
 
-        String query = String.format("Select * From %s ", SocialConstants.SOCIAL_WORKSPACE_TYPE);
+        String query = String.format("Select * From %s ",
+                SocialConstants.SOCIAL_WORKSPACE_TYPE);
         DocumentModelList docs = session.query(query);
         assertEquals(0, docs.size());
 

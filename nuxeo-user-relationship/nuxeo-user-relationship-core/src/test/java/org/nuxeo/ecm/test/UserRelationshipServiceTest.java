@@ -68,10 +68,14 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testFriendshipsCreation() throws ClientException {
-        String user1 = ActivityHelper.createUserActivityObject(createUser("user1").getId());
-        String user2 = ActivityHelper.createUserActivityObject(createUser("user2").getId());
-        String user3 = ActivityHelper.createUserActivityObject(createUser("user3").getId());
-        String user4 = ActivityHelper.createUserActivityObject(createUser("user4").getId());
+        String user1 = ActivityHelper.createUserActivityObject(createUser(
+                "user1").getId());
+        String user2 = ActivityHelper.createUserActivityObject(createUser(
+                "user2").getId());
+        String user3 = ActivityHelper.createUserActivityObject(createUser(
+                "user3").getId());
+        String user4 = ActivityHelper.createUserActivityObject(createUser(
+                "user4").getId());
 
         RelationshipKind relation = RelationshipKind.newInstance("group",
                 "relation");
@@ -123,7 +127,9 @@ public class UserRelationshipServiceTest {
         assertEquals("circle", kind.getGroup());
         assertEquals("friend", kind.getName());
 
-        assertNull(RelationshipKind.fromString("circleFriend")); //Without separator char
+        assertNull(RelationshipKind.fromString("circleFriend")); // Without
+                                                                 // separator
+                                                                 // char
     }
 
     @Test
@@ -151,21 +157,32 @@ public class UserRelationshipServiceTest {
         assertTrue(relationshipService.addRelation(user, "doc3", doc_read));
 
         assertEquals(6, relationshipService.getTargets(user).size());
-        assertEquals(3, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.fromGroup("user")).size());
-        assertEquals(1, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.fromName("coworker")).size());
-        assertEquals(0, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.fromName("unknown")).size());
-        assertEquals(0, relationshipService.getTargetsOfKind(user,
-                RelationshipKind.newInstance("user", "unknown")).size());
+        assertEquals(
+                3,
+                relationshipService.getTargetsOfKind(user,
+                        RelationshipKind.fromGroup("user")).size());
+        assertEquals(
+                1,
+                relationshipService.getTargetsOfKind(user,
+                        RelationshipKind.fromName("coworker")).size());
+        assertEquals(
+                0,
+                relationshipService.getTargetsOfKind(user,
+                        RelationshipKind.fromName("unknown")).size());
+        assertEquals(
+                0,
+                relationshipService.getTargetsOfKind(user,
+                        RelationshipKind.newInstance("user", "unknown")).size());
     }
 
     @Test
     public void testRelationshipWithFulltext() throws ClientException {
-        String user1 = ActivityHelper.createUserActivityObject(createUser("user21").getId());
-        String user2 = ActivityHelper.createUserActivityObject(createUser("user22").getId());
-        String user3 = ActivityHelper.createUserActivityObject(createUser("user23").getId());
+        String user1 = ActivityHelper.createUserActivityObject(createUser(
+                "user21").getId());
+        String user2 = ActivityHelper.createUserActivityObject(createUser(
+                "user22").getId());
+        String user3 = ActivityHelper.createUserActivityObject(createUser(
+                "user23").getId());
         String doc1 = ActivityHelper.DOC_PREFIX + createDoc("doc21").getId();
         String doc2 = ActivityHelper.DOC_PREFIX + "doc22";
 
@@ -180,17 +197,22 @@ public class UserRelationshipServiceTest {
         assertTrue(relationshipService.addRelation(user1, doc2, read));
 
         assertEquals(4, relationshipService.getTargets(user1).size());
-        assertEquals(2, relationshipService.getTargetsWithFulltext(user1,
-                ActivityHelper.USER_PREFIX).size());
-        assertEquals(2, relationshipService.getTargetsWithFulltext(user1,
-                ActivityHelper.DOC_PREFIX).size());
+        assertEquals(
+                2,
+                relationshipService.getTargetsWithFulltext(user1,
+                        ActivityHelper.USER_PREFIX).size());
+        assertEquals(
+                2,
+                relationshipService.getTargetsWithFulltext(user1,
+                        ActivityHelper.DOC_PREFIX).size());
 
-        List<String> targetsWithFulltext = relationshipService.getTargetsWithFulltext(user1, "22");
-        assertEquals(2,
-                targetsWithFulltext.size());
+        List<String> targetsWithFulltext = relationshipService.getTargetsWithFulltext(
+                user1, "22");
+        assertEquals(2, targetsWithFulltext.size());
 
-        assertEquals(1, relationshipService.getTargetsWithFulltext(user1, read,
-                "22").size());
+        assertEquals(
+                1,
+                relationshipService.getTargetsWithFulltext(user1, read, "22").size());
 
     }
 

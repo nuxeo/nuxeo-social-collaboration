@@ -90,7 +90,8 @@ public final class ActivityBuilder {
         activity.setTarget(target);
         activity.setDisplayTarget(displayTarget);
         activity.setVerb(verb);
-        activity.setPublishedDate(publishedDate != null ? publishedDate : new Date());
+        activity.setPublishedDate(publishedDate != null ? publishedDate
+                : new Date());
         return activity;
     }
 

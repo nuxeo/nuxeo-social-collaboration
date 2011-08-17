@@ -42,11 +42,8 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
@@ -91,7 +88,6 @@ public class GetActivityStreamForActor {
             activityStreamType = FOR_USER_ACTIVITY_STREAM_TYPE;
         }
 
-
         if (pageSize == null) {
             pageSize = 0;
         }
@@ -111,13 +107,15 @@ public class GetActivityStreamForActor {
         } else if (FROM_USER_ACTIVITY_STREAM_TYPE.equals(activityStreamType)) {
             parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
         }
-        List<Activity> activities = activityStreamService.query(UserActivityStreamFilter.ID, parameters, pageSize, page);
+        List<Activity> activities = activityStreamService.query(
+                UserActivityStreamFilter.ID, parameters, pageSize, page);
 
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
-        for (Activity activity: activities) {
+        for (Activity activity : activities) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", activity.getId());
-            o.put("activityMessage", activityStreamService.toFormattedMessage(activity, locale));
+            o.put("activityMessage",
+                    activityStreamService.toFormattedMessage(activity, locale));
             o.put("publishedDate",
                     dateFormat.format(activity.getPublishedDate()));
             m.add(o);

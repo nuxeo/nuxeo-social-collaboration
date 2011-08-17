@@ -39,8 +39,8 @@ public final class MiniMessage {
 
     private Date publishedDate;
 
-    private MiniMessage(long id, String actor, String displayActor, String message,
-            Date publishedDate) {
+    private MiniMessage(long id, String actor, String displayActor,
+            String message, Date publishedDate) {
         this.id = id;
         this.actor = actor;
         this.displayActor = displayActor;
@@ -49,8 +49,9 @@ public final class MiniMessage {
     }
 
     public static MiniMessage fromActivity(Activity activity) {
-        return new MiniMessage(activity.getId(), activity.getActor(), activity.getDisplayActor(),
-                activity.getObject(), activity.getPublishedDate());
+        return new MiniMessage(activity.getId(), activity.getActor(),
+                activity.getDisplayActor(), activity.getObject(),
+                activity.getPublishedDate());
     }
 
     public long getId() {

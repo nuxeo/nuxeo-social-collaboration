@@ -100,7 +100,8 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
         Events.instance().raiseEvent(SUBSCRIPTION_REQUESTS_UPDATED);
     }
 
-    protected static void processSubscriptionRequest(SocialWorkspace socialWorkspace,
+    protected static void processSubscriptionRequest(
+            SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest, boolean accept) {
         try {
             if (accept) {

@@ -105,8 +105,8 @@ public class TestRights extends AbstractSocialWorkspaceTest {
                 READ_WRITE));
         assertFalse(session.hasPermission(swMember, publicDashboardPathRef,
                 EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, publicDashboardPathRef,
-                EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator,
+                publicDashboardPathRef, EVERYTHING));
 
         socialWorkspace.makePublic();
 
@@ -133,8 +133,8 @@ public class TestRights extends AbstractSocialWorkspaceTest {
                 READ_WRITE));
         assertFalse(session.hasPermission(swMember, publicDashboardPathRef,
                 EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, publicDashboardPathRef,
-                EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator,
+                publicDashboardPathRef, EVERYTHING));
     }
 
     @Test

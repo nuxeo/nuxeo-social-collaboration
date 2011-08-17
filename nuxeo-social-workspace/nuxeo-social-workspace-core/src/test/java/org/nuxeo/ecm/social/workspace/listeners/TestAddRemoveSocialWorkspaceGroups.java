@@ -43,10 +43,14 @@ public class TestAddRemoveSocialWorkspaceGroups extends
 
         String docId = socialWorkspace.getId();
         assertEquals(1, userRelationshipService.getTargets(docId).size());
-        assertEquals(1, userRelationshipService.getTargetsOfKind(docId,
-                buildRelationAdministratorKind()).size());
-        assertEquals(0, userRelationshipService.getTargetsOfKind(docId,
-                buildRelationMemberKind()).size());
+        assertEquals(
+                1,
+                userRelationshipService.getTargetsOfKind(docId,
+                        buildRelationAdministratorKind()).size());
+        assertEquals(
+                0,
+                userRelationshipService.getTargetsOfKind(docId,
+                        buildRelationMemberKind()).size());
 
         session.removeDocument(socialWorkspaceDoc.getRef());
         session.save();

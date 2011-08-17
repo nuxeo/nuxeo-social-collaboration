@@ -68,8 +68,7 @@ public class TweetActivityStreamFilter implements ActivityStreamFilter {
     @Override
     @SuppressWarnings("unchecked")
     public List<Activity> query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, int pageSize,
-            int currentPage) {
+            Map<String, Serializable> parameters, int pageSize, int currentPage) {
         if (parameters.containsKey("seenBy")) {
             String seenBy = (String) parameters.get("seenBy");
             EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();

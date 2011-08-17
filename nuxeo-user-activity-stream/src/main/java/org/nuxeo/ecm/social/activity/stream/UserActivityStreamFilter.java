@@ -56,7 +56,9 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
 
     public static final String ACTOR_PARAMETER = "actor";
 
-    public static final String[] VERBS = new String[]{ DOCUMENT_CREATED, DOCUMENT_UPDATED, DOCUMENT_REMOVED, "socialworkspace:members", "circle" };
+    public static final String[] VERBS = new String[] { DOCUMENT_CREATED,
+            DOCUMENT_UPDATED, DOCUMENT_REMOVED, "socialworkspace:members",
+            "circle" };
 
     private UserRelationshipService userRelationshipService;
 
@@ -71,13 +73,15 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
     }
 
     @Override
-    public void handleNewActivity(ActivityStreamService activityStreamService, Activity activity) {
+    public void handleNewActivity(ActivityStreamService activityStreamService,
+            Activity activity) {
         // nothing for now
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Activity> query(ActivityStreamService activityStreamService, Map<String, Serializable> parameters, int pageSize, int currentPage) {
+    public List<Activity> query(ActivityStreamService activityStreamService,
+            Map<String, Serializable> parameters, int pageSize, int currentPage) {
         QueryType queryType = (QueryType) parameters.get(QUERY_TYPE_PARAMETER);
         if (queryType == null) {
             throw new IllegalArgumentException(QUERY_TYPE_PARAMETER
@@ -92,26 +96,29 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
         switch (queryType) {
-            case ACTIVITY_STREAM_FOR_ACTOR:
-                List<String> actors = getUserRelationshipService().getTargetsOfKind(ActivityHelper.createUserActivityObject(actor), RelationshipKind.fromString("socialworkspace:members"));
-                actors.addAll(getUserRelationshipService().getTargetsOfKind(ActivityHelper.createUserActivityObject(actor), RelationshipKind.fromGroup("circle")));
-                if (actors.isEmpty()) {
-                    return Collections.emptyList();
-                }
+        case ACTIVITY_STREAM_FOR_ACTOR:
+            List<String> actors = getUserRelationshipService().getTargetsOfKind(
+                    ActivityHelper.createUserActivityObject(actor),
+                    RelationshipKind.fromString("socialworkspace:members"));
+            actors.addAll(getUserRelationshipService().getTargetsOfKind(
+                    ActivityHelper.createUserActivityObject(actor),
+                    RelationshipKind.fromGroup("circle")));
+            if (actors.isEmpty()) {
+                return Collections.emptyList();
+            }
 
-                query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) order by activity.publishedDate desc");
-                query.setParameter("actors", actors);
-                query.setParameter("verbs", Arrays.asList(VERBS));
-                break;
-            case ACTIVITY_STREAM_FROM_ACTOR:
-                query = em.createQuery("select activity from Activity activity where activity.actor = :actor and activity.verb in (:verbs) order by activity.publishedDate desc");
-                query.setParameter("actor", actor);
-                query.setParameter("verbs", Arrays.asList(VERBS));
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid QueryType parameter");
+            query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) order by activity.publishedDate desc");
+            query.setParameter("actors", actors);
+            query.setParameter("verbs", Arrays.asList(VERBS));
+            break;
+        case ACTIVITY_STREAM_FROM_ACTOR:
+            query = em.createQuery("select activity from Activity activity where activity.actor = :actor and activity.verb in (:verbs) order by activity.publishedDate desc");
+            query.setParameter("actor", actor);
+            query.setParameter("verbs", Arrays.asList(VERBS));
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid QueryType parameter");
         }
-
 
         if (pageSize > 0) {
             query.setMaxResults(pageSize);

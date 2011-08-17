@@ -87,7 +87,8 @@ public class TestActivityStreamService {
         activity.setPublishedDate(new Date());
         activityStreamService.addActivity(activity);
 
-        List<Activity> activities = activityStreamService.query(ActivityStreamService.ALL_ACTIVITIES, null);
+        List<Activity> activities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null);
         assertNotNull(activities);
         assertEquals(1, activities.size());
 
@@ -140,25 +141,29 @@ public class TestActivityStreamService {
     public void shouldHandlePagination() {
         addTestActivities(10);
 
-        List<Activity> activities = activityStreamService.query(ActivityStreamService.ALL_ACTIVITIES, null, 5, 1);
+        List<Activity> activities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 5, 1);
         assertEquals(5, activities.size());
         for (int i = 0; i < 5; i++) {
             assertEquals("activity" + i, activities.get(i).getObject());
         }
 
-        activities = activityStreamService.query(ActivityStreamService.ALL_ACTIVITIES, null, 5, 2);
+        activities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 5, 2);
         assertEquals(5, activities.size());
         for (int i = 5; i < 10; i++) {
             assertEquals("activity" + i, activities.get(i - 5).getObject());
         }
 
-        activities = activityStreamService.query(ActivityStreamService.ALL_ACTIVITIES, null, 15, 1);
+        activities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 15, 1);
         assertEquals(10, activities.size());
         for (int i = 0; i < 10; i++) {
             assertEquals("activity" + i, activities.get(i).getObject());
         }
 
-        activities = activityStreamService.query(ActivityStreamService.ALL_ACTIVITIES, null, 5, 3);
+        activities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 5, 3);
         assertEquals(0, activities.size());
     }
 
@@ -167,7 +172,7 @@ public class TestActivityStreamService {
             Activity activity = new ActivityImpl();
             activity.setActor("Administrator");
             activity.setVerb("test");
-            activity.setObject("activity" +i);
+            activity.setObject("activity" + i);
             activity.setPublishedDate(new Date());
             activityStreamService.addActivity(activity);
         }

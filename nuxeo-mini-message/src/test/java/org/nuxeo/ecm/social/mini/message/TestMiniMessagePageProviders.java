@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;

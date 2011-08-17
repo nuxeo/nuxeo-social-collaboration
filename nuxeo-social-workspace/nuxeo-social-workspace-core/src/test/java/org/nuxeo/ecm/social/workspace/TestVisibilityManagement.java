@@ -400,21 +400,16 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
     }
 
     protected void checkPublic(DocumentModel doc) throws ClientException {
-        assertTrue(session.hasPermission(notMember, doc.getRef(),
-                READ));
-        assertFalse(session.hasPermission(notMember, doc.getRef(),
-                READ_WRITE));
-        assertTrue(session.hasPermission(member, doc.getRef(),
-                READ_WRITE));
+        assertTrue(session.hasPermission(notMember, doc.getRef(), READ));
+        assertFalse(session.hasPermission(notMember, doc.getRef(), READ_WRITE));
+        assertTrue(session.hasPermission(member, doc.getRef(), READ_WRITE));
         assertTrue(session.hasPermission(administrator, doc.getRef(),
                 EVERYTHING));
     }
 
     protected void checkRestricted(DocumentModel doc) throws ClientException {
-        assertFalse(session.hasPermission(notMember, doc.getRef(),
-                READ));
-        assertTrue(session.hasPermission(member, doc.getRef(),
-                READ_WRITE));
+        assertFalse(session.hasPermission(notMember, doc.getRef(), READ));
+        assertTrue(session.hasPermission(member, doc.getRef(), READ_WRITE));
         assertTrue(session.hasPermission(administrator, doc.getRef(),
                 EVERYTHING));
     }

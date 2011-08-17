@@ -49,7 +49,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.opensocial.spaces",
         "org.nuxeo.ecm.social.workspace.core",
         "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.user.relationships"})
+        "org.nuxeo.ecm.user.relationships" })
 @LocalDeploy("org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml")
 public abstract class AbstractSocialWorkspaceTest {
 
@@ -89,7 +89,8 @@ public abstract class AbstractSocialWorkspaceTest {
      */
     public DocumentModel createSocialDocument(String pathAsString, String name,
             String type, boolean isPublic) throws Exception {
-        DocumentModel doc = session.createDocumentModel(pathAsString, name, type);
+        DocumentModel doc = session.createDocumentModel(pathAsString, name,
+                type);
         doc.setPropertyValue(
                 SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, isPublic);
         doc = session.createDocument(doc);
@@ -125,10 +126,12 @@ public abstract class AbstractSocialWorkspaceTest {
     }
 
     protected void switchUser(String username) {
-        featuresRunner.getFeature(CoreFeature.class).getRepository().switchUser(username);
+        featuresRunner.getFeature(CoreFeature.class).getRepository().switchUser(
+                username);
     }
 
     protected void switchBackToAdministrator() {
-        featuresRunner.getFeature(CoreFeature.class).getRepository().switchToAdminUser("Administrator");
+        featuresRunner.getFeature(CoreFeature.class).getRepository().switchToAdminUser(
+                "Administrator");
     }
 }

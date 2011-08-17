@@ -17,8 +17,12 @@
 
 package org.nuxeo.ecm.activity;
 
-import javax.persistence.Column;import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;import javax.persistence.GenerationType;import javax.persistence.Id;import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>

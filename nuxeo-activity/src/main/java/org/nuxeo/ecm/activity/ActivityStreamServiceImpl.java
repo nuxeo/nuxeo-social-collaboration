@@ -22,7 +22,6 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,12 +40,8 @@ import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.utils.i18n.I18NUtils;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.persistence.PersistenceProviderFactory;
-import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
 import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
@@ -74,7 +69,8 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         LABELS_FOR_VERBS.put(DOCUMENT_CREATED, "label.activity.documentCreated");
         LABELS_FOR_VERBS.put(DOCUMENT_UPDATED, "label.activity.documentUpdated");
         LABELS_FOR_VERBS.put(DOCUMENT_REMOVED, "label.activity.documentRemoved");
-        LABELS_FOR_VERBS.put("socialworkspace:members", "label.activity.socialworkspace");
+        LABELS_FOR_VERBS.put("socialworkspace:members",
+                "label.activity.socialworkspace");
         LABELS_FOR_VERBS.put("circle", "label.activity.circle");
     }
 
@@ -150,7 +146,8 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     }
 
     @SuppressWarnings("unchecked")
-    protected List<Activity> queryAllByPage(EntityManager em, int pageSize, int currentPage) {
+    protected List<Activity> queryAllByPage(EntityManager em, int pageSize,
+            int currentPage) {
         Query query = em.createQuery("from Activity activity");
         if (pageSize > 0) {
             query.setMaxResults(pageSize);
@@ -202,22 +199,30 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         }
 
         String labelKey = LABELS_FOR_VERBS.get(activity.getVerb());
-        String messageTemplate = I18NUtils.getMessageString("messages", labelKey,
-                null, locale);
+        String messageTemplate = I18NUtils.getMessageString("messages",
+                labelKey, null, locale);
 
         Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
         Matcher m = pattern.matcher(messageTemplate);
-        while(m.find()) {
+        while (m.find()) {
             String param = m.group().replaceAll("[\\|$\\|{\\}]", "");
             if (fields.containsKey(param)) {
                 String value = fields.get(param);
                 final String escapedValue = StringEscapeUtils.escapeHtml(value);
-                final String displayValue = StringEscapeUtils.escapeHtml(fields.get("display" + StringUtils.capitalize(param)));
+                final String displayValue = StringEscapeUtils.escapeHtml(fields.get("display"
+                        + StringUtils.capitalize(param)));
                 if (ActivityHelper.isDocument(escapedValue)) {
-                    String url = VirtualHostHelper.getContextPathProperty() + "/nxdoc/" + ActivityHelper.getRepositoryName(escapedValue) + "/" + ActivityHelper.getDocumentId(escapedValue) + "/view_documents";
-                    value = "<a href=\"" + url + "\" target=\"_top\">" + StringEscapeUtils.escapeHtml(displayValue) + "</a>";
+                    String url = VirtualHostHelper.getContextPathProperty()
+                            + "/nxdoc/"
+                            + ActivityHelper.getRepositoryName(escapedValue)
+                            + "/" + ActivityHelper.getDocumentId(escapedValue)
+                            + "/view_documents";
+                    value = "<a href=\"" + url + "\" target=\"_top\">"
+                            + StringEscapeUtils.escapeHtml(displayValue)
+                            + "</a>";
                 } else if (ActivityHelper.isUser(escapedValue)) {
-                    value = displayValue + " (" + ActivityHelper.getUsername(escapedValue) + ")";
+                    value = displayValue + " ("
+                            + ActivityHelper.getUsername(escapedValue) + ")";
                 }
                 messageTemplate = messageTemplate.replace(m.group(), value);
             }

@@ -30,7 +30,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.core.Events;import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
+import org.jboss.seam.core.Events;
+import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
 
 /**
  * Social User Relationship Network action bean.
@@ -66,7 +67,7 @@ public class UserRelationshipNetworkActions implements Serializable {
         searchString = null;
     }
 
-    @Observer( { USER_RELATIONSHIP_CHANGED,
+    @Observer({ USER_RELATIONSHIP_CHANGED,
             USER_RELATIONSHIP_NETWORK_SEARCH_CHANGED })
     public void resetContentView() {
         contentViewActions.refreshOnSeamEvent(USER_RELATIONSHIP_CHANGED);

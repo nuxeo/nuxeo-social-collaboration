@@ -36,7 +36,8 @@ public interface MiniMessageService {
      *
      * @return the newly created MiniMessage object.
      */
-    MiniMessage addMiniMessage(Principal principal, String message, Date publishedDate);
+    MiniMessage addMiniMessage(Principal principal, String message,
+            Date publishedDate);
 
     /**
      * Add a new mini message.

@@ -78,8 +78,8 @@ public class VisibilitySocialDocumentListener implements
                 : isPublic);
     }
 
-    protected static void updateSocialDocumentVisibility(DocumentModel document,
-            boolean isPublic) throws ClientException {
+    protected static void updateSocialDocumentVisibility(
+            DocumentModel document, boolean isPublic) throws ClientException {
         if (isPublic) {
             toSocialDocument(document).makePublic();
         } else {

@@ -59,7 +59,6 @@ public interface ActivityStreamFilter {
      * @param currentPage the current page of results.
      */
     List<Activity> query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, int pageSize,
-            int currentPage);
+            Map<String, Serializable> parameters, int pageSize, int currentPage);
 
 }

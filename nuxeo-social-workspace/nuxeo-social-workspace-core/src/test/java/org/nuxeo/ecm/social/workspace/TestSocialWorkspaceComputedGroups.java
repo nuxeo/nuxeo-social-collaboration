@@ -45,11 +45,9 @@ public class TestSocialWorkspaceComputedGroups extends
     public void testSocialWorkspaceComputer() throws Exception {
         SocialWorkspaceGroupComputer computer = new SocialWorkspaceGroupComputer();
 
-        SocialWorkspace sw = createSocialWorkspace(
-                "mySocialWorkspace", true);
+        SocialWorkspace sw = createSocialWorkspace("mySocialWorkspace", true);
         assertNotNull(sw);
-        SocialWorkspace sw2 = createSocialWorkspace(
-                "mySocialWorkspace2", true);
+        SocialWorkspace sw2 = createSocialWorkspace("mySocialWorkspace2", true);
         assertNotNull(sw);
 
         // Rights for SocialWorkspace: 1 admin and 2 members
@@ -60,21 +58,29 @@ public class TestSocialWorkspaceComputedGroups extends
         assertTrue(addBidirectionalRelation("userComputer3", sw.getId(),
                 buildRelationMemberKind()));
 
-        assertEquals(2, computer.getGroupMembers(
-                getSocialWorkspaceMembersGroupName(sw.getId())).size());
+        assertEquals(
+                2,
+                computer.getGroupMembers(
+                        getSocialWorkspaceMembersGroupName(sw.getId())).size());
 
         // There is the creator and a freshly added one.
-        assertEquals(2, computer.getGroupMembers(
-                getSocialWorkspaceAdministratorsGroupName(sw.getId())).size());
+        assertEquals(
+                2,
+                computer.getGroupMembers(
+                        getSocialWorkspaceAdministratorsGroupName(sw.getId())).size());
 
         // Right for SocialWorkspace 2: 1 admin and 0 member
         assertTrue(addBidirectionalRelation("userComputer2", sw2.getId(),
                 buildRelationAdministratorKind()));
 
-        assertEquals(2, computer.getGroupMembers(
-                getSocialWorkspaceAdministratorsGroupName(sw2.getId())).size());
-        assertEquals(0, computer.getGroupMembers(
-                getSocialWorkspaceMembersGroupName(sw2.getId())).size());
+        assertEquals(
+                2,
+                computer.getGroupMembers(
+                        getSocialWorkspaceAdministratorsGroupName(sw2.getId())).size());
+        assertEquals(
+                0,
+                computer.getGroupMembers(
+                        getSocialWorkspaceMembersGroupName(sw2.getId())).size());
 
         DocumentModel user1 = userManager.getBareUserModel();
         user1.setProperty(userManager.getUserSchemaName(),

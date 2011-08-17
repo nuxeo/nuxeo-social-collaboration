@@ -24,10 +24,8 @@ import org.junit.Test;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
-import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
@@ -58,14 +56,12 @@ public class TestDeleteSocialDocumentListener extends
 
         DocumentModel privateNews2 = createSocialDocument(
                 socialWorkspaceDoc.getPathAsString(),
-                "AAA another private News", NEWS_ITEM_TYPE,
-                false);
+                "AAA another private News", NEWS_ITEM_TYPE, false);
 
         assertEquals(1, getNumberOfProxy(privateNews1));
         assertEquals(1, getNumberOfProxy(privateNews2));
 
-        session.followTransition(privateNews1.getRef(),
-                DELETE_TRANSITION);
+        session.followTransition(privateNews1.getRef(), DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(privateNews1));
         assertEquals(1, getNumberOfProxy(privateNews2));
 
@@ -74,8 +70,7 @@ public class TestDeleteSocialDocumentListener extends
                 NEWS_ITEM_TYPE, true);
         assertEquals(1, getNumberOfProxy(publicNews));
 
-        session.followTransition(publicNews.getRef(),
-                DELETE_TRANSITION);
+        session.followTransition(publicNews.getRef(), DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(publicNews));
 
         String query = "Select * from NewsItem where ecm:isProxy = 1";
@@ -91,8 +86,7 @@ public class TestDeleteSocialDocumentListener extends
                 ARTICLE_TYPE, false);
 
         assertEquals(0, getNumberOfProxy(privateArticle1));
-        session.followTransition(privateArticle1.getRef(),
-                DELETE_TRANSITION);
+        session.followTransition(privateArticle1.getRef(), DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(privateArticle1));
 
         DocumentModel publicArticle = createSocialDocument(
@@ -100,8 +94,7 @@ public class TestDeleteSocialDocumentListener extends
                 NEWS_ITEM_TYPE, true);
 
         assertEquals(1, getNumberOfProxy(publicArticle));
-        session.followTransition(publicArticle.getRef(),
-                DELETE_TRANSITION);
+        session.followTransition(publicArticle.getRef(), DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(publicArticle));
 
         String query = "Select * from NewsItem where ecm:isProxy = 1";

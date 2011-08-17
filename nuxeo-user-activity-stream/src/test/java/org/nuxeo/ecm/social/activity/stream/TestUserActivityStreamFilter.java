@@ -71,7 +71,8 @@ import com.google.inject.Inject;
 @Features(PlatformFeature.class)
 @RepositoryConfig(repositoryName = "default", type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
-        "org.nuxeo.ecm.user.relationships", "org.nuxeo.ecm.social.user.activity.stream" })
+        "org.nuxeo.ecm.user.relationships",
+        "org.nuxeo.ecm.social.user.activity.stream" })
 @LocalDeploy("org.nuxeo.ecm.social.user.activity.stream:user-activity-stream-test.xml")
 public class TestUserActivityStreamFilter {
 
@@ -107,13 +108,11 @@ public class TestUserActivityStreamFilter {
         String loopbackURL = "http://[2a01:240:fe8e:0:226:bbff:fe09:55cd]:8080/nuxeo";
         Matcher m = p.matcher(loopbackURL);
 
-
-
         Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
 
         String s = "${actor} added ${object} as a relation with ${actor}.";
         m = pattern.matcher(s);
-        while(m.find()) {
+        while (m.find()) {
             String param = m.group().replaceAll("[\\|$\\|{\\}]", "");
             s = s.replace(m.group(), param);
         }
@@ -122,18 +121,20 @@ public class TestUserActivityStreamFilter {
 
     @Test
     public void shouldGetAllActivitiesFromUserNetwork() {
-        RelationshipKind friends = RelationshipKind.newInstance(CIRCLE_RELATIONSHIP_KIND_GROUP,
-                "friends");
-        RelationshipKind coworkers = RelationshipKind.newInstance(CIRCLE_RELATIONSHIP_KIND_GROUP,
-                "coworkers");
+        RelationshipKind friends = RelationshipKind.newInstance(
+                CIRCLE_RELATIONSHIP_KIND_GROUP, "friends");
+        RelationshipKind coworkers = RelationshipKind.newInstance(
+                CIRCLE_RELATIONSHIP_KIND_GROUP, "coworkers");
         String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
         String leelaActivityObject = ActivityHelper.createUserActivityObject("Leela");
         String fryActivityObject = ActivityHelper.createUserActivityObject("Fry");
         String zappActivityObject = ActivityHelper.createUserActivityObject("Zapp");
-        userRelationshipService.addRelation(leelaActivityObject, benderActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject, fryActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject, zappActivityObject,
-                coworkers);
+        userRelationshipService.addRelation(leelaActivityObject,
+                benderActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject,
+                fryActivityObject, friends);
+        userRelationshipService.addRelation(leelaActivityObject,
+                zappActivityObject, coworkers);
 
         DateTime now = new DateTime();
         Activity activity = new ActivityImpl();

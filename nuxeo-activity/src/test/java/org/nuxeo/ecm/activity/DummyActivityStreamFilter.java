@@ -50,8 +50,7 @@ public class DummyActivityStreamFilter implements ActivityStreamFilter {
 
     @Override
     public List<Activity> query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, int pageSize,
-            int currentPage) {
+            Map<String, Serializable> parameters, int pageSize, int currentPage) {
         return Collections.singletonList(lastActivity);
     }
 

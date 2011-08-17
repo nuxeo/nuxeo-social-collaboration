@@ -136,8 +136,9 @@ public class DefaultSubscriptionRequestHandler implements
     /**
      * Returns the dashboard management document, creates it if needed.
      */
-    private static DocumentModel getSubscriptionRequestsRoot(CoreSession session,
-            SocialWorkspace socialWorkspace) throws ClientException {
+    private static DocumentModel getSubscriptionRequestsRoot(
+            CoreSession session, SocialWorkspace socialWorkspace)
+            throws ClientException {
         String subscriptionRequestsRootPath = new Path(
                 socialWorkspace.getPath()).append(
                 SUBSCRIPTION_REQUESTS_ROOT_NAME).toString();
@@ -176,8 +177,8 @@ public class DefaultSubscriptionRequestHandler implements
                 public void run() throws ClientException {
                     String queryTemplate = "SELECT * FROM SubscriptionRequest WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";
                     String query = String.format(queryTemplate,
-                            SUBSCRIPTION_REQUEST_TYPE_JOIN, principal.getName(),
-                            socialWorkspace.getId());
+                            SUBSCRIPTION_REQUEST_TYPE_JOIN,
+                            principal.getName(), socialWorkspace.getId());
                     subscriptionRequests.addAll(session.query(query));
                 }
             }.runUnrestricted();
@@ -210,7 +211,8 @@ public class DefaultSubscriptionRequestHandler implements
             SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest) throws ClientException {
         String principalName = subscriptionRequest.getUsername();
-        if (socialWorkspace.addMember(getUserManager().getPrincipal(principalName))) {
+        if (socialWorkspace.addMember(getUserManager().getPrincipal(
+                principalName))) {
             DocumentModel request = session.getDocument(subscriptionRequest.getDocument().getRef());
             request.followTransition(SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION);
             session.saveDocument(request);

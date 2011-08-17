@@ -40,7 +40,7 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- * 
+ *
  */
 @Operation(id = GetSocialWorkspaceMembers.ID, category = Constants.CAT_EXECUTION, label = "Social Workspace Members", description = "return members of a social workspace")
 public class GetSocialWorkspaceMembers {

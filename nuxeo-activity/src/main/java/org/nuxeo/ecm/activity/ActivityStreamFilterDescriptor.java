@@ -39,7 +39,8 @@ public class ActivityStreamFilterDescriptor {
     public ActivityStreamFilterDescriptor() {
     }
 
-    public ActivityStreamFilterDescriptor(Class<? extends ActivityStreamFilter> activityStreamFilterClass,
+    public ActivityStreamFilterDescriptor(
+            Class<? extends ActivityStreamFilter> activityStreamFilterClass,
             boolean enabled) {
         this.activityStreamFilterClass = activityStreamFilterClass;
         this.enabled = enabled;

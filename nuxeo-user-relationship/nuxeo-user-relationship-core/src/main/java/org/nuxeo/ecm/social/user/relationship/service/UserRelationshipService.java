@@ -49,7 +49,8 @@ public interface UserRelationshipService {
     /**
      * Gets all targets that match the targetPattern with the given kind.
      */
-    List<String> getTargetsWithFulltext(String actorId, RelationshipKind kind, String targetPattern);
+    List<String> getTargetsWithFulltext(String actorId, RelationshipKind kind,
+            String targetPattern);
 
     /**
      * Gets all targets of a specific relation.
@@ -71,7 +72,8 @@ public interface UserRelationshipService {
     /**
      * Adds a relation between two entities.
      *
-     * @return {@code true} if a new relation is created, {@code false} otherwise.
+     * @return {@code true} if a new relation is created, {@code false}
+     *         otherwise.
      */
     Boolean addRelation(String actorId, String targetId, RelationshipKind kind);
 

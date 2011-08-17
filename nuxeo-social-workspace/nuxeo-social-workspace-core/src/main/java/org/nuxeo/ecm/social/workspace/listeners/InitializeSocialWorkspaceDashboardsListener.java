@@ -53,8 +53,8 @@ public class InitializeSocialWorkspaceDashboardsListener implements
         }
     }
 
-    private static void initializeDashboards(CoreSession session, DocumentModel doc)
-            throws ClientException {
+    private static void initializeDashboards(CoreSession session,
+            DocumentModel doc) throws ClientException {
         Space space = doc.getAdapter(Space.class);
         space.initLayout(LayoutHelper.buildLayout(LayoutHelper.Preset.X_2_66_33));
         // add initial gadgets

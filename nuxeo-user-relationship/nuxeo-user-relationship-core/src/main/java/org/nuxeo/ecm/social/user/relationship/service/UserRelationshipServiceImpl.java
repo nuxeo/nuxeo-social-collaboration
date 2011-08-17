@@ -283,7 +283,8 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
                 filter.put(RELATIONSHIP_FIELD_KIND, kind.toString());
             }
 
-            DocumentModelList relations = relationshipDirectory.query(filter, filter.keySet());
+            DocumentModelList relations = relationshipDirectory.query(filter,
+                    filter.keySet());
             if (relations.isEmpty()) {
                 log.warn("Trying to delete a relationship that doesn't exists");
                 return false;

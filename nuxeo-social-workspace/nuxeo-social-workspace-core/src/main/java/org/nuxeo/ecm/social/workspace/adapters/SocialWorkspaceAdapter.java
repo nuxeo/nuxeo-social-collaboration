@@ -101,8 +101,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public void removeMember(Principal principal) {
-        getSocialWorkspaceService().removeSocialWorkspaceMember(this,
-                principal);
+        getSocialWorkspaceService().removeSocialWorkspaceMember(this, principal);
     }
 
     @Override
@@ -214,8 +213,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public void handleSubscriptionRequest(Principal principal) {
-        getSocialWorkspaceService().handleSubscriptionRequest(this,
-                principal);
+        getSocialWorkspaceService().handleSubscriptionRequest(this, principal);
     }
 
     @Override

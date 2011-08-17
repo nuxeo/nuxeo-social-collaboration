@@ -28,8 +28,7 @@ import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 
-public class TestAddSocialFacetToDocument extends
-        AbstractSocialWorkspaceTest {
+public class TestAddSocialFacetToDocument extends AbstractSocialWorkspaceTest {
 
     public static final String SOCIAL_WORKSPACE_NAME = "social workspace";
 

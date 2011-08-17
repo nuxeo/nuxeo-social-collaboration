@@ -39,7 +39,8 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-public class ActivityStreamForActorPageProvider extends AbstractPageProvider<ActivityMessage> {
+public class ActivityStreamForActorPageProvider extends
+        AbstractPageProvider<ActivityMessage> {
 
     public static final String ACTOR_PROPERTY = "actor";
 
@@ -57,7 +58,9 @@ public class ActivityStreamForActorPageProvider extends AbstractPageProvider<Act
             Map<String, Serializable> parameters = new HashMap<String, Serializable>();
             parameters.put(ACTOR_PARAMETER, getActor());
             parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
-            List<Activity> activities = getActivityStreamService().query(UserActivityStreamFilter.ID, parameters, (int) pageSize, (int) getCurrentPageIndex());
+            List<Activity> activities = getActivityStreamService().query(
+                    UserActivityStreamFilter.ID, parameters, (int) pageSize,
+                    (int) getCurrentPageIndex());
             pageActivityMessages.addAll(toActivityMessages(activities));
             resultsCount = Integer.MAX_VALUE - 1;
         }
@@ -67,7 +70,9 @@ public class ActivityStreamForActorPageProvider extends AbstractPageProvider<Act
     protected List<ActivityMessage> toActivityMessages(List<Activity> activities) {
         List<ActivityMessage> messages = new ArrayList<ActivityMessage>();
         for (Activity activity : activities) {
-            ActivityMessage activityMessage = new ActivityMessage(getActivityStreamService().toFormattedMessage(activity, getLocale()), activity.getPublishedDate());
+            ActivityMessage activityMessage = new ActivityMessage(
+                    getActivityStreamService().toFormattedMessage(activity,
+                            getLocale()), activity.getPublishedDate());
             messages.add(activityMessage);
         }
         return messages;

@@ -64,7 +64,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * WebEngine handler for gadgets requests.
- * 
+ *
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @Path("/social")
