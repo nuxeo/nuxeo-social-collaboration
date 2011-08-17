@@ -7,6 +7,7 @@
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
+  <UserPref name="activityStreamType" datatype="hidden" default_value="forUser" />
   <Content type="html">
 
 <![CDATA[

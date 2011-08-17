@@ -3,6 +3,8 @@ var prefs = new gadgets.Prefs();
 var currentActivities = [];
 var waitingActivities = [];
 
+var activityStreamType = prefs.getString("activityStreamType");
+
 function displayActivities() {
   var htmlContent = '';
 
@@ -25,7 +27,8 @@ function displayActivities() {
 function loadActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetActivityStreamForActor',
     operationParams: {
-      language: prefs.getLang()
+      language: prefs.getLang(),
+      activityStreamType: activityStreamType
     },
     operationContext: {},
     operationCallback: function(response, params) {
@@ -40,7 +43,8 @@ function loadActivityStream() {
 function pollActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetActivityStreamForActor',
     operationParams: {
-      language: prefs.getLang()
+      language: prefs.getLang(),
+      activityStreamType: activityStreamType
     },
     operationContext: {},
     operationCallback: function(response, params) {
@@ -60,7 +64,7 @@ function pollActivityStream() {
 function addNewActivitiesBar() {
   var bar = document.createElement('div');
   bar.id = 'newActivitiesBar';
-  bar.innerHTML = 'Show new activities';
+  bar.innerHTML = prefs.getMsg('label.show.new.activities');
   bar.onclick = showNewActivities;
   var container = _gel('activitiesContainer');
   container.insertBefore(bar, container.firstChild);

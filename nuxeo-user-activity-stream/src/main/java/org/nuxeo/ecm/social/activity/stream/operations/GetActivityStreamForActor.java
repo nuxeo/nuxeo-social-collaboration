@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.activity.stream.operations;
 
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QUERY_TYPE_PARAMETER;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FOR_ACTOR;
+import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FROM_ACTOR;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
@@ -56,6 +57,10 @@ public class GetActivityStreamForActor {
 
     public static final String ID = "Services.GetActivityStreamForActor";
 
+    public static final String FOR_USER_ACTIVITY_STREAM_TYPE = "forUser";
+
+    public static final String FROM_USER_ACTIVITY_STREAM_TYPE = "fromUser";
+
     @Context
     protected CoreSession session;
 
@@ -68,6 +73,9 @@ public class GetActivityStreamForActor {
     @Param(name = "language", required = false)
     protected String language;
 
+    @Param(name = "activityStreamType", required = false)
+    protected String activityStreamType;
+
     @Param(name = "page", required = false)
     protected Integer page;
 
@@ -79,6 +87,10 @@ public class GetActivityStreamForActor {
         if (StringUtils.isBlank(actor)) {
             actor = session.getPrincipal().getName();
         }
+        if (StringUtils.isBlank(activityStreamType)) {
+            activityStreamType = FOR_USER_ACTIVITY_STREAM_TYPE;
+        }
+
 
         if (pageSize == null) {
             pageSize = 0;
@@ -94,8 +106,12 @@ public class GetActivityStreamForActor {
 
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
         parameters.put(UserActivityStreamFilter.ACTOR_PARAMETER, actor);
-        parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
-        List<Activity> activities = activityStreamService.query(UserActivityStreamFilter.ID, parameters, (int) pageSize, (int) page);
+        if (FOR_USER_ACTIVITY_STREAM_TYPE.equals(activityStreamType)) {
+            parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
+        } else if (FROM_USER_ACTIVITY_STREAM_TYPE.equals(activityStreamType)) {
+            parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
+        }
+        List<Activity> activities = activityStreamService.query(UserActivityStreamFilter.ID, parameters, pageSize, page);
 
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
         for (Activity activity: activities) {
