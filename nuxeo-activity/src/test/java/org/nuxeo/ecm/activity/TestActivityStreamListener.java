@@ -86,15 +86,17 @@ public class TestActivityStreamListener {
                 "File");
         doc1 = session.createDocument(doc1);
         session.save();
+        eventService.waitForAsyncCompletion();
+
         DocumentModel doc2 = session.createDocumentModel("/", "secondDocument",
                 "File");
         doc2 = session.createDocument(doc2);
         session.save();
+        eventService.waitForAsyncCompletion();
 
         doc1.setPropertyValue("dc:title", "A new Title");
         session.saveDocument(doc1);
         session.save();
-
         eventService.waitForAsyncCompletion();
 
         List<Activity> activities = activityStreamService.query(
