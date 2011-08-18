@@ -33,6 +33,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
@@ -57,9 +58,14 @@ import com.google.inject.Inject;
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.social.workspace.core",
         "org.nuxeo.ecm.social.workspace.gadgets",
-        "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
+        "org.nuxeo.ecm.platform.types.api",
+        "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.core.persistence",
+        "org.nuxeo.ecm.activity", "org.nuxeo.ecm.automation.core",
+        "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.query.api", "org.nuxeo.ecm.user.relationships" })
-@LocalDeploy("org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml")
+@LocalDeploy({
+        "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public class TestSocialProviderOperation {
 
     @Inject
@@ -72,7 +78,16 @@ public class TestSocialProviderOperation {
     UserManager userManager;
 
     @Inject
+    protected EventServiceAdmin eventServiceAdmin;
+
+    @Inject
     FeaturesRunner featuresRunner;
+
+    @Before
+    public void disableActivityStreamListener() {
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
+                false);
+    }
 
     @Before
     public void initRepo() throws Exception {

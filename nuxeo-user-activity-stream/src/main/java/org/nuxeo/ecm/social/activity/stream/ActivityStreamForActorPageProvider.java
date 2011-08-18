@@ -40,7 +40,9 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.4.3
  */
 public class ActivityStreamForActorPageProvider extends
-        AbstractPageProvider<ActivityMessage> {
+AbstractPageProvider<ActivityMessage> {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String ACTOR_PROPERTY = "actor";
 

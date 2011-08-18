@@ -20,6 +20,7 @@ package org.nuxeo.ecm.social.mini.message;
 import java.util.Date;
 
 import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityHelper;
 
 /**
  * Immutable object representing a mini message.
@@ -49,7 +50,8 @@ public final class MiniMessage {
     }
 
     public static MiniMessage fromActivity(Activity activity) {
-        return new MiniMessage(activity.getId(), activity.getActor(),
+        return new MiniMessage(activity.getId(),
+                ActivityHelper.getUsername(activity.getActor()),
                 activity.getDisplayActor(), activity.getObject(),
                 activity.getPublishedDate());
     }

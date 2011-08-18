@@ -578,10 +578,18 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public List<String> searchUsers(SocialWorkspace socialWorkspace,
             RelationshipKind kind, String pattern) {
-        return getUserRelationshipService().getTargetsWithFulltext(
-                socialWorkspace.getId(), kind, pattern);
+        List<String> targets = getUserRelationshipService().getTargetsWithFulltext(
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
+                kind, pattern);
+        List<String> users = new ArrayList<String>();
+        for (String target : targets) {
+            users.add(ActivityHelper.getUsername(target));
+        }
+        return users;
+
     }
 
+    @Override
     public List<String> searchMembers(SocialWorkspace socialWorkspace,
             String pattern) {
         // get members of the social workspace
@@ -590,6 +598,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         return filterUsers(pattern, list);
     }
 
+    @Override
     public List<String> searchAdministrators(SocialWorkspace socialWorkspace,
             String pattern) {
         // get administrators of the social workspace

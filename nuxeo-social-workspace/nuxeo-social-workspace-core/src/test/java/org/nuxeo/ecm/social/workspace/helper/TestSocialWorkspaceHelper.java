@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationKindFromGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getRelationDocIdFromGroupName;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getRelationDocActivityObjectFromGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isValidSocialWorkspaceGroupName;
@@ -70,9 +70,10 @@ public class TestSocialWorkspaceHelper extends AbstractSocialWorkspaceTest {
         assertTrue(isValidSocialWorkspaceGroupName(memGroupName));
         assertFalse(isValidSocialWorkspaceGroupName(other));
 
-        assertEquals("32-34", getRelationDocIdFromGroupName(admGroupName));
+        assertEquals("32-34",
+                getRelationDocActivityObjectFromGroupName(admGroupName));
         assertEquals("33223-343244",
-                getRelationDocIdFromGroupName(memGroupName));
+                getRelationDocActivityObjectFromGroupName(memGroupName));
 
         assertEquals(buildRelationAdministratorKind(),
                 buildRelationKindFromGroupName(admGroupName));

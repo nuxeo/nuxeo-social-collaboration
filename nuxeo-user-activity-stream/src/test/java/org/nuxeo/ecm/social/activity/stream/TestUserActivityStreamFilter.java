@@ -47,7 +47,7 @@ import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
@@ -86,15 +86,22 @@ public class TestUserActivityStreamFilter {
     protected UserRelationshipService userRelationshipService;
 
     @Inject
-    protected EventService eventService;
+    protected EventServiceAdmin eventServiceAdmin;
 
     @Inject
     protected CoreSession session;
 
     @Before
+    public void disableActivityStreamListener() {
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
+                false);
+    }
+
+    @Before
     public void cleanupDatabase() throws ClientException {
         ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(
                 true, new PersistenceProvider.RunVoid() {
+                    @Override
                     public void runWith(EntityManager em) {
                         Query query = em.createQuery("delete from Activity");
                         query.executeUpdate();

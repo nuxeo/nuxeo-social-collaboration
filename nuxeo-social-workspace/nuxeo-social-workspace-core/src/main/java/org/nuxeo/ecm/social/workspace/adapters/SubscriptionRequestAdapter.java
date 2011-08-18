@@ -90,6 +90,7 @@ public class SubscriptionRequestAdapter extends BaseAdapter implements
                 value);
     }
 
+    @Override
     public DocumentModel getDocument() {
         return doc;
     }

@@ -75,27 +75,27 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         assertEquals(
                 "I don't tell you how to tell me what to do, so don't tell me how to do what you tell me to do!",
                 miniMessage.getMessage());
-        assertEquals(benderActivityObject, miniMessage.getActor());
+        assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(1);
         assertEquals("Oh wait, your serious. Let me laugh even harder.",
                 miniMessage.getMessage());
-        assertEquals(benderActivityObject, miniMessage.getActor());
+        assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(2);
         assertEquals("Lies, lies and slander!", miniMessage.getMessage());
-        assertEquals(benderActivityObject, miniMessage.getActor());
+        assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(3);
         assertEquals(
                 "This is the worst kind of discrimination: the kind against me!",
                 miniMessage.getMessage());
-        assertEquals(benderActivityObject, miniMessage.getActor());
+        assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(4);
         assertEquals("Of all the friends I've had... you're the first.",
                 miniMessage.getMessage());
-        assertEquals(benderActivityObject, miniMessage.getActor());
+        assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
     }
 

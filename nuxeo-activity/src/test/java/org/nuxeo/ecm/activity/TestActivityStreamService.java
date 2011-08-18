@@ -64,6 +64,7 @@ public class TestActivityStreamService {
     public void cleanupDatabase() throws ClientException {
         ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(
                 true, new PersistenceProvider.RunVoid() {
+                    @Override
                     public void runWith(EntityManager em) {
                         Query query = em.createQuery("delete from Activity");
                         query.executeUpdate();

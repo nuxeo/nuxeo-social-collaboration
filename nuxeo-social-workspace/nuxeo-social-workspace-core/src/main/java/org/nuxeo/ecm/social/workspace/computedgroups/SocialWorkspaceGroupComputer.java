@@ -3,7 +3,7 @@ package org.nuxeo.ecm.social.workspace.computedgroups;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationKindFromGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getRelationDocIdFromGroupName;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getRelationDocActivityObjectFromGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isValidSocialWorkspaceGroupName;
@@ -43,12 +43,12 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
         // member of a social workspace
         for (String swId : getRelationshipService().getTargetsOfKind(user,
                 buildRelationMemberKind())) {
-            groupsId.add(getSocialWorkspaceMembersGroupName(ActivityHelper.getDocumentId(swId)));
+            groupsId.add(getSocialWorkspaceMembersGroupName(swId));
         }
         // administrator of a social workspace
         for (String swId : getRelationshipService().getTargetsOfKind(user,
                 buildRelationAdministratorKind())) {
-            groupsId.add(getSocialWorkspaceAdministratorsGroupName(ActivityHelper.getDocumentId(swId)));
+            groupsId.add(getSocialWorkspaceAdministratorsGroupName(swId));
         }
         return groupsId;
     }
@@ -65,7 +65,7 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
             return null;
         }
         return getRelationshipService().getTargetsOfKind(
-                getRelationDocIdFromGroupName(groupName),
+                getRelationDocActivityObjectFromGroupName(groupName),
                 buildRelationKindFromGroupName(groupName));
     }
 

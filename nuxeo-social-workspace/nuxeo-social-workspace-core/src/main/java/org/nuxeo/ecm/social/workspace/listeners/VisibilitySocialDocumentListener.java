@@ -22,13 +22,17 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * Class to handle "Social Document" publication after creation or update. It
@@ -71,6 +75,13 @@ public class VisibilitySocialDocumentListener implements
             return;
         }
 
+        SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspaceContainer(
+                document);
+        if (socialWorkspace == null) {
+            // not in a social workspace
+            return;
+        }
+
         document.putContextData(ALREADY_PROCESSED, true);
 
         Boolean isPublic = (Boolean) document.getPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY);
@@ -78,12 +89,20 @@ public class VisibilitySocialDocumentListener implements
                 : isPublic);
     }
 
-    protected static void updateSocialDocumentVisibility(
-            DocumentModel document, boolean isPublic) throws ClientException {
+    private static void updateSocialDocumentVisibility(DocumentModel document,
+            boolean isPublic) throws ClientException {
         if (isPublic) {
             toSocialDocument(document).makePublic();
         } else {
             toSocialDocument(document).restrictToMembers();
+        }
+    }
+
+    private static SocialWorkspaceService getSocialWorkspaceService() {
+        try {
+            return Framework.getService(SocialWorkspaceService.class);
+        } catch (Exception e) {
+            throw new ClientRuntimeException(e);
         }
     }
 

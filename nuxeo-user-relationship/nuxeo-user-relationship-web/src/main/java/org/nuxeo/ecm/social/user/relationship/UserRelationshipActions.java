@@ -30,10 +30,8 @@ import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.Functions;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.ecm.webapp.security.UserManagementActions;
@@ -45,7 +43,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.3
  */
-@Name("userRelationshipAction")
+@Name("userRelationshipActions")
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
 public class UserRelationshipActions implements Serializable {
@@ -59,14 +57,8 @@ public class UserRelationshipActions implements Serializable {
     @In(create = true)
     protected transient UserRelationshipService userRelationshipService;
 
-    @In(create = true)
-    protected transient UserManager userManager;
-
     @In
     protected transient UserManagementActions userManagementActions;
-
-    @In
-    protected transient CoreSession documentManager;
 
     @In(create = true, required = false)
     protected FacesMessages facesMessages;

@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 
 import java.security.Principal;
 
+import org.hibernate.dialect.H2Dialect;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.PathRef;
@@ -55,6 +56,9 @@ public class TestRights extends AbstractSocialWorkspaceTest {
                 socialWorkspace.getMembersGroupName());
         swAdministrator = createUserWithGroup("swAdministrator",
                 socialWorkspace.getAdministratorsGroupName());
+
+        ClassLoader cl = H2Dialect.class.getClassLoader();
+        System.out.println(H2Dialect.class.getClassLoader().toString());
     }
 
     @Test

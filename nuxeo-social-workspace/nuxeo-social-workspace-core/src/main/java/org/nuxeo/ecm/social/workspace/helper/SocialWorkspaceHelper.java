@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FA
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
@@ -57,12 +58,25 @@ public class SocialWorkspaceHelper {
         // Helper class
     }
 
-    public static String getSocialWorkspaceAdministratorsGroupName(String docId) {
-        return docId + SEPARATOR + ADMINISTRATORS_SUFFIX;
+    public static String getSocialWorkspaceAdministratorsGroupName(
+            String activityObject) {
+        return activityObject + SEPARATOR + ADMINISTRATORS_SUFFIX;
     }
 
-    public static String getSocialWorkspaceMembersGroupName(String docId) {
-        return docId + SEPARATOR + MEMBERS_SUFFIX;
+    public static String getSocialWorkspaceAdministratorsGroupName(
+            DocumentModel doc) {
+        return ActivityHelper.createDocumentActivityObject(doc) + SEPARATOR
+                + ADMINISTRATORS_SUFFIX;
+    }
+
+    public static String getSocialWorkspaceMembersGroupName(
+            String activityObject) {
+        return activityObject + SEPARATOR + MEMBERS_SUFFIX;
+    }
+
+    public static String getSocialWorkspaceMembersGroupName(DocumentModel doc) {
+        return ActivityHelper.createDocumentActivityObject(doc) + SEPARATOR
+                + MEMBERS_SUFFIX;
     }
 
     public static String getSocialWorkspaceAdministratorsGroupLabel(
@@ -92,7 +106,8 @@ public class SocialWorkspaceHelper {
         return null;
     }
 
-    public static String getRelationDocIdFromGroupName(String groupName) {
+    public static String getRelationDocActivityObjectFromGroupName(
+            String groupName) {
         return StringUtils.split(groupName, SEPARATOR)[0];
     }
 

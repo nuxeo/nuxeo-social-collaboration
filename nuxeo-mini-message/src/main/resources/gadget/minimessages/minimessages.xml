@@ -7,70 +7,20 @@
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
+  <UserPref name="miniMessagesStreamType" datatype="hidden" default_value="forActor" />
   <Content type="html">
 
 <![CDATA[
 <html>
   <head>
-  <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
-  <link rel="stylesheet" type="text/css" href="minimessages.css"/>
+    <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
+    <link rel="stylesheet" type="text/css" href="minimessages.css"/>
 
-  <!-- insert JS Context -->
-  ${jsContext}
+    <!-- insert JS Context -->
+    ${jsContext}
 
-  <script src="${specDirectoryUrl}default-automation-request.js"></script>
-
-  <script>
-    var prefs = new gadgets.Prefs();
-
-    var miniMessages = [];
-
-    function displayMiniMessages() {
-      var htmlContent = '';
-
-      for (var i = 0; i < miniMessages.length; i++) {
-        var cssClass = 'miniMessage';
-        if (miniMessages[i].isCurrentUserMiniMessage) {
-          cssClass += ' owner';
-        }
-        htmlContent += '<div class="' + cssClass + '">';
-        htmlContent += '<div class="username">';
-        htmlContent += '<span>' + miniMessages[i].fullName + ' (' + miniMessages[i].actor + ')' + '</span>';
-        htmlContent += '</div>';
-        htmlContent += '<div class="message">';
-        htmlContent += '<span>' + miniMessages[i].message + '</span>';
-        htmlContent += '</div>';
-        htmlContent += '<div class="timestamp">';
-        htmlContent += '<span>' + miniMessages[i].publishedDate + '</span>';
-        htmlContent += '</div>';
-        htmlContent += '</div>';
-      }
-
-      _gel('miniMessagesContainer').innerHTML = htmlContent;
-      gadgets.window.adjustHeight();
-    }
-
-    function loadMiniMessages() {
-      var NXRequestParams= { operationId : 'Services.GetMiniMessageForActor',
-        operationParams: {
-          language: prefs.getLang(),
-        },
-        operationContext: {},
-        operationCallback: function(response, params) {
-          miniMessages = response.data;
-          displayMiniMessages();
-        }
-      };
-
-      doAutomationRequest(NXRequestParams);
-    }
-
-    gadgets.util.registerOnLoadHandler(function() {
-      loadMiniMessages();
-      window.setInterval(loadMiniMessages, 30*1000);
-    });
-
-  </script>
+    <script src="${specDirectoryUrl}default-automation-request.js"></script>
+    <script src="minimessages.js"></script>
   </head>
   <body>
 

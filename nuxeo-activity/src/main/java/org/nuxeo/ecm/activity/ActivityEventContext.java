@@ -30,6 +30,8 @@ import org.nuxeo.ecm.core.event.impl.EventContextImpl;
  */
 public class ActivityEventContext extends EventContextImpl {
 
+    private static final long serialVersionUID = 1L;
+
     public ActivityEventContext(CoreSession session, Principal principal,
             Activity activity) {
         super(session, principal, activity);

@@ -11,6 +11,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSoc
 import java.util.List;
 
 import org.junit.Test;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.computedgroups.ComputedGroupsService;
@@ -51,36 +52,44 @@ public class TestSocialWorkspaceComputedGroups extends
         assertNotNull(sw);
 
         // Rights for SocialWorkspace: 1 admin and 2 members
-        assertTrue(addBidirectionalRelation("userComputer", sw.getId(),
+        assertTrue(addBidirectionalRelation(
+                ActivityHelper.createUserActivityObject("userComputer"),
+                ActivityHelper.createDocumentActivityObject(sw.getDocument()),
                 buildRelationAdministratorKind()));
-        assertTrue(addBidirectionalRelation("userComputer2", sw.getId(),
+        assertTrue(addBidirectionalRelation(
+                ActivityHelper.createUserActivityObject("userComputer2"),
+                ActivityHelper.createDocumentActivityObject(sw.getDocument()),
                 buildRelationMemberKind()));
-        assertTrue(addBidirectionalRelation("userComputer3", sw.getId(),
+        assertTrue(addBidirectionalRelation(
+                ActivityHelper.createUserActivityObject("userComputer3"),
+                ActivityHelper.createDocumentActivityObject(sw.getDocument()),
                 buildRelationMemberKind()));
 
         assertEquals(
-                2,
+                3,
                 computer.getGroupMembers(
-                        getSocialWorkspaceMembersGroupName(sw.getId())).size());
+                        getSocialWorkspaceMembersGroupName(sw.getDocument())).size());
 
         // There is the creator and a freshly added one.
         assertEquals(
                 2,
                 computer.getGroupMembers(
-                        getSocialWorkspaceAdministratorsGroupName(sw.getId())).size());
+                        getSocialWorkspaceAdministratorsGroupName(sw.getDocument())).size());
 
         // Right for SocialWorkspace 2: 1 admin and 0 member
-        assertTrue(addBidirectionalRelation("userComputer2", sw2.getId(),
+        assertTrue(addBidirectionalRelation(
+                ActivityHelper.createUserActivityObject("userComputer2"),
+                ActivityHelper.createDocumentActivityObject(sw2.getDocument()),
                 buildRelationAdministratorKind()));
 
         assertEquals(
                 2,
                 computer.getGroupMembers(
-                        getSocialWorkspaceAdministratorsGroupName(sw2.getId())).size());
+                        getSocialWorkspaceAdministratorsGroupName(sw2.getDocument())).size());
         assertEquals(
-                0,
+                1,
                 computer.getGroupMembers(
-                        getSocialWorkspaceMembersGroupName(sw2.getId())).size());
+                        getSocialWorkspaceMembersGroupName(sw2.getDocument())).size());
 
         DocumentModel user1 = userManager.getBareUserModel();
         user1.setProperty(userManager.getUserSchemaName(),
@@ -93,8 +102,8 @@ public class TestSocialWorkspaceComputedGroups extends
         List<String> groups = computer.getGroupsForUser((NuxeoPrincipalImpl) principal);
 
         assertEquals(2, groups.size());
-        assertTrue(groups.contains(getSocialWorkspaceAdministratorsGroupName(sw2.getId())));
-        assertTrue(groups.contains(getSocialWorkspaceMembersGroupName(sw.getId())));
+        assertTrue(groups.contains(getSocialWorkspaceAdministratorsGroupName(sw2.getDocument())));
+        assertTrue(groups.contains(getSocialWorkspaceMembersGroupName(sw.getDocument())));
 
         assertEquals(2, principal.getAllGroups().size());
     }

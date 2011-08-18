@@ -109,6 +109,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<List<Activity>>() {
+                        @Override
                         public List<Activity> runWith(EntityManager em) {
                             return query(em, filter, parameters, pageSize,
                                     currentPage);
@@ -136,6 +137,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<List<Activity>>() {
+                        @Override
                         public List<Activity> runWith(EntityManager em) {
                             return queryAllByPage(em, pageSize, currentPage);
                         }
@@ -166,6 +168,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         try {
             getOrCreatePersistenceProvider().run(true,
                     new PersistenceProvider.RunVoid() {
+                        @Override
                         public void runWith(EntityManager em) {
                             addActivity(em, activity);
                         }

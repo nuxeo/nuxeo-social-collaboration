@@ -90,8 +90,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context HttpServletRequest request)
-            throws Exception {
+    public Object documentList(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         setLanguage();
 
@@ -174,8 +174,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object publishDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -201,8 +201,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object deleteDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
@@ -222,8 +222,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef") String ref,
-            @QueryParam("doctype") String docTypeId) throws Exception {
+    public Object createDocumentForm(@QueryParam("docRef")
+    String ref, @QueryParam("doctype")
+    String docTypeId) throws Exception {
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
@@ -241,8 +242,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref)
-            throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef")
+    String ref) throws ClientException {
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
@@ -275,8 +276,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object createDocument(@Context
+    HttpServletRequest request) throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();

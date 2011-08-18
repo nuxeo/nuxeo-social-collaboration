@@ -5,12 +5,14 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 
 import java.util.Arrays;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
@@ -46,11 +48,15 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.platform.test:test-usermanagerimpl/directory-config.xml",
         "org.nuxeo.ecm.platform.picture.core:OSGI-INF/picturebook-schemas-contrib.xml",
         "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.opensocial.spaces",
+        "org.nuxeo.ecm.platform.types.api",
+        "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.opensocial.spaces",
+        "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
         "org.nuxeo.ecm.social.workspace.core",
         "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.user.relationships" })
-@LocalDeploy("org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml")
+@LocalDeploy({
+        "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
@@ -58,6 +64,9 @@ public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
     protected UserManager userManager;
+
+    @Inject
+    protected EventServiceAdmin eventServiceAdmin;
 
     @Inject
     protected UserRelationshipService userRelationshipService;
@@ -68,6 +77,12 @@ public abstract class AbstractSocialWorkspaceTest {
     protected SocialWorkspace socialWorkspace;
 
     protected DocumentModel socialWorkspaceDoc;
+
+    @Before
+    public void disableActivityStreamListener() {
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
+                false);
+    }
 
     /**
      * Creates document and wait for all post-commit listener execution

@@ -49,7 +49,7 @@ function pollActivityStream() {
     operationContext: {},
     operationCallback: function(response, params) {
       var newActivities = response.data;
-      if (currentActivities[0].id !== newActivities[0].id) {
+      if (newActivities.length > 0 && currentActivities[0].id !== newActivities[0].id) {
         // there is at least one new activity
         waitingActivities = newActivities;
         addNewActivitiesBar();

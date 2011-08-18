@@ -35,6 +35,7 @@ import org.nuxeo.ecm.automation.OperationParameters;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
@@ -66,7 +67,11 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.platform.usermanager",
         "org.nuxeo.ecm.platform.content.template",
         "org.nuxeo.ecm.opensocial.spaces",
+        "org.nuxeo.ecm.platform.types.api",
+        "org.nuxeo.ecm.platform.types.core",
         "org.nuxeo.ecm.automation.core",
+        "org.nuxeo.ecm.core.persistence",
+        "org.nuxeo.ecm.activity",
         "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.query.api",
         "org.nuxeo.ecm.social.workspace.core",
@@ -75,7 +80,9 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.workspace.gadgets",
         "org.nuxeo.ecm.platform.test:test-usermanagerimpl/directory-config.xml",
         "org.nuxeo.ecm.platform.picture.core:OSGI-INF/picturebook-schemas-contrib.xml" })
-@LocalDeploy("org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml")
+@LocalDeploy({
+        "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public class TestSocialWorkspaceMembersOperation {
     @Inject
     protected CoreSession session;
@@ -84,11 +91,20 @@ public class TestSocialWorkspaceMembersOperation {
     protected UserManager userManager;
 
     @Inject
+    protected EventServiceAdmin eventServiceAdmin;
+
+    @Inject
     AutomationService automationService;
 
     DocumentModel socialWorkspaceDocument;
 
     SocialWorkspace socialWorkspace;
+
+    @Before
+    public void disableActivityStreamListener() {
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
+                false);
+    }
 
     @Before
     public void setup() throws Exception {
@@ -111,7 +127,7 @@ public class TestSocialWorkspaceMembersOperation {
         assertNotNull(userManager.getPrincipal("testUser"));
 
         // make the user member of SocialWorkspace
-        socialWorkspace.addMember("testUser");
+        socialWorkspace.addMember(userManager.getPrincipal("testUser"));
 
         session.save();
     }

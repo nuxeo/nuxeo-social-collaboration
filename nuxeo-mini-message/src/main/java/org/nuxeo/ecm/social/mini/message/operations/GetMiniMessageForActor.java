@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +52,10 @@ public class GetMiniMessageForActor {
 
     public static final String ID = "Services.GetMiniMessageForActor";
 
+    public static final String FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE = "forActor";
+
+    public static final String FROM_ACTOR_MINI_MESSAGES_STREAM_TYPE = "fromActor";
+
     public static final RelationshipKind CIRCLE_KIND = RelationshipKind.fromGroup("circle");
 
     @Context
@@ -64,6 +69,9 @@ public class GetMiniMessageForActor {
 
     @Param(name = "relationshipKind", required = false)
     protected String relationshipKind;
+
+    @Param(name = "miniMessagesStreamType", required = false)
+    protected String miniMessagesStreamType;
 
     @Param(name = "language", required = false)
     protected String language;
@@ -86,6 +94,9 @@ public class GetMiniMessageForActor {
         if (StringUtils.isBlank(actor)) {
             actor = session.getPrincipal().getName();
         }
+        if (StringUtils.isBlank(miniMessagesStreamType)) {
+            miniMessagesStreamType = FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE;
+        }
 
         if (pageSize == null) {
             pageSize = 0;
@@ -98,14 +109,22 @@ public class GetMiniMessageForActor {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
 
-        List<MiniMessage> miniMessages = miniMessageService.getMiniMessageFor(
-                actor, kind, pageSize, page);
+        List<MiniMessage> miniMessages = Collections.emptyList();
+
+        if (FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
+            miniMessages = miniMessageService.getMiniMessageFor(actor, kind,
+                    pageSize, page);
+        } else if (FROM_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
+            miniMessages = miniMessageService.getMiniMessageFrom(actor,
+                    pageSize, page);
+        }
+
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
         for (MiniMessage miniMessage : miniMessages) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", miniMessage.getId());
             o.put("actor", miniMessage.getActor());
-            o.put("fullName", miniMessage.getDisplayActor());
+            o.put("displayActor", miniMessage.getDisplayActor());
             o.put("message", miniMessage.getMessage());
             o.put("publishedDate",
                     dateFormat.format(miniMessage.getPublishedDate()));

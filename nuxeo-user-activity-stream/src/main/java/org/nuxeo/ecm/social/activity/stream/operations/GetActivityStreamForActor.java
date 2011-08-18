@@ -54,9 +54,9 @@ public class GetActivityStreamForActor {
 
     public static final String ID = "Services.GetActivityStreamForActor";
 
-    public static final String FOR_USER_ACTIVITY_STREAM_TYPE = "forUser";
+    public static final String FOR_ACTOR_ACTIVITY_STREAM_TYPE = "forActor";
 
-    public static final String FROM_USER_ACTIVITY_STREAM_TYPE = "fromUser";
+    public static final String FROM_ACTOR_ACTIVITY_STREAM_TYPE = "fromActor";
 
     @Context
     protected CoreSession session;
@@ -85,7 +85,7 @@ public class GetActivityStreamForActor {
             actor = session.getPrincipal().getName();
         }
         if (StringUtils.isBlank(activityStreamType)) {
-            activityStreamType = FOR_USER_ACTIVITY_STREAM_TYPE;
+            activityStreamType = FOR_ACTOR_ACTIVITY_STREAM_TYPE;
         }
 
         if (pageSize == null) {
@@ -102,9 +102,9 @@ public class GetActivityStreamForActor {
 
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
         parameters.put(UserActivityStreamFilter.ACTOR_PARAMETER, actor);
-        if (FOR_USER_ACTIVITY_STREAM_TYPE.equals(activityStreamType)) {
+        if (FOR_ACTOR_ACTIVITY_STREAM_TYPE.equals(activityStreamType)) {
             parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
-        } else if (FROM_USER_ACTIVITY_STREAM_TYPE.equals(activityStreamType)) {
+        } else if (FROM_ACTOR_ACTIVITY_STREAM_TYPE.equals(activityStreamType)) {
             parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
         }
         List<Activity> activities = activityStreamService.query(

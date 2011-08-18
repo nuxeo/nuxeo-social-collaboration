@@ -10,7 +10,7 @@
     <f:param value="#{displayedName}" />
   </h:outputFormat>
   <nxu:dataTable id="table_relations_#{widget.id}" var="relation"
-    value="#{userRelationshipAction.relationshipsFromSelectedUser}">
+    value="#{userRelationshipActions.relationshipsFromSelectedUser}">
     <nxu:column>
       <h:graphicImage value="/icons/user.gif" alt="user.gif" />
       <a4j:commandLink action="#{userManagementActions.viewUser(relation)}" reRender="usersPanel">

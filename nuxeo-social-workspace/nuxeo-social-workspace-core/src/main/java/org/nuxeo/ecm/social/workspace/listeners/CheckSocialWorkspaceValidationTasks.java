@@ -57,6 +57,7 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
     public static final String QUERY_SELECT_NOT_VALIDATED_SOCIAL_WORKSPACES = "SELECT * FROM SocialWorkspace "
             + "WHERE ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState = 'project'";
 
+    @Override
     public void handleEvent(Event event) throws ClientException {
         if (!"checkExpiredTasksSignal".equals(event.getName())) {
             return;

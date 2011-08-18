@@ -23,6 +23,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildR
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
 
 import org.junit.Test;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 
 /**
@@ -41,21 +42,23 @@ public class TestAddRemoveSocialWorkspaceGroups extends
 
         assertNotNull(userManager);
 
-        String docId = socialWorkspace.getId();
-        assertEquals(1, userRelationshipService.getTargets(docId).size());
+        String activityObject = ActivityHelper.createDocumentActivityObject(socialWorkspaceDoc);
+        assertEquals(1,
+                userRelationshipService.getTargets(activityObject).size());
         assertEquals(
                 1,
-                userRelationshipService.getTargetsOfKind(docId,
+                userRelationshipService.getTargetsOfKind(activityObject,
                         buildRelationAdministratorKind()).size());
         assertEquals(
-                0,
-                userRelationshipService.getTargetsOfKind(docId,
+                1,
+                userRelationshipService.getTargetsOfKind(activityObject,
                         buildRelationMemberKind()).size());
 
         session.removeDocument(socialWorkspaceDoc.getRef());
         session.save();
 
-        assertEquals(0, userRelationshipService.getTargets(docId).size());
+        assertEquals(0,
+                userRelationshipService.getTargets(activityObject).size());
     }
 
 }

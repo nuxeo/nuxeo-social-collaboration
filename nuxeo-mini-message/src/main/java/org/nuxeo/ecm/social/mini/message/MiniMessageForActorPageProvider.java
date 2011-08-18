@@ -41,6 +41,11 @@ import org.nuxeo.runtime.api.Framework;
 public class MiniMessageForActorPageProvider extends
         AbstractPageProvider<MiniMessage> implements PageProvider<MiniMessage> {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     public static final String ACTOR_PROPERTY = "actor";
 
     public static final String RELATIONSHIP_KIND_PROPERTY = "relationshipKind";
