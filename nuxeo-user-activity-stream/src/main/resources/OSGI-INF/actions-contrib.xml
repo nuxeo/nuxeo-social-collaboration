@@ -4,8 +4,14 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <action id="UserActivityStream" link="/incl/user_activity_stream.xhtml" label="user.activity.stream.tab.view" order="30">
-      <category>Profile_sub_tab</category>
+    <action id="ActivityStream" link="user_center_fragment.xhtml"
+      label="user.activity.stream.tab.view" icon="/icons/activity_stream.png" order="30">
+      <category>USER_CENTER</category>
+    </action>
+
+    <action id="UserActivityStream" link="/incl/user_activity_stream.xhtml"
+      label="user.activity.stream.tab.view" order="10">
+      <category>ActivityStream_sub_tab</category>
     </action>
 
   </extension>

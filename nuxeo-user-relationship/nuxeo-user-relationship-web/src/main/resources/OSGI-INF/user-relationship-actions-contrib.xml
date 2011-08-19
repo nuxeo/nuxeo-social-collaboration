@@ -5,7 +5,7 @@
     point="actions">
 
     <action id="relationship_network" link="user_center_fragment.xhtml"
-      label="user.center.relationship.network" icon="/icons/users_groups.png" order="15">
+      label="user.center.relationship.network" icon="/icons/relationship_network.png" order="25">
       <category>USER_CENTER</category>
     </action>
 

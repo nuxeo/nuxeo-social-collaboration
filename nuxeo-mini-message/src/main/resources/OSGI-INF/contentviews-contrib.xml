@@ -17,7 +17,7 @@
         <property name="actor">#{currentUser.name}</property>
         <property name="relationshipKind">circle:</property>
       </pageProvider>
-      <showPageSizeSelector>true</showPageSizeSelector>
+      <showPageSizeSelector>false</showPageSizeSelector>
       <showRefreshCommand>false</showRefreshCommand>
       <useGlobalPageSize>false</useGlobalPageSize>
       <refresh>

@@ -4,8 +4,14 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <action id="MiniMessages" link="/incl/mini_messages.xhtml" label="mini.messages.tab.view" order="20">
-      <category>Profile_sub_tab</category>
+    <action id="MiniMessages" link="user_center_fragment.xhtml"
+      label="mini.messages.tab.view" icon="/icons/minimessages.png" order="35">
+      <category>USER_CENTER</category>
+    </action>
+
+    <action id="UserMiniMessages" link="/incl/mini_messages.xhtml"
+      label="mini.messages.tab.view" order="10">
+      <category>MiniMessages_sub_tab</category>
     </action>
 
   </extension>
