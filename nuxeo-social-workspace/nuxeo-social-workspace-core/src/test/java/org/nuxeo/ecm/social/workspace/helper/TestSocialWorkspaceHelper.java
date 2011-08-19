@@ -51,11 +51,14 @@ public class TestSocialWorkspaceHelper extends AbstractSocialWorkspaceTest {
         String idSW = socialWorkspaceDoc.getId();
         String labelSW = socialWorkspaceDoc.getName();
 
-        assertEquals(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspaceDoc),
+        assertEquals(
+                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspaceDoc),
                 socialWorkspace.getAdministratorsGroupName());
         assertEquals("Administrators of " + labelSW,
                 socialWorkspace.getAdministratorsGroupLabel());
-        assertEquals(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspaceDoc), socialWorkspace.getMembersGroupName());
+        assertEquals(
+                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspaceDoc),
+                socialWorkspace.getMembersGroupName());
         assertEquals("Members of " + labelSW,
                 socialWorkspace.getMembersGroupLabel());
     }
