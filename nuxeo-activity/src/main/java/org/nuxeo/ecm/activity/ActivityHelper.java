@@ -47,8 +47,6 @@ public class ActivityHelper {
 
     public static final String DOC_PREFIX = "doc" + SEPARATOR;
 
-    private static URLPolicyService urlPolicyService;
-
     private ActivityHelper() {
         // helper class
     }
@@ -156,13 +154,13 @@ public class ActivityHelper {
     }
 
     private static URLPolicyService getURLPolicyService() {
-        if (urlPolicyService == null) {
-            try {
-                urlPolicyService = Framework.getService(URLPolicyService.class);
-            } catch (Exception e) {
-                throw new ClientRuntimeException(e);
-            }
+        URLPolicyService urlPolicyService;
+        try {
+            urlPolicyService = Framework.getService(URLPolicyService.class);
+        } catch (Exception e) {
+            throw new ClientRuntimeException(e);
         }
+
         if (urlPolicyService == null) {
             throw new ClientRuntimeException(
                     "URLPolicyService service is not registered.");
