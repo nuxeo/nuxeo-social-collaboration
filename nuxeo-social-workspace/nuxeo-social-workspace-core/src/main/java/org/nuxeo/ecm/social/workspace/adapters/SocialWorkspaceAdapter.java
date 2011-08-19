@@ -153,7 +153,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public String getAdministratorsGroupName() {
-        return SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc.getId());
+        return SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(doc);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public String getMembersGroupName() {
-        return SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc.getId());
+        return SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(doc);
     }
 
     @Override
