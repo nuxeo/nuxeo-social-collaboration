@@ -48,6 +48,7 @@
     <doctype name="SubscriptionRequest" extends="Document">
       <schema name="dublincore" />
       <schema name="subscription_request" />
+      <facet name="HiddenInNavigation" />
     </doctype>
 
   </extension>
