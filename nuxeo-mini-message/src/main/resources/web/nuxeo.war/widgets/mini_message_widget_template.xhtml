@@ -13,17 +13,13 @@
 
   <c:set var="cssClass" value="miniMessage #{nxu:test(currentUser.name == field_0, 'owner', '')}" />
   <div class="#{cssClass}">
-    <div class="username">
-      <span>#{field_1}</span>
+    <div>
+      <span class="username"><h:outputText value="#{field_1}" escape="false"/></span>
+      <span class="timestamp">#{nxu:formatDateUsingBasicFormatter(field_3)}</span>
     </div>
     <div class="message">
-      <span>#{field_2}</span>
+      #{field_2}
     </div>
-    <div class="timestamp">
-      <span>#{nxu:formatDateUsingBasicFormatter(field_3)}</span>
-    </div>
-
-
   </div>
 
 </f:subview>

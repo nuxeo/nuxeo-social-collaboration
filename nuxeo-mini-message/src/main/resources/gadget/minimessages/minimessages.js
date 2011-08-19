@@ -12,15 +12,14 @@ function displayMiniMessages() {
     if (currentMiniMessages[i].isCurrentUserMiniMessage) {
       cssClass += ' owner';
     }
+
     htmlContent += '<div class="' + cssClass + '">';
-    htmlContent += '<div class="username">';
-    htmlContent += '<span>' + currentMiniMessages[i].displayActor + ' (' + currentMiniMessages[i].actor + ')' + '</span>';
+    htmlContent += '<div>';
+    htmlContent += '<span class="username">' + currentMiniMessages[i].displayActor + '</span>';
+    htmlContent += '<span class="timestamp">' + currentMiniMessages[i].publishedDate + '</span>';
     htmlContent += '</div>';
     htmlContent += '<div class="message">';
-    htmlContent += '<span>' + currentMiniMessages[i].message + '</span>';
-    htmlContent += '</div>';
-    htmlContent += '<div class="timestamp">';
-    htmlContent += '<span>' + currentMiniMessages[i].publishedDate + '</span>';
+    htmlContent += currentMiniMessages[i].message;
     htmlContent += '</div>';
     htmlContent += '</div>';
   }

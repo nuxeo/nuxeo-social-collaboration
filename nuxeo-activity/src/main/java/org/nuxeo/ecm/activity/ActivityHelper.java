@@ -18,10 +18,22 @@
 package org.nuxeo.ecm.activity;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.DocumentLocation;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
+import org.nuxeo.ecm.core.api.impl.DocumentLocationImpl;
+import org.nuxeo.ecm.platform.ui.web.rest.api.URLPolicyService;
+import org.nuxeo.ecm.platform.url.DocumentViewImpl;
+import org.nuxeo.ecm.platform.url.api.DocumentView;
+import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
@@ -34,6 +46,8 @@ public class ActivityHelper {
     public static final String USER_PREFIX = "user" + SEPARATOR;
 
     public static final String DOC_PREFIX = "doc" + SEPARATOR;
+
+    private static URLPolicyService urlPolicyService;
 
     private ActivityHelper() {
         // helper class
@@ -96,6 +110,64 @@ public class ActivityHelper {
             }
         }
         return principal.getName();
+    }
+
+    public static String getDocumentURL(String repositoryName, String documentId) {
+        DocumentLocation docLoc = new DocumentLocationImpl(repositoryName,
+                new IdRef(documentId));
+        DocumentView docView = new DocumentViewImpl(docLoc, "view_documents");
+        return VirtualHostHelper.getContextPathProperty()
+                + "/"
+                + getURLPolicyService().getUrlFromDocumentView("id", docView,
+                        null);
+    }
+
+    public static String getUserProfileURL(String username) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", username);
+        DocumentView docView = new DocumentViewImpl(null, null, params);
+        return VirtualHostHelper.getContextPathProperty()
+                + "/"
+                + getURLPolicyService().getUrlFromDocumentView("user", docView,
+                        null);
+    }
+
+    public static String getDocumentLink(String documentActivityObject,
+            String displayValue) {
+        documentActivityObject = StringEscapeUtils.escapeHtml(documentActivityObject);
+        displayValue = StringEscapeUtils.escapeHtml(displayValue);
+        String link = "<a href=\"%s\" target=\"_top\">%s</a>";
+        return String.format(
+                link,
+                getDocumentURL(
+                        ActivityHelper.getRepositoryName(documentActivityObject),
+                        ActivityHelper.getDocumentId(documentActivityObject)),
+                displayValue);
+    }
+
+    public static String getUserProfileLink(String userActivityObject,
+            String displayValue) {
+        userActivityObject = StringEscapeUtils.escapeHtml(userActivityObject);
+        displayValue = StringEscapeUtils.escapeHtml(displayValue);
+        String link = "<a href=\"%s\" target=\"_top\" title=\"%s\">%s</a>";
+        String username = ActivityHelper.getUsername(userActivityObject);
+        return String.format(link, getUserProfileURL(username), username,
+                displayValue);
+    }
+
+    private static URLPolicyService getURLPolicyService() {
+        if (urlPolicyService == null) {
+            try {
+                urlPolicyService = Framework.getService(URLPolicyService.class);
+            } catch (Exception e) {
+                throw new ClientRuntimeException(e);
+            }
+        }
+        if (urlPolicyService == null) {
+            throw new ClientRuntimeException(
+                    "URLPolicyService service is not registered.");
+        }
+        return urlPolicyService;
     }
 
 }

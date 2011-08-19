@@ -17,12 +17,13 @@
 
 package org.nuxeo.ecm.activity;
 
+import static org.nuxeo.ecm.activity.ActivityHelper.getDocumentLink;
+import static org.nuxeo.ecm.activity.ActivityHelper.getUserProfileLink;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,22 +35,14 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.utils.i18n.I18NUtils;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
-import org.nuxeo.ecm.core.api.DocumentLocation;
-import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.impl.DocumentLocationImpl;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.persistence.PersistenceProviderFactory;
-import org.nuxeo.ecm.platform.ui.web.rest.api.URLPolicyService;
-import org.nuxeo.ecm.platform.url.DocumentViewImpl;
-import org.nuxeo.ecm.platform.url.api.DocumentView;
-import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
@@ -86,8 +79,6 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     protected final Map<String, ActivityStreamFilter> activityStreamFilters = new HashMap<String, ActivityStreamFilter>();
 
     protected PersistenceProvider persistenceProvider;
-
-    protected URLPolicyService urlPolicyService;
 
     @Override
     public List<Activity> query(String filterId,
@@ -220,61 +211,17 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
             String param = m.group().replaceAll("[\\|$\\|{\\}]", "");
             if (fields.containsKey(param)) {
                 String value = fields.get(param);
-                final String escapedValue = StringEscapeUtils.escapeHtml(value);
-                final String displayValue = StringEscapeUtils.escapeHtml(fields.get("display"
-                        + StringUtils.capitalize(param)));
-                if (ActivityHelper.isDocument(escapedValue)) {
-                    String link = "<a href=\"%s\" target=\"_top\">%s</a>";
-                    value = String.format(
-                            link,
-                            getDocumentURL(
-                                    ActivityHelper.getRepositoryName(escapedValue),
-                                    ActivityHelper.getDocumentId(escapedValue)),
-                            displayValue);
-                } else if (ActivityHelper.isUser(escapedValue)) {
-                    String link = "<a href=\"%s\" target=\"_top\" title=\"%s\">%s</a>";
-                    String username = ActivityHelper.getUsername(escapedValue);
-                    value = String.format(link, getUserProfileURL(username),
-                            username, displayValue);
+                final String displayValue = fields.get("display"
+                        + StringUtils.capitalize(param));
+                if (ActivityHelper.isDocument(value)) {
+                    value = getDocumentLink(value, displayValue);
+                } else if (ActivityHelper.isUser(value)) {
+                    value = getUserProfileLink(value, displayValue);
                 }
                 messageTemplate = messageTemplate.replace(m.group(), value);
             }
         }
         return messageTemplate;
-    }
-
-    private String getDocumentURL(String repositoryName, String documentId) {
-        DocumentLocation docLoc = new DocumentLocationImpl(repositoryName,
-                new IdRef(documentId));
-        DocumentView docView = new DocumentViewImpl(docLoc, "view_documents");
-        return VirtualHostHelper.getContextPathProperty()
-                + "/"
-                + getURLPolicyService().getUrlFromDocumentView("id",
-                        docView, null);
-    }
-
-    private String getUserProfileURL(String username) {
-        DocumentView docView = new DocumentViewImpl(null, null,
-                Collections.singletonMap("username", username));
-        return VirtualHostHelper.getContextPathProperty()
-                + "/"
-                + getURLPolicyService().getUrlFromDocumentView("user", docView,
-                        null);
-    }
-
-    private URLPolicyService getURLPolicyService() {
-        if (urlPolicyService == null) {
-            try {
-                urlPolicyService = Framework.getService(URLPolicyService.class);
-            } catch (Exception e) {
-                throw new ClientRuntimeException(e);
-            }
-        }
-        if (urlPolicyService == null) {
-            throw new ClientRuntimeException(
-                    "URLPolicyService service is not registered.");
-        }
-        return urlPolicyService;
     }
 
     public EntityManager getEntityManager() {

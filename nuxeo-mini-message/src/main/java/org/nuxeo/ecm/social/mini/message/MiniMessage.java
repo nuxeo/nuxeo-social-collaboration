@@ -17,6 +17,8 @@
 
 package org.nuxeo.ecm.social.mini.message;
 
+import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
+
 import java.util.Date;
 
 import org.nuxeo.ecm.activity.Activity;
@@ -51,8 +53,9 @@ public final class MiniMessage {
 
     public static MiniMessage fromActivity(Activity activity) {
         return new MiniMessage(activity.getId(),
-                ActivityHelper.getUsername(activity.getActor()),
-                activity.getDisplayActor(), activity.getObject(),
+                getUsername(activity.getActor()),
+                ActivityHelper.getUserProfileLink(activity.getActor(),
+                        activity.getDisplayActor()), activity.getObject(),
                 activity.getPublishedDate());
     }
 
