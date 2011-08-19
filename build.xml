@@ -67,7 +67,7 @@
 
   <target name="assemble-tomcat" depends="build,assemble-tomcat-unix,assemble-tomcat-windows" />
   <target name="assemble-tomcat-unix" if="osfamily-unix">
-    <exec executable="/opt/apache-maven-2.2.1/bin/mvn" failonerror="true">
+    <exec executable="mvn" failonerror="true">
       <arg line="clean install -f ${social.collaboration.distribution.root}/pom.xml ${mvn.opts}" />
     </exec>
   </target>
