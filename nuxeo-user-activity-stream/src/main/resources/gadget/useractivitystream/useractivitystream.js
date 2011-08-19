@@ -9,13 +9,12 @@ function displayActivities() {
   var htmlContent = '';
 
   for (var i = 0; i < currentActivities.length; i++) {
-    var cssClass = 'activity';
-    htmlContent += '<div class="' + cssClass + '">';
-    htmlContent += '<div>';
-    htmlContent += '<span>' + currentActivities[i].activityMessage + '</span>';
+    htmlContent += '<div class="activity">';
+    htmlContent += '<div class="timestamp">';
+    htmlContent += currentActivities[i].publishedDate;
     htmlContent += '</div>';
-    htmlContent += '<div>';
-    htmlContent += '<span>' + currentActivities[i].publishedDate + '</span>';
+    htmlContent += '<div class="activityMessage">';
+    htmlContent += currentActivities[i].activityMessage;
     htmlContent += '</div>';
     htmlContent += '</div>';
   }

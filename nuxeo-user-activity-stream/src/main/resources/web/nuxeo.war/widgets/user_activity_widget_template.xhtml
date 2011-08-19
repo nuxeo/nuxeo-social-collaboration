@@ -5,9 +5,13 @@
   xmlns:h="http://java.sun.com/jsf/html"
   id="#{widget.id}">
 
-  <div>
-    <div><span><h:outputText value="#{field_0}" escape="false"/></span></div>
-    <div><span>#{nxu:formatDateUsingBasicFormatter(field_1)}</span></div>
+  <div class="activity">
+    <div class="timestamp">
+      #{nxu:formatDateUsingBasicFormatter(field_1)}
+    </div>
+    <div class="message">
+      <h:outputText value="#{field_0}" escape="false"/>
+    </div>
   </div>
 
 </f:subview>
