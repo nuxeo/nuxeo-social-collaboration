@@ -5,4 +5,5 @@ Bundle-SymbolicName: org.nuxeo.ecm.user.relationships;singleton:=true
 Bundle-Vendor: Nuxeo
 Bundle-Version: 1.0.0
 Nuxeo-Component: OSGI-INF/user-relationship-directories-contrib.xml,
-  OSGI-INF/user-relationship-service.xml
+ OSGI-INF/user-relationship-service.xml,
+ OSGI-INF/user-relationship-core-types-contrib.xml

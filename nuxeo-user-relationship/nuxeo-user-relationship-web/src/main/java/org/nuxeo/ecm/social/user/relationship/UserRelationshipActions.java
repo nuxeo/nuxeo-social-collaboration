@@ -31,8 +31,10 @@ import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.Functions;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.ecm.webapp.security.UserManagementActions;
@@ -55,6 +57,8 @@ public class UserRelationshipActions implements Serializable {
 
     public static final String USER_RELATIONSHIP_CHANGED = "UserRelationshipChanged";
 
+    private static final String PUBLICPROFILE_FIELD = "socialprofile:publicprofile";
+
     @In(create = true)
     protected transient UserRelationshipService userRelationshipService;
 
@@ -69,6 +73,9 @@ public class UserRelationshipActions implements Serializable {
 
     @In(create = true)
     protected transient NuxeoPrincipal currentUser;
+
+    @In(create = true)
+    protected transient UserManager userManager;
 
     @RequestParameter
     protected String selectedKind;
@@ -85,7 +92,8 @@ public class UserRelationshipActions implements Serializable {
     }
 
     public boolean isCurrentUser() {
-        return getCurrentUser().equals(getSelectedUser());
+        String selectedUser = getSelectedUser();
+        return selectedUser == null || getCurrentUser().equals(selectedUser);
     }
 
     public List<RelationshipKind> getRelationshipsWithSelectedUser() {
@@ -170,7 +178,7 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    @Observer( { USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
     public void resetUserRelationship() {
         relationshipsWithSelectedUser = null;
         allRelationshipsState = null;
@@ -181,7 +189,11 @@ public class UserRelationshipActions implements Serializable {
     }
 
     protected String getSelectedUser() {
-        return userManagementActions.getSelectedUser().getId();
+        DocumentModel selectedUser = userManagementActions.getSelectedUser();
+        if (selectedUser == null) {
+            return null;
+        }
+        return selectedUser.getId();
     }
 
     protected void setFacesMessage(String msg) {
@@ -206,4 +218,36 @@ public class UserRelationshipActions implements Serializable {
         }
         return activityStreamService;
     }
+
+    public boolean canViewProfile(DocumentModel userProfile) {
+        try {
+            return currentUser.isAdministrator() || isCurrentUser()
+                    || isPublicProfile(userProfile) || isInCirclesOf(userProfile);
+        } catch (ClientException e) {
+            log.error("Failed to test profile visibility", e);
+        }
+        return false;
+    }
+
+    protected boolean isPublicProfile(DocumentModel userProfile)
+            throws ClientException {
+        Boolean publicProfile = (Boolean) userProfile.getPropertyValue(PUBLICPROFILE_FIELD);
+        return publicProfile.booleanValue();
+    }
+
+    protected boolean isInCirclesOf(DocumentModel userProfile)
+            throws ClientException {
+        String currentUsrActObj = ActivityHelper.createUserActivityObject(currentUser);
+        String selectedUsrActObj = ActivityHelper.createUserActivityObject((String) userProfile.getProperty(
+                userManager.getUserSchemaName(), userManager.getUserIdField()));
+        for (RelationshipKind kind : getKinds()) {
+            List<String> targetsOfKind = userRelationshipService.getTargetsOfKind(
+                    selectedUsrActObj, kind);
+            if (targetsOfKind.contains(currentUsrActObj)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
