@@ -20,8 +20,6 @@
       <showPageSizeSelector>false</showPageSizeSelector>
       <showRefreshCommand>false</showRefreshCommand>
       <useGlobalPageSize>false</useGlobalPageSize>
-      <cacheKey>only_one_cache</cacheKey>
-      <cacheSize>1</cacheSize>
       <resultLayouts>
         <layout name="user_activity_stream" showCSVExport="false"
           showPDFExport="false" />

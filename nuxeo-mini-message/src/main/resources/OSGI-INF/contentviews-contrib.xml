@@ -23,8 +23,6 @@
       <refresh>
         <event>miniMessageCreated</event>
       </refresh>
-      <cacheKey>only_one_cache</cacheKey>
-      <cacheSize>1</cacheSize>
       <resultLayouts>
         <layout name="mini_messages" showCSVExport="false"
           showPDFExport="false" />
