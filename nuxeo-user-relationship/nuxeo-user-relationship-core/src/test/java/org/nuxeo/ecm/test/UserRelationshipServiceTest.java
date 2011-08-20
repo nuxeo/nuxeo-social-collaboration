@@ -177,14 +177,15 @@ public class UserRelationshipServiceTest {
 
     @Test
     public void testRelationshipWithFulltext() throws ClientException {
+        String pattern = "patternToFind";
         String user1 = ActivityHelper.createUserActivityObject(createUser(
                 "user21").getId());
         String user2 = ActivityHelper.createUserActivityObject(createUser(
-                "user22").getId());
+                "user" + pattern).getId());
         String user3 = ActivityHelper.createUserActivityObject(createUser(
                 "user23").getId());
         String doc1 = ActivityHelper.DOC_PREFIX + createDoc("doc21").getId();
-        String doc2 = ActivityHelper.DOC_PREFIX + "doc22";
+        String doc2 = ActivityHelper.DOC_PREFIX + "doc" + pattern;
 
         RelationshipKind read = RelationshipKind.newInstance("document",
                 "have_read");
@@ -207,12 +208,12 @@ public class UserRelationshipServiceTest {
                         ActivityHelper.DOC_PREFIX).size());
 
         List<String> targetsWithFulltext = relationshipService.getTargetsWithFulltext(
-                user1, "22");
+                user1, pattern);
         assertEquals(2, targetsWithFulltext.size());
 
         assertEquals(
                 1,
-                relationshipService.getTargetsWithFulltext(user1, read, "22").size());
+                relationshipService.getTargetsWithFulltext(user1, read, pattern).size());
 
     }
 
