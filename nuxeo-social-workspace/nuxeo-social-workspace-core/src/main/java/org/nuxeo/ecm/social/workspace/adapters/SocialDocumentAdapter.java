@@ -16,8 +16,15 @@
 package org.nuxeo.ecm.social.workspace.adapters;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.MAKE_DOCUMENT_PUBLIC_VERB;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 
+import java.security.Principal;
+
+import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityBuilder;
+import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -142,6 +149,9 @@ public class SocialDocumentAdapter implements SocialDocument {
         DocumentModel exposedDocument = getSession().publishDocument(
                 sourceDocument, getPublicSection());
         getSession().save();
+
+        addMakeDocumentPublicActivity(exposedDocument, session.getPrincipal());
+
         return exposedDocument;
     }
 
@@ -194,6 +204,20 @@ public class SocialDocumentAdapter implements SocialDocument {
             throw new ClientException(message);
         }
 
+    }
+
+    protected void addMakeDocumentPublicActivity(DocumentModel doc,
+            Principal principal) {
+        ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
+        Activity activity = new ActivityBuilder().verb(
+                MAKE_DOCUMENT_PUBLIC_VERB).actor(
+                ActivityHelper.createUserActivityObject(principal)).displayActor(
+                ActivityHelper.generateDisplayName(principal)).object(
+                ActivityHelper.createDocumentActivityObject(doc)).displayObject(
+                ActivityHelper.getDocumentTitle(doc)).target(
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayTarget(
+                socialWorkspace.getTitle()).build();
+        activityStreamService.addActivity(activity);
     }
 
     @Override

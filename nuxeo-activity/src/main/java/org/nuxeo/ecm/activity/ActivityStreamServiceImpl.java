@@ -69,9 +69,16 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         LABELS_FOR_VERBS.put(DOCUMENT_CREATED, "label.activity.documentCreated");
         LABELS_FOR_VERBS.put(DOCUMENT_UPDATED, "label.activity.documentUpdated");
         LABELS_FOR_VERBS.put(DOCUMENT_REMOVED, "label.activity.documentRemoved");
-        LABELS_FOR_VERBS.put("socialworkspace:members",
-                "label.activity.socialworkspace");
+
         LABELS_FOR_VERBS.put("circle", "label.activity.circle");
+
+        LABELS_FOR_VERBS.put("socialworkspace:members",
+                "label.activity.socialworkspace.member");
+        LABELS_FOR_VERBS.put(DOCUMENT_CREATED + "InSocialWorkspace",
+                "label.activity.documentCreated");
+        LABELS_FOR_VERBS.put(DOCUMENT_UPDATED + "InSocialWorkspace",
+                "label.activity.documentUpdated");
+        LABELS_FOR_VERBS.put("makedocumentpublic", "label.activity.socialworkspace.make.document.public");
     }
 
     protected final ThreadLocal<EntityManager> localEntityManager = new ThreadLocal<EntityManager>();

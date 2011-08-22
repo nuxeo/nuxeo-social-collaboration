@@ -85,25 +85,17 @@ public class ActivityStreamListener implements PostCommitEventListener {
                 ActivityHelper.generateDisplayName(principal)).verb(
                 event.getName()).object(
                 ActivityHelper.createDocumentActivityObject(doc)).displayObject(
-                getDocumentTitle(doc)).target(
+                ActivityHelper.getDocumentTitle(doc)).target(
                 ActivityHelper.createDocumentActivityObject(
                         doc.getRepositoryName(), doc.getParentRef().toString())).displayTarget(
                 getDocumentTitle(docEventContext.getCoreSession(),
                         doc.getParentRef())).build();
     }
 
-    private String getDocumentTitle(DocumentModel doc) {
-        try {
-            return doc.getTitle();
-        } catch (ClientException e) {
-            return doc.getId();
-        }
-    }
-
     private String getDocumentTitle(CoreSession session, DocumentRef docRef) {
         try {
             DocumentModel doc = session.getDocument(docRef);
-            return getDocumentTitle(doc);
+            return ActivityHelper.getDocumentTitle(doc);
         } catch (ClientException e) {
             return docRef.toString();
         }

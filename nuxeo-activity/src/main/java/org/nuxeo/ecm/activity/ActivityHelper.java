@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentLocation;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -108,6 +109,14 @@ public class ActivityHelper {
             }
         }
         return principal.getName();
+    }
+
+    public static String getDocumentTitle(DocumentModel doc) {
+        try {
+            return doc.getTitle();
+        } catch (ClientException e) {
+            return doc.getId();
+        }
     }
 
     public static String getDocumentURL(String repositoryName, String documentId) {

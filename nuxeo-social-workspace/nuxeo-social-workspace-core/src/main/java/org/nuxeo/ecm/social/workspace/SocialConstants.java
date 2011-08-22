@@ -16,6 +16,11 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
+
+import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
+
 /**
  * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  *
@@ -94,6 +99,15 @@ public class SocialConstants {
     public static final String SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION = "accept";
 
     public static final String SUBSCRIPTION_REQUEST_REJECT_TRANSITION = "reject";
+
+    // Activity stuff
+    public static final String MAKE_DOCUMENT_PUBLIC_VERB = "makedocumentpublic";
+
+    public static final String IN_SOCIAL_WORKSPACE_SUFFIX = "InSocialWorkspace";
+
+    public static final String DOCUMENT_CREATED_IN_SOCIAL_WORKSPACE_VERB = DOCUMENT_CREATED + IN_SOCIAL_WORKSPACE_SUFFIX;
+
+    public static final String DOCUMENT_UPDATED_IN_SOCIAL_WORKSPACE_VERB = DOCUMENT_UPDATED + IN_SOCIAL_WORKSPACE_SUFFIX;
 
     private SocialConstants() {
     }

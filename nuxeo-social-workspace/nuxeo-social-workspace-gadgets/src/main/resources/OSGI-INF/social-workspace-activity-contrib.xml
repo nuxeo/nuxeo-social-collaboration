@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.gadgets.activity.stream.filters">
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreamFilters">
+
+    <activityStreamFilter
+      class="org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter" />
+
+  </extension>
+
+</component>

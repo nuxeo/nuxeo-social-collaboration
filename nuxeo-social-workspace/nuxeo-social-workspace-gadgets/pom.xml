@@ -18,6 +18,10 @@
       <artifactId>nuxeo-social-workspace-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.nuxeo.ecm.social</groupId>
+      <artifactId>nuxeo-activity</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>
       <artifactId>nuxeo-automation-core</artifactId>
     </dependency>
@@ -52,6 +56,10 @@
       <artifactId>ezmorph</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
       <scope>test</scope>
@@ -75,11 +83,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.nuxeo.ecm.social</groupId>
-      <artifactId>nuxeo-activity</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-persistence</artifactId>

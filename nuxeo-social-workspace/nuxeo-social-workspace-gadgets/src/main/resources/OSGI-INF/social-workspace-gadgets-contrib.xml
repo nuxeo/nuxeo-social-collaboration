@@ -72,5 +72,13 @@
       <icon>public_social_workspaces.png</icon>
     </internalGadget>
 
+    <internalGadget name="socialworkspaceactivitystream" disabled="false">
+      <mountPoint>/socialworkspaceactivitystream</mountPoint>
+      <directory>socialworkspaceactivitystream</directory>
+      <entryPoint>socialworkspaceactivitystream.xml</entryPoint>
+      <category>Espace collaboratif (privé)</category>
+      <icon>gadget-socialworkspaceactivitystream.png</icon>
+    </internalGadget>
+
   </extension>
 </component>
