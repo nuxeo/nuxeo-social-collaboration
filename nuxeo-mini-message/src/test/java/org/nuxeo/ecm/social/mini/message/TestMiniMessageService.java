@@ -104,7 +104,8 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         initializeSomeMiniMessagesAndRelations();
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
-                ActivityHelper.createUserActivityObject("Leela"), RelationshipKind.fromGroup("circle"), 0, 0);
+                ActivityHelper.createUserActivityObject("Leela"),
+                RelationshipKind.fromGroup("circle"), 0, 0);
         assertNotNull(messages);
         assertEquals(10, messages.size());
     }

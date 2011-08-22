@@ -64,7 +64,8 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(json);
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
-                ActivityHelper.createUserActivityObject("Leela"), RelationshipKind.fromGroup("circle"), 0, 0);
+                ActivityHelper.createUserActivityObject("Leela"),
+                RelationshipKind.fromGroup("circle"), 0, 0);
         assertNotNull(messages);
         assertEquals(1, messages.size());
 

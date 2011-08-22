@@ -83,8 +83,8 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     }
 
     @Override
-    public List<MiniMessage> getMiniMessageFrom(String actorActivityObject, int pageSize,
-            int currentPage) {
+    public List<MiniMessage> getMiniMessageFrom(String actorActivityObject,
+            int pageSize, int currentPage) {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
         parameters.put(ACTOR_PARAMETER, actorActivityObject);
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FROM_ACTOR);

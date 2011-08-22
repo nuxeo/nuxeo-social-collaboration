@@ -63,7 +63,7 @@ public interface MiniMessageService {
      * @param pageSize the wanted page size.
      * @param currentPage the current page index.
      */
-    List<MiniMessage> getMiniMessageFrom(String actorActivityObject, int pageSize,
-            int currentPage);
+    List<MiniMessage> getMiniMessageFrom(String actorActivityObject,
+            int pageSize, int currentPage);
 
 }

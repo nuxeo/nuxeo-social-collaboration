@@ -32,7 +32,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamService;
@@ -45,8 +44,6 @@ import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
-import org.nuxeo.ecm.social.mini.message.MiniMessage;
-import org.nuxeo.ecm.social.mini.message.MiniMessageService;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
@@ -111,9 +108,10 @@ public class GetSocialWorkspaceMiniMessages {
                 locale);
 
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
-                socialWorkspace.getDocument().getRepositoryName(), socialWorkspace.getId());
-        List<MiniMessage> miniMessages = miniMessageService.getMiniMessageFor(socialWorkspaceActivityObject, kind,
-                    pageSize, page);
+                socialWorkspace.getDocument().getRepositoryName(),
+                socialWorkspace.getId());
+        List<MiniMessage> miniMessages = miniMessageService.getMiniMessageFor(
+                socialWorkspaceActivityObject, kind, pageSize, page);
 
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
         for (MiniMessage miniMessage : miniMessages) {

@@ -58,8 +58,9 @@ import com.google.inject.Inject;
 @Features(PlatformFeature.class)
 @RepositoryConfig(repositoryName = "default", type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
-        "org.nuxeo.ecm.user.relationships", "org.nuxeo.ecm.social.mini.message",
-        "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
+        "org.nuxeo.ecm.user.relationships",
+        "org.nuxeo.ecm.social.mini.message", "org.nuxeo.ecm.platform.url.api",
+        "org.nuxeo.ecm.platform.url.core",
         "org.nuxeo.ecm.platform.ui:OSGI-INF/urlservice-framework.xml",
         "org.nuxeo.ecm.user.center:OSGI-INF/urlservice-contrib.xml" })
 @LocalDeploy("org.nuxeo.ecm.social.mini.message:mini-message-test.xml")

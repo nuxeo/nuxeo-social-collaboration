@@ -113,11 +113,13 @@ public class GetMiniMessageForActor {
         List<MiniMessage> miniMessages = Collections.emptyList();
 
         if (FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
-            miniMessages = miniMessageService.getMiniMessageFor(ActivityHelper.createUserActivityObject(actor), kind,
+            miniMessages = miniMessageService.getMiniMessageFor(
+                    ActivityHelper.createUserActivityObject(actor), kind,
                     pageSize, page);
         } else if (FROM_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
-            miniMessages = miniMessageService.getMiniMessageFrom(ActivityHelper.createUserActivityObject(actor),
-                    pageSize, page);
+            miniMessages = miniMessageService.getMiniMessageFrom(
+                    ActivityHelper.createUserActivityObject(actor), pageSize,
+                    page);
         }
 
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();

@@ -178,7 +178,7 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    @Observer( { USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
     public void resetUserRelationship() {
         relationshipsWithSelectedUser = null;
         allRelationshipsState = null;
@@ -222,7 +222,8 @@ public class UserRelationshipActions implements Serializable {
     public boolean canViewProfile(DocumentModel userProfile) {
         try {
             return currentUser.isAdministrator() || isCurrentUser()
-                    || isPublicProfile(userProfile) || isInCirclesOf(userProfile);
+                    || isPublicProfile(userProfile)
+                    || isInCirclesOf(userProfile);
         } catch (ClientException e) {
             log.error("Failed to test profile visibility", e);
         }
