@@ -2,6 +2,8 @@
 <component name="org.nuxeo.ecm.activity.ActivityStreamService">
 
   <documentation>
+    Service storing and querying activities.
+
     @author Thomas Roger (troger@nuxeo.com)
   </documentation>
 
@@ -15,10 +17,20 @@
 
   <extension-point name="activityStreamFilters">
     <documentation>
+      ActivityStreamFilters are used to store and filter activities for specific use cases.
 
+      The ActivityStreamService delegates to the contributed filters.
     </documentation>
     <object
       class="org.nuxeo.ecm.activity.ActivityStreamFilterDescriptor" />
+  </extension-point>
+
+  <extension-point name="activityMessageLabels">
+    <documentation>
+      An ActivityMessageLabel stores a mapping between an Activity verb and a label key.
+    </documentation>
+    <object
+      class="org.nuxeo.ecm.activity.ActivityMessageLabelDescriptor" />
   </extension-point>
 
   <require>org.nuxeo.ecm.core.persistence.PersistenceComponent</require>

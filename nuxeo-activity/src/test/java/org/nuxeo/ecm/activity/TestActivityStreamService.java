@@ -19,6 +19,10 @@ package org.nuxeo.ecm.activity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +38,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
@@ -217,6 +222,20 @@ public class TestActivityStreamService {
         assertEquals(activity.getActor(), storedActivity.getActor());
         assertEquals(activity.getVerb(), storedActivity.getVerb());
         assertEquals(activity.getObject(), storedActivity.getObject());
+    }
+
+    @Test
+    public void shouldStoreLAbelKeyForActivityVerbs() {
+        Map<String, String> activityMessageLabels = ((ActivityStreamServiceImpl) activityStreamService).activityMessageLabels;
+        assertNotNull(activityMessageLabels);
+        assertEquals(3, activityMessageLabels.size());
+        assertTrue(activityMessageLabels.containsKey(DOCUMENT_CREATED));
+        assertTrue(activityMessageLabels.containsKey(DOCUMENT_UPDATED));
+        assertTrue(activityMessageLabels.containsKey(DOCUMENT_REMOVED));
+
+        assertEquals("label.activity.documentCreated", activityMessageLabels.get(DOCUMENT_CREATED));
+        assertEquals("label.activity.documentModified", activityMessageLabels.get(DOCUMENT_UPDATED));
+        assertEquals("label.activity.documentRemoved", activityMessageLabels.get(DOCUMENT_REMOVED));
     }
 
 }

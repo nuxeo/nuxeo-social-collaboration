@@ -55,7 +55,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
  * @since 5.4.3
  */
 public class ActivityStreamServiceImpl extends DefaultComponent implements
-        ActivityStreamService {
+ActivityStreamService {
 
     private static final Log log = LogFactory.getLog(ActivityStreamServiceImpl.class);
 
@@ -63,28 +63,13 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
 
     public static final String ACTIVITY_STREAM_FILTER_EP = "activityStreamFilters";
 
-    protected static final Map<String, String> LABELS_FOR_VERBS = new HashMap<String, String>();
-
-    static {
-        LABELS_FOR_VERBS.put(DOCUMENT_CREATED, "label.activity.documentCreated");
-        LABELS_FOR_VERBS.put(DOCUMENT_UPDATED, "label.activity.documentUpdated");
-        LABELS_FOR_VERBS.put(DOCUMENT_REMOVED, "label.activity.documentRemoved");
-
-        LABELS_FOR_VERBS.put("circle", "label.activity.circle");
-
-        LABELS_FOR_VERBS.put("socialworkspace:members",
-                "label.activity.socialworkspace.member");
-        LABELS_FOR_VERBS.put(DOCUMENT_CREATED + "InSocialWorkspace",
-                "label.activity.documentCreated");
-        LABELS_FOR_VERBS.put(DOCUMENT_UPDATED + "InSocialWorkspace",
-                "label.activity.documentUpdated");
-        LABELS_FOR_VERBS.put("makedocumentpublic",
-                "label.activity.socialworkspace.make.document.public");
-    }
+    public static final String ACTIVITY_MESSAGE_LABELS_EP = "activityMessageLabels";
 
     protected final ThreadLocal<EntityManager> localEntityManager = new ThreadLocal<EntityManager>();
 
     protected final Map<String, ActivityStreamFilter> activityStreamFilters = new HashMap<String, ActivityStreamFilter>();
+
+    protected final Map<String, String> activityMessageLabels = new HashMap<String, String>();
 
     protected PersistenceProvider persistenceProvider;
 
@@ -117,12 +102,12 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<List<Activity>>() {
-                        @Override
-                        public List<Activity> runWith(EntityManager em) {
-                            return query(em, filter, parameters, pageSize,
-                                    currentPage);
-                        }
-                    });
+                @Override
+                public List<Activity> runWith(EntityManager em) {
+                    return query(em, filter, parameters, pageSize,
+                            currentPage);
+                }
+            });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -145,11 +130,11 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<List<Activity>>() {
-                        @Override
-                        public List<Activity> runWith(EntityManager em) {
-                            return queryAllByPage(em, pageSize, currentPage);
-                        }
-                    });
+                @Override
+                public List<Activity> runWith(EntityManager em) {
+                    return queryAllByPage(em, pageSize, currentPage);
+                }
+            });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -176,11 +161,11 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         try {
             getOrCreatePersistenceProvider().run(true,
                     new PersistenceProvider.RunVoid() {
-                        @Override
-                        public void runWith(EntityManager em) {
-                            addActivity(em, activity);
-                        }
-                    });
+                @Override
+                public void runWith(EntityManager em) {
+                    addActivity(em, activity);
+                }
+            });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -205,11 +190,11 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     public String toFormattedMessage(final Activity activity, Locale locale) {
         Map<String, String> fields = activity.toMap();
 
-        if (!LABELS_FOR_VERBS.containsKey(activity.getVerb())) {
+        if (!activityMessageLabels.containsKey(activity.getVerb())) {
             return activity.toString();
         }
 
-        String labelKey = LABELS_FOR_VERBS.get(activity.getVerb());
+        String labelKey = activityMessageLabels.get(activity.getVerb());
         String messageTemplate = I18NUtils.getMessageString("messages",
                 labelKey, null, locale);
 
@@ -272,43 +257,72 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     @Override
     public void registerContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
-            throws Exception {
+                    throws Exception {
         if (ACTIVITY_STREAM_FILTER_EP.equals(extensionPoint)) {
-            ActivityStreamFilterDescriptor descriptor = (ActivityStreamFilterDescriptor) contribution;
-            ActivityStreamFilter filter = descriptor.getActivityStreamFilter();
+            registerActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
 
-            String filterId = filter.getId();
+        } else if (ACTIVITY_MESSAGE_LABELS_EP.equals(extensionPoint)) {
+            registerActivityMessageLabel((ActivityMessageLabelDescriptor) contribution);
+        }
+    }
 
-            boolean enabled = descriptor.isEnabled();
-            if (activityStreamFilters.containsKey(filterId)) {
-                log.info("Overriding activity stream filter with id "
-                        + filterId);
-                if (!enabled) {
-                    activityStreamFilters.remove(filterId);
-                    log.info("Disabled activity stream filter with id "
-                            + filterId);
-                }
-            }
-            if (enabled) {
-                log.info("Registering activity stream filter with id "
-                        + filterId);
-                activityStreamFilters.put(filterId,
-                        descriptor.getActivityStreamFilter());
+    private void registerActivityStreamFilter(
+            ActivityStreamFilterDescriptor descriptor) throws ClientException {
+        ActivityStreamFilter filter = descriptor.getActivityStreamFilter();
+
+        String filterId = filter.getId();
+
+        boolean enabled = descriptor.isEnabled();
+        if (activityStreamFilters.containsKey(filterId)) {
+            log.info("Overriding activity stream filter with id " + filterId);
+            if (!enabled) {
+                activityStreamFilters.remove(filterId);
+                log.info("Disabled activity stream filter with id " + filterId);
             }
         }
+        if (enabled) {
+            log.info("Registering activity stream filter with id " + filterId);
+            activityStreamFilters.put(filterId,
+                    descriptor.getActivityStreamFilter());
+        }
+    }
+
+    private void registerActivityMessageLabel(
+            ActivityMessageLabelDescriptor descriptor) {
+        String activityVerb = descriptor.getActivityVerb();
+        if (activityMessageLabels.containsKey(activityVerb)) {
+            log.info("Overriding activity message label for verb "
+                    + activityVerb);
+        }
+        log.info("Registering activity message label for verb" + activityVerb);
+        activityMessageLabels.put(activityVerb, descriptor.getLabelKey());
     }
 
     @Override
     public void unregisterContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
-            throws Exception {
+                    throws Exception {
         if (ACTIVITY_STREAM_FILTER_EP.equals(extensionPoint)) {
-            ActivityStreamFilterDescriptor descriptor = (ActivityStreamFilterDescriptor) contribution;
-            ActivityStreamFilter filter = descriptor.getActivityStreamFilter();
-            String filterId = filter.getId();
-            activityStreamFilters.remove(filterId);
-            log.info("Unregistering activity stream filter with id " + filterId);
+            unregisterActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
+        } else if (ACTIVITY_MESSAGE_LABELS_EP.equals(extensionPoint)) {
+            unregisterActivityMessageLabel((ActivityMessageLabelDescriptor) contribution);
         }
+    }
+
+    private void unregisterActivityStreamFilter(
+            ActivityStreamFilterDescriptor descriptor) throws ClientException {
+        ActivityStreamFilter filter = descriptor.getActivityStreamFilter();
+        String filterId = filter.getId();
+        activityStreamFilters.remove(filterId);
+        log.info("Unregistering activity stream filter with id " + filterId);
+    }
+
+    private void unregisterActivityMessageLabel(
+            ActivityMessageLabelDescriptor descriptor) {
+        String activityVerb = descriptor.getActivityVerb();
+        activityMessageLabels.remove(activityVerb);
+        log.info("Unregistering activity message label for verb "
+                + activityVerb);
     }
 
 }

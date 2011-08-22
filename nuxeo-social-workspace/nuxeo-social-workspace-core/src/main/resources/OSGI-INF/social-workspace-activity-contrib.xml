@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.activity">
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityMessageLabels">
+
+    <activityMessageLabel activityVerb="documentCreatedInSocialWorkspace"
+      labelKey="label.activity.documentCreated" />
+    <activityMessageLabel activityVerb="documentModifiedInSocialWorkspace"
+      labelKey="label.activity.documentModified" />
+    <activityMessageLabel activityVerb="socialworkspace:members"
+      labelKey="label.activity.socialworkspace.member" />
+    <activityMessageLabel activityVerb="makedocumentpublic"
+      labelKey="label.activity.socialworkspace.make.document.public" />
+
+  </extension>
+
+</component>
