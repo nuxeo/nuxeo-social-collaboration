@@ -47,23 +47,23 @@ public interface MiniMessageService {
     MiniMessage addMiniMessage(Principal principal, String message);
 
     /**
-     * Returns the mini messages for the given {@code actor}. The
+     * Returns the mini messages for the given {@code actorActivityObject}. The
      * {@code relationshipKind} is used to find people with whom the actor has a
      * relation.
      *
      * @param pageSize the wanted page size.
      * @param currentPage the current page index.
      */
-    List<MiniMessage> getMiniMessageFor(String actor,
+    List<MiniMessage> getMiniMessageFor(String actorActivityObject,
             RelationshipKind relationshipKind, int pageSize, int currentPage);
 
     /**
-     * Returns the mini messages from the given {@code actor}.
+     * Returns the mini messages from the given {@code actorActivityObject}.
      *
      * @param pageSize the wanted page size.
      * @param currentPage the current page index.
      */
-    List<MiniMessage> getMiniMessageFrom(String actor, int pageSize,
+    List<MiniMessage> getMiniMessageFrom(String actorActivityObject, int pageSize,
             int currentPage);
 
 }

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
@@ -89,7 +90,7 @@ public class MiniMessageForActorPageProvider extends
             throw new ClientRuntimeException("Cannot find " + ACTOR_PROPERTY
                     + " property.");
         }
-        return actor;
+        return ActivityHelper.createUserActivityObject(actor);
     }
 
     protected RelationshipKind getRelationshipKind() {

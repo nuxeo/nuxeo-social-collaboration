@@ -66,11 +66,10 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     }
 
     @Override
-    public List<MiniMessage> getMiniMessageFor(String actor,
+    public List<MiniMessage> getMiniMessageFor(String actorActivityObject,
             RelationshipKind relationshipKind, int pageSize, int currentPage) {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-        parameters.put(ACTOR_PARAMETER,
-                ActivityHelper.createUserActivityObject(actor));
+        parameters.put(ACTOR_PARAMETER, actorActivityObject);
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FOR_ACTOR);
         List<Activity> activities = getActivityStreamService().query(
                 MiniMessageActivityStreamFilter.ID, parameters, pageSize,
@@ -84,11 +83,10 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     }
 
     @Override
-    public List<MiniMessage> getMiniMessageFrom(String actor, int pageSize,
+    public List<MiniMessage> getMiniMessageFrom(String actorActivityObject, int pageSize,
             int currentPage) {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-        parameters.put(ACTOR_PARAMETER,
-                ActivityHelper.createUserActivityObject(actor));
+        parameters.put(ACTOR_PARAMETER, actorActivityObject);
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FROM_ACTOR);
         List<Activity> activities = getActivityStreamService().query(
                 MiniMessageActivityStreamFilter.ID, parameters, pageSize,

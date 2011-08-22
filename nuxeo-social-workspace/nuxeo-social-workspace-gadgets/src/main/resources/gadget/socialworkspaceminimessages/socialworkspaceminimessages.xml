@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Mini Messages"
+    description=""
+    author="troger" author_email="troger@nuxeo.com" height="280">
+    <#include "dynamic-translations.ftl"/>
+    <Require feature="dynamic-height" />
+    <#include "default-oauth-prefs.ftl"/>
+  </ModulePrefs>
+  <#include "context-prefs.ftl"/>
+  <Content type="html">
+
+<![CDATA[
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
+    <link rel="stylesheet" type="text/css" href="socialworkspaceminimessages.css"/>
+
+    <!-- insert JS Context -->
+    ${jsContext}
+
+    <script src="${specDirectoryUrl}default-automation-request.js"></script>
+    <script src="${specDirectoryUrl}context-management.js"></script>
+    <script src="socialworkspaceminimessages.js"></script>
+  </head>
+  <body>
+
+    <div id="content">
+      <div id="miniMessagesContainer">
+      </div>
+      <div class="navigationBar">
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+
+    <#include "default-request-controls.ftl"/>
+
+  </body>
+</html>
+]]>
+  </Content>
+</Module>

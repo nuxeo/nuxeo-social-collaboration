@@ -25,6 +25,9 @@
   <operation
     class="org.nuxeo.ecm.social.workspace.gadgets.GetSocialWorkspaceActivityStream" />
 
+  <operation
+    class="org.nuxeo.ecm.social.workspace.gadgets.GetSocialWorkspaceMiniMessages" />
+
   </extension>
 
 </component>

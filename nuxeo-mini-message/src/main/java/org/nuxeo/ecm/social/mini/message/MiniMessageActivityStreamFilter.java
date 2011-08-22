@@ -92,15 +92,15 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
         }
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
-        Query query = null;
+        Query query;
         switch (queryType) {
         case MINI_MESSAGES_FOR_ACTOR:
             RelationshipKind relationshipKind = (RelationshipKind) parameters.get(RELATIONSHIP_KIND_PARAMETER);
-            List<String> users = getUserRelationshipService().getTargetsOfKind(
+            List<String> actors = getUserRelationshipService().getTargetsOfKind(
                     actor, relationshipKind);
-            users.add(actor);
-            query = em.createQuery("select activity from Activity activity where activity.actor in (:actor) and activity.verb = :verb order by activity.publishedDate desc");
-            query.setParameter(ACTOR_PARAMETER, users);
+            actors.add(actor);
+            query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb = :verb order by activity.publishedDate desc");
+            query.setParameter("actors", actors);
             query.setParameter("verb", VERB);
             break;
         case MINI_MESSAGES_FROM_ACTOR:

@@ -80,5 +80,13 @@
       <icon>gadget-socialworkspaceactivitystream.png</icon>
     </internalGadget>
 
+    <internalGadget name="socialworkspaceminimessages" disabled="false">
+      <mountPoint>/socialworkspaceminimessages</mountPoint>
+      <directory>socialworkspaceminimessages</directory>
+      <entryPoint>socialworkspaceminimessages.xml</entryPoint>
+      <category>Espace collaboratif (privé)</category>
+      <icon>gadget-socialworkspaceminimessages.png</icon>
+    </internalGadget>
+
   </extension>
 </component>

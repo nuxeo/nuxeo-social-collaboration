@@ -27,6 +27,7 @@ import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -63,7 +64,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(json);
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
-                "Leela", RelationshipKind.fromGroup("circle"), 0, 0);
+                ActivityHelper.createUserActivityObject("Leela"), RelationshipKind.fromGroup("circle"), 0, 0);
         assertNotNull(messages);
         assertEquals(1, messages.size());
 

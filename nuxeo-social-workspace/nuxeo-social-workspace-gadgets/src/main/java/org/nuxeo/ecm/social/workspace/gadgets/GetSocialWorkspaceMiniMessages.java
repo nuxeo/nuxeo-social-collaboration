@@ -15,9 +15,13 @@
  *     Thomas Roger <troger@nuxeo.com>
  */
 
-package org.nuxeo.ecm.social.mini.message.operations;
+package org.nuxeo.ecm.social.workspace.gadgets;
+
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.REPOSITORY_NAME_PARAMETER;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.SOCIAL_WORKSPACE_ID_PARAMETER;
 
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -29,7 +33,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -37,42 +43,39 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
 import org.nuxeo.ecm.social.mini.message.MiniMessageService;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
- * Operation to get the mini messages for a given actor.
- *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-@Operation(id = GetMiniMessageForActor.ID, category = Constants.CAT_SERVICES, label = "Get mini messages", description = "Get mini messages for the current user.")
-public class GetMiniMessageForActor {
+@Operation(id = GetSocialWorkspaceMiniMessages.ID, category = Constants.CAT_SERVICES, label = "Get social workspace mini messages", description = "Get social workspace mini messages.")
+public class GetSocialWorkspaceMiniMessages {
 
-    public static final String ID = "Services.GetMiniMessageForActor";
+    public static final String ID = "Services.GetSocialWorkspaceMiniMessages";
 
-    public static final String FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE = "forActor";
-
-    public static final String FROM_ACTOR_MINI_MESSAGES_STREAM_TYPE = "fromActor";
-
-    public static final RelationshipKind CIRCLE_KIND = RelationshipKind.fromGroup("circle");
+    public static final RelationshipKind SOCIAL_WORKSPACE_MEMBER_KIND = RelationshipKind.fromGroup("socialworkspace:member");
 
     @Context
     protected CoreSession session;
 
     @Context
+    protected SocialWorkspaceService socialWorkspaceService;
+
+    @Context
     protected MiniMessageService miniMessageService;
 
-    @Param(name = "actor", required = false)
-    protected String actor;
+    @Param(name = "contextPath", required = true)
+    protected String contextPath;
 
     @Param(name = "relationshipKind", required = false)
     protected String relationshipKind;
-
-    @Param(name = "miniMessagesStreamType", required = false)
-    protected String miniMessagesStreamType;
 
     @Param(name = "language", required = false)
     protected String language;
@@ -85,40 +88,32 @@ public class GetMiniMessageForActor {
 
     @OperationMethod
     public Blob run() throws Exception {
-        RelationshipKind kind;
-        if (StringUtils.isBlank(relationshipKind)) {
-            kind = CIRCLE_KIND;
-        } else {
-            kind = RelationshipKind.fromString(relationshipKind);
-        }
-
-        if (StringUtils.isBlank(actor)) {
-            actor = session.getPrincipal().getName();
-        }
-        if (StringUtils.isBlank(miniMessagesStreamType)) {
-            miniMessagesStreamType = FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE;
-        }
-
         if (pageSize == null) {
             pageSize = 0;
         }
         if (page == null) {
             page = 0;
         }
+
+        RelationshipKind kind;
+        if (StringUtils.isBlank(relationshipKind)) {
+            kind = SOCIAL_WORKSPACE_MEMBER_KIND;
+        } else {
+            kind = RelationshipKind.fromString(relationshipKind);
+        }
+
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+                session, new PathRef(contextPath));
+
         Locale locale = language != null && !language.isEmpty() ? new Locale(
                 language) : Locale.ENGLISH;
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
 
-        List<MiniMessage> miniMessages = Collections.emptyList();
-
-        if (FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
-            miniMessages = miniMessageService.getMiniMessageFor(ActivityHelper.createUserActivityObject(actor), kind,
+        String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
+                socialWorkspace.getDocument().getRepositoryName(), socialWorkspace.getId());
+        List<MiniMessage> miniMessages = miniMessageService.getMiniMessageFor(socialWorkspaceActivityObject, kind,
                     pageSize, page);
-        } else if (FROM_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
-            miniMessages = miniMessageService.getMiniMessageFrom(ActivityHelper.createUserActivityObject(actor),
-                    pageSize, page);
-        }
 
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
         for (MiniMessage miniMessage : miniMessages) {

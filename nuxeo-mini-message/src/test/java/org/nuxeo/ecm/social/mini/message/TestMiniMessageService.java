@@ -68,7 +68,7 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
-                "Bender", 0, 0);
+                benderActivityObject, 0, 0);
         assertNotNull(messages);
         assertEquals(5, messages.size());
         MiniMessage miniMessage = messages.get(0);
@@ -104,7 +104,7 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         initializeSomeMiniMessagesAndRelations();
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
-                "Leela", RelationshipKind.fromGroup("circle"), 0, 0);
+                ActivityHelper.createUserActivityObject("Leela"), RelationshipKind.fromGroup("circle"), 0, 0);
         assertNotNull(messages);
         assertEquals(10, messages.size());
     }
