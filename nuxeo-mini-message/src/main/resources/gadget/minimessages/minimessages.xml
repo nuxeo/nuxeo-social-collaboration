@@ -8,6 +8,7 @@
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
   <UserPref name="miniMessagesStreamType" datatype="hidden" default_value="forActor" />
+  <UserPref name="actor" datatype="hidden" default_value="" />
   <Content type="html">
 
 <![CDATA[

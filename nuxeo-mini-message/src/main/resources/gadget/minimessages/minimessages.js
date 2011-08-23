@@ -1,6 +1,8 @@
 var prefs = new gadgets.Prefs();
 
 var miniMessagesStreamType = prefs.getString("miniMessagesStreamType");
+var actor = prefs.getString("actor");
+
 var currentMiniMessages = [];
 var waitingMiniMessages = [];
 
@@ -32,6 +34,7 @@ function loadMiniMessages() {
   var NXRequestParams= { operationId : 'Services.GetMiniMessageForActor',
     operationParams: {
       language: prefs.getLang(),
+      actor: actor,
       miniMessagesStreamType: miniMessagesStreamType
     },
     operationContext: {},
@@ -48,6 +51,7 @@ function pollMiniMessages() {
 var NXRequestParams= { operationId : 'Services.GetMiniMessageForActor',
   operationParams: {
     language: prefs.getLang(),
+    actor: actor,
     miniMessagesStreamType: miniMessagesStreamType
   },
   operationContext: {},

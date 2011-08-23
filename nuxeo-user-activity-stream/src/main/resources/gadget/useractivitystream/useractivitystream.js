@@ -1,9 +1,10 @@
 var prefs = new gadgets.Prefs();
 
+var activityStreamType = prefs.getString("activityStreamType");
+var actor = prefs.getString("actor");
+
 var currentActivities = [];
 var waitingActivities = [];
-
-var activityStreamType = prefs.getString("activityStreamType");
 
 function displayActivities() {
   var htmlContent = '';
@@ -27,6 +28,7 @@ function loadActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetActivityStreamForActor',
     operationParams: {
       language: prefs.getLang(),
+      actor: actor,
       activityStreamType: activityStreamType
     },
     operationContext: {},
@@ -43,6 +45,7 @@ function pollActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetActivityStreamForActor',
     operationParams: {
       language: prefs.getLang(),
+      actor: actor,
       activityStreamType: activityStreamType
     },
     operationContext: {},
