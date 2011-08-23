@@ -81,7 +81,7 @@ public class DefaultSubscriptionRequestHandler implements
             final SocialWorkspace socialWorkspace, final Principal principal) {
         try {
             String repositoryName = socialWorkspace.getDocument().getRepositoryName();
-            new UnrestrictedSessionRunner(repositoryName) {
+            new UnrestrictedSessionRunner(repositoryName, principal.getName()) {
                 @Override
                 public void run() throws ClientException {
                     handleSubscriptionRequestFor(session, socialWorkspace,
@@ -172,7 +172,7 @@ public class DefaultSubscriptionRequestHandler implements
         final List<DocumentModel> subscriptionRequests = new ArrayList<DocumentModel>();
         try {
             String repositoryName = socialWorkspace.getDocument().getRepositoryName();
-            new UnrestrictedSessionRunner(repositoryName) {
+            new UnrestrictedSessionRunner(repositoryName, principal.getName()) {
                 @Override
                 public void run() throws ClientException {
                     String queryTemplate = "SELECT * FROM SubscriptionRequest WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s'";

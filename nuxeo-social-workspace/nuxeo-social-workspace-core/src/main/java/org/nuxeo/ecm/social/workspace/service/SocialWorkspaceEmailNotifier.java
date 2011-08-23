@@ -21,6 +21,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -96,11 +97,15 @@ public class SocialWorkspaceEmailNotifier {
             return;
         }
 
-        Expression subject = Scripting.newTemplate("Join request received from ${Context.principal.firstName} ${Context.principal.lastName} ");
+        Expression subject = Scripting.newTemplate("Join request received from ${Context.subscriptionRequestUser.firstName} ${Context.subscriptionRequestUser.lastName} ");
         String template = loadTemplate(TEMPLATE_JOIN_REQUEST_RECEIVED);
 
         OperationContext ctx = new OperationContext(session);
         ctx.setInput(socialWorkspaceDoc);
+
+        Principal subscriptionRequestUser = getUserManager().getPrincipal(requestAdapter.getUsername());
+        ctx.put("subscriptionRequestUser", subscriptionRequestUser);
+
         OperationChain chain = new OperationChain("sendEMail");
         chain.add(SendMail.ID).set("from", "admin@nuxeo.org").set("to", toList).set(
                 "subject", subject).set("HTML", true).set("message", template);
