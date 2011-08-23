@@ -234,7 +234,7 @@ public class TestActivityStreamService {
         assertTrue(activityMessageLabels.containsKey(DOCUMENT_REMOVED));
 
         assertEquals("label.activity.documentCreated", activityMessageLabels.get(DOCUMENT_CREATED));
-        assertEquals("label.activity.documentModified", activityMessageLabels.get(DOCUMENT_UPDATED));
+        assertEquals("label.activity.documentUpdated", activityMessageLabels.get(DOCUMENT_UPDATED));
         assertEquals("label.activity.documentRemoved", activityMessageLabels.get(DOCUMENT_REMOVED));
     }
 

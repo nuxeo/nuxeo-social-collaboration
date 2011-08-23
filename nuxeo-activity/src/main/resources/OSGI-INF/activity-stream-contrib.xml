@@ -7,7 +7,7 @@
     <activityMessageLabel activityVerb="documentCreated"
       labelKey="label.activity.documentCreated" />
     <activityMessageLabel activityVerb="documentModified"
-      labelKey="label.activity.documentModified" />
+      labelKey="label.activity.documentUpdated" />
     <activityMessageLabel activityVerb="documentRemoved"
       labelKey="label.activity.documentRemoved" />
 

@@ -7,7 +7,7 @@
     <activityMessageLabel activityVerb="documentCreatedInSocialWorkspace"
       labelKey="label.activity.documentCreated" />
     <activityMessageLabel activityVerb="documentModifiedInSocialWorkspace"
-      labelKey="label.activity.documentModified" />
+      labelKey="label.activity.documentUpdated" />
     <activityMessageLabel activityVerb="socialworkspace:members"
       labelKey="label.activity.socialworkspace.member" />
     <activityMessageLabel activityVerb="makedocumentpublic"
