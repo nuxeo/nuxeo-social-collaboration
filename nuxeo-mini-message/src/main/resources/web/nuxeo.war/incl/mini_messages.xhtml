@@ -4,11 +4,12 @@
   xmlns:nxd="http://nuxeo.org/nxweb/document"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:nxu="http://nuxeo.org/nxweb/util"
-  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax">
+  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+  class="miniMessages">
 
-  <a4j:outputPanel id="miniMessagesPanel">
-    <h:form id="newMiniMessageForm">
-      <h:inputTextarea value="#{miniMessageActions.newMessage}" cols="30" rows="10" />
+  <a4j:outputPanel id="miniMessagesPanel" styleClass="miniMessagePanel" >
+    <h:form id="newMiniMessageForm" class="newMiniMessageForm">
+      <h:inputTextarea value="#{miniMessageActions.newMessage}" cols="60" rows="4" />
       <p class="newMiniMessageActions">
         <a4j:commandButton styleClass="button" value="#{messages['command.write']}"
           action="#{miniMessageActions.createNewMiniMessage()}"
