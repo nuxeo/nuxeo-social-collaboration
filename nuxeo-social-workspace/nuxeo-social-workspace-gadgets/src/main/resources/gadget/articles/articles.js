@@ -1,5 +1,20 @@
 var prefs = new gadgets.Prefs();
 
+var NXRequestParams = {
+  operationId : 'Social.Provider',            // id of operation or chain to execute
+  operationParams : {
+    query : "Select * from Article WHERE ecm:isProxy = 0 and ecm:currentLifeCycleState <> 'deleted'",
+    pageSize : 5,
+    contextPath : getTargetContextPath()
+  },  // parameters for the chain or operation
+  operationContext : {},                                                // context
+  operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
+  entityType : 'documents',                                             // result type : only document is supported for now
+  usePagination : true,                                                 // manage pagination or not
+  displayMethod : displayArticles,                                  // js method used to display the result
+  noEntryLabel: prefs.getMsg('label.gadget.no.document')
+};
+
 function displayArticles(entries, nxParams) {
 
   var html = "";
