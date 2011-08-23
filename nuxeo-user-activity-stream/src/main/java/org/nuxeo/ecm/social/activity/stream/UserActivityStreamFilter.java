@@ -92,16 +92,17 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
         if (actor == null) {
             throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
         }
+        actor = ActivityHelper.createUserActivityObject(actor);
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
         switch (queryType) {
         case ACTIVITY_STREAM_FOR_ACTOR:
             List<String> actors = getUserRelationshipService().getTargetsOfKind(
-                    ActivityHelper.createUserActivityObject(actor),
+                    actor,
                     RelationshipKind.fromString("socialworkspace:members"));
             actors.addAll(getUserRelationshipService().getTargetsOfKind(
-                    ActivityHelper.createUserActivityObject(actor),
+                    actor,
                     RelationshipKind.fromGroup("circle")));
             if (actors.isEmpty()) {
                 return Collections.emptyList();

@@ -1,0 +1,32 @@
+<div xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jstl/core"
+  id="#{widget.id}">
+
+  <h3 class="summaryTitle">
+    <h:outputText value="#{messages['user.activity.stream.tab.view']}" />
+  </h3>
+
+  <div class="gadgets-gadget-chrome gadgets gadget-user-activity-stream"></div>
+
+  <script type="text/javascript">
+    jQuery('.gadget-user-activity-stream').openSocialGadget({
+      baseURL: '#{baseURL}',
+      language: '#{localeSelector.language}',
+      gadgetDefs: [
+        { specUrl: '#{gadgetsBaseURL}/site/gadgets/useractivitystream/useractivitystream.xml',
+          title: '#{messages['user.activity.stream.tab.view']}',
+          userPrefs: {
+            activityStreamType: {
+              value: 'fromActor'
+            }
+          },
+          displayTitleBar: false,
+          width: '100%'
+        }
+      ]
+    });
+  </script>
+
+</div>

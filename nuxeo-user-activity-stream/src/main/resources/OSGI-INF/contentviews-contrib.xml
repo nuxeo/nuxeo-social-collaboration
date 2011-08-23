@@ -21,7 +21,7 @@
       <showRefreshCommand>false</showRefreshCommand>
       <useGlobalPageSize>false</useGlobalPageSize>
       <resultLayouts>
-        <layout name="user_activity_stream" showCSVExport="false"
+        <layout name="listing_user_activity_stream" showCSVExport="false"
           showPDFExport="false" />
       </resultLayouts>
     </contentView>
