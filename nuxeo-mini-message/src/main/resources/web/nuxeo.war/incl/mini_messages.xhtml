@@ -9,7 +9,7 @@
 
   <a4j:outputPanel id="miniMessagesPanel" styleClass="miniMessagePanel" >
     <h:form id="newMiniMessageForm" class="newMiniMessageForm">
-      <h:inputTextarea value="#{miniMessageActions.newMessage}" cols="60" rows="4" />
+      <h:inputTextarea value="#{miniMessageActions.newMessage}" rows="4" />
       <p class="newMiniMessageActions">
         <a4j:commandButton styleClass="button" value="#{messages['command.write']}"
           action="#{miniMessageActions.createNewMiniMessage()}"
