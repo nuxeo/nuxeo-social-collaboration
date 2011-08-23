@@ -56,7 +56,7 @@ function buildList() {
 	data = "<table class='dataList'><tbody>";
 	for ( i = 0 ; i < users.length ; i++ ) {
 		data += "<tr>";
-		data += "<td>";
+		data += "<td class="avatar">";
 		data += "<a href='#' onclick='alert(\"to be implemented...\");return false;'>";
 		data += "<img src='" + NXGadgetContext.clientSideBaseUrl + "icons/missing_avatar.png'>";
 		data += "</a>";

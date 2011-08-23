@@ -17,6 +17,7 @@
   <head>
 
   <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
+  <link rel="stylesheet" type="text/css" href="join.css"/>
 
   <!-- insert JS Context -->
   ${jsContext}
@@ -103,10 +104,12 @@
 
       <div id="content">
         <#include "default-request-controls.ftl"/>
-        <p id="socialWorkspaceDescription">
+        <p id="socialWorkspaceDescription" class="socialWorkspaceDescription">
         </p>
-        <p id="statusMessage">__MSG_label.gadget.joinDescription__</p>
-        <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.gadget.joinButton__</button>
+        <div class="joinMessage">
+          <p id="statusMessage">__MSG_label.gadget.joinDescription__</p>
+          <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.gadget.joinButton__</button>
+        </div>
       </div>
     </body>
 </html>

@@ -18,7 +18,6 @@
 <html>
   <head>
   <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
-  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/documentlists.css"/>
   <link rel="stylesheet" type="text/css" href="members.css"/>
   <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}/css/jquery.fancybox.css" />
 

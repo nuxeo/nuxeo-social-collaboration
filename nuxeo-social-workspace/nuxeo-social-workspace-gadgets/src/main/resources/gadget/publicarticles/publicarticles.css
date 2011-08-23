@@ -3,10 +3,15 @@
 }
 
 .article {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   }
 
 p {
   margin-top:0;
   margin-bottom: 5px;
+}
+
+p.infos {
+	color: #777777;
+	font-size: 120%;
 }

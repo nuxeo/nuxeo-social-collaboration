@@ -1,1 +1,21 @@
-.ownMiniMessage { background-color: #ffc0cb; }
+.miniMessage {
+	border-bottom: 1px solid #EDEDED;
+	font-size: 105%;
+	padding: 3px 0;
+}
+
+.username {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+.timestamp {
+	color: #999;
+}
+
+.message {
+	padding: 1px 0 5px;
+}
+
+.username a { color: #519eec; }
+.owner .username a { color: #000; }

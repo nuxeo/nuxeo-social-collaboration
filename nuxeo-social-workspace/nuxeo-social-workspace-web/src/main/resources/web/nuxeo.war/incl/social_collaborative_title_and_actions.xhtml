@@ -1,50 +1,66 @@
 <div xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:nxu="http://nuxeo.org/nxweb/util"
-  xmlns:c="http://java.sun.com/jstl/core"
-  xmlns:nxh="http://nuxeo.org/nxweb/html"
-  xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:nxu="http://nuxeo.org/nxweb/util"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:nxh="http://nuxeo.org/nxweb/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	class="globalActionBar">
 
-  <ui:insert name="social_collaboration_title" />
-  <h:form id="socialWorkspaceFullScreenListForm">
-    <ui:insert name="social_collaboration_before_actions" />
+	<ui:insert name="social_collaboration_title" />
+	<h:form id="socialWorkspaceFullScreenListForm">
+		<ui:insert name="social_collaboration_before_actions" />
 
-    <nxu:set var="displaysDocumentActions"
-      value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}"
-      cache="true">
-      <c:if test="#{!empty displaysDocumentActions}">
-        <h:outputText
-          value="#{messages['label.social.workspace.listing']}" />
-        <ul>
-          <nxu:dataList layout="simple" var="action"
-            value="#{displaysDocumentActions}">
-            <li><nxh:commandLink action="#{action.getLink()}"
-                immediate="#{action.immediate}">
-                <h:outputText value=" #{messages[action.label]}" />
-              </nxh:commandLink>
-            </li>
-          </nxu:dataList>
-        </ul>
-      </c:if>
-    </nxu:set>
+		<ul class="actionList">
+			<nxu:set var="displaysDocumentActions"
+				value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}"
+				cache="true">
+			 <c:if test="#{!empty displaysDocumentActions}">
+				 <li>
+					 <a href="#">
+							<h:outputText
+								value="#{messages['label.social.workspace.listing']}" />
+					 </a>
+					 <ul class="actionSubList">
+						 <nxu:dataList layout="simple" var="action"
+							 value="#{displaysDocumentActions}">
+							 <li>
+								 <nxh:commandLink action="#{action.getLink()}"
+									 immediate="#{action.immediate}">
+									 <h:outputText value=" #{messages[action.label]}" />
+								 </nxh:commandLink>
+							 </li>
+						 </nxu:dataList>
+					 </ul>
+				 </li>
+			 </c:if>
+		 </nxu:set>
 
-    <nxu:set var="actions"
-      value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}"
-      cache="true">
-      <c:if test="#{!empty actions}">
-        <h:outputText
-          value="#{messages['label.social.workspace.actions']}" />
-        <ul>
-          <nxu:dataList layout="simple" var="action" value="#{actions}">
-            <li><nxh:commandLink action="#{action.getLink()}"
-                immediate="#{action.immediate}">
-                <h:outputText value=" #{messages[action.label]}" />
-              </nxh:commandLink>
-            </li>
-          </nxu:dataList>
-        </ul>
-      </c:if>
-    </nxu:set>
-    <ui:insert name="social_collaboration_after_actions" />
-  </h:form>
+		 <nxu:set var="actions"
+			 value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}"
+			 cache="true">
+			 <c:if test="#{!empty actions}">
+				 <li>
+					 <a href="#">
+						 <h:outputText
+							 value="#{messages['label.social.workspace.actions']}" />
+					 </a>
+					 <ul class="actionSubList">
+						 <nxu:dataList layout="simple" var="action" value="#{actions}">
+								<li>
+									<nxh:commandLink action="#{action.getLink()}"
+									 	immediate="#{action.immediate}">
+											<h:outputText value=" #{messages[action.label]}" />
+									</nxh:commandLink>
+								</li>
+							</nxu:dataList>
+						</ul>
+					</li>
+				</c:if>
+			</nxu:set>
+		<div class="clear"></div>
+		</ul>
+		<ui:insert name="social_collaboration_after_actions" />
+	</h:form>
+	
+	<div class="clear"></div>
 
 </div>

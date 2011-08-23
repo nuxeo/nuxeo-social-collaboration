@@ -1,1 +1,17 @@
-.ownMiniMessage { background-color: #86555e; }
+.activitiesContainer {
+	margin:  3px 0;
+	font-size: 105%;
+}
+
+.activity {
+	margin:	0 0 5px;
+}
+
+.timestamp {
+	float: left;
+	color: #999;
+}
+
+.activityMessage {
+	margin: 0 0 0 75px;
+}

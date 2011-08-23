@@ -1278,6 +1278,71 @@
       <selector path=".fieldColumn .dr-tree img">
         <margin>0</margin>
       </selector>
+      <!-- Style for global action bar -->
+      <selector path=".globalActionBar, #socialWorkspaceFullScreenListForm">
+        <text-align>right</text-align>
+        <height>28px</height>
+      </selector>
+      <selector path=".globalActionBar .actionList">
+        <margin>0 0 0 8px</margin>
+        <padding>0</padding>
+        <float>right</float>
+        <list-style>none</list-style>
+        <text-align>right</text-align>
+        <height>28px</height>
+      </selector>
+      <selector path=".globalActionBar .actionList li">
+        <float>left</float>
+        <height>25px</height>
+        <width>60px</width>
+      </selector>
+      <selector path=".globalActionBar .actionList li a">
+        <background-color>#E7E7E7</background-color>
+        <border>1px solid #ddd</border>
+        <border-radius>2px</border-radius>
+        <color>#333</color>
+        <padding>3px 5px</padding>
+        <margin>0 0 0 8px</margin>
+        <text-decoration>none</text-decoration>
+        <display>block</display>
+      </selector>
+      <selector path=".globalActionBar .actionList li a:hover">
+        <cursor>pointer</cursor>
+        <border-color>#333</border-color>
+      </selector>
+      <selector path=".globalActionBar .actionList li:hover .actionSubList">
+        <display>block</display>
+      </selector>
+      <selector path=".globalActionBar .actionList .actionSubList">
+        <border>1px solid #ddd</border>
+        <background-color>#fff</background-color>
+        <box-shadow>1px 1px 3px rgba(0, 0, 0, 0.2)</box-shadow>
+        <display>none</display>
+        <height>auto</height>
+        <position>absolute</position>
+        <width>300px</width>
+        <z-index>1001</z-index>
+        <padding>0</padding>
+        <list-style>none</list-style>
+      </selector>
+      <selector path=".globalActionBar .actionList .actionSubList li">
+        <width>300px</width>
+        <float>left</float>
+        <text-align>left</text-align>
+      </selector>
+      <selector path=".globalActionBar .actionList .actionSubList li a">
+        <display>block</display>
+        <padding>5px 10px</padding>
+        <background>none</background>
+        <border>none</border>
+        <margin>0</margin>
+      </selector>
+      <selector path=".globalActionBar .actionList .actionSubList li a:hover">
+        <background-color>#d3e7f2</background-color>
+      </selector>
+      <selector path=".clear">
+        <clear>both</clear>
+      </selector>
     </style>
     <!-- General -->
     <style element="page[1]">

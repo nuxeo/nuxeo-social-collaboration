@@ -23,9 +23,9 @@ function displayListOfArticles(entries,nxParams){
   for (var i = 0; i < entries.length; i++) {
       var entry = entries[i];
       var date = new Date(entry.properties["dc:modified"]);
-      html += '<div class="article">';
-      html += '<p>' + entry.properties["dc:creator"] + ', ' + date.toLocaleDateString() + ' - ';
-      html += '<a target ="_top" class="article_title" title="';
+      html += '<div class="news">';
+      html += '<p class="infos">' + entry.properties["dc:creator"] + ', ' + date.toLocaleDateString() + ' - ';
+      html += '<a target ="_top" class="news_title" title="';
       html += entry.title;
       html += "\" href=\"";
       html += NXGadgetContext.clientSideBaseUrl;

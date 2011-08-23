@@ -3,10 +3,15 @@
 }
 
 .news {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   }
 
 p {
   margin-top:0;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
+}
+
+p.infos {
+	color: #777777;
+	font-size: 120%;
 }
