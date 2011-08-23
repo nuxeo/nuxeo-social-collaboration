@@ -24,7 +24,7 @@
         <event>miniMessageCreated</event>
       </refresh>
       <resultLayouts>
-        <layout name="mini_messages" showCSVExport="false"
+        <layout name="listing_mini_messages" showCSVExport="false"
           showPDFExport="false" />
       </resultLayouts>
     </contentView>

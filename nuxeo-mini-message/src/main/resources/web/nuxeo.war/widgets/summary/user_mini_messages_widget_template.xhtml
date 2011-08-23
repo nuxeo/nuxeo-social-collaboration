@@ -1,0 +1,32 @@
+<div xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jstl/core"
+  id="#{widget.id}">
+
+  <h3 class="summaryTitle">
+    <h:outputText value="#{messages['mini.messages.tab.view']}" />
+  </h3>
+
+  <div class="gadgets-gadget-chrome gadgets gadget-user-mini-messages"></div>
+
+  <script type="text/javascript">
+    jQuery('.gadget-user-mini-messages').openSocialGadget({
+      baseURL: '#{baseURL}',
+      language: '#{localeSelector.language}',
+      gadgetDefs: [
+        { specUrl: '#{gadgetsBaseURL}/site/gadgets/minimessages/minimessages.xml',
+          title: '#{messages['mini.messages.tab.view']}',
+          userPrefs: {
+            miniMessagesStreamType: {
+              value: 'fromActor'
+            }
+          },
+          displayTitleBar: false,
+          width: '100%'
+        }
+      ]
+    });
+  </script>
+
+</div>
