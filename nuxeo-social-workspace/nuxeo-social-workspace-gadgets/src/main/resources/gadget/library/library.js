@@ -72,6 +72,9 @@ function iframeLoaded(iframe) {
 
 
 function loadContent(path, data) {
+  // add language
+  data.lang = prefs.getLang();
+
   jQuery.post(
     path,
     data,
@@ -98,6 +101,15 @@ function contentLoadedHandler(data){
       loadContent(jQuery(this).attr("action"),data);
     }
   );
+  // add the language parameter to all links
+  l = prefs.getLang();
+  jQuery("a").attr('href', function(i, h) {
+  	 if ( h.indexOf("javascript") == 0 )  { // don't add language to href starting with javascript
+  	 	return h;
+  	 } else {
+     	return h + (h.indexOf('?') != -1 ? "&lang=" : "?lang=") + l;
+     }
+  });
 
 }
 
@@ -112,16 +124,16 @@ function getBasePath() {
 // message - message that will be displayed
 // code - code that will be executed(as string) if ok button is pressed
 function showConfirmationPopup(message, code ) {
-  content = '<h3>' + message + '</h3>';
-  content += '<button class="border" name="ok" type="button" onclick="jQuery.fancybox.close();'+ code +'">OK</button>';
-  content += '<button class="border" name="cancel" type="button" onclick="jQuery.fancybox.close()">Cancel</button>';
+  t = '<h3>' + message + '</h3>';
+  t += '<button class="border" name="ok" type="button" onclick="jQuery.fancybox.close();'+ code +'">OK</button>';
+  t += '<button class="border" name="cancel" type="button" onclick="jQuery.fancybox.close()">Cancel</button>';
   jQuery.fancybox(
-    content,
+    t,
     {
       'showCloseButton'  : false,
       'autoDimensions'  : false,
       'width'           : 350,
-      'height'          : 'auto',
+      'height'          : 100,
       'transitionIn'    : 'none',
       'transitionOut'    : 'none'
     }

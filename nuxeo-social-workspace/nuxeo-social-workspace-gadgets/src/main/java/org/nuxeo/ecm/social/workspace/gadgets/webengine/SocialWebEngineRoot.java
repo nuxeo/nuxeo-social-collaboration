@@ -38,7 +38,7 @@ import javax.ws.rs.core.Context;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.seam.international.LocaleSelector;
+import org.nuxeo.common.utils.i18n.I18NUtils;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -64,7 +64,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * WebEngine handler for gadgets requests.
- *
+ * 
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @Path("/social")
@@ -90,10 +90,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context
-    HttpServletRequest request) throws Exception {
+    public Object documentList(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
-        setLanguage();
+
+        String lang = formData.getString("lang");
+        setLanguage(lang);
 
         // get the arguments
         String ref = formData.getString("docRef");
@@ -174,8 +176,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object publishDocument(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -201,8 +203,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object deleteDocument(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
@@ -222,9 +224,10 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef")
-    String ref, @QueryParam("doctype")
-    String docTypeId) throws Exception {
+    public Object createDocumentForm(@QueryParam("docRef") String ref,
+            @QueryParam("doctype") String docTypeId,
+            @QueryParam("lang") String lang) throws Exception {
+        setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
@@ -242,8 +245,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef")
-    String ref) throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref,
+            @QueryParam("lang") String lang) throws ClientException {
+        setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
@@ -252,7 +256,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 currentDoc.getType(), currentDoc);
 
         return getView("select_doc_type").arg("currentDoc", currentDoc).arg(
-                "docTypes", types).arg("categories", types.keySet());
+                "docTypes", types).arg("categories", types.keySet()).arg(
+                "lang", lang);
     }
 
     protected static TypeManager getTypeService() throws ClientException {
@@ -276,8 +281,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object createDocument(@Context HttpServletRequest request)
+            throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();
@@ -362,7 +367,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     protected static DocumentRef getDocumentRef(String ref) {
         DocumentRef docRef;
         if (ref != null && ref.startsWith("/")) { // doc identified by absolute
-                                                  // path
+            // path
             docRef = new PathRef(ref);
         } else { // // doc identified by id
             docRef = new IdRef(ref);
@@ -370,12 +375,10 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return docRef;
     }
 
-    protected void setLanguage() {
-        try {
-            Locale locale = LocaleSelector.instance().getLocale();
+    protected void setLanguage(String lang) {
+        if (lang != null && lang.trim().length() > 0) {
+            Locale locale = new Locale(lang);
             ctx.setLocale(locale);
-        } catch (Exception e) {
-            log.debug("failed to set language in web context", e);
         }
     }
 
@@ -470,6 +473,15 @@ public class SocialWebEngineRoot extends ModuleRoot {
         }
 
         return viewResults;
+    }
+
+    public String getTranslatedLabel(String label) {
+        String newLabel = I18NUtils.getMessageString("messages", label, null,
+                ctx.getLocale());
+        if (newLabel == null) {
+            return label;
+        }
+        return newLabel;
     }
 
 }

@@ -16,3 +16,5 @@ h3 { border-bottom: 1px solid #ddd; margin: 8px 0; padding: 0 0 10px }
 
 .center { text-align: center }
 table.create { margin: auto }
+
+img { border: none }

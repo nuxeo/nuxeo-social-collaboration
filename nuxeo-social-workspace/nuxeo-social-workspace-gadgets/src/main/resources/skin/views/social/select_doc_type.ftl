@@ -20,8 +20,8 @@
       <td class="labelColumn">${category}</td>
       <#list docTypesList as docType>
         <td>
-          <a class="documentType" href="${This.path}/createDocumentForm?docRef=${currentDoc.id}&doctype=${docType.id}">
-            <img src="${contextPath}${docType.icon}" alt="create ${docType.id}"/>  ${docType.label}
+          <a class="documentType" href="${This.path}/createDocumentForm?docRef=${currentDoc.id}&doctype=${docType.id}&lang=${lang}">
+            <img src="${contextPath}${docType.icon}" alt="create ${docType.id}"/>  ${This.getTranslatedLabel(docType.label)}
           </a>
         </td>
       </#list>
