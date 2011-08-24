@@ -105,6 +105,7 @@ function contentLoadedHandler(data){
       loadContent(jQuery(this).attr("action"),data);
     }
   );
+
   // add the language parameter to all links
   l = prefs.getLang();
   jQuery("a").attr('href', function(i, h) {
@@ -116,6 +117,11 @@ function contentLoadedHandler(data){
       }
     }
   });
+
+  // remove "alt" attribute from images to avoid be displayed in IE
+  if ( jQuery.browser.msie ) {
+  	jQuery("img").removeAttr("alt");
+  }
 
 }
 
