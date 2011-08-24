@@ -1,5 +1,7 @@
-pageMax = -1;
-page = 0;
+var prefs = new gadgets.Prefs();
+
+var pageMax = -1;
+var page = 0;
 delete users;
 
 var NXRequestParams = {
@@ -21,7 +23,7 @@ function operationExecutedCallback(response, nxParams){
 }
 
 function doSearch() {
-	 query = _gel('query').value;
+	 var query = _gel('query').value;
 	 if ( isEmpty(query) ) {
 		delete users;
 		displayUsers();
@@ -48,25 +50,30 @@ function displayUsers(){
 
 		_gel("pageInfo").innerHTML = (page + 1) + '/' + pageMax;
 		_gel("listData").innerHTML = buildList();
+
+    $(".user").click(function(){
+      window.parent.location = $(this).find("a").attr("href");
+      return false;
+    });
 	}
 	gadgets.window.adjustHeight();
 }
 
 function buildList() {
-	data = "<table class='dataList'><tbody>";
-	for ( i = 0 ; i < users.length ; i++ ) {
-		data += "<tr>";
-		data += "<td class="avatar">";
-		data += "<a href='#' onclick='alert(\"to be implemented...\");return false;'>";
-		data += "<img src='" + NXGadgetContext.clientSideBaseUrl + "icons/missing_avatar.png'>";
-		data += "</a>";
-		data += "</td>";
-		data += "<td>" + users[i]['firstName'] + "</td>";
-		data += "<td>" + users[i]['lastName'] + "</td>";
-		data += "</tr>\n";
-	}
-	data += "</tbody></table>";
-	return data;
+  var html = '<div class="usersList">';
+  for (var i = 0; i < users.length; i++) {
+    html += '<div class="user">';
+    html += '<span class="avatar">';
+    html += '<a target="_top" href="' + users[i]['profileURL'] + '">';
+    html += '<img src="' + users[i]['avatarURL'] + '">';
+    html += '</a>';
+    html += '</span>';
+    html += '<span>' + users[i]['firstName'] + '</span>';
+    html += '<span>' + users[i]['lastName'] + '</span>';
+    html += '</div>';
+    html += '</div>';
+  }
+  return html;
 }
 
 function getUsers() {

@@ -18,11 +18,13 @@ package org.nuxeo.ecm.social.workspace.gadgets;
 
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -31,12 +33,16 @@ import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.ecm.user.center.profile.UserProfileService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
@@ -47,11 +53,16 @@ public class GetSocialWorkspaceMembers {
 
     public static final String ID = "SocialWorkspace.Members";
 
+    public static final String AVATAR_PROPERTY = "userprofile:avatar";
+
     @Context
     protected CoreSession session;
 
     @Context
     protected SocialWorkspaceService socialWorkspaceService;
+
+    @Context
+    protected UserProfileService userProfileService;
 
     @Context
     protected UserManager userManager;
@@ -93,6 +104,9 @@ public class GetSocialWorkspaceMembers {
             o.element("id", principal.getName());
             o.element("firstName", principal.getFirstName());
             o.element("lastName", principal.getLastName());
+            o.element("profileURL",
+                    ActivityHelper.getUserProfileURL(principal.getName()));
+            o.element("avatarURL", getAvatarURL(principal));
             array.add(o);
         }
 
@@ -101,4 +115,17 @@ public class GetSocialWorkspaceMembers {
         return new InputStreamBlob(new ByteArrayInputStream(
                 result.toString().getBytes("UTF-8")), "application/json");
     }
+
+    protected String getAvatarURL(Principal principal) throws ClientException {
+        DocumentModel userProfileDoc = userProfileService.getUserProfileDocument(
+                principal.getName(), session);
+        String url = VirtualHostHelper.getContextPathProperty()
+                + "/icons/missing_avatar.png";
+        if (userProfileDoc.getPropertyValue(AVATAR_PROPERTY) != null) {
+            url = DocumentModelFunctions.fileUrl("downloadFile",
+                    userProfileDoc, AVATAR_PROPERTY, "avatar");
+        }
+        return url;
+    }
+
 }

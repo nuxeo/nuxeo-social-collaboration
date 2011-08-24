@@ -1,8 +1,14 @@
-.listData .datalist .avatar {
+.usersList .user {
+    height: 40px;
+}
+
+.usersList .user .avatar {
+    margin: auto;
+    height: 40px;
 	width: 50px;
 }
 
-.listData .dataList .avatar img {
-	max-height: 30px;
+.usersList .user .avatar img {
+    max-height: 30px;
 	max-width: 30px;
 }
