@@ -21,19 +21,21 @@
 
   <ui:define name="body">
 
-    <ui:include src="/incl/social_collaborative_title_and_actions.xhtml">
-      <ui:param name="view_container"
-        value="article_social_collaboration_view" />
-    </ui:include>
-
-
-    <h1>
-      <h:outputText value="#{nxd:titleOrId(currentDocument)}" />
-    </h1>
-
-    <h:form id="documentLayout">
-      <nxl:documentLayout mode="fullscreen" value="#{currentDocument}" />
-    </h:form>
-
+    <div class="headerTitleAndTools">
+      <ui:include src="/incl/social_collaborative_title_and_actions.xhtml">
+        <ui:param name="view_container"
+          value="article_social_collaboration_view" />
+      </ui:include>
+      <h1>
+        <h:outputText value="#{nxd:titleOrId(currentDocument)}" />
+      </h1>
+	    <div class="clear"></div>
+	  </div>
+	  
+	  <h:form id="documentLayout">
+	    <nxl:documentLayout mode="fullscreen" value="#{currentDocument}" />
+	    <div class="clear"></div>
+	  </h:form>
+	  
   </ui:define>
 </nxthemes:composition>

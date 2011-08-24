@@ -18,8 +18,50 @@
 <html>
   <head>
   <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
-  <link rel="stylesheet" type="text/css" href="library.css"/>
   <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}/css/jquery.fancybox.css" />
+  <style type="text/css">
+    .content { font: normal 11px / 14px 'Lucida Grande',Verdana,Arial,sans-serif; height: 100% }
+    
+    .header { border-bottom: 1px solid #ddd; margin: 2px 0 5px; padding: 0 0 5px }
+    .header h3 { float: left; margin: 3px 0 0 }
+    
+    .breadcrumb { font-size: 9px }
+    .links { float: right }
+    
+    .dataList { background: none repeat scroll 0 0 white; border-collapse: collapse; margin: 0; width: 100% }
+      .dataList thead th { border-bottom: 1px solid #C7C7C7; color: #666666; font-size: 11px; font-weight: normal; padding: 5px 3px; text-align: left }
+      .dataList .iconColumn { text-align: center; width: 20px }
+      .dataList td { font-size: 11px; background: none transparent; border-color: #C7C7C7 #000000; border-style: solid none; border-width: 0 0 1px; margin: 0; padding: 5px 3px }
+    
+    .dataRowEven { background-color: #f2f7fc }
+    
+    img { border: none }
+    
+    /* pagination controls */
+    #pageNavigationControls span { color:#757575; font-size:13px; font-weight:bold; margin:10px 5px; vertical-align:top }
+    #pageNavigationControls { border-bottom:1px solid #3399FF; margin:0px; padding:2px 0px 0px; text-align:center; margin-bottom: 5px }
+    #pageNavigationControls input { margin-left:5px }
+    
+    /* search box */
+    input.searchBox { font: 11px 'Lucida Grande',Verdana,Arial,sans-serif; padding: 1px 3px 0 1px }
+    
+    /* STYLES SEARCH FIELD */
+    .customSearchBox { float: right }
+    .customSearchBox form { margin: 0 10px 0 0 }
+    .customSearchBox .wideDefinition { border: 1px solid #ccc; padding: 2px 0 2px 2px }
+    .customSearchBox .searchBox { background: none transparent; border: none; width: 105px }
+    .customSearchBox .button {background: transparent url(custom_search.png) no-repeat left center; border:none; cursor: pointer; width: 20px }
+    
+    /* Tooltips */
+    
+    a.button { text-decoration: none; position: relative }
+    a.disabled { cursor: default }
+    .tooltip { text-decoration: none; margin-left: -999em; position: absolute; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 3px; color: #333; padding: 5px 5px 5px 23px !important }
+    a.button:hover .tooltip { text-decoration: none; box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1); font-family: Lucida,Geneva,sans-serif; right: 1em; margin-left: 0; position: absolute; top: 1em; width: 120px; z-index: 999 }
+    
+    /* Clear */
+    .clear { clear:both }
+  </style>
 
   <!-- insert JS Context -->
   ${jsContext}
