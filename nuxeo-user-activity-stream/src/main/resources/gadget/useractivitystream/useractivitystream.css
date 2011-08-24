@@ -15,3 +15,13 @@
 .activityMessage {
 	margin: 0 0 0 75px;
 }
+
+.newActivitiesBar {
+    background-color: #F2F7FC;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    color: #0066CC;
+    cursor: pointer;
+    padding: 3px;
+    text-align: center;
+}

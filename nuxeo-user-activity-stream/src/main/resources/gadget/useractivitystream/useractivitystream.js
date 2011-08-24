@@ -64,8 +64,13 @@ function pollActivityStream() {
 }
 
 function addNewActivitiesBar() {
+  if (document.getElementById('newActivitiesBar') !== null) {
+    return;
+  }
+
   var bar = document.createElement('div');
   bar.id = 'newActivitiesBar';
+  bar.className = 'newActivitiesBar';
   bar.innerHTML = prefs.getMsg('label.show.new.activities');
   bar.onclick = showNewActivities;
   var container = _gel('activitiesContainer');

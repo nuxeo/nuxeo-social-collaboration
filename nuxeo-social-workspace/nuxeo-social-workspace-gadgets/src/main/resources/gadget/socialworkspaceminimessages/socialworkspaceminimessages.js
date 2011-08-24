@@ -53,7 +53,7 @@ var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
   operationContext: {},
   operationCallback: function(response, params) {
     var newMiniMessages = response.data;
-    if (newMiniMessages.length> 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
+    if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
       // there is at least one new mini message
       waitingMiniMessages = newMiniMessages;
       addNewMiniMessagesBar();
@@ -66,17 +66,22 @@ doAutomationRequest(NXRequestParams);
 }
 
 function addNewMiniMessagesBar() {
-var bar = document.createElement('div');
-bar.id = 'newMiniMessagesBar';
-bar.innerHTML = prefs.getMsg('label.show.new.mini.messages');
-bar.onclick = showNewMiniMessages;
-var container = _gel('miniMessagesContainer');
-container.insertBefore(bar, container.firstChild);
+  if (document.getElementById('newMiniMessagesBar') !== null) {
+    return;
+  }
+
+  var bar = document.createElement('div');
+  bar.id = 'newMiniMessagesBar';
+  bar.className = 'newMiniMessagesBar';
+  bar.innerHTML = prefs.getMsg('label.show.new.mini.messages');
+  bar.onclick = showNewMiniMessages;
+  var container = _gel('miniMessagesContainer');
+  container.insertBefore(bar, container.firstChild);
 }
 
 function showNewMiniMessages() {
-currentMiniMessages = waitingMiniMessages;
-displayMiniMessages();
+  currentMiniMessages = waitingMiniMessages;
+  displayMiniMessages();
 }
 
 gadgets.util.registerOnLoadHandler(function() {
