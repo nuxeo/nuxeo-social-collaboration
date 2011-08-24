@@ -1343,6 +1343,66 @@
       <selector path=".clear">
         <clear>both</clear>
       </selector>
+      <!-- Style for Articles and News Listing -->
+      <selector path=".documentItemListing .tool">
+        <float>right</float>
+      </selector>
+      <selector path=".documentItemListing .tool ul">
+        <border preset="header.userMenuList (Social Collaboration borders)" />
+        <list-style>none</list-style>
+        <padding>1px 3px 2px</padding>
+        <margin>0</margin>
+      </selector>
+      <selector path=".documentItemListing .tool .actions li">
+        <position>relative</position>
+        <cursor>pointer</cursor>
+        <text-align>right</text-align>
+      </selector>
+      <selector path=".documentItemListing .actions ul">
+        <border preset="header.userMenuList (Social Collaboration borders)" />
+        <box-shadow>3px 3px 5px rgba(0, 0, 0, 0.3)</box-shadow>
+        <display>none</display>
+        <position>absolute</position>
+        <z-index>1002</z-index>
+        <background-color>white</background-color>
+        <right>-2px</right>
+      </selector>
+      <selector path=".documentItemListing .actions li:hover ul">
+        <display>block</display>
+      </selector>
+      <selector path=".documentItemListing .tool .actions ul li">
+        <margin>0</margin>
+        <padding>0</padding>
+        <width>100px</width>
+      </selector>
+      <selector path=".documentItemListing .actions ul li a">
+        <background-color>white</background-color>
+        <display>block</display>
+        <padding>5px 10px</padding>
+      </selector>
+      <selector path=".documentItemListing .documentHeader span">
+        <font-size>120%</font-size>
+        <font-weight>bold</font-weight>
+      </selector>
+      <selector path=".documentItemListing .documentHeader">
+        <padding>3px 0 5px</padding>
+      </selector>
+      <selector path=".documentItemListing .content">
+        <font-size>105%</font-size>
+        <padding-bottom>5px</padding-bottom>
+        <line-height>14pt</line-height>
+      </selector>
+      <selector path=".documentItemListing .info">
+        <text-align>right</text-align>
+        <color preset="comments.details (Social Collaboration colors)" />
+      </selector>
+      <selector path=".documentItemListing .info span">
+        <padding>0 0 0 5px</padding>
+      </selector>
+      <selector path=".article_item_listing .dataOutput, .news_item_listing .dataOutput">
+        <width>80%</width>
+        <margin>0 auto</margin>
+      </selector>
     </style>
     <!-- General -->
     <style element="page[1]">

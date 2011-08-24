@@ -3,7 +3,8 @@
   xmlns:nxu="http://nuxeo.org/nxweb/util"
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:nxh="http://nuxeo.org/nxweb/html"
-  xmlns:nxd="http://nuxeo.org/nxweb/document">
+  xmlns:nxd="http://nuxeo.org/nxweb/document"
+  class="documentItemListing">
 
 
 
@@ -13,33 +14,45 @@
 
     <div class="#{cssClass}">
 
-      <nxd:restDocumentLink document="#{field_0}"
-        view="#{navigationContext.navigateToDocument(field_0,'fullscreen')}">
+      <div class="documentHeader">
+        <nxd:restDocumentLink document="#{field_0}"
+        view="#{navigationContext.navigateToDocument(field_0,'fullscreen')}"
+        styleClass="title">
         <span id="title_#{field_0.dc.title}" title="#{field_0.dc.title}">
           #{nxd:titleOrId(field_0)} </span>
-      </nxd:restDocumentLink>
-      <pre>
-        <h:outputText value="#{field_0.dc.description}" />
-      </pre>
-      <pre>
-        <h:outputText value="#{field_0.dc.created}" />
-        ,
-        <h:outputText value="#{field_0.dc.creator}" />
-      </pre>
+        </nxd:restDocumentLink>
+ 
+        <div class="tool">
+        <ul class="actions">
+          <li>
+            <h:outputText value="#{messages['label.social.workspace.actions']}" />
+            <ul>
+              <li>
+                <h:commandLink
+                  value="#{messages['label.action.social.document.delete']}"
+                  action="#{fullscreenManagementActions.deleteSocialDocument(field)}"
+                  immediate="true" />
+              </li>
+              <li>
+                <h:commandLink
+                  value="#{messages['label.action.social.document.edit']}"
+                  action="#{fullscreenManagementActions.editSocialDocument(field)}"
+                  immediate="true" />
+              </li>
+             </ul>
+           </li>
+         </ul>
+       </div>
+       <div style="clear: both;"></div>
 
-      <div style="clear: both;"></div>
-      <h:outputText
-        value="#{messages['label.social.workspace.actions']}" />
-      <br />
-      <h:commandLink
-        value="#{messages['label.action.social.document.delete']}"
-        action="#{fullscreenManagementActions.deleteSocialDocument(field)}"
-        immediate="true" />
-      <br />
-      <h:commandLink
-        value="#{messages['label.action.social.document.edit']}"
-        action="#{fullscreenManagementActions.editSocialDocument(field)}"
-        immediate="true" />
+      </div>
+      <div class="content">
+        <h:outputText value="#{field_0.dc.description}" />
+      </div>
+      <div class="info">
+        <span><h:outputText value="#{field_0.dc.created}" /></span><span><h:outputText value="#{field_0.dc.creator}" /></span>
+      </div>
+
     </div>
   </c:if>
 </div>
