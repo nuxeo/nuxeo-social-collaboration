@@ -6,7 +6,7 @@
 </head>
 <body>
 <form class="selectDocType" action="${This.path}/navigateToCreationForm" method="post" enctype="application/x-www-form-urlencoded" target="_parent">
-<h3>Ajouter un Document dans ${currentDoc.title} </h3>
+<h3>Ajouter un Document dans "${currentDoc.title}" </h3>
 <#if (categories?size == 0)>
   Impossible de créer un document dans ${currentDoc.title}
 <#else>

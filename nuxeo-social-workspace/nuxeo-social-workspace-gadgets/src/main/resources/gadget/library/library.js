@@ -61,14 +61,7 @@ function loadContext() {
 }
 
 
-// called when iframe  is loaded ; used for multipart forms ( see create_document_form.ftl)
-function iframeLoaded(iframe) {
-	text=jQuery(iframe).contents().find('body').html();
-	if ( !isEmpty(text ) ) {
-		 jQuery("#content").html(text);
-		jQuery.fancybox.close();
-	}
-}
+
 
 
 function loadContent(path, data) {
@@ -81,6 +74,17 @@ function loadContent(path, data) {
     contentLoadedHandler
   );
 }
+
+
+// called when iframe  is loaded ; used for multipart forms ( see create_document_form.ftl)
+function iframeLoaded(iframe) {
+	text=jQuery(iframe).contents().find('body').html();
+	if ( !isEmpty(text) ) {
+		jQuery.fancybox.close();
+		contentLoadedHandler(text);
+	}
+}
+
 
 //
 function contentLoadedHandler(data){
@@ -104,11 +108,13 @@ function contentLoadedHandler(data){
   // add the language parameter to all links
   l = prefs.getLang();
   jQuery("a").attr('href', function(i, h) {
-  	 if ( h.indexOf("javascript") == 0 )  { // don't add language to href starting with javascript
-  	 	return h;
-  	 } else {
+    if ( typeof h != 'undefined' ) {
+  	  if ( h.indexOf("javascript") == 0 )  { // don't add language to href starting with javascript
+  	    return h;
+  	  } else {
      	return h + (h.indexOf('?') != -1 ? "&lang=" : "?lang=") + l;
-     }
+      }
+    }
   });
 
 }
