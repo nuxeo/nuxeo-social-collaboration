@@ -9,7 +9,9 @@
 
   <a4j:outputPanel id="miniMessagesPanel" styleClass="miniMessagePanel" >
     <h:form id="newMiniMessageForm" class="newMiniMessageForm">
-      <h:inputTextarea value="#{miniMessageActions.newMessage}" rows="4" />
+      <h:inputTextarea id="newMiniMessageText" value="#{miniMessageActions.newMessage}" rows="4" />
+      <h:message styleClass="errorMessage" for="newMiniMessageText"
+        id="newMiniMessageText_errorMessage" />
       <p class="newMiniMessageActions">
         <a4j:commandButton styleClass="button" value="#{messages['command.write']}"
           action="#{miniMessageActions.createNewMiniMessage()}"
@@ -27,5 +29,27 @@
     </nxu:set>
 
   </a4j:outputPanel>
+
+  <script type="text/javascript">
+
+    function updateMiniMessageCounter() {
+      var delta = 140 - jQuery('.newMiniMessageForm textarea').val().length;
+      var miniMessageCounter = jQuery('.miniMessageCounter');
+      miniMessageCounter.text(delta);
+      miniMessageCounter.toggleClass('warning', delta &lt; 5);
+      if (delta &lt; 0) {
+        jQuery('.writeMiniMessageButton').attr('disabled', 'disabled');
+      } else {
+        jQuery('.writeMiniMessageButton').removeAttr('disabled');
+      }
+    }
+
+    jQuery(document).ready(function($) {
+      updateMiniMessageCounter();
+      $('.newMiniMessageForm textarea').keyup(updateMiniMessageCounter);
+    });
+
+  </script>
+
 
 </div>
