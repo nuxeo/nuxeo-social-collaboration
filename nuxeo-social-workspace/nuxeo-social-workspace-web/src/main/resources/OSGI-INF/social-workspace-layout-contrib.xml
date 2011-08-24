@@ -320,13 +320,7 @@
       </templates>
       <rows>
         <row>
-          <widget>group_name</widget>
-        </row>
-        <row>
-          <widget>group_label</widget>
-        </row>
-        <row>
-          <widget>group_members</widget>
+          <widget>social_workspace_group_members</widget>
         </row>
       </rows>
     </layout>
@@ -502,6 +496,22 @@
       <properties mode="any">
         <property name="template">/widgets/listing_social_document_widget_template.xhtml
         </property>
+      </properties>
+    </widget>
+
+    <widget name="social_workspace_group_members" type="template">
+      <labels>
+        <label mode="any">label.groupManager.userMembers</label>
+      </labels>
+      <translated>true</translated>
+      <fields>
+        <field></field>
+      </fields>
+      <properties widgetMode="any">
+        <property name="template">
+          /widgets/user_suggestion_widget_template.xhtml
+        </property>
+        <property name="userSuggestionSearchType">USER_TYPE</property>
       </properties>
     </widget>
 

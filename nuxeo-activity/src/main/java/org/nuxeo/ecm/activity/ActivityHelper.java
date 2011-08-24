@@ -18,7 +18,9 @@
 package org.nuxeo.ecm.activity;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -61,8 +63,18 @@ public class ActivityHelper {
     }
 
     public static String getUsername(String activityObject) {
-        return isUser(activityObject) ? activityObject.replaceAll(USER_PREFIX,
-                "") : "";
+        if (!isUser(activityObject)) {
+            throw new IllegalArgumentException();
+        }
+        return activityObject.replaceAll(USER_PREFIX, "");
+    }
+
+    public static List<String> getUsernames(List<String> activityObjects) {
+        List<String> usernames = new ArrayList<String>();
+        for (String activityObject : activityObjects) {
+            usernames.add(getUsername(activityObject));
+        }
+        return usernames;
     }
 
     public static String getDocumentId(String activityObject) {
@@ -144,11 +156,9 @@ public class ActivityHelper {
         documentActivityObject = StringEscapeUtils.escapeHtml(documentActivityObject);
         displayValue = StringEscapeUtils.escapeHtml(displayValue);
         String link = "<a href=\"%s\" target=\"_top\">%s</a>";
-        return String.format(
-                link,
-                getDocumentURL(
-                        ActivityHelper.getRepositoryName(documentActivityObject),
-                        ActivityHelper.getDocumentId(documentActivityObject)),
+        return String.format(link, getDocumentURL(
+                ActivityHelper.getRepositoryName(documentActivityObject),
+                ActivityHelper.getDocumentId(documentActivityObject)),
                 displayValue);
     }
 

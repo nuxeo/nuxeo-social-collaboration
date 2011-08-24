@@ -6,7 +6,6 @@ import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.C
 import static org.nuxeo.ecm.webapp.security.UserManagementActions.USER_SELECTED_CHANGED;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,11 +160,7 @@ public class UserRelationshipActions implements Serializable {
                 ActivityHelper.createUserActivityObject(getSelectedUser()),
                 RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP));
 
-        List<String> users = new ArrayList<String>();
-        for (String target : targets) {
-            users.add(ActivityHelper.getUsername(target));
-        }
-        return users;
+        return ActivityHelper.getUsernames(targets);
     }
 
     public void relationshipCheckboxChanged(ValueChangeEvent event) {
@@ -178,7 +173,7 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    @Observer( { USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
     public void resetUserRelationship() {
         relationshipsWithSelectedUser = null;
         allRelationshipsState = null;
