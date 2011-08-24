@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
@@ -39,14 +41,22 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-public class MiniMessageForActorPageProvider extends
+public class MiniMessagePageProvider extends
         AbstractPageProvider<MiniMessage> implements PageProvider<MiniMessage> {
 
     private static final long serialVersionUID = 1L;
 
+    private static final Log log = LogFactory.getLog(MiniMessagePageProvider.class);
+
     public static final String ACTOR_PROPERTY = "actor";
 
     public static final String RELATIONSHIP_KIND_PROPERTY = "relationshipKind";
+
+    public static final String STREAM_TYPE_PROPERTY = "streamType";
+
+    public static final String FOR_ACTOR_STREAM_TYPE = "forActor";
+
+    public static final String FROM_ACTOR_STREAM_TYPE = "fromActor";
 
     protected MiniMessageService miniMessageService;
 
@@ -57,9 +67,20 @@ public class MiniMessageForActorPageProvider extends
         if (pageMiniMessages == null) {
             pageMiniMessages = new ArrayList<MiniMessage>();
             long pageSize = getMinMaxPageSize();
-            pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFor(
+
+            String streamType = getStreamType();
+            if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
+                pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFor(
                     getActor(), getRelationshipKind(), (int) pageSize,
                     (int) getCurrentPageIndex()));
+            } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
+                pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFrom(
+                        getActor(), (int) pageSize,
+                        (int) getCurrentPageIndex()));
+            } else {
+                log.error("Unknown stream type: " + streamType);
+            }
+
             resultsCount = Integer.MAX_VALUE - 1;
         }
         return pageMiniMessages;
@@ -91,6 +112,15 @@ public class MiniMessageForActorPageProvider extends
                     + " property.");
         }
         return ActivityHelper.createUserActivityObject(actor);
+    }
+
+    protected String getStreamType() {
+        Map<String, Serializable> props = getProperties();
+        String streamType = (String) props.get(STREAM_TYPE_PROPERTY);
+        if (streamType == null) {
+            streamType = FOR_ACTOR_STREAM_TYPE;
+        }
+        return streamType;
     }
 
     protected RelationshipKind getRelationshipKind() {

@@ -19,8 +19,8 @@ package org.nuxeo.ecm.social.mini.message;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.nuxeo.ecm.social.mini.message.MiniMessageForActorPageProvider.ACTOR_PROPERTY;
-import static org.nuxeo.ecm.social.mini.message.MiniMessageForActorPageProvider.RELATIONSHIP_KIND_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.ACTOR_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ import com.google.inject.Inject;
 @Deploy("org.nuxeo.ecm.platform.query.api:OSGI-INF/pageprovider-framework.xml")
 public class TestMiniMessagePageProviders extends AbstractMiniMessageTest {
 
-    public static final String PROVIDER_NAME = "mini_messages_for_actor";
+    public static final String PROVIDER_NAME = "mini_messages";
 
     @Inject
     protected PageProviderService pageProviderService;

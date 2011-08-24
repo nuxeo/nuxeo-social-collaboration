@@ -13,9 +13,10 @@
       <emptySentence></emptySentence>
       <translateEmptySentence>false</translateEmptySentence>
 
-      <pageProvider name="mini_messages_for_actor">
+      <pageProvider name="mini_messages">
         <property name="actor">#{currentUser.name}</property>
         <property name="relationshipKind">circle:</property>
+        <property name="streamType">forActor</property>
       </pageProvider>
       <showPageSizeSelector>false</showPageSizeSelector>
       <showRefreshCommand>false</showRefreshCommand>

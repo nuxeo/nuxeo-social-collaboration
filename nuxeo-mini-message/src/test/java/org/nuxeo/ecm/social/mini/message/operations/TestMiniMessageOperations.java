@@ -43,7 +43,8 @@ import com.google.inject.Inject;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-@Deploy("org.nuxeo.ecm.automation.core")
+@Deploy({ "org.nuxeo.ecm.automation.core",
+        "org.nuxeo.ecm.platform.query.api:OSGI-INF/pageprovider-framework.xml" })
 public class TestMiniMessageOperations extends AbstractMiniMessageTest {
 
     @Inject

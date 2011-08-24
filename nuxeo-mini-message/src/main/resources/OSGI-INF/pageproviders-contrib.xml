@@ -4,8 +4,8 @@
   <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
     point="providers">
 
-    <genericPageProvider name="mini_messages_for_actor"
-      class="org.nuxeo.ecm.social.mini.message.MiniMessageForActorPageProvider">
+    <genericPageProvider name="mini_messages"
+      class="org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider">
       <pageSize>50</pageSize>
     </genericPageProvider>
 

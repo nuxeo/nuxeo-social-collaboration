@@ -17,7 +17,13 @@
 
 package org.nuxeo.ecm.social.mini.message.operations;
 
+import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.ACTOR_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.FOR_ACTOR_STREAM_TYPE;
+import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.STREAM_TYPE_PROPERTY;
+
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -38,7 +44,10 @@ import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.platform.query.api.PageProvider;
+import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
+import org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider;
 import org.nuxeo.ecm.social.mini.message.MiniMessageService;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 
@@ -53,17 +62,13 @@ public class GetMiniMessageForActor {
 
     public static final String ID = "Services.GetMiniMessageForActor";
 
-    public static final String FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE = "forActor";
-
-    public static final String FROM_ACTOR_MINI_MESSAGES_STREAM_TYPE = "fromActor";
-
-    public static final RelationshipKind CIRCLE_KIND = RelationshipKind.fromGroup("circle");
+    public static final String CIRCLE_KIND = "circle";
 
     @Context
     protected CoreSession session;
 
     @Context
-    protected MiniMessageService miniMessageService;
+    protected PageProviderService pageProviderService;
 
     @Param(name = "actor", required = false)
     protected String actor;
@@ -85,45 +90,40 @@ public class GetMiniMessageForActor {
 
     @OperationMethod
     public Blob run() throws Exception {
-        RelationshipKind kind;
         if (StringUtils.isBlank(relationshipKind)) {
-            kind = CIRCLE_KIND;
-        } else {
-            kind = RelationshipKind.fromString(relationshipKind);
+            relationshipKind = CIRCLE_KIND;
         }
 
         if (StringUtils.isBlank(actor)) {
             actor = session.getPrincipal().getName();
         }
         if (StringUtils.isBlank(miniMessagesStreamType)) {
-            miniMessagesStreamType = FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE;
+            miniMessagesStreamType = FOR_ACTOR_STREAM_TYPE;
         }
 
-        if (pageSize == null) {
-            pageSize = 0;
+        Long targetPage = null;
+        if (page != null) {
+            targetPage = page.longValue();
         }
-        if (page == null) {
-            page = 0;
+        Long targetPageSize = null;
+        if (pageSize != null) {
+            targetPageSize = pageSize.longValue();
         }
+
+        Map<String, Serializable> props = new HashMap<String, Serializable>();
+        props.put(STREAM_TYPE_PROPERTY, miniMessagesStreamType);
+        props.put(ACTOR_PROPERTY, actor);
+        props.put(RELATIONSHIP_KIND_PROPERTY, relationshipKind);
+        PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
+                "mini_messages", null, targetPageSize, targetPage, props);
+
         Locale locale = language != null && !language.isEmpty() ? new Locale(
                 language) : Locale.ENGLISH;
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
 
-        List<MiniMessage> miniMessages = Collections.emptyList();
-
-        if (FOR_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
-            miniMessages = miniMessageService.getMiniMessageFor(
-                    ActivityHelper.createUserActivityObject(actor), kind,
-                    pageSize, page);
-        } else if (FROM_ACTOR_MINI_MESSAGES_STREAM_TYPE.equals(miniMessagesStreamType)) {
-            miniMessages = miniMessageService.getMiniMessageFrom(
-                    ActivityHelper.createUserActivityObject(actor), pageSize,
-                    page);
-        }
-
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
-        for (MiniMessage miniMessage : miniMessages) {
+        for (MiniMessage miniMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", miniMessage.getId());
             o.put("actor", miniMessage.getActor());
