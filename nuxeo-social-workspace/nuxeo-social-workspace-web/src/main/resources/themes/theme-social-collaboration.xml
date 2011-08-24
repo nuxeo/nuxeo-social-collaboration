@@ -1060,6 +1060,7 @@
         <color preset="titles (Social Collaboration colors)" />
         <font preset="title1 (Social Collaboration fonts)"/>
         <overflow>auto</overflow>
+        <text-align>left</text-align>
       </selector>
       <selector path=".dataRowEven">
         <background preset="white (Social Collaboration backgrounds)"/>
@@ -1281,7 +1282,6 @@
       <!-- Style for global action bar -->
       <selector path=".globalActionBar, #socialWorkspaceFullScreenListForm">
         <text-align>right</text-align>
-        <height>28px</height>
       </selector>
       <selector path=".globalActionBar .actionList">
         <margin>0 0 0 8px</margin>

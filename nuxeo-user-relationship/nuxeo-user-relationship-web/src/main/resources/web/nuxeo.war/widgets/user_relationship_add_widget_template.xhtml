@@ -5,24 +5,6 @@
   xmlns:a4j="http://richfaces.org/a4j"
   id="#{widget.id}" rendered="#{widget.mode == 'view' }">
 
-  <style type="text/css">
-    div#add_relationship_#{widget.id} {
-      position: absolute;
-      border: 1px solid #333;
-      background-color: white;
-      z-index:1000;
-    }
-
-    #add_relationship_#{widget.id} table {
-      width: 100%;
-    }
-
-    #add_relationship_#{widget.id} table input{
-      margin-right: 10px;
-      margin-left: 20px;
-      float: right;
-    }
-  </style>
   <c:set var="andLabel" value=" #{messages['label.and']} " scope="page" />
   <c:set var="displayedName" value="#{nxu:test(empty userManagementActions.selectedUser.user.firstName, userManagementActions.selectedUser.id, userManagementActions.selectedUser.user.firstName)}" scope="page" />
   <a4j:outputPanel id="userRelationPanel" >
@@ -67,37 +49,38 @@
           });
         </script>
       </a4j:outputPanel>
+      <div class="relationPopUpContainer">
+        <div id="add_relationship_#{widget.id}" class="relationPopUp">
+          <a4j:status>
+            <f:facet name="start">
+              <h:graphicImage value="/img/standart_waiter.gif" />
+            </f:facet>
+          </a4j:status>
+          <a4j:outputPanel id="add_relationship_#{widget.id}">
+            <nxu:dataTable id="#{widget.id}_add_relationship"
+              value="#{userRelationshipActions.kinds}" var="kind"
+              rendered="#{!(userRelationshipActions.currentUser)}">
 
-      <div id="add_relationship_#{widget.id}" style="display: none;">
-        <a4j:status>
-          <f:facet name="start">
-            <h:graphicImage value="/img/standart_waiter.gif" />
-          </f:facet>
-        </a4j:status>
-        <a4j:outputPanel id="add_relationship_#{widget.id}">
-          <nxu:dataTable id="#{widget.id}_add_relationship"
-            value="#{userRelationshipActions.kinds}" var="kind"
-            rendered="#{!(userRelationshipActions.currentUser)}">
+              <nxu:column>
+                <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipActions.relationshipCheckboxChanged}"
+                  value="#{userRelationshipActions.allRelationshipsState[kind]}">
+                  <a4j:support event="onchange"
+                    reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
+                    <f:param name="selectedKind" value="#{kind.toString()}" />
+                  </a4j:support>
+                  <span><h:outputText value="#{kind.name}" /></span>
+                </h:selectBooleanCheckbox>
+              </nxu:column>
+            </nxu:dataTable>
+            <script type="text/javasript">
+              var div = jQuery("#add_relationship_#{widget.id}");
 
-            <nxu:column>
-              <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipActions.relationshipCheckboxChanged}"
-                value="#{userRelationshipActions.allRelationshipsState[kind]}">
-                <a4j:support event="onchange"
-                  reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
-                  <f:param name="selectedKind" value="#{kind.toString()}" />
-                </a4j:support>
-                <h:outputText value="#{kind.name}" />
-              </h:selectBooleanCheckbox>
-            </nxu:column>
-          </nxu:dataTable>
-          <script type="text/javasript">
-            var div = jQuery("#add_relationship_#{widget.id}");
-
-            div.mouseleave(function() {
-              jQuery("#add_relationship_#{widget.id}").fadeOut(500);
-            });
-          </script>
-        </a4j:outputPanel>
+              div.mouseleave(function() {
+                jQuery("#add_relationship_#{widget.id}").fadeOut(500);
+              });
+            </script>
+          </a4j:outputPanel>
+        </div>
       </div>
     </a4j:outputPanel>
 
