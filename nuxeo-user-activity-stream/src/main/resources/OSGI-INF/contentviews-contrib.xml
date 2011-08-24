@@ -10,8 +10,8 @@
       <translateTitle>true</translateTitle>
       <showTitle>false</showTitle>
 
-      <emptySentence></emptySentence>
-      <translateEmptySentence>false</translateEmptySentence>
+      <emptySentence>label.no.activity</emptySentence>
+      <translateEmptySentence>true</translateEmptySentence>
 
       <pageProvider name="activity_stream_for_actor">
         <property name="actor">#{currentUser.name}</property>

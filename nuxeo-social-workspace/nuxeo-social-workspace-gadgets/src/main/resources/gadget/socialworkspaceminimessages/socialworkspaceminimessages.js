@@ -7,21 +7,25 @@ var waitingMiniMessages = [];
 function displayMiniMessages() {
   var htmlContent = '';
 
-  for (var i = 0; i < currentMiniMessages.length; i++) {
-    var cssClass = 'miniMessage';
-    if (currentMiniMessages[i].isCurrentUserMiniMessage) {
-      cssClass += ' owner';
-    }
+  if (currentMiniMessages.length == 0) {
+    htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.mini.message') + '</div>';
+  } else {
+    for (var i = 0; i < currentMiniMessages.length; i++) {
+      var cssClass = 'miniMessage';
+      if (currentMiniMessages[i].isCurrentUserMiniMessage) {
+        cssClass += ' owner';
+      }
 
-    htmlContent += '<div class="' + cssClass + '">';
-    htmlContent += '<div>';
-    htmlContent += '<span class="username">' + currentMiniMessages[i].displayActor + '</span>';
-    htmlContent += '<span class="timestamp">' + currentMiniMessages[i].publishedDate + '</span>';
-    htmlContent += '</div>';
-    htmlContent += '<div class="message">';
-    htmlContent += currentMiniMessages[i].message;
-    htmlContent += '</div>';
-    htmlContent += '</div>';
+      htmlContent += '<div class="' + cssClass + '">';
+      htmlContent += '<div>';
+      htmlContent += '<span class="username">' + currentMiniMessages[i].displayActor + '</span>';
+      htmlContent += '<span class="timestamp">' + currentMiniMessages[i].publishedDate + '</span>';
+      htmlContent += '</div>';
+      htmlContent += '<div class="message">';
+      htmlContent += currentMiniMessages[i].message;
+      htmlContent += '</div>';
+      htmlContent += '</div>';
+    }
   }
 
   _gel('miniMessagesContainer').innerHTML = htmlContent;

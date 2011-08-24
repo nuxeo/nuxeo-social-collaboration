@@ -9,15 +9,19 @@ var waitingActivities = [];
 function displayActivities() {
   var htmlContent = '';
 
-  for (var i = 0; i < currentActivities.length; i++) {
-    htmlContent += '<div class="activity">';
-    htmlContent += '<div class="timestamp">';
-    htmlContent += currentActivities[i].publishedDate;
-    htmlContent += '</div>';
-    htmlContent += '<div class="activityMessage">';
-    htmlContent += currentActivities[i].activityMessage;
-    htmlContent += '</div>';
-    htmlContent += '</div>';
+  if (currentActivities.length == 0) {
+    htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.activity') + '</div>';
+  } else {
+    for (var i = 0; i < currentActivities.length; i++) {
+      htmlContent += '<div class="activity">';
+      htmlContent += '<div class="timestamp">';
+      htmlContent += currentActivities[i].publishedDate;
+      htmlContent += '</div>';
+      htmlContent += '<div class="activityMessage">';
+      htmlContent += currentActivities[i].activityMessage;
+      htmlContent += '</div>';
+      htmlContent += '</div>';
+    }
   }
 
   _gel('activitiesContainer').innerHTML = htmlContent;
