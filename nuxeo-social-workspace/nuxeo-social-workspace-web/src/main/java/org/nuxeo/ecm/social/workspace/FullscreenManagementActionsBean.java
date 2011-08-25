@@ -44,7 +44,7 @@ import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
- *
+ * 
  */
 @Name("fullscreenManagementActions")
 @Scope(CONVERSATION)
@@ -80,6 +80,8 @@ public class FullscreenManagementActionsBean implements Serializable {
 
     @In(create = true)
     protected transient SocialWorkspaceService socialWorkspaceService;
+
+    protected DocumentModel previous;
 
     /**
      * Navigate to the Dashboard of the Social Workspace if the document belong
@@ -164,6 +166,10 @@ public class FullscreenManagementActionsBean implements Serializable {
                     SocialConstants.NEWS_ROOT_RELATIVE_PATH);
         }
 
+        if (SocialConstants.SOCIAL_WORKSPACE_TYPE.equals(type)) {
+            return socialContainer.getDocument().getParentRef();
+        }
+
         return socialContainer.getDocument().getRef();
 
     }
@@ -227,4 +233,23 @@ public class FullscreenManagementActionsBean implements Serializable {
         return navigationContext.navigateToDocument(currentDocument,
                 AFTER_SOCIAL_COLLABORATION_EDITION_VIEW);
     }
+
+    public String displayCreateSocialWorkspaceForm() throws ClientException {
+        previous = navigationContext.getCurrentDocument();
+        if (previous != null
+                && SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE.equals(previous.getType())) {
+            previous = documentManager.getDocument(previous.getParentRef());
+        }
+        return createNewDocument(SocialConstants.SOCIAL_WORKSPACE_TYPE);
+    }
+
+    public String goToPreviosDocument() throws ClientException {
+        if (previous != null) {
+            navigationContext.setCurrentDocument(previous);
+            previous = null;
+            return navigateToFullscreenView();
+        }
+        return null;
+    }
+
 }

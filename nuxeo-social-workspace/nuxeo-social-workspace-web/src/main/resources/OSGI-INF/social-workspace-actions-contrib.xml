@@ -74,6 +74,36 @@
       <filter-id>is_social_workspace_administrator</filter-id>
     </action>
 
+	<action id="CreateSocialWorkspace"
+      link="#{fullscreenManagementActions.displayCreateSocialWorkspaceForm}"
+      label="label.social.workspace.create.social.workspace"
+      immediate="false"
+      icon="/icons/create_soacial_workspace.png"
+      order="10">
+      <category>SOCIAL_WORKSPACE_ACTIONS</category>
+      <filter-id>isSocialWorkspaceMember</filter-id>
+    </action>
+
+    <action id="CreateSocialWorkspaceSaveButton"
+      link="#{fullscreenManagementActions.saveOncreate}"
+      label="command.create"
+      immediate="false"
+      icon="/icons/create_news_item.png"
+      order="0">
+      <category>SOCIAL_WORKSPACE_CREATION_FORM</category>
+      <filter-id>canCreateSocialWorkspace</filter-id>
+    </action>
+
+    <action id="CreateSocialWorkspaceCancelButton"
+      link="#{fullscreenManagementActions.goToPreviosDocument}"
+      label="command.cancel"
+      immediate="true"
+      icon="/icons/create_news_item.png"
+      order="50">
+      <category>SOCIAL_WORKSPACE_CREATION_FORM</category>
+      <filter-id>canCreateSocialWorkspace</filter-id>
+    </action>
+
     <action id="CreateSocialDocumentSaveButton"
       link="#{fullscreenManagementActions.saveOncreate}"
       label="command.create"
@@ -331,6 +361,19 @@
     <filter id="isCurrentDocNewsItem">
       <rule grant="true">
         <type>NewsItem</type>
+      </rule>
+    </filter>
+
+    <filter id="isCurrentDocNewsItem">
+      <rule grant="true">
+        <type>NewsItem</type>
+      </rule>
+    </filter>
+
+    <filter id="canCreateSocialWorkspace">
+      <rule grant="true">
+        <permission>AddChildren</permission>
+      	<type>SocialWorkspaceContainer</type>
       </rule>
     </filter>
 
