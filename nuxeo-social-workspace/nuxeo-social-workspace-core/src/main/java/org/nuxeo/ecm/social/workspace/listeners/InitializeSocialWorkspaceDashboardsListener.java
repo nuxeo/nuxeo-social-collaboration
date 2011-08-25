@@ -53,6 +53,11 @@ public class InitializeSocialWorkspaceDashboardsListener implements
 
     @Override
     public void handleEvent(Event event) throws ClientException {
+        if (Framework.isTestModeSet()) {
+            // do not initialize any dashboard in tests
+            return ;
+        }
+
         if (!DOCUMENT_CREATED.equals(event.getName())) {
             return;
         }
