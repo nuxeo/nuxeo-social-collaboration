@@ -27,7 +27,7 @@
       </ui:define>
       <ui:define name="social_collaboration_before_actions" >
         <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">
-            <ul>
+            <ul class="actionList">
               <li>
                 <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">
                   #{messages['label.opensocial.container.change.layout']}

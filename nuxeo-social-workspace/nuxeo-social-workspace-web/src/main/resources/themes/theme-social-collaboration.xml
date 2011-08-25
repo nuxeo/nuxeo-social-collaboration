@@ -596,7 +596,6 @@
         <font-style>italic</font-style>
       </selector>
       <selector path=".pageNavigationControls">
-        <border preset="blue.sky.mini (Social Collaboration borders)" />
         <margin>5px 0px</margin>
         <padding>7px</padding>
         <text-align>center</text-align>
@@ -1277,32 +1276,38 @@
         <margin>0</margin>
       </selector>
       <!-- Style for title and global action bar -->
+      <selector path=".headerTitleAndTools">
+        <margin-bottom>50px</margin-bottom>
+      </selector>
       <selector path=".headerTitleAndTools h1">
         <display>inline</display>
       </selector>
       <selector path=".headerTitleAndTools .globalActionBar">
-        <text-align>right</text-align>
+        <float>right</float>
       </selector>
       <selector path=".globalActionBar .actionList">
-        <margin>0 0 0 8px</margin>
+        <margin>0</margin>
         <padding>0</padding>
         <list-style>none</list-style>
+        <float>right</float>
       </selector>
       <selector path=".globalActionBar .actionList li">
-        <display>inline</display>
+        <float>right</float>
         <position>relative</position>
-      </selector>
-      <selector path=".globalActionBar .actionList li a">
         <background-color>#f5f5f5</background-color>
         <border>1px solid #ddd</border>
         <border-radius>2px</border-radius>
         <color>#333</color>
         <padding>3px 5px</padding>
         <margin>0 0 0 8px</margin>
+        <cursor>pointer</cursor>
         <text-decoration>none</text-decoration>
       </selector>
-      <selector path=".globalActionBar .actionList li a:hover">
-        <cursor>pointer</cursor>
+      <selector path=".globalActionBar .actionList li a">
+          <padding>0</padding>
+          <color>#333</color>
+      </selector>
+      <selector path=".globalActionBar .actionList li:hover">
         <border-color>#333</border-color>
       </selector>
       <selector path=".globalActionBar .actionList .actionSubList">
@@ -1318,18 +1323,22 @@
         <padding>0</padding>
         <list-style>none</list-style>
       </selector>
-      <selector path=".globalActionBar .actionList li:hover .actionSubList">
-        <display>block</display>
-      </selector>
       <selector path=".globalActionBar .actionList .actionSubList li">
         <width>300px</width>
+        <float>none</float>
         <display>inline</display>
         <text-align>left</text-align>
+        <background>none</background>
+        <height>auto</height>
+        <border>none</border>
+         <margin>0</margin>
+         <padding>0</padding>
       </selector>
       <selector path=".globalActionBar .actionList .actionSubList li a">
         <display>block</display>
         <padding>5px 10px</padding>
         <background>none</background>
+        <text-decoration>none</text-decoration>
         <border>none</border>
         <margin>0</margin>
       </selector>
@@ -1344,22 +1353,22 @@
         <float>right</float>
       </selector>
       <selector path=".documentItemListing .tool ul">
-        <border preset="header.userMenuList (Social Collaboration borders)" />
         <list-style>none</list-style>
-        <padding>1px 3px 2px</padding>
+        <padding>0 3px 2px</padding>
         <margin>0</margin>
       </selector>
       <selector path=".documentItemListing .tool .actions li">
         <position>relative</position>
         <cursor>pointer</cursor>
-        <text-align>right</text-align>
       </selector>
       <selector path=".documentItemListing .actions ul">
         <border preset="header.userMenuList (Social Collaboration borders)" />
         <box-shadow>3px 3px 5px rgba(0, 0, 0, 0.3)</box-shadow>
         <display>none</display>
         <position>absolute</position>
+        <padding>0</padding>
         <z-index>1002</z-index>
+        <top>15px</top>
         <background-color>white</background-color>
         <right>-2px</right>
       </selector>
@@ -1375,6 +1384,10 @@
         <background-color>white</background-color>
         <display>block</display>
         <padding>5px 10px</padding>
+      </selector>
+      <selector path=".documentItemListing .actions ul li a:hover">
+        <background-color>#d3e7f2</background-color>
+        <text-decoration>none</text-decoration>
       </selector>
       <selector path=".documentItemListing .documentHeader span">
         <font-size>120%</font-size>
@@ -1395,9 +1408,9 @@
       <selector path=".documentItemListing .info span">
         <padding>0 0 0 5px</padding>
       </selector>
-      <selector path=".article_item_listing .dataOutput, .news_item_listing .dataOutput">
+      <selector path=".article_item_listing, .news_item_listing">
         <width>80%</width>
-        <margin>0 auto</margin>
+        <margin>20px auto 0</margin>
       </selector>
     </style>
     <!-- General -->

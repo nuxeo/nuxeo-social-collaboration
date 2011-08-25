@@ -66,12 +66,15 @@
                AND ecm:currentLifeCycleState != 'deleted'
                AND ecm:path STARTSWITH ?
         </pattern>
-      <pageSize>20</pageSize>
+      <pageSize>50</pageSize>
       <parameter>#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() ? 0 : 1}
       </parameter>
       <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}
       </parameter>
     </coreQueryPageProvider>
+    <showPageSizeSelector>false</showPageSizeSelector>
+    <showRefreshCommand>false</showRefreshCommand>
+    <useGlobalPageSize>false</useGlobalPageSize>
     <refresh>
       <event>documentChanged</event>
       <event>documentChildrenChanged</event>
@@ -97,10 +100,13 @@
                AND ecm:currentLifeCycleState != 'deleted'
                AND ecm:path STARTSWITH ?
       </pattern>
-      <pageSize>20</pageSize>
+      <pageSize>50</pageSize>
       <parameter>#{socialWorkspaceActions.getSocialWorkspaceContainer().getPath()}
       </parameter>
     </coreQueryPageProvider>
+    <showPageSizeSelector>false</showPageSizeSelector>
+    <showRefreshCommand>false</showRefreshCommand>
+    <useGlobalPageSize>false</useGlobalPageSize>
     <refresh>
       <event>documentChanged</event>
       <event>documentChildrenChanged</event>
