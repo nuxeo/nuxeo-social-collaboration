@@ -105,8 +105,10 @@ public class SocialWorkspaceActivityStreamFilter implements
             return Collections.emptyList();
         }
 
-        query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) order by activity.publishedDate desc");
+        query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) " +
+                "and activity.target = :target order by activity.publishedDate desc");
         query.setParameter("actors", actors);
+        query.setParameter("target", socialWorkspaceActivityObject);
         query.setParameter("verbs", Arrays.asList(VERBS));
 
         if (pageSize > 0) {

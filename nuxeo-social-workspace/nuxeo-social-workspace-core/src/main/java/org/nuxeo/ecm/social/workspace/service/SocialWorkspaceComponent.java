@@ -398,7 +398,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayActor(
                 socialWorkspace.getTitle()).verb(kind.toString()).object(
                 ActivityHelper.createUserActivityObject(principal.getName())).displayObject(
-                ActivityHelper.generateDisplayName(principal)).build();
+                ActivityHelper.generateDisplayName(principal)).target(
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayTarget(
+                socialWorkspace.getTitle()).build();
         getActivityStreamService().addActivity(activity);
     }
 
