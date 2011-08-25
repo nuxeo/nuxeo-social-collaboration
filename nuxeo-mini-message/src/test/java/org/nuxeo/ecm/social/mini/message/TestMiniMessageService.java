@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.nuxeo.ecm.activity.Activity;

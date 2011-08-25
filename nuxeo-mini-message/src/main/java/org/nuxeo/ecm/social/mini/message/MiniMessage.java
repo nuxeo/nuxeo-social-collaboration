@@ -20,9 +20,13 @@ package org.nuxeo.ecm.social.mini.message;
 import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.platform.htmlsanitizer.HtmlSanitizerService;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * Immutable object representing a mini message.
@@ -52,10 +56,11 @@ public final class MiniMessage {
     }
 
     public static MiniMessage fromActivity(Activity activity) {
+        String message = MiniMessageHelper.replaceURLsByLinks(activity.getObject());
         return new MiniMessage(activity.getId(),
                 getUsername(activity.getActor()),
                 ActivityHelper.getUserProfileLink(activity.getActor(),
-                        activity.getDisplayActor()), activity.getObject(),
+                        activity.getDisplayActor()), message,
                 activity.getPublishedDate());
     }
 

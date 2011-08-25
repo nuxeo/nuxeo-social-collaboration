@@ -17,6 +17,12 @@
 
 package org.nuxeo.ecm.social.mini.message;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.nuxeo.ecm.platform.htmlsanitizer.HtmlSanitizerService;
+import org.nuxeo.runtime.api.Framework;
+
 /**
  * Helper methods to deal with mini messages.
  *
@@ -25,8 +31,26 @@ package org.nuxeo.ecm.social.mini.message;
  */
 public class MiniMessageHelper {
 
+    public static Pattern HTTP_URL_PATTERN = Pattern.compile("\\b(https?://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])");
+
     private MiniMessageHelper() {
         // Helper class
+    }
+
+    public static String replaceURLsByLinks(String message) {
+        Matcher m = HTTP_URL_PATTERN.matcher(message);
+        StringBuffer sb = new StringBuffer(message.length());
+        while (m.find()) {
+            String url = m.group(1);
+            m.appendReplacement(sb, computeLinkFor(url));
+        }
+        m.appendTail(sb);
+        return Framework.getLocalService(HtmlSanitizerService.class).sanitizeString(
+                sb.toString(), null);
+    }
+
+    private static String computeLinkFor(String url) {
+        return "<a href=\"" + url + "\">" + url + "</a>";
     }
 
 }
