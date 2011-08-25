@@ -35,22 +35,22 @@
       <category>SimpleDocument</category>
       <default-view>view_documents</default-view>
       <layouts mode="any">
-        <layout>heading</layout>
+        <layout>social_document_heading</layout>
         <layout>article</layout>
-        <layout>note</layout>
+        <layout>social_document_content</layout>
       </layouts>
       <layouts mode="summary">
         <layout>social_document_summary_layout</layout>
       </layouts>
       <layouts mode="edit">
-        <layout>heading</layout>
+        <layout>social_document_heading</layout>
         <layout>article</layout>
-        <layout>note</layout>
+        <layout>social_document_content</layout>
         <layout>dublincore</layout>
       </layouts>
       <layouts mode="view">
         <layout>article</layout>
-        <layout>note</layout>
+        <layout>social_document_content</layout>
       </layouts>
       <layouts mode="fullscreen">
         <layout>fullscreen</layout>
@@ -70,21 +70,21 @@
       <category>SimpleDocument</category>
       <default-view>view_documents</default-view>
       <layouts mode="any">
-        <layout>heading</layout>
+        <layout>social_document_heading</layout>
         <layout>news_item</layout>
-        <layout>note</layout>
+        <layout>social_document_content</layout>
       </layouts>
       <layouts mode="summary">
         <layout>news_item_summary_layout</layout>
       </layouts>
       <layouts mode="edit">
-        <layout>heading</layout>
+        <layout>social_document_heading</layout>
         <layout>news_item</layout>
-        <layout>note</layout>
+        <layout>social_document_content</layout>
         <layout>dublincore</layout>
       </layouts>
       <layouts mode="view">
-        <layout>note</layout>
+        <layout>social_document_content</layout>
       </layouts>
       <layouts mode="fullscreen">
         <layout>fullscreen</layout>

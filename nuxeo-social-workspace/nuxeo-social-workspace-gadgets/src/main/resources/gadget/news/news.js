@@ -35,7 +35,7 @@ function displayListOfArticles(entries,nxParams){
       html += "\" >";
       html += entry.title;
       html += '</a></p>';
-      var text = entry.properties["note:note"];
+      var text = entry.properties["dc:description"];
       text = text.substring(0, text.length > 300 ? 300 : text.length);
       html += '<p>' + text + '</p>';
       html += '</div>';

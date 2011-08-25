@@ -324,6 +324,32 @@
         </row>
       </rows>
     </layout>
+
+    <layout name="social_document_heading">
+      <templates>
+        <template mode="any">/layouts/layout_default_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <widget>title</widget>
+        </row>
+        <row>
+          <widget>required_description</widget>
+        </row>
+      </rows>
+    </layout>
+
+     <layout name="social_document_content">
+      <templates>
+        <template mode="any">/layouts/layout_default_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <widget>social_document_content</widget>
+        </row>
+      </rows>
+    </layout>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
@@ -515,6 +541,35 @@
       </properties>
     </widget>
 
+    <widget name="required_description" type="textarea">
+      <labels>
+        <label mode="any">description</label>
+      </labels>
+      <translated>true</translated>
+      <fields>
+        <field>dc:description</field>
+      </fields>
+      <properties widgetMode="edit">
+        <property name="required">true</property>
+        <property name="styleClass">dataInputText</property>
+      </properties>
+    </widget>
+
+    <widget name="social_document_content" type="richtext_with_mimetype">
+      <labels>
+        <label mode="any">label.social.document.content</label>
+      </labels>
+      <translated>true</translated>
+      <fields>
+        <field>note:note</field>
+        <field>note:mime_type</field>
+      </fields>
+      <properties mode="view">
+        <property name="translatedHtml">
+          #{noteActions.translateImageLinks(field_0)}
+        </property>
+      </properties>
+    </widget>
   </extension>
 
 </component>
