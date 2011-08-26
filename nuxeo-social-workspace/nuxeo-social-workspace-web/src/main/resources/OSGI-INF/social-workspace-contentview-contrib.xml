@@ -11,7 +11,7 @@
       <property name="coreSession">#{documentManager}</property>
       <pattern>
         SELECT * FROM SubscriptionRequest WHERE ecm:isCheckedInVersion = 0
-        AND ecm:isProxy = 0 AND req:info = ?
+        AND ecm:isProxy = 0 AND req:info = ? AND ecm:currentLifeCycleState = 'pending'
       </pattern>
       <parameter>#{currentDocument.id}</parameter>
       <pageSize>20</pageSize>
