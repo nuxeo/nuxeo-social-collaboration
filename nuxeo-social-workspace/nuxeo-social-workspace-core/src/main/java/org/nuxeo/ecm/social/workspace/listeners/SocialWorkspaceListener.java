@@ -24,6 +24,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -63,7 +64,7 @@ public class SocialWorkspaceListener implements EventListener {
             return;
         }
 
-        doc.putContextData(DO_NOT_PROCESS, true);
+        doc.putContextData(ScopeType.REQUEST, DO_NOT_PROCESS, true);
         SocialWorkspace socialWorkspace = toSocialWorkspace(doc);
         if (DOCUMENT_CREATED.equals(event.getName())) {
             handleSocialWorkspaceCreation(socialWorkspace, ctx);

@@ -38,6 +38,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
@@ -324,6 +325,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
             addSocialWorkspaceACL(acl, socialWorkspace);
             doc.setACP(acp, true);
+            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
             session.saveDocument(doc);
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
@@ -445,7 +447,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, true);
-            doc.putContextData(SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionReadable(session, socialWorkspace);
@@ -505,7 +507,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, false);
-            doc.putContextData(SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionUnreadable(session, socialWorkspace);
