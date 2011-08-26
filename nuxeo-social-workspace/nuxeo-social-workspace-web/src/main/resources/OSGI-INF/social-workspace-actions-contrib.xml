@@ -232,6 +232,11 @@
       <filter-id>social_workspace</filter-id>
     </action>
 
+    <action id="TAB_RIGHTS">
+      <category>TAB_MANAGE_sub_tab</category>
+      <filter-id>hide_rights_tab</filter-id>
+    </action>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
@@ -281,6 +286,13 @@
     <filter id="not_social_document">
       <rule grant="false">
         <facet>SocialDocument</facet>
+      </rule>
+    </filter>
+
+    <filter id="hide_rights_tab">
+      <rule grant="false">
+        <facet>SocialWorkspace</facet>
+        <condition>!principal.administrator</condition>
       </rule>
     </filter>
 
