@@ -21,8 +21,7 @@
         template="incl/social_collaborative_title_and_actions.xhtml">
         <ui:define name="social_collaboration_title">
           <h1>
-            <h:outputText
-              value="#{messages['title.edit']} #{currentType.id}" />
+            #{socialWorkspaceActions.socialWorkspaceContainer.title} / #{messages['title.edit']} #{currentType.id}"
           </h1>
         </ui:define>
       </ui:decorate>

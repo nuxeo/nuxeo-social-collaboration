@@ -1302,6 +1302,8 @@
         <margin>0 0 0 8px</margin>
         <cursor>pointer</cursor>
         <text-decoration>none</text-decoration>
+        <!-- just for IE7 -->
+        <z-index>3000</z-index>
       </selector>
       <selector path=".globalActionBar .actionList li a">
           <padding>0</padding>
@@ -1316,7 +1318,7 @@
         <box-shadow>1px 1px 3px rgba(0, 0, 0, 0.2)</box-shadow>
         <display>none</display>
         <position>absolute</position>
-        <top>15px</top>
+        <top>20px</top>
         <right>0</right>
         <width>250px</width>
         <z-index>1001</z-index>

@@ -22,8 +22,7 @@
         template="incl/social_collaborative_title_and_actions.xhtml">
         <ui:define name="social_collaboration_title">
           <h1>
-            <h:outputText
-              value="#{messages['title.create.document']} #{messages[nxd:typeInfo(changeableDocument).label]}" />
+            #{socialWorkspaceActions.socialWorkspaceContainer.title} / #{messages['title.create.document']} #{messages[nxd:typeInfo(changeableDocument).label]}
           </h1>
         </ui:define>
       </ui:decorate>
