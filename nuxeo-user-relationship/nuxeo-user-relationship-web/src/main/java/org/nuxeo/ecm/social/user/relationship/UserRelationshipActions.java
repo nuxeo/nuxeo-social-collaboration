@@ -116,12 +116,12 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    protected void addNewRelationActivity(String actorId, String targetId,
-            RelationshipKind relationshipKind) {
-        Activity activity = new ActivityBuilder().actor(actorId).displayActor(
-                Functions.userFullName(actorId)).verb(
-                relationshipKind.getGroup()).object(targetId).displayObject(
-                Functions.userFullName(targetId)).build();
+    protected void addNewRelationActivity(String actorActivityObject,
+            String targetActivityObject, RelationshipKind relationshipKind) {
+        Activity activity = new ActivityBuilder().actor(actorActivityObject).displayActor(
+                Functions.userFullName(ActivityHelper.getUsername(actorActivityObject))).verb(
+                relationshipKind.getGroup()).object(targetActivityObject).displayObject(
+                Functions.userFullName(ActivityHelper.getUsername(targetActivityObject))).build();
         getActivityStreamService().addActivity(activity);
     }
 
@@ -173,7 +173,7 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    @Observer( { USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
     public void resetUserRelationship() {
         relationshipsWithSelectedUser = null;
         allRelationshipsState = null;
