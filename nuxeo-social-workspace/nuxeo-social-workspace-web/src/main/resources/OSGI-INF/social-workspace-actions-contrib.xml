@@ -96,7 +96,7 @@
     </action>
 
     <action id="CreateSocialWorkspaceCancelButton"
-      link="#{fullscreenManagementActions.goToPreviosDocument}"
+      link="#{fullscreenManagementActions.goToPreviousDocument}"
       label="command.cancel"
       immediate="true"
       icon="/icons/create_news_item.png"

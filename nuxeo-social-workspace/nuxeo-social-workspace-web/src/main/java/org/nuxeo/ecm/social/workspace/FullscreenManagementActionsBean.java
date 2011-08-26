@@ -245,7 +245,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         return createNewDocument(SocialConstants.SOCIAL_WORKSPACE_TYPE);
     }
 
-    public String goToPreviosDocument() throws ClientException {
+    public String goToPreviousDocument() throws ClientException {
         if (previous != null) {
             navigationContext.setCurrentDocument(previous);
             previous = null;
