@@ -21,7 +21,7 @@
       label="label.social.workspace.gotodmview"
       immediate="false"
       icon="/icons/goto_dm.png"
-      order="10">
+      order="99">
       <category>SOCIAL_WORKSPACE_LISTING</category>
       <filter-id>is_social_workspace_administrator</filter-id>
     </action>
@@ -50,7 +50,7 @@
       label="label.social.workspace.list.news.items"
       immediate="false"
       icon="/icons/news_item_listing.png"
-      order="10">
+      order="11">
       <category>SOCIAL_WORKSPACE_LISTING</category>
       <filter-id>is_social_workspace_administrator</filter-id>
     </action>
