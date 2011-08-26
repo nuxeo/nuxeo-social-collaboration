@@ -25,6 +25,8 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 
 import java.io.Serializable;
 
+import javax.faces.context.FacesContext;
+
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
@@ -44,7 +46,7 @@ import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
- * 
+ *
  */
 @Name("fullscreenManagementActions")
 @Scope(CONVERSATION)
@@ -250,6 +252,10 @@ public class FullscreenManagementActionsBean implements Serializable {
             return navigateToFullscreenView();
         }
         return null;
+    }
+
+    public String getViewId() {
+        return FacesContext.getCurrentInstance().getViewRoot().getViewId();
     }
 
 }

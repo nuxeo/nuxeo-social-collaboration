@@ -13,6 +13,7 @@
       icon="/icons/back_to_social_workspace_dashboard.png"
       order="20">
       <category>SOCIAL_WORKSPACE_LISTING</category>
+      <filter-id>social_workspace_dashboard_view</filter-id>
     </action>
 
     <action id="GoToDMView"
@@ -300,6 +301,12 @@
       <rule grant="true">
         <facet>SocialDocument</facet>
         <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="social_workspace_dashboard_view">
+      <rule grant="false">
+        <condition>#{fullscreenManagementActions.getViewId().equals("/social_dashboard.xhtml")}</condition>
       </rule>
     </filter>
 
