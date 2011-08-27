@@ -326,7 +326,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             addSocialWorkspaceACL(acl, socialWorkspace);
             doc.setACP(acp, true);
             doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
-            session.saveDocument(doc);
+            doc = session.saveDocument(doc);
+            socialWorkspace.setDocument(doc);
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }

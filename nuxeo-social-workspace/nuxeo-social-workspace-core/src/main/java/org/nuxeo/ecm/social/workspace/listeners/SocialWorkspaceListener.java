@@ -73,6 +73,7 @@ public class SocialWorkspaceListener implements EventListener {
         } else if (DOCUMENT_REMOVED.equals(event.getName())) {
             handleSocialWorkspaceDeletion(socialWorkspace);
         }
+        doc.getContextData().remove(ScopeType.REQUEST.getScopedKey(DO_NOT_PROCESS));
     }
 
     private static void handleSocialWorkspaceCreation(
