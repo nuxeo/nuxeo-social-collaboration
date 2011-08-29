@@ -31,13 +31,6 @@
    var socialWorkspacePath = getTargetContextPath();
    var getSocialWorkspaceQuery = 'select * from SocialWorkspace where ecm:path = \'' + socialWorkspacePath + '\'';
 
-   //var NXRequestParams={ operationId : 'Document.Query',            // id of operation or chain to execute
-   //  operationParams : { query : getSocialWorkspaceQuery},    	    // parameters for the chain or operation
-   //  operationContext : {},                                         // context
-   //  operationDocumentProperties : "common,dublincore",
-   //  entityType : 'documents',
-   //  displayMethod : displaySocialWorkspaceDescription
-   //};
 
    var NXRequestParams = {
        operationId : 'SocialWorkspace.UserStatus',
@@ -46,56 +39,74 @@
        },
        entityType : 'blob',
        operationContext : {},
-       operationCallback : displayStatut
+       operationCallback : displayStatus
    }
 
 
 
   function disableButton() {
     _gel("statusMessage").innerHTML = "__MSG_label.request.registered__";
-      _gel("joinButton").style.display = 'none';
+    _gel("joinButton").style.display = 'none';
   }
 
-   function displaySocialWorkspaceDescription(entries) {
-       msg = ""
-       if ( entries.length > 0 ) {
-         msg = entries[0].properties["dc:description"];
-       }
-       _gel("socialWorkspaceDescription").innerHTML = msg;
-       gadgets.window.adjustHeight();
-   }
+  function displaySocialWorkspaceDescription(entries) {
+    msg = ""
+    if ( entries.length > 0 ) {
+      msg = entries[0].properties["dc:description"];
+    }
+    _gel("socialWorkspaceDescription").innerHTML = msg;
+    gadgets.window.adjustHeight();
+  }
 
-   function displayStatut(response, nxParams) {
-       statute = response.data["status"];
+  function displayStatus(response, nxParams) {
+    status = response.data["status"];
        _gel("socialWorkspaceDescription").innerHTML = response.data["description"];
-    if ( "REQUEST_PENDING" == statute ) {
+    if ( "REQUEST_PENDING" == status ) {
       _gel("statusMessage").innerHTML = "__MSG_label.request.alreadyRegistered__";
       _gel("joinButton").style.display = 'none';
     }
-    if ( "MEMBER" == statute ) {
-      _gel("statusMessage").innerHTML = "__MSG_label.request.alreadyMember__";
+    if ( "MEMBER" == status ) {
+      var html = '';
+      html += '<p>';
+      html += '__MSG_label.request.alreadyMember1__';
+
+      var locationHref = window.parent.location.href;
+      var index = locationHref.indexOf('?');
+      if (index > -1) {
+        locationHref = locationHref.substring(0, index);
+      }
+      locationHref = locationHref.substring(locationHref.indexOf(NXGadgetContext.clientSideBaseUrl)
+        + NXGadgetContext.clientSideBaseUrl.length);
+      var link = NXGadgetContext.clientSideBaseUrl + 'logout?requestedUrl=' + locationHref.replace(NXGadgetContext.clientSideBaseUrl, '');
+      html += ' <a href="' + link + '" target="_top">__MSG_label.request.alreadyMember2__</a> ';
+      html += '__MSG_label.request.alreadyMember3__';
+      html += '</p>';
+
+      _gel("statusMessage").innerHTML = html;
       _gel("joinButton").style.display = 'none';
     }
     gadgets.window.adjustHeight();
-   }
+  }
 
    // execute automation request onload
    gadgets.util.registerOnLoadHandler(function() {
      doAutomationRequest(NXRequestParams);
      gadgets.window.adjustHeight();
-   } );
+   });
 
    var NXJoinRequestParams = {
-       operationId : 'Social.Join',
-       operationParams : {
-        contextPath : socialWorkspacePath
-       },
-       operationContext : {},
-       operationCallback : disableButton
+     operationId : 'Social.Join',
+     operationParams : {
+      contextPath : socialWorkspacePath
+     },
+     operationContext : {},
+     operationCallback : function() {
+      doAutomationRequest(NXRequestParams);
+     }
    }
 
    function joinSocialWorkspace() {
-         doAutomationRequest(NXJoinRequestParams);
+     doAutomationRequest(NXJoinRequestParams);
    };
 
   </script>

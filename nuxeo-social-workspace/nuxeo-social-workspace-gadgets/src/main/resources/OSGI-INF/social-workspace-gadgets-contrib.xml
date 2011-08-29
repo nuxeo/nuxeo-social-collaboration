@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
-<component name="org.nuxeo.ecm.social.workspace.gadgets" version="1.0">
+<component name="org.nuxeo.ecm.social.workspace.gadgets"
+  version="1.0">
 
-  <extension target="org.nuxeo.opensocial.gadgets.service" point="gadget">
+  <extension target="org.nuxeo.opensocial.gadgets.service"
+    point="gadget">
 
     <internalGadget name="articles" disabled="false">
       <mountPoint>/articles</mountPoint>
@@ -17,7 +19,7 @@
       <icon>gadget-article.png</icon>
     </internalGadget>
 
-   <internalGadget name="news" disabled="false">
+    <internalGadget name="news" disabled="false">
       <mountPoint>/news</mountPoint>
       <entryPoint>news.xml</entryPoint>
       <category>gadget.category.social.workspace.public</category>
@@ -72,7 +74,8 @@
       <icon>public_social_workspaces.png</icon>
     </internalGadget>
 
-    <internalGadget name="socialworkspaceactivitystream" disabled="false">
+    <internalGadget name="socialworkspaceactivitystream"
+      disabled="false">
       <mountPoint>/socialworkspaceactivitystream</mountPoint>
       <directory>socialworkspaceactivitystream</directory>
       <entryPoint>socialworkspaceactivitystream.xml</entryPoint>
@@ -80,7 +83,8 @@
       <icon>gadget-socialworkspaceactivitystream.png</icon>
     </internalGadget>
 
-    <internalGadget name="socialworkspaceminimessages" disabled="false">
+    <internalGadget name="socialworkspaceminimessages"
+      disabled="false">
       <mountPoint>/socialworkspaceminimessages</mountPoint>
       <directory>socialworkspaceminimessages</directory>
       <entryPoint>socialworkspaceminimessages.xml</entryPoint>

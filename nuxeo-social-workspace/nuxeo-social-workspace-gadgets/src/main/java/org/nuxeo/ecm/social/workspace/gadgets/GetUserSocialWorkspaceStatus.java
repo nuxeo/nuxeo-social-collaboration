@@ -18,9 +18,11 @@ package org.nuxeo.ecm.social.workspace.gadgets;
 
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import net.sf.json.JSONObject;
 
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -33,6 +35,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
@@ -54,6 +58,9 @@ public class GetUserSocialWorkspaceStatus {
     @Context
     protected SocialWorkspaceService socialWorkspaceService;
 
+    @Context
+    protected UserRelationshipService userRelationshipService;
+
     @Param(name = "contextPath", required = true)
     protected String contextPath;
 
@@ -62,14 +69,18 @@ public class GetUserSocialWorkspaceStatus {
         NuxeoPrincipal currentUser = (NuxeoPrincipal) session.getPrincipal();
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
                 session, new PathRef(contextPath));
-        if (socialWorkspace.isAdministratorOrMember(currentUser)) {
+
+        List<String> targets = userRelationshipService.getTargetsOfKind(ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument().getRepositoryName(), socialWorkspace.getId()), RelationshipKind.fromString("socialworkspace:members"));
+        if (targets.contains(ActivityHelper.createUserActivityObject(currentUser))) {
             return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
-        }
-        if (socialWorkspace.isSubscriptionRequestPending(currentUser)) {
+        } else if (socialWorkspace.isAdministratorOrMember(currentUser)) {
+            return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
+        } else if (socialWorkspace.isSubscriptionRequestPending(currentUser)) {
             return buildResponse(socialWorkspace.getDocument(),
                     Status.REQUEST_PENDING);
+        } else {
+            return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
         }
-        return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
     }
 
     protected static Blob buildResponse(DocumentModel sws, Status status)
