@@ -56,7 +56,12 @@
             <div class="tooltip">Cet espace collabortif est privé, aucun document ne peut être public</div>
           </a>
         </#if>
-
+        <#if This.hasAttachment(doc)>
+          <a class="button" href="${contextPath}/nxfile/default/${doc.id}/file:content/">
+            <img src="${contextPath}/icons/download.png" alt="download"></img>
+            <div class="tooltip">${Context.getMessage("label.action.download")}</div>
+          </a>
+        </#if>
       </td>
     </tr>
     </#list>

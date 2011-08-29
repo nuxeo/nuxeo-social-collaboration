@@ -22,6 +22,7 @@ import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,7 @@ import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.operations.services.DocumentPageProviderOperation;
 import org.nuxeo.ecm.automation.core.util.PaginableDocumentModelList;
+import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -484,4 +486,18 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return newLabel;
     }
 
+    /**
+     * used in document list template to check if a document has attachment
+     * 
+     * @param doc - document to be check
+     * @return true if the document has a file attched
+     */
+    public boolean hasAttachment(DocumentModel doc) {
+        try {
+            Serializable v = doc.getPropertyValue("file:content");
+            return (v instanceof Blob && ((Blob) v).getLength() > 0);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
