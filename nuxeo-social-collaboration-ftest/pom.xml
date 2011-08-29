@@ -38,6 +38,31 @@
             </artifactItem>
 
             <artifactItem>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-activity</artifactId>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-user-activity-stream</artifactId>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-user-relationship-core</artifactId>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-user-relationship-web</artifactId>
+              <overWrite>true</overWrite>
+              <outputDirectory>target</outputDirectory>
+            </artifactItem>
+
+            <artifactItem>
               <groupId>org.seleniumhq.selenium</groupId>
               <artifactId>selenium-server</artifactId>
               <classifier>standalone</classifier>

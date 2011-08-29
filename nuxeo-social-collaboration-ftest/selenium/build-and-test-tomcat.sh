@@ -9,7 +9,7 @@ HERE=$(cd $(dirname $0); pwd -P)
 cd ../target
 unzip nuxeo-distribution-tomcat-*.zip || exit 1
 mv nuxeo-dm-*-tomcat tomcat || exit 1
-mv nuxeo-social-workspace-* tomcat/nxserver/bundles/ || exit 1
+mv `ls | grep -v distribution | grep -v tomcat` tomcat/nxserver/bundles/ || exit 1 # move bundles in bundle directory
 chmod +x tomcat/bin/nuxeoctl || exit 1
 tomcat/bin/nuxeoctl start || exit 1
 
