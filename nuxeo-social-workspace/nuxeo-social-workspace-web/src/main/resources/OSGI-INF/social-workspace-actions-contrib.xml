@@ -75,7 +75,7 @@
       <filter-id>is_social_workspace_administrator</filter-id>
     </action>
 
-	<action id="CreateSocialWorkspace"
+  <action id="CreateSocialWorkspace"
       link="#{fullscreenManagementActions.displayCreateSocialWorkspaceForm}"
       label="label.social.workspace.create.social.workspace"
       immediate="false"
@@ -145,8 +145,34 @@
       <filter-id>isCurrentDocArticle</filter-id>
       <filter-id>mutable_document</filter-id>
       <filter-id>isSocialWorkspaceMember</filter-id>
-
     </action>
+
+    <action id="RestrictSocialDocumentToSocialWorkspace"
+      link="#{socialDocumentVisibilityActions.restrictToMembers}"
+      label="command.restrictToSocialWorkspace"
+      immediate="true"
+      order="10">
+      <category>SOCIAL_WORKSPACE_ACTIONS</category>
+      <filter-id>isNotSocialWorkspaceContainer</filter-id>
+      <filter-id>social_document</filter-id>
+      <filter-id>mutable_document</filter-id>
+      <filter-id>isSocialWorkspaceMember</filter-id>
+      <filter-id>isPublic</filter-id>
+    </action>
+
+    <action id="MakeSocialDocumentPublic"
+      link="#{socialDocumentVisibilityActions.makePublic}"
+      label="command.makePublic"
+      immediate="true"
+      order="10">
+      <category>SOCIAL_WORKSPACE_ACTIONS</category>
+      <filter-id>isNotSocialWorkspaceContainer</filter-id>
+      <filter-id>social_document</filter-id>
+      <filter-id>mutable_document</filter-id>
+      <filter-id>isSocialWorkspaceMember</filter-id>
+      <filter-id>isRestricted</filter-id>
+    </action>
+
 
     <action id="EditNewsItems"
       link="#{fullscreenManagementActions.editSocialDocument}"
@@ -383,16 +409,29 @@
       </rule>
     </filter>
 
-    <filter id="isCurrentDocNewsItem">
-      <rule grant="true">
-        <type>NewsItem</type>
-      </rule>
-    </filter>
-
     <filter id="canCreateSocialWorkspace">
       <rule grant="true">
         <permission>AddChildren</permission>
-      	<type>SocialWorkspaceContainer</type>
+        <type>SocialWorkspaceContainer</type>
+      </rule>
+    </filter>
+
+    <filter id="isNotSocialWorkspaceContainer">
+      <rule grant="false">
+        <facet>folderish</facet>
+      </rule>
+    </filter>
+
+
+    <filter id="isPublic">
+      <rule grant="true">
+        <condition>#{socialDocumentVisibilityActions.isPublic()}</condition>
+      </rule>
+    </filter>
+
+    <filter id="isRestricted">
+      <rule grant="true">
+        <condition>#{socialDocumentVisibilityActions.isRestricted()}</condition>
       </rule>
     </filter>
 

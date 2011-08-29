@@ -1,5 +1,6 @@
 <div xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:nxu="http://nuxeo.org/nxweb/util"
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:nxh="http://nuxeo.org/nxweb/html"
@@ -15,40 +16,56 @@
     <div class="#{cssClass}">
 
       <div class="documentHeader">
-        <nxd:restDocumentLink document="#{field_0}"
-        view="#{navigationContext.navigateToDocument(field_0,'fullscreen')}"
-        styleClass="title">
+        <nxd:restDocumentLink document="#{field_0}" view="view_social_document" styleClass="title">
         <span id="title_#{field_0.dc.title}" title="#{field_0.dc.title}">
           #{nxd:titleOrId(field_0)} </span>
         </nxd:restDocumentLink>
- 
-        <div class="tool">
-        <ul class="actions">
-          <li>
-            <h:graphicImage url="/icons/tools.png" alt="tools"/>
-            <ul>
-              <li>
-                <h:commandLink
-                  value="#{messages['label.action.social.document.delete']}"
-                  action="#{fullscreenManagementActions.deleteSocialDocument(field)}"
-                  immediate="true" />
+        <c:if
+          test="#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
+          <div class="tool">
+            <ul class="actions">
+              <li><h:graphicImage url="/icons/tools.png"
+                  alt="tools" />
+                <ul>
+                  <li>
+                    <h:commandLink
+                      value="#{messages['label.action.social.document.delete']}"
+                      action="#{fullscreenManagementActions.deleteSocialDocument(field)}"
+                      immediate="true" />
+                  </li>
+                  <li>
+                    <h:commandLink
+                      value="#{messages['label.action.social.document.edit']}"
+                      action="#{fullscreenManagementActions.editSocialDocument(field)}"
+                      immediate="true" />
+                  </li>
+                  <li>
+                    <c:if test="#{field_0.socialdoc.isPublic}">
+                      <h:commandLink
+                        value="#{messages['command.restrictToSocialWorkspace']}"
+                        action="#{socialDocumentVisibilityActions.restrictToMembers(field)}"
+                        immediate="true" />
+                    </c:if>
+                    <c:if test="#{!field_0.socialdoc.isPublic}">
+                      <h:commandLink
+                        value="#{messages['command.makePublic']}"
+                        action="#{socialDocumentVisibilityActions.makePublic(field)}"
+                        immediate="true" />
+                    </c:if>
+                  </li>
+
+                </ul>
               </li>
-              <li>
-                <h:commandLink
-                  value="#{messages['label.action.social.document.edit']}"
-                  action="#{fullscreenManagementActions.editSocialDocument(field)}"
-                  immediate="true" />
-              </li>
-             </ul>
-           </li>
-         </ul>
-       </div>
-       <div style="clear: both;"></div>
+            </ul>
+          </div>
+        </c:if>
+        <div style="clear: both;"></div>
 
       </div>
       <div class="content">
         <h:outputText value="#{field_0.dc.description}" />
       </div>
+
       <div class="info">
         <span><h:outputText value="#{field_0.dc.created}" /></span><span><h:outputText value="#{field_0.dc.creator}" /></span>
       </div>

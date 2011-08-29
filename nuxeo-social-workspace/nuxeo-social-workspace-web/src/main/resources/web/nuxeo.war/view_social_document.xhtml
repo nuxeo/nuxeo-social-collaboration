@@ -20,19 +20,19 @@
   </ui:define>
 
   <ui:define name="body">
-	  <ui:decorate
-	    template="incl/social_collaborative_title_and_actions.xhtml">
-	    <ui:define name="social_collaboration_title">
-				<h1>
-				  #{socialWorkspaceActions.socialWorkspaceContainer.title} / #{nxd:titleOrId(currentDocument)}
-				</h1>
-	    </ui:define>
-	  </ui:decorate>
+    <ui:decorate
+      template="incl/social_collaborative_title_and_actions.xhtml">
+      <ui:define name="social_collaboration_title">
+        <h1>
+          #{socialWorkspaceActions.socialWorkspaceContainer.title} / #{nxd:titleOrId(currentDocument)}
+        </h1>
+      </ui:define>
+    </ui:decorate>
 
-	  <h:form id="documentLayout">
-	    <nxl:documentLayout mode="fullscreen" value="#{currentDocument}" />
-	    <div class="clear"></div>
-	  </h:form>
-	  
+    <h:form id="documentLayout">
+      <nxl:documentLayout mode="fullscreen" value="#{currentDocument}" />
+      <div class="clear"></div>
+    </h:form>
+
   </ui:define>
 </nxthemes:composition>

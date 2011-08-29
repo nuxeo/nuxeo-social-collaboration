@@ -54,26 +54,87 @@ public class SocialDocumentVisibilityActions implements Serializable {
 
     /**
      * create or update a proxy of the current social document in the public
-     * social section associated to its type.
+     * social section of the social workspace.
      */
     public void makePublic() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        SocialDocument socialDocument = toSocialDocument(currentDocument);
-        socialDocument.makePublic();
-        Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED,
-                currentDocument);
+        makePublic(currentDocument);
     }
 
     /**
-     * create or update a proxy of the current social document in the private
-     * social section associated to its type.
+     * create or update a proxy of the social document passed as an argument in
+     * the public social section of the social workspace.
+     */
+    public void makePublic(DocumentModel document) throws ClientException {
+        SocialDocument socialDocument = toSocialDocument(document);
+        socialDocument.makePublic();
+        Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED, document);
+    }
+
+    /**
+     * hide the current document to non members of the social collaboration
+     * workspace
      */
     public void restrictToMembers() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        SocialDocument socialDocument = toSocialDocument(currentDocument);
+        restrictToMembers(currentDocument);
+    }
+
+    /**
+     * Hide the social document passed as parameter to non members of the social
+     * collaboration workspace
+     */
+    public void restrictToMembers(DocumentModel document)
+            throws ClientException {
+        SocialDocument socialDocument = toSocialDocument(document);
         socialDocument.restrictToMembers();
-        Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED,
-                currentDocument);
+        Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED, document);
+    }
+
+    /**
+     * Indicates if the current document is visible by everybody
+     *
+     * @return true if the current document is public, false otherwise.
+     * @throws ClientException
+     */
+    public boolean isPublic() throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        return isPublic(currentDocument);
+    }
+
+    /**
+     * Indicates if the document passed as a parameter is visible by everybody
+     *
+     * @return true if the current document is public, false otherwise.
+     * @throws ClientException
+     */
+    public boolean isPublic(DocumentModel document) throws ClientException {
+        SocialDocument socialDocument = toSocialDocument(document);
+        return socialDocument.isPublic();
+    }
+
+    /**
+     * Indicates if the current document is only visible by members of the
+     * community
+     *
+     * @return true if the current document is public, false otherwise.
+     * @throws ClientException
+     */
+    public boolean isRestricted() throws ClientException {
+        DocumentModel currentDocument = navigationContext.getCurrentDocument();
+        return isRestricted(currentDocument);
+    }
+
+    /**
+     * Indicates if the document passed as a parameter is only visible by
+     * members of the community
+     *
+     * @return true if the current document is public, false otherwise.
+     * @throws ClientException
+     */
+    public boolean isRestricted(DocumentModel document) throws ClientException {
+        SocialDocument socialDocument = toSocialDocument(document);
+        return socialDocument.isRestrictedToMembers();
     }
 
 }
