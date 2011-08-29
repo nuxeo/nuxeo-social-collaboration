@@ -70,7 +70,11 @@ public class GetUserSocialWorkspaceStatus {
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
                 session, new PathRef(contextPath));
 
-        List<String> targets = userRelationshipService.getTargetsOfKind(ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument().getRepositoryName(), socialWorkspace.getId()), RelationshipKind.fromString("socialworkspace:members"));
+        List<String> targets = userRelationshipService.getTargetsOfKind(
+                ActivityHelper.createDocumentActivityObject(
+                        socialWorkspace.getDocument().getRepositoryName(),
+                        socialWorkspace.getId()),
+                RelationshipKind.fromString("socialworkspace:members"));
         if (targets.contains(ActivityHelper.createUserActivityObject(currentUser))) {
             return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
         } else if (socialWorkspace.isAdministratorOrMember(currentUser)) {
@@ -79,7 +83,8 @@ public class GetUserSocialWorkspaceStatus {
             return buildResponse(socialWorkspace.getDocument(),
                     Status.REQUEST_PENDING);
         } else {
-            return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
+            return buildResponse(socialWorkspace.getDocument(),
+                    Status.NOT_MEMBER);
         }
     }
 
