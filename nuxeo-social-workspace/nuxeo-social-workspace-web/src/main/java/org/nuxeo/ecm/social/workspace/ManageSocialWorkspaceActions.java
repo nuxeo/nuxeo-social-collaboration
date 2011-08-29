@@ -16,12 +16,11 @@
 
 package org.nuxeo.ecm.social.workspace;
 
-import static org.jboss.seam.ScopeType.CONVERSATION;
+import static org.jboss.seam.ScopeType.PAGE;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,11 +34,11 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.computedgroups.SocialWorkspaceGroupComputer;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 
@@ -50,7 +49,7 @@ import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
  * @since 5.4.1
  */
 @Name("manageSocialWorkspaceActions")
-@Scope(CONVERSATION)
+@Scope(PAGE)
 @Install(precedence = FRAMEWORK)
 public class ManageSocialWorkspaceActions implements Serializable {
 
@@ -82,9 +81,6 @@ public class ManageSocialWorkspaceActions implements Serializable {
     @In(create = true)
     protected ResourcesAccessor resourcesAccessor;
 
-    @In(create = true)
-    private UserRelationshipService userRelationshipService;
-
     protected SocialWorkspaceGroupComputer computer = new SocialWorkspaceGroupComputer();
 
     public List<String> getAdministrators() throws Exception {
@@ -105,54 +101,29 @@ public class ManageSocialWorkspaceActions implements Serializable {
         return members;
     }
 
-    public void resetGroups() {
-        administrators = null;
-        members = null;
-    }
-
-    public void updateGroups() {
-        DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        RelationshipKind relationKind = buildRelationAdministratorKind();
-        String documentActivityObject = ActivityHelper.createDocumentActivityObject(currentDocument);
+    public void updateGroups() throws ClientException {
+        SocialWorkspace socialWorkspace = toSocialWorkspace(navigationContext.getCurrentDocument());
         for (String administrator : administrators) {
             if (!originalAdministrators.contains(administrator)) {
-                String userActivityObject = ActivityHelper.createUserActivityObject(administrator);
-                userRelationshipService.addRelation(userActivityObject,
-                        documentActivityObject, relationKind);
-                userRelationshipService.addRelation(documentActivityObject,
-                        userActivityObject, relationKind);
+                socialWorkspace.addAdministrator(userManager.getPrincipal(administrator));
             }
         }
         for (String administrator : originalAdministrators) {
             if (!administrators.contains(administrator)) {
-                String userActivityObject = ActivityHelper.createUserActivityObject(administrator);
-                userRelationshipService.removeRelation(userActivityObject,
-                        documentActivityObject, relationKind);
-                userRelationshipService.removeRelation(documentActivityObject,
-                        userActivityObject, relationKind);
+                socialWorkspace.removeAdministrator(userManager.getPrincipal(administrator));
             }
         }
-        relationKind = buildRelationMemberKind();
         for (String member : members) {
             if (!originalMembers.contains(member)) {
-                String userActivityObject = ActivityHelper.createUserActivityObject(member);
-                userRelationshipService.addRelation(userActivityObject,
-                        documentActivityObject, relationKind);
-                userRelationshipService.addRelation(documentActivityObject,
-                        userActivityObject, relationKind);
+                socialWorkspace.addMember(userManager.getPrincipal(member));
             }
         }
         for (String member : originalMembers) {
             if (!members.contains(member)) {
-                String userActivityObject = ActivityHelper.createUserActivityObject(member);
-                userRelationshipService.removeRelation(userActivityObject,
-                        documentActivityObject, relationKind);
-                userRelationshipService.removeRelation(documentActivityObject,
-                        userActivityObject, relationKind);
+                socialWorkspace.removeMember(userManager.getPrincipal(member));
             }
         }
 
-        resetGroups();
         facesMessages.add(
                 StatusMessage.Severity.INFO,
                 resourcesAccessor.getMessages().get(GROUPS_SAVE_COMPLETED_LABEL));
