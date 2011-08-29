@@ -55,6 +55,7 @@ import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.schema.TypeService;
+import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
@@ -330,11 +331,14 @@ public class SocialWebEngineRoot extends ModuleRoot {
         OperationContext ctx = new OperationContext(session);
         OperationChain chain = new OperationChain("search");
 
+        String escapedQueryText = NXQLQueryBuilder.prepareStringLiteral(
+                queryText.trim(), false, true);
+
         String query = "SELECT * FROM Document "
                 + "WHERE ecm:mixinType != 'HiddenInNavigation' "
                 + "AND ecm:isCheckedInVersion = 0 "
-                + "AND ecm:currentLifeCycleState != 'deleted'"
-                + "AND ecm:fulltext = '" + queryText + "'"
+                + "AND ecm:currentLifeCycleState != 'deleted' "
+                + "AND ecm:fulltext = '" + escapedQueryText + "' "
                 + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "'";
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
                 "pageSize", pageSize).set("page", page);
