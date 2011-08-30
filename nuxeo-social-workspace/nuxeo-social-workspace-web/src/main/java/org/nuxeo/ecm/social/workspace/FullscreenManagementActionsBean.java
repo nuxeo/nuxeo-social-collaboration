@@ -27,6 +27,8 @@ import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
@@ -46,12 +48,14 @@ import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
- *
+ * 
  */
 @Name("fullscreenManagementActions")
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
 public class FullscreenManagementActionsBean implements Serializable {
+
+    private static final Log log = LogFactory.getLog(FullscreenManagementActionsBean.class);
 
     private static final String AFTER_SOCIAL_COLLABORATION_EDITION_VIEW = "after-social-collaboration-edition";
 
@@ -258,4 +262,34 @@ public class FullscreenManagementActionsBean implements Serializable {
         return FacesContext.getCurrentInstance().getViewRoot().getViewId();
     }
 
+    public boolean canCreateSocialWorkspace() {
+        DocumentModel doc = navigationContext.getCurrentDocument();
+        DocumentModel parent = null;
+
+        if (SocialConstants.SOCIAL_WORKSPACE_CONTAINER_TYPE.equals(doc.getType())) {
+            parent = doc;
+        } else {
+            SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(doc);
+            if (socialWorkspace != null) {
+                DocumentRef parentRef = socialWorkspace.getDocument().getParentRef();
+                try {
+                    parent = documentManager.getDocument(parentRef);
+                } catch (ClientException e) {
+                    log.debug("failed to get SocialWorkspace container", e);
+                }
+            }
+
+        }
+        if (parent != null) {
+            try {
+                return (documentManager.hasPermission(parent.getRef(),
+                        "AddChildren"));
+            } catch (ClientException e) {
+                log.debug(
+                        "failed to check permission on SocialWorkspace container",
+                        e);
+            }
+        }
+        return false;
+    }
 }

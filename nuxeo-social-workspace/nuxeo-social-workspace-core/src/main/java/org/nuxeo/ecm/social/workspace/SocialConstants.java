@@ -21,7 +21,7 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 /**
  * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
+ * 
  */
 public class SocialConstants {
 
@@ -47,6 +47,8 @@ public class SocialConstants {
     public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
 
     public static final String DASHBOARD_SPACES_CONTAINER_TYPE = "DashboardSpacesContainer";
+
+    public static final String SOCIAL_WORKSPACE_CONTAINER_TYPE = "SocialWorkspaceContainer";
 
     // Social Document
     public static final String SOCIAL_DOCUMENT_FACET = "SocialDocument";

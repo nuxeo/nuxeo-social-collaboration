@@ -82,7 +82,7 @@
       icon="/icons/create_soacial_workspace.png"
       order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
-      <filter-id>isSocialWorkspaceMember</filter-id>
+      <filter-id>canCreateSocialWorkspace</filter-id>
     </action>
 
     <action id="CreateSocialWorkspaceSaveButton"
@@ -411,8 +411,7 @@
 
     <filter id="canCreateSocialWorkspace">
       <rule grant="true">
-        <permission>AddChildren</permission>
-        <type>SocialWorkspaceContainer</type>
+      	 <condition>#{fullscreenManagementActions.canCreateSocialWorkspace()}</condition>
       </rule>
     </filter>
 
