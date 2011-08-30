@@ -135,8 +135,8 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    public boolean isActiveRelationship(String type) {
-        return getRelationshipsWithSelectedUser().contains(type);
+    public boolean isActiveRelationship(RelationshipKind relationshipKind) {
+        return getRelationshipsWithSelectedUser().contains(relationshipKind);
     }
 
     public Map<RelationshipKind, Boolean> getAllRelationshipsState()
@@ -145,7 +145,7 @@ public class UserRelationshipActions implements Serializable {
             allRelationshipsState = new HashMap<RelationshipKind, Boolean>();
             for (RelationshipKind kind : userRelationshipService.getRegisteredKinds(null)) {
                 allRelationshipsState.put(kind,
-                        isActiveRelationship(kind.toString()));
+                        isActiveRelationship(kind));
             }
         }
         return allRelationshipsState;
