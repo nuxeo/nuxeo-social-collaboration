@@ -28,7 +28,7 @@
 
     <action id="GoToFullScreenViewForDocument"
       link="#{fullscreenManagementActions.navigateToFullscreenView()}"
-      label="label.social.workspace.gotofullscreen"
+      label="label.social.workspace.gotosocialcollaboration"
       immediate="false"
       icon="/icons/fullscreen.png"
       order="10">
