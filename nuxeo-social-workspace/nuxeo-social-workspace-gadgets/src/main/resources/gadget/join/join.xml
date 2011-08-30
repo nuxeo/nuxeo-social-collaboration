@@ -68,7 +68,7 @@
     if ( "MEMBER" == status ) {
       var html = '';
       html += '<p>';
-      html += '__MSG_label.request.alreadyMember1__';
+      html += prefs.getMsg('label.request.alreadyMember1');
 
       var locationHref = window.parent.location.href;
       var index = locationHref.indexOf('?');
@@ -78,8 +78,8 @@
       locationHref = locationHref.substring(locationHref.indexOf(NXGadgetContext.clientSideBaseUrl)
         + NXGadgetContext.clientSideBaseUrl.length);
       var link = NXGadgetContext.clientSideBaseUrl + 'logout?requestedUrl=' + locationHref.replace(NXGadgetContext.clientSideBaseUrl, '');
-      html += ' <a href="' + link + '" target="_top">__MSG_label.request.alreadyMember2__</a> ';
-      html += '__MSG_label.request.alreadyMember3__';
+      html += ' <a href="' + link + '" target="_top">' + prefs.getMsg('label.request.alreadyMember2') + '</a> ';
+      html += prefs.getMsg('label.request.alreadyMember3');
       html += '</p>';
 
       _gel("statusMessage").innerHTML = html;
