@@ -34,12 +34,14 @@
      	<#include "default-request-controls.ftl"/>
      	<div class="tools">
      		<div id="searchBox">
-     		<table>
-      			<tr>
-       				<td><input type="text" name="query" id ="query"></td>
-       				<td><input type="button" value="__MSG_command.search__" onclick="doSearch()"/></td>
-      			</tr>
-     		</table>
+          <form id="queryForm" onsubmit="doSearch(); return false">
+            <table>
+              <tr>
+                <td><input type="text" name="query" id ="query"></td>
+                <td><input type="submit" value="__MSG_command.search__" /></td>
+              </tr>
+            </table>
+          </form>
      		</div>
      	</div>
      	<div id="list" style="display:none">
