@@ -1,4 +1,5 @@
 <div xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:nxd="http://nuxeo.org/nxweb/document"
@@ -9,11 +10,14 @@
 
   <a4j:outputPanel id="miniMessagesPanel" styleClass="miniMessagePanel" >
     <h:form id="newMiniMessageForm" class="newMiniMessageForm">
-      <h:inputTextarea id="newMiniMessageText" value="#{miniMessageActions.newMessage}" rows="4" />
+      <h:inputTextarea id="newMiniMessageText" value="#{miniMessageActions.newMessage}" rows="4">
+        <f:validateLength maximum="140" minimum="1"/>
+      </h:inputTextarea>
       <h:message styleClass="errorMessage" for="newMiniMessageText"
         id="newMiniMessageText_errorMessage" />
       <p class="newMiniMessageActions">
-        <a4j:commandButton styleClass="button" value="#{messages['command.write']}"
+        <span class="miniMessageCounter"></span>
+        <a4j:commandButton styleClass="button writeMiniMessageButton" value="#{messages['command.write']}"
           action="#{miniMessageActions.createNewMiniMessage()}"
           reRender="miniMessagesPanel" />
       </p>
@@ -26,9 +30,7 @@
         <ui:define name="content_view_syndication_buttons">
       </ui:define>
       </ui:decorate>
-    </nxu:set>
-
-  </a4j:outputPanel>
+  </nxu:set>
 
   <script type="text/javascript">
 
@@ -44,12 +46,12 @@
       }
     }
 
-    jQuery(document).ready(function($) {
-      updateMiniMessageCounter();
-      $('.newMiniMessageForm textarea').keyup(updateMiniMessageCounter);
-    });
+    updateMiniMessageCounter();
+    jQuery('.newMiniMessageForm textarea').keyup(updateMiniMessageCounter);
 
   </script>
 
+
+  </a4j:outputPanel>
 
 </div>
