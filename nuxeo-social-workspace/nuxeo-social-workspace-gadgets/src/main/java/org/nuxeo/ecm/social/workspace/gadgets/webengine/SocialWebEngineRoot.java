@@ -504,4 +504,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
             return false;
         }
     }
+
+    public String escapeSingleQuote(String text) {
+        return NXQLQueryBuilder.prepareStringLiteral(text, false, true);
+    }
 }
