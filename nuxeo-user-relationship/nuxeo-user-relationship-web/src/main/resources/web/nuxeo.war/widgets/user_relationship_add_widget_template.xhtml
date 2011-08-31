@@ -39,13 +39,13 @@
             <h:outputText value="#{messages['action.social.user.relationship.join']}" />
           </a>
         </a4j:outputPanel>
-        <script type="text/javasript">
+        <script type="text/javascript">
           var btn = jQuery(".relationship_#{widget.id}_button");
           btn.click(function() {
             return false;
           });
           btn.mouseenter(function() {
-            div.fadeIn(500);
+             jQuery("#add_relationship_#{widget.id}").fadeIn(500);
           });
         </script>
       </a4j:outputPanel>
@@ -72,9 +72,8 @@
                 </h:selectBooleanCheckbox>
               </nxu:column>
             </nxu:dataTable>
-            <script type="text/javasript">
+            <script type="text/javascript">
               var div = jQuery("#add_relationship_#{widget.id}");
-
               div.mouseleave(function() {
                 jQuery("#add_relationship_#{widget.id}").fadeOut(500);
               });
