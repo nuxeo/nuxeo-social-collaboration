@@ -23,17 +23,33 @@
 </div>
 <script type="text/javascript" src="#{baseURL}js/?scripts=confirmAlerts.js|DragAndDrop.js|tableSelections.js|customSeamRemotingWaiter.js|custom-javascript.js|default-contextmenu-actions.js|custom-contextmenu-actions.js|tooltip.js"></script>
 
+<!-- for lightweight OpenSocial container -->
+<link rel="stylesheet" href="#{baseURL}css/opensocial/light-container-gadgets.css"></link>
+
+<script type="text/javascript">
+// workaround for IE bug, see NXP-6759
+if (typeof Sarissa != 'undefined') {
+  jQuery.ajaxSetup({
+    xhr: function() {
+      if (Sarissa.originalXMLHttpRequest) {
+        return new Sarissa.originalXMLHttpRequest();
+      } else if (typeof ActiveXObject != 'undefined') {
+        return new ActiveXObject("Microsoft.XMLHTTP");
+      } else {
+        return new XMLHttpRequest();
+      }
+    }
+  });
+}
+</script>
+<script type="text/javascript" language="javascript" src="#{baseURL}opensocial/gadgets/js/rpc.js?c=1"></script>
+<script type="text/javascript" src="#{baseURL}js/?scripts=opensocial/cookies.js|opensocial/util.js|opensocial/gadgets.js|opensocial/cookiebaseduserprefstore.js|opensocial/jquery.opensocial.gadget.js"></script>
+
 <c:if test="#{useHtml5DragAndDrop}">
 
 <script type="text/javascript" src="#{baseURL}js/?scripts=dnd/jquery.client.js|dnd/jquery.dnd-file-upload.js|automation.js|dnd/nxdropzone.js|dnd/nxdropout.js|dnd/nxinternaldnd.js"></script>
 
 <ui:include src="/incl/dnd/dnd-ui.xhtml" />
-
-<!-- for lightweight OpenSocial container -->
-<link rel="stylesheet" href="#{baseURL}css/opensocial/light-container-gadgets.css"></link>
-
-<script type="text/javascript" language="javascript" src="#{baseURL}opensocial/gadgets/js/rpc.js?c=1"></script>
-<script type="text/javascript" src="#{baseURL}js/?scripts=opensocial/cookies.js|opensocial/util.js|opensocial/gadgets.js|opensocial/cookiebaseduserprefstore.js|opensocial/jquery.opensocial.gadget.js"></script>
 
 <script>
 var baseURL='#{baseURL}';
