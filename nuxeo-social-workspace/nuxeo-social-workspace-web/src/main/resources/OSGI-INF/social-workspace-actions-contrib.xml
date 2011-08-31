@@ -327,6 +327,9 @@
       <rule grant="true">
         <facet>SocialDocument</facet>
         <facet>SocialWorkspace</facet>
+        <type>Article</type>
+        <type>NewsItem</type>
+        <type>SocialWorkspace</type>
       </rule>
     </filter>
 
