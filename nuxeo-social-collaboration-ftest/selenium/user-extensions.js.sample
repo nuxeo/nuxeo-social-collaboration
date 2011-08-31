@@ -1,8 +1,12 @@
+/**
+ * 
+ */
+
 // DEPRECATED: see https://github.com/nuxeo/tools-nuxeo-ftest
 
 // Absolute path to current folder this path is set at runtime by run.sh
 Selenium.prototype.doRetrieveTestFolderPath = function() {
-  storedVars['testfolderpath'] = "/path/to/project-ear/ftest/selenium/data/";
+  storedVars['testfolderpath'] = "/home/rlegall/Sources/nuxeo/addons/nuxeo-social-collaboration/nuxeo-social-collaboration-ftest/selenium";
 };
 
 // helper method to store current year/month/day
@@ -138,12 +142,16 @@ Selenium.prototype.doWaitForOpensocialGadgetsToLoad = function(mandatoryElementI
           }
           // wait for frame to be loaded
           var loaded = false;
-          if (testFrame.document.getElementById(mandatoryElementId)) {
-            var content = this.getText(testFrame.document.getElementById(mandatoryElementId));
+var mandatoryElementIdList = mandatoryElementId.split(",");
+    for(var j=0; j < mandatoryElementIdList.length ; j++){
+          if (testFrame.document.getElementById(mandatoryElementIdList[j])) {
+            var content = this.getText(testFrame.document.getElementById(mandatoryElementIdList[j]));
             if (content) {
               loaded = true;
+              break;
             }
           }
+    }
           if (!loaded) {
             // go back to original window
             selenium.browserbot.selectWindow();

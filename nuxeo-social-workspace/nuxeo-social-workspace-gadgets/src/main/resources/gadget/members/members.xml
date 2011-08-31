@@ -31,9 +31,9 @@
 
   <body>
      <div class="content" id="content">
-     	<#include "default-request-controls.ftl"/>
-     	<div class="tools">
-     		<div id="searchBox">
+      <#include "default-request-controls.ftl"/>
+      <div class="tools">
+        <div id="searchBox">
           <form id="queryForm" onsubmit="doSearch(); return false">
             <table>
               <tr>
@@ -42,22 +42,24 @@
               </tr>
             </table>
           </form>
-     		</div>
-     	</div>
-     	<div id="list" style="display:none">
-        	<div id="pageNavigationControls">
-          		<input type="image" id="navFirstPage" src="${clientSideBaseUrl}icons/action_page_rewind.gif"/>
-          		<input type="image" id="navPrevPage" src="${clientSideBaseUrl}icons/action_page_previous.gif"/>
-          		<span class="currentPageStatus" id="pageInfo"></span>
-          		<input type="image" id="navNextPage" src="${clientSideBaseUrl}icons/action_page_next.gif"/>
-          		<input type="image" id="navLastPage" src="${clientSideBaseUrl}icons/action_page_fastforward.gif"/>
-         	</div>
-        	<div id="listData">
-          		<!-- here comes the list data -->
-        	</div>
- 		</div>
- 		<div id="message" style="display:none">
- 		<div>
+        </div>
+      </div>
+      <div id="list" style="display:none">
+          <div id="pageNavigationControls">
+              <input type="image" id="navFirstPage" src="${clientSideBaseUrl}icons/action_page_rewind.gif"/>
+              <input type="image" id="navPrevPage" src="${clientSideBaseUrl}icons/action_page_previous.gif"/>
+              <span class="currentPageStatus" id="pageInfo"></span>
+              <input type="image" id="navNextPage" src="${clientSideBaseUrl}icons/action_page_next.gif"/>
+              <input type="image" id="navLastPage" src="${clientSideBaseUrl}icons/action_page_fastforward.gif"/>
+          </div>
+          <div id="listData">
+              <!-- here comes the list data -->
+          </div>
+    </div>
+        <div style="display: block;" id="message">__MSG_label.gadget.members.description__</div>
+    <div id="message" style="display:none">
+    <div>
+
      </div>
   </body>
 </html>

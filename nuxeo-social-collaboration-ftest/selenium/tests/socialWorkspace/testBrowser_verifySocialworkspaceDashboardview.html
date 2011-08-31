@@ -11,7 +11,6 @@
 <thead>
 <tr><td rowspan="1" colspan="3">Verify SocialWorkspace dashboard view</td></tr>
 </thead><tbody>
-<!--Must follow a test case with "Administrator" log on.-->
 <tr>
 	<td>setTimeout</td>
 	<td>120000</td>
@@ -79,7 +78,7 @@
 </tr>
 <tr>
 	<td>waitForOpensocialGadgetsToLoad</td>
-	<td>nxDocumentListData</td>
+	<td>nxDocumentListData,content</td>
 	<td>60000</td>
 </tr>
 <tr>
@@ -99,17 +98,17 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div/p/a</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div/p/a</td>
 	<td>Public news</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div/p[2]</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div/p[2]</td>
 	<td>changing the content of the public news</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[2]/p</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div[2]/p</td>
 	<td>Administrator,*</td>
 </tr>
 <tr>
@@ -119,12 +118,12 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[2]/p/a</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div[2]/p/a</td>
 	<td>News for test</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[2]/p[2]</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div[2]/p[2]</td>
 	<td>And now something completely different:&quot; the larch!&quot;</td>
 </tr>
 <tr>
@@ -174,7 +173,7 @@
 </tr>
 <tr>
 	<td>waitForOpensocialGadgetsToLoad</td>
-	<td>nxDocumentListData</td>
+	<td>nxDocumentListData,content</td>
 	<td>60000</td>
 </tr>
 <tr>
@@ -184,7 +183,7 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div/p</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div/p</td>
 	<td>Administrator,*</td>
 </tr>
 <tr>
@@ -194,17 +193,17 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div/p/a</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div/p/a</td>
 	<td>Public news</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div/p[2]</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div/p[2]</td>
 	<td>changing the content of the public news</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[2]/p</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div[2]/p</td>
 	<td>Administrator,*</td>
 </tr>
 <tr>
@@ -214,12 +213,12 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[2]/p/a</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div[2]/p/a</td>
 	<td>News for test</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[2]/p[2]</td>
+	<td>//*[@id=&quot;nxDocumentListData&quot;]//div[2]/p[2]</td>
 	<td>And now something completely different:&quot; the larch!&quot;</td>
 </tr>
 <tr>
@@ -249,7 +248,7 @@
 </tr>
 <tr>
 	<td>waitForOpensocialGadgetsToLoad</td>
-	<td>nxDocumentListData</td>
+	<td>nxDocumentListData,content</td>
 	<td>60000</td>
 </tr>
 <tr>
