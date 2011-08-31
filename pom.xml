@@ -68,6 +68,11 @@
         <artifactId>nuxeo-user-activity-stream</artifactId>
         <version>${nuxeo.features.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.social</groupId>
+        <artifactId>nuxeo-social-collaboration-distribution</artifactId>
+        <version>${nuxeo.features.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>org.nuxeo.ecm.platform</groupId>

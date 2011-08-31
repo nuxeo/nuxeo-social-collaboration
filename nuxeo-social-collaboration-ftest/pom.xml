@@ -10,7 +10,7 @@
   <artifactId>nuxeo-social-collaboration-ftest</artifactId>
   <name>Nuxeo Social Collaboration Functional Tests</name>
   <description>Nuxeo Social Collaboration Functional Tests</description>
-
+  
   <build>
     <plugins>
       <plugin>
@@ -19,50 +19,6 @@
         <configuration>
           <artifactItems>
             <artifactItem>
-              <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-social-workspace-core</artifactId>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-            <artifactItem>
-              <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-social-workspace-web</artifactId>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-            <artifactItem>
-              <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-social-workspace-gadgets</artifactId>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-
-            <artifactItem>
-              <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-activity</artifactId>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-            <artifactItem>
-              <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-user-activity-stream</artifactId>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-            <artifactItem>
-              <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-user-relationship-core</artifactId>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-            <artifactItem>
-              <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-user-relationship-web</artifactId>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-
-            <artifactItem>
               <groupId>org.seleniumhq.selenium</groupId>
               <artifactId>selenium-server</artifactId>
               <classifier>standalone</classifier>
@@ -70,19 +26,12 @@
               <outputDirectory>selenium</outputDirectory>
               <destFileName>selenium-server.jar</destFileName>
             </artifactItem>
+            
             <artifactItem>
-              <groupId>org.nuxeo.ecm.distribution</groupId>
-              <artifactId>nuxeo-distribution-tomcat</artifactId>
-              <classifier>nuxeo-dm</classifier>
+              <groupId>org.nuxeo.ecm.social</groupId>
+              <artifactId>nuxeo-social-collaboration-distribution</artifactId>
               <type>zip</type>
-              <overWrite>true</overWrite>
-              <outputDirectory>target</outputDirectory>
-            </artifactItem>
-            <artifactItem>
-              <groupId>org.nuxeo.ecm.distribution</groupId>
-              <artifactId>nuxeo-distribution-jboss</artifactId>
-              <classifier>nuxeo-dm</classifier>
-              <type>zip</type>
+              <classifier>tomcat</classifier>
               <overWrite>true</overWrite>
               <outputDirectory>target</outputDirectory>
             </artifactItem>
@@ -91,5 +40,5 @@
       </plugin>
     </plugins>
   </build>
-
+  
 </project>
