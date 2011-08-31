@@ -50,7 +50,7 @@ public class MiniMessageHelper {
     }
 
     private static String computeLinkFor(String url) {
-        return "<a href=\"" + url + "\">" + url + "</a>";
+        return "<a href=\"" + url + "\" target=\"_top\">" + url + "</a>";
     }
 
 }
