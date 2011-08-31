@@ -222,13 +222,13 @@
 
     <action id="TAB_MANAGE_SOCIAL_WORKSPACE"
       link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml"
-      order="100" label="action.view.group.management" icon="/icons/file.gif">
+      order="10" label="action.view.membership.management" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
     <action id="TAB_MANAGE_REQUESTS" link="/incl/tabs/manage_requests_action_tab.xhtml"
-      order="800" label="action.view.manage.requests" icon="/icons/file.gif">
+      order="20" label="action.view.manage.requests" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
       <filter-id>workspace_administrator</filter-id>
