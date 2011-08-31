@@ -1414,6 +1414,10 @@
         <width>80%</width>
         <margin>20px auto 0</margin>
       </selector>
+      <!-- fix gadget width in profile view-->
+      <selector path=".fullWidth">
+        <width>100%</width>
+      </selector>
     </style>
     <!-- General -->
     <style element="page[1]">
