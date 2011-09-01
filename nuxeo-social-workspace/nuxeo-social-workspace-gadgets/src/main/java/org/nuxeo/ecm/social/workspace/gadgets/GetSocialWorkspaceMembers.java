@@ -126,7 +126,7 @@ public class GetSocialWorkspaceMembers {
         }
 
         if (userProfileDoc.getPropertyValue(AVATAR_PROPERTY) != null) {
-            url = DocumentModelFunctions.fileUrl("downloadFile",
+            url = VirtualHostHelper.getContextPathProperty() + "/" + DocumentModelFunctions.fileUrl("downloadFile",
                     userProfileDoc, AVATAR_PROPERTY, "avatar");
         }
         return url;
