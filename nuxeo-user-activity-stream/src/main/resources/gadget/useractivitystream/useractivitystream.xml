@@ -14,13 +14,13 @@
 <html>
   <head>
   <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
-  <link rel="stylesheet" type="text/css" href="useractivitystream.css"/>
+  <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}useractivitystream.css"/>
 
   <!-- insert JS Context -->
   ${jsContext}
 
   <script src="${specDirectoryUrl}default-automation-request.js"></script>
-  <script src="useractivitystream.js"></script>
+  <script src="${specDirectoryUrl}useractivitystream.js"></script>
 
   </head>
   <body>

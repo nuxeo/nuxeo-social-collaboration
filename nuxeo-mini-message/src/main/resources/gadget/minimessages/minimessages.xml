@@ -15,13 +15,13 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
-    <link rel="stylesheet" type="text/css" href="minimessages.css"/>
+    <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}minimessages.css"/>
 
     <!-- insert JS Context -->
     ${jsContext}
 
     <script src="${specDirectoryUrl}default-automation-request.js"></script>
-    <script src="minimessages.js"></script>
+    <script src="${specDirectoryUrl}minimessages.js"></script>
   </head>
   <body>
 
