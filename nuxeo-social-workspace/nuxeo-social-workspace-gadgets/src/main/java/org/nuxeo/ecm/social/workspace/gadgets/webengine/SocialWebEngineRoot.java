@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.ADD_CHILDREN;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
@@ -61,14 +62,19 @@ import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.webengine.forms.FormData;
+import org.nuxeo.ecm.webengine.model.WebContext;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
 
 /**
  * WebEngine handler for gadgets requests.
- * 
+ *
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
+ */
+/**
+ * @author rlegall
+ *
  */
 @Path("/social")
 @WebObject(type = "social")
@@ -492,7 +498,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     /**
      * used in document list template to check if a document has attachment
-     * 
+     *
      * @param doc - document to be check
      * @return true if the document has a file attched
      */
@@ -507,5 +513,24 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     public String escapeSingleQuote(String text) {
         return NXQLQueryBuilder.prepareStringLiteral(text, false, true);
+    }
+
+    /**
+     * Indicates if the current user has the right to Add Children to the
+     * current Document
+     *
+     * @param docId the reference of the document
+     * @return true if the current user has the right to Add Children to the
+     *         current Document and false otherwise
+     */
+    public boolean hasAddChildrenRight(String docId) {
+        try {
+            IdRef docRef = new IdRef(docId);
+            boolean hasPermission = ctx.getCoreSession().hasPermission(docRef,
+                    ADD_CHILDREN);
+            return hasPermission;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
