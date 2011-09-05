@@ -37,7 +37,10 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-public class ActivitiesListImpl extends ArrayList<Activity> implements ActivitiesList {
+public class ActivitiesListImpl extends ArrayList<Activity> implements
+        ActivitiesList {
+
+    private static final long serialVersionUID = 1L;
 
     public ActivitiesListImpl() {
         super();
@@ -53,7 +56,8 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements Activitie
 
         Map<String, List<Activity>> activitiesByDocument = getActivitiesByDocument();
 
-        List<String> authorizedDocuments = filterAuthorizedDocuments(activitiesByDocument.keySet(), session);
+        List<String> authorizedDocuments = filterAuthorizedDocuments(
+                activitiesByDocument.keySet(), session);
         // remove all activities the user has access to
         for (String authorizedDocument : authorizedDocuments) {
             activitiesByDocument.remove(authorizedDocument);
@@ -105,11 +109,16 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements Activitie
         return relatedDocuments;
     }
 
-    protected List<String> filterAuthorizedDocuments(Set<String> allDocuments, CoreSession session) {
+    protected List<String> filterAuthorizedDocuments(Set<String> allDocuments,
+            CoreSession session) {
         try {
-            String idsParam = "('" + StringUtils.join(allDocuments.toArray(new String[allDocuments.size()]), "', '") + "')";
+            String idsParam = "('"
+                    + StringUtils.join(
+                            allDocuments.toArray(new String[allDocuments.size()]),
+                            "', '") + "')";
             String query = String.format(
-                        "SELECT ecm:uuid FROM Document WHERE ecm:uuid IN %s", idsParam);
+                    "SELECT ecm:uuid FROM Document WHERE ecm:uuid IN %s",
+                    idsParam);
             IterableQueryResult res = session.queryAndFetch(query, "NXQL");
 
             try {
@@ -123,7 +132,7 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements Activitie
                     res.close();
                 }
             }
-        } catch(ClientException e) {
+        } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
     }
@@ -133,9 +142,9 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements Activitie
         ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
         List<ActivityMessage> messages = new ArrayList<ActivityMessage>();
         for (Activity activity : this) {
-            ActivityMessage activityMessage = new ActivityMessage(activity.getId(),
-                    activityStreamService.toFormattedMessage(activity,
-                            locale), activity.getPublishedDate());
+            ActivityMessage activityMessage = new ActivityMessage(
+                    activity.getId(), activityStreamService.toFormattedMessage(
+                            activity, locale), activity.getPublishedDate());
             messages.add(activityMessage);
         }
         return messages;

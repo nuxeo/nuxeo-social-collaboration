@@ -23,7 +23,6 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -108,8 +107,7 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
             List<String> actors = getUserRelationshipService().getTargetsOfKind(
                     actor,
                     RelationshipKind.fromString("socialworkspace:members"));
-            actors.addAll(getUserRelationshipService().getTargetsOfKind(
-                    actor,
+            actors.addAll(getUserRelationshipService().getTargetsOfKind(actor,
                     RelationshipKind.fromGroup("circle")));
             if (actors.isEmpty()) {
                 return new ActivitiesListImpl();

@@ -19,14 +19,10 @@ package org.nuxeo.ecm.activity;
 
 import static org.nuxeo.ecm.activity.ActivityHelper.getDocumentLink;
 import static org.nuxeo.ecm.activity.ActivityHelper.getUserProfileLink;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -56,7 +52,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
  * @since 5.4.3
  */
 public class ActivityStreamServiceImpl extends DefaultComponent implements
-ActivityStreamService {
+        ActivityStreamService {
 
     private static final Log log = LogFactory.getLog(ActivityStreamServiceImpl.class);
 
@@ -103,12 +99,12 @@ ActivityStreamService {
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<ActivitiesList>() {
-                @Override
-                public ActivitiesList runWith(EntityManager em) {
-                    return query(em, filter, parameters, pageSize,
-                            currentPage);
-                }
-            });
+                        @Override
+                        public ActivitiesList runWith(EntityManager em) {
+                            return query(em, filter, parameters, pageSize,
+                                    currentPage);
+                        }
+                    });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -131,11 +127,11 @@ ActivityStreamService {
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<ActivitiesList>() {
-                @Override
-                public ActivitiesList runWith(EntityManager em) {
-                    return queryAllByPage(em, pageSize, currentPage);
-                }
-            });
+                        @Override
+                        public ActivitiesList runWith(EntityManager em) {
+                            return queryAllByPage(em, pageSize, currentPage);
+                        }
+                    });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -162,11 +158,11 @@ ActivityStreamService {
         try {
             getOrCreatePersistenceProvider().run(true,
                     new PersistenceProvider.RunVoid() {
-                @Override
-                public void runWith(EntityManager em) {
-                    addActivity(em, activity);
-                }
-            });
+                        @Override
+                        public void runWith(EntityManager em) {
+                            addActivity(em, activity);
+                        }
+                    });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -198,8 +194,8 @@ ActivityStreamService {
         String labelKey = activityMessageLabels.get(activity.getVerb());
         String messageTemplate = null;
         try {
-            messageTemplate = I18NUtils.getMessageString("messages",
-                    labelKey, null, locale);
+            messageTemplate = I18NUtils.getMessageString("messages", labelKey,
+                    null, locale);
         } catch (MissingResourceException e) {
             log.error(e, e);
             // just return the labelKey if we have no resource bundle
@@ -265,7 +261,7 @@ ActivityStreamService {
     @Override
     public void registerContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
-                    throws Exception {
+            throws Exception {
         if (ACTIVITY_STREAM_FILTER_EP.equals(extensionPoint)) {
             registerActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
 
@@ -309,7 +305,7 @@ ActivityStreamService {
     @Override
     public void unregisterContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
-                    throws Exception {
+            throws Exception {
         if (ACTIVITY_STREAM_FILTER_EP.equals(extensionPoint)) {
             unregisterActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
         } else if (ACTIVITY_MESSAGE_LABELS_EP.equals(extensionPoint)) {

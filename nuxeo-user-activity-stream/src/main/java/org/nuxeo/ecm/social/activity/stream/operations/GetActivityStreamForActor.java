@@ -20,9 +20,6 @@ package org.nuxeo.ecm.social.activity.stream.operations;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.CORE_SESSION_PROPERTY;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.FOR_ACTOR_STREAM_TYPE;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.LOCALE_PROPERTY;
-import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QUERY_TYPE_PARAMETER;
-import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FOR_ACTOR;
-import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FROM_ACTOR;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.STREAM_TYPE_PROPERTY;
 
 import java.io.ByteArrayInputStream;
@@ -114,8 +111,7 @@ public class GetActivityStreamForActor {
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", activityMessage.getActivityId());
-            o.put("activityMessage",
-                    activityMessage.getMessage());
+            o.put("activityMessage", activityMessage.getMessage());
             o.put("publishedDate", activityMessage.getPublishedDate());
             m.add(o);
         }

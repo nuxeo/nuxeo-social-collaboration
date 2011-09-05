@@ -19,7 +19,6 @@ package org.nuxeo.ecm.social.activity.stream.operations;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -27,14 +26,11 @@ import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
-import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.social.activity.stream.AbstractUserActivityTest;
-import org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.runtime.test.runner.Deploy;
 
 import com.google.inject.Inject;
@@ -60,7 +56,8 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
         OperationContext ctx = new OperationContext(session);
         assertNotNull(ctx);
 
-        OperationChain chain = new OperationChain("testUserActivityStreamOperation");
+        OperationChain chain = new OperationChain(
+                "testUserActivityStreamOperation");
         chain.add(GetActivityStreamForActor.ID);
         Blob result = (Blob) automationService.run(ctx, chain);
         assertNotNull(result);

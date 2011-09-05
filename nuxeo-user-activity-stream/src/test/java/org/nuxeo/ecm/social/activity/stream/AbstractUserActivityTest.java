@@ -92,8 +92,11 @@ public abstract class AbstractUserActivityTest {
     protected CoreSession session;
 
     protected String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
+
     protected String leelaActivityObject = ActivityHelper.createUserActivityObject("Leela");
+
     protected String fryActivityObject = ActivityHelper.createUserActivityObject("Fry");
+
     protected String zappActivityObject = ActivityHelper.createUserActivityObject("Zapp");
 
     @Before
