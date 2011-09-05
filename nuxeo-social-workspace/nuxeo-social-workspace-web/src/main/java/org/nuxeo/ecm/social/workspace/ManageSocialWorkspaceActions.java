@@ -23,6 +23,9 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSoc
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -33,6 +36,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
+import org.mvel2.optimizers.impl.refl.nodes.ArrayLength;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -40,6 +44,7 @@ import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.computedgroups.SocialWorkspaceGroupComputer;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 
 /**
@@ -59,6 +64,8 @@ public class ManageSocialWorkspaceActions implements Serializable {
 
     public static final String GROUPS_SAVE_ERROR_LABEL = "label.social.workspace.faces.saveError";
 
+    public static final String USERS_IMPORTED_COUNT_LABEL = "label.social.workspace.users.imported.count";
+
     private static final Log log = LogFactory.getLog(ManageSocialWorkspaceActions.class);
 
     protected List<String> originalAdministrators;
@@ -68,6 +75,11 @@ public class ManageSocialWorkspaceActions implements Serializable {
     protected List<String> originalMembers;
 
     protected List<String> members;
+
+    protected String rawListOfEmails;
+
+    @In(create = true)
+    protected transient SocialWorkspaceService socialWorkspaceService;
 
     @In(create = true)
     protected transient UserManager userManager;
@@ -135,6 +147,26 @@ public class ManageSocialWorkspaceActions implements Serializable {
 
     public void setMembers(List<String> members) {
         this.members = members;
+    }
+
+    public String getRawListOfEmails() {
+        return rawListOfEmails;
+    }
+
+    public void setRawListOfEmails(String rawListOfEmails) {
+        this.rawListOfEmails = rawListOfEmails;
+    }
+
+    public void importUserFromListOfEmail() throws ClientException {
+
+        List<String> emails = Arrays.asList(rawListOfEmails.split("\\s"));
+        SocialWorkspace socialWorkspace = toSocialWorkspace(navigationContext.getCurrentDocument());
+        List<String> emailOfUsersAdded = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
+                socialWorkspace, emails);
+        facesMessages.add(
+                StatusMessage.Severity.INFO,
+                resourcesAccessor.getMessages().get(USERS_IMPORTED_COUNT_LABEL),
+                emailOfUsersAdded.size());
     }
 
 }

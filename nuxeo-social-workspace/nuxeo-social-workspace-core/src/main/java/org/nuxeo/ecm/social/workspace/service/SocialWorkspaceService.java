@@ -22,6 +22,7 @@ package org.nuxeo.ecm.social.workspace.service;
 import java.security.Principal;
 import java.util.List;
 
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -80,7 +81,7 @@ public interface SocialWorkspaceService {
     SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc);
 
     /**
-     * Adds a user to the @{code socialWorkspace} administrators group.
+     * Adds a user to the {@code socialWorkspace} administrators group.
      *
      * @return {@code true} if the user was successfully added to the
      *         administrators group, {@code false} otherwise.
@@ -89,13 +90,23 @@ public interface SocialWorkspaceService {
             Principal principal);
 
     /**
-     * Adds a user to the @{code socialWorkspace} members group.
+     * Adds a user to the {@code socialWorkspace} members group.
      *
      * @return {@code true} if the user was successfully added to the members
      *         group, {@code false} otherwise.
      */
     boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal);
+
+    /**
+     * Add several users to the {@code socialWorkspace} members group.
+     *
+     * @param principals
+     * @return {@code List<Principal>} contains the Principal added, null if no
+     *         {@code Principal} were added
+     */
+    List<String> addSeveralSocialWorkspaceMembers(
+            SocialWorkspace socialWorkspace, List<String> principals)throws ClientException;
 
     /**
      * Removes a user from the @{code socialWorkspace} administrators group.

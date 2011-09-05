@@ -1,0 +1,18 @@
+<div xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:nxl="http://nuxeo.org/nxforms/layout">
+
+  <p>#{messages['label.membership.management.bulk.import.description']}</p>
+
+  <h:form id="editSocialWorkspaceGroups">
+    <h2>#{messages['label.social.workspace.groups.administrator']}</h2>
+    <h:inputTextarea name="social_workspace_group_import"
+      value="#{manageSocialWorkspaceActions.rawListOfEmails}" />
+
+    <h:commandButton
+      value="#{messages['command.import']}"
+      action="#{manageSocialWorkspaceActions.importUserFromListOfEmail}"
+      styleClass="button"/>
+  </h:form>
+
+</div>

@@ -30,10 +30,15 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildR
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -325,7 +330,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
             addSocialWorkspaceACL(acl, socialWorkspace);
             doc.setACP(acp, true);
-            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
             doc = session.saveDocument(doc);
             socialWorkspace.setDocument(doc);
         } catch (ClientException e) {
@@ -395,6 +401,37 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         return false;
     }
 
+    @Override
+    public List<String> addSeveralSocialWorkspaceMembers(
+            SocialWorkspace socialWorkspace, List<String> emails)
+            throws ClientException {
+        List<String> memberAddedList = new ArrayList<String>(emails.size());
+        for (String email : emails) {
+            Map<String, Serializable> filter = new HashMap<String, Serializable>();
+            String emailKey = getUserManager().getUserEmailField();
+            filter.put(emailKey, email);
+            Set<String> pattern = new HashSet<String>();
+            pattern.add(emailKey);
+
+            DocumentModelList foundUsers = userManager.searchUsers(filter,
+                    pattern);
+
+            if (foundUsers.isEmpty()) {
+                continue;
+            } else if (foundUsers.size() > 1) {
+                log.warn("For the email " + email
+                        + " several user were found. First one used.");
+            }
+
+            Principal principal = userManager.getPrincipal(foundUsers.get(0).getId());
+            if (addSocialWorkspaceMember(socialWorkspace, principal)) {
+                memberAddedList.add(email);
+            }
+
+        }
+        return memberAddedList;
+    }
+
     private void addNewActivity(Principal principal,
             SocialWorkspace socialWorkspace, RelationshipKind kind) {
         Activity activity = new ActivityBuilder().actor(
@@ -448,7 +485,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, true);
-            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionReadable(session, socialWorkspace);
@@ -508,7 +546,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, false);
-            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionUnreadable(session, socialWorkspace);
