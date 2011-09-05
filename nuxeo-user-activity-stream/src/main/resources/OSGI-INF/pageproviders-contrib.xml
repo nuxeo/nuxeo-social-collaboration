@@ -4,8 +4,8 @@
   <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
     point="providers">
 
-    <genericPageProvider name="activity_stream_for_actor"
-      class="org.nuxeo.ecm.social.activity.stream.ActivityStreamForActorPageProvider">
+    <genericPageProvider name="user_activity_stream"
+      class="org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider">
       <pageSize>50</pageSize>
     </genericPageProvider>
 

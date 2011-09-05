@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -195,8 +196,15 @@ ActivityStreamService {
         }
 
         String labelKey = activityMessageLabels.get(activity.getVerb());
-        String messageTemplate = I18NUtils.getMessageString("messages",
-                labelKey, null, locale);
+        String messageTemplate = null;
+        try {
+            messageTemplate = I18NUtils.getMessageString("messages",
+                    labelKey, null, locale);
+        } catch (MissingResourceException e) {
+            log.error(e, e);
+            // just return the labelKey if we have no resource bundle
+            return labelKey;
+        }
 
         Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
         Matcher m = pattern.matcher(messageTemplate);

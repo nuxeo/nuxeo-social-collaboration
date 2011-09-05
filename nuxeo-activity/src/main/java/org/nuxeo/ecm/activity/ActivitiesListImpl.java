@@ -54,7 +54,7 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements Activitie
         Map<String, List<Activity>> activitiesByDocument = getActivitiesByDocument();
 
         List<String> authorizedDocuments = filterAuthorizedDocuments(activitiesByDocument.keySet(), session);
-        // remove all activities we have access to
+        // remove all activities the user has access to
         for (String authorizedDocument : authorizedDocuments) {
             activitiesByDocument.remove(authorizedDocument);
         }
@@ -133,7 +133,7 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements Activitie
         ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
         List<ActivityMessage> messages = new ArrayList<ActivityMessage>();
         for (Activity activity : this) {
-            ActivityMessage activityMessage = new ActivityMessage(
+            ActivityMessage activityMessage = new ActivityMessage(activity.getId(),
                     activityStreamService.toFormattedMessage(activity,
                             locale), activity.getPublishedDate());
             messages.add(activityMessage);

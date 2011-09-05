@@ -43,6 +43,11 @@ import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
+ * Activity Stream filter handling user activity stream.
+ * <p>
+ * The different queries this filter can handle are defined in the
+ * {@link QueryType} enum.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */

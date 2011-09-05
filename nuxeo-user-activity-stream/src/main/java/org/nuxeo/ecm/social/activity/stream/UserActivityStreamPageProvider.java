@@ -20,43 +20,57 @@ package org.nuxeo.ecm.social.activity.stream;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.ACTOR_PARAMETER;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QUERY_TYPE_PARAMETER;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FOR_ACTOR;
+import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FROM_ACTOR;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
-import org.nuxeo.common.utils.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.activity.ActivitiesList;
-import org.nuxeo.ecm.activity.Activity;
-import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.activity.ActivityStreamService;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.runtime.api.Framework;
 
 /**
+ * Page provider listing activity messages for a given actor
+ * <p>
+ * This page provider requires four properties:
+ * <ul>
+ * <li>the actor</li>
+ * <li>the CoreSession to use</li>
+ * <li>the user activity stream type: for the actor or from the actor</li>
+ * <li>the locale to internationalize the activity messages</li>
+ * </ul>
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-public class ActivityStreamForActorPageProvider extends
+public class UserActivityStreamPageProvider extends
         AbstractPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Log log = LogFactory.getLog(UserActivityStreamPageProvider.class);
 
     public static final String ACTOR_PROPERTY = "actor";
 
     public static final String LOCALE_PROPERTY = "locale";
 
     public static final String CORE_SESSION_PROPERTY = "coreSession";
+
+    public static final String STREAM_TYPE_PROPERTY = "streamType";
+
+    public static final String FOR_ACTOR_STREAM_TYPE = "forActor";
+
+    public static final String FROM_ACTOR_STREAM_TYPE = "fromActor";
 
     protected ActivityStreamService activityStreamService;
 
@@ -67,14 +81,30 @@ public class ActivityStreamForActorPageProvider extends
         if (pageActivityMessages == null) {
             pageActivityMessages = new ArrayList<ActivityMessage>();
             long pageSize = getMinMaxPageSize();
-            Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-            parameters.put(ACTOR_PARAMETER, getActor());
-            parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
-            ActivitiesList activities = getActivityStreamService().query(
-                    UserActivityStreamFilter.ID, parameters, (int) pageSize,
-                    (int) getCurrentPageIndex());
-            activities = activities.filterActivities(getCoreSession());
-            pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
+
+            String streamType = getStreamType();
+            if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
+                Map<String, Serializable> parameters = new HashMap<String, Serializable>();
+                parameters.put(ACTOR_PARAMETER, getActor());
+                parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
+                ActivitiesList activities = getActivityStreamService().query(
+                        UserActivityStreamFilter.ID, parameters,
+                        (int) pageSize, (int) getCurrentPageIndex());
+                activities = activities.filterActivities(getCoreSession());
+                pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
+            } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
+                Map<String, Serializable> parameters = new HashMap<String, Serializable>();
+                parameters.put(ACTOR_PARAMETER, getActor());
+                parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
+                ActivitiesList activities = getActivityStreamService().query(
+                        UserActivityStreamFilter.ID, parameters,
+                        (int) pageSize, (int) getCurrentPageIndex());
+                activities = activities.filterActivities(getCoreSession());
+                pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
+            } else {
+                log.error("Unknown stream type: " + streamType);
+            }
+
             resultsCount = Integer.MAX_VALUE - 1;
         }
         return pageActivityMessages;
@@ -110,12 +140,31 @@ public class ActivityStreamForActorPageProvider extends
 
     protected Locale getLocale() {
         Map<String, Serializable> props = getProperties();
-        return (Locale) props.get(LOCALE_PROPERTY);
+        Locale locale = (Locale) props.get(LOCALE_PROPERTY);
+        if (locale == null) {
+            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY
+                    + " property.");
+        }
+        return locale;
     }
 
     protected CoreSession getCoreSession() {
         Map<String, Serializable> props = getProperties();
-        return (CoreSession) props.get(CORE_SESSION_PROPERTY);
+        CoreSession session = (CoreSession) props.get(CORE_SESSION_PROPERTY);
+        if (session == null) {
+            throw new ClientRuntimeException("Cannot find "
+                    + CORE_SESSION_PROPERTY + " property.");
+        }
+        return session;
+    }
+
+    protected String getStreamType() {
+        Map<String, Serializable> props = getProperties();
+        String streamType = (String) props.get(STREAM_TYPE_PROPERTY);
+        if (streamType == null) {
+            streamType = FOR_ACTOR_STREAM_TYPE;
+        }
+        return streamType;
     }
 
     @Override
