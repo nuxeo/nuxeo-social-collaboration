@@ -34,6 +34,8 @@ import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.runtime.api.Framework;
 
 /**
+ * Default implementation of {@link ActivitiesList}.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */

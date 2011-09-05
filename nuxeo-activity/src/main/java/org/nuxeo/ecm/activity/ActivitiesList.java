@@ -23,13 +23,26 @@ import java.util.Locale;
 import org.nuxeo.ecm.core.api.CoreSession;
 
 /**
+ * A list of Activities with useful methods to filter it or transform it.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
 public interface ActivitiesList extends List<Activity> {
 
+    /**
+     * Returns a filtered {@code ActivitiesList} based on the given
+     * {@code session}.
+     * <p>
+     * All the activities related to documents the user has no read access will
+     * be filter out.
+     */
     ActivitiesList filterActivities(CoreSession session);
 
+    /**
+     * Transforms this {@code ActivitiesList} into a list of
+     * {@code ActivityMessage}, internationalized with the given {@code locale}.
+     */
     List<ActivityMessage> toActivityMessages(Locale locale);
 
 }
