@@ -56,7 +56,7 @@ public interface ActivityStreamService {
      *             {@code ActivityStreamFilter} matching the given
      *             {@code filterId}.
      */
-    List<Activity> query(String filterId, Map<String, Serializable> parameters,
+    ActivitiesList query(String filterId, Map<String, Serializable> parameters,
             int pageSize, int currentPage);
 
     /**
@@ -70,7 +70,7 @@ public interface ActivityStreamService {
      *             {@code ActivityStreamFilter} matching the given
      *             {@code filterId}.
      */
-    List<Activity> query(String filterId, Map<String, Serializable> parameters);
+    ActivitiesList query(String filterId, Map<String, Serializable> parameters);
 
     String toFormattedMessage(Activity activity, Locale locale);
 

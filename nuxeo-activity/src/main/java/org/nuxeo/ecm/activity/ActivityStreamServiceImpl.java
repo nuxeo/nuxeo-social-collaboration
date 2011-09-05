@@ -74,13 +74,13 @@ ActivityStreamService {
     protected PersistenceProvider persistenceProvider;
 
     @Override
-    public List<Activity> query(String filterId,
+    public ActivitiesList query(String filterId,
             final Map<String, Serializable> parameters) {
         return query(filterId, parameters, 0, 0);
     }
 
     @Override
-    public List<Activity> query(String filterId,
+    public ActivitiesList query(String filterId,
             final Map<String, Serializable> parameters, final int pageSize,
             final int currentPage) {
         if (ALL_ACTIVITIES.equals(filterId)) {
@@ -96,14 +96,14 @@ ActivityStreamService {
         return query(filter, parameters, pageSize, currentPage);
     }
 
-    protected List<Activity> query(final ActivityStreamFilter filter,
+    protected ActivitiesList query(final ActivityStreamFilter filter,
             final Map<String, Serializable> parameters, final int pageSize,
             final int currentPage) {
         try {
             return getOrCreatePersistenceProvider().run(false,
-                    new PersistenceProvider.RunCallback<List<Activity>>() {
+                    new PersistenceProvider.RunCallback<ActivitiesList>() {
                 @Override
-                public List<Activity> runWith(EntityManager em) {
+                public ActivitiesList runWith(EntityManager em) {
                     return query(em, filter, parameters, pageSize,
                             currentPage);
                 }
@@ -113,7 +113,7 @@ ActivityStreamService {
         }
     }
 
-    protected List<Activity> query(EntityManager em,
+    protected ActivitiesList query(EntityManager em,
             ActivityStreamFilter filter, Map<String, Serializable> parameters,
             int pageSize, int currentPage) {
         try {
@@ -125,13 +125,13 @@ ActivityStreamService {
 
     }
 
-    protected List<Activity> queryAllByPage(final int pageSize,
+    protected ActivitiesList queryAllByPage(final int pageSize,
             final int currentPage) {
         try {
             return getOrCreatePersistenceProvider().run(false,
-                    new PersistenceProvider.RunCallback<List<Activity>>() {
+                    new PersistenceProvider.RunCallback<ActivitiesList>() {
                 @Override
-                public List<Activity> runWith(EntityManager em) {
+                public ActivitiesList runWith(EntityManager em) {
                     return queryAllByPage(em, pageSize, currentPage);
                 }
             });
@@ -141,7 +141,7 @@ ActivityStreamService {
     }
 
     @SuppressWarnings("unchecked")
-    protected List<Activity> queryAllByPage(EntityManager em, int pageSize,
+    protected ActivitiesList queryAllByPage(EntityManager em, int pageSize,
             int currentPage) {
         Query query = em.createQuery("from Activity activity");
         if (pageSize > 0) {
@@ -150,7 +150,7 @@ ActivityStreamService {
                 query.setFirstResult((currentPage - 1) * pageSize);
             }
         }
-        return query.getResultList();
+        return new ActivitiesListImpl(query.getResultList());
     }
 
     @Override
