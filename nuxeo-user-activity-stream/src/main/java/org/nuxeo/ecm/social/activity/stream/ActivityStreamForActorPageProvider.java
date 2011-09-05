@@ -24,14 +24,21 @@ import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.Quer
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
+import org.nuxeo.common.utils.StringUtils;
 import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.activity.ActivityStreamService;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.runtime.api.Framework;
 
@@ -48,6 +55,8 @@ public class ActivityStreamForActorPageProvider extends
 
     public static final String LOCALE_PROPERTY = "locale";
 
+    public static final String CORE_SESSION_PROPERTY = "coreSession";
+
     protected ActivityStreamService activityStreamService;
 
     protected List<ActivityMessage> pageActivityMessages;
@@ -63,6 +72,7 @@ public class ActivityStreamForActorPageProvider extends
             List<Activity> activities = getActivityStreamService().query(
                     UserActivityStreamFilter.ID, parameters, (int) pageSize,
                     (int) getCurrentPageIndex());
+            activities = filterActivities(activities);
             pageActivityMessages.addAll(toActivityMessages(activities));
             resultsCount = Integer.MAX_VALUE - 1;
         }
@@ -78,6 +88,88 @@ public class ActivityStreamForActorPageProvider extends
             messages.add(activityMessage);
         }
         return messages;
+    }
+
+    protected List<Activity> filterActivities(List<Activity> activities) {
+        List<Activity> filteredActivities = new ArrayList<Activity>(activities);
+
+        Map<String, List<Activity>> activitiesByDocument = getActivitiesByDocument(activities);
+
+        List<String> authorizedDocuments = filterAuthorizedDocuments(activitiesByDocument.keySet());
+        // remove all activities we have access to
+        for (String authorizedDocument : authorizedDocuments) {
+            activitiesByDocument.remove(authorizedDocument);
+        }
+
+        // extract all unauthorized activities
+        List<Activity> unauthorizedActivities = new ArrayList<Activity>();
+        for (List<Activity> l : activitiesByDocument.values()) {
+            unauthorizedActivities.addAll(l);
+        }
+
+        // remove all unauthorized activities
+        filteredActivities.removeAll(unauthorizedActivities);
+        return filteredActivities;
+    }
+
+    protected Map<String, List<Activity>> getActivitiesByDocument(List<Activity> activities) {
+        Map<String, List<Activity>> activitiesByDocuments = new HashMap<String, List<Activity>>();
+        for (Activity activity : activities) {
+            List<String> relatedDocuments = getRelatedDocuments(activity);
+            for (String doc : relatedDocuments) {
+                List<Activity> value = activitiesByDocuments.get(doc);
+                if (value == null) {
+                    value = new ArrayList<Activity>();
+                    activitiesByDocuments.put(doc, value);
+                }
+                value.add(activity);
+            }
+        }
+        return activitiesByDocuments;
+    }
+
+    protected List<String> getRelatedDocuments(Activity activity) {
+        List<String> relatedDocuments = new ArrayList<String>();
+
+        String activityObject = activity.getActor();
+        if (activityObject != null && ActivityHelper.isDocument(activityObject)) {
+            relatedDocuments.add(ActivityHelper.getDocumentId(activityObject));
+        }
+        activityObject = activity.getObject();
+        if (activityObject != null && ActivityHelper.isDocument(activityObject)) {
+            relatedDocuments.add(ActivityHelper.getDocumentId(activityObject));
+        }
+        activityObject = activity.getTarget();
+        if (activityObject != null && ActivityHelper.isDocument(activityObject)) {
+            relatedDocuments.add(ActivityHelper.getDocumentId(activityObject));
+        }
+
+        return relatedDocuments;
+    }
+
+    protected List<String> filterAuthorizedDocuments(Set<String> allDocuments) {
+        try {
+            CoreSession session = getCoreSession();
+
+            String idsParam = "('" + StringUtils.join(allDocuments.toArray(new String[allDocuments.size()]), "', '") + "')";
+            String query = String.format(
+                        "SELECT ecm:uuid FROM Document WHERE ecm:uuid IN %s", idsParam);
+            IterableQueryResult res = session.queryAndFetch(query, "NXQL");
+
+            try {
+                List<String> authorizedDocuments = new ArrayList<String>();
+                for (Map<String, Serializable> map : res) {
+                    authorizedDocuments.add((String) map.get("ecm:uuid"));
+                }
+                return authorizedDocuments;
+            } finally {
+                if (res != null) {
+                    res.close();
+                }
+            }
+        } catch(ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
     }
 
     protected ActivityStreamService getActivityStreamService()
@@ -111,6 +203,11 @@ public class ActivityStreamForActorPageProvider extends
     protected Locale getLocale() {
         Map<String, Serializable> props = getProperties();
         return (Locale) props.get(LOCALE_PROPERTY);
+    }
+
+    protected CoreSession getCoreSession() {
+        Map<String, Serializable> props = getProperties();
+        return (CoreSession) props.get(CORE_SESSION_PROPERTY);
     }
 
     @Override

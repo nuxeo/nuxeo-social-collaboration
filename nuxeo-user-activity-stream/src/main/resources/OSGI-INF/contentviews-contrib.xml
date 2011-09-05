@@ -16,6 +16,7 @@
       <pageProvider name="activity_stream_for_actor">
         <property name="actor">#{currentUser.name}</property>
         <property name="locale">#{localeSelector.locale}</property>
+        <property name="coreSession">#{documentManager}</property>
       </pageProvider>
       <showPageSizeSelector>false</showPageSizeSelector>
       <showRefreshCommand>false</showRefreshCommand>
