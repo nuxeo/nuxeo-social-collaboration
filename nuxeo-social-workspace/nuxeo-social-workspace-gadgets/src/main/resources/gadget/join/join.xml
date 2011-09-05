@@ -50,7 +50,7 @@
   }
 
   function displaySocialWorkspaceDescription(entries) {
-    msg = ""
+    var msg = ""
     if ( entries.length > 0 ) {
       msg = entries[0].properties["dc:description"];
     }
@@ -59,7 +59,7 @@
   }
 
   function displayStatus(response, nxParams) {
-    status = response.data["status"];
+    var status = response.data["status"];
        _gel("socialWorkspaceDescription").innerHTML = response.data["description"];
     if ( "REQUEST_PENDING" == status ) {
       _gel("statusMessage").innerHTML = "__MSG_label.request.alreadyRegistered__";
@@ -118,7 +118,7 @@
         <p id="socialWorkspaceDescription" class="socialWorkspaceDescription">
         </p>
         <div class="joinMessage">
-          <p id="statusMessage">__MSG_label.gadget.joinDescription__</p>
+          <div id="statusMessage">__MSG_label.gadget.joinDescription__</div>
           <button onClick="joinSocialWorkspace()" id="joinButton">__MSG_label.gadget.joinButton__</button>
         </div>
       </div>
