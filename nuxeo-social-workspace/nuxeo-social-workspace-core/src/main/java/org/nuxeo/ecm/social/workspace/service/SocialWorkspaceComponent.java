@@ -19,16 +19,10 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.*;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.*;
 
 import java.io.Serializable;
 import java.security.Principal;
@@ -55,6 +49,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
@@ -403,6 +398,32 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     @Override
     public List<String> addSeveralSocialWorkspaceMembers(
+            SocialWorkspace socialWorkspace, String groupName)
+            throws ClientException {
+        NuxeoGroup group = getUserManager().getGroup(groupName);
+        if (group == null) {
+            throw new ClientException(String.format("Group (%s) not found",
+                    groupName));
+        }
+
+        List<String> importedUsers = new ArrayList<String>();
+        for (String userName : group.getMemberUsers()) {
+            Principal principal = userManager.getPrincipal(userName);
+            if (principal == null) {
+                log.info(String.format("User (%s) doesn't exist.", userName));
+                continue;
+            }
+
+            if (addSocialWorkspaceMember(socialWorkspace, principal)) {
+                importedUsers.add(userName);
+            }
+        }
+
+        return importedUsers;
+    }
+
+    @Override
+    public List<String> addSeveralSocialWorkspaceMembers(
             SocialWorkspace socialWorkspace, List<String> emails)
             throws ClientException {
         List<String> memberAddedList = new ArrayList<String>(emails.size());
@@ -419,7 +440,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             if (foundUsers.isEmpty()) {
                 continue;
             } else if (foundUsers.size() > 1) {
-                log.warn("For the email " + email
+                log.info("For the email " + email
                         + " several user were found. First one used.");
             }
 

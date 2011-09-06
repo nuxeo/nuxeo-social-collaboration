@@ -99,11 +99,21 @@ public interface SocialWorkspaceService {
             Principal principal);
 
     /**
+     * Add all group's users to the {@code socialWorkspace} members groups
+     *
+     * @param groupName throw a {@code ClientException} when is not existing.
+     * @return {@code List<String>} containing imported users, or an empty one.
+     * @throws ClientException when groupName doesn't exist
+     */
+    List<String> addSeveralSocialWorkspaceMembers(
+            SocialWorkspace socialWorkspace, String groupName)
+            throws ClientException;
+
+    /**
      * Add several users to the {@code socialWorkspace} members group.
      *
      * @param principals
-     * @return {@code List<Principal>} contains the Principal added, null if no
-     *         {@code Principal} were added
+     * @return {@code List<String>} contains the email of user added, or an empty one.
      */
     List<String> addSeveralSocialWorkspaceMembers(
             SocialWorkspace socialWorkspace, List<String> principals)throws ClientException;

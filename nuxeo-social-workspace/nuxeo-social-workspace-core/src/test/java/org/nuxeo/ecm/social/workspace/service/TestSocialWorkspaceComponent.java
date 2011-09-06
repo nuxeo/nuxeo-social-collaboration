@@ -18,20 +18,16 @@ package org.nuxeo.ecm.social.workspace.service;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.inject.Inject;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.model.PropertyException;
-import org.nuxeo.ecm.platform.usermanager.exceptions.UserAlreadyExistsException;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-
-import com.google.inject.Inject;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
@@ -52,16 +48,14 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember2.getId()));
 
         String userNewMember1Email = "userNewMember1@mail.net";
-        DocumentModel userNewMember1 = createUserForTest(userNewMember1Email,
-                "userNewMember1");
-        DocumentModel userNewMember2 = createUserForTest(
-                "userNewMember2@mail.net", "userNewMember2");
+        createUserForTest(userNewMember1Email, "userNewMember1");
+        createUserForTest("userNewMember2@mail.net", "userNewMember2");
 
         String nonExsitingUser1Email = "nonExistingUser1@mail.net";
-        List<String> emails = Arrays.asList(new String[] {
-                userAlreadyMember1Email, "userAlreadyMember2@mail.net",
-                "userNewMember1@mail.net", "userNewMember2@mail.net",
-                nonExsitingUser1Email, "nonExistingUser2@mail.net" });
+        List<String> emails = Arrays.asList(userAlreadyMember1Email,
+                "userAlreadyMember2@mail.net", "userNewMember1@mail.net",
+                "userNewMember2@mail.net", nonExsitingUser1Email,
+                "nonExistingUser2@mail.net");
 
         List<String> addedUsers = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
                 socialWorkspace, emails);
@@ -75,13 +69,48 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         assertTrue(addedUsers.isEmpty());
 
         addedUsers = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
-                socialWorkspace, Collections.emptyList());
+                socialWorkspace, new ArrayList<String>());
         assertTrue(addedUsers.isEmpty());
     }
 
+    @Test(expected = ClientException.class)
+    public void testAddSeveralSocialWorkspaceMembersFromGroup()
+            throws Exception {
+        String existingUser1 = "userAlreadyMember1";
+        String existingUser2 = "userAlreadyMember2";
+
+        DocumentModel group1 = userManager.getBareGroupModel();
+        group1.setPropertyValue(userManager.getGroupSchemaName() + ":"
+                + userManager.getGroupIdField(), "group1");
+        List<String> members = Arrays.asList(existingUser1, existingUser2,
+                "Administrator", "unknown");
+        group1.setProperty(userManager.getGroupSchemaName(),
+                userManager.getGroupMembersField(), members);
+
+        group1 = userManager.createGroup(group1);
+        members = (List<String>) group1.getPropertyValue(userManager.getGroupSchemaName()
+                + ":" + userManager.getGroupMembersField());
+        assertEquals(4, members.size());
+
+        SocialWorkspace sw = createSocialWorkspace("SocialWorkspaceWithGroup");
+        assertEquals(1, sw.getMembers().size());
+
+        List<String> imported = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
+                sw, group1.getName());
+        assertEquals(2, imported.size());
+        assertTrue(imported.contains(existingUser1));
+        assertTrue(imported.contains(existingUser2));
+        assertFalse(imported.contains("Administrator"));
+
+        assertEquals(3, sw.getMembers().size());
+
+        // Will throw a ClientException
+        socialWorkspaceService.addSeveralSocialWorkspaceMembers(sw,
+                "john_doe_group");
+    }
+
     protected DocumentModel createUserForTest(String userEmail, String userId)
-            throws ClientException, PropertyException,
-            UserAlreadyExistsException {
+            throws ClientException {
         DocumentModel user = userManager.getBareUserModel();
         user.setPropertyValue(userManager.getUserSchemaName() + ":"
                 + userManager.getUserEmailField(), userEmail);
