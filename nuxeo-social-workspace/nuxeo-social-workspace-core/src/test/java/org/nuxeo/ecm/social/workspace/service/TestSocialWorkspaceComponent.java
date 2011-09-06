@@ -47,6 +47,9 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
                 "userAlreadyMember2@mail.net", "userAlreadyMember2");
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember2.getId()));
 
+        DocumentModel fulltextEmailUser1 = createUserForTest(
+                "fulltextEmailUser1@mail.net", "fulltextEmailUser1");
+
         String userNewMember1Email = "userNewMember1@mail.net";
         createUserForTest(userNewMember1Email, "userNewMember1");
         createUserForTest("userNewMember2@mail.net", "userNewMember2");
@@ -55,11 +58,11 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         List<String> emails = Arrays.asList(userAlreadyMember1Email,
                 "userAlreadyMember2@mail.net", "userNewMember1@mail.net",
                 "userNewMember2@mail.net", nonExsitingUser1Email,
-                "nonExistingUser2@mail.net");
+                "nonExistingUser2@mail.net", fulltextEmailUser1.getId());
 
         List<String> addedUsers = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
                 socialWorkspace, emails);
-        assertEquals(2, addedUsers.size());
+        assertEquals(3, addedUsers.size());
         assertFalse(addedUsers.contains(userAlreadyMember1Email));
         assertFalse(addedUsers.contains(nonExsitingUser1Email));
         assertTrue(addedUsers.contains(userNewMember1Email));
