@@ -19,16 +19,13 @@ package org.nuxeo.ecm.activity;
 
 import static org.nuxeo.ecm.activity.ActivityHelper.getDocumentLink;
 import static org.nuxeo.ecm.activity.ActivityHelper.getUserProfileLink;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +52,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
  * @since 5.4.3
  */
 public class ActivityStreamServiceImpl extends DefaultComponent implements
-ActivityStreamService {
+        ActivityStreamService {
 
     private static final Log log = LogFactory.getLog(ActivityStreamServiceImpl.class);
 
@@ -74,13 +71,13 @@ ActivityStreamService {
     protected PersistenceProvider persistenceProvider;
 
     @Override
-    public List<Activity> query(String filterId,
+    public ActivitiesList query(String filterId,
             final Map<String, Serializable> parameters) {
         return query(filterId, parameters, 0, 0);
     }
 
     @Override
-    public List<Activity> query(String filterId,
+    public ActivitiesList query(String filterId,
             final Map<String, Serializable> parameters, final int pageSize,
             final int currentPage) {
         if (ALL_ACTIVITIES.equals(filterId)) {
@@ -96,24 +93,24 @@ ActivityStreamService {
         return query(filter, parameters, pageSize, currentPage);
     }
 
-    protected List<Activity> query(final ActivityStreamFilter filter,
+    protected ActivitiesList query(final ActivityStreamFilter filter,
             final Map<String, Serializable> parameters, final int pageSize,
             final int currentPage) {
         try {
             return getOrCreatePersistenceProvider().run(false,
-                    new PersistenceProvider.RunCallback<List<Activity>>() {
-                @Override
-                public List<Activity> runWith(EntityManager em) {
-                    return query(em, filter, parameters, pageSize,
-                            currentPage);
-                }
-            });
+                    new PersistenceProvider.RunCallback<ActivitiesList>() {
+                        @Override
+                        public ActivitiesList runWith(EntityManager em) {
+                            return query(em, filter, parameters, pageSize,
+                                    currentPage);
+                        }
+                    });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
     }
 
-    protected List<Activity> query(EntityManager em,
+    protected ActivitiesList query(EntityManager em,
             ActivityStreamFilter filter, Map<String, Serializable> parameters,
             int pageSize, int currentPage) {
         try {
@@ -125,23 +122,23 @@ ActivityStreamService {
 
     }
 
-    protected List<Activity> queryAllByPage(final int pageSize,
+    protected ActivitiesList queryAllByPage(final int pageSize,
             final int currentPage) {
         try {
             return getOrCreatePersistenceProvider().run(false,
-                    new PersistenceProvider.RunCallback<List<Activity>>() {
-                @Override
-                public List<Activity> runWith(EntityManager em) {
-                    return queryAllByPage(em, pageSize, currentPage);
-                }
-            });
+                    new PersistenceProvider.RunCallback<ActivitiesList>() {
+                        @Override
+                        public ActivitiesList runWith(EntityManager em) {
+                            return queryAllByPage(em, pageSize, currentPage);
+                        }
+                    });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
     }
 
     @SuppressWarnings("unchecked")
-    protected List<Activity> queryAllByPage(EntityManager em, int pageSize,
+    protected ActivitiesList queryAllByPage(EntityManager em, int pageSize,
             int currentPage) {
         Query query = em.createQuery("from Activity activity");
         if (pageSize > 0) {
@@ -150,7 +147,7 @@ ActivityStreamService {
                 query.setFirstResult((currentPage - 1) * pageSize);
             }
         }
-        return query.getResultList();
+        return new ActivitiesListImpl(query.getResultList());
     }
 
     @Override
@@ -161,11 +158,11 @@ ActivityStreamService {
         try {
             getOrCreatePersistenceProvider().run(true,
                     new PersistenceProvider.RunVoid() {
-                @Override
-                public void runWith(EntityManager em) {
-                    addActivity(em, activity);
-                }
-            });
+                        @Override
+                        public void runWith(EntityManager em) {
+                            addActivity(em, activity);
+                        }
+                    });
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
@@ -195,8 +192,15 @@ ActivityStreamService {
         }
 
         String labelKey = activityMessageLabels.get(activity.getVerb());
-        String messageTemplate = I18NUtils.getMessageString("messages",
-                labelKey, null, locale);
+        String messageTemplate = null;
+        try {
+            messageTemplate = I18NUtils.getMessageString("messages", labelKey,
+                    null, locale);
+        } catch (MissingResourceException e) {
+            log.error(e, e);
+            // just return the labelKey if we have no resource bundle
+            return labelKey;
+        }
 
         Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
         Matcher m = pattern.matcher(messageTemplate);
@@ -257,7 +261,7 @@ ActivityStreamService {
     @Override
     public void registerContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
-                    throws Exception {
+            throws Exception {
         if (ACTIVITY_STREAM_FILTER_EP.equals(extensionPoint)) {
             registerActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
 
@@ -301,7 +305,7 @@ ActivityStreamService {
     @Override
     public void unregisterContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
-                    throws Exception {
+            throws Exception {
         if (ACTIVITY_STREAM_FILTER_EP.equals(extensionPoint)) {
             unregisterActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
         } else if (ACTIVITY_MESSAGE_LABELS_EP.equals(extensionPoint)) {

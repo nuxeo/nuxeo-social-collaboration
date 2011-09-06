@@ -35,8 +35,7 @@ import org.nuxeo.runtime.api.Framework;
  * Page provider listing mini messages for a given actor
  * <p>
  * This page provider requires two properties: the first one to be filled with
- * the actor, and the second one to be filled with the relationship kind to use
- * between the actor and.
+ * the actor, and the second one to be filled with the relationship kind to use.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3

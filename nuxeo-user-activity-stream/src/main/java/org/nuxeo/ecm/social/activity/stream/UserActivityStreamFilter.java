@@ -23,13 +23,14 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.nuxeo.ecm.activity.ActivitiesList;
+import org.nuxeo.ecm.activity.ActivitiesListImpl;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
@@ -41,6 +42,11 @@ import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
+ * Activity Stream filter handling user activity stream.
+ * <p>
+ * The different queries this filter can handle are defined in the
+ * {@link QueryType} enum.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
@@ -80,7 +86,7 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Activity> query(ActivityStreamService activityStreamService,
+    public ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, int pageSize, int currentPage) {
         QueryType queryType = (QueryType) parameters.get(QUERY_TYPE_PARAMETER);
         if (queryType == null) {
@@ -101,11 +107,10 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
             List<String> actors = getUserRelationshipService().getTargetsOfKind(
                     actor,
                     RelationshipKind.fromString("socialworkspace:members"));
-            actors.addAll(getUserRelationshipService().getTargetsOfKind(
-                    actor,
+            actors.addAll(getUserRelationshipService().getTargetsOfKind(actor,
                     RelationshipKind.fromGroup("circle")));
             if (actors.isEmpty()) {
-                return Collections.emptyList();
+                return new ActivitiesListImpl();
             }
 
             query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) order by activity.publishedDate desc");
@@ -127,7 +132,7 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
                 query.setFirstResult(currentPage * pageSize);
             }
         }
-        return query.getResultList();
+        return new ActivitiesListImpl(query.getResultList());
     }
 
     private UserRelationshipService getUserRelationshipService()

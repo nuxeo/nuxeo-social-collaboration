@@ -16,6 +16,12 @@
       <sort column="dc:title" ascending="true" />
       <pageSize>0</pageSize>
     </coreQueryPageProvider>
+
+    <genericPageProvider name="social_workspace_activity_stream"
+      class="org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider">
+      <pageSize>50</pageSize>
+    </genericPageProvider>
+
   </extension>
 
 </component>

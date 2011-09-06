@@ -18,7 +18,6 @@
 package org.nuxeo.ecm.activity;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,7 +57,7 @@ public interface ActivityStreamFilter {
      * @param pageSize the number results per page.
      * @param currentPage the current page of results.
      */
-    List<Activity> query(ActivityStreamService activityStreamService,
+    ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, int pageSize, int currentPage);
 
 }

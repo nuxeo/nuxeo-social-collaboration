@@ -17,34 +17,32 @@
 
 package org.nuxeo.ecm.activity;
 
-import org.nuxeo.common.xmap.annotation.XNode;
-import org.nuxeo.common.xmap.annotation.XObject;
+import java.util.List;
+import java.util.Locale;
+
+import org.nuxeo.ecm.core.api.CoreSession;
 
 /**
- * Descriptor object for registering a mapping between an Activity verb and a
- * label key.
+ * A list of Activities with useful methods to filter it or transform it.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-@XObject("activityMessageLabel")
-public class ActivityMessageLabelDescriptor {
+public interface ActivitiesList extends List<Activity> {
 
-    @XNode("@activityVerb")
-    protected String activityVerb;
+    /**
+     * Returns a filtered {@code ActivitiesList} based on the given
+     * {@code session}.
+     * <p>
+     * All the activities related to documents the user has no read access will
+     * be filter out.
+     */
+    ActivitiesList filterActivities(CoreSession session);
 
-    @XNode("@labelKey")
-    protected String labelKey;
-
-    public ActivityMessageLabelDescriptor() {
-    }
-
-    public String getActivityVerb() {
-        return activityVerb;
-    }
-
-    public String getLabelKey() {
-        return labelKey;
-    }
+    /**
+     * Transforms this {@code ActivitiesList} into a list of
+     * {@code ActivityMessage}, internationalized with the given {@code locale}.
+     */
+    List<ActivityMessage> toActivityMessages(Locale locale);
 
 }
