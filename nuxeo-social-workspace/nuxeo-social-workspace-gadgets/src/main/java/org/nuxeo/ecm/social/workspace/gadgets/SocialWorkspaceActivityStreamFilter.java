@@ -30,6 +30,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.nuxeo.ecm.activity.ActivitiesList;
+import org.nuxeo.ecm.activity.ActivitiesListImpl;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
@@ -79,7 +81,7 @@ public class SocialWorkspaceActivityStreamFilter implements
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Activity> query(ActivityStreamService activityStreamService,
+    public ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, int pageSize, int currentPage) {
         String repositoryName = (String) parameters.get(REPOSITORY_NAME_PARAMETER);
         if (repositoryName == null) {
@@ -102,7 +104,7 @@ public class SocialWorkspaceActivityStreamFilter implements
                 RelationshipKind.fromString("socialworkspace:members"));
         actors.add(socialWorkspaceActivityObject);
         if (actors.isEmpty()) {
-            return Collections.emptyList();
+            return new ActivitiesListImpl();
         }
 
         query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) " +
@@ -117,7 +119,7 @@ public class SocialWorkspaceActivityStreamFilter implements
                 query.setFirstResult(currentPage * pageSize);
             }
         }
-        return query.getResultList();
+        return new ActivitiesListImpl(query.getResultList());
     }
 
     private UserRelationshipService getUserRelationshipService()

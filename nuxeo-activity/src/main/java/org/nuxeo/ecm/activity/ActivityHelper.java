@@ -55,16 +55,17 @@ public class ActivityHelper {
     }
 
     public static boolean isUser(String activityObject) {
-        return activityObject.startsWith(USER_PREFIX);
+        return activityObject != null && activityObject.startsWith(USER_PREFIX);
     }
 
     public static boolean isDocument(String activityObject) {
-        return activityObject.startsWith(DOC_PREFIX);
+        return activityObject != null && activityObject.startsWith(DOC_PREFIX);
     }
 
     public static String getUsername(String activityObject) {
         if (!isUser(activityObject)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(activityObject
+                    + " is not a user activity object");
         }
         return activityObject.replaceAll(USER_PREFIX, "");
     }
@@ -156,9 +157,11 @@ public class ActivityHelper {
         documentActivityObject = StringEscapeUtils.escapeHtml(documentActivityObject);
         displayValue = StringEscapeUtils.escapeHtml(displayValue);
         String link = "<a href=\"%s\" target=\"_top\">%s</a>";
-        return String.format(link, getDocumentURL(
-                ActivityHelper.getRepositoryName(documentActivityObject),
-                ActivityHelper.getDocumentId(documentActivityObject)),
+        return String.format(
+                link,
+                getDocumentURL(
+                        ActivityHelper.getRepositoryName(documentActivityObject),
+                        ActivityHelper.getDocumentId(documentActivityObject)),
                 displayValue);
     }
 

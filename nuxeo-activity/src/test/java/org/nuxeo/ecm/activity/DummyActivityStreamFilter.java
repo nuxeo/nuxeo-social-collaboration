@@ -18,8 +18,6 @@
 package org.nuxeo.ecm.activity;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,9 +47,11 @@ public class DummyActivityStreamFilter implements ActivityStreamFilter {
     }
 
     @Override
-    public List<Activity> query(ActivityStreamService activityStreamService,
+    public ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, int pageSize, int currentPage) {
-        return Collections.singletonList(lastActivity);
+        ActivitiesList list = new ActivitiesListImpl();
+        list.add(lastActivity);
+        return list;
     }
 
 }

@@ -13,9 +13,11 @@
       <emptySentence>label.no.activity</emptySentence>
       <translateEmptySentence>true</translateEmptySentence>
 
-      <pageProvider name="activity_stream_for_actor">
+      <pageProvider name="user_activity_stream">
         <property name="actor">#{currentUser.name}</property>
         <property name="locale">#{localeSelector.locale}</property>
+        <property name="coreSession">#{documentManager}</property>
+        <property name="streamType">forActor</property>
       </pageProvider>
       <showPageSizeSelector>false</showPageSizeSelector>
       <showRefreshCommand>false</showRefreshCommand>

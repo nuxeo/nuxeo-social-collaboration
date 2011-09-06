@@ -17,8 +17,10 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.REPOSITORY_NAME_PARAMETER;
-import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.SOCIAL_WORKSPACE_ID_PARAMETER;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.CORE_SESSION_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.LOCALE_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.REPOSITORY_NAME_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.SOCIAL_WORKSPACE_ID_PROPERTY;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
@@ -31,8 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.nuxeo.ecm.activity.Activity;
-import org.nuxeo.ecm.activity.ActivityStreamService;
+import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -42,10 +43,14 @@ import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.platform.query.api.PageProvider;
+import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
+ * Operation to get the activity stream for a given Social Workspace.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
@@ -54,11 +59,13 @@ public class GetSocialWorkspaceActivityStream {
 
     public static final String ID = "Services.GetSocialWorkspaceActivityStream";
 
+    public static final String PROVIDER_NAME = "social_workspace_activity_stream";
+
     @Context
     protected CoreSession session;
 
     @Context
-    protected ActivityStreamService activityStreamService;
+    protected PageProviderService pageProviderService;
 
     @Context
     protected SocialWorkspaceService socialWorkspaceService;
@@ -75,13 +82,16 @@ public class GetSocialWorkspaceActivityStream {
     @Param(name = "pageSize", required = false)
     protected Integer pageSize;
 
+    @SuppressWarnings("unchecked")
     @OperationMethod
     public Blob run() throws Exception {
-        if (pageSize == null) {
-            pageSize = 0;
+        Long targetPage = null;
+        if (page != null) {
+            targetPage = page.longValue();
         }
-        if (page == null) {
-            page = 0;
+        Long targetPageSize = null;
+        if (pageSize != null) {
+            targetPageSize = pageSize.longValue();
         }
 
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
@@ -89,25 +99,25 @@ public class GetSocialWorkspaceActivityStream {
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(
                 language) : Locale.ENGLISH;
+
+        Map<String, Serializable> props = new HashMap<String, Serializable>();
+        props.put(SOCIAL_WORKSPACE_ID_PROPERTY, socialWorkspace.getId());
+        props.put(REPOSITORY_NAME_PROPERTY,
+                socialWorkspace.getDocument().getRepositoryName());
+        props.put(LOCALE_PROPERTY, locale);
+        props.put(CORE_SESSION_PROPERTY, (Serializable) session);
+        PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
+                PROVIDER_NAME, null, targetPageSize, targetPage, props);
+
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
-
-        Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-        parameters.put(REPOSITORY_NAME_PARAMETER,
-                socialWorkspace.getDocument().getRepositoryName());
-        parameters.put(SOCIAL_WORKSPACE_ID_PARAMETER, socialWorkspace.getId());
-        List<Activity> activities = activityStreamService.query(
-                SocialWorkspaceActivityStreamFilter.ID, parameters, pageSize,
-                page);
-
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
-        for (Activity activity : activities) {
+        for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", activity.getId());
-            o.put("activityMessage",
-                    activityStreamService.toFormattedMessage(activity, locale));
+            o.put("id", activityMessage.getActivityId());
+            o.put("activityMessage", activityMessage.getMessage());
             o.put("publishedDate",
-                    dateFormat.format(activity.getPublishedDate()));
+                    dateFormat.format(activityMessage.getPublishedDate()));
             m.add(o);
         }
 

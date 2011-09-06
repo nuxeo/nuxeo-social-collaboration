@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.nuxeo.ecm.activity.ActivitiesList;
+import org.nuxeo.ecm.activity.ActivitiesListImpl;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
@@ -78,7 +80,7 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Activity> query(ActivityStreamService activityStreamService,
+    public ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, int pageSize, int currentPage) {
         QueryType queryType = (QueryType) parameters.get(QUERY_TYPE_PARAMETER);
         if (queryType == null) {
@@ -118,7 +120,7 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
                 query.setFirstResult(currentPage * pageSize);
             }
         }
-        return query.getResultList();
+        return new ActivitiesListImpl(query.getResultList());
     }
 
     private UserRelationshipService getUserRelationshipService()

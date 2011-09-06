@@ -18,8 +18,6 @@
 package org.nuxeo.ecm.activity;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -67,16 +65,16 @@ public class TweetActivityStreamFilter implements ActivityStreamFilter {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Activity> query(ActivityStreamService activityStreamService,
+    public ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, int pageSize, int currentPage) {
         if (parameters.containsKey("seenBy")) {
             String seenBy = (String) parameters.get("seenBy");
             EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
             Query query = em.createQuery("select activity from Tweet tweet, Activity activity where tweet.seenBy=:seenBy and tweet.activityId = activity.id");
             query.setParameter("seenBy", seenBy);
-            return query.getResultList();
+            return new ActivitiesListImpl(query.getResultList());
         }
-        return Collections.emptyList();
+        return new ActivitiesListImpl();
     }
 
 }

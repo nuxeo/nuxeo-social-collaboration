@@ -25,13 +25,20 @@ import java.util.Date;
  */
 public final class ActivityMessage {
 
+    private final long activityId;
+
     private final String message;
 
     private final Date publishedDate;
 
-    public ActivityMessage(String message, Date publishedDate) {
+    public ActivityMessage(long activityId, String message, Date publishedDate) {
+        this.activityId = activityId;
         this.message = message;
         this.publishedDate = publishedDate;
+    }
+
+    public long getActivityId() {
+        return activityId;
     }
 
     public String getMessage() {

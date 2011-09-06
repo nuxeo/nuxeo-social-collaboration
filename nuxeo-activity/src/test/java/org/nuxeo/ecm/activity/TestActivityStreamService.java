@@ -38,7 +38,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
-import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
@@ -233,9 +232,12 @@ public class TestActivityStreamService {
         assertTrue(activityMessageLabels.containsKey(DOCUMENT_UPDATED));
         assertTrue(activityMessageLabels.containsKey(DOCUMENT_REMOVED));
 
-        assertEquals("label.activity.documentCreated", activityMessageLabels.get(DOCUMENT_CREATED));
-        assertEquals("label.activity.documentUpdated", activityMessageLabels.get(DOCUMENT_UPDATED));
-        assertEquals("label.activity.documentRemoved", activityMessageLabels.get(DOCUMENT_REMOVED));
+        assertEquals("label.activity.documentCreated",
+                activityMessageLabels.get(DOCUMENT_CREATED));
+        assertEquals("label.activity.documentUpdated",
+                activityMessageLabels.get(DOCUMENT_UPDATED));
+        assertEquals("label.activity.documentRemoved",
+                activityMessageLabels.get(DOCUMENT_REMOVED));
     }
 
 }
