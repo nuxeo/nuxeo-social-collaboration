@@ -25,6 +25,7 @@ import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvide
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,8 @@ public class GetActivityStreamForActor {
 
     public static final String ID = "Services.GetActivityStreamForActor";
 
+    public static final String PROVIDER_NAME = "user_activity_stream";
+
     @Context
     protected CoreSession session;
 
@@ -78,6 +81,7 @@ public class GetActivityStreamForActor {
     @Param(name = "pageSize", required = false)
     protected Integer pageSize;
 
+    @SuppressWarnings("unchecked")
     @OperationMethod
     public Blob run() throws Exception {
         if (StringUtils.isBlank(actor)) {
@@ -105,14 +109,17 @@ public class GetActivityStreamForActor {
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                "user_activity_stream", null, targetPageSize, targetPage, props);
+                PROVIDER_NAME, null, targetPageSize, targetPage, props);
 
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
+                locale);
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", activityMessage.getActivityId());
             o.put("activityMessage", activityMessage.getMessage());
-            o.put("publishedDate", activityMessage.getPublishedDate());
+            o.put("publishedDate",
+                    dateFormat.format(activityMessage.getPublishedDate()));
             m.add(o);
         }
 

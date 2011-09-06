@@ -15,12 +15,10 @@
  *     Thomas Roger <troger@nuxeo.com>
  */
 
-package org.nuxeo.ecm.social.activity.stream;
+package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.ACTOR_PARAMETER;
-import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QUERY_TYPE_PARAMETER;
-import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FOR_ACTOR;
-import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter.QueryType.ACTIVITY_STREAM_FROM_ACTOR;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.REPOSITORY_NAME_PARAMETER;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.SOCIAL_WORKSPACE_ID_PARAMETER;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,37 +38,33 @@ import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Page provider listing activity messages for a given actor
+ * Page provider listing activity messages for a given social workspace
  * <p>
  * This page provider requires four properties:
  * <ul>
- * <li>the actor</li>
+ * <li>the social workspace ID</li>
+ * <li>the repository name</li>
  * <li>the CoreSession used to filter the Activities</li>
- * <li>the user activity stream type: for the actor or from the actor</li>
  * <li>the locale to internationalize the activity messages</li>
  * </ul>
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-public class UserActivityStreamPageProvider extends
-        AbstractPageProvider<ActivityMessage> {
+public class SocialWorkspaceActivityStreamPageProvider extends
+AbstractPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Log log = LogFactory.getLog(UserActivityStreamPageProvider.class);
+    private static final Log log = LogFactory.getLog(SocialWorkspaceActivityStreamPageProvider.class);
 
-    public static final String ACTOR_PROPERTY = "actor";
+    public static final String SOCIAL_WORKSPACE_ID_PROPERTY = "socialWorkspaceId";
+
+    public static final String REPOSITORY_NAME_PROPERTY = "repositoryName";
 
     public static final String LOCALE_PROPERTY = "locale";
 
     public static final String CORE_SESSION_PROPERTY = "coreSession";
-
-    public static final String STREAM_TYPE_PROPERTY = "streamType";
-
-    public static final String FOR_ACTOR_STREAM_TYPE = "forActor";
-
-    public static final String FROM_ACTOR_STREAM_TYPE = "fromActor";
 
     protected List<ActivityMessage> pageActivityMessages;
 
@@ -81,42 +75,40 @@ public class UserActivityStreamPageProvider extends
             long pageSize = getMinMaxPageSize();
 
             ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
-            String streamType = getStreamType();
-            if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
-                Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-                parameters.put(ACTOR_PARAMETER, getActor());
-                parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
-                ActivitiesList activities = activityStreamService.query(
-                        UserActivityStreamFilter.ID, parameters,
-                        (int) pageSize, (int) getCurrentPageIndex());
-                activities = activities.filterActivities(getCoreSession());
-                pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
-            } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
-                Map<String, Serializable> parameters = new HashMap<String, Serializable>();
-                parameters.put(ACTOR_PARAMETER, getActor());
-                parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
-                ActivitiesList activities = activityStreamService.query(
-                        UserActivityStreamFilter.ID, parameters,
-                        (int) pageSize, (int) getCurrentPageIndex());
-                activities = activities.filterActivities(getCoreSession());
-                pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
-            } else {
-                log.error("Unknown stream type: " + streamType);
-            }
+            Map<String, Serializable> parameters = new HashMap<String, Serializable>();
+            parameters.put(REPOSITORY_NAME_PARAMETER, getRepositoryName());
+            parameters.put(SOCIAL_WORKSPACE_ID_PARAMETER,
+                    getSocialWorkspaceId());
+
+            ActivitiesList activities = activityStreamService.query(
+                    SocialWorkspaceActivityStreamFilter.ID, parameters,
+                    (int) pageSize, (int) getCurrentPageIndex());
+            activities = activities.filterActivities(getCoreSession());
+            pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
 
             resultsCount = Integer.MAX_VALUE - 1;
         }
         return pageActivityMessages;
     }
 
-    protected String getActor() {
+    protected String getSocialWorkspaceId() {
         Map<String, Serializable> props = getProperties();
-        String actor = (String) props.get(ACTOR_PROPERTY);
-        if (actor == null) {
-            throw new ClientRuntimeException("Cannot find " + ACTOR_PROPERTY
-                    + " property.");
+        String socialWorkspaceId = (String) props.get(SOCIAL_WORKSPACE_ID_PROPERTY);
+        if (socialWorkspaceId == null) {
+            throw new ClientRuntimeException("Cannot find "
+                    + SOCIAL_WORKSPACE_ID_PROPERTY + " property.");
         }
-        return actor;
+        return socialWorkspaceId;
+    }
+
+    protected String getRepositoryName() {
+        Map<String, Serializable> props = getProperties();
+        String repositoryName = (String) props.get(REPOSITORY_NAME_PROPERTY);
+        if (repositoryName == null) {
+            throw new ClientRuntimeException("Cannot find "
+                    + REPOSITORY_NAME_PROPERTY + " property.");
+        }
+        return repositoryName;
     }
 
     protected Locale getLocale() {
@@ -137,15 +129,6 @@ public class UserActivityStreamPageProvider extends
                     + CORE_SESSION_PROPERTY + " property.");
         }
         return session;
-    }
-
-    protected String getStreamType() {
-        Map<String, Serializable> props = getProperties();
-        String streamType = (String) props.get(STREAM_TYPE_PROPERTY);
-        if (streamType == null) {
-            streamType = FOR_ACTOR_STREAM_TYPE;
-        }
-        return streamType;
     }
 
     @Override
