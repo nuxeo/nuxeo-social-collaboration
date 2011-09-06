@@ -3,17 +3,25 @@
      xmlns:nxl="http://nuxeo.org/nxforms/layout">
 
   <h:form id="editSocialWorkspaceGroups">
-    <h2>#{messages['label.social.workspace.groups.administrator']}</h2>
-    <p>#{messages['label.membership.management.bulk.import.description']}</p>
-    <h:inputTextarea name="social_workspace_group_import"
-      value="#{bulkImportSocialWorkspaceActions.rawListOfEmails}" />
+    <h2>#{messages['label.social.workspace.bulk.import.list']}</h2>
+    <p>#{messages['label.social.workspace.bulk.import.description']}</p>
+
+    <table class="dataInput">
+      <tbody>
+        <tr>
+          <td class="iconColumn" style="vertical-align:top;"></td>
+          <td class="labelColumn">#{messages['label.social.workspace.bulk.widget.emails']}</td>
+          <td class="fieldColumn"><h:inputTextarea value="#{bulkImportSocialWorkspaceActions.rawListOfEmails}" /></td>
+        </tr>
+      </tbody>
+    </table>
 
     <h:commandButton
       value="#{messages['command.import']}"
       action="#{bulkImportSocialWorkspaceActions.importUserFromListOfEmail}"
       styleClass="button"/>
     
-    <h2>#{messages['label.social.workspace.groups.administrator']}</h2>
+    <h2>#{messages['label.social.workspace.bulk.import.group']}</h2>
     <nxl:layout name="social_workspace_group_import" mode="edit"
                 value="#{bulkImportSocialWorkspaceActions.groupsToImport}" />
 
@@ -24,3 +32,4 @@
   </h:form>
 
 </div>
+
