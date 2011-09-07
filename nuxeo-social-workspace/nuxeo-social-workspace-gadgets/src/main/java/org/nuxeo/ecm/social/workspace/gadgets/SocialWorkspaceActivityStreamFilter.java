@@ -23,7 +23,6 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.MAKE_DOCUMENT_PUBLI
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -107,8 +106,8 @@ public class SocialWorkspaceActivityStreamFilter implements
             return new ActivitiesListImpl();
         }
 
-        query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) " +
-                "and activity.target = :target order by activity.publishedDate desc");
+        query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) "
+                + "and activity.target = :target order by activity.publishedDate desc");
         query.setParameter("actors", actors);
         query.setParameter("target", socialWorkspaceActivityObject);
         query.setParameter("verbs", Arrays.asList(VERBS));

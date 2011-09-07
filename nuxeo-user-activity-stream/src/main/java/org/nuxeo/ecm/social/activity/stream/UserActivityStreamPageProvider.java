@@ -74,6 +74,8 @@ public class UserActivityStreamPageProvider extends
 
     protected List<ActivityMessage> pageActivityMessages;
 
+    protected long nextOffset = 0;
+
     @Override
     public List<ActivityMessage> getCurrentPage() {
         if (pageActivityMessages == null) {
@@ -89,6 +91,7 @@ public class UserActivityStreamPageProvider extends
                 ActivitiesList activities = activityStreamService.query(
                         UserActivityStreamFilter.ID, parameters,
                         getCurrentPageOffset(), pageSize);
+                nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
                 pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
@@ -98,13 +101,14 @@ public class UserActivityStreamPageProvider extends
                 ActivitiesList activities = activityStreamService.query(
                         UserActivityStreamFilter.ID, parameters,
                         getCurrentPageOffset(), pageSize);
+                nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
                 pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
 
-            resultsCount = Long.MAX_VALUE - 1;
+            setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageActivityMessages;
     }
@@ -146,6 +150,10 @@ public class UserActivityStreamPageProvider extends
             streamType = FOR_ACTOR_STREAM_TYPE;
         }
         return streamType;
+    }
+
+    public long getNextOffset() {
+        return nextOffset;
     }
 
     @Override

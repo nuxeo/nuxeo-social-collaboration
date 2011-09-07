@@ -3,6 +3,13 @@ var prefs = new gadgets.Prefs();
 var currentActivities = [];
 var waitingActivities = [];
 
+var offset = 0;
+var limit = 10;
+var waitingOffset = 0;
+var waitingLimit = 0;
+
+var hasMoreActivities = true;
+
 var socialWorkspacePath = getTargetContextPath();
 
 function displayActivities() {
@@ -24,18 +31,70 @@ function displayActivities() {
   }
 
   _gel('activitiesContainer').innerHTML = htmlContent;
+  if (hasMoreActivities) {
+    addMoreActivitiesBar();
+  } else {
+    addNoMoreActivitiesText();
+  }
   gadgets.window.adjustHeight();
+}
+
+function addMoreActivitiesBar() {
+  var bar = document.createElement('div');
+  bar.id = 'moreActivitiesBar';
+  bar.className = 'moreActivitiesBar';
+  bar.innerHTML = prefs.getMsg('label.show.more.activities');
+  bar.onclick = showMoreActivities;
+  var container = _gel('activitiesContainer');
+  container.insertBefore(bar, null);
+}
+
+function addNoMoreActivitiesText() {
+  var bar = document.createElement('div');
+  bar.id = 'moreActivitiesBar';
+  bar.className = 'moreActivitiesBar noMore';
+  bar.innerHTML = prefs.getMsg('label.no.more.activities');
+  var container = _gel('activitiesContainer');
+  container.insertBefore(bar, null);
+}
+
+function showMoreActivities() {
+  var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceActivityStream',
+    operationParams: {
+      language: prefs.getLang(),
+      contextPath: socialWorkspacePath,
+      offset: offset,
+      limit: limit
+    },
+    operationContext: {},
+    operationCallback: function(response, params) {
+      var newActivities = response.data.activities;
+      if (newActivities.length > 0) {
+        currentActivities = currentActivities.concat(newActivities);
+        offset = response.data.offset;
+        limit = response.data.limit;
+      } else {
+        hasMoreActivities = false;
+      }
+      displayActivities();
+    }
+  };
+
+  doAutomationRequest(NXRequestParams);
 }
 
 function loadActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceActivityStream',
     operationParams: {
       language: prefs.getLang(),
-      contextPath: socialWorkspacePath
+      contextPath: socialWorkspacePath,
+      limit: limit
     },
     operationContext: {},
     operationCallback: function(response, params) {
-      currentActivities = response.data;
+      currentActivities = response.data.activities;
+      offset = response.data.offset;
+      limit = response.data.limit;
       displayActivities();
     }
   };
@@ -47,14 +106,17 @@ function pollActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceActivityStream',
     operationParams: {
       language: prefs.getLang(),
-      contextPath: socialWorkspacePath
+      contextPath: socialWorkspacePath,
+      limit: limit
     },
     operationContext: {},
     operationCallback: function(response, params) {
-      var newActivities = response.data;
+      var newActivities = response.data.activities;
       if (newActivities.length > 0 && currentActivities[0].id !== newActivities[0].id) {
         // there is at least one new activity
         waitingActivities = newActivities;
+        waitingOffset = response.data.offset;
+        waitingLimit = response.data.limit;
         addNewActivitiesBar();
         gadgets.window.adjustHeight();
       }
@@ -80,6 +142,8 @@ function addNewActivitiesBar() {
 
 function showNewActivities() {
   currentActivities = waitingActivities;
+  offset = waitingOffset;
+  limit = waitingLimit;
   displayActivities();
 }
 

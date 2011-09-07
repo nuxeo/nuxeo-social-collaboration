@@ -52,7 +52,7 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.4.3
  */
 public class SocialWorkspaceActivityStreamPageProvider extends
-AbstractPageProvider<ActivityMessage> {
+        AbstractPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -67,6 +67,8 @@ AbstractPageProvider<ActivityMessage> {
     public static final String CORE_SESSION_PROPERTY = "coreSession";
 
     protected List<ActivityMessage> pageActivityMessages;
+
+    protected long nextOffset = 0;
 
     @Override
     public List<ActivityMessage> getCurrentPage() {
@@ -83,6 +85,7 @@ AbstractPageProvider<ActivityMessage> {
             ActivitiesList activities = activityStreamService.query(
                     SocialWorkspaceActivityStreamFilter.ID, parameters,
                     getCurrentPageOffset(), pageSize);
+            nextOffset = offset + activities.size();
             activities = activities.filterActivities(getCoreSession());
             pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
 
@@ -129,6 +132,10 @@ AbstractPageProvider<ActivityMessage> {
                     + CORE_SESSION_PROPERTY + " property.");
         }
         return session;
+    }
+
+    public long getNextOffset() {
+        return nextOffset;
     }
 
     @Override

@@ -46,6 +46,7 @@ import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter;
+import org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider;
 
 /**
  * Operation to get the activity stream for or from a given actor.
@@ -114,15 +115,21 @@ public class GetActivityStreamForActor {
 
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
-        List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", activityMessage.getActivityId());
             o.put("activityMessage", activityMessage.getMessage());
             o.put("publishedDate",
                     dateFormat.format(activityMessage.getPublishedDate()));
-            m.add(o);
+            activities.add(o);
         }
+
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("offset",
+                ((UserActivityStreamPageProvider) pageProvider).getNextOffset());
+        m.put("limit", pageProvider.getPageSize());
+        m.put("activities", activities);
 
         ObjectMapper mapper = new ObjectMapper();
         StringWriter writer = new StringWriter();
