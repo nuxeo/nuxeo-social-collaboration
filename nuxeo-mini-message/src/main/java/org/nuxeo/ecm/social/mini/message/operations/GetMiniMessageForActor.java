@@ -45,6 +45,7 @@ import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
+import org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider;
 
 /**
  * Operation to get the mini messages for a given actor.
@@ -100,9 +101,9 @@ public class GetMiniMessageForActor {
         if (offset != null) {
             targetOffset = offset.longValue();
         }
-        Long targetPageSize = null;
+        Long targetLimit = null;
         if (limit != null) {
-            targetPageSize = limit.longValue();
+            targetLimit = limit.longValue();
         }
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
@@ -112,7 +113,7 @@ public class GetMiniMessageForActor {
 
         @SuppressWarnings("unchecked")
         PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                "mini_messages", null, targetPageSize, 0L, props);
+                "mini_messages", null, targetLimit, 0L, props);
         pageProvider.setCurrentPageOffset(targetOffset);
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(
@@ -120,7 +121,7 @@ public class GetMiniMessageForActor {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
 
-        List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
         for (MiniMessage miniMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", miniMessage.getId());
@@ -132,8 +133,14 @@ public class GetMiniMessageForActor {
             o.put("isCurrentUserMiniMessage",
                     session.getPrincipal().getName().equals(
                             miniMessage.getActor()));
-            m.add(o);
+            miniMessages.add(o);
         }
+
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("offset",
+                ((MiniMessagePageProvider) pageProvider).getNextOffset());
+        m.put("limit", pageProvider.getCurrentPageSize());
+        m.put("miniMessages", miniMessages);
 
         ObjectMapper mapper = new ObjectMapper();
         StringWriter writer = new StringWriter();

@@ -4,6 +4,13 @@ var socialWorkspacePath = getTargetContextPath();
 var currentMiniMessages = [];
 var waitingMiniMessages = [];
 
+var offset = 0;
+var limit = 5;
+var waitingOffset = 0;
+var waitingLimit = 0;
+
+var hasMoreMiniMessages = true;
+
 function displayMiniMessages() {
   var htmlContent = '';
 
@@ -29,18 +36,70 @@ function displayMiniMessages() {
   }
 
   _gel('miniMessagesContainer').innerHTML = htmlContent;
+  if (hasMoreMiniMessages) {
+    addMoreMiniMessagesBar();
+  } else {
+    addNoMoreMiniMessageText();
+  }
   gadgets.window.adjustHeight();
+}
+
+function addMoreMiniMessagesBar() {
+  var bar = document.createElement('div');
+  bar.id = 'moreMiniMessagesBar';
+  bar.className = 'moreMiniMessagesBar';
+  bar.innerHTML = prefs.getMsg('label.show.more.mini.messages');
+  bar.onclick = showMoreMiniMessages;
+  var container = _gel('miniMessagesContainer');
+  container.insertBefore(bar, null);
+}
+
+function addNoMoreMiniMessageText() {
+  var bar = document.createElement('div');
+  bar.id = 'moreMiniMessagesBar';
+  bar.className = 'moreMiniMessagesBar noMore';
+  bar.innerHTML = prefs.getMsg('label.no.more.mini.messages');
+  var container = _gel('miniMessagesContainer');
+  container.insertBefore(bar, null);
+}
+
+function showMoreMiniMessages() {
+  var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
+    operationParams: {
+      language: prefs.getLang(),
+      contextPath: socialWorkspacePath,
+      offset: offset,
+      limit: limit
+    },
+    operationContext: {},
+    operationCallback: function(response, params) {
+      var newMiniMessages = response.data.miniMessages;
+      if (newMiniMessages.length > 0) {
+        currentMiniMessages = currentMiniMessages.concat(response.data.miniMessages);
+        offset = response.data.offset;
+        limit = response.data.limit;
+      } else {
+        hasMoreMiniMessages = false;
+      }
+      displayMiniMessages();
+    }
+  };
+
+  doAutomationRequest(NXRequestParams);
 }
 
 function loadMiniMessages() {
   var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
     operationParams: {
       language: prefs.getLang(),
-      contextPath: socialWorkspacePath
+      contextPath: socialWorkspacePath,
+      limit: limit
     },
     operationContext: {},
     operationCallback: function(response, params) {
-      currentMiniMessages = response.data;
+      currentMiniMessages = response.data.miniMessages;
+      offset = response.data.offset;
+      limit = response.data.limit;
       displayMiniMessages();
     }
   };
@@ -52,14 +111,17 @@ function pollMiniMessages() {
 var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
   operationParams: {
     language: prefs.getLang(),
-    contextPath: socialWorkspacePath
+    contextPath: socialWorkspacePath,
+    limit: limit
   },
   operationContext: {},
   operationCallback: function(response, params) {
-    var newMiniMessages = response.data;
+    var newMiniMessages = response.data.miniMessages;
     if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
       // there is at least one new mini message
       waitingMiniMessages = newMiniMessages;
+      waitingOffset = response.data.offset;
+      waitingLimit = response.data.limit;
       addNewMiniMessagesBar();
       gadgets.window.adjustHeight();
     }
@@ -85,6 +147,8 @@ function addNewMiniMessagesBar() {
 
 function showNewMiniMessages() {
   currentMiniMessages = waitingMiniMessages;
+  offset = waitingOffset;
+  limit = waitingLimit;
   displayMiniMessages();
 }
 

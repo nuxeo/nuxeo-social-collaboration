@@ -19,9 +19,9 @@ package org.nuxeo.ecm.social.mini.message;
 
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.ACTOR_PARAMETER;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QUERY_TYPE_PARAMETER;
+import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FOR_ACTOR;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FROM_ACTOR;
-import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 
 import java.io.Serializable;
 import java.security.Principal;
@@ -72,8 +72,7 @@ public class MiniMessageServiceImpl implements MiniMessageService {
         parameters.put(ACTOR_PARAMETER, actorActivityObject);
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FOR_ACTOR);
         List<Activity> activities = getActivityStreamService().query(
-                MiniMessageActivityStreamFilter.ID, parameters, offset,
-                limit);
+                MiniMessageActivityStreamFilter.ID, parameters, offset, limit);
 
         List<MiniMessage> miniMessages = new ArrayList<MiniMessage>();
         for (Activity activity : activities) {
@@ -89,8 +88,7 @@ public class MiniMessageServiceImpl implements MiniMessageService {
         parameters.put(ACTOR_PARAMETER, actorActivityObject);
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FROM_ACTOR);
         List<Activity> activities = getActivityStreamService().query(
-                MiniMessageActivityStreamFilter.ID, parameters, offset,
-                limit);
+                MiniMessageActivityStreamFilter.ID, parameters, offset, limit);
 
         List<MiniMessage> miniMessages = new ArrayList<MiniMessage>();
         for (Activity activity : activities) {

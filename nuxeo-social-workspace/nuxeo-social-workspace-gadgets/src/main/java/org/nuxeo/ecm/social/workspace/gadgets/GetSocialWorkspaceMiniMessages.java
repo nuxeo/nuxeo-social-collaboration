@@ -17,15 +17,10 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.REPOSITORY_NAME_PARAMETER;
-import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamFilter.SOCIAL_WORKSPACE_ID_PARAMETER;
-
 import java.io.ByteArrayInputStream;
-import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -33,9 +28,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
-import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -113,11 +106,10 @@ public class GetSocialWorkspaceMiniMessages {
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
                 socialWorkspace.getDocument().getRepositoryName(),
                 socialWorkspace.getId());
-        List<MiniMessage> miniMessages = miniMessageService.getMiniMessageFor(
-                socialWorkspaceActivityObject, kind, offset, limit);
 
-        List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
-        for (MiniMessage miniMessage : miniMessages) {
+        List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
+        for (MiniMessage miniMessage : miniMessageService.getMiniMessageFor(
+                socialWorkspaceActivityObject, kind, offset, limit)) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", miniMessage.getId());
             o.put("actor", miniMessage.getActor());
@@ -128,8 +120,13 @@ public class GetSocialWorkspaceMiniMessages {
             o.put("isCurrentUserMiniMessage",
                     session.getPrincipal().getName().equals(
                             miniMessage.getActor()));
-            m.add(o);
+            miniMessages.add(o);
         }
+
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("offset", offset + miniMessages.size());
+        m.put("limit", limit);
+        m.put("miniMessages", miniMessages);
 
         ObjectMapper mapper = new ObjectMapper();
         StringWriter writer = new StringWriter();

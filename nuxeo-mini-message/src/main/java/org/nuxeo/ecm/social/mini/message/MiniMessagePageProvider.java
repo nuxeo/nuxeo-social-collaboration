@@ -40,8 +40,8 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-public class MiniMessagePageProvider extends
-        AbstractPageProvider<MiniMessage> implements PageProvider<MiniMessage> {
+public class MiniMessagePageProvider extends AbstractPageProvider<MiniMessage>
+        implements PageProvider<MiniMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,6 +61,8 @@ public class MiniMessagePageProvider extends
 
     protected List<MiniMessage> pageMiniMessages;
 
+    protected long nextOffset = 0;
+
     @Override
     public List<MiniMessage> getCurrentPage() {
         if (pageMiniMessages == null) {
@@ -70,17 +72,16 @@ public class MiniMessagePageProvider extends
             String streamType = getStreamType();
             if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
                 pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFor(
-                    getActor(), getRelationshipKind(), getCurrentPageOffset(),
-                    pageSize));
+                        getActor(), getRelationshipKind(),
+                        getCurrentPageOffset(), pageSize));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
                 pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFrom(
-                        getActor(), getCurrentPageOffset(),
-                        pageSize));
+                        getActor(), getCurrentPageOffset(), pageSize));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
-
-            resultsCount = Long.MAX_VALUE - 1;
+            nextOffset = offset + pageMiniMessages.size();
+            setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageMiniMessages;
     }
@@ -130,6 +131,10 @@ public class MiniMessagePageProvider extends
                     + RELATIONSHIP_KIND_PROPERTY + " property.");
         }
         return RelationshipKind.fromString(relationshipKind);
+    }
+
+    public long getNextOffset() {
+        return nextOffset;
     }
 
     @Override
