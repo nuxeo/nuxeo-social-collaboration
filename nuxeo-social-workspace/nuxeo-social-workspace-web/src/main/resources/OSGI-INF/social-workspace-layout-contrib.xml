@@ -325,13 +325,13 @@
       </rows>
     </layout>
 
-    <layout name="social_workspace_group_import">
+    <layout name="social_workspace_bulk_import">
       <templates>
         <template mode="any">/layouts/layout_default_template.xhtml</template>
       </templates>
       <rows>
         <row>
-          <widget>social_workspace_group_import</widget>
+          <widget>social_workspace_bulk_import</widget>
         </row>
       </rows>
     </layout>
@@ -552,7 +552,7 @@
       </properties>
     </widget>
 
-    <widget name="social_workspace_group_import" type="template">
+    <widget name="social_workspace_bulk_import" type="template">
       <labels>
         <label mode="any">label.groupManager.groups</label>
       </labels>
