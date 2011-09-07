@@ -38,6 +38,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.utils.i18n.I18NUtils;
@@ -511,8 +512,11 @@ public class SocialWebEngineRoot extends ModuleRoot {
         }
     }
 
-    public String escapeSingleQuote(String text) {
-        return NXQLQueryBuilder.prepareStringLiteral(text, false, true);
+    public String escape(String text) {
+    	text = StringEscapeUtils.escapeJavaScript(text);
+    	text = StringEscapeUtils.escapeHtml(text);
+    	text = StringEscapeUtils.escapeXml(text);
+    	return text;
     }
 
     /**

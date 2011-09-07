@@ -24,7 +24,7 @@
     <tr>
       <td><img src="${contextPath}${doc["common:icon"]}" alt="icon"/></td>
       <#if doc.isFolder>
-        <td><a href="javascript: documentList('${doc.id}')" class="navigation">${doc.title}</a></td>
+        <td><a href="javascript: documentList('${doc.id}')" class="navigation">${doc.title?xml}</a></td>
       <#else>
         <td><a href="javascript: goToDocument('${doc.path}', '${fullscreen_views[doc.id]}')" class="navigation">${doc.title}</a></td>
       </#if>
@@ -32,20 +32,20 @@
       <td>${doc["dc:creator"]}</td>
       <td>
         <#if removable?seq_contains(doc.id)>
-          <a class="button" href="javascript:confirmDeleteDocument('${doc.id}' , '${This.escapeSingleQuote(doc.title)}' )">
+          <a class="button" href="javascript:confirmDeleteDocument('${doc.id}' , '${This.escape(doc.title)}' )">
             <img src="${contextPath}/icons/action_delete.gif" alt="remove"></img>
             <div class="tooltip">${Context.getMessage("tooltip.remove.document")}</div>
           </a>
         </#if>
         <#if isPublicSocialWorkspace>
           <#if publishablePublic?seq_contains(doc.id)>
-            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${This.escapeSingleQuote(doc.title)}', true )">
+            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', true )">
               <img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></img>
               <div class="tooltip">${Context.getMessage("tooltip.publish.document")}</div>
             </a>
           </#if>
           <#if publishablePrivate?seq_contains(doc.id)>
-            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${This.escapeSingleQuote(doc.title)}', false )">
+            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', false )">
               <img src="${skinPath}/icons/publish_to_social_workspace.png" alt="make it public"></img>
               <div class="tooltip">${Context.getMessage("tooltip.restrict.document")}</div>
             </a>
