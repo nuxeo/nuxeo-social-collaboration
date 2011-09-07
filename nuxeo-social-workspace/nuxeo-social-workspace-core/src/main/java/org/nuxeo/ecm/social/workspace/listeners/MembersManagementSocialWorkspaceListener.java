@@ -45,7 +45,8 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.Event;
-import org.nuxeo.ecm.core.event.EventListener;
+import org.nuxeo.ecm.core.event.EventBundle;
+import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.Functions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -59,7 +60,8 @@ import org.nuxeo.runtime.api.Framework;
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.4.3
  */
-public class MembersManagementSocialWorkspaceListener implements EventListener {
+public class MembersManagementSocialWorkspaceListener implements
+        PostCommitEventListener {
 
     private static Log log = LogFactory.getLog(MembersManagementSocialWorkspaceListener.class);
 
@@ -68,10 +70,16 @@ public class MembersManagementSocialWorkspaceListener implements EventListener {
     private static final String TEMPLATE_ADDED = "templates/memberNotificationNew.ftl";
 
     @Override
-    public void handleEvent(Event event) throws ClientException {
-        if (!(EVENT_MEMBERS_ADDED.equals(event.getName()) || EVENT_MEMBERS_REMOVED.equals(event.getName()))) {
-            return;
+    public void handleEvent(EventBundle eventBundle) throws ClientException {
+        if (eventBundle.containsEventName(EVENT_MEMBERS_ADDED)
+                || eventBundle.containsEventName(EVENT_MEMBERS_REMOVED)) {
+            for (Event event : eventBundle) {
+                handleEvent(event);
+            }
         }
+    }
+
+    public void handleEvent(Event event) throws ClientException {
         DocumentEventContext docCtx = (DocumentEventContext) event.getContext();
         SocialWorkspace sw = docCtx.getSourceDocument().getAdapter(
                 SocialWorkspace.class);
