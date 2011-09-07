@@ -51,19 +51,21 @@ public interface MiniMessageService {
      * {@code relationshipKind} is used to find people with whom the actor has a
      * relation.
      *
-     * @param pageSize the wanted page size.
-     * @param currentPage the current page index.
+     * @param offset the offset (starting at 0) into the list of mini messages.
+     * @param limit the maximum number of mini messages to retrieve, or 0 for all of
+     *            them.
      */
     List<MiniMessage> getMiniMessageFor(String actorActivityObject,
-            RelationshipKind relationshipKind, int pageSize, int currentPage);
+            RelationshipKind relationshipKind, long offset, long limit);
 
     /**
      * Returns the mini messages from the given {@code actorActivityObject}.
      *
-     * @param pageSize the wanted page size.
-     * @param currentPage the current page index.
+     * @param offset the offset (starting at 0) into the list of mini messages.
+     * @param limit the maximum number of mini messages to retrieve, or 0 for all of
+     *            them.
      */
     List<MiniMessage> getMiniMessageFrom(String actorActivityObject,
-            int pageSize, int currentPage);
+            long offset, long limit);
 
 }

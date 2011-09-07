@@ -82,7 +82,7 @@ AbstractPageProvider<ActivityMessage> {
 
             ActivitiesList activities = activityStreamService.query(
                     SocialWorkspaceActivityStreamFilter.ID, parameters,
-                    (int) pageSize, (int) getCurrentPageIndex());
+                    getCurrentPageOffset(), pageSize);
             activities = activities.filterActivities(getCoreSession());
             pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
 

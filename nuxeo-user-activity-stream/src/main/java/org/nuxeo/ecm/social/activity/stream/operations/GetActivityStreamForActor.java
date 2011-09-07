@@ -75,11 +75,11 @@ public class GetActivityStreamForActor {
     @Param(name = "activityStreamType", required = false)
     protected String activityStreamType;
 
-    @Param(name = "page", required = false)
-    protected Integer page;
+    @Param(name = "offset", required = false)
+    protected Integer offset;
 
-    @Param(name = "pageSize", required = false)
-    protected Integer pageSize;
+    @Param(name = "limit", required = false)
+    protected Integer limit;
 
     @SuppressWarnings("unchecked")
     @OperationMethod
@@ -91,13 +91,13 @@ public class GetActivityStreamForActor {
             activityStreamType = FOR_ACTOR_STREAM_TYPE;
         }
 
-        Long targetPage = null;
-        if (page != null) {
-            targetPage = page.longValue();
+        Long targetOffset = 0L;
+        if (offset != null) {
+            targetOffset = offset.longValue();
         }
-        Long targetPageSize = null;
-        if (pageSize != null) {
-            targetPageSize = pageSize.longValue();
+        Long targetLimit = null;
+        if (limit != null) {
+            targetLimit = limit.longValue();
         }
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(
@@ -109,7 +109,8 @@ public class GetActivityStreamForActor {
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, targetPageSize, targetPage, props);
+                PROVIDER_NAME, null, targetLimit, 0L, props);
+        pageProvider.setCurrentPageOffset(targetOffset);
 
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);

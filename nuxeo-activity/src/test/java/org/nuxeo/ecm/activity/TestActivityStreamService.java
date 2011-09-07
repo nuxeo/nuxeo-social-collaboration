@@ -147,28 +147,28 @@ public class TestActivityStreamService {
         addTestActivities(10);
 
         List<Activity> activities = activityStreamService.query(
-                ActivityStreamService.ALL_ACTIVITIES, null, 5, 1);
+                ActivityStreamService.ALL_ACTIVITIES, null, 0, 5);
         assertEquals(5, activities.size());
         for (int i = 0; i < 5; i++) {
             assertEquals("activity" + i, activities.get(i).getObject());
         }
 
         activities = activityStreamService.query(
-                ActivityStreamService.ALL_ACTIVITIES, null, 5, 2);
+                ActivityStreamService.ALL_ACTIVITIES, null, 5, 5);
         assertEquals(5, activities.size());
         for (int i = 5; i < 10; i++) {
             assertEquals("activity" + i, activities.get(i - 5).getObject());
         }
 
         activities = activityStreamService.query(
-                ActivityStreamService.ALL_ACTIVITIES, null, 15, 1);
+                ActivityStreamService.ALL_ACTIVITIES, null, 0, 15);
         assertEquals(10, activities.size());
         for (int i = 0; i < 10; i++) {
             assertEquals("activity" + i, activities.get(i).getObject());
         }
 
         activities = activityStreamService.query(
-                ActivityStreamService.ALL_ACTIVITIES, null, 5, 3);
+                ActivityStreamService.ALL_ACTIVITIES, null, 15, 5);
         assertEquals(0, activities.size());
     }
 

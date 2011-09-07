@@ -78,10 +78,10 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
 
     @Override
     public ActivitiesList query(String filterId,
-            final Map<String, Serializable> parameters, final int pageSize,
-            final int currentPage) {
+            final Map<String, Serializable> parameters, final long offset,
+            final long limit) {
         if (ALL_ACTIVITIES.equals(filterId)) {
-            return queryAllByPage(pageSize, currentPage);
+            return queryAll(offset, limit);
         }
 
         final ActivityStreamFilter filter = activityStreamFilters.get(filterId);
@@ -90,19 +90,19 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
                     "Unable to retrieve '%s' ActivityStreamFilter", filterId));
         }
 
-        return query(filter, parameters, pageSize, currentPage);
+        return query(filter, parameters, offset, limit);
     }
 
     protected ActivitiesList query(final ActivityStreamFilter filter,
-            final Map<String, Serializable> parameters, final int pageSize,
-            final int currentPage) {
+            final Map<String, Serializable> parameters, final long offset,
+            final long limit) {
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<ActivitiesList>() {
                         @Override
                         public ActivitiesList runWith(EntityManager em) {
-                            return query(em, filter, parameters, pageSize,
-                                    currentPage);
+                            return query(em, filter, parameters, offset,
+                                    limit);
                         }
                     });
         } catch (ClientException e) {
@@ -112,24 +112,24 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
 
     protected ActivitiesList query(EntityManager em,
             ActivityStreamFilter filter, Map<String, Serializable> parameters,
-            int pageSize, int currentPage) {
+            long offset, long limit) {
         try {
             localEntityManager.set(em);
-            return filter.query(this, parameters, pageSize, currentPage);
+            return filter.query(this, parameters, offset, limit);
         } finally {
             localEntityManager.remove();
         }
 
     }
 
-    protected ActivitiesList queryAllByPage(final int pageSize,
-            final int currentPage) {
+    protected ActivitiesList queryAll(final long offset,
+                                      final long limit) {
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<ActivitiesList>() {
                         @Override
                         public ActivitiesList runWith(EntityManager em) {
-                            return queryAllByPage(em, pageSize, currentPage);
+                            return queryAll(em, offset, limit);
                         }
                     });
         } catch (ClientException e) {
@@ -138,13 +138,13 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     }
 
     @SuppressWarnings("unchecked")
-    protected ActivitiesList queryAllByPage(EntityManager em, int pageSize,
-            int currentPage) {
+    protected ActivitiesList queryAll(EntityManager em, long offset,
+                                      long limit) {
         Query query = em.createQuery("from Activity activity");
-        if (pageSize > 0) {
-            query.setMaxResults(pageSize);
-            if (currentPage > 0) {
-                query.setFirstResult((currentPage - 1) * pageSize);
+        if (limit > 0) {
+            query.setMaxResults((int) limit);
+            if (offset > 0) {
+                query.setFirstResult((int) offset);
             }
         }
         return new ActivitiesListImpl(query.getResultList());
@@ -192,7 +192,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         }
 
         String labelKey = activityMessageLabels.get(activity.getVerb());
-        String messageTemplate = null;
+        String messageTemplate;
         try {
             messageTemplate = I18NUtils.getMessageString("messages", labelKey,
                     null, locale);

@@ -80,19 +80,19 @@ public class GetSocialWorkspaceMiniMessages {
     @Param(name = "language", required = false)
     protected String language;
 
-    @Param(name = "page", required = false)
-    protected Integer page;
+    @Param(name = "offset", required = false)
+    protected Integer offset;
 
-    @Param(name = "pageSize", required = false)
-    protected Integer pageSize;
+    @Param(name = "limit", required = false)
+    protected Integer limit;
 
     @OperationMethod
     public Blob run() throws Exception {
-        if (pageSize == null) {
-            pageSize = 0;
+        if (limit == null) {
+            limit = 0;
         }
-        if (page == null) {
-            page = 0;
+        if (offset == null) {
+            offset = 0;
         }
 
         RelationshipKind kind;
@@ -114,7 +114,7 @@ public class GetSocialWorkspaceMiniMessages {
                 socialWorkspace.getDocument().getRepositoryName(),
                 socialWorkspace.getId());
         List<MiniMessage> miniMessages = miniMessageService.getMiniMessageFor(
-                socialWorkspaceActivityObject, kind, pageSize, page);
+                socialWorkspaceActivityObject, kind, offset, limit);
 
         List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
         for (MiniMessage miniMessage : miniMessages) {

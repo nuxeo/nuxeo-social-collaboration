@@ -88,7 +88,7 @@ public class UserActivityStreamPageProvider extends
                 parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
                 ActivitiesList activities = activityStreamService.query(
                         UserActivityStreamFilter.ID, parameters,
-                        (int) pageSize, (int) getCurrentPageIndex());
+                        getCurrentPageOffset(), pageSize);
                 activities = activities.filterActivities(getCoreSession());
                 pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
@@ -97,14 +97,14 @@ public class UserActivityStreamPageProvider extends
                 parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
                 ActivitiesList activities = activityStreamService.query(
                         UserActivityStreamFilter.ID, parameters,
-                        (int) pageSize, (int) getCurrentPageIndex());
+                        getCurrentPageOffset(), pageSize);
                 activities = activities.filterActivities(getCoreSession());
                 pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
 
-            resultsCount = Integer.MAX_VALUE - 1;
+            resultsCount = Long.MAX_VALUE - 1;
         }
         return pageActivityMessages;
     }

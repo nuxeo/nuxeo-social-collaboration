@@ -70,17 +70,17 @@ public class MiniMessagePageProvider extends
             String streamType = getStreamType();
             if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
                 pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFor(
-                    getActor(), getRelationshipKind(), (int) pageSize,
-                    (int) getCurrentPageIndex()));
+                    getActor(), getRelationshipKind(), getCurrentPageOffset(),
+                    pageSize));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
                 pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFrom(
-                        getActor(), (int) pageSize,
-                        (int) getCurrentPageIndex()));
+                        getActor(), getCurrentPageOffset(),
+                        pageSize));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
 
-            resultsCount = Integer.MAX_VALUE - 1;
+            resultsCount = Long.MAX_VALUE - 1;
         }
         return pageMiniMessages;
     }

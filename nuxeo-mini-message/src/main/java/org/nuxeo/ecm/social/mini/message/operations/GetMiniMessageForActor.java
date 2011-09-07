@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +34,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -47,9 +45,6 @@ import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
-import org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider;
-import org.nuxeo.ecm.social.mini.message.MiniMessageService;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 
 /**
  * Operation to get the mini messages for a given actor.
@@ -82,11 +77,11 @@ public class GetMiniMessageForActor {
     @Param(name = "language", required = false)
     protected String language;
 
-    @Param(name = "page", required = false)
-    protected Integer page;
+    @Param(name = "offset", required = false)
+    protected Integer offset;
 
-    @Param(name = "pageSize", required = false)
-    protected Integer pageSize;
+    @Param(name = "limit", required = false)
+    protected Integer limit;
 
     @OperationMethod
     public Blob run() throws Exception {
@@ -101,21 +96,24 @@ public class GetMiniMessageForActor {
             miniMessagesStreamType = FOR_ACTOR_STREAM_TYPE;
         }
 
-        Long targetPage = null;
-        if (page != null) {
-            targetPage = page.longValue();
+        Long targetOffset = 0L;
+        if (offset != null) {
+            targetOffset = offset.longValue();
         }
         Long targetPageSize = null;
-        if (pageSize != null) {
-            targetPageSize = pageSize.longValue();
+        if (limit != null) {
+            targetPageSize = limit.longValue();
         }
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(STREAM_TYPE_PROPERTY, miniMessagesStreamType);
         props.put(ACTOR_PROPERTY, actor);
         props.put(RELATIONSHIP_KIND_PROPERTY, relationshipKind);
+
+        @SuppressWarnings("unchecked")
         PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                "mini_messages", null, targetPageSize, targetPage, props);
+                "mini_messages", null, targetPageSize, 0L, props);
+        pageProvider.setCurrentPageOffset(targetOffset);
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(
                 language) : Locale.ENGLISH;

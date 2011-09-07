@@ -48,15 +48,16 @@ public interface ActivityStreamService {
      *
      * @param filterId the id of the {@code ActivityStreamFilter} to use.
      * @param parameters this query parameters.
-     * @param pageSize the number results per page.
-     * @param currentPage the current page of results.
+     * @param offset the offset (starting at 0) into the list of activities.
+     * @param limit the maximum number of activities to retrieve, or 0 for all of
+     *            them.
      *
      * @throws org.nuxeo.ecm.core.api.ClientRuntimeException if there is no
      *             {@code ActivityStreamFilter} matching the given
      *             {@code filterId}.
      */
     ActivitiesList query(String filterId, Map<String, Serializable> parameters,
-            int pageSize, int currentPage);
+            long offset, long limit);
 
     /**
      * Returns the list of activities filtered by the given parameters using the

@@ -63,6 +63,7 @@ public class TestMiniMessagePageProviders extends AbstractMiniMessageTest {
         assertEquals(10, miniMessages.size());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void shouldPaginateMiniMessages() throws ClientException {
         initializeSomeMiniMessagesAndRelations();

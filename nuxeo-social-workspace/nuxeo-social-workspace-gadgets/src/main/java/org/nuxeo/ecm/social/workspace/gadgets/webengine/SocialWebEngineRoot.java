@@ -92,7 +92,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      * parameters:
      * <ul>
      * <li>docRef: parent document identifier (may be a path or an id)
-     * <li>pageSize: number of documents per page</li>
+     * <li>limit: number of documents per page</li>
      * <li>page: index of the current page</li>
      * <li>queryText (optional): search term</li>
      * </ul>
@@ -109,7 +109,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         // get the arguments
         String ref = formData.getString("docRef");
         String queryText = formData.getString("queryText");
-        int pageSize = getIntFromString(formData.getString("pageSize"));
+        int pageSize = getIntFromString(formData.getString("limit"));
         int page = getIntFromString(formData.getString("page"));
         return buildDocumentList(ref, pageSize, page, queryText);
     }
@@ -324,7 +324,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "AND ecm:parentId = '" + doc.getId() + "'";
 
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
-                "pageSize", pageSize).set("page", page);
+                "limit", pageSize).set("page", page);
 
         return (PaginableDocumentModelList) getAutomationService().run(ctx,
                 chain);
@@ -347,7 +347,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "AND ecm:fulltext = '" + escapedQueryText + "' "
                 + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "'";
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
-                "pageSize", pageSize).set("page", page);
+                "limit", pageSize).set("page", page);
 
         return (PaginableDocumentModelList) getAutomationService().run(ctx,
                 chain);

@@ -87,7 +87,7 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
     @SuppressWarnings("unchecked")
     @Override
     public ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, int pageSize, int currentPage) {
+            Map<String, Serializable> parameters, long offset, long limit) {
         QueryType queryType = (QueryType) parameters.get(QUERY_TYPE_PARAMETER);
         if (queryType == null) {
             throw new IllegalArgumentException(QUERY_TYPE_PARAMETER
@@ -126,10 +126,10 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
             throw new IllegalArgumentException("Invalid QueryType parameter");
         }
 
-        if (pageSize > 0) {
-            query.setMaxResults(pageSize);
-            if (currentPage > 0) {
-                query.setFirstResult(currentPage * pageSize);
+        if (limit > 0) {
+            query.setMaxResults((int) limit);
+            if (offset > 0) {
+                query.setFirstResult((int) offset);
             }
         }
         return new ActivitiesListImpl(query.getResultList());
