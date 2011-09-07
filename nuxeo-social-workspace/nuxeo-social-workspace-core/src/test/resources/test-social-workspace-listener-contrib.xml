@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.test.listeners.contrib">
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
+             point="listener">
+
+    <listener name="testSocialWorkspaceImportEvent" async="true"
+              postCommit="false"
+              class="org.nuxeo.ecm.social.workspace.service.ImportEventListener"
+              priority="150">
+      <event>newMembersAdded</event>
+      <event>newMembersRemoved</event>
+    </listener>
+  </extension>
+</component>
