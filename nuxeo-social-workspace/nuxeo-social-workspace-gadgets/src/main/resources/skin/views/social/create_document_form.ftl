@@ -6,7 +6,12 @@
 </head>
 <body>
 <form class="createDocument" action="${This.path}/createDocument" method="post" enctype="multipart/form-data" target="hiddenIFrame">
-<h3>Ajouter un ${This.getTranslatedLabel(docType.label)} dans "${currentDoc.title}" </h3>
+<h3>
+${Context.getMessage("label.create.a.document")}
+ ${This.getTranslatedLabel(docType.label)}
+ ${Context.getMessage("label.in")}
+ "${currentDoc.title}"
+</h3>
 <div class="center">
 <table class="create">
 <tr>

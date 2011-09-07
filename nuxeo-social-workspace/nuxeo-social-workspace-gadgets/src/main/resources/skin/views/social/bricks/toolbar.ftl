@@ -5,11 +5,11 @@
   <#else>
     <a class="button disabled" href="#">
       <img src="${skinPath}/icons/add_document_disabled.gif" alt="create document"></img>
-      <div class="tooltip">Vous n'avez pas la possibilité de créer des documents ici.</div>
+      <div class="tooltip">${Context.getMessage("tooltip.can.not.create.document")}</div>
     </a>
     <a class="button disabled" href="#">
       <img src="${skinPath}/icons/add_folder_disabled.gif" alt="create folder"></img>
-      <div class="tooltip">Vous n'avez pas la possibilité de créer de répertoire ici.</div>
+      <div class="tooltip">${Context.getMessage("tooltip.can.not.create.directory")}</div>
     </a>
   </#if>
   <a href="javascript: documentList('${currentDoc.id}', ${page})"><img src="${skinPath}/icons/refresh.png" alt="refresh"/></a>
