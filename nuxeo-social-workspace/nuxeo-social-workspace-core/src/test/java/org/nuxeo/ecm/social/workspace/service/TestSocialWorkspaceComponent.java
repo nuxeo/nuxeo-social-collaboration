@@ -18,6 +18,7 @@ package org.nuxeo.ecm.social.workspace.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -30,10 +31,19 @@ import org.junit.Test;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.platform.ec.notification.service.NotificationServiceHelper;
+import org.nuxeo.ecm.platform.url.api.DocumentViewCodecManager;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
+@Deploy({ "org.nuxeo.ecm.automation.core",
+        "org.nuxeo.ecm.automation.features",
+        "org.nuxeo.ecm.platform.url.api",
+        "org.nuxeo.ecm.platform.url.core",
+        "org.nuxeo.ecm.platform.notification.core"})
 @LocalDeploy({ "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml" })
 public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
@@ -49,6 +59,13 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
     }
 
     @Test
+    public void testService() {
+        // Services needed for testing SendMail operation
+        assertNotNull(Framework.getLocalService(DocumentViewCodecManager.class));
+        assertNotNull(NotificationServiceHelper.getNotificationService());
+    }
+
+    @Test
     public void testAddSeveralSocialWorkspaceMembers() throws Exception {
         assertEquals(0, ImportEventListener.getMemberAddedCount());
         SocialWorkspace socialWorkspace = createSocialWorkspace("Social workspace for test");
@@ -60,7 +77,8 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember1.getId()));
         assertEquals(2, ImportEventListener.getMemberAddedCount());
 
-        socialWorkspace.getDocument().putContextData("allowMemberNotification", false);
+        socialWorkspace.getDocument().putContextData("allowMemberNotification",
+                false);
         assertFalse(socialWorkspace.allowMembersNotification());
 
         DocumentModel userAlreadyMember2 = createUserForTest(
@@ -68,7 +86,8 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember2.getId()));
 
         assertEquals(2, ImportEventListener.getMemberAddedCount());
-        socialWorkspace.getDocument().putContextData("allowMemberNotification", true);
+        socialWorkspace.getDocument().putContextData("allowMemberNotification",
+                true);
 
         DocumentModel fulltextEmailUser1 = createUserForTest(
                 "fulltextEmailUser1@mail.net", "fulltextEmailUser1");
@@ -130,7 +149,8 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         List<String> imported = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
                 sw, group1.getName());
         assertEquals(2, imported.size());
-        assertEquals(beforeImportCount, ImportEventListener.getMemberAddedCount());
+        assertEquals(beforeImportCount,
+                ImportEventListener.getMemberAddedCount());
         assertTrue(imported.contains(existingUser1));
         assertTrue(imported.contains(existingUser2));
         assertFalse(imported.contains("Administrator"));

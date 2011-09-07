@@ -76,6 +76,14 @@
       <event>documentCreatedByCopy</event>
       <event>documentMoved</event>
     </listener>
+
+    <listener name="socialWorkspaceMembersManagementListener" async="true"
+      postCommit="false"
+      class="org.nuxeo.ecm.social.workspace.listeners.MembersManagementSocialWorkspaceListener"
+      priority="150">
+      <event>newMembersAdded</event>
+      <event>newMembersRemoved</event>
+    </listener>
   </extension>
 
 </component>
