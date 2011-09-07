@@ -23,6 +23,9 @@ import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.CTX_PRINCIPALS_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_ADDED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_REMOVED;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
@@ -65,6 +68,9 @@ import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.core.event.EventContext;
+import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
@@ -391,6 +397,17 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
+        Boolean memberCreated = addSocialWorkspaceMemberWithoutNotification(
+                socialWorkspace, principal);
+        if (memberCreated) {
+            fireEventWithUsers(socialWorkspace,
+                    Arrays.asList(principal), EVENT_MEMBERS_ADDED);
+        }
+        return memberCreated;
+    }
+
+    private boolean addSocialWorkspaceMemberWithoutNotification(
+            SocialWorkspace socialWorkspace, Principal principal) {
         if (addPrincipalToSocialWorkspace(
                 ActivityHelper.createUserActivityObject(principal.getName()),
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
@@ -413,6 +430,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
 
         List<String> importedUsers = new ArrayList<String>();
+        List<Principal> importedPrincipal = new ArrayList<Principal>();
         for (String userName : group.getMemberUsers()) {
             Principal principal = userManager.getPrincipal(userName);
             if (principal == null) {
@@ -420,10 +438,15 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 continue;
             }
 
-            if (addSocialWorkspaceMember(socialWorkspace, principal)) {
+            if (addSocialWorkspaceMemberWithoutNotification(socialWorkspace,
+                    principal)) {
                 importedUsers.add(userName);
+                importedPrincipal.add(principal);
             }
         }
+
+        // Notify bulk import
+        fireEventWithUsers(socialWorkspace, importedPrincipal, EVENT_MEMBERS_ADDED);
 
         return importedUsers;
     }
@@ -433,6 +456,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             SocialWorkspace socialWorkspace, List<String> emails)
             throws ClientException {
         List<String> memberAddedList = new ArrayList<String>(emails.size());
+        List<Principal> principalAdded = new ArrayList<Principal>();
         for (String email : emails) {
             Map<String, Serializable> filter = new HashMap<String, Serializable>();
             String emailKey = getUserManager().getUserEmailField();
@@ -451,11 +475,17 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             }
 
             Principal principal = userManager.getPrincipal(foundUsers.get(0).getId());
-            if (addSocialWorkspaceMember(socialWorkspace, principal)) {
+            if (addSocialWorkspaceMemberWithoutNotification(socialWorkspace,
+                    principal)) {
                 memberAddedList.add(email);
+                principalAdded.add(principal);
             }
 
         }
+        // Notify bulk import
+        fireEventWithUsers(socialWorkspace, principalAdded,
+                EVENT_MEMBERS_ADDED);
+
         return memberAddedList;
     }
 
@@ -483,10 +513,13 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
-        removePrincipalFromSocialWorkspace(
+        if (removePrincipalFromSocialWorkspace(
                 ActivityHelper.createUserActivityObject(principal.getName()),
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
-                buildRelationMemberKind());
+                buildRelationMemberKind())) {
+            fireEventWithUsers(socialWorkspace,
+                    Arrays.asList(principal), EVENT_MEMBERS_REMOVED);
+        }
     }
 
     private boolean addPrincipalToSocialWorkspace(String principalName,
@@ -597,6 +630,23 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         acp.removeACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
         publicSection.setACP(acp, true);
         session.saveDocument(publicSection);
+    }
+
+    private void fireEventWithUsers(SocialWorkspace socialWorkspace,
+            List<Principal> usernames, String eventName) {
+        if (socialWorkspace.allowMembersNotification()) {
+            DocumentModel doc = socialWorkspace.getDocument();
+            EventContext ctx = new DocumentEventContext(doc.getCoreSession(),
+                    doc.getCoreSession().getPrincipal(), doc);
+            ctx.setProperty(CTX_PRINCIPALS_PROPERTY, (Serializable) usernames);
+
+            try {
+                Framework.getLocalService(EventService.class).fireEvent(
+                        ctx.newEvent(eventName));
+            } catch (ClientException e) {
+                log.warn("Unable to notify social workspace members", e);
+            }
+        }
     }
 
     private static void makePublicDashboardUnreadable(CoreSession session,
