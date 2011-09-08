@@ -89,7 +89,7 @@ public class SocialWorkspaceActivityStreamPageProvider extends
             activities = activities.filterActivities(getCoreSession());
             pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
 
-            resultsCount = Integer.MAX_VALUE - 1;
+            setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageActivityMessages;
     }

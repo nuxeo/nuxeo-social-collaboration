@@ -17,7 +17,12 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.REPOSITORY_NAME_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.SOCIAL_WORKSPACE_ID_PROPERTY;
+
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -28,7 +33,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -38,13 +42,15 @@ import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.platform.query.api.PageProvider;
+import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
-import org.nuxeo.ecm.social.mini.message.MiniMessageService;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
+ * Operation to get the mini messages for a given Social Workspace.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
@@ -53,16 +59,18 @@ public class GetSocialWorkspaceMiniMessages {
 
     public static final String ID = "Services.GetSocialWorkspaceMiniMessages";
 
-    public static final RelationshipKind SOCIAL_WORKSPACE_MEMBER_KIND = RelationshipKind.fromGroup("socialworkspace:member");
+    public static final String SOCIAL_WORKSPACE_MEMBER_KIND = "socialworkspace:member";
+
+    public static final String PROVIDER_NAME = "social_workspace_mini_messages";
 
     @Context
     protected CoreSession session;
 
     @Context
-    protected SocialWorkspaceService socialWorkspaceService;
+    protected PageProviderService pageProviderService;
 
     @Context
-    protected MiniMessageService miniMessageService;
+    protected SocialWorkspaceService socialWorkspaceService;
 
     @Param(name = "contextPath", required = true)
     protected String contextPath;
@@ -81,35 +89,43 @@ public class GetSocialWorkspaceMiniMessages {
 
     @OperationMethod
     public Blob run() throws Exception {
-        if (limit == null) {
-            limit = 0;
+        Long targetOffset = 0L;
+        if (offset != null) {
+            targetOffset = offset.longValue();
         }
-        if (offset == null) {
-            offset = 0;
+        Long targetLimit = null;
+        if (limit != null) {
+            targetLimit = limit.longValue();
         }
 
-        RelationshipKind kind;
+        String kind;
         if (StringUtils.isBlank(relationshipKind)) {
             kind = SOCIAL_WORKSPACE_MEMBER_KIND;
         } else {
-            kind = RelationshipKind.fromString(relationshipKind);
+            kind = relationshipKind;
         }
 
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
                 session, new PathRef(contextPath));
+
+        Map<String, Serializable> props = new HashMap<String, Serializable>();
+        props.put(SOCIAL_WORKSPACE_ID_PROPERTY, socialWorkspace.getId());
+        props.put(REPOSITORY_NAME_PROPERTY,
+                socialWorkspace.getDocument().getRepositoryName());
+        props.put(RELATIONSHIP_KIND_PROPERTY, kind);
+
+        @SuppressWarnings("unchecked")
+        PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
+                PROVIDER_NAME, null, targetLimit, 0L, props);
+        pageProvider.setCurrentPageOffset(targetOffset);
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(
                 language) : Locale.ENGLISH;
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
 
-        String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
-                socialWorkspace.getDocument().getRepositoryName(),
-                socialWorkspace.getId());
-
         List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
-        for (MiniMessage miniMessage : miniMessageService.getMiniMessageFor(
-                socialWorkspaceActivityObject, kind, offset, limit)) {
+        for (MiniMessage miniMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", miniMessage.getId());
             o.put("actor", miniMessage.getActor());
@@ -124,8 +140,9 @@ public class GetSocialWorkspaceMiniMessages {
         }
 
         Map<String, Object> m = new HashMap<String, Object>();
-        m.put("offset", offset + miniMessages.size());
-        m.put("limit", limit);
+        m.put("offset",
+                ((SocialWorkspaceMiniMessagePageProvider) pageProvider).getNextOffset());
+        m.put("limit", pageProvider.getCurrentPageSize());
         m.put("miniMessages", miniMessages);
 
         ObjectMapper mapper = new ObjectMapper();

@@ -22,6 +22,11 @@
       <pageSize>50</pageSize>
     </genericPageProvider>
 
+    <genericPageProvider name="social_workspace_mini_messages"
+      class="org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider">
+      <pageSize>50</pageSize>
+    </genericPageProvider>
+
   </extension>
 
 </component>
