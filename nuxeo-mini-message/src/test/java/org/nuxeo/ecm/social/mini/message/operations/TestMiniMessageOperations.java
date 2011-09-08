@@ -80,7 +80,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessageForActor.ID);
+        chain.add(GetMiniMessages.ID);
         Blob result = (Blob) automationService.run(ctx, chain);
         assertNotNull(result);
         String json = result.getString();
@@ -104,7 +104,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessageForActor.ID);
+        chain.add(GetMiniMessages.ID);
         Blob result = (Blob) automationService.run(ctx, chain);
         assertNotNull(result);
         String json = result.getString();

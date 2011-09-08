@@ -58,7 +58,7 @@ function addNoMoreActivitiesText() {
 }
 
 function showMoreActivities() {
-  var NXRequestParams= { operationId : 'Services.GetActivityStreamForActor',
+  var NXRequestParams= { operationId : 'Services.GetActivityStream',
     operationParams: {
       language: prefs.getLang(),
       actor: actor,
@@ -82,7 +82,7 @@ function showMoreActivities() {
 }
 
 function loadActivityStream() {
-  var NXRequestParams= { operationId : 'Services.GetActivityStreamForActor',
+  var NXRequestParams= { operationId : 'Services.GetActivityStream',
     operationParams: {
       language: prefs.getLang(),
       actor: actor,
@@ -100,7 +100,7 @@ function loadActivityStream() {
 }
 
 function pollActivityStream() {
-  var NXRequestParams= { operationId : 'Services.GetActivityStreamForActor',
+  var NXRequestParams= { operationId : 'Services.GetActivityStream',
     operationParams: {
       language: prefs.getLang(),
       actor: actor,

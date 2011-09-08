@@ -54,10 +54,10 @@ import org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-@Operation(id = GetActivityStreamForActor.ID, category = Constants.CAT_SERVICES, label = "Get activity stream", description = "Get activity stream for the current user.")
-public class GetActivityStreamForActor {
+@Operation(id = GetActivityStream.ID, category = Constants.CAT_SERVICES, label = "Get activity stream", description = "Get activity stream for the current user.")
+public class GetActivityStream {
 
-    public static final String ID = "Services.GetActivityStreamForActor";
+    public static final String ID = "Services.GetActivityStream";
 
     public static final String PROVIDER_NAME = "gadget_user_activity_stream";
 

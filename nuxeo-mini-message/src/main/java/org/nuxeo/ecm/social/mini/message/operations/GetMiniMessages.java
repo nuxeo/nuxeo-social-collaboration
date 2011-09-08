@@ -48,15 +48,15 @@ import org.nuxeo.ecm.social.mini.message.MiniMessage;
 import org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider;
 
 /**
- * Operation to get the mini messages for a given actor.
+ * Operation to get the mini messages for or from a given actor.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-@Operation(id = GetMiniMessageForActor.ID, category = Constants.CAT_SERVICES, label = "Get mini messages", description = "Get mini messages for the current user.")
-public class GetMiniMessageForActor {
+@Operation(id = GetMiniMessages.ID, category = Constants.CAT_SERVICES, label = "Get mini messages", description = "Get mini messages for the current user.")
+public class GetMiniMessages {
 
-    public static final String ID = "Services.GetMiniMessageForActor";
+    public static final String ID = "Services.GetMiniMessages";
 
     public static final String PROVIDER_NAME = "gadget_mini_messages";
 

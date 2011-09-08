@@ -58,7 +58,7 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
 
         OperationChain chain = new OperationChain(
                 "testUserActivityStreamOperation");
-        chain.add(GetActivityStreamForActor.ID);
+        chain.add(GetActivityStream.ID);
         Blob result = (Blob) automationService.run(ctx, chain);
         assertNotNull(result);
         String json = result.getString();

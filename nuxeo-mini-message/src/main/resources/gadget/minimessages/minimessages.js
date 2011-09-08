@@ -64,7 +64,7 @@ function addNoMoreMiniMessageText() {
 }
 
 function showMoreMiniMessages() {
-  var NXRequestParams= { operationId : 'Services.GetMiniMessageForActor',
+  var NXRequestParams= { operationId : 'Services.GetMiniMessages',
     operationParams: {
       language: prefs.getLang(),
       actor: actor,
@@ -89,7 +89,7 @@ function showMoreMiniMessages() {
 
 
 function loadMiniMessages() {
-  var NXRequestParams= { operationId : 'Services.GetMiniMessageForActor',
+  var NXRequestParams= { operationId : 'Services.GetMiniMessages',
     operationParams: {
       language: prefs.getLang(),
       actor: actor,
@@ -107,7 +107,7 @@ function loadMiniMessages() {
 }
 
 function pollMiniMessages() {
-var NXRequestParams= { operationId : 'Services.GetMiniMessageForActor',
+var NXRequestParams= { operationId : 'Services.GetMiniMessages',
   operationParams: {
     language: prefs.getLang(),
     actor: actor,

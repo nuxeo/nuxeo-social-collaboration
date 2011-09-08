@@ -8,7 +8,7 @@
     point="operations">
 
     <operation
-      class="org.nuxeo.ecm.social.activity.stream.operations.GetActivityStreamForActor" />
+      class="org.nuxeo.ecm.social.activity.stream.operations.GetActivityStream" />
 
   </extension>
 
