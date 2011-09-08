@@ -20,7 +20,10 @@
       value="#{messages['command.import']}"
       action="#{bulkImportSocialWorkspaceActions.importUserFromListOfEmail}"
       styleClass="button"/>
-    
+
+    <h:selectBooleanCheckbox id="emailNotification" value="#{currentDocument.contextData.memberNotificationDisabled}" />
+    <h:outputText value="#{messages['label.social.workspace.notification.disabled']}"/>
+
     <h2>#{messages['label.social.workspace.bulk.import.group']}</h2>
     <nxl:layout name="social_workspace_bulk_import" mode="edit"
                 value="#{bulkImportSocialWorkspaceActions.groupsToImport}" />
@@ -29,6 +32,10 @@
       value="#{messages['command.import']}"
       action="#{bulkImportSocialWorkspaceActions.importUserFromGroups}"
       styleClass="button"/>
+
+    <h:selectBooleanCheckbox id="groupNotification" value="#{currentDocument.contextData.memberNotificationDisabled}" />
+    <h:outputText value="#{messages['label.social.workspace.notification.disabled']}"/>
+
   </h:form>
 
 </div>

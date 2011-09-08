@@ -9,7 +9,7 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 /**
  * An object that wraps a {@code DocumentModel} having the facet
  * {@code SocialWorkspace}.
- * 
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
@@ -59,10 +59,10 @@ public interface SocialWorkspace {
     boolean mustApproveSubscription();
 
     /**
-     * Returns {@code true} if the social workspace will send notification to
-     * its members when modification occurred.
+     * Returns {@code true} if the social workspace won't send a notification to
+     * its members when modifications occurred.
      */
-    boolean allowMembersNotification();
+    boolean isMembersNotificationDisabled();
 
     /**
      * Adds a user to this Social Workspace administrators group.
@@ -71,7 +71,7 @@ public interface SocialWorkspace {
 
     /**
      * Adds a user to this Social Workspace members group.
-     * 
+     *
      * @return {@code true} if the user was successfully added to the members
      *         group, {@code false} otherwise.
      */
@@ -79,7 +79,7 @@ public interface SocialWorkspace {
 
     /**
      * Removes a user from this Social Workspace administrators group.
-     * 
+     *
      * @return {@code true} if the user was successfully added to the
      *         administrators group, {@code false} otherwise.
      */

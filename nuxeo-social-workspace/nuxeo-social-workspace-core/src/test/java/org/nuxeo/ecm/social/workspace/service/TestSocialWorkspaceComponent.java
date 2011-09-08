@@ -69,7 +69,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
     public void testAddSeveralSocialWorkspaceMembers() throws Exception {
         assertEquals(0, ImportEventListener.getMemberAddedCount());
         SocialWorkspace socialWorkspace = createSocialWorkspace("Social workspace for test");
-        assertTrue(socialWorkspace.allowMembersNotification());
+        assertFalse(socialWorkspace.isMembersNotificationDisabled());
 
         String userAlreadyMember1Email = "userAlreadyMember1@mail.net";
         DocumentModel userAlreadyMember1 = createUserForTest(
@@ -77,17 +77,17 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember1.getId()));
         assertEquals(2, ImportEventListener.getMemberAddedCount());
 
-        socialWorkspace.getDocument().putContextData("allowMemberNotification",
-                false);
-        assertFalse(socialWorkspace.allowMembersNotification());
+        socialWorkspace.getDocument().putContextData("memberNotificationDisabled",
+                true);
+        assertTrue(socialWorkspace.isMembersNotificationDisabled());
 
         DocumentModel userAlreadyMember2 = createUserForTest(
                 "userAlreadyMember2@mail.net", "userAlreadyMember2");
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember2.getId()));
 
         assertEquals(2, ImportEventListener.getMemberAddedCount());
-        socialWorkspace.getDocument().putContextData("allowMemberNotification",
-                true);
+        socialWorkspace.getDocument().putContextData("memberNotificationDisabled",
+                false);
 
         DocumentModel fulltextEmailUser1 = createUserForTest(
                 "fulltextEmailUser1@mail.net", "fulltextEmailUser1");

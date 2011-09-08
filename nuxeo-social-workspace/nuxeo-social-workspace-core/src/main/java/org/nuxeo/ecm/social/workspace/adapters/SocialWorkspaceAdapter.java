@@ -22,14 +22,14 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Default implementation of {@see SocialWorkspace}.
- * 
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
 public class SocialWorkspaceAdapter extends BaseAdapter implements
         SocialWorkspace {
 
-    private static final String ALLOW_MEMBER_NOTIFICATION = "allowMemberNotification";
+    private static final String MEMBER_NOTIFICATION_DISABLED = "memberNotificationDisabled";
 
     public SocialWorkspaceAdapter(DocumentModel doc) {
         super(doc);
@@ -84,11 +84,12 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public boolean allowMembersNotification() {
-        Boolean allowMembersNotification = (Boolean)doc.getContextData(ALLOW_MEMBER_NOTIFICATION);
-        return allowMembersNotification == null ? true
+    public boolean isMembersNotificationDisabled() {
+        Boolean allowMembersNotification = (Boolean)doc.getContextData(MEMBER_NOTIFICATION_DISABLED);
+        return allowMembersNotification == null ? false
                 : allowMembersNotification;
     }
+
 
     @Override
     public boolean addAdministrator(Principal principal) {
