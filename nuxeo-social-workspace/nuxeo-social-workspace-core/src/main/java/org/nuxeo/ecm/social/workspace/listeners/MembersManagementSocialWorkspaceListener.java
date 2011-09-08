@@ -26,8 +26,10 @@ import java.io.InputStream;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -43,6 +45,7 @@ import org.nuxeo.ecm.automation.core.scripting.Scripting;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
@@ -56,7 +59,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Listener to handle added or removed social workspace members
- * 
+ *
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.4.3
  */
@@ -65,25 +68,67 @@ public class MembersManagementSocialWorkspaceListener implements
 
     private static Log log = LogFactory.getLog(MembersManagementSocialWorkspaceListener.class);
 
-    private static final String TEMPLATE_REMOVED = "templates/memberNotificationRemove.ftl";
-
-    private static final String TEMPLATE_ADDED = "templates/memberNotificationNew.ftl";
+    private static final String TEMPLATE_ADDED = "templates/memberNotification.ftl";
 
     @Override
     public void handleEvent(EventBundle eventBundle) throws ClientException {
-        if (eventBundle.containsEventName(EVENT_MEMBERS_ADDED)
-                || eventBundle.containsEventName(EVENT_MEMBERS_REMOVED)) {
-            for (Event event : eventBundle) {
-                handleEvent(event);
+        Map<DocumentRef, List<Event>> socialDocuments = new HashMap<DocumentRef, List<Event>>();
+        for (Event event : eventBundle) {
+            String eventName = event.getName();
+            if (EVENT_MEMBERS_ADDED.equals(eventName)
+                    || EVENT_MEMBERS_REMOVED.equals(eventName)) {
+                addDocumentContextToMap(socialDocuments, event);
             }
+        }
+        for (Map.Entry<DocumentRef, List<Event>> entry : socialDocuments.entrySet()) {
+            handleEmailNotification(entry);
+        }
+
+    }
+
+    public void addDocumentContextToMap(
+            Map<DocumentRef, List<Event>> socialDocuments, Event event) {
+        DocumentEventContext docCtx = (DocumentEventContext) event.getContext();
+
+        DocumentRef docRef = docCtx.getSourceDocument().getRef();
+        if (socialDocuments.containsKey(docRef)) {
+            socialDocuments.get(docRef).add(event);
+        } else {
+            List<Event> docContextes = new ArrayList<Event>();
+            docContextes.add(event);
+            socialDocuments.put(docRef, docContextes);
         }
     }
 
-    public void handleEvent(Event event) throws ClientException {
-        DocumentEventContext docCtx = (DocumentEventContext) event.getContext();
+    private void handleEmailNotification(
+            Map.Entry<DocumentRef, List<Event>> eventContexts) {
+        List<Principal> addedMembers = new ArrayList<Principal>();
+        List<Principal> removedMembers = new ArrayList<Principal>();
+
+        for (Event event : eventContexts.getValue()) {
+            DocumentEventContext docCtx=(DocumentEventContext) event.getContext();
+            List<Principal> principals = (List<Principal>) docCtx.getProperty(CTX_PRINCIPALS_PROPERTY);
+            if(event.getName().equals(EVENT_MEMBERS_ADDED)){
+                addedMembers.addAll(principals);
+            }else if(event.getName().equals(EVENT_MEMBERS_REMOVED)){
+                removedMembers.addAll(principals);
+            }
+        }
+
+        if(!addedMembers.isEmpty() || !removedMembers.isEmpty()){
+            DocumentEventContext context = (DocumentEventContext)eventContexts.getValue().get(0).getContext();
+            notifyMembers(context, addedMembers, removedMembers);
+        }
+
+
+    }
+
+
+    public void notifyMembers(DocumentEventContext docCtx,
+            List<Principal> addedMembers, List<Principal> removedMembers) {
+
         SocialWorkspace sw = docCtx.getSourceDocument().getAdapter(
                 SocialWorkspace.class);
-        List<Principal> principals = (List<Principal>) docCtx.getProperty(CTX_PRINCIPALS_PROPERTY);
 
         if (sw == null) {
             log.info("Event is handling a non social workspace document");
@@ -92,20 +137,18 @@ public class MembersManagementSocialWorkspaceListener implements
 
         OperationContext ctx = new OperationContext(docCtx.getCoreSession());
         ctx.setInput(docCtx.getSourceDocument());
-        ctx.put("principalsList", buildPrincipalsString(principals));
+        ctx.put("addedMembers", buildPrincipalsString(addedMembers));
+        ctx.put("removedMembers", buildPrincipalsString(removedMembers));
 
         Expression from = Scripting.newExpression("Env[\"mail.from\"]");
-        StringList to = buildRecipientsList(sw, principals);
+        // join both list to remove email of directly affected members
+        addedMembers.addAll(removedMembers);
+        StringList to = buildRecipientsList(sw, addedMembers);
 
         String subject;
         String template;
-        if (EVENT_MEMBERS_ADDED.equals(event.getName())) {
-            subject = "New Members into: " + sw.getTitle();
-            template = TEMPLATE_ADDED;
-        } else {
-            subject = "Members removed in: " + sw.getTitle();
-            template = TEMPLATE_REMOVED;
-        }
+        subject = "Member Activity of " + sw.getTitle();
+        template = TEMPLATE_ADDED;
         String message = loadTemplate(template);
 
         try {
