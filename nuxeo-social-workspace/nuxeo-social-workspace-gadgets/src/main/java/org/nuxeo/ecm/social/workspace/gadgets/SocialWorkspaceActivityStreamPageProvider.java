@@ -29,12 +29,12 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.activity.AbstractActivityPageProvider;
 import org.nuxeo.ecm.activity.ActivitiesList;
 import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -52,7 +52,7 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.4.3
  */
 public class SocialWorkspaceActivityStreamPageProvider extends
-        AbstractPageProvider<ActivityMessage> {
+        AbstractActivityPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -67,8 +67,6 @@ public class SocialWorkspaceActivityStreamPageProvider extends
     public static final String CORE_SESSION_PROPERTY = "coreSession";
 
     protected List<ActivityMessage> pageActivityMessages;
-
-    protected long nextOffset = 0;
 
     @Override
     public List<ActivityMessage> getCurrentPage() {
@@ -132,10 +130,6 @@ public class SocialWorkspaceActivityStreamPageProvider extends
                     + CORE_SESSION_PROPERTY + " property.");
         }
         return session;
-    }
-
-    public long getNextOffset() {
-        return nextOffset;
     }
 
     @Override

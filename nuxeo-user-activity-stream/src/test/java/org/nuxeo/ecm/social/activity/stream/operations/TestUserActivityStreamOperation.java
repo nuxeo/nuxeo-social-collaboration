@@ -65,9 +65,10 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
         assertNotNull(json);
 
         ObjectMapper mapper = new ObjectMapper();
-        List<Map<String, Object>> activities = mapper.readValue(json,
-                new TypeReference<List<Map<String, Object>>>() {
+        Map<String, Object> m = mapper.readValue(json,
+                new TypeReference<Map<String, Object>>() {
                 });
+        List<Map<String, Object>> activities = (List<Map<String, Object>>) m.get("activities");
         assertEquals(4, activities.size());
 
         changeUser("Administrator");

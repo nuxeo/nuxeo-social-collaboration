@@ -17,9 +17,9 @@
 package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.ADD_CHILDREN;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.ADD_CHILDREN;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
@@ -62,7 +62,6 @@ import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.webengine.forms.FormData;
-import org.nuxeo.ecm.webengine.model.WebContext;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
@@ -99,8 +98,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context HttpServletRequest request)
-            throws Exception {
+    public Object documentList(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -185,8 +184,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object publishDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -212,8 +211,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object deleteDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
@@ -233,9 +232,10 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef") String ref,
-            @QueryParam("doctype") String docTypeId,
-            @QueryParam("lang") String lang) throws Exception {
+    public Object createDocumentForm(@QueryParam("docRef")
+    String ref, @QueryParam("doctype")
+    String docTypeId, @QueryParam("lang")
+    String lang) throws Exception {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -254,8 +254,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref,
-            @QueryParam("lang") String lang) throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef")
+    String ref, @QueryParam("lang")
+    String lang) throws ClientException {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -290,8 +291,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object createDocument(@Context
+    HttpServletRequest request) throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();

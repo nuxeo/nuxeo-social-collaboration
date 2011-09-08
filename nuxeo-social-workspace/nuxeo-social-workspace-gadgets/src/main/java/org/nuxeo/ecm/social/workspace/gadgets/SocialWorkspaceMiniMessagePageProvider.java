@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.nuxeo.ecm.activity.AbstractActivityPageProvider;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
-import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
 import org.nuxeo.ecm.social.mini.message.MiniMessageService;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
@@ -44,11 +44,8 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.4.3
  */
 public class SocialWorkspaceMiniMessagePageProvider extends
-        AbstractPageProvider<MiniMessage> {
+        AbstractActivityPageProvider<MiniMessage> {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public static final String SOCIAL_WORKSPACE_ID_PROPERTY = "socialWorkspaceId";
@@ -58,8 +55,6 @@ public class SocialWorkspaceMiniMessagePageProvider extends
     public static final String RELATIONSHIP_KIND_PROPERTY = "relationshipKind";
 
     protected List<MiniMessage> pageMiniMessages;
-
-    protected long nextOffset = 0;
 
     @Override
     public List<MiniMessage> getCurrentPage() {
@@ -109,10 +104,6 @@ public class SocialWorkspaceMiniMessagePageProvider extends
                     + RELATIONSHIP_KIND_PROPERTY + " property.");
         }
         return RelationshipKind.fromString(relationshipKind);
-    }
-
-    public long getNextOffset() {
-        return nextOffset;
     }
 
     @Override

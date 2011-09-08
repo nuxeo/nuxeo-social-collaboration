@@ -17,22 +17,18 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import static org.nuxeo.ecm.social.mini.message.MiniMessageHelper.toJSON;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.REPOSITORY_NAME_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.SOCIAL_WORKSPACE_ID_PROPERTY;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -105,6 +101,9 @@ public class GetSocialWorkspaceMiniMessages {
             kind = relationshipKind;
         }
 
+        Locale locale = language != null && !language.isEmpty() ? new Locale(
+                language) : Locale.ENGLISH;
+
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
                 session, new PathRef(contextPath));
 
@@ -119,38 +118,9 @@ public class GetSocialWorkspaceMiniMessages {
                 PROVIDER_NAME, null, targetLimit, 0L, props);
         pageProvider.setCurrentPageOffset(targetOffset);
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                locale);
-
-        List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
-        for (MiniMessage miniMessage : pageProvider.getCurrentPage()) {
-            Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", miniMessage.getId());
-            o.put("actor", miniMessage.getActor());
-            o.put("displayActor", miniMessage.getDisplayActor());
-            o.put("message", miniMessage.getMessage());
-            o.put("publishedDate",
-                    dateFormat.format(miniMessage.getPublishedDate()));
-            o.put("isCurrentUserMiniMessage",
-                    session.getPrincipal().getName().equals(
-                            miniMessage.getActor()));
-            miniMessages.add(o);
-        }
-
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("offset",
-                ((SocialWorkspaceMiniMessagePageProvider) pageProvider).getNextOffset());
-        m.put("limit", pageProvider.getCurrentPageSize());
-        m.put("miniMessages", miniMessages);
-
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        mapper.writeValue(writer, m);
-
+        String json = toJSON(pageProvider, locale, session);
         return new InputStreamBlob(new ByteArrayInputStream(
-                writer.toString().getBytes("UTF-8")), "application/json");
+                json.getBytes("UTF-8")), "application/json");
     }
 
 }

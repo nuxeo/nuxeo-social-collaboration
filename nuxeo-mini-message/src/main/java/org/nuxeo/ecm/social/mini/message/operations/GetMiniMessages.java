@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.social.mini.message.operations;
 
+import static org.nuxeo.ecm.social.mini.message.MiniMessageHelper.toJSON;
 import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.ACTOR_PROPERTY;
 import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.FOR_ACTOR_STREAM_TYPE;
 import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
@@ -45,6 +46,7 @@ import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
+import org.nuxeo.ecm.social.mini.message.MiniMessageHelper;
 import org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider;
 
 /**
@@ -108,6 +110,9 @@ public class GetMiniMessages {
             targetLimit = limit.longValue();
         }
 
+        Locale locale = language != null && !language.isEmpty() ? new Locale(
+                language) : Locale.ENGLISH;
+
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(STREAM_TYPE_PROPERTY, miniMessagesStreamType);
         props.put(ACTOR_PROPERTY, actor);
@@ -118,38 +123,9 @@ public class GetMiniMessages {
                 PROVIDER_NAME, null, targetLimit, 0L, props);
         pageProvider.setCurrentPageOffset(targetOffset);
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                locale);
-
-        List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
-        for (MiniMessage miniMessage : pageProvider.getCurrentPage()) {
-            Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", miniMessage.getId());
-            o.put("actor", miniMessage.getActor());
-            o.put("displayActor", miniMessage.getDisplayActor());
-            o.put("message", miniMessage.getMessage());
-            o.put("publishedDate",
-                    dateFormat.format(miniMessage.getPublishedDate()));
-            o.put("isCurrentUserMiniMessage",
-                    session.getPrincipal().getName().equals(
-                            miniMessage.getActor()));
-            miniMessages.add(o);
-        }
-
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("offset",
-                ((MiniMessagePageProvider) pageProvider).getNextOffset());
-        m.put("limit", pageProvider.getCurrentPageSize());
-        m.put("miniMessages", miniMessages);
-
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        mapper.writeValue(writer, m);
-
+        String json = toJSON(pageProvider, locale, session);
         return new InputStreamBlob(new ByteArrayInputStream(
-                writer.toString().getBytes("UTF-8")), "application/json");
+                json.getBytes("UTF-8")), "application/json");
     }
 
 }
