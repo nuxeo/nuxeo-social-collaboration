@@ -58,7 +58,7 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
 
     public static final String USERS_IMPORTED_LABEL = "label.social.workspace.users.imported";
 
-    public static final String USERS_IMPORTED_AND_NOT_LABEL = "label.social.workspace.users.imported.and.not";
+    public static final String USERS_NOT_IMPORTED_LABEL = "label.social.workspace.users.imported.not";
 
     public static final String USERS_IMPORTED_ERROR_LABEL = "label.social.workspace.users.imported.error";
 
@@ -108,13 +108,21 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
             emailOfUsersAdded = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
                     socialWorkspace, emails);
             emails.removeAll(emailOfUsersAdded);
-            facesMessages.add(
-                    StatusMessage.Severity.INFO,
-                    resourcesAccessor.getMessages().get(
-                            USERS_IMPORTED_AND_NOT_LABEL),
+
+            // Display message about new imported users
+            facesMessages.add(StatusMessage.Severity.INFO,
+                    resourcesAccessor.getMessages().get(USERS_IMPORTED_LABEL),
                     emailOfUsersAdded.size(),
-                    getUsersListString(emailOfUsersAdded), emails.size(),
-                    getUsersListString(emails));
+                    getUsersListString(emailOfUsersAdded));
+            if (!emails.isEmpty()) {
+                // Display message about not imported users if there are.
+                facesMessages.add(
+                        StatusMessage.Severity.WARN,
+                        resourcesAccessor.getMessages().get(
+                                USERS_NOT_IMPORTED_LABEL), emails.size(),
+                        getUsersListString(emails));
+            }
+
             resetRawListOfEmails();
         } catch (ClientException e) {
             log.warn(e, e);
@@ -154,11 +162,13 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
 
     protected String getUsersListString(Collection<String> users) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<ul>");
         for (String user : users) {
-            sb.append("<li>").append(user).append("</li>");
+            sb.append(user).append(", ");
         }
-        sb.append("</ul>");
+        if (sb.length() > 0) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        sb.append(".");
         return sb.toString();
     }
 
