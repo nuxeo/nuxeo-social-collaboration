@@ -59,7 +59,7 @@ public class GetActivityStreamForActor {
 
     public static final String ID = "Services.GetActivityStreamForActor";
 
-    public static final String PROVIDER_NAME = "user_activity_stream";
+    public static final String PROVIDER_NAME = "gadget_user_activity_stream";
 
     @Context
     protected CoreSession session;

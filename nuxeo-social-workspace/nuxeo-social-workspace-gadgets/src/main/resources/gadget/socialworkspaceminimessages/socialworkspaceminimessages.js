@@ -5,9 +5,7 @@ var currentMiniMessages = [];
 var waitingMiniMessages = [];
 
 var offset = 0;
-var limit = 5;
 var waitingOffset = 0;
-var waitingLimit = 0;
 
 var hasMoreMiniMessages = true;
 
@@ -68,8 +66,7 @@ function showMoreMiniMessages() {
     operationParams: {
       language: prefs.getLang(),
       contextPath: socialWorkspacePath,
-      offset: offset,
-      limit: limit
+      offset: offset
     },
     operationContext: {},
     operationCallback: function(response, params) {
@@ -77,7 +74,6 @@ function showMoreMiniMessages() {
       if (newMiniMessages.length > 0) {
         currentMiniMessages = currentMiniMessages.concat(response.data.miniMessages);
         offset = response.data.offset;
-        limit = response.data.limit;
       } else {
         hasMoreMiniMessages = false;
       }
@@ -92,14 +88,12 @@ function loadMiniMessages() {
   var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
     operationParams: {
       language: prefs.getLang(),
-      contextPath: socialWorkspacePath,
-      limit: limit
+      contextPath: socialWorkspacePath
     },
     operationContext: {},
     operationCallback: function(response, params) {
       currentMiniMessages = response.data.miniMessages;
       offset = response.data.offset;
-      limit = response.data.limit;
       displayMiniMessages();
     }
   };
@@ -111,8 +105,7 @@ function pollMiniMessages() {
 var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
   operationParams: {
     language: prefs.getLang(),
-    contextPath: socialWorkspacePath,
-    limit: limit
+    contextPath: socialWorkspacePath
   },
   operationContext: {},
   operationCallback: function(response, params) {
@@ -121,7 +114,6 @@ var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
       // there is at least one new mini message
       waitingMiniMessages = newMiniMessages;
       waitingOffset = response.data.offset;
-      waitingLimit = response.data.limit;
       addNewMiniMessagesBar();
       gadgets.window.adjustHeight();
     }
@@ -148,7 +140,6 @@ function addNewMiniMessagesBar() {
 function showNewMiniMessages() {
   currentMiniMessages = waitingMiniMessages;
   offset = waitingOffset;
-  limit = waitingLimit;
   displayMiniMessages();
 }
 

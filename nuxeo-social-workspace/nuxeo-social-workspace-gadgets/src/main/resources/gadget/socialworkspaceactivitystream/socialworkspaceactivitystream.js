@@ -4,9 +4,7 @@ var currentActivities = [];
 var waitingActivities = [];
 
 var offset = 0;
-var limit = 10;
 var waitingOffset = 0;
-var waitingLimit = 0;
 
 var hasMoreActivities = true;
 
@@ -63,8 +61,7 @@ function showMoreActivities() {
     operationParams: {
       language: prefs.getLang(),
       contextPath: socialWorkspacePath,
-      offset: offset,
-      limit: limit
+      offset: offset
     },
     operationContext: {},
     operationCallback: function(response, params) {
@@ -72,7 +69,6 @@ function showMoreActivities() {
       if (newActivities.length > 0) {
         currentActivities = currentActivities.concat(newActivities);
         offset = response.data.offset;
-        limit = response.data.limit;
       } else {
         hasMoreActivities = false;
       }
@@ -87,14 +83,12 @@ function loadActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceActivityStream',
     operationParams: {
       language: prefs.getLang(),
-      contextPath: socialWorkspacePath,
-      limit: limit
+      contextPath: socialWorkspacePath
     },
     operationContext: {},
     operationCallback: function(response, params) {
       currentActivities = response.data.activities;
       offset = response.data.offset;
-      limit = response.data.limit;
       displayActivities();
     }
   };
@@ -106,8 +100,7 @@ function pollActivityStream() {
   var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceActivityStream',
     operationParams: {
       language: prefs.getLang(),
-      contextPath: socialWorkspacePath,
-      limit: limit
+      contextPath: socialWorkspacePath
     },
     operationContext: {},
     operationCallback: function(response, params) {
@@ -116,7 +109,6 @@ function pollActivityStream() {
         // there is at least one new activity
         waitingActivities = newActivities;
         waitingOffset = response.data.offset;
-        waitingLimit = response.data.limit;
         addNewActivitiesBar();
         gadgets.window.adjustHeight();
       }
@@ -143,7 +135,6 @@ function addNewActivitiesBar() {
 function showNewActivities() {
   currentActivities = waitingActivities;
   offset = waitingOffset;
-  limit = waitingLimit;
   displayActivities();
 }
 

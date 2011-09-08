@@ -9,6 +9,11 @@
       <pageSize>50</pageSize>
     </genericPageProvider>
 
+    <genericPageProvider name="gadget_user_activity_stream"
+      class="org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider">
+      <pageSize>10</pageSize>
+    </genericPageProvider>
+
   </extension>
 
 </component>

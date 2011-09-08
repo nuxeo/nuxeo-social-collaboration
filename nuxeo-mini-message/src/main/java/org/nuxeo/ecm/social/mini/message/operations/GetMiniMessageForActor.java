@@ -58,6 +58,8 @@ public class GetMiniMessageForActor {
 
     public static final String ID = "Services.GetMiniMessageForActor";
 
+    public static final String PROVIDER_NAME = "gadget_mini_messages";
+
     public static final String CIRCLE_KIND = "circle";
 
     @Context
@@ -113,7 +115,7 @@ public class GetMiniMessageForActor {
 
         @SuppressWarnings("unchecked")
         PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                "mini_messages", null, targetLimit, 0L, props);
+                PROVIDER_NAME, null, targetLimit, 0L, props);
         pageProvider.setCurrentPageOffset(targetOffset);
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(
