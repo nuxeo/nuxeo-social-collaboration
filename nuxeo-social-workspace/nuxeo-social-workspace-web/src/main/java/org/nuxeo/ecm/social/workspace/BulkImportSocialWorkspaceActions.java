@@ -22,7 +22,9 @@ import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +56,9 @@ import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 public class BulkImportSocialWorkspaceActions implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final String USERS_IMPORTED_COUNT_LABEL = "label.social.workspace.users.imported.count";
+    public static final String USERS_IMPORTED_LABEL = "label.social.workspace.users.imported";
+
+    public static final String USERS_IMPORTED_AND_NOT_LABEL = "label.social.workspace.users.imported.and.not";
 
     public static final String USERS_IMPORTED_ERROR_LABEL = "label.social.workspace.users.imported.error";
 
@@ -96,17 +100,21 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
     }
 
     public void importUserFromListOfEmail() {
-        List<String> emails = Arrays.asList(rawListOfEmails.split("\\s"));
+        List<String> emails = new ArrayList<String>(
+                Arrays.asList(rawListOfEmails.split("\\s")));
         SocialWorkspace socialWorkspace = toSocialWorkspace(navigationContext.getCurrentDocument());
         List<String> emailOfUsersAdded = null;
         try {
             emailOfUsersAdded = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
                     socialWorkspace, emails);
+            emails.removeAll(emailOfUsersAdded);
             facesMessages.add(
                     StatusMessage.Severity.INFO,
                     resourcesAccessor.getMessages().get(
-                            USERS_IMPORTED_COUNT_LABEL),
-                    emailOfUsersAdded.size());
+                            USERS_IMPORTED_AND_NOT_LABEL),
+                    emailOfUsersAdded.size(),
+                    getUsersListString(emailOfUsersAdded), emails.size(),
+                    getUsersListString(emails));
             resetRawListOfEmails();
         } catch (ClientException e) {
             log.warn(e, e);
@@ -131,8 +139,8 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
                 facesMessages.add(
                         StatusMessage.Severity.INFO,
                         resourcesAccessor.getMessages().get(
-                                USERS_IMPORTED_COUNT_LABEL),
-                        importedUsers.size());
+                                USERS_IMPORTED_LABEL), importedUsers.size(),
+                        getUsersListString(importedUsers));
                 resetGroupsToImport();
             } catch (ClientException e) {
                 log.warn(e, e);
@@ -142,6 +150,16 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
                                 USERS_IMPORTED_ERROR_LABEL));
             }
         }
+    }
+
+    protected String getUsersListString(Collection<String> users) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<ul>");
+        for (String user : users) {
+            sb.append("<li>").append(user).append("</li>");
+        }
+        sb.append("</ul>");
+        return sb.toString();
     }
 
     public void resetGroupsToImport() {

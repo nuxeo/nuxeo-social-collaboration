@@ -142,6 +142,12 @@ public class MembersManagementSocialWorkspaceListener implements
         addedMembers.addAll(removedMembers);
         StringList to = buildRecipientsList(sw, addedMembers);
 
+        if (to.isEmpty()) {
+            log.info("No recipients found for member notification in"
+                    + docCtx.getSourceDocument().getId());
+            return;
+        }
+
         String subject = "Member Activity of " + sw.getTitle();
         String template = TEMPLATE_ADDED;
         String message = loadTemplate(template);
