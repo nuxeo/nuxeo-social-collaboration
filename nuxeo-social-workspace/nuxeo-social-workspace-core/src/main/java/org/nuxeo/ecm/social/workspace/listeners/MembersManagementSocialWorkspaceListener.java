@@ -58,7 +58,8 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceComponent;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Listener to handle added or removed social workspace members
+ * Listener to notify members about added or removed social workspace
+ * members
  * 
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.4.3

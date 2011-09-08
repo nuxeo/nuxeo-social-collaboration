@@ -400,7 +400,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         Boolean memberCreated = addSocialWorkspaceMemberWithoutNotification(
                 socialWorkspace, principal);
         if (memberCreated) {
-            fireEventWithUsers(socialWorkspace,
+            fireEventMembersManagement(socialWorkspace,
                     Arrays.asList(principal), EVENT_MEMBERS_ADDED);
         }
         return memberCreated;
@@ -446,7 +446,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         }
 
         // Notify bulk import
-        fireEventWithUsers(socialWorkspace, importedPrincipal, EVENT_MEMBERS_ADDED);
+        fireEventMembersManagement(socialWorkspace, importedPrincipal,
+                EVENT_MEMBERS_ADDED);
 
         return importedUsers;
     }
@@ -483,7 +484,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
         }
         // Notify bulk import
-        fireEventWithUsers(socialWorkspace, principalAdded,
+        fireEventMembersManagement(socialWorkspace, principalAdded,
                 EVENT_MEMBERS_ADDED);
 
         return memberAddedList;
@@ -517,7 +518,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 ActivityHelper.createUserActivityObject(principal.getName()),
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
                 buildRelationMemberKind())) {
-            fireEventWithUsers(socialWorkspace,
+            fireEventMembersManagement(socialWorkspace,
                     Arrays.asList(principal), EVENT_MEMBERS_REMOVED);
         }
     }
@@ -632,8 +633,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         session.saveDocument(publicSection);
     }
 
-    private void fireEventWithUsers(SocialWorkspace socialWorkspace,
-            List<Principal> usernames, String eventName) {
+    private static void fireEventMembersManagement(
+            SocialWorkspace socialWorkspace, List<Principal> usernames,
+            String eventName) {
         if (!socialWorkspace.isMembersNotificationDisabled()) {
             DocumentModel doc = socialWorkspace.getDocument();
             EventContext ctx = new DocumentEventContext(doc.getCoreSession(),
