@@ -40,9 +40,9 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Default implementation of {@link SocialDocument}.
- *
+ * 
  * @author Benjamin JALON <bjalon@nuxeo.com>
- *
+ * 
  */
 public class SocialDocumentAdapter implements SocialDocument {
 

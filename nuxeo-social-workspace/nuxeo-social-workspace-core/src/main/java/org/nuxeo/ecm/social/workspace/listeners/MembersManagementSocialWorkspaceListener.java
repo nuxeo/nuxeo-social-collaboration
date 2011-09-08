@@ -59,7 +59,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Listener to handle added or removed social workspace members
- *
+ * 
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.4.3
  */
@@ -81,9 +81,8 @@ public class MembersManagementSocialWorkspaceListener implements
             }
         }
         for (Map.Entry<DocumentRef, List<Event>> entry : socialDocuments.entrySet()) {
-            handleEmailNotification(entry);
+            notifyForDocument(entry);
         }
-
     }
 
     public void addDocumentContextToMap(
@@ -100,29 +99,27 @@ public class MembersManagementSocialWorkspaceListener implements
         }
     }
 
-    private void handleEmailNotification(
+    private void notifyForDocument(
             Map.Entry<DocumentRef, List<Event>> eventContexts) {
         List<Principal> addedMembers = new ArrayList<Principal>();
         List<Principal> removedMembers = new ArrayList<Principal>();
 
         for (Event event : eventContexts.getValue()) {
-            DocumentEventContext docCtx=(DocumentEventContext) event.getContext();
+            DocumentEventContext docCtx = (DocumentEventContext) event.getContext();
             List<Principal> principals = (List<Principal>) docCtx.getProperty(CTX_PRINCIPALS_PROPERTY);
-            if(event.getName().equals(EVENT_MEMBERS_ADDED)){
+            if (event.getName().equals(EVENT_MEMBERS_ADDED)) {
                 addedMembers.addAll(principals);
-            }else if(event.getName().equals(EVENT_MEMBERS_REMOVED)){
+            } else if (event.getName().equals(EVENT_MEMBERS_REMOVED)) {
                 removedMembers.addAll(principals);
             }
         }
 
-        if(!addedMembers.isEmpty() || !removedMembers.isEmpty()){
-            DocumentEventContext context = (DocumentEventContext)eventContexts.getValue().get(0).getContext();
+        if (!addedMembers.isEmpty() || !removedMembers.isEmpty()) {
+            DocumentEventContext context = (DocumentEventContext) eventContexts.getValue().get(
+                    0).getContext();
             notifyMembers(context, addedMembers, removedMembers);
         }
-
-
     }
-
 
     public void notifyMembers(DocumentEventContext docCtx,
             List<Principal> addedMembers, List<Principal> removedMembers) {
@@ -145,10 +142,8 @@ public class MembersManagementSocialWorkspaceListener implements
         addedMembers.addAll(removedMembers);
         StringList to = buildRecipientsList(sw, addedMembers);
 
-        String subject;
-        String template;
-        subject = "Member Activity of " + sw.getTitle();
-        template = TEMPLATE_ADDED;
+        String subject = "Member Activity of " + sw.getTitle();
+        String template = TEMPLATE_ADDED;
         String message = loadTemplate(template);
 
         try {
@@ -189,7 +184,7 @@ public class MembersManagementSocialWorkspaceListener implements
                     emails.add(email);
                 }
             } catch (ClientException e) {
-                log.info(String.format("Trying to fetch unknown user: %s",
+                log.info(String.format("Trying to fetch an unknown user: %s",
                         username));
                 log.debug(e, e);
             }
