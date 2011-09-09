@@ -17,6 +17,8 @@
 
 package org.nuxeo.ecm.activity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,21 +34,29 @@ import javax.persistence.Table;
 @Table(name = "tweets")
 public class TweetActivity {
 
-    private long id;
+    private Long id;
 
     private String seenBy;
 
-    private long activityId;
+    private Long activityId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false, columnDefinition = "integer")
-    public long getId() {
+    @Column(nullable = false, columnDefinition = "integer")
+    public Long getInternalId() {
+        return id;
+    }
+
+    public void setInternalId(Long id) {
+        this.id = id;
+    }
+
+    public Serializable getId() {
         return id;
     }
 
     @Column(name = "activityId", columnDefinition = "integer")
-    public long getActivityId() {
+    public Long getActivityId() {
         return activityId;
     }
 
@@ -55,16 +65,16 @@ public class TweetActivity {
         return seenBy;
     }
 
-    public void setActivityId(long activityId) {
-        this.activityId = activityId;
+    public void setActivityId(Serializable activityId) {
+        this.activityId = (Long) activityId;
     }
 
     public void setSeenBy(String seenBy) {
         this.seenBy = seenBy;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(Serializable id) {
+        this.id = (Long) id;
     }
 
 }

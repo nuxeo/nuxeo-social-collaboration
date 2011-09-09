@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.activity;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -45,7 +47,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @Table(name = "nxp_activities")
 public class ActivityImpl implements Activity {
 
-    private long id;
+    private Long id;
 
     private String actor;
 
@@ -67,12 +69,11 @@ public class ActivityImpl implements Activity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, columnDefinition = "integer")
     @Override
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    @Override
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

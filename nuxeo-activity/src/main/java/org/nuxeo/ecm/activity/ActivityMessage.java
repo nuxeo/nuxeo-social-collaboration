@@ -17,27 +17,28 @@
 
 package org.nuxeo.ecm.activity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-public final class ActivityMessage {
+public final class ActivityMessage implements Serializable {
 
-    private final long activityId;
+    private final Serializable activityId;
 
     private final String message;
 
     private final Date publishedDate;
 
-    public ActivityMessage(long activityId, String message, Date publishedDate) {
+    public ActivityMessage(Serializable activityId, String message, Date publishedDate) {
         this.activityId = activityId;
         this.message = message;
         this.publishedDate = publishedDate;
     }
 
-    public long getActivityId() {
+    public Serializable getActivityId() {
         return activityId;
     }
 

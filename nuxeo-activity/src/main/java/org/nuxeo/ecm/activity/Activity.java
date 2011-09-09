@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.activity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
@@ -28,9 +29,7 @@ import java.util.Map;
  */
 public interface Activity {
 
-    long getId();
-
-    void setId(long id);
+    Serializable getId();
 
     String getActor();
 
