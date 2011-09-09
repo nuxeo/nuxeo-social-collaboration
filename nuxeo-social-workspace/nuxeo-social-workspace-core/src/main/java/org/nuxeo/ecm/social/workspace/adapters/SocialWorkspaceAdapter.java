@@ -84,7 +84,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public boolean isMembersNotificationEnabled() {
+    public boolean isMembersNotificationDisabled() {
         Boolean allowMembersNotification = (Boolean)doc.getContextData(MEMBER_NOTIFICATION_DISABLED);
         return allowMembersNotification == null ? false
                 : allowMembersNotification;

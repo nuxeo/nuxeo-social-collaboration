@@ -70,7 +70,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
     public void testAddSeveralSocialWorkspaceMembers() throws Exception {
         assertEquals(0, ImportEventListener.getMemberAddedCount());
         SocialWorkspace socialWorkspace = createSocialWorkspace("Social workspace for test");
-        assertTrue(socialWorkspace.isMembersNotificationEnabled());
+        assertFalse(socialWorkspace.isMembersNotificationDisabled());
 
         String userAlreadyMember1Email = "userAlreadyMember1@mail.net";
         DocumentModel userAlreadyMember1 = createUserForTest(
@@ -80,7 +80,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
         socialWorkspace.getDocument().putContextData("memberNotificationDisabled",
                 true);
-        assertTrue(socialWorkspace.isMembersNotificationEnabled());
+        assertTrue(socialWorkspace.isMembersNotificationDisabled());
 
         DocumentModel userAlreadyMember2 = createUserForTest(
                 "userAlreadyMember2@mail.net", "userAlreadyMember2");

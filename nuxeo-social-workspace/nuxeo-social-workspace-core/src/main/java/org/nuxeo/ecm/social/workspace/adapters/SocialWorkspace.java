@@ -62,7 +62,7 @@ public interface SocialWorkspace {
      * Returns {@code true} if the social workspace won't send a notification to
      * its members when modifications occurred.
      */
-    boolean isMembersNotificationEnabled();
+    boolean isMembersNotificationDisabled();
 
     /**
      * Adds a user to this Social Workspace administrators group.
