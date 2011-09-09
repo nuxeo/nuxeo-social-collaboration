@@ -63,7 +63,7 @@ public class SocialWorkspaceActivityListener implements EventListener {
         }
 
         SocialWorkspace socialWorkspace = Framework.getLocalService(
-                SocialWorkspaceService.class).getSocialWorkspaceContainer(doc);
+                SocialWorkspaceService.class).getSocialWorkspace(doc);
         if (socialWorkspace != null) {
             addActivity(event, ctx.getPrincipal(), doc, socialWorkspace);
         }

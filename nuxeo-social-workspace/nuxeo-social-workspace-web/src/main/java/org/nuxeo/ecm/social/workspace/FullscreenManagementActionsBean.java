@@ -165,7 +165,7 @@ public class FullscreenManagementActionsBean implements Serializable {
 
     protected DocumentRef getRootSocialContainerPathRef(String type) {
         DocumentModel currentDoc = navigationContext.getCurrentDocument();
-        SocialWorkspace socialContainer = socialWorkspaceService.getSocialWorkspaceContainer(currentDoc);
+        SocialWorkspace socialContainer = socialWorkspaceService.getSocialWorkspace(currentDoc);
 
         if (SocialConstants.NEWS_ITEM_TYPE.equals(type)) {
             return new PathRef(socialContainer.getPath(),

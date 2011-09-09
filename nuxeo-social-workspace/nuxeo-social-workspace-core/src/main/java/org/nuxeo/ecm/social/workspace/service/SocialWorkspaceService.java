@@ -77,7 +77,7 @@ public interface SocialWorkspaceService {
      * Returns the {@code SocialWorkspace} container of the given document if it
      * is part of a Social Workspace, {@code null} otherwise.
      */
-    SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc);
+    SocialWorkspace getSocialWorkspace(DocumentModel doc);
 
     /**
      * Adds a user to the @{code socialWorkspace} administrators group.

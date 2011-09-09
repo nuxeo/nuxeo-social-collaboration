@@ -185,7 +185,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public SocialWorkspace getSocialWorkspaceContainer(DocumentModel doc) {
+    public SocialWorkspace getSocialWorkspace(DocumentModel doc) {
         try {
             CoreSession session = doc.getCoreSession();
             List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
