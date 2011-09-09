@@ -21,6 +21,7 @@ import static org.nuxeo.ecm.activity.ActivityHelper.getDocumentLink;
 import static org.nuxeo.ecm.activity.ActivityHelper.getUserProfileLink;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -101,8 +102,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
                     new PersistenceProvider.RunCallback<ActivitiesList>() {
                         @Override
                         public ActivitiesList runWith(EntityManager em) {
-                            return query(em, filter, parameters, offset,
-                                    limit);
+                            return query(em, filter, parameters, offset, limit);
                         }
                     });
         } catch (ClientException e) {
@@ -122,8 +122,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
 
     }
 
-    protected ActivitiesList queryAll(final long offset,
-                                      final long limit) {
+    protected ActivitiesList queryAll(final long offset, final long limit) {
         try {
             return getOrCreatePersistenceProvider().run(false,
                     new PersistenceProvider.RunCallback<ActivitiesList>() {
@@ -138,8 +137,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     }
 
     @SuppressWarnings("unchecked")
-    protected ActivitiesList queryAll(EntityManager em, long offset,
-                                      long limit) {
+    protected ActivitiesList queryAll(EntityManager em, long offset, long limit) {
         Query query = em.createQuery("from Activity activity");
         if (limit > 0) {
             query.setMaxResults((int) limit);
@@ -178,6 +176,41 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
                     filter.handleNewActivity(this, activity);
                 }
             }
+        } finally {
+            localEntityManager.remove();
+        }
+    }
+
+    @Override
+    public void removeActivities(final Collection<Serializable> activityIds) {
+        if (activityIds == null || activityIds.isEmpty()) {
+            return;
+        }
+
+        try {
+            getOrCreatePersistenceProvider().run(true,
+                    new PersistenceProvider.RunVoid() {
+                        @Override
+                        public void runWith(EntityManager em) {
+                            removeActivities(em, activityIds);
+                        }
+                    });
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    protected void removeActivities(EntityManager em,
+            Collection<Serializable> activityIds) {
+        try {
+            localEntityManager.set(em);
+            for (ActivityStreamFilter filter : activityStreamFilters.values()) {
+                filter.handleRemovedActivities(this, activityIds);
+            }
+
+            Query query = em.createQuery("delete from Activity activity where activity.id in (:ids)");
+            query.setParameter("ids", activityIds);
+            query.executeUpdate();
         } finally {
             localEntityManager.remove();
         }

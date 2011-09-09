@@ -25,16 +25,11 @@ import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.STREAM_T
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -46,8 +41,6 @@ import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
-import org.nuxeo.ecm.social.mini.message.MiniMessageHelper;
-import org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider;
 
 /**
  * Operation to get the mini messages for or from a given actor.

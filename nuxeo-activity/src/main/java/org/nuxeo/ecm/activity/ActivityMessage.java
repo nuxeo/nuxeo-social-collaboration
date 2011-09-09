@@ -26,13 +26,19 @@ import java.util.Date;
  */
 public final class ActivityMessage implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private final Serializable activityId;
 
     private final String message;
 
     private final Date publishedDate;
 
-    public ActivityMessage(Serializable activityId, String message, Date publishedDate) {
+    public ActivityMessage(Serializable activityId, String message,
+            Date publishedDate) {
         this.activityId = activityId;
         this.message = message;
         this.publishedDate = publishedDate;

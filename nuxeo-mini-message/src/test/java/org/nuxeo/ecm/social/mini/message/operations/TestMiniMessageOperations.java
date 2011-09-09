@@ -126,9 +126,8 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(json);
 
         mapper = new ObjectMapper();
-        m = mapper.readValue(json,
-                new TypeReference<Map<String, Object>>() {
-                });
+        m = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
+        });
         miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertEquals(5, miniMessages.size());
 
@@ -140,9 +139,8 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(json);
 
         mapper = new ObjectMapper();
-        m = mapper.readValue(json,
-                new TypeReference<Map<String, Object>>() {
-                });
+        m = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
+        });
         miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertEquals(0, miniMessages.size());
 

@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.activity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -61,6 +62,16 @@ public class TweetActivityStreamFilter implements ActivityStreamFilter {
             tweetActivity.setSeenBy("John");
             em.persist(tweetActivity);
         }
+    }
+
+    @Override
+    public void handleRemovedActivities(
+            ActivityStreamService activityStreamService,
+            Collection<Serializable> activityIds) {
+        EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
+        Query query = em.createQuery("delete from Tweet tweet where tweet.activityId in (:activityIds)");
+        query.setParameter("activityIds", activityIds);
+        query.executeUpdate();
     }
 
     @Override
