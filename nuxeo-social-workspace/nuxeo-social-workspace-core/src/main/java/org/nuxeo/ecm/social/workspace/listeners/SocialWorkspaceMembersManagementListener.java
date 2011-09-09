@@ -58,22 +58,26 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceComponent;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Listener to notify members about added or removed social workspace
- * members
- * 
+ * Listener to notify members about added or removed social workspace members
+ *
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.4.3
  */
-public class MembersManagementSocialWorkspaceListener implements
+public class SocialWorkspaceMembersManagementListener implements
         PostCommitEventListener {
 
-    private static Log log = LogFactory.getLog(MembersManagementSocialWorkspaceListener.class);
+    private static Log log = LogFactory.getLog(SocialWorkspaceMembersManagementListener.class);
 
     private static final String TEMPLATE_ADDED = "templates/memberNotification.ftl";
 
     @Override
     public void handleEvent(EventBundle eventBundle) throws ClientException {
         Map<DocumentRef, List<Event>> socialDocuments = new HashMap<DocumentRef, List<Event>>();
+
+        if (!(eventBundle.containsEventName(EVENT_MEMBERS_ADDED) || eventBundle.containsEventName(EVENT_MEMBERS_REMOVED))) {
+            return;
+        }
+
         for (Event event : eventBundle) {
             String eventName = event.getName();
             if (EVENT_MEMBERS_ADDED.equals(eventName)
@@ -159,7 +163,7 @@ public class MembersManagementSocialWorkspaceListener implements
                     true).set("subject", subject).set("message", message);
             Framework.getLocalService(AutomationService.class).run(ctx, chain);
         } catch (Exception e) {
-            log.warn("Unable to notify about a member management.");
+            log.error("Unable to notify about a member management.",e);
             log.debug(e, e);
         }
     }

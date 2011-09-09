@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -38,6 +37,8 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
+
+import com.google.inject.Inject;
 
 @Deploy({ "org.nuxeo.ecm.automation.core",
         "org.nuxeo.ecm.automation.features",
@@ -69,7 +70,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
     public void testAddSeveralSocialWorkspaceMembers() throws Exception {
         assertEquals(0, ImportEventListener.getMemberAddedCount());
         SocialWorkspace socialWorkspace = createSocialWorkspace("Social workspace for test");
-        assertFalse(socialWorkspace.isMembersNotificationDisabled());
+        assertTrue(socialWorkspace.isMembersNotificationEnabled());
 
         String userAlreadyMember1Email = "userAlreadyMember1@mail.net";
         DocumentModel userAlreadyMember1 = createUserForTest(
@@ -79,7 +80,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
         socialWorkspace.getDocument().putContextData("memberNotificationDisabled",
                 true);
-        assertTrue(socialWorkspace.isMembersNotificationDisabled());
+        assertTrue(socialWorkspace.isMembersNotificationEnabled());
 
         DocumentModel userAlreadyMember2 = createUserForTest(
                 "userAlreadyMember2@mail.net", "userAlreadyMember2");
@@ -102,7 +103,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
                 "userNewMember2@mail.net", nonExsitingUser1Email,
                 "nonExistingUser2@mail.net", fulltextEmailUser1.getId());
 
-        List<String> addedUsers = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
+        List<String> addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
                 socialWorkspace, emails);
         assertEquals(3, addedUsers.size());
         assertEquals(5, ImportEventListener.getMemberAddedCount());
@@ -111,17 +112,17 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         assertFalse(addedUsers.contains(nonExsitingUser1Email));
         assertTrue(addedUsers.contains(userNewMember1Email));
 
-        addedUsers = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
+        addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
                 socialWorkspace, emails);
         assertTrue(addedUsers.isEmpty());
 
-        addedUsers = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
+        addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
                 socialWorkspace, new ArrayList<String>());
         assertTrue(addedUsers.isEmpty());
     }
 
     @Test(expected = ClientException.class)
-    public void testAddSeveralSocialWorkspaceMembersFromGroup()
+    public void testaddSocialWorkspaceMembersFromGroup()
             throws Exception {
         assertEquals(0, ImportEventListener.getMemberAddedCount());
 
@@ -146,7 +147,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
         int beforeImportCount = ImportEventListener.getMemberAddedCount();
         sw.getDocument().putContextData("allowMemberNotification", false);
-        List<String> imported = socialWorkspaceService.addSeveralSocialWorkspaceMembers(
+        List<String> imported = socialWorkspaceService.addSocialWorkspaceMembers(
                 sw, group1.getName());
         assertEquals(2, imported.size());
         assertEquals(beforeImportCount,
@@ -158,7 +159,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         assertEquals(3, sw.getMembers().size());
 
         // Will throw a ClientException
-        socialWorkspaceService.addSeveralSocialWorkspaceMembers(sw,
+        socialWorkspaceService.addSocialWorkspaceMembers(sw,
                 "john_doe_group");
     }
 

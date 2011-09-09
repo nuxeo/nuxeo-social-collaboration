@@ -79,7 +79,7 @@
 
     <listener name="socialWorkspaceMembersManagementListener" async="true"
       postCommit="true"
-      class="org.nuxeo.ecm.social.workspace.listeners.MembersManagementSocialWorkspaceListener"
+      class="org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceMembersManagementListener"
       priority="150">
       <event>newMembersAdded</event>
       <event>newMembersRemoved</event>

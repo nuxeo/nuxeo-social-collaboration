@@ -71,6 +71,7 @@ import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
@@ -420,7 +421,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public List<String> addSeveralSocialWorkspaceMembers(
+    public List<String> addSocialWorkspaceMembers(
             SocialWorkspace socialWorkspace, String groupName)
             throws ClientException {
         NuxeoGroup group = getUserManager().getGroup(groupName);
@@ -453,7 +454,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public List<String> addSeveralSocialWorkspaceMembers(
+    public List<String> addSocialWorkspaceMembers(
             SocialWorkspace socialWorkspace, List<String> emails)
             throws ClientException {
         List<String> memberAddedList = new ArrayList<String>(emails.size());
@@ -475,7 +476,11 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                         + " several user were found. First one used.");
             }
 
-            Principal principal = userManager.getPrincipal(foundUsers.get(0).getId());
+            DocumentModel firstUser = foundUsers.get(0);
+            NuxeoPrincipalImpl principal = new NuxeoPrincipalImpl(
+                    firstUser.getId());
+            principal.setModel(firstUser, false);
+
             if (addSocialWorkspaceMemberWithoutNotification(socialWorkspace,
                     principal)) {
                 memberAddedList.add(email);
@@ -636,7 +641,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     private static void fireEventMembersManagement(
             SocialWorkspace socialWorkspace, List<Principal> usernames,
             String eventName) {
-        if (!socialWorkspace.isMembersNotificationDisabled()) {
+        if (socialWorkspace.isMembersNotificationEnabled()) {
             DocumentModel doc = socialWorkspace.getDocument();
             EventContext ctx = new DocumentEventContext(doc.getCoreSession(),
                     doc.getCoreSession().getPrincipal(), doc);
