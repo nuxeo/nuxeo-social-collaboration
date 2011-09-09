@@ -48,7 +48,7 @@
   </head>
 
   <body>
-     <div class="content">
+     <div id="content">
       <#include "default-documentlist-layout.ftl"/>
       <#include "default-request-controls.ftl"/>
     </div>
