@@ -19,9 +19,14 @@ package org.nuxeo.ecm.social.workspace;
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ROOT_RELATIVE_PATH;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspaceContainer;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+import static org.nuxeo.ecm.webapp.helpers.EventNames.DOCUMENT_CHILDREN_CHANGED;
 
 import java.io.Serializable;
 
@@ -44,7 +49,6 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
 import org.nuxeo.ecm.webapp.helpers.EventManager;
-import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
@@ -157,22 +161,34 @@ public class FullscreenManagementActionsBean implements Serializable {
     }
 
     public String createNewDocument(String type) throws ClientException {
-        DocumentModel parentContainer = documentManager.getDocument(getRootSocialContainerPathRef(type));
-        navigationContext.navigateToDocument(parentContainer);
+        DocumentModel parent = documentManager.getDocument(getRootSocialContainerPathRef(type));
+        navigationContext.navigateToDocument(parent);
         documentActions.createDocument(type);
         return FULLSCREEN_CREATE_VIEW;
     }
 
+    public DocumentModel getChangeableSocialDocument() throws ClientException {
+        if (navigationContext.getChangeableDocument() == null
+                && canCreateSocialWorkspace()) {
+            createNewDocument(SOCIAL_WORKSPACE_TYPE);
+        }
+        return navigationContext.getChangeableDocument();
+    }
+
     protected DocumentRef getRootSocialContainerPathRef(String type) {
         DocumentModel currentDoc = navigationContext.getCurrentDocument();
-        SocialWorkspace socialContainer = socialWorkspaceService.getSocialWorkspace(currentDoc);
 
-        if (SocialConstants.NEWS_ITEM_TYPE.equals(type)) {
-            return new PathRef(socialContainer.getPath(),
-                    SocialConstants.NEWS_ROOT_RELATIVE_PATH);
+        if (isSocialWorkspaceContainer(currentDoc)) {
+            return currentDoc.getRef();
         }
 
-        if (SocialConstants.SOCIAL_WORKSPACE_TYPE.equals(type)) {
+        SocialWorkspace socialContainer = socialWorkspaceService.getSocialWorkspace(currentDoc);
+        if (NEWS_ITEM_TYPE.equals(type)) {
+            return new PathRef(socialContainer.getPath(),
+                    NEWS_ROOT_RELATIVE_PATH);
+        }
+
+        if (SOCIAL_WORKSPACE_TYPE.equals(type)) {
             return socialContainer.getDocument().getParentRef();
         }
 
@@ -190,7 +206,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         document.followTransition(DELETE_TRANSITION);
         documentManager.saveDocument(document);
         DocumentModel parentDoc = documentManager.getDocument(document.getParentRef());
-        Events.instance().raiseEvent(EventNames.DOCUMENT_CHILDREN_CHANGED,
+        Events.instance().raiseEvent(DOCUMENT_CHILDREN_CHANGED,
                 parentDoc);
     }
 
@@ -243,10 +259,10 @@ public class FullscreenManagementActionsBean implements Serializable {
     public String displayCreateSocialWorkspaceForm() throws ClientException {
         previous = navigationContext.getCurrentDocument();
         if (previous != null
-                && SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE.equals(previous.getType())) {
+                && DASHBOARD_SPACES_CONTAINER_TYPE.equals(previous.getType())) {
             previous = documentManager.getDocument(previous.getParentRef());
         }
-        return createNewDocument(SocialConstants.SOCIAL_WORKSPACE_TYPE);
+        return createNewDocument(SOCIAL_WORKSPACE_TYPE);
     }
 
     public String goToPreviousDocument() throws ClientException {
@@ -266,7 +282,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         DocumentModel doc = navigationContext.getCurrentDocument();
         DocumentModel parent = null;
 
-        if (SocialConstants.SOCIAL_WORKSPACE_CONTAINER_TYPE.equals(doc.getType())) {
+        if (isSocialWorkspaceContainer(doc)) {
             parent = doc;
         } else {
             SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(doc);
