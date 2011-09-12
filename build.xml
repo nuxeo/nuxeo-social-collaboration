@@ -57,7 +57,7 @@
   </target>
 
   <target name="deploy-tomcat" depends="build" description="Deploy project on a Tomcat instance">
-    <copy todir="${tomcat.bundles.dir}" overwrite="true" flatten="true">
+    <copy todir="${tomcat.bundles.dir}" verbose="true" overwrite="true" flatten="true">
       <fileset dir="${basedir}">
         <include name="**/target/*.jar" />
         <exclude name="**/target/*-sources.jar" />
