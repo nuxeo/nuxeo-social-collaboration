@@ -21,7 +21,7 @@
       action="#{bulkImportSocialWorkspaceActions.importUserFromListOfEmail}"
       styleClass="button"/>
 
-    <h:selectBooleanCheckbox id="emailNotification" value="#{currentDocument.contextData.memberNotificationDisabled}" />
+    <h:selectBooleanCheckbox id="emailNotification" value="#{currentDocument.contextData['request/memberNotificationDisabled']}" />
     <h:outputText value="#{messages['label.social.workspace.notification.disabled']}"/>
 
     <h2>#{messages['label.social.workspace.bulk.import.group']}</h2>
@@ -33,7 +33,7 @@
       action="#{bulkImportSocialWorkspaceActions.importUserFromGroups}"
       styleClass="button"/>
 
-    <h:selectBooleanCheckbox id="groupNotification" value="#{currentDocument.contextData.memberNotificationDisabled}" />
+    <h:selectBooleanCheckbox id="groupNotification" value="#{currentDocument.contextData['request/memberNotificationDisabled']}" />
     <h:outputText value="#{messages['label.social.workspace.notification.disabled']}"/>
 
   </h:form>

@@ -11,6 +11,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildR
 import java.security.Principal;
 import java.util.List;
 
+import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
@@ -84,10 +85,10 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
-    public boolean isMembersNotificationDisabled() {
-        Boolean allowMembersNotification = (Boolean)doc.getContextData(MEMBER_NOTIFICATION_DISABLED);
-        return allowMembersNotification == null ? false
-                : allowMembersNotification;
+    public boolean isMembersNotificationEnabled() {
+        Boolean allowMembersNotification = (Boolean)doc.getContextData(ScopeType.REQUEST,MEMBER_NOTIFICATION_DISABLED);
+        return allowMembersNotification == null ? true
+                : !allowMembersNotification;
     }
 
 

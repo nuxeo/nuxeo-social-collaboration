@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.EventService;
@@ -40,11 +41,9 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import com.google.inject.Inject;
 
-@Deploy({ "org.nuxeo.ecm.automation.core",
-        "org.nuxeo.ecm.automation.features",
-        "org.nuxeo.ecm.platform.url.api",
-        "org.nuxeo.ecm.platform.url.core",
-        "org.nuxeo.ecm.platform.notification.core"})
+@Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
+        "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
+        "org.nuxeo.ecm.platform.notification.core" })
 @LocalDeploy({ "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml" })
 public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
@@ -70,7 +69,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
     public void testAddSeveralSocialWorkspaceMembers() throws Exception {
         assertEquals(0, ImportEventListener.getMemberAddedCount());
         SocialWorkspace socialWorkspace = createSocialWorkspace("Social workspace for test");
-        assertFalse(socialWorkspace.isMembersNotificationDisabled());
+        assertTrue(socialWorkspace.isMembersNotificationEnabled());
 
         String userAlreadyMember1Email = "userAlreadyMember1@mail.net";
         DocumentModel userAlreadyMember1 = createUserForTest(
@@ -78,17 +77,17 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember1.getId()));
         assertEquals(2, ImportEventListener.getMemberAddedCount());
 
-        socialWorkspace.getDocument().putContextData("memberNotificationDisabled",
-                true);
-        assertTrue(socialWorkspace.isMembersNotificationDisabled());
+        socialWorkspace.getDocument().putContextData(ScopeType.REQUEST,
+                "memberNotificationDisabled", true);
+        assertFalse(socialWorkspace.isMembersNotificationEnabled());
 
         DocumentModel userAlreadyMember2 = createUserForTest(
                 "userAlreadyMember2@mail.net", "userAlreadyMember2");
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember2.getId()));
 
         assertEquals(2, ImportEventListener.getMemberAddedCount());
-        socialWorkspace.getDocument().putContextData("memberNotificationDisabled",
-                false);
+        socialWorkspace.getDocument().putContextData(ScopeType.REQUEST,
+                "memberNotificationDisabled", false);
 
         DocumentModel fulltextEmailUser1 = createUserForTest(
                 "fulltextEmailUser1@mail.net", "fulltextEmailUser1");
@@ -122,8 +121,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
     }
 
     @Test(expected = ClientException.class)
-    public void testaddSocialWorkspaceMembersFromGroup()
-            throws Exception {
+    public void testaddSocialWorkspaceMembersFromGroup() throws Exception {
         assertEquals(0, ImportEventListener.getMemberAddedCount());
 
         String existingUser1 = "userAlreadyMember1";
@@ -159,8 +157,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         assertEquals(3, sw.getMembers().size());
 
         // Will throw a ClientException
-        socialWorkspaceService.addSocialWorkspaceMembers(sw,
-                "john_doe_group");
+        socialWorkspaceService.addSocialWorkspaceMembers(sw, "john_doe_group");
     }
 
     protected DocumentModel createUserForTest(String userEmail, String userId)

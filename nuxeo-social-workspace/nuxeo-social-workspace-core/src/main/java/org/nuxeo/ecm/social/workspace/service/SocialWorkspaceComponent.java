@@ -641,7 +641,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     private static void fireEventMembersManagement(
             SocialWorkspace socialWorkspace, List<Principal> usernames,
             String eventName) {
-        if (!socialWorkspace.isMembersNotificationDisabled()) {
+        if (socialWorkspace.isMembersNotificationEnabled()) {
             DocumentModel doc = socialWorkspace.getDocument();
             EventContext ctx = new DocumentEventContext(doc.getCoreSession(),
                     doc.getCoreSession().getPrincipal(), doc);

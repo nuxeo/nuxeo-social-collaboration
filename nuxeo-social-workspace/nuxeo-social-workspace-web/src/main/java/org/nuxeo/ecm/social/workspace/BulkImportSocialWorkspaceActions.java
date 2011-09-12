@@ -37,6 +37,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
+import org.nuxeo.common.collections.ScopeType;
+import org.nuxeo.common.collections.ScopedMap;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -61,6 +63,8 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
     public static final String USERS_NOT_IMPORTED_LABEL = "label.social.workspace.users.imported.not";
 
     public static final String USERS_IMPORTED_ERROR_LABEL = "label.social.workspace.users.imported.error";
+
+    private static final String MEMBER_NOTIFICATION_DISABLED = "memberNotificationDisabled";
 
     private static final Log log = LogFactory.getLog(BulkImportSocialWorkspaceActions.class);
 
@@ -121,7 +125,7 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
                                 USERS_NOT_IMPORTED_LABEL), emails.size(),
                         convertToString(emails));
             }
-
+            resetMemberNotificationDisabled(socialWorkspace);
             resetRawListOfEmails();
         } catch (ClientException e) {
             log.warn(e, e);
@@ -130,6 +134,13 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
                     resourcesAccessor.getMessages().get(
                             USERS_IMPORTED_ERROR_LABEL));
         }
+    }
+
+    private void resetMemberNotificationDisabled(SocialWorkspace socialWorkspace) {
+        ScopedMap contextData = socialWorkspace.getDocument().getContextData();
+        contextData.putScopedValue(ScopeType.REQUEST,
+                MEMBER_NOTIFICATION_DISABLED, false);
+
     }
 
     public void importUserFromGroups() {
@@ -149,6 +160,7 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
                                 USERS_IMPORTED_LABEL), importedUsers.size(),
                         convertToString(importedUsers));
                 resetGroupsToImport();
+                resetMemberNotificationDisabled(socialWorkspace);
             } catch (ClientException e) {
                 log.warn(e, e);
                 facesMessages.add(
