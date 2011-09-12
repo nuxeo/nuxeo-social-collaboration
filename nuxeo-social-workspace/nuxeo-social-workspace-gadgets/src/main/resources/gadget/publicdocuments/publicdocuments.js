@@ -35,13 +35,13 @@ function displayDocuments(entries,nxParams){
       html += '</a>';
       html += '</td>';
       html += '<td>';
-      if (entry.properties["file:filename"]){
+      if (entry.properties["file:content"]){
           html += '<a target ="_top" href=\"';
           html += NXGadgetContext.clientSideBaseUrl;
           html += "nxfile/default/";
           html += entry.uid;
           html += "/blobholder:0/";
-          html += entry.properties["file:filename"];
+          html += entry.properties["file:content"]["name"];
           html += '\" >';
           html += "<img src=\"/nuxeo/icons/download.png\" alt=\"Download\" title=\"Download\">";
           html += '</a>';
