@@ -20,13 +20,9 @@ package org.nuxeo.ecm.social.mini.message;
 import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
 
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
-import org.nuxeo.ecm.platform.htmlsanitizer.HtmlSanitizerService;
-import org.nuxeo.runtime.api.Framework;
 
 /**
  * Immutable object representing a mini message.

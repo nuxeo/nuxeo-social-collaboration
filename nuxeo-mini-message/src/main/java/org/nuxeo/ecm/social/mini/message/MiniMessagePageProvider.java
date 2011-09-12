@@ -24,9 +24,9 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.activity.AbstractActivityPageProvider;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
-import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
@@ -41,7 +41,8 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.4.3
  */
 public class MiniMessagePageProvider extends
-        AbstractPageProvider<MiniMessage> implements PageProvider<MiniMessage> {
+        AbstractActivityPageProvider<MiniMessage> implements
+        PageProvider<MiniMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,17 +71,16 @@ public class MiniMessagePageProvider extends
             String streamType = getStreamType();
             if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
                 pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFor(
-                    getActor(), getRelationshipKind(), (int) pageSize,
-                    (int) getCurrentPageIndex()));
+                        getActor(), getRelationshipKind(),
+                        getCurrentPageOffset(), pageSize));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
                 pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFrom(
-                        getActor(), (int) pageSize,
-                        (int) getCurrentPageIndex()));
+                        getActor(), getCurrentPageOffset(), pageSize));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
-
-            resultsCount = Integer.MAX_VALUE - 1;
+            nextOffset = offset + pageMiniMessages.size();
+            setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageMiniMessages;
     }

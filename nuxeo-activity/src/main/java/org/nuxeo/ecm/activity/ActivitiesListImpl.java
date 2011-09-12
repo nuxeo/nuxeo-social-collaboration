@@ -67,8 +67,8 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements
 
         // extract all unauthorized activities
         List<Activity> unauthorizedActivities = new ArrayList<Activity>();
-        for (List<Activity> l : activitiesByDocument.values()) {
-            unauthorizedActivities.addAll(l);
+        for (List<Activity> activities : activitiesByDocument.values()) {
+            unauthorizedActivities.addAll(activities);
         }
 
         // remove all unauthorized activities

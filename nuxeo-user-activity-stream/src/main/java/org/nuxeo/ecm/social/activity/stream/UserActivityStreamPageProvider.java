@@ -31,12 +31,12 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.activity.AbstractActivityPageProvider;
 import org.nuxeo.ecm.activity.ActivitiesList;
 import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -54,7 +54,7 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.4.3
  */
 public class UserActivityStreamPageProvider extends
-        AbstractPageProvider<ActivityMessage> {
+        AbstractActivityPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -88,7 +88,8 @@ public class UserActivityStreamPageProvider extends
                 parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
                 ActivitiesList activities = activityStreamService.query(
                         UserActivityStreamFilter.ID, parameters,
-                        (int) pageSize, (int) getCurrentPageIndex());
+                        getCurrentPageOffset(), pageSize);
+                nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
                 pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
@@ -97,14 +98,15 @@ public class UserActivityStreamPageProvider extends
                 parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
                 ActivitiesList activities = activityStreamService.query(
                         UserActivityStreamFilter.ID, parameters,
-                        (int) pageSize, (int) getCurrentPageIndex());
+                        getCurrentPageOffset(), pageSize);
+                nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
                 pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
 
-            resultsCount = Integer.MAX_VALUE - 1;
+            setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageActivityMessages;
     }

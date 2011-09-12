@@ -23,7 +23,6 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.MAKE_DOCUMENT_PUBLI
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +81,7 @@ public class SocialWorkspaceActivityStreamFilter implements
     @SuppressWarnings("unchecked")
     @Override
     public ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, int pageSize, int currentPage) {
+            Map<String, Serializable> parameters, long offset, long limit) {
         String repositoryName = (String) parameters.get(REPOSITORY_NAME_PARAMETER);
         if (repositoryName == null) {
             throw new IllegalArgumentException(REPOSITORY_NAME_PARAMETER
@@ -107,16 +106,16 @@ public class SocialWorkspaceActivityStreamFilter implements
             return new ActivitiesListImpl();
         }
 
-        query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) " +
-                "and activity.target = :target order by activity.publishedDate desc");
+        query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) "
+                + "and activity.target = :target order by activity.publishedDate desc");
         query.setParameter("actors", actors);
         query.setParameter("target", socialWorkspaceActivityObject);
         query.setParameter("verbs", Arrays.asList(VERBS));
 
-        if (pageSize > 0) {
-            query.setMaxResults(pageSize);
-            if (currentPage > 0) {
-                query.setFirstResult(currentPage * pageSize);
+        if (limit > 0) {
+            query.setMaxResults((int) limit);
+            if (offset > 0) {
+                query.setFirstResult((int) offset);
             }
         }
         return new ActivitiesListImpl(query.getResultList());

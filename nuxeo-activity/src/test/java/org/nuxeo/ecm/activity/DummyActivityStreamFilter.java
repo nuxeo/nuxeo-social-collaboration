@@ -48,7 +48,7 @@ public class DummyActivityStreamFilter implements ActivityStreamFilter {
 
     @Override
     public ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, int pageSize, int currentPage) {
+            Map<String, Serializable> parameters, long offset, long limit) {
         ActivitiesList list = new ActivitiesListImpl();
         list.add(lastActivity);
         return list;
