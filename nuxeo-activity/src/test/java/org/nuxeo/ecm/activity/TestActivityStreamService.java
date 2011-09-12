@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.activity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
@@ -25,6 +26,8 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -184,6 +187,60 @@ public class TestActivityStreamService {
     }
 
     @Test
+    public void shouldRemoveActivities() {
+        addTestActivities(10);
+
+        List<Activity> allActivities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 0, 0);
+        assertEquals(10, allActivities.size());
+
+        Activity firstActivity = allActivities.get(0);
+        activityStreamService.removeActivities(Collections.singleton(firstActivity.getId()));
+
+        allActivities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 0, 0);
+        assertEquals(9, allActivities.size());
+        assertFalse(allActivities.contains(firstActivity));
+
+        List<Activity> activities = allActivities.subList(0, 4);
+        activityStreamService.removeActivities(toActivityIds(activities));
+        allActivities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 0, 0);
+        assertEquals(5, allActivities.size());
+
+        activities = allActivities.subList(0, 5);
+        activityStreamService.removeActivities(toActivityIds(activities));
+        allActivities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null, 0, 0);
+        assertTrue(allActivities.isEmpty());
+    }
+
+    private List<Serializable> toActivityIds(List<Activity> activities) {
+        List<Serializable> activityIds = new ArrayList<Serializable>();
+        for (Activity activity : activities) {
+            activityIds.add(activity.getId());
+        }
+        return activityIds;
+    }
+
+    @Test
+    public void shouldStoreLabelKeyForActivityVerbs() {
+        Map<String, String> activityMessageLabels = ((ActivityStreamServiceImpl) activityStreamService).activityMessageLabels;
+        assertNotNull(activityMessageLabels);
+        assertEquals(3, activityMessageLabels.size());
+        assertTrue(activityMessageLabels.containsKey(DOCUMENT_CREATED));
+        assertTrue(activityMessageLabels.containsKey(DOCUMENT_UPDATED));
+        assertTrue(activityMessageLabels.containsKey(DOCUMENT_REMOVED));
+
+        assertEquals("label.activity.documentCreated",
+                activityMessageLabels.get(DOCUMENT_CREATED));
+        assertEquals("label.activity.documentUpdated",
+                activityMessageLabels.get(DOCUMENT_UPDATED));
+        assertEquals("label.activity.documentRemoved",
+                activityMessageLabels.get(DOCUMENT_REMOVED));
+    }
+
+    @Test
     public void shouldStoreTweetActivities() {
         Activity activity = new ActivityImpl();
         activity.setActor("Administrator");
@@ -224,20 +281,47 @@ public class TestActivityStreamService {
     }
 
     @Test
-    public void shouldStoreLAbelKeyForActivityVerbs() {
-        Map<String, String> activityMessageLabels = ((ActivityStreamServiceImpl) activityStreamService).activityMessageLabels;
-        assertNotNull(activityMessageLabels);
-        assertEquals(3, activityMessageLabels.size());
-        assertTrue(activityMessageLabels.containsKey(DOCUMENT_CREATED));
-        assertTrue(activityMessageLabels.containsKey(DOCUMENT_UPDATED));
-        assertTrue(activityMessageLabels.containsKey(DOCUMENT_REMOVED));
+    public void shouldRemoveTweets() throws ClientException {
+        Activity activity = new ActivityImpl();
+        activity.setActor("Administrator");
+        activity.setVerb(TweetActivityStreamFilter.TWEET_VERB);
+        activity.setObject("yo");
+        activity.setPublishedDate(new Date());
+        activity = activityStreamService.addActivity(activity);
 
-        assertEquals("label.activity.documentCreated",
-                activityMessageLabels.get(DOCUMENT_CREATED));
-        assertEquals("label.activity.documentUpdated",
-                activityMessageLabels.get(DOCUMENT_UPDATED));
-        assertEquals("label.activity.documentRemoved",
-                activityMessageLabels.get(DOCUMENT_REMOVED));
+        Map<String, Serializable> parameters = new HashMap<String, Serializable>();
+        parameters.put("seenBy", "Bob");
+        List<Activity> activities = activityStreamService.query(
+                TweetActivityStreamFilter.ID, parameters);
+        assertEquals(1, activities.size());
+
+        List<TweetActivity> tweets = getAllTweetActivities();
+        assertEquals(3, tweets.size());
+
+        activityStreamService.removeActivities(Collections.singleton(activity.getId()));
+        activities = activityStreamService.query(TweetActivityStreamFilter.ID,
+                parameters);
+        assertTrue(activities.isEmpty());
+
+        activities = activityStreamService.query(
+                ActivityStreamService.ALL_ACTIVITIES, null);
+        assertTrue(activities.isEmpty());
+
+        tweets = getAllTweetActivities();
+        assertTrue(tweets.isEmpty());
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<TweetActivity> getAllTweetActivities() throws ClientException {
+        return ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(
+                true,
+                new PersistenceProvider.RunCallback<List<TweetActivity>>() {
+                    @Override
+                    public List<TweetActivity> runWith(EntityManager em) {
+                        Query query = em.createQuery("from Tweet");
+                        return query.getResultList();
+                    }
+                });
     }
 
 }

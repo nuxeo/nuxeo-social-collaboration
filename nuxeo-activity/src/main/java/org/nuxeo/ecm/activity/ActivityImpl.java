@@ -45,7 +45,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @Table(name = "nxp_activities")
 public class ActivityImpl implements Activity {
 
-    private long id;
+    private Long id;
 
     private String actor;
 
@@ -67,12 +67,11 @@ public class ActivityImpl implements Activity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, columnDefinition = "integer")
     @Override
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    @Override
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

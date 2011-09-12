@@ -106,7 +106,7 @@ public class TestActivityStreamListener {
 
         String currentUser = ActivityHelper.createUserActivityObject(session.getPrincipal());
         Activity storedActivity = activities.get(0);
-        assertEquals(1, storedActivity.getId());
+        assertEquals(1L, storedActivity.getId());
         assertEquals(currentUser, storedActivity.getActor());
         assertEquals(DOCUMENT_CREATED, storedActivity.getVerb());
         assertEquals(ActivityHelper.createDocumentActivityObject(doc1),
@@ -117,7 +117,7 @@ public class TestActivityStreamListener {
                 storedActivity.getTarget());
 
         storedActivity = activities.get(1);
-        assertEquals(2, storedActivity.getId());
+        assertEquals(2L, storedActivity.getId());
         assertEquals(currentUser, storedActivity.getActor());
         assertEquals(DOCUMENT_CREATED, storedActivity.getVerb());
         assertEquals(ActivityHelper.createDocumentActivityObject(doc2),
@@ -128,7 +128,7 @@ public class TestActivityStreamListener {
                 storedActivity.getTarget());
 
         storedActivity = activities.get(2);
-        assertEquals(3, storedActivity.getId());
+        assertEquals(3L, storedActivity.getId());
         assertEquals(currentUser, storedActivity.getActor());
         assertEquals(DocumentEventTypes.DOCUMENT_UPDATED,
                 storedActivity.getVerb());

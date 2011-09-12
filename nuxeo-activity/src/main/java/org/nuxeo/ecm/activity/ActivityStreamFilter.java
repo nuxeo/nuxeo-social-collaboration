@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.activity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -50,13 +51,20 @@ public interface ActivityStreamFilter {
             Activity activity);
 
     /**
+     * Called by the {@code ActivityStreamService} before removing the
+     * activities referenced by the given {@code activityIds}.
+     */
+    void handleRemovedActivities(ActivityStreamService activityStreamService,
+            Collection<Serializable> activityIds);
+
+    /**
      * Returns the list of activities filtered by the given parameters.
      *
      * @param activityStreamService the main {@code ActivityStreamService}
      * @param parameters this query parameters.
      * @param offset the offset (starting at 0) into the list of activities.
-     * @param limit the maximum number of activities to retrieve, or 0 for all of
-     *            them.
+     * @param limit the maximum number of activities to retrieve, or 0 for all
+     *            of them.
      */
     ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, long offset, long limit);

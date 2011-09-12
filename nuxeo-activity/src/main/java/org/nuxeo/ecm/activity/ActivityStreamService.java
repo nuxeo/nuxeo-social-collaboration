@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.activity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,14 +44,19 @@ public interface ActivityStreamService {
     Activity addActivity(Activity activity);
 
     /**
+     * Remove the Activities referenced by the given {@code activityIds}.
+     */
+    void removeActivities(Collection<Serializable> activityIds);
+
+    /**
      * Returns the list of activities filtered by the given parameters using the
      * {@code ActivityStreamFilter} referenced by {@code filterId}.
      *
      * @param filterId the id of the {@code ActivityStreamFilter} to use.
      * @param parameters this query parameters.
      * @param offset the offset (starting at 0) into the list of activities.
-     * @param limit the maximum number of activities to retrieve, or 0 for all of
-     *            them.
+     * @param limit the maximum number of activities to retrieve, or 0 for all
+     *            of them.
      *
      * @throws org.nuxeo.ecm.core.api.ClientRuntimeException if there is no
      *             {@code ActivityStreamFilter} matching the given
