@@ -47,6 +47,11 @@ public interface MiniMessageService {
     MiniMessage addMiniMessage(Principal principal, String message);
 
     /**
+     * Remove a mini message.
+     */
+    void removeMiniMessage(MiniMessage miniMessage);
+
+    /**
      * Returns the mini messages for the given {@code actorActivityObject}. The
      * {@code relationshipKind} is used to find people with whom the actor has a
      * relation.

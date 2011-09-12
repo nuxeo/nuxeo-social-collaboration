@@ -36,10 +36,7 @@
         <label mode="any" />
       </labels>
       <fields>
-        <field>data.actor</field>
-        <field>data.displayActor</field>
-        <field>data.message</field>
-        <field>data.publishedDate</field>
+        <field>data</field>
       </fields>
       <properties mode="any">
         <property name="template">/widgets/listing_mini_message_widget_template.xhtml</property>

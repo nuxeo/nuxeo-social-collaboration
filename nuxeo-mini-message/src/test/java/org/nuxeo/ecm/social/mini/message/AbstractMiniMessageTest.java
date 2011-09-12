@@ -67,6 +67,8 @@ import com.google.inject.Inject;
 @LocalDeploy("org.nuxeo.ecm.social.mini.message:mini-message-test.xml")
 public abstract class AbstractMiniMessageTest {
 
+    public static RelationshipKind CIRCLE_RELATION = RelationshipKind.fromGroup("circle");
+
     @Inject
     protected FeaturesRunner featuresRunner;
 
@@ -87,6 +89,8 @@ public abstract class AbstractMiniMessageTest {
 
     @Inject
     protected CoreSession session;
+
+
 
     @Before
     public void cleanupDatabase() throws ClientException {

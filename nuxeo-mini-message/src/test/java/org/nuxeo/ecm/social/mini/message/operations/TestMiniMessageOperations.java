@@ -66,7 +66,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
                 ActivityHelper.createUserActivityObject("Leela"),
-                RelationshipKind.fromGroup("circle"), 0, 0);
+                CIRCLE_RELATION, 0, 0);
         assertNotNull(messages);
         assertEquals(1, messages.size());
 
@@ -90,6 +90,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         Map<String, Object> m = mapper.readValue(json,
                 new TypeReference<Map<String, Object>>() {
                 });
+        @SuppressWarnings("unchecked")
         List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertTrue(miniMessages.isEmpty());
 
@@ -97,6 +98,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void shouldGetPaginatedMiniMessages() throws Exception {
         initializeSomeMiniMessagesAndRelations();
         changeUser("Leela");

@@ -31,8 +31,11 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
+import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
+import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -52,6 +55,12 @@ public class MiniMessageActions implements Serializable {
 
     @In(create = true)
     protected transient ContentViewActions contentViewActions;
+
+    @In(create = true, required = false)
+    protected FacesMessages facesMessages;
+
+    @In(create = true)
+    protected ResourcesAccessor resourcesAccessor;
 
     @In(required = true, create = true)
     protected transient Principal currentUser;
@@ -75,6 +84,14 @@ public class MiniMessageActions implements Serializable {
         miniMessageService.addMiniMessage(currentUser, newMessage);
         Events.instance().raiseEvent(MINI_MESSAGE_CREATED_EVENT);
         newMessage = null;
+    }
+
+    public void deleteMiniMessage(MiniMessage miniMessage) {
+        getMiniMessageService().removeMiniMessage(miniMessage);
+        facesMessages.add(
+                    StatusMessage.Severity.INFO,
+                    resourcesAccessor.getMessages().get(
+                            "info.mini.message.removed"));
     }
 
     protected MiniMessageService getMiniMessageService()

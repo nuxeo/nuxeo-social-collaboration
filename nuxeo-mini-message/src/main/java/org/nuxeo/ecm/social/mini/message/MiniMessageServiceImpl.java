@@ -19,13 +19,14 @@ package org.nuxeo.ecm.social.mini.message;
 
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.ACTOR_PARAMETER;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QUERY_TYPE_PARAMETER;
-import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FOR_ACTOR;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FROM_ACTOR;
+import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,12 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     @Override
     public MiniMessage addMiniMessage(Principal principal, String message) {
         return addMiniMessage(principal, message, new Date());
+    }
+
+    @Override
+    public void removeMiniMessage(MiniMessage miniMessage) {
+        getActivityStreamService().removeActivities(
+                Collections.singleton(miniMessage.getId()));
     }
 
     @Override
