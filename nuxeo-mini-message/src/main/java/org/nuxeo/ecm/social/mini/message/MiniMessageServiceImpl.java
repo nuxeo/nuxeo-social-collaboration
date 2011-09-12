@@ -19,9 +19,9 @@ package org.nuxeo.ecm.social.mini.message;
 
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.ACTOR_PARAMETER;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QUERY_TYPE_PARAMETER;
+import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FOR_ACTOR;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FROM_ACTOR;
-import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 
 import java.io.Serializable;
 import java.security.Principal;

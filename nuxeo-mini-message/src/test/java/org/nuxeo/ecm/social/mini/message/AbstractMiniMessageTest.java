@@ -90,8 +90,6 @@ public abstract class AbstractMiniMessageTest {
     @Inject
     protected CoreSession session;
 
-
-
     @Before
     public void cleanupDatabase() throws ClientException {
         ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(
