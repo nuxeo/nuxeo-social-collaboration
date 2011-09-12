@@ -30,10 +30,8 @@ import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 public abstract class AbstractActivityPageProvider<T> extends
         AbstractPageProvider<T> {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
+
     protected long nextOffset;
 
     /**

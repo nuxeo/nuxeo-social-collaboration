@@ -21,14 +21,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * Immutable object representing an Activity message.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
 public final class ActivityMessage implements Serializable {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     private final Serializable activityId;
