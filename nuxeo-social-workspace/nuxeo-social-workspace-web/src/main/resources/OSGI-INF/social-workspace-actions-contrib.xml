@@ -75,7 +75,7 @@
       <filter-id>is_social_workspace_administrator</filter-id>
     </action>
 
-  <action id="CreateSocialWorkspace"
+    <action id="CreateSocialWorkspace"
       link="#{fullscreenManagementActions.displayCreateSocialWorkspaceForm}"
       label="label.social.workspace.create.social.workspace"
       immediate="false"
