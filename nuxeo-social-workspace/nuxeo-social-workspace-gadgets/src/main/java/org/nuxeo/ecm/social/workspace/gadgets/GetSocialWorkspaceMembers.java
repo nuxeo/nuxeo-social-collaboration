@@ -67,7 +67,7 @@ public class GetSocialWorkspaceMembers {
     @Context
     protected UserManager userManager;
 
-    @Param(name = "pageSize")
+    @Param(name = "limit")
     protected int pageSize = 5;
 
     @Param(name = "page")
@@ -126,8 +126,10 @@ public class GetSocialWorkspaceMembers {
         }
 
         if (userProfileDoc.getPropertyValue(AVATAR_PROPERTY) != null) {
-            url = VirtualHostHelper.getContextPathProperty() + "/" + DocumentModelFunctions.fileUrl("downloadFile",
-                    userProfileDoc, AVATAR_PROPERTY, "avatar");
+            url = VirtualHostHelper.getContextPathProperty()
+                    + "/"
+                    + DocumentModelFunctions.fileUrl("downloadFile",
+                            userProfileDoc, AVATAR_PROPERTY, "avatar");
         }
         return url;
     }

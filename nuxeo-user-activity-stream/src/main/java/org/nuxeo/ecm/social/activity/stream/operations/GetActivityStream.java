@@ -46,6 +46,7 @@ import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter;
+import org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider;
 
 /**
  * Operation to get the activity stream for or from a given actor.
@@ -53,12 +54,12 @@ import org.nuxeo.ecm.social.activity.stream.UserActivityStreamFilter;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-@Operation(id = GetActivityStreamForActor.ID, category = Constants.CAT_SERVICES, label = "Get activity stream", description = "Get activity stream for the current user.")
-public class GetActivityStreamForActor {
+@Operation(id = GetActivityStream.ID, category = Constants.CAT_SERVICES, label = "Get activity stream", description = "Get activity stream for the current user.")
+public class GetActivityStream {
 
-    public static final String ID = "Services.GetActivityStreamForActor";
+    public static final String ID = "Services.GetActivityStream";
 
-    public static final String PROVIDER_NAME = "user_activity_stream";
+    public static final String PROVIDER_NAME = "gadget_user_activity_stream";
 
     @Context
     protected CoreSession session;
@@ -75,11 +76,11 @@ public class GetActivityStreamForActor {
     @Param(name = "activityStreamType", required = false)
     protected String activityStreamType;
 
-    @Param(name = "page", required = false)
-    protected Integer page;
+    @Param(name = "offset", required = false)
+    protected Integer offset;
 
-    @Param(name = "pageSize", required = false)
-    protected Integer pageSize;
+    @Param(name = "limit", required = false)
+    protected Integer limit;
 
     @SuppressWarnings("unchecked")
     @OperationMethod
@@ -91,13 +92,13 @@ public class GetActivityStreamForActor {
             activityStreamType = FOR_ACTOR_STREAM_TYPE;
         }
 
-        Long targetPage = null;
-        if (page != null) {
-            targetPage = page.longValue();
+        Long targetOffset = 0L;
+        if (offset != null) {
+            targetOffset = offset.longValue();
         }
-        Long targetPageSize = null;
-        if (pageSize != null) {
-            targetPageSize = pageSize.longValue();
+        Long targetLimit = null;
+        if (limit != null) {
+            targetLimit = limit.longValue();
         }
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(
@@ -109,19 +110,26 @@ public class GetActivityStreamForActor {
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, targetPageSize, targetPage, props);
+                PROVIDER_NAME, null, targetLimit, 0L, props);
+        pageProvider.setCurrentPageOffset(targetOffset);
 
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
-        List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
             Map<String, Object> o = new HashMap<String, Object>();
             o.put("id", activityMessage.getActivityId());
             o.put("activityMessage", activityMessage.getMessage());
             o.put("publishedDate",
                     dateFormat.format(activityMessage.getPublishedDate()));
-            m.add(o);
+            activities.add(o);
         }
+
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("offset",
+                ((UserActivityStreamPageProvider) pageProvider).getNextOffset());
+        m.put("limit", pageProvider.getPageSize());
+        m.put("activities", activities);
 
         ObjectMapper mapper = new ObjectMapper();
         StringWriter writer = new StringWriter();

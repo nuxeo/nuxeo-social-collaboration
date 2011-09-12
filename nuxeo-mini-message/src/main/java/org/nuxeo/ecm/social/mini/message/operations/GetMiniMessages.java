@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.social.mini.message.operations;
 
+import static org.nuxeo.ecm.social.mini.message.MiniMessageHelper.toJSON;
 import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.ACTOR_PROPERTY;
 import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.FOR_ACTOR_STREAM_TYPE;
 import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
@@ -27,7 +28,6 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +35,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -47,20 +46,21 @@ import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
+import org.nuxeo.ecm.social.mini.message.MiniMessageHelper;
 import org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider;
-import org.nuxeo.ecm.social.mini.message.MiniMessageService;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 
 /**
- * Operation to get the mini messages for a given actor.
+ * Operation to get the mini messages for or from a given actor.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.4.3
  */
-@Operation(id = GetMiniMessageForActor.ID, category = Constants.CAT_SERVICES, label = "Get mini messages", description = "Get mini messages for the current user.")
-public class GetMiniMessageForActor {
+@Operation(id = GetMiniMessages.ID, category = Constants.CAT_SERVICES, label = "Get mini messages", description = "Get mini messages for the current user.")
+public class GetMiniMessages {
 
-    public static final String ID = "Services.GetMiniMessageForActor";
+    public static final String ID = "Services.GetMiniMessages";
+
+    public static final String PROVIDER_NAME = "gadget_mini_messages";
 
     public static final String CIRCLE_KIND = "circle";
 
@@ -82,11 +82,11 @@ public class GetMiniMessageForActor {
     @Param(name = "language", required = false)
     protected String language;
 
-    @Param(name = "page", required = false)
-    protected Integer page;
+    @Param(name = "offset", required = false)
+    protected Integer offset;
 
-    @Param(name = "pageSize", required = false)
-    protected Integer pageSize;
+    @Param(name = "limit", required = false)
+    protected Integer limit;
 
     @OperationMethod
     public Blob run() throws Exception {
@@ -101,48 +101,31 @@ public class GetMiniMessageForActor {
             miniMessagesStreamType = FOR_ACTOR_STREAM_TYPE;
         }
 
-        Long targetPage = null;
-        if (page != null) {
-            targetPage = page.longValue();
+        Long targetOffset = 0L;
+        if (offset != null) {
+            targetOffset = offset.longValue();
         }
-        Long targetPageSize = null;
-        if (pageSize != null) {
-            targetPageSize = pageSize.longValue();
+        Long targetLimit = null;
+        if (limit != null) {
+            targetLimit = limit.longValue();
         }
+
+        Locale locale = language != null && !language.isEmpty() ? new Locale(
+                language) : Locale.ENGLISH;
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(STREAM_TYPE_PROPERTY, miniMessagesStreamType);
         props.put(ACTOR_PROPERTY, actor);
         props.put(RELATIONSHIP_KIND_PROPERTY, relationshipKind);
+
+        @SuppressWarnings("unchecked")
         PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                "mini_messages", null, targetPageSize, targetPage, props);
+                PROVIDER_NAME, null, targetLimit, 0L, props);
+        pageProvider.setCurrentPageOffset(targetOffset);
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                locale);
-
-        List<Map<String, Object>> m = new ArrayList<Map<String, Object>>();
-        for (MiniMessage miniMessage : pageProvider.getCurrentPage()) {
-            Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", miniMessage.getId());
-            o.put("actor", miniMessage.getActor());
-            o.put("displayActor", miniMessage.getDisplayActor());
-            o.put("message", miniMessage.getMessage());
-            o.put("publishedDate",
-                    dateFormat.format(miniMessage.getPublishedDate()));
-            o.put("isCurrentUserMiniMessage",
-                    session.getPrincipal().getName().equals(
-                            miniMessage.getActor()));
-            m.add(o);
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        mapper.writeValue(writer, m);
-
+        String json = toJSON(pageProvider, locale, session);
         return new InputStreamBlob(new ByteArrayInputStream(
-                writer.toString().getBytes("UTF-8")), "application/json");
+                json.getBytes("UTF-8")), "application/json");
     }
 
 }

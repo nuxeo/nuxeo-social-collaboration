@@ -84,7 +84,7 @@ public class SocialProviderOperation {
     @Param(name = "page", required = false)
     protected Integer page = 0;
 
-    @Param(name = "pageSize", required = false)
+    @Param(name = "limit", required = false)
     protected Integer pageSize;
 
     @Param(name = "sortInfo", required = false)

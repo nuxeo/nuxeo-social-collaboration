@@ -54,10 +54,11 @@ public interface ActivityStreamFilter {
      *
      * @param activityStreamService the main {@code ActivityStreamService}
      * @param parameters this query parameters.
-     * @param pageSize the number results per page.
-     * @param currentPage the current page of results.
+     * @param offset the offset (starting at 0) into the list of activities.
+     * @param limit the maximum number of activities to retrieve, or 0 for all of
+     *            them.
      */
     ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, int pageSize, int currentPage);
+            Map<String, Serializable> parameters, long offset, long limit);
 
 }

@@ -9,6 +9,11 @@
       <pageSize>50</pageSize>
     </genericPageProvider>
 
+    <genericPageProvider name="gadget_mini_messages"
+      class="org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider">
+      <pageSize>5</pageSize>
+    </genericPageProvider>
+
   </extension>
 
 </component>

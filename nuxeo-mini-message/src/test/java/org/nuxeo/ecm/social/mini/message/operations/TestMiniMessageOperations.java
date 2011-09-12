@@ -80,23 +80,24 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessageForActor.ID);
+        chain.add(GetMiniMessages.ID);
         Blob result = (Blob) automationService.run(ctx, chain);
         assertNotNull(result);
         String json = result.getString();
         assertNotNull(json);
 
         ObjectMapper mapper = new ObjectMapper();
-        List<MiniMessage> miniMessages = mapper.readValue(json,
-                new TypeReference<List<MiniMessage>>() {
+        Map<String, Object> m = mapper.readValue(json,
+                new TypeReference<Map<String, Object>>() {
                 });
+        List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertTrue(miniMessages.isEmpty());
 
         changeUser("Administrator");
     }
 
     @Test
-    public void shouldGetAllMiniMessages() throws Exception {
+    public void shouldGetPaginatedMiniMessages() throws Exception {
         initializeSomeMiniMessagesAndRelations();
         changeUser("Leela");
 
@@ -104,17 +105,46 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessageForActor.ID);
+        chain.add(GetMiniMessages.ID);
         Blob result = (Blob) automationService.run(ctx, chain);
         assertNotNull(result);
         String json = result.getString();
         assertNotNull(json);
 
         ObjectMapper mapper = new ObjectMapper();
-        List<Map<String, Object>> miniMessages = mapper.readValue(json,
-                new TypeReference<List<Map<String, Object>>>() {
+        Map<String, Object> m = mapper.readValue(json,
+                new TypeReference<Map<String, Object>>() {
                 });
-        assertEquals(10, miniMessages.size());
+        List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
+        assertEquals(5, miniMessages.size());
+
+        chain = new OperationChain("testMiniMessageOperation");
+        chain.add(GetMiniMessages.ID).set("offset", 5);
+        result = (Blob) automationService.run(ctx, chain);
+        assertNotNull(result);
+        json = result.getString();
+        assertNotNull(json);
+
+        mapper = new ObjectMapper();
+        m = mapper.readValue(json,
+                new TypeReference<Map<String, Object>>() {
+                });
+        miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
+        assertEquals(5, miniMessages.size());
+
+        chain = new OperationChain("testMiniMessageOperation");
+        chain.add(GetMiniMessages.ID).set("offset", 10);
+        result = (Blob) automationService.run(ctx, chain);
+        assertNotNull(result);
+        json = result.getString();
+        assertNotNull(json);
+
+        mapper = new ObjectMapper();
+        m = mapper.readValue(json,
+                new TypeReference<Map<String, Object>>() {
+                });
+        miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
+        assertEquals(0, miniMessages.size());
 
         changeUser("Administrator");
     }

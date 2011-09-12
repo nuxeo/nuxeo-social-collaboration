@@ -6,7 +6,7 @@ function documentList(docRef, page){
   if ( typeof page == 'number' ) {
     data.page = page;
   }
-  data.pageSize = prefs.getString("pageSize");
+  data.pageSize = prefs.getString("limit");
 
   // set new value of docRef
   data.docRef = docRef;
@@ -99,8 +99,8 @@ function contentLoadedHandler(data){
       event.preventDefault();
       data = jQuery(this).serializeArray();
       data.push({
-        name: 'pageSize' ,
-        value : prefs.getString("pageSize")
+        name: 'limit' ,
+        value : prefs.getString("limit")
       });
       loadContent(jQuery(this).attr("action"),data);
     }
