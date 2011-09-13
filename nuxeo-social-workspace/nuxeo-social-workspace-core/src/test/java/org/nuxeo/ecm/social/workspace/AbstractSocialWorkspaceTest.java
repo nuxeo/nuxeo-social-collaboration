@@ -56,7 +56,8 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.user.relationships" })
 @LocalDeploy({
         "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml"})
+        "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml",
+        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml"})
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject

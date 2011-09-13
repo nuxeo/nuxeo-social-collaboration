@@ -22,6 +22,7 @@ package org.nuxeo.ecm.social.workspace.service;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.CTX_PRINCIPALS_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_ADDED;
@@ -95,6 +96,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     private static final Log log = LogFactory.getLog(SocialWorkspaceComponent.class);
 
     public static final String CONFIGURATION_EP = "configuration";
+
+    public static final String SOCIAL_WORKSPACE_CONTAINER_ACL_NAME = "socialWorkspaceContainerAcl";
 
     public static final String SOCIAL_WORKSPACE_ACL_NAME = "socialWorkspaceAcl";
 
@@ -250,10 +253,19 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                                 0, lastSlash);
                         String title = socialWorkspaceContainerPath.substring(lastSlash + 1);
 
-                        DocumentModel swc = session.createDocumentModel(parentPath,
-                                title, SOCIAL_WORKSPACE_CONTAINER_TYPE);
+                        DocumentModel swc = session.createDocumentModel(
+                                parentPath, title,
+                                SOCIAL_WORKSPACE_CONTAINER_TYPE);
                         swc.setPropertyValue(DC_TITLE, title);
-                        session.createDocument(swc);
+                        swc = session.createDocument(swc);
+
+                        // Define default ACL
+                        ACP acp = swc.getACP();
+                        ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_CONTAINER_ACL_NAME);
+                        acl.setACEs(new ACE[] { new ACE(
+                                getUserManager().getDefaultGroup(), READ_WRITE, true) });
+                        swc.setACP(acp, true);
+                        session.saveDocument(swc);
                     }
                 }.runUnrestricted();
             }
