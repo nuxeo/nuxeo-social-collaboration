@@ -77,7 +77,7 @@ public class SocialDocumentAdapter implements SocialDocument {
                             + sourceDocument.getPathAsString());
         }
 
-        socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspaceContainer(
+        socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(
                 sourceDocument);
         if (socialWorkspace == null) {
             throw new ClientException(

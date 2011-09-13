@@ -67,7 +67,7 @@ public class GetUserSocialWorkspaceStatus {
     @OperationMethod
     public Blob run() throws Exception {
         NuxeoPrincipal currentUser = (NuxeoPrincipal) session.getPrincipal();
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
 
         List<String> targets = userRelationshipService.getTargetsOfKind(

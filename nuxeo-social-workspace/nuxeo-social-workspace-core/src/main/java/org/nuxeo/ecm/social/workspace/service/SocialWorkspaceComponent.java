@@ -176,13 +176,13 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     }
 
     @Override
-    public SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc) {
-        return getDetachedSocialWorkspaceContainer(doc.getCoreSession(),
+    public SocialWorkspace getDetachedSocialWorkspace(DocumentModel doc) {
+        return getDetachedSocialWorkspace(doc.getCoreSession(),
                 doc.getRef());
     }
 
     @Override
-    public SocialWorkspace getDetachedSocialWorkspaceContainer(
+    public SocialWorkspace getDetachedSocialWorkspace(
             CoreSession session, DocumentRef docRef) {
         try {
             SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session,
