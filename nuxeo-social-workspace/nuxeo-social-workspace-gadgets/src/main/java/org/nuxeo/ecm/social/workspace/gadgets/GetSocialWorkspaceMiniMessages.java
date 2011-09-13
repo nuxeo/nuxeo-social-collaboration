@@ -17,17 +17,18 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import static org.nuxeo.ecm.social.mini.message.MiniMessageHelper.toJSON;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.REPOSITORY_NAME_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.SOCIAL_WORKSPACE_ID_PROPERTY;
+
 import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.text.DateFormat;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -100,7 +101,10 @@ public class GetSocialWorkspaceMiniMessages {
             kind = relationshipKind;
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+        Locale locale = language != null && !language.isEmpty() ? new Locale(
+                language) : Locale.ENGLISH;
+
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
