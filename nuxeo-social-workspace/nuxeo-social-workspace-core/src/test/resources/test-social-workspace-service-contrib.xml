@@ -5,6 +5,7 @@
     point="configuration">
     <configuration>
       <validationTimeInDays>3</validationTimeInDays>
+      <socialWorkspaceContainerPath>/default-domain/test-social-workspaces</socialWorkspaceContainerPath>
     </configuration>
   </extension>
 
