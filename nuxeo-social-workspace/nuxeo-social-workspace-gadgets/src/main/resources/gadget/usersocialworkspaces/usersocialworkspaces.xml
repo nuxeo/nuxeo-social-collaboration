@@ -64,6 +64,10 @@
    <body>
    <div class="tools">
      <#include "context-chooser-ui.ftl"/>
+     <div class="context-edit-button">
+       <a href="${clientSideBaseUrl}nxpath/default/default-domain/workspaces-agora@create_social_workspace_document"
+         target="_parent" title="__MSG_label.create.social.workspace__" >__MSG_label.create.social.workspace__</a>
+     </div>
    </div>
    <div id="content">
      <#include "default-documentlist-layout.ftl"/>
