@@ -4,25 +4,20 @@ This addon provides a set of tools to build your social network on top of Nuxeo 
 
 Here is the list of Social modules you can find inside this addon:
 
-* Nuxeo Social Workspace: this module adds social features to existing Workspaces, like a dashboard, members management and invitations.
+* Nuxeo Social Workspace: provides a new SocialWorkspace document with social features, like a dashboard, members management and invitations.
+* Nuxeo User Relationship: provides a Service handling relations between two objects, a UI to manage relations between users.
+* Nuxeo Mini Message: provides a service, JSF view and OpenSocial gadget to add / remove / display mini messages created by users.
+* Nuxeo User Activity Stream: provides a JSF view and OpenSocial gadget to display what are doing the users you added in your relations.
 
 ## How to build
 
-Using maven 2.2.1 or later, from root of the `nuxeo-social-collaboration` folder:
+You can build Nuxeo Social Collaboration with:
 
-    $ mvn clean install
+	$ ant build
 
-This will build all the modules inside the `nuxeo-social-collaboration` addon.
-You can also just build
-the Nuxeo Social Workspace module by doing the following:
+If you want to build and launch the tests, do it with:
 
-    $ cd nuxeo-social-workspace
-    $ mvn clean install
-
-Then copy the built jars `**/target/nuxeo-*-SNAPSHOT.jar` into the
-`nxserver/bundles` folder of your Nuxeo DM (assuming the default
-tomcat package).
-  
+	$ ant build-with-tests  
   
 ## About Nuxeo
 
