@@ -111,6 +111,13 @@ public class SocialConstants {
     public static final String DOCUMENT_UPDATED_IN_SOCIAL_WORKSPACE_VERB = DOCUMENT_UPDATED
             + IN_SOCIAL_WORKSPACE_SUFFIX;
 
+    // Event stuff
+    public static final String EVENT_MEMBERS_ADDED = "newMembersAdded";
+
+    public static final String EVENT_MEMBERS_REMOVED = "newMembersRemoved";
+
+    public static final String CTX_PRINCIPALS_PROPERTY = "socialWorkspacePrincipals";
+
     private SocialConstants() {
     }
 

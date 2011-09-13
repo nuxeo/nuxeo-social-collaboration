@@ -23,6 +23,9 @@ import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.CTX_PRINCIPALS_PROPERTY;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_ADDED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_REMOVED;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
@@ -30,10 +33,15 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildR
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -50,6 +58,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
@@ -59,6 +68,10 @@ import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.core.event.EventContext;
+import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
@@ -325,7 +338,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
             addSocialWorkspaceACL(acl, socialWorkspace);
             doc.setACP(acp, true);
-            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
             doc = session.saveDocument(doc);
             socialWorkspace.setDocument(doc);
         } catch (ClientException e) {
@@ -384,6 +398,17 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
+        Boolean memberCreated = addSocialWorkspaceMemberWithoutNotification(
+                socialWorkspace, principal);
+        if (memberCreated) {
+            fireEventMembersManagement(socialWorkspace,
+                    Arrays.asList(principal), EVENT_MEMBERS_ADDED);
+        }
+        return memberCreated;
+    }
+
+    private boolean addSocialWorkspaceMemberWithoutNotification(
+            SocialWorkspace socialWorkspace, Principal principal) {
         if (addPrincipalToSocialWorkspace(
                 ActivityHelper.createUserActivityObject(principal.getName()),
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
@@ -393,6 +418,81 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<String> addSocialWorkspaceMembers(
+            SocialWorkspace socialWorkspace, String groupName)
+            throws ClientException {
+        NuxeoGroup group = getUserManager().getGroup(groupName);
+        if (group == null) {
+            throw new ClientException(String.format("Group (%s) not found",
+                    groupName));
+        }
+
+        List<String> importedUsers = new ArrayList<String>();
+        List<Principal> importedPrincipal = new ArrayList<Principal>();
+        for (String userName : group.getMemberUsers()) {
+            Principal principal = userManager.getPrincipal(userName);
+            if (principal == null) {
+                log.info(String.format("User (%s) doesn't exist.", userName));
+                continue;
+            }
+
+            if (addSocialWorkspaceMemberWithoutNotification(socialWorkspace,
+                    principal)) {
+                importedUsers.add(userName);
+                importedPrincipal.add(principal);
+            }
+        }
+
+        // Notify bulk import
+        fireEventMembersManagement(socialWorkspace, importedPrincipal,
+                EVENT_MEMBERS_ADDED);
+
+        return importedUsers;
+    }
+
+    @Override
+    public List<String> addSocialWorkspaceMembers(
+            SocialWorkspace socialWorkspace, List<String> emails)
+            throws ClientException {
+        List<String> memberAddedList = new ArrayList<String>(emails.size());
+        List<Principal> principalAdded = new ArrayList<Principal>();
+        for (String email : emails) {
+            Map<String, Serializable> filter = new HashMap<String, Serializable>();
+            String emailKey = getUserManager().getUserEmailField();
+            filter.put(emailKey, email);
+            Set<String> pattern = new HashSet<String>();
+            pattern.add(emailKey);
+
+            DocumentModelList foundUsers = userManager.searchUsers(filter,
+                    pattern);
+
+            if (foundUsers.isEmpty()) {
+                continue;
+            } else if (foundUsers.size() > 1) {
+                log.info("For the email " + email
+                        + " several user were found. First one used.");
+            }
+
+            DocumentModel firstUser = foundUsers.get(0);
+            NuxeoPrincipalImpl principal = new NuxeoPrincipalImpl(
+                    firstUser.getId());
+            principal.setModel(firstUser, false);
+
+            if (addSocialWorkspaceMemberWithoutNotification(socialWorkspace,
+                    principal)) {
+                memberAddedList.add(email);
+                principalAdded.add(principal);
+            }
+
+        }
+        // Notify bulk import
+        fireEventMembersManagement(socialWorkspace, principalAdded,
+                EVENT_MEMBERS_ADDED);
+
+        return memberAddedList;
     }
 
     private void addNewActivity(Principal principal,
@@ -419,10 +519,13 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
     @Override
     public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
             Principal principal) {
-        removePrincipalFromSocialWorkspace(
+        if (removePrincipalFromSocialWorkspace(
                 ActivityHelper.createUserActivityObject(principal.getName()),
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
-                buildRelationMemberKind());
+                buildRelationMemberKind())) {
+            fireEventMembersManagement(socialWorkspace,
+                    Arrays.asList(principal), EVENT_MEMBERS_REMOVED);
+        }
     }
 
     private boolean addPrincipalToSocialWorkspace(String principalName,
@@ -448,7 +551,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, true);
-            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionReadable(session, socialWorkspace);
@@ -508,7 +612,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, false);
-            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST,
+                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionUnreadable(session, socialWorkspace);
@@ -531,6 +636,24 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         acp.removeACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
         publicSection.setACP(acp, true);
         session.saveDocument(publicSection);
+    }
+
+    private static void fireEventMembersManagement(
+            SocialWorkspace socialWorkspace, List<Principal> usernames,
+            String eventName) {
+        if (socialWorkspace.isMembersNotificationEnabled()) {
+            DocumentModel doc = socialWorkspace.getDocument();
+            EventContext ctx = new DocumentEventContext(doc.getCoreSession(),
+                    doc.getCoreSession().getPrincipal(), doc);
+            ctx.setProperty(CTX_PRINCIPALS_PROPERTY, (Serializable) usernames);
+
+            try {
+                Framework.getLocalService(EventService.class).fireEvent(
+                        ctx.newEvent(eventName));
+            } catch (ClientException e) {
+                log.warn("Unable to notify social workspace members", e);
+            }
+        }
     }
 
     private static void makePublicDashboardUnreadable(CoreSession session,

@@ -59,6 +59,12 @@ public interface SocialWorkspace {
     boolean mustApproveSubscription();
 
     /**
+     * Returns {@code true} if the social workspace won't send a notification to
+     * its members when modifications occurred.
+     */
+    boolean isMembersNotificationEnabled();
+
+    /**
      * Adds a user to this Social Workspace administrators group.
      */
     boolean addAdministrator(Principal principal);

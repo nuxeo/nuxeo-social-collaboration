@@ -227,6 +227,13 @@
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
+    <action id="TAB_MANAGE_SOCIAL_WORKSPACE_IMPORT"
+      link="/incl/tabs/social_workspace_bulk_import_action_tabs.xhtml"
+      order="15" label="label.view.membership.management.bulk.import" icon="/icons/file.gif">
+      <category>TAB_MANAGE_sub_tab</category>
+      <filter-id>manage_social_workspace</filter-id>
+    </action>
+
     <action id="TAB_MANAGE_REQUESTS" link="/incl/tabs/manage_requests_action_tab.xhtml"
       order="20" label="action.view.manage.requests" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
@@ -414,7 +421,7 @@
 
     <filter id="canCreateSocialWorkspace">
       <rule grant="true">
-      	 <condition>#{fullscreenManagementActions.canCreateSocialWorkspace()}</condition>
+        <condition>#{fullscreenManagementActions.canCreateSocialWorkspace()}</condition>
       </rule>
     </filter>
 

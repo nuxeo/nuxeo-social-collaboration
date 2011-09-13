@@ -325,6 +325,17 @@
       </rows>
     </layout>
 
+    <layout name="social_workspace_bulk_import">
+      <templates>
+        <template mode="any">/layouts/layout_default_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <widget>social_workspace_bulk_import</widget>
+        </row>
+      </rows>
+    </layout>
+
     <layout name="social_document_heading">
       <templates>
         <template mode="any">/layouts/layout_default_template.xhtml</template>
@@ -538,6 +549,22 @@
           /widgets/user_suggestion_widget_template.xhtml
         </property>
         <property name="userSuggestionSearchType">USER_TYPE</property>
+      </properties>
+    </widget>
+
+    <widget name="social_workspace_bulk_import" type="template">
+      <labels>
+        <label mode="any">label.groupManager.groups</label>
+      </labels>
+      <translated>true</translated>
+      <fields>
+        <field></field>
+      </fields>
+      <properties widgetMode="any">
+        <property name="template">
+          /widgets/user_suggestion_widget_template.xhtml
+        </property>
+        <property name="userSuggestionSearchType">GROUP_TYPE</property>
       </properties>
     </widget>
 
