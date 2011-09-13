@@ -18,9 +18,9 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.ADD_CHILDREN;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ROOT_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialDocument;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
@@ -40,6 +40,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -67,17 +68,17 @@ public class FullscreenManagementActionsBean implements Serializable {
 
     private static final String EDIT_SOCIAL_DOCUMENT_VIEW = "edit_social_document";
 
-    private static final String NEWS_ITEMS_VIEW = "news_items";
+    private static final String CREATE_SOCIAL_DOCUMENT_VIEW = "create_social_document";
 
     private static final String DELETE_TRANSITION = "delete";
+
+    private static final String NEWS_ITEMS_VIEW = "news_items";
 
     private static final String ARTICLES_VIEW = "articles";
 
     private static final long serialVersionUID = 1L;
 
     public static final String FULLSCREEN_VIEW_ID = "fullscreen";
-
-    public static final String FULLSCREEN_CREATE_VIEW = "create_social_workspace_document";
 
     @In(create = true)
     protected transient CoreSession documentManager;
@@ -87,6 +88,9 @@ public class FullscreenManagementActionsBean implements Serializable {
 
     @In(create = true)
     protected transient DocumentActions documentActions;
+
+    @In(create = true)
+    protected transient SocialWorkspaceActions socialWorkspaceActions;
 
     @In(create = true)
     protected transient SocialWorkspaceService socialWorkspaceService;
@@ -161,39 +165,37 @@ public class FullscreenManagementActionsBean implements Serializable {
     }
 
     public String createNewDocument(String type) throws ClientException {
-        DocumentModel parent = documentManager.getDocument(getRootSocialContainerPathRef(type));
+        DocumentModel parent = documentManager.getDocument(getParentDocumentRef(type));
         navigationContext.navigateToDocument(parent);
         documentActions.createDocument(type);
-        return FULLSCREEN_CREATE_VIEW;
+        return CREATE_SOCIAL_DOCUMENT_VIEW;
     }
 
     public DocumentModel getChangeableSocialDocument() throws ClientException {
-        if (navigationContext.getChangeableDocument() == null
-                && canCreateSocialWorkspace()) {
+        if (navigationContext.getChangeableDocument() == null) {
+            // by default, we admit to create a new social workspace
             createNewDocument(SOCIAL_WORKSPACE_TYPE);
         }
         return navigationContext.getChangeableDocument();
     }
 
-    protected DocumentRef getRootSocialContainerPathRef(String type) {
+    protected DocumentRef getParentDocumentRef(String type) {
         DocumentModel currentDoc = navigationContext.getCurrentDocument();
-
         if (isSocialWorkspaceContainer(currentDoc)) {
             return currentDoc.getRef();
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getSocialWorkspace(currentDoc);
+        SocialWorkspace socialWorkspace = socialWorkspaceActions.getSocialWorkspace();
         if (NEWS_ITEM_TYPE.equals(type)) {
-            return new PathRef(socialWorkspace.getPath(),
-                    NEWS_ROOT_RELATIVE_PATH);
+            return new PathRef(socialWorkspace.getNewsItemsRootPath());
         }
 
         if (SOCIAL_WORKSPACE_TYPE.equals(type)) {
-            return socialWorkspace.getDocument().getParentRef();
+            return socialWorkspaceActions.getSocialWorkspaceContainer().getRef();
         }
 
-        return socialWorkspace.getDocument().getRef();
-
+        throw new ClientRuntimeException(
+                "Unable to determine social document parent for " + type);
     }
 
     public String createSameTypeDocument() throws ClientException {
@@ -206,8 +208,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         document.followTransition(DELETE_TRANSITION);
         documentManager.saveDocument(document);
         DocumentModel parentDoc = documentManager.getDocument(document.getParentRef());
-        Events.instance().raiseEvent(DOCUMENT_CHILDREN_CHANGED,
-                parentDoc);
+        Events.instance().raiseEvent(DOCUMENT_CHILDREN_CHANGED, parentDoc);
     }
 
     public String navigateToNewsItems() throws ClientException {
@@ -299,7 +300,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         if (parent != null) {
             try {
                 return (documentManager.hasPermission(parent.getRef(),
-                        "AddChildren"));
+                        ADD_CHILDREN));
             } catch (ClientException e) {
                 log.debug(
                         "failed to check permission on SocialWorkspace container",
