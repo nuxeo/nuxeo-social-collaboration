@@ -26,9 +26,9 @@
       value="#{userRelationshipActions.relationshipsFromSelectedUser}">
       <nxu:column>
         <h:graphicImage value="/icons/user.gif" alt="user.gif" />
-        <a4j:commandLink action="#{userManagementActions.viewUser(relation)}" reRender="usersPanel">
+        <h:outputLink value="#{nxu:userUrl('user', relation, null, false)}">
           <h:outputText value="#{nxu:userFullName(relation)}" />
-        </a4j:commandLink>
+        </h:outputLink>
       </nxu:column>
     </nxu:dataTable>
   </c:if>
