@@ -25,11 +25,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.platform.ec.notification.service.NotificationServiceHelper;
 import org.nuxeo.ecm.platform.url.api.DocumentViewCodecManager;
@@ -39,12 +41,12 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
-import com.google.inject.Inject;
-
 @Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
         "org.nuxeo.ecm.platform.notification.core" })
-@LocalDeploy({ "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml" })
+@LocalDeploy({
+        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml" })
 public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
     @Inject
@@ -158,6 +160,18 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
         // Will throw a ClientException
         socialWorkspaceService.addSocialWorkspaceMembers(sw, "john_doe_group");
+    }
+
+    @Test
+    public void testSocialWorkspaceContainer() throws ClientException {
+        assertFalse(session.exists(new PathRef(
+                "/default-domain/test-social-workspaces")));
+        DocumentModel container = socialWorkspaceService.getOrCreateSocialWorkspaceContainer(session);
+        assertEquals("test-social-workspaces", container.getTitle());
+        assertEquals("/default-domain",
+                session.getDocument(container.getParentRef()).getPathAsString());
+        assertTrue(session.exists(new PathRef(
+                "/default-domain/test-social-workspaces")));
     }
 
     protected DocumentModel createUserForTest(String userEmail, String userId)
