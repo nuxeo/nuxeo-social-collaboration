@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.CTX_PRINCIPALS_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_ADDED;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_REMOVED;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_CONTAINER_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
@@ -101,11 +102,15 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     public static final String PUBLIC_SOCIAL_WORKSPACE_ACL_NAME = "publicSocialWorkspaceAcl";
 
+    public static final String DC_TITLE = "dc:title";
+
     private UserManager userManager;
 
     private SubscriptionRequestHandler subscriptionRequestHandler;
 
     private int validationDays = 15;
+
+    private String socialWorkspaceContainerPath = "/default-domain/social-workspaces";
 
     private UserRelationshipService relationshipService;
 
@@ -177,13 +182,12 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     @Override
     public SocialWorkspace getDetachedSocialWorkspace(DocumentModel doc) {
-        return getDetachedSocialWorkspace(doc.getCoreSession(),
-                doc.getRef());
+        return getDetachedSocialWorkspace(doc.getCoreSession(), doc.getRef());
     }
 
     @Override
-    public SocialWorkspace getDetachedSocialWorkspace(
-            CoreSession session, DocumentRef docRef) {
+    public SocialWorkspace getDetachedSocialWorkspace(CoreSession session,
+            DocumentRef docRef) {
         try {
             SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session,
                     docRef);
@@ -227,6 +231,36 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
             if (config.getValidationTimeInDays() > 0) {
                 validationDays = config.getValidationTimeInDays();
             }
+            if (!StringUtils.isBlank(config.getSocialWorkspaceContainerPath())) {
+                socialWorkspaceContainerPath = config.getSocialWorkspaceContainerPath();
+            }
+        }
+    }
+
+    @Override
+    public DocumentModel getOrCreateSocialWorkspaceContainer(CoreSession session) {
+        try {
+            DocumentRef docRef = new PathRef(socialWorkspaceContainerPath);
+            if (!session.exists(docRef)) {
+                new UnrestrictedSessionRunner(session) {
+                    @Override
+                    public void run() throws ClientException {
+                        int lastSlash = socialWorkspaceContainerPath.lastIndexOf("/");
+                        String parentPath = socialWorkspaceContainerPath.substring(
+                                0, lastSlash);
+                        String title = socialWorkspaceContainerPath.substring(lastSlash + 1);
+
+                        DocumentModel swc = session.createDocumentModel(parentPath,
+                                title, SOCIAL_WORKSPACE_CONTAINER_TYPE);
+                        swc.setPropertyValue(DC_TITLE, title);
+                        session.createDocument(swc);
+                    }
+                }.runUnrestricted();
+            }
+
+            return session.getDocument(docRef);
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
         }
     }
 

@@ -214,4 +214,10 @@ public interface SocialWorkspaceService {
      */
     List<String> searchAdministrators(SocialWorkspace socialWorkspace,
             String pattern);
+
+    /**
+     * Returns Social Workspace Container and create it if needed.
+     * @param session
+     */
+    DocumentModel getOrCreateSocialWorkspaceContainer(CoreSession session);
 }

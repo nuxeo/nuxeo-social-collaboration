@@ -31,7 +31,14 @@ public class ConfigurationDescriptor implements Serializable {
     @XNode("validationTimeInDays")
     private int validationTimeInDays = -1;
 
+    @XNode("socialWorkspaceContainerPath")
+    private String socialWorkspaceContainerPath;
+
     public int getValidationTimeInDays() {
         return validationTimeInDays;
+    }
+
+    public String getSocialWorkspaceContainerPath() {
+        return socialWorkspaceContainerPath;
     }
 }

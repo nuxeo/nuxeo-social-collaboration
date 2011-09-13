@@ -76,4 +76,8 @@ public class SocialWorkspaceActions implements Serializable {
         return getSocialWorkspace(doc);
     }
 
+    public DocumentModel getSocialWorkspaceContainer() {
+        return socialWorkspaceService.getOrCreateSocialWorkspaceContainer(documentManager);
+    }
+
 }

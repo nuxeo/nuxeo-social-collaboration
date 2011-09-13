@@ -20,6 +20,7 @@
     point="configuration">
           <configuration>
             <validationTimeInDays>15</validationTimeInDays>
+            <socialWorkspaceContainerPath>/default-domain/social-workspaces</socialWorkspaceContainerPath>
           </configuration>
         </extension>
       </code>

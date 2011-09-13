@@ -65,7 +65,7 @@
    <div class="tools">
      <#include "context-chooser-ui.ftl"/>
      <div class="context-edit-button">
-       <a href="${clientSideBaseUrl}nxpath/default/default-domain/workspaces-agora@create_social_workspace_document"
+       <a href="${clientSideBaseUrl}nxpath/default@create_social_document"
          target="_parent" title="__MSG_label.create.social.workspace__" >__MSG_label.create.social.workspace__</a>
      </div>
    </div>
