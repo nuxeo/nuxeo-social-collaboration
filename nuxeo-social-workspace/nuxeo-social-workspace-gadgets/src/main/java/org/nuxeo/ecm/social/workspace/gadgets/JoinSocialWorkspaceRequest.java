@@ -55,7 +55,7 @@ public class JoinSocialWorkspaceRequest {
             return;
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
         socialWorkspace.handleSubscriptionRequest(session.getPrincipal());
     }

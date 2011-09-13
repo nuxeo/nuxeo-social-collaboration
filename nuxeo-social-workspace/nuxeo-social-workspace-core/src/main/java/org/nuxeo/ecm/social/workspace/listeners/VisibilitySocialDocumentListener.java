@@ -75,7 +75,7 @@ public class VisibilitySocialDocumentListener implements
             return;
         }
 
-        SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspaceContainer(
+        SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(
                 document);
         if (socialWorkspace == null) {
             // not in a social workspace

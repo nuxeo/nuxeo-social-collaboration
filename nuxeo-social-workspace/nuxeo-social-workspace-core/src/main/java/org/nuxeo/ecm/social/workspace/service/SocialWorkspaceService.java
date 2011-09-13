@@ -62,7 +62,7 @@ public interface SocialWorkspaceService {
      * <p>
      * The underlying {@code DocumentModel} is detached.
      */
-    SocialWorkspace getDetachedSocialWorkspaceContainer(DocumentModel doc);
+    SocialWorkspace getDetachedSocialWorkspace(DocumentModel doc);
 
     /**
      * Returns the {@code SocialWorkspace} container of the given document ref
@@ -71,8 +71,8 @@ public interface SocialWorkspaceService {
      * <p>
      * The underlying {@code DocumentModel} is detached.
      */
-    SocialWorkspace getDetachedSocialWorkspaceContainer(CoreSession session,
-            DocumentRef docRef);
+    SocialWorkspace getDetachedSocialWorkspace(CoreSession session,
+                                               DocumentRef docRef);
 
     /**
      * Returns the {@code SocialWorkspace} container of the given document if it

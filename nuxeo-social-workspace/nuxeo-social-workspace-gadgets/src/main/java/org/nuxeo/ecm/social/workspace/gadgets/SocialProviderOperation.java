@@ -136,7 +136,7 @@ public class SocialProviderOperation {
             return EMPTY_LIST;
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
 
         if (socialWorkspace != null) {

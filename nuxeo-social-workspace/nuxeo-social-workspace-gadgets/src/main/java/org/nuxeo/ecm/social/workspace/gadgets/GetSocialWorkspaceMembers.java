@@ -81,7 +81,7 @@ public class GetSocialWorkspaceMembers {
 
     @OperationMethod
     public Blob run() throws Exception {
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
         List<String> users = socialWorkspace.searchMembers(pattern);
         return buildResponse(users);

@@ -104,7 +104,7 @@ public class FullscreenManagementActionsBean implements Serializable {
             sourceDocument = documentManager.getSourceDocument(currentDocument.getRef());
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(sourceDocument);
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(sourceDocument);
 
         if (socialWorkspace != null) {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
@@ -149,7 +149,7 @@ public class FullscreenManagementActionsBean implements Serializable {
             throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(currentDocument);
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(currentDocument);
         if (socialWorkspace != null) {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));
@@ -182,17 +182,17 @@ public class FullscreenManagementActionsBean implements Serializable {
             return currentDoc.getRef();
         }
 
-        SocialWorkspace socialContainer = socialWorkspaceService.getSocialWorkspace(currentDoc);
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getSocialWorkspace(currentDoc);
         if (NEWS_ITEM_TYPE.equals(type)) {
-            return new PathRef(socialContainer.getPath(),
+            return new PathRef(socialWorkspace.getPath(),
                     NEWS_ROOT_RELATIVE_PATH);
         }
 
         if (SOCIAL_WORKSPACE_TYPE.equals(type)) {
-            return socialContainer.getDocument().getParentRef();
+            return socialWorkspace.getDocument().getParentRef();
         }
 
-        return socialContainer.getDocument().getRef();
+        return socialWorkspace.getDocument().getRef();
 
     }
 
@@ -285,7 +285,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         if (isSocialWorkspaceContainer(doc)) {
             parent = doc;
         } else {
-            SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(doc);
+            SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(doc);
             if (socialWorkspace != null) {
                 DocumentRef parentRef = socialWorkspace.getDocument().getParentRef();
                 try {
