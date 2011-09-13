@@ -34,7 +34,6 @@ import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.social.mini.message.AbstractMiniMessageTest;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.runtime.test.runner.Deploy;
 
 import com.google.inject.Inject;
@@ -66,7 +65,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
                 ActivityHelper.createUserActivityObject("Leela"),
-                RelationshipKind.fromGroup("circle"), 0, 0);
+                CIRCLE_RELATION, 0, 0);
         assertNotNull(messages);
         assertEquals(1, messages.size());
 
@@ -90,6 +89,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         Map<String, Object> m = mapper.readValue(json,
                 new TypeReference<Map<String, Object>>() {
                 });
+        @SuppressWarnings("unchecked")
         List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertTrue(miniMessages.isEmpty());
 
@@ -97,6 +97,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void shouldGetPaginatedMiniMessages() throws Exception {
         initializeSomeMiniMessagesAndRelations();
         changeUser("Leela");
@@ -126,9 +127,8 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(json);
 
         mapper = new ObjectMapper();
-        m = mapper.readValue(json,
-                new TypeReference<Map<String, Object>>() {
-                });
+        m = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
+        });
         miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertEquals(5, miniMessages.size());
 
@@ -140,9 +140,8 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(json);
 
         mapper = new ObjectMapper();
-        m = mapper.readValue(json,
-                new TypeReference<Map<String, Object>>() {
-                });
+        m = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
+        });
         miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertEquals(0, miniMessages.size());
 

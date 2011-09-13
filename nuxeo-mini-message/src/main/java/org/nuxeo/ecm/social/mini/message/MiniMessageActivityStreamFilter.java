@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.social.mini.message;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +76,13 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
     @Override
     public void handleNewActivity(ActivityStreamService activityStreamService,
             Activity activity) {
+        // nothing to do
+    }
+
+    @Override
+    public void handleRemovedActivities(
+            ActivityStreamService activityStreamService,
+            Collection<Serializable> activityIds) {
         // nothing to do
     }
 

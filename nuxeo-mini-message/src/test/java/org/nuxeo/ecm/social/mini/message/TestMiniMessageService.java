@@ -18,13 +18,12 @@
 package org.nuxeo.ecm.social.mini.message;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.nuxeo.ecm.activity.Activity;
@@ -32,7 +31,6 @@ import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityImpl;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
@@ -107,9 +105,37 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
                 ActivityHelper.createUserActivityObject("Leela"),
-                RelationshipKind.fromGroup("circle"), 0, 0);
+                CIRCLE_RELATION, 0, 0);
         assertNotNull(messages);
         assertEquals(10, messages.size());
+    }
+
+    @Test
+    public void shouldRemoveMiniMessage() throws ClientException {
+        initializeSomeMiniMessagesAndRelations();
+
+        String leelaActivityObject = ActivityHelper.createUserActivityObject("Leela");
+
+        List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
+                leelaActivityObject, CIRCLE_RELATION, 0, 0);
+        assertNotNull(messages);
+        assertEquals(10, messages.size());
+
+        MiniMessage firstMiniMessage = messages.get(0);
+        miniMessageService.removeMiniMessage(firstMiniMessage);
+        messages = miniMessageService.getMiniMessageFor(leelaActivityObject,
+                CIRCLE_RELATION, 0, 0);
+        assertNotNull(messages);
+        assertEquals(9, messages.size());
+        assertFalse(messages.contains(firstMiniMessage));
+
+        firstMiniMessage = messages.get(0);
+        miniMessageService.removeMiniMessage(firstMiniMessage);
+        messages = miniMessageService.getMiniMessageFor(leelaActivityObject,
+                CIRCLE_RELATION, 0, 0);
+        assertNotNull(messages);
+        assertEquals(8, messages.size());
+        assertFalse(messages.contains(firstMiniMessage));
     }
 
 }

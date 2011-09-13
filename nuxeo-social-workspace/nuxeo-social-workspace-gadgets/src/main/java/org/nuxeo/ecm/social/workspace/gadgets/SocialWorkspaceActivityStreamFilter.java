@@ -23,6 +23,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.MAKE_DOCUMENT_PUBLI
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +76,13 @@ public class SocialWorkspaceActivityStreamFilter implements
     @Override
     public void handleNewActivity(ActivityStreamService activityStreamService,
             Activity activity) {
+        // nothing for now
+    }
+
+    @Override
+    public void handleRemovedActivities(
+            ActivityStreamService activityStreamService,
+            Collection<Serializable> activityIds) {
         // nothing for now
     }
 

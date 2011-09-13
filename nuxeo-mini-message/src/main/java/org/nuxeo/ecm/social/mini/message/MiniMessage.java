@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.mini.message;
 
 import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.nuxeo.ecm.activity.Activity;
@@ -32,7 +33,7 @@ import org.nuxeo.ecm.activity.ActivityHelper;
  */
 public final class MiniMessage {
 
-    private long id;
+    private Serializable id;
 
     private String actor;
 
@@ -42,7 +43,7 @@ public final class MiniMessage {
 
     private Date publishedDate;
 
-    private MiniMessage(long id, String actor, String displayActor,
+    private MiniMessage(Serializable id, String actor, String displayActor,
             String message, Date publishedDate) {
         this.id = id;
         this.actor = actor;
@@ -60,7 +61,7 @@ public final class MiniMessage {
                 activity.getPublishedDate());
     }
 
-    public long getId() {
+    public Serializable getId() {
         return id;
     }
 
