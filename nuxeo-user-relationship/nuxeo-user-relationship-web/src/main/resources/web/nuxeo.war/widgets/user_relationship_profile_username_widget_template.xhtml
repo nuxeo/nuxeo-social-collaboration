@@ -6,8 +6,8 @@
   xmlns:h="http://java.sun.com/jsf/html">
 
   <c:set var="userSchema" value="#{userManager.userSchemaName}" />
-  <a4j:commandLink action="#{userManagementActions.viewUser(field[userSchema].username)}" reRender="usersPanel">
+  <h:outputLink value="#{nxu:userUrl('user', field[userSchema].username, null, false)}">
     <h:outputText value="#{nxu:userDisplayName(field[userSchema].username, field[userSchema].firstName, field[userSchema].lastName)}" />
-  </a4j:commandLink>
+  </h:outputLink>
 
 </f:subview>
