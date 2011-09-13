@@ -217,7 +217,6 @@
 	<td>10000</td>
 	<td></td>
 </tr>
-
 <!-- add a friend relation between bender and leela -->
 <tr>
 	<td>open</td>
@@ -310,9 +309,9 @@
 	<td></td>
 </tr>
 <tr>
-  <td>waitForElementPresent</td>
-  <td>//div[@class='gadgets-gadget-chrome gadgets gadget-user-mini-messages fullWidth']/div[2]/iframe</td>
-  <td></td>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='gadgets-gadget-chrome gadgets gadget-user-mini-messages fullWidth']/div[2]/iframe</td>
+	<td></td>
 </tr>
 <tr>
 	<td>selectFrame</td>
@@ -344,7 +343,6 @@
 	<td>10000</td>
 	<td></td>
 </tr>
-
 <!-- leela adds some mini messages -->
 <tr>
 	<td>open</td>
@@ -431,7 +429,6 @@
 	<td>Leela's second mini message!</td>
 	<td></td>
 </tr>
-
 <!-- check that bender sees the mini messages -->
 <tr>
 	<td>clickAndWait</td>
@@ -483,7 +480,6 @@
 	<td>Leela's second mini message!</td>
 	<td></td>
 </tr>
-
 <!-- bender adds a new mini message, he should see it also -->
 <tr>
 	<td>type</td>
@@ -510,7 +506,6 @@
 	<td>Bender's first mini message!</td>
 	<td></td>
 </tr>
-
 <!-- check that the mini messages are displayed on leela's profile -->
 <tr>
 	<td>clickAndWait</td>
@@ -602,7 +597,6 @@
 	<td>null</td>
 	<td></td>
 </tr>
-
 <!-- bender removes his mini message -->
 <tr>
 	<td>clickAndWait</td>
@@ -651,7 +645,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id="mini_messages"]/table/tbody/tr/td/div/div[3]/a</td>
+	<td>//form[@id=&quot;mini_messages&quot;]/table/tbody/tr/td/div/div[3]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -666,7 +660,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Mini message removed</td>
+	<td>Mini message deleted</td>
 	<td></td>
 </tr>
 <tr>
@@ -674,7 +668,6 @@
 	<td>Bender's first mini message!</td>
 	<td></td>
 </tr>
-
 <!-- remove users -->
 <tr>
 	<td>clickAndWait</td>
