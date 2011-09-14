@@ -166,8 +166,8 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
     @Test
     public void testSocialWorkspaceContainer() throws ClientException {
-        Principal john = createUserWithGroup("JohnDoh", "members");
-        Principal polo = createUserWithGroup("PoloDoh", "trash");
+        Principal john = createUserWithGroup("JohnDoe", "members");
+        Principal polo = createUserWithGroup("PoloDoe", "trash");
         assertFalse(session.exists(new PathRef(
                 "/default-domain/test-social-workspaces")));
         DocumentModel container = socialWorkspaceService.getOrCreateSocialWorkspaceContainer(session);
