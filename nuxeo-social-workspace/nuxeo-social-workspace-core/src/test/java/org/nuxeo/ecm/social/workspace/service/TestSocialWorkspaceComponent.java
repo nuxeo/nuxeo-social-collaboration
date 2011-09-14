@@ -48,7 +48,8 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
         "org.nuxeo.ecm.platform.notification.core" })
 @LocalDeploy({
         "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml" })
+        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml" })
 public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
     @Inject
