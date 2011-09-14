@@ -21,6 +21,9 @@
       <schema name="social_document" />
     </facet>
 
+    <doctype name="SocialWorkspaceContainer" extends="Workspace">
+    </doctype>
+
     <doctype name="SocialWorkspace" extends="Workspace">
       <facet name="SocialWorkspace" />
     </doctype>

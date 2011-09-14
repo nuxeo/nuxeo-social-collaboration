@@ -64,6 +64,12 @@
    <body>
    <div class="tools">
      <#include "context-chooser-ui.ftl"/>
+     <div class="links">
+       <a href="${clientSideBaseUrl}nxpath/default@create_social_document"
+         target="_parent" title="__MSG_label.create.social.workspace__" class="addPopup">
+         <img src="${clientSideBaseUrl}site/skin/social/icons/add_document.gif" alt="__MSG_label.create.social.workspace__" title="__MSG_label.create.social.workspace__" />
+       </a>
+     </div>
    </div>
    <div id="content">
      <#include "default-documentlist-layout.ftl"/>

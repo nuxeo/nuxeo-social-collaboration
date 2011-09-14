@@ -6,6 +6,33 @@
   <extension target="org.nuxeo.ecm.platform.types.TypeService"
     point="types">
 
+    <type id="SocialWorkspaceContainer">
+      <label>SocialWorkspaceContainer</label>
+      <icon>/icons/workspace.gif</icon>
+      <bigIcon>/icons/workspace_100.png</bigIcon>
+      <icon-expanded>/icons/workspace_open.gif</icon-expanded>
+      <category>Collaborative</category>
+      <description>SocialWorkspaceContainer.description</description>
+      <default-view>view_documents</default-view>
+      <create-view>create_workspace</create-view>
+      <subtypes>
+        <type>SocialWorkspace</type>
+      </subtypes>
+      <layouts mode="any">
+        <layout>heading</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>heading</layout>
+        <layout>dublincore</layout>
+      </layouts>
+      <contentViews category="content">
+        <contentView>document_content</contentView>
+      </contentViews>
+      <contentViews category="trash_content">
+        <contentView>document_trash_content</contentView>
+      </contentViews>
+    </type>
+
     <type id="SocialWorkspace">
       <label>SocialWorkspace</label>
       <icon>/icons/social_workspace.png</icon>

@@ -21,6 +21,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ROOT_RELATIVE_
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_CONTAINER_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 
 import org.apache.commons.lang.StringUtils;
@@ -121,6 +122,10 @@ public class SocialWorkspaceHelper {
 
     public static RelationshipKind buildRelationKind() {
         return RelationshipKind.fromGroup(KIND_GROUP);
+    }
+
+    public static boolean isSocialWorkspaceContainer(DocumentModel doc) {
+        return doc != null && doc.getType().equals(SOCIAL_WORKSPACE_CONTAINER_TYPE);
     }
 
     public static boolean isSocialWorkspace(DocumentModel doc) {

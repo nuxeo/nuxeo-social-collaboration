@@ -13,7 +13,7 @@
   xmlns:nxu="http://nuxeo.org/nxweb/util">
 
   <ui:define name="page title">
-    <h:outputText value="#{nuxeoApplicationName} - #{socialWorkspaceActions.socialWorkspaceContainer.title}"/>
+    <h:outputText value="#{nuxeoApplicationName} - #{socialWorkspaceActions.socialWorkspace.title}"/>
   </ui:define>
 
   <ui:define name="bookmark">
@@ -23,7 +23,7 @@
   <ui:define name="body">
     <ui:decorate template="incl/social_collaborative_title_and_actions.xhtml">
       <ui:define name="social_collaboration_title" >
-        <h1>#{socialWorkspaceActions.socialWorkspaceContainer.title}</h1>
+        <h1>#{socialWorkspaceActions.socialWorkspace.title}</h1>
       </ui:define>
       <ui:define name="social_collaboration_before_actions" >
         <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">

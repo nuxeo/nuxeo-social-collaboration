@@ -35,10 +35,8 @@ import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
-import org.nuxeo.ecm.spaces.api.Constants;
 import org.nuxeo.ecm.spaces.api.Space;
 import org.nuxeo.ecm.spaces.helper.WebContentHelper;
 import org.nuxeo.opensocial.container.shared.layout.api.LayoutHelper;
@@ -67,7 +65,7 @@ public class InitializeSocialWorkspaceDashboardsListener implements
             DocumentEventContext documentEventContext = (DocumentEventContext) eventContext;
             DocumentModel doc = documentEventContext.getSourceDocument();
 
-            SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspaceContainer(doc);
+            SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(doc);
 
             if (socialWorkspace != null && SPACE_DOCUMENT_TYPE.equals(doc.getType())) {
                 initializeDashboards(documentEventContext.getCoreSession(), doc, socialWorkspace);

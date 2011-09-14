@@ -94,7 +94,7 @@ public class GetSocialWorkspaceActivityStream {
             targetLimit = limit.longValue();
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(

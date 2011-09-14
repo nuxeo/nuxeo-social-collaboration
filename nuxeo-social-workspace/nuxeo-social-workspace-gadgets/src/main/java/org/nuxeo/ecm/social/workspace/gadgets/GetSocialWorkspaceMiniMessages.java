@@ -104,7 +104,7 @@ public class GetSocialWorkspaceMiniMessages {
         Locale locale = language != null && !language.isEmpty() ? new Locale(
                 language) : Locale.ENGLISH;
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspaceContainer(
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
