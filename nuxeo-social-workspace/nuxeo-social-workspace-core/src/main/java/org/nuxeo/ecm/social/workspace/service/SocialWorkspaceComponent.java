@@ -49,6 +49,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.collections.ScopeType;
+import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
@@ -248,10 +249,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 new UnrestrictedSessionRunner(session) {
                     @Override
                     public void run() throws ClientException {
-                        int lastSlash = socialWorkspaceContainerPath.lastIndexOf("/");
-                        String parentPath = socialWorkspaceContainerPath.substring(
-                                0, lastSlash);
-                        String title = socialWorkspaceContainerPath.substring(lastSlash + 1);
+                        Path path = new Path(socialWorkspaceContainerPath);
+                        String parentPath = path.removeLastSegments(1).toString();
+                        String title = path.lastSegment();
 
                         DocumentModel swc = session.createDocumentModel(
                                 parentPath, title,
@@ -262,8 +262,8 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                         // Define default ACL
                         ACP acp = swc.getACP();
                         ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_CONTAINER_ACL_NAME);
-                        acl.setACEs(new ACE[] { new ACE(
-                                getUserManager().getDefaultGroup(), READ_WRITE, true) });
+                        acl.add(new ACE(getUserManager().getDefaultGroup(),
+                                READ_WRITE, true));
                         swc.setACP(acp, true);
                         session.saveDocument(swc);
                     }
