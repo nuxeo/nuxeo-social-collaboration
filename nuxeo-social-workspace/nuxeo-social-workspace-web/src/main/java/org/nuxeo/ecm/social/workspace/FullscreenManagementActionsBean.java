@@ -194,8 +194,7 @@ public class FullscreenManagementActionsBean implements Serializable {
             return socialWorkspaceActions.getSocialWorkspaceContainer().getRef();
         }
 
-        throw new ClientRuntimeException(
-                "Unable to determine social document parent for " + type);
+        return socialWorkspace.getDocument().getRef();
     }
 
     public String createSameTypeDocument() throws ClientException {
