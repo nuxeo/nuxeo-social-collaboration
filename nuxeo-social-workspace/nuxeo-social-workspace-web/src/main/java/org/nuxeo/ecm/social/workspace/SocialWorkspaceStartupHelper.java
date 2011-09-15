@@ -38,8 +38,6 @@ import org.nuxeo.ecm.webapp.helpers.StartupHelper;
 public class SocialWorkspaceStartupHelper extends StartupHelper {
     private static final long serialVersionUID = 3248232383219879845L;
 
-    private static final Log log = LogFactory.getLog(StartupHelper.class);
-
     @Override
     public String initDomainAndFindStartupPage(String domainTitle, String viewId) {
         String result = super.initDomainAndFindStartupPage(domainTitle, viewId);
