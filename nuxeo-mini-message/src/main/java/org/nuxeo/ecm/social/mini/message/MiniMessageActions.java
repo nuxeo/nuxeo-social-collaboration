@@ -90,7 +90,7 @@ public class MiniMessageActions implements Serializable {
         getMiniMessageService().removeMiniMessage(miniMessage);
         facesMessages.add(
                 StatusMessage.Severity.INFO,
-                resourcesAccessor.getMessages().get("info.mini.message.removed"));
+                resourcesAccessor.getMessages().get("info.mini.message.deleted"));
     }
 
     protected MiniMessageService getMiniMessageService()
