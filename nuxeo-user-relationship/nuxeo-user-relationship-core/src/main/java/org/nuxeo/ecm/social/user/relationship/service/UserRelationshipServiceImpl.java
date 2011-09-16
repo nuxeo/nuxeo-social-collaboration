@@ -62,7 +62,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
 public class UserRelationshipServiceImpl extends DefaultComponent implements
         UserRelationshipService {
 
-    public static final String TYPES_EXTENSION_POINT = "types";
+    public static final String KINDS_EXTENSION_POINT = "types";
 
     protected static final String RELATIONSHIP_DIRECTORY_NAME = "actorRelationshipDirectory";
 
@@ -80,7 +80,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
     public void registerContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
-        if (TYPES_EXTENSION_POINT.equals(extensionPoint)) {
+        if (KINDS_EXTENSION_POINT.equals(extensionPoint)) {
             addRelationshipKind((UserRelationshipKindDescriptor) contribution);
         }
     }

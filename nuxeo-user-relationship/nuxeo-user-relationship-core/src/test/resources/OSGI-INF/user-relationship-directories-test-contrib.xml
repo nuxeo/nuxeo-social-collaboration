@@ -7,13 +7,17 @@
 
     <directory name="actorRelationshipKindDirectory">
       <schema>actor_relationship_kind</schema>
-      <dbDriver>org.hsqldb.jdbcDriver</dbDriver>
-      <dbUrl>jdbc:hsqldb:mem:memid</dbUrl>
+      <!--<dbDriver>org.h2.Driver</dbDriver>
+      <dbUrl>jdbc:h2:target/test/h2/nuxeo/nuxeojunittests</dbUrl>
       <dbUser>sa</dbUser>
-      <dbPassword></dbPassword>
+      <dbPassword></dbPassword>-->
+      <dbDriver>${nuxeo.test.vcs.driver}</dbDriver>
+      <dbUrl>${nuxeo.test.vcs.url}</dbUrl>
+      <dbUser>${nuxeo.test.vcs.user}</dbUser>
+      <dbPassword>${nuxeo.test.vcs.password}</dbPassword>
       <cacheTimeout>3600</cacheTimeout>
       <cacheMaxSize>1000</cacheMaxSize>
-      <table>actor_relationship_kind</table>
+      <table>actor_relationship_kinds</table>
       <idField>name</idField>
       <autoincrementIdField>false</autoincrementIdField>
       <createTablePolicy>on_missing_columns</createTablePolicy>
@@ -24,13 +28,13 @@
 
     <directory name="actorRelationshipDirectory">
       <schema>actor_relationship</schema>
-      <dbDriver>org.hsqldb.jdbcDriver</dbDriver>
-      <dbUrl>jdbc:hsqldb:mem:memid</dbUrl>
-      <dbUser>sa</dbUser>
-      <dbPassword></dbPassword>
+      <dbDriver>${nuxeo.test.vcs.driver}</dbDriver>
+      <dbUrl>${nuxeo.test.vcs.url}</dbUrl>
+      <dbUser>${nuxeo.test.vcs.user}</dbUser>
+      <dbPassword>${nuxeo.test.vcs.password}</dbPassword>
       <cacheTimeout>3600</cacheTimeout>
       <cacheMaxSize>1000</cacheMaxSize>
-      <table>actor_relationship</table>
+      <table>actor_relationships</table>
       <idField>id</idField>
       <autoincrementIdField>true</autoincrementIdField>
       <createTablePolicy>on_missing_columns</createTablePolicy>
@@ -38,14 +42,4 @@
     </directory>
 
   </extension>
-
-  <extension target="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService"
-    point="types">
-    <kind group="user" name="friend" label="%s is friend with %s" />
-    <kind group="user" name="coworker" label="%s works with %s" />
-    <kind group="user" name="connected" label="%s is connected to %s" />
-    <kind group="user" name="relation" label="%s is in a relationship with %s" />
-    <kind group="other" name="trucmuch" label="" />
-  </extension>
-
 </component>
