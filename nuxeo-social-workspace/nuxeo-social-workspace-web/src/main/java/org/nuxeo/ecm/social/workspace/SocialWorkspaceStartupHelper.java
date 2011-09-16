@@ -19,8 +19,6 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.SESSION;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;

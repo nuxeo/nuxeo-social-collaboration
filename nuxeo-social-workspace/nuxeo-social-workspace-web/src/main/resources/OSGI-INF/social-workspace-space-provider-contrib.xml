@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <component name="org.nuxeo.ecm.social.workspace.spaceprovider">
 
+  <require>org.nuxeo.ecm.user.center.dashboard.opensocial.spaceprovider</require>
+  
   <extension target="org.nuxeo.ecm.spaces.core.spacemanager.service"
     point="spaceProviders">
     <spaceProvider name="socialWorkspacePrivateDashboardSpaceProvider">
@@ -12,6 +14,12 @@
     <spaceProvider name="socialWorkspacePublicDashboardSpaceProvider">
       <class>
         org.nuxeo.ecm.social.workspace.spaces.SocialWorkspacePublicSpaceProvider
+      </class>
+    </spaceProvider>
+
+    <spaceProvider name="defaultDashboardSpaceProvider">
+      <class>
+        org.nuxeo.ecm.social.workspace.spaces.SocialWorkspaceDefaultSpaceProvider
       </class>
     </spaceProvider>
   </extension>
