@@ -45,3 +45,24 @@
     background-color: #fff;
     cursor: default;
 }
+
+img { border: none }
+
+
+textarea .miniMessageText {
+   border: 1px solid #C7C7C7;
+   font: bold 12px 'Lucida Grande',Verdana,Arial,sans-serif;
+   width: 90%;
+   margin: 5px;
+}
+
+.toolbarActions { float: right }
+
+.miniMessageCounter {
+	font-size :110%;
+	font-weight : bold;
+}
+
+.warning {
+	color : #DE1A00;
+}
