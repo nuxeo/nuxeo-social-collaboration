@@ -150,6 +150,95 @@ function showNewMiniMessages() {
 }
 
 gadgets.util.registerOnLoadHandler(function() {
+  fillToolbar();
   loadMiniMessages();
   window.setInterval(pollMiniMessages, 30*1000);
 });
+
+// fill the gadget toolbar
+function fillToolbar() {
+  if ( checkCreateMessagesPermission() ) {
+    createMiniMessageImg = document.createElement('img');
+    createMiniMessageImg.src=top.nxContextPath + '/icons/action_add.gif';
+    createMiniMessageImg.alt='create minimessage';
+
+    createMiniMessageLink = document.createElement('a');
+    createMiniMessageLink.href='#';
+    createMiniMessageLink.className='toolbarActions';
+    createMiniMessageLink.appendChild(createMiniMessageImg);
+    createMiniMessageLink.onclick=showCreateMiniMessagePopup;
+
+    _gel('miniMessagesToolbar').appendChild(createMiniMessageLink);
+
+  }
+}
+
+//
+function checkCreateMessagesPermission() {
+  return true;
+}
+
+function showCreateMiniMessagePopup() {
+    t = '';
+    t += '<div class="formContainer">';
+    t += '<form name="createMiniMessageForm" class="createMiniMessageForm">';
+    t += '<textarea rows="4" name="miniMessageText" class="miniMessageText"></textarea>';
+    t += '<p class="newMiniMessageActions">';
+    t += '<span class="miniMessageCounter"></span>';
+    t += '<button name="ok" type="button" onclick="createMiniMessage()">OK</button>';
+    t += '<button name="cancel" type="button" onclick="closePopUp()">Cancel</button>';
+    t += '</p>';
+    t += '</form>';
+    t += '</div>';
+
+    jQuery.fancybox(t,
+       {
+          'width'			  : '100%',
+          'autoScale'         : false,
+          'showCloseButton'   : false,
+          'autoDimensions'    : false,
+          'transitionIn'      : 'none',
+          'transitionOut'     : 'none',
+          'padding'      	  : 0,
+          'margin'           : 0
+       }
+    );
+    updateMiniMessageCounter();
+    jQuery('textarea[name="miniMessageText"]').keyup(updateMiniMessageCounter);
+    gadgets.window.adjustHeight(150);
+}
+
+function updateMiniMessageCounter() {
+    var delta = 140 - jQuery('textarea[name="miniMessageText"]').val().length;
+    var miniMessageCounter = jQuery('.miniMessageCounter');
+    miniMessageCounter.text(delta);
+    miniMessageCounter.toggleClass('warning', delta < 5);
+    if (delta < 0) {
+        jQuery('button[name="ok"]').attr('disabled', 'disabled');
+    } else {
+        jQuery('button[name="ok"]').removeAttr('disabled');
+    }
+}
+
+function closePopUp() {
+	jQuery.fancybox.close();
+	gadgets.window.adjustHeight();
+}
+
+function createMiniMessage(){
+  miniMessageText = jQuery('textarea[name="miniMessageText"]').val();
+  var opCallParameters = {
+     operationId : 'Services.AddMiniMessage',
+     operationParams : {
+       message : miniMessageText,
+       language : prefs.getLang()
+     },
+     entityType : 'blob',
+     operationContext : {},
+     operationCallback : function(response, opCallParameters) {
+       loadMiniMessages();
+     }
+  };
+  doAutomationRequest(opCallParameters);
+  closePopUp();
+}
