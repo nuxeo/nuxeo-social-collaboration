@@ -77,7 +77,7 @@
       }
       locationHref = locationHref.substring(locationHref.indexOf(NXGadgetContext.clientSideBaseUrl)
         + NXGadgetContext.clientSideBaseUrl.length);
-      var link = NXGadgetContext.clientSideBaseUrl + 'logout?requestedUrl=' + locationHref.replace(NXGadgetContext.clientSideBaseUrl, '');
+      var link = NXGadgetContext.clientSideBaseUrl + 'logout?requestedUrl=' + encodeURIComponent(encodeURIComponent(locationHref.replace(NXGadgetContext.clientSideBaseUrl, '')));
       html += ' <a href="' + link + '" target="_top">' + prefs.getMsg('label.request.alreadyMember2') + '</a> ';
       html += prefs.getMsg('label.request.alreadyMember3');
       html += '</p>';
