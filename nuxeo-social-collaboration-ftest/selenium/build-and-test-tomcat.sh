@@ -3,7 +3,11 @@
 HERE=$(cd $(dirname $0); pwd -P)
 
 # Retrieve Nuxeo Distribution and selenium-server.jar
-(cd .. && mvn clean dependency:copy -P$MAVEN_PROFILES) || exit 1
+if [ x != x$MAVEN_PROFILES ] ; then 
+    (cd .. && mvn clean dependency:copy -P$MAVEN_PROFILES) || exit 1
+else 
+    (cd .. && mvn clean dependency:copy) || exit 1
+fi
 
 # Start Tomcat
 cd ../target
