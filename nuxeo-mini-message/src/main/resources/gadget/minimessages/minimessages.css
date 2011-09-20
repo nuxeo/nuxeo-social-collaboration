@@ -58,9 +58,13 @@ textarea .miniMessageText {
 
 .toolbarActions { float: right }
 
+.createMiniMessageForm { margin: 0; padding: 3px; text-align: center; }
+.miniMessageText { font: normal 12px 'Lucida Grande',Verdana,Arial,sans-serif; overflow: auto;
+	padding: 4px; width: 270px;}
 .miniMessageCounter {
 	font-size :110%;
 	font-weight : bold;
+	padding-right: 10px;
 }
 
 .warning {

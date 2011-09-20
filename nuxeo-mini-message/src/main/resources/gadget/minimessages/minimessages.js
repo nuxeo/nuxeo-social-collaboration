@@ -183,13 +183,12 @@ function showCreateMiniMessagePopup() {
     t += '<div class="formContainer">';
     t += '<form name="createMiniMessageForm" class="createMiniMessageForm">';
     t += '<textarea rows="4" name="miniMessageText" class="miniMessageText"></textarea>';
+    t += '<p class="newMiniMessageActions">';
     t += '<span class="miniMessageCounter"></span>';
-    t += '</br>';
     t += '<button name="ok" type="button" onclick="createMiniMessage()">OK</button>';
     t += '<button name="cancel" type="button" onclick="closePopUp()">Cancel</button>';
-    t += '</br>';
+    t += '</p>';
     t += '</form>';
-    t += '</br>';
     t += '</div>';
 
     jQuery.fancybox(t,
