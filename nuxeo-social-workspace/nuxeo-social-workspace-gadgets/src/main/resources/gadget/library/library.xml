@@ -56,8 +56,8 @@
 
     a.button { text-decoration: none; position: relative }
     a.disabled { cursor: default }
-    .tooltip { text-decoration: none; margin-left: -999em; position: absolute; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 3px; color: #333; padding: 5px 5px 5px 23px !important }
-    a.button:hover .tooltip { text-decoration: none; box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1); font-family: Lucida,Geneva,sans-serif; right: 1em; margin-left: 0; position: absolute; top: 1em; width: 120px; z-index: 9999 }
+    .tooltip { text-decoration: none; margin-left: -999em; position: absolute; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 3px; color: #333; padding: 5px; z-index: 9999 }
+    a.button:hover .tooltip { text-decoration: none; box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1); font-family: Lucida,Geneva,sans-serif; margin-left: 0; position: absolute; top: -7px; right: 25px; width: 120px; z-index: 9999 }
     
     /* FancyBox message */
     .fancyContent { padding: 10px; }
