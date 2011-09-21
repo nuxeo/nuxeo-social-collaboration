@@ -137,8 +137,8 @@ function getBasePath() {
 // code - code that will be executed(as string) if ok button is pressed
 function showConfirmationPopup(message, code ) {
   t = '<h3>' + message + '</h3>';
-  t += '<button class="border" name="ok" type="button" onclick="jQuery.fancybox.close();'+ code +'">OK</button>';
-  t += '<button class="border" name="cancel" type="button" onclick="jQuery.fancybox.close()">Cancel</button>';
+  t += '<button class="border" name="ok" type="button" onclick="jQuery.fancybox.close();'+ code +'">__MSG_label.ok__</button>';
+  t += '<button class="border" name="cancel" type="button" onclick="jQuery.fancybox.close()">__MSG_label.cancel__</button>';
   jQuery.fancybox(
     t,
     {

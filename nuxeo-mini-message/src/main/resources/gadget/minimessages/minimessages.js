@@ -157,7 +157,7 @@ gadgets.util.registerOnLoadHandler(function() {
 
 // fill the gadget toolbar
 function fillToolbar() {
-  if ( checkCreateMessagesPermission() ) {
+  if (checkCreateMessagesPermission()) {
     createMiniMessageImg = document.createElement('img');
     createMiniMessageImg.src=top.nxContextPath + '/icons/action_add.gif';
     createMiniMessageImg.alt='create minimessage';
@@ -173,20 +173,19 @@ function fillToolbar() {
   }
 }
 
-//
 function checkCreateMessagesPermission() {
   return true;
 }
 
 function showCreateMiniMessagePopup() {
-    t = '';
+    var t = '';
     t += '<div class="formContainer">';
     t += '<form name="createMiniMessageForm" class="createMiniMessageForm">';
     t += '<textarea rows="4" name="miniMessageText" class="miniMessageText"></textarea>';
     t += '<p class="newMiniMessageActions">';
     t += '<span class="miniMessageCounter"></span>';
-    t += '<button name="ok" type="button" onclick="createMiniMessage()">OK</button>';
-    t += '<button name="cancel" type="button" onclick="closePopUp()">Cancel</button>';
+    t += '<button name="ok" type="button" onclick="createMiniMessage()">'+ prefs.getMsg('label.ok') +'</button>';
+    t += '<button name="cancel" type="button" onclick="closePopUp()">' + prefs.getMsg('label.cancel') + '</button>';
     t += '</p>';
     t += '</form>';
     t += '</div>';
@@ -226,7 +225,7 @@ function closePopUp() {
 }
 
 function createMiniMessage(){
-  miniMessageText = jQuery('textarea[name="miniMessageText"]').val();
+  var miniMessageText = jQuery('textarea[name="miniMessageText"]').val();
   var opCallParameters = {
      operationId : 'Services.AddMiniMessage',
      operationParams : {
