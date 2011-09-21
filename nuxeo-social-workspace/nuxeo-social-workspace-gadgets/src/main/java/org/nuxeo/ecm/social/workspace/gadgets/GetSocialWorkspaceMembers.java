@@ -67,7 +67,7 @@ public class GetSocialWorkspaceMembers {
     @Context
     protected UserManager userManager;
 
-    @Param(name = "limit")
+    @Param(name = "pageSize")
     protected int pageSize = 5;
 
     @Param(name = "page")
