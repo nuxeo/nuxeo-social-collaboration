@@ -1165,6 +1165,10 @@
         <line-height>1.8em</line-height>
         <font-size>105%</font-size>
       </selector>
+      <selector path=".note_content_block img">
+        <max-width>200px</max-width>
+        <max-height>150px</max-height>
+      </selector>
       <selector path=".relation_block">
       </selector>
       <selector path=".description_block">
