@@ -1244,6 +1244,10 @@
       <selector path=".summary_div_2">
         <clear>both</clear>
       </selector>
+      <selector path=".summary_div_0 .fieldColumn img, .summary_div_1 .fieldColumn img, .summary_div_2 .fieldColumn img">
+        <max-width>120px</max-width>
+        <max-height>120px</max-height>
+      </selector>
       <selector path=".bigIcon">
         <width>50px</width>
       </selector>
@@ -1418,6 +1422,15 @@
       <!-- fix gadget width in profile view-->
       <selector path=".fullWidth">
         <width>100%</width>
+      </selector>
+      <!-- Profile View -->
+      <selector path=".profileAvatar">
+        <width>120px</width>
+        <height>120px</height>
+      </selector>
+      <selector path=".avatar">
+        <max-width>120px</max-width>
+        <max-height>120px</max-height>
       </selector>
     </style>
     <!-- General -->
