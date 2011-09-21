@@ -72,8 +72,8 @@ function buildList() {
     html += '<span>' + users[i]['firstName'] + '</span>';
     html += '<span>' + users[i]['lastName'] + '</span>';
     html += '</div>';
-    html += '</div>';
   }
+  html += '</div>';
   return html;
 }
 
