@@ -34,6 +34,7 @@ import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.core.event.impl.ShallowDocumentModel;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -65,9 +66,11 @@ public class ActivityStreamListener implements PostCommitEventListener {
                     || DOCUMENT_REMOVED.equals(event.getName())
                     || DOCUMENT_UPDATED.equals(event.getName())) {
                 DocumentEventContext docEventContext = (DocumentEventContext) eventContext;
-                if (docEventContext.getSourceDocument().hasFacet(
+                DocumentModel doc = docEventContext.getSourceDocument();
+                if (doc instanceof ShallowDocumentModel || doc.hasFacet(
                         HIDDEN_IN_NAVIGATION)) {
-                    // Not really interested if document is not visible.
+                    // Not really interested if document cannot be reconnected
+                    // or if not visible
                     return;
                 }
                 Activity activity = toActivity(docEventContext, event);
