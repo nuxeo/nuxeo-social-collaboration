@@ -68,6 +68,7 @@
         <column>
           <properties mode="any">
             <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+            <property name="columnStyleClass">pictureColumn</property>
           </properties>
           <widget>user_relationship_avatar</widget>
         </column>
