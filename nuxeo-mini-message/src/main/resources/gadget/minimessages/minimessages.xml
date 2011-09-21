@@ -16,16 +16,19 @@
   <head>
     <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
     <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}minimessages.css"/>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}/css/jquery.fancybox.css" />
 
     <!-- insert JS Context -->
     ${jsContext}
-
+	<script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,jquery.fancybox.js"></script>
     <script src="${specDirectoryUrl}default-automation-request.js"></script>
     <script src="${specDirectoryUrl}minimessages.js"></script>
+
   </head>
   <body>
-
     <div id="content">
+      <div id="miniMessagesToolbar">
+      </div>
       <div id="miniMessagesContainer">
       </div>
       <div class="navigationBar">
