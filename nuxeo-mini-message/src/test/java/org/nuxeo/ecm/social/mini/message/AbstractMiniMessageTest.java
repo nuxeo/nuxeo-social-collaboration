@@ -32,6 +32,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
@@ -85,6 +86,9 @@ public abstract class AbstractMiniMessageTest {
     protected EventService eventService;
 
     @Inject
+    protected EventServiceAdmin eventServiceAdmin;
+
+    @Inject
     protected UserManager userManager;
 
     @Inject
@@ -100,6 +104,12 @@ public abstract class AbstractMiniMessageTest {
                         query.executeUpdate();
                     }
                 });
+    }
+
+    @Before
+    public void disableActivityStreamListener() {
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
+                false);
     }
 
     protected void initializeSomeMiniMessagesAndRelations()
