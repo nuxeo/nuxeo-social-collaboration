@@ -153,7 +153,7 @@ public class TestSocialWorkspaceMembersOperation {
                 GetSocialWorkspaceMembers.ID);
         oParams.set("pattern", "testU%");
         oParams.set("page", 0);
-        oParams.set("limit", 5);
+        oParams.set("pageSize", 5);
         oParams.set("contextPath", "/testSocialWorkspace");
         chain.add(oParams);
 
