@@ -40,7 +40,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -96,6 +95,10 @@ public class FullscreenManagementActionsBean implements Serializable {
     protected transient SocialWorkspaceService socialWorkspaceService;
 
     protected DocumentModel previous;
+
+    public DocumentModel getPrevious() {
+        return previous;
+    }
 
     /**
      * Navigate to the Dashboard of the Social Workspace if the document belong
