@@ -20,9 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -167,13 +165,9 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
     @Test
     public void testSocialWorkspaceContainer() throws ClientException {
-        Principal john = createUserWithGroup("JohnDoe", "members");
-        Principal polo = createUserWithGroup("PoloDoe", "trash");
         assertFalse(session.exists(new PathRef(
                 "/default-domain/test-social-workspaces")));
         DocumentModel container = socialWorkspaceService.getOrCreateSocialWorkspaceContainer(session);
-        assertTrue(session.hasPermission(john, container.getRef(), READ_WRITE));
-        assertFalse(session.hasPermission(polo, container.getRef(), READ_WRITE));
         assertEquals("test-social-workspaces", container.getTitle());
         assertEquals("/default-domain",
                 session.getDocument(container.getParentRef()).getPathAsString());

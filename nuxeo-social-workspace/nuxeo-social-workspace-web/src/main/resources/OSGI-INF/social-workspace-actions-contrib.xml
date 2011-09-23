@@ -266,10 +266,6 @@
       <filter-id>social_workspace</filter-id>
     </action>
 
-    <action id="TAB_MANAGE">
-      <filter-id>not_social_workspace_container</filter-id>
-    </action>
-
     <action id="TAB_RIGHTS">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>hide_rights_tab</filter-id>
@@ -341,12 +337,6 @@
         <type>Article</type>
         <type>NewsItem</type>
         <type>SocialWorkspace</type>
-      </rule>
-    </filter>
-
-    <filter id="not_social_workspace_container">
-      <rule grant="false">
-        <type>SocialWorkspaceContainer</type>
       </rule>
     </filter>
 

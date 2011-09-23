@@ -22,7 +22,6 @@ package org.nuxeo.ecm.social.workspace.service;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYONE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
-import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.CTX_PRINCIPALS_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_ADDED;
@@ -257,15 +256,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                                 parentPath, title,
                                 SOCIAL_WORKSPACE_CONTAINER_TYPE);
                         swc.setPropertyValue(DC_TITLE, title);
-                        swc = session.createDocument(swc);
-
-                        // Define default ACL
-                        ACP acp = swc.getACP();
-                        ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_CONTAINER_ACL_NAME);
-                        acl.add(new ACE(getUserManager().getDefaultGroup(),
-                                READ_WRITE, true));
-                        swc.setACP(acp, true);
-                        session.saveDocument(swc);
+                        session.createDocument(swc);
                     }
                 }.runUnrestricted();
             }
