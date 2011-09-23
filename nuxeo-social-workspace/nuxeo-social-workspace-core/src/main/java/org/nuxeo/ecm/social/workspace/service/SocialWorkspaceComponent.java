@@ -31,6 +31,8 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FA
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
@@ -427,6 +429,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
                 buildRelationAdministratorKind())) {
             addSocialWorkspaceMember(socialWorkspace, principal);
+            addGroupToPrincipal(
+                    getSocialWorkspaceAdministratorsGroupName(socialWorkspace.getDocument()),
+                    principal);
             return true;
         }
         return false;
@@ -438,6 +443,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
         Boolean memberCreated = addSocialWorkspaceMemberWithoutNotification(
                 socialWorkspace, principal);
         if (memberCreated) {
+            addGroupToPrincipal(
+                    getSocialWorkspaceMembersGroupName(socialWorkspace.getDocument()),
+                    principal);
             fireEventMembersManagement(socialWorkspace,
                     Arrays.asList(principal), EVENT_MEMBERS_ADDED);
         }
