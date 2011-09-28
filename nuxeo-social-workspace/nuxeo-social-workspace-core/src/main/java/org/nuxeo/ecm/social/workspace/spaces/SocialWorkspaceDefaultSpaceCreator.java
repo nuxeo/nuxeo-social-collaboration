@@ -51,9 +51,11 @@ public class SocialWorkspaceDefaultSpaceCreator extends DefaultDashboardSpaceCre
         WebContentHelper.createOpenSocialGadget(space, session, locale,
                 "news", 0, 0, 1);
         WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "userworkspaces", 0, 0, 2);
+                        "publicsocialworkspaces", 0, 0, 2);
         WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "userdocuments", 0, 0, 3);
+                "userworkspaces", 0, 0, 3);
+        WebContentHelper.createOpenSocialGadget(space, session, locale,
+                "userdocuments", 0, 0, 4);
 
         WebContentHelper.createOpenSocialGadget(space, session, locale,
                 "minimessages", 0, 1, 0);
@@ -63,7 +65,5 @@ public class SocialWorkspaceDefaultSpaceCreator extends DefaultDashboardSpaceCre
                 "waitingfor", 0, 1, 2);
         WebContentHelper.createOpenSocialGadget(space, session, locale,
                 "tasks", 0, 1, 3);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "publicsocialworkspaces", 0, 1, 4);
     }
 }
