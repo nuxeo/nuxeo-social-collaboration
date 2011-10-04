@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.activity.ActivityHelper;
@@ -49,7 +48,7 @@ import org.nuxeo.runtime.api.Framework;
  * the username of which user you want the relations, and the second one to be
  * filled with a search string.
  * <p>
- *
+ * 
  * @since 5.4.3
  */
 public class UserRelationshipPageProvider extends
@@ -109,19 +108,10 @@ public class UserRelationshipPageProvider extends
     }
 
     protected void fillRelationshipsForCurrentUser() {
-        String searchString = getSearchString();
         relationships = new ArrayList<String>();
-
-        if (StringUtils.isBlank(searchString) || "*".equals(searchString)) {
-            relationships.addAll(getUserRelationshipService().getTargetsOfKind(
-                    getCurrentUser(),
-                    RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP)));
-        } else {
-            relationships.addAll(getUserRelationshipService().getTargetsWithFulltext(
-                    getCurrentUser(),
-                    RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP),
-                    searchString.trim()));
-        }
+        relationships.addAll(getUserRelationshipService().getTargetsOfKind(
+                getCurrentUser(),
+                RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP)));
     }
 
     protected UserRelationshipService getUserRelationshipService() {
@@ -161,14 +151,6 @@ public class UserRelationshipPageProvider extends
         Object[] params = getParameters();
         if (params.length >= 1) {
             return ActivityHelper.createUserActivityObject((String) params[0]);
-        }
-        return null;
-    }
-
-    protected String getSearchString() {
-        Object[] params = getParameters();
-        if (params.length >= 2) {
-            return (String) params[1];
         }
         return null;
     }

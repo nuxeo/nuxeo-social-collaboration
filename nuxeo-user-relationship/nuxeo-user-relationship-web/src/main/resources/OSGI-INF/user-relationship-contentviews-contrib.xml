@@ -14,12 +14,33 @@
   <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
     point="contentViews">
 
+    <contentView name="users_listing_relationship">
+      <emptySentence>label.userManager.emptyUserList</emptySentence>
+      <translateEmptySentence>true</translateEmptySentence>
+      <pageProvider name="users_listing">
+        <property name="usersListingMode">#{userManagementActions.listingMode}</property>
+        <parameter>#{userManagementActions.searchString}</parameter>
+      </pageProvider>
+      <showPageSizeSelector>true</showPageSizeSelector>
+      <showRefreshCommand>false</showRefreshCommand>
+      <useGlobalPageSize>false</useGlobalPageSize>
+      <refresh>
+        <event>usersListingChanged</event>
+        <event>usersSearchChanged</event>
+      </refresh>
+      <cacheKey>only_one_cache</cacheKey>
+      <cacheSize>1</cacheSize>
+      <resultLayouts>
+        <layout name="relationships_listing" showCSVExport="false"
+            showPDFExport="false"/>
+      </resultLayouts>
+    </contentView>
+
     <contentView name="user_relationships">
       <emptySentence>label.userManager.emptyUserList</emptySentence>
       <translateEmptySentence>true</translateEmptySentence>
       <pageProvider name="user_relationships">
         <parameter>#{currentUser.model.id}</parameter>
-        <parameter>#{userRelationshipNetworkActions.searchString}</parameter>
         <property name="coreSession">#{documentManager}</property>
       </pageProvider>
       <showPageSizeSelector>false</showPageSizeSelector>

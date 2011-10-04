@@ -30,12 +30,11 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.core.Events;
 import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
 
 /**
  * Social User Relationship Network action bean.
- *
+ * 
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.3
  */
@@ -47,29 +46,12 @@ public class UserRelationshipNetworkActions implements Serializable {
 
     private static final Log log = LogFactory.getLog(UserRelationshipNetworkActions.class);
 
-    protected String searchString;
-
-    public static final String USER_RELATIONSHIP_NETWORK_SEARCH_CHANGED = "userRelationshipNetworkChanged";
-
     @In
     protected transient ContentViewActions contentViewActions;
 
-    public String getSearchString() {
-        return searchString;
-    }
-
-    public void setSearchString(String searchString) {
-        this.searchString = searchString;
-        Events.instance().raiseEvent(USER_RELATIONSHIP_NETWORK_SEARCH_CHANGED);
-    }
-
-    public void clearSearch() {
-        searchString = null;
-    }
-
-    @Observer({ USER_RELATIONSHIP_CHANGED,
-            USER_RELATIONSHIP_NETWORK_SEARCH_CHANGED })
+    @Observer(USER_RELATIONSHIP_CHANGED)
     public void resetContentView() {
+        log.debug("Resetting current user relationship content view");
         contentViewActions.refreshOnSeamEvent(USER_RELATIONSHIP_CHANGED);
         contentViewActions.resetPageProviderOnSeamEvent(USER_RELATIONSHIP_CHANGED);
     }
