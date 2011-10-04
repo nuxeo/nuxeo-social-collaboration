@@ -41,7 +41,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Social User Relationship action bean.
- *
+ * 
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.4.3
  */
@@ -81,7 +81,7 @@ public class UserRelationshipActions implements Serializable {
 
     protected transient ActivityStreamService activityStreamService;
 
-    protected List<RelationshipKind> relationshipsWithSelectedUser;
+    protected Map<String, List<RelationshipKind>> relationshipsWithUser;
 
     protected Map<RelationshipKind, Boolean> allRelationshipsState;
 
@@ -95,13 +95,21 @@ public class UserRelationshipActions implements Serializable {
         return selectedUser == null || getCurrentUser().equals(selectedUser);
     }
 
-    public List<RelationshipKind> getRelationshipsWithSelectedUser() {
-        if (relationshipsWithSelectedUser == null) {
-            relationshipsWithSelectedUser = userRelationshipService.getRelationshipKinds(
-                    ActivityHelper.createUserActivityObject(getCurrentUser()),
-                    ActivityHelper.createUserActivityObject(getSelectedUser()));
+    public List<RelationshipKind> getRelationshipsWithUser(String username) {
+        if (relationshipsWithUser == null) {
+            relationshipsWithUser = new HashMap<String, List<RelationshipKind>>();
         }
-        return relationshipsWithSelectedUser;
+        if (!relationshipsWithUser.containsKey(username)) {
+            List<RelationshipKind> relations = userRelationshipService.getRelationshipKinds(
+                    ActivityHelper.createUserActivityObject(getCurrentUser()),
+                    ActivityHelper.createUserActivityObject(username));
+            relationshipsWithUser.put(username, relations);
+        }
+        return relationshipsWithUser.get(username);
+    }
+
+    public List<RelationshipKind> getRelationshipsWithSelectedUser() {
+        return getRelationshipsWithUser(getSelectedUser());
     }
 
     protected void addRelationshipWithSelectedUser(String kind) {
@@ -144,8 +152,7 @@ public class UserRelationshipActions implements Serializable {
         if (allRelationshipsState == null) {
             allRelationshipsState = new HashMap<RelationshipKind, Boolean>();
             for (RelationshipKind kind : userRelationshipService.getRegisteredKinds(null)) {
-                allRelationshipsState.put(kind,
-                        isActiveRelationship(kind));
+                allRelationshipsState.put(kind, isActiveRelationship(kind));
             }
         }
         return allRelationshipsState;
@@ -173,9 +180,14 @@ public class UserRelationshipActions implements Serializable {
         }
     }
 
-    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    @Observer(USER_RELATIONSHIP_CHANGED)
     public void resetUserRelationship() {
-        relationshipsWithSelectedUser = null;
+        // XXX Should be more intelligent to remove only impacted relations
+        relationshipsWithUser = null;
+    }
+
+    @Observer({ USER_RELATIONSHIP_CHANGED, USER_SELECTED_CHANGED })
+    public void resetUserRelationshipStates() {
         allRelationshipsState = null;
     }
 

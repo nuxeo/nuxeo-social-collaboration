@@ -78,6 +78,12 @@
           </properties>
           <widget>user_relationship_username</widget>
         </column>
+        <column>
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+          </properties>
+          <widget>user_relationship_relations</widget>
+        </column>
       </columns>
     </layout>
   </extension>
@@ -138,6 +144,18 @@
       </fields>
       <properties mode="any">
         <property name="template">/widgets/user_relationship_contacts_widget_template.xhtml</property>
+      </properties>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
+    </widget>
+
+    <widget name="user_relationship_relations" type="template">
+      <fields>
+        <field>data</field>
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/user_relationship_relation_with_user.xhtml</property>
       </properties>
       <widgetModes>
         <mode value="any">view</mode>
