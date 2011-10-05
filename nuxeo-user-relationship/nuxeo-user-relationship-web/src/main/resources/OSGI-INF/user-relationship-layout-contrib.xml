@@ -186,7 +186,6 @@
       </helpLabels>
       <fields>
         <field>data</field>
-        <field>data.userprofile.avatar</field>
       </fields>
       <properties mode="any">
         <property name="file_property_name">userprofile:avatar</property>
