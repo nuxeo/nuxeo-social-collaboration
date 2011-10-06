@@ -8,7 +8,7 @@
   <c:set var="userSchema" value="#{userManager.userSchemaName}"/>
 
   <c:forEach var="relation" items="#{userRelationshipActions.getRelationshipsWithUser(field[userSchema].username)}">
-    <div class="user_relation">
+    <div class="userRelation tag">
       <h:outputText value="#{relation.name}"/>
     </div>
   </c:forEach>
