@@ -45,3 +45,28 @@
     background-color: #fff;
     cursor: default;
 }
+
+
+img { border: none }
+
+textarea .miniMessageText {
+   border: 1px solid #C7C7C7;
+   font: bold 12px 'Lucida Grande',Verdana,Arial,sans-serif;
+   width: 90%;
+   margin: 5px;
+}
+
+.toolbarActions { float: right }
+
+.createMiniMessageForm { margin: 0; padding: 3px; text-align: center; }
+.miniMessageText { font: normal 12px 'Lucida Grande',Verdana,Arial,sans-serif; overflow: auto;
+	padding: 4px; width: 270px;}
+.miniMessageCounter {
+	font-size :110%;
+	font-weight : bold;
+	padding-right: 10px;
+}
+
+.warning {
+	color : #DE1A00;
+}

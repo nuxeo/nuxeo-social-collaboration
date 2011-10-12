@@ -157,7 +157,7 @@ gadgets.util.registerOnLoadHandler(function() {
 
 // fill the gadget toolbar
 function fillToolbar() {
-  if (checkCreateMessagesPermission()) {
+  if (isCreateMessagesActionDisplayed()) {
     createMiniMessageImg = document.createElement('img');
     createMiniMessageImg.src=top.nxContextPath + '/icons/action_add.gif';
     createMiniMessageImg.alt='create minimessage';
@@ -173,8 +173,8 @@ function fillToolbar() {
   }
 }
 
-function checkCreateMessagesPermission() {
-  return true;
+function isCreateMessagesActionDisplayed() {
+  return miniMessagesStreamType == 'forActor';
 }
 
 function showCreateMiniMessagePopup() {
