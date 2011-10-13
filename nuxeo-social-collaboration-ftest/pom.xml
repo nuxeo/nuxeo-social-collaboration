@@ -20,8 +20,7 @@
           <artifactItems>
             <artifactItem>
               <groupId>org.seleniumhq.selenium</groupId>
-              <artifactId>selenium-server</artifactId>
-              <classifier>standalone</classifier>
+              <artifactId>selenium-server-standalone</artifactId>
               <overWrite>false</overWrite>
               <outputDirectory>selenium</outputDirectory>
               <destFileName>selenium-server.jar</destFileName>
