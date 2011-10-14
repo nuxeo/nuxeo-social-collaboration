@@ -43,6 +43,21 @@
       <to-view-id>/news_items.xhtml</to-view-id>
       <redirect />
     </navigation-case>
+    <navigation-case>
+      <from-outcome>view_collaboration</from-outcome>
+      <to-view-id>/view_collaboration.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
+  </extension>
+
+  <extension target="web#STD-AUTH-FILTER">
+    <filter-mapping>
+      <filter-name>NuxeoAuthenticationFilter</filter-name>
+      <url-pattern>/collaboration/*</url-pattern>
+      <dispatcher>REQUEST</dispatcher>
+      <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
   </extension>
 
   <install>

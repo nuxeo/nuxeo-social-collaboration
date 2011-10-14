@@ -44,6 +44,8 @@ public class SocialConstants {
 
     public static final String PUBLIC_DASHBOARD_SPACE_NAME = "publicDashboardSpace";
 
+    public static final String GLOBAL_DASHBOARD_SPACE_NAME = "globalDashboardSpace";
+
     public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
 
     public static final String DASHBOARD_SPACES_CONTAINER_TYPE = "DashboardSpacesContainer";
