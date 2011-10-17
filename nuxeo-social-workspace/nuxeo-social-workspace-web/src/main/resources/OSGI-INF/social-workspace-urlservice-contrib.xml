@@ -4,7 +4,7 @@
     target="org.nuxeo.ecm.platform.url.service.DocumentViewCodecService"
     point="codecs">
 
-    <documentViewCodec name="collaboration" enabled="true" default="false"
+    <documentViewCodec name="docpathcollaboration" enabled="true" default="false"
       prefix="collaboration"
       class="org.nuxeo.ecm.platform.url.codec.DocumentPathCodec" />
 
@@ -22,7 +22,7 @@
       <needBaseURL>true</needBaseURL>
       <needRedirectFilter>true</needRedirectFilter>
       <needFilterPreprocessing>true</needFilterPreprocessing>
-      <codecName>docpathhome</codecName>
+      <codecName>docpathcollaboration</codecName>
       <actionBinding>#{restHelper.initContextFromRestRequest}</actionBinding>
       <documentViewBindingApplies>
         #{mainTabsActions.isOnMainTab('collaboration')}

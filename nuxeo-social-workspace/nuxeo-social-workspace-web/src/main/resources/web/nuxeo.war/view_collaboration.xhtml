@@ -28,9 +28,24 @@
         <ui:decorate template="/incl/opensocial_container_template.xhtml">
 
           <ui:define name="opensocial_container_title">
-          	<h1>
-        	#{messages['label.main.tab.collaboration']}
-      		</h1>
+            <h1>
+              #{messages['label.main.tab.collaboration']}
+            </h1>
+          </ui:define>
+
+          <ui:define name="opensocial_container_actions">
+            <c:if test="#{currentUser.administrator}">
+              <div class="opensocial_buttons">
+                <ul>
+                  <li>
+                    <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
+                  </li>
+                  <li>
+                    <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
+                  </li>
+                </ul>
+              </div>
+            </c:if>
           </ui:define>
 
         </ui:decorate>
