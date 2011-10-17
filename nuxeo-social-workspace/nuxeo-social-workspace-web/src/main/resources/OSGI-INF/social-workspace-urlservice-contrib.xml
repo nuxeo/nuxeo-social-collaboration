@@ -38,7 +38,7 @@
         <binding name="subTabId" callGetter="false">
           #{webActions.currentSubTabId}
         </binding>
-        <binding name="tabIds">#{webActions.currentTabIds}</binding>
+        <binding name="tabIds">#{socialWorkspaceActions.collaborationMainTab}</binding>
         <binding name="language" callGetter="false">
           #{restHelper.localeString}
         </binding>
