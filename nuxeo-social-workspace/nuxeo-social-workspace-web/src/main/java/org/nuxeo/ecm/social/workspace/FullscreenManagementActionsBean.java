@@ -45,6 +45,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
+import org.nuxeo.ecm.platform.ui.web.api.WebActions;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
@@ -94,6 +95,9 @@ public class FullscreenManagementActionsBean implements Serializable {
     @In(create = true)
     protected transient SocialWorkspaceService socialWorkspaceService;
 
+    @In(create = true)
+    protected transient WebActions webActions;
+
     protected DocumentModel previous;
 
     public DocumentModel getPrevious() {
@@ -116,6 +120,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         if (socialWorkspace != null) {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));
+            webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
             return navigationContext.navigateToDocument(dashboardSpacesRoot,
                     FULLSCREEN_VIEW_ID);
         } else {
@@ -138,9 +143,11 @@ public class FullscreenManagementActionsBean implements Serializable {
             SocialWorkspace socialWorkspace = toSocialWorkspace(currentDocument);
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));
+            webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
             return navigationContext.navigateToDocument(dashboardSpacesRoot,
                     FULLSCREEN_VIEW_ID);
         } else if (isSocialDocument(currentDocument)) {
+            webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
             return navigationContext.navigateToDocument(currentDocument,
                     FULLSCREEN_VIEW_ID);
         } else {

@@ -44,7 +44,7 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 @Install(precedence = FRAMEWORK)
 public class SocialWorkspaceActions implements Serializable {
 
-    private static final String MAIN_TABS_COLLABORATION = "MAIN_TABS:collaboration";
+    public static final String MAIN_TABS_COLLABORATION = "MAIN_TABS:collaboration";
 
     private static final long serialVersionUID = 1L;
 
