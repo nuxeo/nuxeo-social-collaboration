@@ -23,9 +23,9 @@
       </class>
     </spaceProvider>
 
-     <spaceProvider name="globalDashboardSpaceProvider">
+     <spaceProvider name="collaborationDashboardSpaceProvider">
       <class>
-        org.nuxeo.ecm.social.workspace.spaces.GlobalDashboardSpaceProvider
+        org.nuxeo.ecm.social.workspace.spaces.CollaborationDashboardSpaceProvider
       </class>
     </spaceProvider>
 
