@@ -45,6 +45,10 @@
         <theme>social-collaboration/dashboard</theme>
       </view>
 
+      <view id="/view_collaboration.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
    </application>
   </extension>
 

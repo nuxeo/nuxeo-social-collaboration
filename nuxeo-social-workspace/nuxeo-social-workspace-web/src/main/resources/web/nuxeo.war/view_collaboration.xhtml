@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<nxthemes:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxthemes="http://nuxeo.org/nxthemes"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:nxh="http://nuxeo.org/nxweb/html"
+  xmlns:nxd="http://nuxeo.org/nxweb/document"
+  xmlns:nxl="http://nuxeo.org/nxforms/layout">
+
+  <ui:define name="page title">
+    <h:outputText
+      value="#{messages['label.main.tab.collaboration']}" />
+  </ui:define>
+
+  <ui:define name="bookmark">
+    <link rel="bookmark"
+      href="#{navigationContext.currentDocumentFullUrl}" />
+  </ui:define>
+
+  <ui:define name="body">
+
+    <nxu:set var="repositoryName" value="#{navigationContext.currentServerLocation.name}">
+      <nxu:set var="spaceProviderName" value="collaborationDashboardSpaceProvider">
+
+        <ui:decorate template="/incl/opensocial_container_template.xhtml">
+
+          <ui:define name="opensocial_container_title">
+            <h1>
+              #{messages['label.main.tab.collaboration']}
+            </h1>
+          </ui:define>
+
+          <ui:define name="opensocial_container_actions">
+            <c:if test="#{currentUser.administrator}">
+              <div class="opensocial_buttons">
+                <ul>
+                  <li>
+                    <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
+                  </li>
+                  <li>
+                    <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
+                  </li>
+                </ul>
+              </div>
+            </c:if>
+          </ui:define>
+
+        </ui:decorate>
+      </nxu:set>
+    </nxu:set>
+
+  </ui:define>
+
+
+
+
+
+</nxthemes:composition>

@@ -30,6 +30,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
+import org.nuxeo.ecm.platform.ui.web.api.WebActions;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
@@ -42,6 +43,8 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
 public class SocialWorkspaceActions implements Serializable {
+
+    public static final String MAIN_TABS_COLLABORATION = "MAIN_TABS:collaboration";
 
     private static final long serialVersionUID = 1L;
 
@@ -56,6 +59,9 @@ public class SocialWorkspaceActions implements Serializable {
 
     @In(create = true)
     protected transient NuxeoPrincipal currentUser;
+
+    @In(create = true)
+    protected transient WebActions webActions;
 
     public static SocialWorkspace toSocialWorkspace(DocumentModel doc) {
         return SocialWorkspaceHelper.toSocialWorkspace(doc);
@@ -80,4 +86,11 @@ public class SocialWorkspaceActions implements Serializable {
         return socialWorkspaceService.getOrCreateSocialWorkspaceContainer(documentManager);
     }
 
+    public String getCollaborationMainTab(){
+        return MAIN_TABS_COLLABORATION;
+    }
+
+    public void setCollaborationMainTab(String string) {
+        webActions.setCurrentTabIds(MAIN_TABS_COLLABORATION);
+    }
 }
