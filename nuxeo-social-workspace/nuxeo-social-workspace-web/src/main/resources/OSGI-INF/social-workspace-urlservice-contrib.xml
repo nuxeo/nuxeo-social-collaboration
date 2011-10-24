@@ -9,7 +9,8 @@
       class="org.nuxeo.ecm.platform.url.codec.DocumentPathCodec" />
 
     <documentation>
-      TODO
+      Codec used for collaboration tab.
+      Urls are of the form http://site/nuxeo/collaboration/path/to/doc@view?extraargs
     </documentation>
 
   </extension>

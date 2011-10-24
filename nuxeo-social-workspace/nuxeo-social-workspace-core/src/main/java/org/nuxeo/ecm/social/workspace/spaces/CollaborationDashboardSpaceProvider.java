@@ -38,6 +38,9 @@ import org.nuxeo.ecm.user.center.dashboard.AbstractDashboardSpaceCreator;
 import org.nuxeo.runtime.api.Framework;
 
 /**
+ * Dashboard space provider returning the collaboration dashboard to be
+ * dispalyed in collaboration tab </p>
+ * 
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  * @since 5.4.3
  */
@@ -93,7 +96,7 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
     protected SocialWorkspaceService getSocialWorkspaceService()
             throws ClientException {
         try {
-            return Framework.getService(SocialWorkspaceService.class);
+            return Framework.getLocalService(SocialWorkspaceService.class);
         } catch (Exception e) {
             throw new ClientException(e);
         }
