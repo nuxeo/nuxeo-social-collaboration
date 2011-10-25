@@ -60,7 +60,7 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
         try {
             return getOrCreateSpace(session, parameters);
         } catch (ClientException e) {
-            log.error("Unable to create or get global dashboard", e);
+            log.error("Unable to create or get collaboration dashboard", e);
             return null;
         }
     }
@@ -69,67 +69,62 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
             Map<String, String> parameters) throws ClientException {
         DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getOrCreateSocialWorkspaceContainer(
                 session);
-        DocumentRef globalDashboardSpaceRef = new PathRef(
+        DocumentRef collaborationDashboardSpaceRef = new PathRef(
                 socialWorkspaceContainer.getPathAsString(),
                 COLLABORATION_DASHBOARD_SPACE_NAME);
-        if (session.exists(globalDashboardSpaceRef)) {
-            DocumentModel globalDashboardSpace = session.getDocument(globalDashboardSpaceRef);
-            return globalDashboardSpace.getAdapter(Space.class);
+        if (session.exists(collaborationDashboardSpaceRef)) {
+            DocumentModel collaborationDashboardSpace = session.getDocument(collaborationDashboardSpaceRef);
+            return collaborationDashboardSpace.getAdapter(Space.class);
         } else {
-            DocumentModel globalDashboardSpace = getOrCreateGlobalDashboardSpace(
+            DocumentModel collaborationDashboardSpace = getOrCreateCollaborationDashboardSpace(
                     session, parameters);
-            return globalDashboardSpace.getAdapter(Space.class);
+            return collaborationDashboardSpace.getAdapter(Space.class);
         }
 
     }
 
-    protected DocumentModel getOrCreateGlobalDashboardSpace(
+    protected DocumentModel getOrCreateCollaborationDashboardSpace(
             CoreSession session, Map<String, String> parameters)
             throws ClientException {
         CollaborationDashBoardSpaceCreator creator = new CollaborationDashBoardSpaceCreator(
                 session, parameters);
         creator.runUnrestricted();
-        return session.getDocument(creator.getGlobalDashboardSpaceRef());
+        return session.getDocument(creator.getCollaborationDashboardSpaceRef());
 
     }
 
-    protected SocialWorkspaceService getSocialWorkspaceService()
-            throws ClientException {
-        try {
-            return Framework.getLocalService(SocialWorkspaceService.class);
-        } catch (Exception e) {
-            throw new ClientException(e);
-        }
+    protected SocialWorkspaceService getSocialWorkspaceService() {
+        return Framework.getLocalService(SocialWorkspaceService.class);
     }
 
     class CollaborationDashBoardSpaceCreator extends
             AbstractDashboardSpaceCreator {
 
-        DocumentRef globalDashboardSpaceRef;
+        DocumentRef collaborationDashboardSpaceRef;
 
         protected CollaborationDashBoardSpaceCreator(CoreSession session,
                 Map<String, String> parameters) {
             super(session, parameters);
         }
 
-        public DocumentRef getGlobalDashboardSpaceRef() {
-            return globalDashboardSpaceRef;
+        public DocumentRef getCollaborationDashboardSpaceRef() {
+            return collaborationDashboardSpaceRef;
         }
 
         public void run() throws ClientException {
             DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getOrCreateSocialWorkspaceContainer(
                     session);
-            DocumentModel globalDashboardSpace = session.createDocumentModel(
+            DocumentModel collaborationDashboardSpace = session.createDocumentModel(
                     socialWorkspaceContainer.getPathAsString(),
                     COLLABORATION_DASHBOARD_SPACE_NAME, SPACE_DOCUMENT_TYPE);
-            globalDashboardSpace.setPropertyValue("dc:title",
+            collaborationDashboardSpace.setPropertyValue("dc:title",
                     "global dashboard space");
-            globalDashboardSpace.setPropertyValue("dc:description",
+            collaborationDashboardSpace.setPropertyValue("dc:description",
                     "global dashboard space");
-            globalDashboardSpace = session.createDocument(globalDashboardSpace);
+            collaborationDashboardSpace = session.createDocument(collaborationDashboardSpace);
 
-            addInitialGadgets(globalDashboardSpace);
-            globalDashboardSpaceRef = globalDashboardSpace.getRef();
+            addInitialGadgets(collaborationDashboardSpace);
+            collaborationDashboardSpaceRef = collaborationDashboardSpace.getRef();
 
         }
 
