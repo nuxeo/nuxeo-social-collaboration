@@ -35,6 +35,7 @@
 
           <ui:define name="opensocial_container_actions">
             <c:if test="#{currentUser.administrator}">
+              <h:form>
               <div class="opensocial_buttons">
                 <ul>
                   <li>
@@ -43,8 +44,15 @@
                   <li>
                     <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
                   </li>
+                  <li>
+
+                    <h:commandLink action="create_social_document">
+                      <img src="${baseURL}/icons/action_add.gif" alt="#{messages['label.create.social.workspace']}" title="#{messages['label.create.social.workspace']}" />
+                    </h:commandLink>
+                  </li>
                 </ul>
               </div>
+              </h:form>
             </c:if>
           </ui:define>
 
