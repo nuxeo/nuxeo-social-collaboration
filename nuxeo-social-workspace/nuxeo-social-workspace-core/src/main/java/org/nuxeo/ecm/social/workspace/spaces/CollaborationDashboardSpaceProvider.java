@@ -135,7 +135,7 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
             WebContentHelper.createOpenSocialGadget(space, session, locale,
                     "news", 0, 0, 1);
             WebContentHelper.createOpenSocialGadget(space, session, locale,
-                    "userworkspaces", 0, 1, 0);
+                    "usersocialworkspaces", 0, 1, 0);
             WebContentHelper.createOpenSocialGadget(space, session, locale,
                     "useractivitystream", 0, 1, 1);
         }
