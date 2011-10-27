@@ -6,7 +6,7 @@ function documentList(docRef, page){
   if ( typeof page == 'number' ) {
     data.page = page;
   }
-  data.pageSize = prefs.getString("limit");
+  data.limit = prefs.getString("limit");
 
   // set new value of docRef
   data.docRef = docRef;
@@ -123,6 +123,7 @@ function contentLoadedHandler(data){
   	jQuery("img").removeAttr("alt");
   }
 
+  gadgets.window.adjustHeight();
 }
 
 
