@@ -29,7 +29,7 @@ import org.nuxeo.ecm.webapp.helpers.StartupHelper;
  * redirect user into their dashboards after login in.
  * 
  * @author Arnaud Kervern <akervern@nuxeo.com>
- * @since 5.4.3
+ * @since 5.5
  */
 @Name("startupHelper")
 @Scope(SESSION)

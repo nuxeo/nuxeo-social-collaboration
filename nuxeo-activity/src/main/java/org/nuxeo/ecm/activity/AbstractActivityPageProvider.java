@@ -25,7 +25,7 @@ import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
  * Maintains the next offset to be used to have the next activities.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public abstract class AbstractActivityPageProvider<T> extends
         AbstractPageProvider<T> {

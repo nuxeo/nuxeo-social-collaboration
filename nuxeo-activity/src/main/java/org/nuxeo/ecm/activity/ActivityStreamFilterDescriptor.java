@@ -25,7 +25,7 @@ import org.nuxeo.ecm.core.api.ClientException;
  * Descriptor object for registering {@link ActivityStreamFilter}s.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @XObject("activityStreamFilter")
 public class ActivityStreamFilterDescriptor {

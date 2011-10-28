@@ -38,7 +38,7 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceEmailNotifier;
  * users.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public class SubscriptionRequestListener implements PostCommitEventListener {
 

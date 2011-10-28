@@ -17,7 +17,7 @@
 
     <widgetType name="summary_social_document_visibility_action">
       <configuration>
-        <sinceVersion>5.4.3</sinceVersion>
+        <sinceVersion>5.5</sinceVersion>
         <title>Publication of social document</title>
         <description>
           <p>

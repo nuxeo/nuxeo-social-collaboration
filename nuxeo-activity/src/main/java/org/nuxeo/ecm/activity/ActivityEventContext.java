@@ -26,7 +26,7 @@ import org.nuxeo.ecm.core.event.impl.EventContextImpl;
  * Specialized implementation to be used when firing event for an Activity.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public class ActivityEventContext extends EventContextImpl {
 

@@ -4,17 +4,17 @@
   <parent>
     <groupId>org.nuxeo.ecm.platform</groupId>
     <artifactId>nuxeo-features-parent</artifactId>
-    <version>5.4.3-DEPRECATED</version>
+    <version>5.5-SNAPSHOT</version>
   </parent>
   <groupId>org.nuxeo.ecm.social</groupId>
   <artifactId>nuxeo-social-collaboration-parent</artifactId>
   <name>Nuxeo Social Collaboration Parent</name>
-  <version>5.4.3-DEPRECATED</version>
+  <version>5.5-SNAPSHOT</version>
   <description>Nuxeo Social Collaboration Parent</description>
   <packaging>pom</packaging>
 
   <properties>
-    <nuxeo.distribution.version>5.4.3-DEPRECATED</nuxeo.distribution.version>
+    <nuxeo.distribution.version>5.5-SNAPSHOT</nuxeo.distribution.version>
   </properties>
 
   <modules>

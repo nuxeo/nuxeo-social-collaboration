@@ -27,7 +27,7 @@ import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
  * Service to manage relations between entities.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public interface UserRelationshipService {
 

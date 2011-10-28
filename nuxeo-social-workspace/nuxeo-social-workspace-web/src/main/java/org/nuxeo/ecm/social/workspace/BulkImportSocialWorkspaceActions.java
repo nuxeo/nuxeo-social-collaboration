@@ -50,7 +50,7 @@ import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
  * Action bean to manage bulk user import in a Social Workspace
  *
  * @author Arnaud KERVERN <akervern@nuxeo.com>
- * @since 5.4.3
+ * @since 5.5
  */
 @Name("bulkImportSocialWorkspaceActions")
 @Scope(CONVERSATION)

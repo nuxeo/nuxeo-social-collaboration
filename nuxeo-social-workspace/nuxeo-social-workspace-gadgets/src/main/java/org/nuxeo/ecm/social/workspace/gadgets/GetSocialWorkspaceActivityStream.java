@@ -52,7 +52,7 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
  * Operation to get the activity stream for a given Social Workspace.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Operation(id = GetSocialWorkspaceActivityStream.ID, category = Constants.CAT_SERVICES, label = "Get a social workspace activity stream", description = "Get a social workspace activity stream.")
 public class GetSocialWorkspaceActivityStream {

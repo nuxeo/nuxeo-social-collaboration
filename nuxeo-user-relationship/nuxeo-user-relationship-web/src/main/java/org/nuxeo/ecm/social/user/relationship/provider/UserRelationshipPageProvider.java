@@ -49,7 +49,7 @@ import org.nuxeo.runtime.api.Framework;
  * filled with a search string.
  * <p>
  * 
- * @since 5.4.3
+ * @since 5.5
  */
 public class UserRelationshipPageProvider extends
         AbstractPageProvider<DocumentModel> {

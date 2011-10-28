@@ -38,7 +38,7 @@ import org.nuxeo.runtime.api.Framework;
  * the actor, and the second one to be filled with the relationship kind to use.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public class MiniMessagePageProvider extends
         AbstractActivityPageProvider<MiniMessage> implements

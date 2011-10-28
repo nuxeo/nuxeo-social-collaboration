@@ -57,7 +57,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
  * Default implementation of {@see UserRelationshipService}.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public class UserRelationshipServiceImpl extends DefaultComponent implements
         UserRelationshipService {

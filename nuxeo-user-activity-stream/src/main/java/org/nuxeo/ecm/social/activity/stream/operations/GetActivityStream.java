@@ -52,7 +52,7 @@ import org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider;
  * Operation to get the activity stream for or from a given actor.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Operation(id = GetActivityStream.ID, category = Constants.CAT_SERVICES, label = "Get activity stream", description = "Get activity stream for the current user.")
 public class GetActivityStream {

@@ -48,7 +48,7 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
  * Operation to get the mini messages for a given Social Workspace.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Operation(id = GetSocialWorkspaceMiniMessages.ID, category = Constants.CAT_SERVICES, label = "Get social workspace mini messages", description = "Get social workspace mini messages.")
 public class GetSocialWorkspaceMiniMessages {

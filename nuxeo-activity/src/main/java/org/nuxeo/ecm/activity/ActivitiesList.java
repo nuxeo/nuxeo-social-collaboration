@@ -26,7 +26,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
  * A list of Activities with useful methods to filter it or transform it.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public interface ActivitiesList extends List<Activity> {
 
