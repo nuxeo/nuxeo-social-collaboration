@@ -1,0 +1,51 @@
+<component name="org.nuxeo.ecm.collaboration.urlservice">
+
+  <extension
+    target="org.nuxeo.ecm.platform.url.service.DocumentViewCodecService"
+    point="codecs">
+
+    <documentViewCodec name="docpathcollaboration" enabled="true" default="false"
+      prefix="collaboration"
+      class="org.nuxeo.ecm.platform.url.codec.DocumentPathCodec" />
+
+    <documentation>
+      Codec used for collaboration tab.
+      Urls are of the form http://site/nuxeo/collaboration/path/to/doc@view?extraargs
+    </documentation>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.ui.web.rest.URLService"
+    point="urlpatterns">
+
+    <urlPattern name="collaboration" enabled="true">
+      <defaultURLPolicy>false</defaultURLPolicy>
+      <needBaseURL>true</needBaseURL>
+      <needRedirectFilter>true</needRedirectFilter>
+      <needFilterPreprocessing>true</needFilterPreprocessing>
+      <codecName>docpathcollaboration</codecName>
+      <actionBinding>#{restHelper.initContextFromRestRequest}</actionBinding>
+      <documentViewBindingApplies>
+        #{mainTabsActions.isOnMainTab('collaboration')}
+      </documentViewBindingApplies>
+      <documentViewBinding>#{restHelper.documentView}</documentViewBinding>
+      <newDocumentViewBinding>
+        #{restHelper.getNewDocumentView(null)}
+      </newDocumentViewBinding>
+      <bindings>
+        <binding name="tabId" callGetter="false">
+          #{webActions.currentTabId}
+        </binding>
+        <binding name="subTabId" callGetter="false">
+          #{webActions.currentSubTabId}
+        </binding>
+        <binding name="tabIds">#{socialWorkspaceActions.collaborationMainTab}</binding>
+        <binding name="language" callGetter="false">
+          #{restHelper.localeString}
+        </binding>
+      </bindings>
+    </urlPattern>
+
+  </extension>
+
+</component>

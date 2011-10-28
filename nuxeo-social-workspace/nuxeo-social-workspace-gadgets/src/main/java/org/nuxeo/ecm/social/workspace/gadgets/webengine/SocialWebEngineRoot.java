@@ -326,7 +326,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "AND ecm:parentId = '" + doc.getId() + "'";
 
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
-                "limit", pageSize).set("page", page);
+                "pageSize", pageSize).set("page", page);
 
         return (PaginableDocumentModelList) getAutomationService().run(ctx,
                 chain);

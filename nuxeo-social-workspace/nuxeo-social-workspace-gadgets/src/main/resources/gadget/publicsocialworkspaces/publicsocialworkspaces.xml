@@ -44,7 +44,7 @@ function getPublicSociaWorkspaces() {
       displayMethod: displayDocumentList,
       displayColumns: [
         {type: 'builtin', field: 'icon'},
-        {type: 'builtin', field: 'titleWithLink', label: '__MSG_label.dublincore.title__', view: 'social_dashboard'},
+        {type: 'builtin', field: 'titleWithLink', label: '__MSG_label.dublincore.title__', view: 'social_dashboard', codec: 'collaboration'},
         {type: 'date', field: 'dc:modified', label: '__MSG_label.dublincore.modified__'},
         {type: 'text', field: 'dc:creator', label: '__MSG_label.dublincore.creator__'}
     ],
