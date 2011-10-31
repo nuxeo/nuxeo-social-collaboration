@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.SESSION;
 
+import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -27,20 +28,22 @@ import org.nuxeo.ecm.webapp.helpers.StartupHelper;
 /**
  * Overriding default {@see org.nuxeo.ecm.webapp.helpers.StartupHelper} to
  * redirect user into their dashboards after login in.
- * 
+ *
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.5
  */
 @Name("startupHelper")
 @Scope(SESSION)
 public class SocialWorkspaceStartupHelper extends StartupHelper {
+
     private static final long serialVersionUID = 3248232383219879845L;
 
     @Override
+    @Begin(id = "#{conversationIdGenerator.nextMainConversationId}", join = true)
     public String initDomainAndFindStartupPage(String domainTitle, String viewId) {
         String result = super.initDomainAndFindStartupPage(domainTitle, viewId);
 
-        if (((NuxeoPrincipal)documentManager.getPrincipal()).isAdministrator()) {
+        if (((NuxeoPrincipal) documentManager.getPrincipal()).isAdministrator()) {
             return result;
         } else {
             return dashboardNavigationHelper.navigateToDashboard();
