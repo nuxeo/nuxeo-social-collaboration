@@ -1,0 +1,32 @@
+<component name="org.nuxeo.ecm.user.relationship.urlservice">
+
+  <require>org.nuxeo.ecm.user.center.urlservice</require>
+
+  <extension target="org.nuxeo.ecm.platform.ui.web.rest.URLService"
+    point="urlpatterns">
+
+    <urlPattern name="user" enabled="true">
+      <defaultURLPolicy>false</defaultURLPolicy>
+      <needBaseURL>true</needBaseURL>
+      <needRedirectFilter>true</needRedirectFilter>
+      <needFilterPreprocessing>true</needFilterPreprocessing>
+      <codecName>user</codecName>
+      <actionBinding>
+        #{restHelper.initContextFromRestRequest}
+      </actionBinding>
+      <bindings>
+        <binding name="tabIds" callGetter="false">
+          #{userRelationshipNetworkActions.relationsTab}
+        </binding>
+        <binding name="username" callGetter="false">
+          #{userManagementActions.selectedUserName}
+        </binding>
+        <binding name="showUser" callGetter="false">
+          #{userManagementActions.showUser}
+        </binding>
+      </bindings>
+    </urlPattern>
+
+  </extension>
+
+</component>
