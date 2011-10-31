@@ -20,7 +20,7 @@ import org.nuxeo.runtime.api.Framework;
  * User Relationship service business delegate
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Name("userRelationshipService")
 @Scope(CONVERSATION)

@@ -42,7 +42,7 @@ import org.nuxeo.runtime.api.Framework;
  * dispalyed in collaboration tab </p>
  * 
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
 

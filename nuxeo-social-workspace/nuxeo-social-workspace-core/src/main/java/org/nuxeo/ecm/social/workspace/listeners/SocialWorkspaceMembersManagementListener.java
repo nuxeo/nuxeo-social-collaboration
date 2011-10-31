@@ -61,7 +61,7 @@ import org.nuxeo.runtime.api.Framework;
  * Listener to notify members about added or removed social workspace members
  *
  * @author Arnaud Kervern <akervern@nuxeo.com>
- * @since 5.4.3
+ * @since 5.5
  */
 public class SocialWorkspaceMembersManagementListener implements
         PostCommitEventListener {

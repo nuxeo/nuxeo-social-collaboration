@@ -46,7 +46,7 @@ import org.nuxeo.ecm.social.mini.message.MiniMessage;
  * Operation to get the mini messages for or from a given actor.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Operation(id = GetMiniMessages.ID, category = Constants.CAT_SERVICES, label = "Get mini messages", description = "Get mini messages for the current user.")
 public class GetMiniMessages {

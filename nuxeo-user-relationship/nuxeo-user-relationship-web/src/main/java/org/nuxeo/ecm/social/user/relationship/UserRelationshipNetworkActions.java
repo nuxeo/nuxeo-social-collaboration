@@ -37,7 +37,7 @@ import org.nuxeo.ecm.platform.ui.web.api.WebActions;
  * Social User Relationship Network action bean.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Name("userRelationshipNetworkActions")
 @Scope(CONVERSATION)

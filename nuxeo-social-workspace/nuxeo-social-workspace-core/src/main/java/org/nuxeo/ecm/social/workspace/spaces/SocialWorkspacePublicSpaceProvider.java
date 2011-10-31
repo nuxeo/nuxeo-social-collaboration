@@ -19,7 +19,7 @@ import org.nuxeo.ecm.spaces.api.exceptions.SpaceException;
  * Creates the default Public {@link Space} for a Social Workspace.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public class SocialWorkspacePublicSpaceProvider extends AbstractSpaceProvider {
 

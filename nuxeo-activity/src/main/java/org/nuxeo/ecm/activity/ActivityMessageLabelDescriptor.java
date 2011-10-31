@@ -25,7 +25,7 @@ import org.nuxeo.common.xmap.annotation.XObject;
  * label key.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @XObject("activityMessageLabel")
 public class ActivityMessageLabelDescriptor {

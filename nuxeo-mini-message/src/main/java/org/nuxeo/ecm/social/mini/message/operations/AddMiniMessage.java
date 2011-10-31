@@ -43,7 +43,7 @@ import org.nuxeo.ecm.social.mini.message.MiniMessageService;
  * Operation to add a mini message.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Operation(id = AddMiniMessage.ID, category = Constants.CAT_SERVICES, label = "Add a mini message", description = "Add a mini message.")
 public class AddMiniMessage {

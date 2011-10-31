@@ -42,7 +42,7 @@ import org.nuxeo.runtime.api.Framework;
  * Handles MiniMessage related web actions.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.4.3
+ * @since 5.5
  */
 @Name("miniMessageActions")
 @Scope(CONVERSATION)

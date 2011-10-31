@@ -29,7 +29,7 @@ import org.nuxeo.ecm.user.center.dashboard.DefaultDashboardSpaceProvider;
  * {@link org.nuxeo.ecm.user.center.dashboard.DefaultDashboardSpaceProvider}
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
- * @since 5.4.3
+ * @since 5.5
  */
 public class SocialWorkspaceDefaultSpaceProvider extends DefaultDashboardSpaceProvider {
     @Override
