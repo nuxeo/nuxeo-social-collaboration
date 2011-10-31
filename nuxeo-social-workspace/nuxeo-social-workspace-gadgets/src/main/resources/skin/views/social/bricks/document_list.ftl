@@ -62,6 +62,10 @@
             <div class="tooltip">${Context.getMessage("label.action.download")}</div>
           </a>
         </#if>
+        <a class="button" href="${contextPath}/nxpath/default${doc.path}@view_documents" target="_blank">
+          <img src="${contextPath}/icons/external.gif" alt="openInDM"></img>
+          <div class="tooltip">${Context.getMessage("label.action.openInDM")}</div>
+        </a>
       </td>
     </tr>
     </#list>
