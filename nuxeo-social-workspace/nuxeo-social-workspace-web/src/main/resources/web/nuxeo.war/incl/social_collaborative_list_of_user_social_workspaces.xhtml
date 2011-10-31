@@ -1,0 +1,37 @@
+<f:subview xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:nxd="http://nuxeo.org/nxweb/document"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core">
+
+  <nxu:set var="contentView"
+    value="#{contentViewActions.getContentViewWithProvider('user_social_workspace_view')}"
+    cache="true">
+    <c:if test="#{contentView != null}">
+      <nxu:set var="userSocialWorkspaces"
+      value="#{contentView.currentPageProvider.currentPage}">
+        <c:if test="#{!empty userSocialWorkspaces}">
+          <ul class="actionList">
+            <li class="dropDownMenu">
+            <h:outputText value="#{messages['label.social.workspace.select.user.social.workspaces']}" />
+              <ul class="actionSubList">
+              <li>
+                <nxu:dataList layout="simple" var="userSocialWorkspace"
+                value="#{userSocialWorkspaces}">
+                  <nxd:restDocumentLink document="#{userSocialWorkspace}" view="social_dashboard" styleClass="title">
+                    <span id="title_#{userSocialWorkspace.dc.title}"
+                      title="#{userSocialWorkspace.dc.title}">
+                      #{nxd:titleOrId(userSocialWorkspace)}
+                    </span>
+                  </nxd:restDocumentLink>
+                </nxu:dataList>
+              </li>
+              </ul>
+            </li>
+          </ul>
+        </c:if>
+      </nxu:set>
+    </c:if>
+  </nxu:set>
+
+</f:subview >

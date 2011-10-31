@@ -120,6 +120,19 @@
     </resultLayouts>
   </contentView>
 
+        <contentView name="user_social_workspace_view">
+      <coreQueryPageProvider>
+        <property name="coreSession">#{documentManager}</property>
+        <pattern>SELECT * FROM SocialWorkspace WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0)</pattern>
+        <sort column="dc:title" ascending="true"/>
+      </coreQueryPageProvider>
+      <showPageSizeSelector>false</showPageSizeSelector>
+      <showRefreshCommand>false</showRefreshCommand>
+      <useGlobalPageSize>false</useGlobalPageSize>
+      <cacheKey>#{currentDocument.id}</cacheKey>
+      <cacheSize>10</cacheSize>
+    </contentView>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager" point="layouts">
