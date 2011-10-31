@@ -52,6 +52,10 @@
       <fileset dir="src/main/resources/templates/" />
     </copy>
 
+    <echo file="${tomcatdir}/bin/nuxeo.conf" append="true">
+nuxeo.templates=default,collaboration
+</echo>
+
     <chmod dir="${tomcatdir}/bin" perm="750" includes="*.sh,*ctl" />
 
     <zip destfile="${outdir}/${maven.project.artifactId}-${maven.project.version}-tomcat.zip"
