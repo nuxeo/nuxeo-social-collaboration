@@ -4,8 +4,30 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:a4j="http://richfaces.org/a4j"
     xmlns:nxu="http://nuxeo.org/nxweb/util"
+    xmlns:nxl="http://nuxeo.org/nxforms/layout"
     id="user_relationships_network">
 
+   <!-- view form -->
+   <f:subview rendered="#{not empty userManagementActions.selectedUser and userManagementActions.showUserOrGroup}"
+        id="viewUserView">
+     <h:form>
+       <p class="directoryBack">
+         <a4j:commandLink immediate="true"
+           value="#{messages['command.directoryBack']}"
+           action="#{userManagementActions.resetState}"
+           reRender="user_relationships_network" />
+       </p>
+     </h:form>
+     <a4j:form id="viewUser"
+       rendered="#{userManagementActions.detailsMode == 'view'}">
+       <nxl:layout name="summary_user_profile_layout" mode="view"
+             value="#{userProfileActions.selectedUserProfile}" />
+     </a4j:form>
+   </f:subview>
+
+  <!-- search form -->
+ <f:subview rendered="#{not userManagementActions.showUserOrGroup}"
+    id="relationshipNetworkView">
   <div class="userRelationsPanel half left">
     <h2>#{messages['label.relationship.search.relation']}</h2>
     <a4j:outputPanel id="usersListingRelationshipPanel">
@@ -75,5 +97,6 @@
       </div>
     </nxu:set>
   </div>
+  </f:subview>
   <div class="clear"></div>
 </a4j:outputPanel>

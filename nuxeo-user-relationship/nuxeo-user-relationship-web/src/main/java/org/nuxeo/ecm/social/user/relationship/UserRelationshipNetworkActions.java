@@ -31,10 +31,11 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
+import org.nuxeo.ecm.platform.ui.web.api.WebActions;
 
 /**
  * Social User Relationship Network action bean.
- * 
+ *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
@@ -46,8 +47,14 @@ public class UserRelationshipNetworkActions implements Serializable {
 
     private static final Log log = LogFactory.getLog(UserRelationshipNetworkActions.class);
 
+    public static final String RELATIONS_TAB = "MAIN_TABS:home,USER_CENTER:relationship_network";
+
     @In
     protected transient ContentViewActions contentViewActions;
+
+    @In(create = true)
+    protected transient WebActions webActions;
+
 
     @Observer(USER_RELATIONSHIP_CHANGED)
     public void resetContentView() {
@@ -55,4 +62,13 @@ public class UserRelationshipNetworkActions implements Serializable {
         contentViewActions.refreshOnSeamEvent(USER_RELATIONSHIP_CHANGED);
         contentViewActions.resetPageProviderOnSeamEvent(USER_RELATIONSHIP_CHANGED);
     }
+
+    public String getRelationsTab() {
+        return RELATIONS_TAB;
+    }
+
+    public void setRelationsTab(String string) {
+        webActions.setCurrentTabIds(RELATIONS_TAB);
+    }
+
 }
