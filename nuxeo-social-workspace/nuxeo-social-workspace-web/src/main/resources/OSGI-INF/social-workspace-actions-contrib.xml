@@ -279,17 +279,9 @@
       <filter-id>hide_rights_tab</filter-id>
     </action>
 
-    <action id="UsersGroupsHome" link="user_center_fragment.xhtml"
-      label="label.groupManager.groups" icon="/icons/users_groups.png"
-      order="60">
-      <category>USER_CENTER</category>
-      <filter-id>not_readonly</filter-id>
-    </action>
+    <action id="UsersGroupsHome" label="label.groupManager.groups" />
 
-    <action id="UsersHome" link="users/view_users.xhtml" label="label.userManager.users"
-      order="10" enabled="false">
-      <category>UsersGroupsHome_sub_tab</category>
-    </action>
+    <action id="UsersHome" enabled="false"/>
 
   </extension>
 
