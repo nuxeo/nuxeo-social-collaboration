@@ -13,24 +13,25 @@
       <ul class="actionList">
         <li class="dropDownMenu">
           <h:outputText value="#{messages['label.social.workspace.actions']}" />
-          <ul class="actionSubList">
-            <nxu:set var="actions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}" cache="true">
-              <c:if test="#{!empty actions}">
+          <ui:insert name="action_menu_before" />
+
+          <nxu:set var="actions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}" cache="true">
+            <c:if test="#{!empty actions}">
+              <ul class="separator">
                 <nxu:dataList layout="simple" var="action" value="#{actions}">
-                  <li class="dropDownMenu">
+                  <li>
                     <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
                       <h:outputText value=" #{messages[action.label]}" />
                     </nxh:commandLink>
                   </li>
                 </nxu:dataList>
-               <!-- separator -->
-               <!-- end separator -->
-              </c:if>
-            </nxu:set>
-            <nxu:set var="displaysDocumentActions"
-					value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}"
-					cache="true">
-              <c:if test="#{!empty displaysDocumentActions}">
+              </ul>
+            </c:if>
+          </nxu:set>
+
+          <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}" cache="true">
+            <c:if test="#{!empty displaysDocumentActions}">
+              <ul class="separator">
                 <nxu:dataList layout="simple" var="action" value="#{displaysDocumentActions}">
                   <li>
                     <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
@@ -38,9 +39,11 @@
                     </nxh:commandLink>
                   </li>
                 </nxu:dataList>
-              </c:if>
-            </nxu:set>
-          </ul>
+              </ul>
+            </c:if>
+          </nxu:set>
+
+          <ui:insert name="action_menu_after" />
         </li>
       </ul>
       <ui:insert name="social_collaboration_before_actions" />
