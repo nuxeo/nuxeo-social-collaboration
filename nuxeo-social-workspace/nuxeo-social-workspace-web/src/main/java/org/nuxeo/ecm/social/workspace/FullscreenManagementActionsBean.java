@@ -289,23 +289,7 @@ public class FullscreenManagementActionsBean implements Serializable {
     }
 
     public boolean canCreateSocialWorkspace() {
-        DocumentModel doc = navigationContext.getCurrentDocument();
-        DocumentModel parent = null;
-
-        if (isSocialWorkspaceContainer(doc)) {
-            parent = doc;
-        } else {
-            SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(doc);
-            if (socialWorkspace != null) {
-                DocumentRef parentRef = socialWorkspace.getDocument().getParentRef();
-                try {
-                    parent = documentManager.getDocument(parentRef);
-                } catch (ClientException e) {
-                    log.debug("failed to get SocialWorkspace container", e);
-                }
-            }
-
-        }
+        DocumentModel parent = socialWorkspaceService.getOrCreateSocialWorkspaceContainer(documentManager);
         if (parent != null) {
             try {
                 return (documentManager.hasPermission(parent.getRef(),
