@@ -2,20 +2,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.nuxeo.ecm.platform</groupId>
-    <artifactId>nuxeo-features-parent</artifactId>
+    <groupId>org.nuxeo</groupId>
+    <artifactId>nuxeo-addons-parent</artifactId>
     <version>5.5-SNAPSHOT</version>
   </parent>
+
   <groupId>org.nuxeo.ecm.social</groupId>
   <artifactId>nuxeo-social-collaboration-parent</artifactId>
   <name>Nuxeo Social Collaboration Parent</name>
-  <version>5.5-SNAPSHOT</version>
   <description>Nuxeo Social Collaboration Parent</description>
   <packaging>pom</packaging>
-
-  <properties>
-    <nuxeo.distribution.version>5.5-SNAPSHOT</nuxeo.distribution.version>
-  </properties>
 
   <modules>
     <module>nuxeo-activity</module>
@@ -24,103 +20,6 @@
     <module>nuxeo-mini-message</module>
     <module>nuxeo-user-activity-stream</module>
   </modules>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-activity</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-social-workspace-core</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-social-workspace-web</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-social-workspace-gadgets</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-user-relationship-core</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-user-relationship-web</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-mini-message</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-user-activity-stream</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.social</groupId>
-        <artifactId>nuxeo-social-collaboration-distribution</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-activity</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-platform-contentview-jsf</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.opensocial</groupId>
-        <artifactId>nuxeo-opensocial-spaces</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-user-center</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-user-profile</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-user-dashboard-opensocial</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-distribution-jboss</artifactId>
-        <version>${nuxeo.distribution.version}</version>
-        <classifier>nuxeo-dm</classifier>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-distribution-tomcat</artifactId>
-        <version>${nuxeo.distribution.version}</version>
-        <classifier>nuxeo-dm</classifier>
-        <type>zip</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <repositories>
     <repository>
@@ -140,7 +39,6 @@
         <enabled>false</enabled>
       </releases>
       <snapshots>
-        <updatePolicy>always</updatePolicy>
         <enabled>true</enabled>
       </snapshots>
     </repository>
