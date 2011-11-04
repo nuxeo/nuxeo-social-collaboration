@@ -279,6 +279,10 @@
       <filter-id>hide_rights_tab</filter-id>
     </action>
 
+    <action id="UsersGroupsHome" label="label.groupManager.groups" />
+
+    <action id="UsersHome" enabled="false"/>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
