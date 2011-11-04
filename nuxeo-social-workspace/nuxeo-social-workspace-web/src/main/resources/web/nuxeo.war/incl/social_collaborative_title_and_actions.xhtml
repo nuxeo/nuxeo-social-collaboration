@@ -47,23 +47,10 @@
         </li>
       </ul>
       <ui:insert name="social_collaboration_before_actions" />
+      <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>
     </h:form>
   </div>
 
   <div class="clear"></div>
-
-  <script type="text/javascript">
-    jQuery(document).ready(function($) {
-    jQuery('.dropDownMenu').click(function(e) {
-    jQuery('.dropDownMenu').find('ul').hide();
-    jQuery(this).find("ul").show();
-    e.stopPropagation();
-    });
-
-    jQuery(document).click(function() {
-    jQuery('.dropDownMenu').find('ul').hide();
-    })
-    });
-  </script>
 
 </div>
