@@ -39,25 +39,25 @@
                 <ul class="actionList">
                   <li class="dropDownMenu">
                     <h:outputText value="#{messages['label.social.workspace.actions']}" />
-                    <c:if test="#{currentUser.administrator}">
-                      <ul class="separator">
+                    <ul class="actionSubList">
+                      <c:if test="#{currentUser.administrator}">
                         <li>
                           <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
                         </li>
                         <li>
                           <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
                         </li>
-                      </ul>
-                    </c:if>
-                    <c:if test="#{fullscreenManagementActions.canCreateSocialWorkspace()}">
-                      <ul class="separator">
+                        <div class="separator"></div>
+                      </c:if>
+                      <c:if test="#{fullscreenManagementActions.canCreateSocialWorkspace()}">
                         <li>
                           <h:commandLink action="create_social_document">
                             <h:outputText value="#{messages['label.create.social.workspace']}" />
                           </h:commandLink>
                         </li>
-                      </ul>
-                    </c:if>
+                        <div class="separator"></div>
+                      </c:if>
+                    </ul>
                   </li>
                 </ul>
                 <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>

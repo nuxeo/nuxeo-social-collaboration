@@ -15,9 +15,9 @@
           <h:outputText value="#{messages['label.social.workspace.actions']}" />
           <ui:insert name="action_menu_before" />
 
-          <nxu:set var="actions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}" cache="true">
-            <c:if test="#{!empty actions}">
-              <ul class="separator">
+          <ul class="actionSubList">
+            <nxu:set var="actions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}" cache="true">
+              <c:if test="#{!empty actions}">
                 <nxu:dataList layout="simple" var="action" value="#{actions}">
                   <li>
                     <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
@@ -25,13 +25,12 @@
                     </nxh:commandLink>
                   </li>
                 </nxu:dataList>
-              </ul>
-            </c:if>
-          </nxu:set>
+                <div class="separator"></div>
+              </c:if>
+            </nxu:set>
 
-          <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}" cache="true">
-            <c:if test="#{!empty displaysDocumentActions}">
-              <ul class="separator">
+            <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}" cache="true">
+              <c:if test="#{!empty displaysDocumentActions}">
                 <nxu:dataList layout="simple" var="action" value="#{displaysDocumentActions}">
                   <li>
                     <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
@@ -39,9 +38,10 @@
                     </nxh:commandLink>
                   </li>
                 </nxu:dataList>
-              </ul>
-            </c:if>
-          </nxu:set>
+                <div class="separator"></div>
+              </c:if>
+            </nxu:set>
+          </ul>
 
           <ui:insert name="action_menu_after" />
         </li>

@@ -26,16 +26,16 @@
         <h1>#{socialWorkspaceActions.socialWorkspace.title}</h1>
       </ui:define>
       <ui:define name="action_menu_before" >
-        <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">
-            <ul class="separator">
+        <ul class="actionSubList">
+          <c:if test="#{nxd:hasPermission(currentDocument, 'Everything')}">
               <li>
                 <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">
                   #{messages['label.opensocial.container.change.layout']}
                 </a>
               </li>
               <li><a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a></li>
-            </ul>
-        </c:if>
+          </c:if>
+        </ul>
 
       </ui:define>
     </ui:decorate>

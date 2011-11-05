@@ -1356,6 +1356,9 @@
       <selector path=".globalActionBar .actionList .actionSubList li a:hover">
         <background-color>#d3e7f2</background-color>
       </selector>
+      <selector path=".separator">
+        <border-bottom>1px solid #ddd</border-bottom>
+      </selector>
       <selector path=".clear">
         <clear>both</clear>
       </selector>
