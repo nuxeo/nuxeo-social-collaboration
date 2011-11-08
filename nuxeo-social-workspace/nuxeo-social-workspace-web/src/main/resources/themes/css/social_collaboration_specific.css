@@ -1,0 +1,33 @@
+/* CSS styles for theme 'social-collaboration' (Tue Nov 08 22:05:06 CET 2011) */
+
+/* specific to Social */
+h1 { text-align: left }
+h3.summaryTitle {color:#000; font-weight:bold; margin:0 0 10px 0; padding:0 0 3px; text-transform:uppercase }
+.content_block .labelColumn { display:none }
+.description_block { font-size:120%; padding:0px 0px 20px 15px }
+.actions_block,  .content_block,  .metadata_block { border:2px solid #eee; border-radius:5px }
+
+.summary_div_0 { margin-top:20px }
+.summary_div_0 p { color:#555; font-size:1.1em; line-height:150% }
+.summary_div_0 h3.summaryTitle,  .content_block h3.summaryTitle { display:none }
+.summary_div_1 h3.summaryTitle { padding-left:15px }
+.summary_div_0 .fieldColumn img,  .summary_div_1 .fieldColumn img,  .summary_div_2 .fieldColumn img { max-width:120px; max-height:120px }
+
+/* For Articles and News listing */
+.documentItemListing .tool { float:right }
+.documentItemListing .tool ul { list-style:none; margin:0; padding:0 3px 2px }
+.documentItemListing .tool .actions li { cursor:pointer; position:relative }
+.documentItemListing .actions ul { background-color:white; border:1px solid #e0e0e0; display:none; padding:0; position:absolute; right:-2px; top:15px; z-index:1002; box-shadow:3px 3px 5px rgba(0, 0, 0, 0.3);}
+.documentItemListing .actions li:hover ul { display:block }
+.documentItemListing .tool .actions ul li { margin:0; padding:0; width:100px }
+.documentItemListing .actions ul li a { background-color:white; display:block; padding:5px 10px }
+.documentItemListing .actions ul li a:hover { background-color:#d3e7f2; text-decoration:none }
+.documentItemListing .documentHeader span { font-size:120%; font-weight:bold }
+.documentItemListing .documentHeader { padding:3px 0 5px }
+.documentItemListing .content { font-size:105%; line-height:14pt; padding-bottom:5px }
+.documentItemListing .info { color:#666666; text-align:right }
+.documentItemListing .info span { padding:0 0 0 5px }
+.article_item_listing,  .news_item_listing { margin:20px auto 0; width:80% }
+
+.socialCollab .nxMainContainer .content { background:#fff url(/nuxeo/img/theme-social-collaboration/social-collaboration-background.png) bottom center no-repeat; font-family: "default (__FLAVOR__ font)"; padding:20px 35px 180px }
+.socialCollab #containerPanel .content { background: none }
