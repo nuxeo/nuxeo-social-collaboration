@@ -34,6 +34,7 @@
   <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
     point="types">
     <types>
+      <type name="SocialDomain">default</type>
       <type name="SocialWorkspace">default</type>
       <type name="NewsItem">default</type>
       <type name="Article">default</type>
