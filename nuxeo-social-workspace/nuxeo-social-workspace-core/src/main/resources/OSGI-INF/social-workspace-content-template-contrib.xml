@@ -9,6 +9,13 @@
   <extension
     target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService"
     point="factoryBinding">
+    <factoryBinding name="SocialDomainFactory" factoryName="SimpleTemplateFactory" targetType="SocialDomain">
+      <template>
+        <templateItem typeName="SocialWorkspace" id="collaboration" title="Collaboration"
+            description="Collaboration"/>
+      </template>
+    </factoryBinding>
+
     <factoryBinding name="SocialWorkspaceFactory"
       factoryName="SimpleTemplateFactory" targetType="SocialWorkspace">
       <template>

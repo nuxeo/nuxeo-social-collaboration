@@ -16,124 +16,116 @@
   </thead>
   <tbody>
   <tr>
-    <td>open</td>
-    <td>
-      restAPI/systemLog?token=dolog&amp;level=INFO&amp;message=-----Selenium<br/><br/>
-      createSocialWorkspace
-    </td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>open</td>
-    <td>logout</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>type</td>
-    <td>username</td>
-    <td>Administrator</td>
-  </tr>
-  <tr>
-    <td>type</td>
-    <td>password</td>
-    <td>Administrator</td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>Submit</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>verifyTextPresent</td>
-    <td>Administrator</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>link=Workspaces</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>link=Create a new workspace</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>type</td>
-    <td>//td[@class=&quot;fieldColumn&quot;]/input[@type=&quot;text&quot;]</td>
-    <td>testWorkspace</td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>//input[@value='Create']</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>mouseDown</td>
-    <td>link=New</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>link=Social Workspace</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>type</td>
-    <td>//td[@class=&quot;fieldColumn&quot;]/input[@type=&quot;text&quot;]</td>
-    <td>mySocialWorkspace</td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>//input[@value=&quot;Create&quot;]</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>verifyTextPresent</td>
-    <td>Section</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>verifyTextPresent</td>
-    <td>Workspace</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>verifyTextNotPresent</td>
-    <td>preview</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>link=Document Management</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>link=mySocialWorkspace</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>link=Manage</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>clickAndWait</td>
-    <td>link=Membership management</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>verifyTextPresent</td>
-    <td>Administrators group</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>verifyTextPresent</td>
-    <td>Members group</td>
-    <td></td>
-  </tr>
-  </tbody>
+	<td>open</td>
+	<td>restAPI/systemLog?token=dolog&amp;level=INFO&amp;message=-----Selenium<br /><br /><br /> createSocialWorkspace</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>logout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>Administrator</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Administrator</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[@id='breadcrumbForm:goToParentButton']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDown</td>
+	<td>link=New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Social Domain</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//td[@class=&quot;fieldColumn&quot;]/input[@type=&quot;text&quot;]</td>
+	<td>My Social Domain</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Create']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//form[@id='document_content']/table/tbody/tr/td[3]/div/a[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Private dashboard</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Public dashboard</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Default domain</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Collaboration</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Add gadget</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Document Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Manage</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Membership management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Administrators group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Members group</td>
+	<td></td>
+</tr>
+</tbody>
 </table>
 </body>
 </html>

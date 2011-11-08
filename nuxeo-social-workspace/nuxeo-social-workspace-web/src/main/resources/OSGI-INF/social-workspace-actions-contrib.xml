@@ -283,6 +283,8 @@
 
     <action id="UsersHome" enabled="false"/>
 
+    <action id="newDomain" enabled="false" />
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
@@ -470,6 +472,18 @@
     <filter id="isRestricted">
       <rule grant="true">
         <condition>#{socialDocumentVisibilityActions.isRestricted()}</condition>
+      </rule>
+    </filter>
+
+    <filter id="create" append="true">
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <type>Root</type>
+        <type>SocialDomain</type>
+        <condition>
+          #{typeManager.getAllowedSubTypes(document.getType(), document).size()
+          > 0}
+        </condition>
       </rule>
     </filter>
 
