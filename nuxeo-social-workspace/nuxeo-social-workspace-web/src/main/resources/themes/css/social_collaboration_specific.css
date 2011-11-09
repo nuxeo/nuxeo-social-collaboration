@@ -2,32 +2,44 @@
 
 /* specific to Social */
 h1 { text-align: left }
-h3.summaryTitle {color:#000; font-weight:bold; margin:0 0 10px 0; padding:0 0 3px; text-transform:uppercase }
+h3.summaryTitle {color:#333; font-weight:bold; padding:0 0 3px }
 .content_block .labelColumn { display:none }
 .description_block { font-size:120%; padding:0px 0px 20px 15px }
-.actions_block,  .content_block,  .metadata_block { border:2px solid #eee; border-radius:5px }
+.actions_block,  .content_block,  .metadata_block { margin-bottom: 20px }
+.description_block { border-bottom: 1px dashed #ddd; color: #999; margin: 0 0 20px 0; padding: 0 }
+.note_content_block {	border:  none; margin: 0; padding: 15px 0 0 0; }
+.note_content_block h2 { font-size: 1.1em; line-height: 1.5em; margin: 0 0 1em; padding: 0 }
 
-.summary_div_0 { margin-top:20px }
-.summary_div_0 p { color:#555; font-size:1.1em; line-height:150% }
-.summary_div_0 h3.summaryTitle,  .content_block h3.summaryTitle { display:none }
-.summary_div_1 h3.summaryTitle { padding-left:15px }
+.summary_div_0 { background-color: white; border: 1px solid #ddd; box-shadow: 1px 3px 2px #ccc; padding: 25px 25px 35px; width: 58% }
+.summary_div_0 p { color:#444; font-size: 1em; line-height: 160%; }
+.summary_div_0 h3.summaryTitle { display:none }
+.summary_div_1 { font-size: 90% }
+.summary_div_1 h3.summaryTitle { border-bottom: 3px double #ccc; padding: 0 0 5px 0 }
 .summary_div_0 .fieldColumn img,  .summary_div_1 .fieldColumn img,  .summary_div_2 .fieldColumn img { max-width:120px; max-height:120px }
 
 /* For Articles and News listing */
+.documentItemListing { background-color: white; border: 1px solid #ddd; padding: 1em }
 .documentItemListing .tool { float:right }
 .documentItemListing .tool ul { list-style:none; margin:0; padding:0 3px 2px }
 .documentItemListing .tool .actions li { cursor:pointer; position:relative }
 .documentItemListing .actions ul { background-color:white; border:1px solid #e0e0e0; display:none; padding:0; position:absolute; right:-2px; top:15px; z-index:1002; box-shadow:3px 3px 5px rgba(0, 0, 0, 0.3);}
 .documentItemListing .actions li:hover ul { display:block }
-.documentItemListing .tool .actions ul li { margin:0; padding:0; width:100px }
+.documentItemListing .tool .actions ul li { margin:0; padding:0; width:130px }
 .documentItemListing .actions ul li a { background-color:white; display:block; padding:5px 10px }
 .documentItemListing .actions ul li a:hover { background-color:#d3e7f2; text-decoration:none }
 .documentItemListing .documentHeader span { font-size:120%; font-weight:bold }
 .documentItemListing .documentHeader { padding:3px 0 5px }
-.documentItemListing .content { font-size:105%; line-height:14pt; padding-bottom:5px }
-.documentItemListing .info { color:#666666; text-align:right }
+.documentItemListing .content { background-color: white; color: #999; font-size: 105%; line-height: 14pt; padding: 0; }
+.documentItemListing .info { color:#666; text-align:right }
 .documentItemListing .info span { padding:0 0 0 5px }
-.article_item_listing,  .news_item_listing { margin:20px auto 0; width:80% }
+.article_item_listing, .news_item_listing { margin:20px auto 0; width:80% }
+.article_item_listing .dataOutput td, .news_item_listing .dataOutput td { border: none }
 
-.socialCollab .nxMainContainer .content { background:#fff url(/nuxeo/img/theme-social-collaboration/social-collaboration-background.png) bottom center no-repeat; font-family: "default (__FLAVOR__ font)"; padding:20px 35px 180px }
-.socialCollab #containerPanel .content { background: none }
+.nxMainContainer { font-size: 1em; min-height: 660px; height: auto!important; height: 660px }
+.nxMainContainer .content { background-color: #f6f6f6; font-family: "default (__FLAVOR__ font)"; padding:20px 35px 80px }
+
+.content form#documentLayout { margin: 0 auto; width: 95% }
+
+/* Fix style inheritance for gadgets */
+body, table td, select { font-family: "default (__FLAVOR__ font)"; font-size: normal!;}
+#containerPanel .content { padding: 0 }
