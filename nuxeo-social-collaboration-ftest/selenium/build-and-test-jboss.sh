@@ -2,6 +2,8 @@
 
 HERE=$(cd $(dirname $0); pwd -P)
 
+echo DEPRECATED: should use nuxeo-ftest
+
 # Retrieve Nuxeo Distribution and selenium-server.jar
 (cd .. && mvn clean dependency:copy -P$MAVEN_PROFILES) || exit 1
 
