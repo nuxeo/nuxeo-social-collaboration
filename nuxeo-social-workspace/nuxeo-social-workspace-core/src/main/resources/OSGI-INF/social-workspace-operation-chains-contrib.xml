@@ -20,7 +20,7 @@
         <param type="string" name="message">&lt;html&gt;
 Hello,
 
-Social Workspace &lt;a href="${docUrl}"&gt;${Document.title}&lt;/a&gt; was created. Please validate it at [...].
+Social Workspace &lt;a href="${docUrl}"&gt;${Document.title}&lt;/a&gt; was created. Please validate it &lt;a href="${baseUrl}nxadmin/${Session.repositoryName}${Document.path}@view_admin?tabIds=MAIN_TABS%3Aadmin%2CNUXEO_ADMIN%3ASocialWorkspacesAdministration"&gt;here&lt;/a&gt;.
 &lt;/html&gt;</param>
         <param type="string" name="subject">Social Workspace  created</param>
         <param type="string" name="HTML">true</param>
