@@ -115,7 +115,7 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     private int validationDays = 15;
 
-    private String socialWorkspaceContainerPath = "/default-domain/social-workspaces";
+    private String socialWorkspaceContainerPath = "/social-domain";
 
     private UserRelationshipService relationshipService;
 

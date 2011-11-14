@@ -6,15 +6,25 @@
   <extension target="org.nuxeo.ecm.platform.types.TypeService"
     point="types">
 
-    <type id="SocialWorkspaceContainer">
-      <label>SocialWorkspaceContainer</label>
-      <icon>/icons/workspace.gif</icon>
-      <bigIcon>/icons/workspace_100.png</bigIcon>
-      <icon-expanded>/icons/workspace_open.gif</icon-expanded>
-      <category>Collaborative</category>
-      <description>SocialWorkspaceContainer.description</description>
+    <type id="Root">
+      <subtypes>
+        <type>Domain</type>
+        <type>SocialDomain</type>
+      </subtypes>
+    </type>
+
+    <type id="SocialDomain">
+      <label>SocialDomain</label>
+      <icon>/icons/social_domain.gif</icon>
+      <bigIcon>/icons/social_domain.gif</bigIcon>
+      <category>SuperDocument</category>
+      <description>SocialDomain.description</description>
       <default-view>view_documents</default-view>
-      <create-view>create_workspace</create-view>
+      <create-view>create_domain</create-view>
+      <views>
+        <view id="user_dashboard" value="user_dashboard" />
+        <view id="opensocial_dashboard" value="opensocial_dashboard" />
+      </views>
       <subtypes>
         <type>SocialWorkspace</type>
       </subtypes>
@@ -29,7 +39,9 @@
         <contentView>document_content</contentView>
       </contentViews>
       <contentViews category="trash_content">
-        <contentView>document_trash_content</contentView>
+        <contentView showInExportView="false">
+          document_trash_content
+        </contentView>
       </contentViews>
     </type>
 
@@ -140,12 +152,6 @@
       </layouts>
       <subtypes>
         <type>NewsItem</type>
-      </subtypes>
-    </type>
-
-    <type id="Workspace">
-      <subtypes>
-        <type>SocialWorkspace</type>
       </subtypes>
     </type>
 
