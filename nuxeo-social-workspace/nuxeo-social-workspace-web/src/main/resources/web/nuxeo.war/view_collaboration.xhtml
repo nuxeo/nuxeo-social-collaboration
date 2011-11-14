@@ -34,28 +34,36 @@
           </ui:define>
 
           <ui:define name="opensocial_container_actions">
-            <c:if test="#{currentUser.administrator}">
-              <h:form>
-              <div class="opensocial_buttons">
-                <ul>
-                  <li>
-                    <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
-                  </li>
-                  <li>
-                    <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
-                  </li>
-                  <li>
-
-                    <h:commandLink action="create_social_document">
-                      <img src="${baseURL}/icons/action_add.gif" alt="#{messages['label.create.social.workspace']}" title="#{messages['label.create.social.workspace']}" />
-                    </h:commandLink>
+            <div class="globalActionBar">
+              <h:form id="collaborativeViewActions">
+                <ul class="actionList">
+                  <li class="dropDownMenu">
+                    <h:outputText value="#{messages['label.social.workspace.actions']}" />
+                    <ul class="actionSubList">
+                      <c:if test="#{currentUser.administrator}">
+                        <li>
+                          <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
+                        </li>
+                        <li>
+                          <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
+                        </li>
+                        <div class="separator"></div>
+                      </c:if>
+                      <c:if test="#{fullscreenManagementActions.canCreateSocialWorkspace()}">
+                        <li>
+                          <h:commandLink action="create_social_document">
+                            <h:outputText value="#{messages['label.create.social.workspace']}" />
+                          </h:commandLink>
+                        </li>
+                        <div class="separator"></div>
+                      </c:if>
+                    </ul>
                   </li>
                 </ul>
-              </div>
+                <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>
               </h:form>
-            </c:if>
+            </div>
           </ui:define>
-
         </ui:decorate>
       </nxu:set>
     </nxu:set>
