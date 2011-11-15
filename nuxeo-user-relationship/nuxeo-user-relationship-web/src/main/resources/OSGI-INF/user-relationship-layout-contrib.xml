@@ -84,6 +84,12 @@
           </properties>
           <widget>user_relationship_relations</widget>
         </column>
+        <column>
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+          </properties>
+          <widget>listing_user_relationship_add</widget>
+        </column>
       </columns>
     </layout>
   </extension>
@@ -112,6 +118,30 @@
         /widgets/summary/user_relationship_widget_template.xhtml
       </property>
     </widgetType>
+
+    <widgetType name="manage_user_relations">
+      <configuration>
+        <sinceVersion>5.5</sinceVersion>
+        <title>User Manage Realations</title>
+        <description>
+          <p>This widgets will manage user relations</p>
+        </description>
+        <categories>
+          <category>summary</category>
+        </categories>
+        <supportedModes>
+          <mode>any</mode>
+        </supportedModes>
+        <!-- no configurable properties -->
+      </configuration>
+      <handler-class>
+        org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
+      </handler-class>
+      <property name="template">
+        /widgets/user_relationship_add_widget_template.xhtml
+      </property>
+    </widgetType>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
@@ -119,19 +149,16 @@
 
     <widget name="summary_user_relationship" type="summary_user_relationship" />
 
-    <widget name="user_relationship_add" type="template">
-      <labels>
-        <label mode="any" />
-      </labels>
+    <widget name="user_relationship_add" type="manage_user_relations">
       <fields>
-        <field />
+        <field/>
       </fields>
-      <properties mode="any">
-        <property name="template">/widgets/user_relationship_add_widget_template.xhtml</property>
-      </properties>
-      <widgetModes>
-        <mode value="edit">hidden</mode>
-      </widgetModes>
+    </widget>
+
+    <widget name="listing_user_relationship_add" type="manage_user_relations">
+      <fields>
+        <field>data</field>
+      </fields>
     </widget>
 
     <widget name="user_relationship_contacts" type="template">

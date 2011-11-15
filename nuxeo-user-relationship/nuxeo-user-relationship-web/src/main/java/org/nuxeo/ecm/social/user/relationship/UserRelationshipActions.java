@@ -79,6 +79,9 @@ public class UserRelationshipActions implements Serializable {
     @RequestParameter
     protected String selectedKind;
 
+    @RequestParameter
+    protected String selectedUser;
+
     protected transient ActivityStreamService activityStreamService;
 
     protected Map<String, List<RelationshipKind>> relationshipsWithUser;
@@ -90,9 +93,17 @@ public class UserRelationshipActions implements Serializable {
                 && !getRelationshipsWithSelectedUser().isEmpty();
     }
 
+    public boolean isAlreadyConnected(String userName) {
+        return !isCurrentUser(userName)
+                && !getRelationshipsWithUser(userName).isEmpty();
+    }
+
     public boolean isCurrentUser() {
-        String selectedUser = getSelectedUser();
-        return selectedUser == null || getCurrentUser().equals(selectedUser);
+        return isCurrentUser(getSelectedUser());
+    }
+
+    public boolean isCurrentUser(String userName) {
+        return userName == null || getCurrentUser().equals(userName);
     }
 
     public List<RelationshipKind> getRelationshipsWithUser(String username) {
@@ -112,9 +123,9 @@ public class UserRelationshipActions implements Serializable {
         return getRelationshipsWithUser(getSelectedUser());
     }
 
-    protected void addRelationshipWithSelectedUser(String kind) {
+    protected void addRelationshipWithSelectedUser(String userName, String kind) {
         String currentUser = ActivityHelper.createUserActivityObject(getCurrentUser());
-        String selectedUser = ActivityHelper.createUserActivityObject(getSelectedUser());
+        String selectedUser = ActivityHelper.createUserActivityObject(userName);
         RelationshipKind relationshipKind = RelationshipKind.fromString(kind);
         if (userRelationshipService.addRelation(currentUser, selectedUser,
                 relationshipKind)) {
@@ -133,10 +144,10 @@ public class UserRelationshipActions implements Serializable {
         getActivityStreamService().addActivity(activity);
     }
 
-    protected void removeRelationship(String kind) {
+    protected void removeRelationship(String userName, String kind) {
         if (userRelationshipService.removeRelation(
                 ActivityHelper.createUserActivityObject(getCurrentUser()),
-                ActivityHelper.createUserActivityObject(getSelectedUser()),
+                ActivityHelper.createUserActivityObject(userName),
                 RelationshipKind.fromString(kind))) {
             setFacesMessage("label.social.user.relationship.removeRelation.success");
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
@@ -173,9 +184,9 @@ public class UserRelationshipActions implements Serializable {
     public void relationshipCheckboxChanged(ValueChangeEvent event) {
         if (!StringUtils.isBlank(selectedKind)) {
             if ((Boolean) event.getNewValue()) {
-                addRelationshipWithSelectedUser(selectedKind);
+                addRelationshipWithSelectedUser(selectedUser, selectedKind);
             } else {
-                removeRelationship(selectedKind);
+                removeRelationship(selectedUser, selectedKind);
             }
         }
     }
