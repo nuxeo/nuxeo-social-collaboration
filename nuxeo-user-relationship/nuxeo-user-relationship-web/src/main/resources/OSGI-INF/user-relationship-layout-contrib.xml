@@ -82,12 +82,6 @@
           <properties mode="any">
             <property name="useFirstWidgetLabelAsColumnHeader">false</property>
           </properties>
-          <widget>user_relationship_relations</widget>
-        </column>
-        <column>
-          <properties mode="any">
-            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
-          </properties>
           <widget>listing_user_relationship_add</widget>
         </column>
       </columns>
