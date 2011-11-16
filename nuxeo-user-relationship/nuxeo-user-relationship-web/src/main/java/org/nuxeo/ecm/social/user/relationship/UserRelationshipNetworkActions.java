@@ -49,7 +49,7 @@ public class UserRelationshipNetworkActions implements Serializable {
 
     public static final String RELATIONS_TAB = "MAIN_TABS:home,USER_CENTER:relationship_network";
 
-    @In
+    @In(create = true)
     protected transient ContentViewActions contentViewActions;
 
     @In(create = true)
