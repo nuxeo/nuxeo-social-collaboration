@@ -39,8 +39,8 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Dashboard space provider returning the collaboration dashboard to be
- * dispalyed in collaboration tab </p>
- * 
+ * displayed in collaboration tab </p>
+ *
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  * @since 5.5
  */

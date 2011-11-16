@@ -13,6 +13,7 @@ Nuxeo-Component: OSGI-INF/social-workspace-core-types-contrib.xml,
  OSGI-INF/social-workspace-event-handlers-contrib.xml,
  OSGI-INF/social-workspace-scheduler-contrib.xml,
  OSGI-INF/social-workspace-operation-chains-contrib.xml,
+ OSGI-INF/social-workspace-service.xml,
  OSGI-INF/social-workspace-service-contrib.xml,
  OSGI-INF/social-workspace-computedgroups-contrib.xml,
  OSGI-INF/social-workspace-activity-contrib.xml

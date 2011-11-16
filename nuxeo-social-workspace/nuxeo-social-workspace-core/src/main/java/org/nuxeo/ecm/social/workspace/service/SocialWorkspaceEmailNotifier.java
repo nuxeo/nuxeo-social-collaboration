@@ -178,7 +178,7 @@ public class SocialWorkspaceEmailNotifier {
     }
 
     private static String loadTemplate(String key) {
-        InputStream io = SocialWorkspaceComponent.class.getClassLoader().getResourceAsStream(
+        InputStream io = SocialWorkspaceServiceImpl.class.getClassLoader().getResourceAsStream(
                 key);
         if (io != null) {
             try {

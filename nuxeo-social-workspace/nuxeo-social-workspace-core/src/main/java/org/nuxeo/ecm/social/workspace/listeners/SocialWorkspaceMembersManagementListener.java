@@ -54,7 +54,7 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.Functions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceComponent;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -205,7 +205,7 @@ public class SocialWorkspaceMembersManagementListener implements
     }
 
     private static String loadTemplate(String key) {
-        InputStream io = SocialWorkspaceComponent.class.getClassLoader().getResourceAsStream(
+        InputStream io = SocialWorkspaceServiceImpl.class.getClassLoader().getResourceAsStream(
                 key);
         if (io != null) {
             try {

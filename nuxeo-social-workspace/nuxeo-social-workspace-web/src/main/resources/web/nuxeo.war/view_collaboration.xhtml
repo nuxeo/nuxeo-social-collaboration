@@ -49,14 +49,19 @@
                         </li>
                         <div class="separator"></div>
                       </c:if>
-                      <c:if test="#{fullscreenManagementActions.canCreateSocialWorkspace()}">
-                        <li>
-                          <h:commandLink action="create_social_document">
-                            <h:outputText value="#{messages['label.create.social.workspace']}" />
-                          </h:commandLink>
-                        </li>
-                        <div class="separator"></div>
-                      </c:if>
+
+                      <nxu:set var="actions" value="#{webActions.getActionsList('COLLABORATION_TAB_ACTIONS')}" cache="true">
+                        <c:if test="#{!empty actions}">
+                          <nxu:dataList layout="simple" var="action" value="#{actions}">
+                            <li>
+                              <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
+                                <h:outputText value=" #{messages[action.label]}" />
+                              </nxh:commandLink>
+                            </li>
+                          </nxu:dataList>
+                          <div class="separator"></div>
+                        </c:if>
+                      </nxu:set>
                     </ul>
                   </li>
                 </ul>

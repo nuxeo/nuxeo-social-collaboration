@@ -92,14 +92,12 @@ import org.nuxeo.runtime.model.DefaultComponent;
 /**
  * Default implementation of {@see SocialWorkspaceService} service.
  */
-public class SocialWorkspaceComponent extends DefaultComponent implements
+public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         SocialWorkspaceService {
 
-    private static final Log log = LogFactory.getLog(SocialWorkspaceComponent.class);
+    private static final Log log = LogFactory.getLog(SocialWorkspaceServiceImpl.class);
 
     public static final String CONFIGURATION_EP = "configuration";
-
-    public static final String SOCIAL_WORKSPACE_CONTAINER_ACL_NAME = "socialWorkspaceContainerAcl";
 
     public static final String SOCIAL_WORKSPACE_ACL_NAME = "socialWorkspaceAcl";
 
@@ -113,9 +111,9 @@ public class SocialWorkspaceComponent extends DefaultComponent implements
 
     private SubscriptionRequestHandler subscriptionRequestHandler;
 
-    private int validationDays = 15;
+    private int validationDays;
 
-    private String socialWorkspaceContainerPath = "/social-domain";
+    private String socialWorkspaceContainerPath;
 
     private UserRelationshipService relationshipService;
 

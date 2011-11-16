@@ -87,6 +87,7 @@
       icon="/icons/create_soacial_workspace.png"
       order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
+      <category>COLLABORATION_TAB_ACTIONS</category>
       <filter-id>canCreateSocialWorkspace</filter-id>
     </action>
 

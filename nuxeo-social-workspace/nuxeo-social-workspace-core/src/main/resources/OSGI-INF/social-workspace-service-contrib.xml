@@ -1,31 +1,12 @@
 <?xml version="1.0"?>
-<component name="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceComponent">
-  <documentation>
-    This component gives the possibility to change Social Workspace behaviors
-  </documentation>
+<component name="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService.contrib">
 
-  <implementation class="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceComponent" />
-
-  <service>
-    <provide interface="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService" />
-  </service>
-
-  <extension-point name="configuration">
-    <documentation>
-      This extension can be used to configure some social workspace behaviors.
-
-      Sample:
-      <code>
-        <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceComponent"
+  <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService"
     point="configuration">
-          <configuration>
-            <validationTimeInDays>15</validationTimeInDays>
-            <socialWorkspaceContainerPath>/default-domain/social-workspaces</socialWorkspaceContainerPath>
-          </configuration>
-        </extension>
-      </code>
-    </documentation>
-    <object class="org.nuxeo.ecm.social.workspace.service.ConfigurationDescriptor" />
-  </extension-point>
+      <configuration>
+        <validationTimeInDays>15</validationTimeInDays>
+        <socialWorkspaceContainerPath>/collaboration</socialWorkspaceContainerPath>
+      </configuration>
+    </extension>
 
 </component>
