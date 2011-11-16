@@ -27,7 +27,7 @@
       immediate="false"
       icon="/icons/goto_dm.png"
       order="99">
-      <category>SOCIAL_WORKSPACE_LISTING</category>
+      <category>SOCIAL_WORKSPACE_NAVIGATION</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 

@@ -41,6 +41,19 @@
                 <div class="separator"></div>
               </c:if>
             </nxu:set>
+
+            <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_NAVIGATION')}" cache="true">
+              <c:if test="#{!empty displaysDocumentActions}">
+                <nxu:dataList layout="simple" var="action" value="#{displaysDocumentActions}">
+                  <li>
+                    <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
+                      <h:outputText value=" #{messages[action.label]}" />
+                    </nxh:commandLink>
+                  </li>
+                </nxu:dataList>
+                <div class="separator"></div>
+              </c:if>
+            </nxu:set>
           </ul>
 
           <ui:insert name="action_menu_after" />
