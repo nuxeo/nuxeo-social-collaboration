@@ -9,12 +9,18 @@
   </parent>
 
   <groupId>org.nuxeo.ecm.social</groupId>
-  <artifactId>nuxeo-social-collaboration-distribution</artifactId>
+  <artifactId>nuxeo-distribution-social-collaboration</artifactId>
+  <packaging>zip</packaging>
   <name>Nuxeo Social Collaboration Distribution</name>
   <description>Nuxeo Social Collaboration Distribution</description>
-  <packaging>pom</packaging>
 
   <dependencies>
+    <dependency>
+      <groupId>org.nuxeo.ecm.distribution</groupId>
+      <artifactId>nuxeo-distribution-dm</artifactId>
+      <type>pom</type>
+    </dependency>
+
     <dependency>
       <groupId>org.nuxeo.ecm.social</groupId>
       <artifactId>nuxeo-social-workspace-core</artifactId>
@@ -55,20 +61,11 @@
       <plugin>
         <groupId>org.nuxeo.build</groupId>
         <artifactId>nuxeo-distribution-tools</artifactId>
-        <executions>
-          <execution>
-            <id>antbuild</id>
-            <phase>package</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
-            <configuration>
-              <buildFiles>
-                <buildFile>${basedir}/src/main/assemble/assembly.xml</buildFile>
-              </buildFiles>
-            </configuration>
-          </execution>
-        </executions>
+        <configuration>
+          <buildFiles>
+            <buildFile>${basedir}/src/main/assemble/assembly.xml</buildFile>
+          </buildFiles>
+        </configuration>
       </plugin>
     </plugins>
   </build>
