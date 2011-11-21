@@ -32,6 +32,9 @@
       <facet name="HiddenInNavigation" />
     </doctype>
 
+    <doctype name="SocialFolder" extends="Folder">
+    </doctype>
+
     <doctype name="DashboardSpacesContainer" extends="HiddenFolder">
     </doctype>
 

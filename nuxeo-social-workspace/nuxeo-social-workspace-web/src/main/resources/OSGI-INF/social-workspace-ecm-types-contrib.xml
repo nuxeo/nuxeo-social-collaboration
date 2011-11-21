@@ -60,10 +60,9 @@
         <layout>social_workspace</layout>
       </layouts>
       <subtypes>
-        <type>Folder</type>
+        <type>SocialFolder</type>
         <type>Article</type>
         <type>File</type>
-        <type>Note</type>
       </subtypes>
     </type>
 
@@ -155,12 +154,34 @@
       </subtypes>
     </type>
 
-    <type id="Folder">
+    <type id="SocialFolder">
+      <label>Folder</label>
+      <icon>/icons/folder.gif</icon>
+      <bigIcon>/icons/folder_100.png</bigIcon>
+      <icon-expanded>/icons/folder_open.gif</icon-expanded>
+      <category>Collaborative</category>
+      <description>Folder.description</description>
+      <default-view>view_documents</default-view>
       <subtypes>
+        <type>SocialFolder</type>
         <type>Article</type>
         <type>File</type>
-        <type>Note</type>
       </subtypes>
+      <layouts mode="any">
+        <layout>heading</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>heading</layout>
+        <layout>dublincore</layout>
+      </layouts>
+      <contentViews category="content">
+        <contentView>document_content</contentView>
+      </contentViews>
+      <contentViews category="trash_content">
+        <contentView showInExportView="false">
+          document_trash_content
+        </contentView>
+      </contentViews>
     </type>
 
     <type id="DashboardSpacesContainer">

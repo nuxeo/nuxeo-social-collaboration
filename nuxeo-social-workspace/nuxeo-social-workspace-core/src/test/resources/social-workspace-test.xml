@@ -1,9 +1,9 @@
 <component name="org.nuxeo.ecm.social.workspace.test">
 
   <extension target="org.nuxeo.ecm.core.persistence.PersistenceComponent"
-		point="hibernate">
-		<hibernateConfiguration name="nxactivities">
-		  <properties>
+        point="hibernate">
+        <hibernateConfiguration name="nxactivities">
+          <properties>
         <property name="hibernate.connection.url">jdbc:h2:target/test/h2/activities</property>;
         <property name="hibernate.connection.driver_class">org.h2.Driver</property>
         <property name="hibernate.connection.auto_commit">true</property>
@@ -12,8 +12,8 @@
         <property name="hibernate.hbm2ddl.auto">update</property>;
         <property name="hibernate.show_sql">false</property>; // true to debug
         <property name="hibernate.format_sql">true</property>;
-		   </properties>
-		</hibernateConfiguration>
+           </properties>
+        </hibernateConfiguration>
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.types.TypeService"
@@ -34,10 +34,9 @@
         <layout>social_workspace</layout>
       </layouts>
       <subtypes>
-        <type>Folder</type>
+        <type>SocialFolder</type>
         <type>Article</type>
         <type>File</type>
-        <type>Note</type>
       </subtypes>
     </type>
 
@@ -135,7 +134,7 @@
       </subtypes>
     </type>
 
-    <type id="Folder">
+    <type id="SocialFolder">
       <label>Folder</label>
       <icon>/icons/folder.gif</icon>
       <bigIcon>/icons/folder_100.png</bigIcon>
@@ -144,9 +143,9 @@
       <description>Folder.description</description>
       <default-view>view_documents</default-view>
       <subtypes>
-        <type>Folder</type>
+        <type>SocialFolder</type>
+        <type>Article</type>
         <type>File</type>
-        <type>Note</type>
       </subtypes>
       <layouts mode="any">
         <layout>heading</layout>
@@ -159,16 +158,10 @@
         <contentView>document_content</contentView>
       </contentViews>
       <contentViews category="trash_content">
-        <contentView>document_trash_content</contentView>
+        <contentView showInExportView="false">
+          document_trash_content
+        </contentView>
       </contentViews>
-    </type>
-
-    <type id="Folder">
-      <subtypes>
-        <type>Article</type>
-        <type>File</type>
-        <type>Note</type>
-      </subtypes>
     </type>
 
     <type id="File">
@@ -189,30 +182,6 @@
       </layouts>
       <!-- all content already on summary page -->
       <layouts mode="view" />
-    </type>
-
-    <type id="Note">
-      <label>Note</label>
-      <icon>/icons/note.gif</icon>
-      <bigIcon>/icons/note_100.png</bigIcon>
-      <category>SimpleDocument</category>
-      <description>Note.description</description>
-      <default-view>view_documents</default-view>
-      <layouts mode="any">
-        <layout>heading</layout>
-        <layout>note</layout>
-      </layouts>
-      <layouts mode="summary">
-        <layout>note_summary_layout</layout>
-      </layouts>
-      <layouts mode="edit">
-        <layout>heading</layout>
-        <layout>note</layout>
-        <layout>dublincore</layout>
-      </layouts>
-      <layouts mode="view">
-        <layout>note</layout>
-      </layouts>
     </type>
 
     <type id="DashboardSpacesContainer">

@@ -1,7 +1,7 @@
 <div class="links">
   <#if This.hasAddChildrenRight(currentDoc.id) >
     <a href="${This.path}/selectDocTypeToCreate?docRef=${currentDoc.id}" class="addPopup"><img src="${skinPath}/icons/add_document.gif" alt="create document"/></a>
-    <a href="${This.path}/createDocumentForm?docRef=${currentDoc.id}&doctype=Folder" class="addPopup"><img src="${skinPath}/icons/add_folder.gif" alt="create folder"/></a>
+    <a href="${This.path}/createDocumentForm?docRef=${currentDoc.id}&doctype=SocialFolder" class="addPopup"><img src="${skinPath}/icons/add_folder.gif" alt="create folder"/></a>
   <#else>
     <a class="button disabled" href="#">
       <img src="${skinPath}/icons/add_document_disabled.gif" alt="create document"></img>

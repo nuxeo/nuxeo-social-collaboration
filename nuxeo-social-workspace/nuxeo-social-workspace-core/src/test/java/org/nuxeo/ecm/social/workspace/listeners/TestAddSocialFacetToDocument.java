@@ -41,7 +41,7 @@ public class TestAddSocialFacetToDocument extends AbstractSocialWorkspaceTest {
 
         socialWorkspace = createSocialWorkspace(SOCIAL_WORKSPACE_NAME, true);
         folderInSocialWorkspace = createDocument(socialWorkspace.getPath(),
-                "Folder in Social Workspace", "Folder");
+                "Folder in Social Workspace", "SocialFolder");
 
         DocumentModel fileInSocialWorkspace = createDocument(
                 socialWorkspace.getPath(), "Regular File in Social Workspace",
@@ -49,11 +49,6 @@ public class TestAddSocialFacetToDocument extends AbstractSocialWorkspaceTest {
         session.save();
         fileInSocialWorkspace = session.getDocument(fileInSocialWorkspace.getRef());
         assertTrue(fileInSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
-
-        DocumentModel noteInAFolderInASocialWorkspace = createDocument(
-                folderInSocialWorkspace.getPathAsString(),
-                "Note in a folder in an social workspace", "Note");
-        assertTrue(noteInAFolderInASocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
         DocumentModel fileOutOfSocialWorkspace = createDocument("/",
                 "Regular File create at root level", "File");

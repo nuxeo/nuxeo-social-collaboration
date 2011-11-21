@@ -296,7 +296,6 @@
         <type>Article</type>
         <type>NewsItem</type>
         <type>File</type>
-        <type>Note</type>
       </rule>
     </filter>
 
@@ -423,12 +422,30 @@
         <permission>AddChildren</permission>
         <facet>SocialWorkspace</facet>
       </rule>
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <type>Root</type>
+        <type>SocialDomain</type>
+        <type>SocialFolder</type>
+        <condition>
+          #{typeManager.getAllowedSubTypes(document.getType(), document).size()
+          > 0}
+        </condition>
+      </rule>
     </filter>
 
     <filter id="importFile" append="true">
       <rule grant="true">
         <permission>AddChildren</permission>
         <facet>SocialWorkspace</facet>
+      </rule>
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <type>SocialFolder</type>
+        <condition>
+          #{typeManager.getAllowedSubTypes(document.getType(), document).size()
+          > 0}
+        </condition>
       </rule>
     </filter>
 
@@ -473,18 +490,6 @@
     <filter id="isRestricted">
       <rule grant="true">
         <condition>#{socialDocumentVisibilityActions.isRestricted()}</condition>
-      </rule>
-    </filter>
-
-    <filter id="create" append="true">
-      <rule grant="true">
-        <permission>AddChildren</permission>
-        <type>Root</type>
-        <type>SocialDomain</type>
-        <condition>
-          #{typeManager.getAllowedSubTypes(document.getType(), document).size()
-          > 0}
-        </condition>
       </rule>
     </filter>
 
