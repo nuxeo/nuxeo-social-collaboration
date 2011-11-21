@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.nuxeo.ecm.social</groupId>
-    <artifactId>nuxeo-social-collaboration-distribution</artifactId>
+    <artifactId>nuxeo-social-collaboration-parent</artifactId>
     <version>5.5-SNAPSHOT</version>
   </parent>
   <artifactId>nuxeo-social-collaboration-ftest</artifactId>
@@ -27,10 +27,9 @@
 
             <artifactItem>
               <groupId>org.nuxeo.ecm.social</groupId>
-              <artifactId>nuxeo-social-collaboration-distribution</artifactId>
+              <artifactId>nuxeo-distribution-social-collaboration-tomcat</artifactId>
               <version>${project.version}</version>
               <type>zip</type>
-              <classifier>tomcat</classifier>
               <overWrite>true</overWrite>
               <outputDirectory>target</outputDirectory>
             </artifactItem>

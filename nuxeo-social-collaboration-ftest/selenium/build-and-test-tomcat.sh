@@ -13,7 +13,7 @@ fi
 
 # Start Tomcat
 cd ../target
-unzip nuxeo-social-collaboration-distribution-*.zip || exit 1
+unzip nuxeo-distribution-social-collaboration-*.zip || exit 1
 mv nuxeo-social-collaboration-*-tomcat tomcat || exit 1
 chmod +x tomcat/bin/nuxeoctl || exit 1
 
