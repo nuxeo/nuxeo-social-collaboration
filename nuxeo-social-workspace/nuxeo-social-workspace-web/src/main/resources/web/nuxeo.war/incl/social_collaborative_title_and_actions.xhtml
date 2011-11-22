@@ -14,8 +14,8 @@
         <li class="dropDownMenu">
           <h:outputText value="#{messages['label.social.workspace.actions']}" />
           <ui:insert name="action_menu_before" />
-
           <ul class="actionSubList">
+            <ui:insert name="before_submenu_actions" />
             <nxu:set var="actions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}" cache="true">
               <c:if test="#{!empty actions}">
                 <nxu:dataList layout="simple" var="action" value="#{actions}">
@@ -54,6 +54,7 @@
                 <div class="separator"></div>
               </c:if>
             </nxu:set>
+            <ui:insert name="after_submenu_actions" />
           </ul>
 
           <ui:insert name="action_menu_after" />
