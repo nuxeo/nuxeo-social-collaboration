@@ -83,7 +83,7 @@ public class SocialWorkspaceActions implements Serializable {
     }
 
     public DocumentModel getSocialWorkspaceContainer() {
-        return socialWorkspaceService.getOrCreateSocialWorkspaceContainer(documentManager);
+        return socialWorkspaceService.getSocialWorkspaceContainer(documentManager);
     }
 
     public String getCollaborationMainTab(){

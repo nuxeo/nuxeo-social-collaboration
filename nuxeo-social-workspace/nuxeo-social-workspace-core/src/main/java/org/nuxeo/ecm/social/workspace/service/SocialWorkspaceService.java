@@ -219,5 +219,11 @@ public interface SocialWorkspaceService {
      * Returns Social Workspace Container and create it if needed.
      * @param session
      */
-    DocumentModel getOrCreateSocialWorkspaceContainer(CoreSession session);
+    DocumentModel getSocialWorkspaceContainer(CoreSession session);
+
+    /**
+     * Returns the configured SocialWorkspaceContainerDescriptor that contains
+     * the path, title and description of the container.
+     */
+    SocialWorkspaceContainerDescriptor getSocialWorkspaceContainerDescriptor();
 }

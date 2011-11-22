@@ -3,10 +3,16 @@
 
   <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService"
     point="configuration">
-      <configuration>
-        <validationTimeInDays>15</validationTimeInDays>
-        <socialWorkspaceContainerPath>/collaboration</socialWorkspaceContainerPath>
-      </configuration>
-    </extension>
+    <configuration>
+      <validationTimeInDays>15</validationTimeInDays>
+    </configuration>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService"
+    point="socialWorkspaceContainer">
+
+    <socialWorkspaceContainer path="/collaboration" title="Collaboration" />
+
+  </extension>
 
 </component>

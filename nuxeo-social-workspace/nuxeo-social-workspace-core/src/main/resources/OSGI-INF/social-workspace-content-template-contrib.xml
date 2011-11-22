@@ -12,8 +12,7 @@
 
     <factoryBinding name="RootFactory" factoryName="SimpleTemplateRootFactory" targetType="Root" append="true">
       <template>
-        <templateItem typeName="SocialDomain" id="collaboration" title="Collaboration"
-            description="Collaboration"/>
+        <templateItem typeName="SocialDomain" id="collaboration" title="Collaboration" />
       </template>
     </factoryBinding>
 
@@ -34,6 +33,14 @@
           title="Public Dashboard" description="Contains the public Dashboard"/>
       </template>
     </factoryBinding>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService"
+    point="postContentCreationHandlers">
+
+    <postContentCreationHandler name="collaborationHandler"
+      class="org.nuxeo.ecm.social.workspace.CollaborationHandler" />
+
   </extension>
 
 </component>

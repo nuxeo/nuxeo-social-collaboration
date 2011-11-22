@@ -67,7 +67,7 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
 
     protected Space getOrCreateSpace(CoreSession session,
             Map<String, String> parameters) throws ClientException {
-        DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getOrCreateSocialWorkspaceContainer(
+        DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getSocialWorkspaceContainer(
                 session);
         DocumentRef collaborationDashboardSpaceRef = new PathRef(
                 socialWorkspaceContainer.getPathAsString(),
@@ -112,7 +112,7 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
         }
 
         public void run() throws ClientException {
-            DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getOrCreateSocialWorkspaceContainer(
+            DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getSocialWorkspaceContainer(
                     session);
             DocumentModel collaborationDashboardSpace = session.createDocumentModel(
                     socialWorkspaceContainer.getPathAsString(),

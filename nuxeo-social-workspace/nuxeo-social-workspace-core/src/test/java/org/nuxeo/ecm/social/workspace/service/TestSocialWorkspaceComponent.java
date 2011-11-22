@@ -167,7 +167,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
     public void testSocialWorkspaceContainer() throws ClientException {
         assertFalse(session.exists(new PathRef(
                 "/default-domain/test-social-workspaces")));
-        DocumentModel container = socialWorkspaceService.getOrCreateSocialWorkspaceContainer(session);
+        DocumentModel container = socialWorkspaceService.getSocialWorkspaceContainer(session);
         assertEquals("test-social-workspaces", container.getTitle());
         assertEquals("/default-domain",
                 session.getDocument(container.getParentRef()).getPathAsString());

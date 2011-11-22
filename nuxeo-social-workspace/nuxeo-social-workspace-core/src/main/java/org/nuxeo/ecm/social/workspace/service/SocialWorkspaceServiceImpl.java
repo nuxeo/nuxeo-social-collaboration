@@ -99,13 +99,13 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     public static final String CONFIGURATION_EP = "configuration";
 
+    public static final String SOCIAL_WORKSPACE_CONTAINER_EP = "socialWorkspaceContainer";
+
     public static final String SOCIAL_WORKSPACE_ACL_NAME = "socialWorkspaceAcl";
 
     public static final String NEWS_ITEMS_ROOT_ACL_NAME = "newsItemsRootAcl";
 
     public static final String PUBLIC_SOCIAL_WORKSPACE_ACL_NAME = "publicSocialWorkspaceAcl";
-
-    public static final String DC_TITLE = "dc:title";
 
     private UserManager userManager;
 
@@ -113,7 +113,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     private int validationDays;
 
-    private String socialWorkspaceContainerPath;
+    private SocialWorkspaceContainerDescriptor socialWorkspaceContainer;
 
     private UserRelationshipService relationshipService;
 
@@ -234,35 +234,21 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             if (config.getValidationTimeInDays() > 0) {
                 validationDays = config.getValidationTimeInDays();
             }
-            if (!StringUtils.isBlank(config.getSocialWorkspaceContainerPath())) {
-                socialWorkspaceContainerPath = config.getSocialWorkspaceContainerPath();
-            }
+        } else if (SOCIAL_WORKSPACE_CONTAINER_EP.equals(extensionPoint)) {
+            socialWorkspaceContainer = (SocialWorkspaceContainerDescriptor) contribution;
         }
     }
 
     @Override
-    public DocumentModel getOrCreateSocialWorkspaceContainer(CoreSession session) {
+    public SocialWorkspaceContainerDescriptor getSocialWorkspaceContainerDescriptor() {
+        return socialWorkspaceContainer;
+    }
+
+    @Override
+    public DocumentModel getSocialWorkspaceContainer(CoreSession session) {
         try {
-            DocumentRef docRef = new PathRef(socialWorkspaceContainerPath);
-            if (!session.exists(docRef)) {
-                new UnrestrictedSessionRunner(session) {
-                    @Override
-                    public void run() throws ClientException {
-                        Path path = new Path(socialWorkspaceContainerPath);
-                        String parentPath = path.removeLastSegments(1).toString();
-                        String title = path.lastSegment();
-
-                        DocumentModel swc = session.createDocumentModel(
-                                parentPath, title,
-                                SOCIAL_WORKSPACE_CONTAINER_TYPE);
-                        swc.setPropertyValue(DC_TITLE, title);
-                        session.createDocument(swc);
-                    }
-                }.runUnrestricted();
-            }
-
-            return session.getDocument(docRef);
-        } catch (ClientException e) {
+            return session.getDocument(new PathRef(socialWorkspaceContainer.getPath()));
+        } catch(ClientException e) {
             throw new ClientRuntimeException(e);
         }
     }

@@ -53,7 +53,7 @@ import org.nuxeo.ecm.webapp.helpers.EventManager;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
- * 
+ *
  */
 @Name("fullscreenManagementActions")
 @Scope(CONVERSATION)
@@ -289,7 +289,7 @@ public class FullscreenManagementActionsBean implements Serializable {
     }
 
     public boolean canCreateSocialWorkspace() {
-        DocumentModel parent = socialWorkspaceService.getOrCreateSocialWorkspaceContainer(documentManager);
+        DocumentModel parent = socialWorkspaceService.getSocialWorkspaceContainer(documentManager);
         if (parent != null) {
             try {
                 return (documentManager.hasPermission(parent.getRef(),
