@@ -5,79 +5,93 @@
   xmlns:a4j="http://richfaces.org/a4j"
   id="#{widget.id}" rendered="#{widget.mode == 'view' }">
 
+
   <c:set var="andLabel" value=" #{messages['label.and']} " scope="page" />
-  <c:set var="displayedName" value="#{nxu:test(empty userManagementActions.selectedUser.user.firstName, userManagementActions.selectedUser.id, userManagementActions.selectedUser.user.firstName)}" scope="page" />
+  <c:set var="userSchema" value="#{userManager.userSchemaName}"/>
+  <c:set var="userName" value="#{field_0[userSchema].username}" scope="page" />
+  <c:set var="displayedName" value="#{nxu:test(empty field_0[userSchema].firstName, userName, field_0[userSchema].firstName)}" scope="page" />
   <a4j:outputPanel id="userRelationPanel" >
 
-    <a4j:outputPanel rendered="#{!userRelationshipActions.currentUser}" id="user_relationship_#{widget.id}">
+    <a4j:outputPanel rendered="#{!userRelationshipActions.isCurrentUser(userName)}" id="user_relationship_#{widget.id}">
 
       <a4j:outputPanel styleClass="action_bar" id="add_relationship_#{widget.id}_btn">
-        <a4j:outputPanel styleClass="relationship_label" rendered="#{not userRelationshipActions.alreadyConnected}">
+        <a4j:outputPanel styleClass="relationship_label" rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}">
           <h:outputFormat value="#{messages['action.social.user.relationship.not.in.relation']}">
             <f:param value="#{displayedName}" />
           </h:outputFormat>
         </a4j:outputPanel>
 
-        <a4j:outputPanel styleClass="relationship_label" rendered="#{userRelationshipActions.alreadyConnected}">
+        <a4j:outputPanel styleClass="relationship_label" rendered="#{userRelationshipActions.isAlreadyConnected(userName)}">
           <h:outputFormat value="#{messages['action.social.user.relationship.in.relation']} ">
             <f:param value="#{displayedName}" />
           </h:outputFormat>
 
-          <c:forEach var="relation" items="#{userRelationshipActions.relationshipsWithSelectedUser}" varStatus="status">
+          <c:forEach var="relation" items="#{userRelationshipActions.getRelationshipsWithUser(userName)}" varStatus="status">
             <c:if test="#{!status.first}">#{status.last ? andLabel : ', '}</c:if>
             <h:outputText value="#{relation.name}" />
           </c:forEach>
         </a4j:outputPanel>
 
-        <a4j:outputPanel rendered="#{not userRelationshipActions.alreadyConnected}">
-          <a class="button relationship_#{widget.id}_button">
-            <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
-          </a>
-        </a4j:outputPanel>
-        <a4j:outputPanel rendered="#{userRelationshipActions.alreadyConnected}">
-          <a class="button relationship_#{widget.id}_button">
-            <h:outputText value="#{messages['action.social.user.relationship.join']}" />
-          </a>
-        </a4j:outputPanel>
-        <script type="text/javascript">
-          var btn = jQuery(".relationship_#{widget.id}_button");
-          btn.click(function() {
-            jQuery("#add_relationship_#{widget.id}").fadeIn(500);
-          });
-        </script>
-      </a4j:outputPanel>
-      <div class="relationPopUpContainer">
-        <div id="add_relationship_#{widget.id}" class="relationPopUp">
-          <a4j:status>
-            <f:facet name="start">
-              <h:graphicImage value="/img/standart_waiter.gif" />
-            </f:facet>
-          </a4j:status>
-          <a4j:outputPanel id="add_relationship_#{widget.id}">
-            <nxu:dataTable id="#{widget.id}_add_relationship"
-              value="#{userRelationshipActions.kinds}" var="kind"
-              rendered="#{!(userRelationshipActions.currentUser)}">
 
-              <nxu:column>
-                <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipActions.relationshipCheckboxChanged}"
-                  value="#{userRelationshipActions.allRelationshipsState[kind]}">
-                  <a4j:support event="onchange"
-                    reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
-                    <f:param name="selectedKind" value="#{kind.toString()}" />
-                  </a4j:support>
-                  <span><h:outputText value="#{kind.name}" /></span>
-                </h:selectBooleanCheckbox>
-              </nxu:column>
-            </nxu:dataTable>
-            <script type="text/javascript">
-              var div = jQuery("#add_relationship_#{widget.id}");
-              div.mouseleave(function() {
-                jQuery("#add_relationship_#{widget.id}").fadeOut(500);
-              });
-            </script>
+        <div class="buttonContainer_#{widget.id}">
+          <!--add button-->
+          <a4j:outputPanel rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}">
+            <a class="button relationship_#{widget.id}_button">
+              <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
+            </a>
           </a4j:outputPanel>
+          <!--end add button-->
+
+          <!--modify button-->
+          <a4j:outputPanel rendered="#{userRelationshipActions.isAlreadyConnected(userName)}">
+            <a class="button relationship_#{widget.id}_button">
+              <h:outputText value="#{messages['action.social.user.relationship.join']}" />
+            </a>
+          </a4j:outputPanel>
+          <!--end button-->
+
+          <div class="relationPopUpContainer">
+            <a4j:region id="#{widget.id}_region">
+              <div id="add_relationship_#{widget.id}_popup" class="relationPopUp">
+                <a4j:status>
+                  <f:facet name="start">
+                    <h:graphicImage value="/img/standart_waiter.gif" />
+                  </f:facet>
+                </a4j:status>
+                <a4j:outputPanel id="add_relationship_#{widget.id}">
+                  <nxu:dataTable id="#{widget.id}_add_relationship"
+              value="#{userRelationshipActions.kinds}" var="kind"
+              rendered="#{!(userRelationshipActions.isCurrentUser(userName))}">
+                    <nxu:column>
+                      <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipActions.relationshipCheckboxChanged}"
+                  value="#{userRelationshipActions.allRelationshipsState[kind]}">
+                        <a4j:support event="onchange"
+                    reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
+                          <f:param name="selectedKind" value="#{kind.toString()}" />
+                          <f:param name="selectedUser" value="#{userName}" />
+                        </a4j:support>
+                        <span>
+                          <h:outputText value="#{kind.name}" />
+                        </span>
+                      </h:selectBooleanCheckbox>
+                    </nxu:column>
+                  </nxu:dataTable>
+                </a4j:outputPanel>
+              </div>
+            </a4j:region>
+          </div>
+          <script type="text/javascript">
+          	var div = jQuery("#add_relationship_#{widget.id}_popup");
+            div.mouseleave(function() {
+                 div.fadeOut(500);
+            });
+            var btn = jQuery(".relationship_#{widget.id}_button");
+            btn.click(function() {
+           		 jQuery("#add_relationship_#{widget.id}_popup").fadeIn(500);
+            });
+          </script>
         </div>
-      </div>
+      </a4j:outputPanel>
     </a4j:outputPanel>
 
   </a4j:outputPanel>
