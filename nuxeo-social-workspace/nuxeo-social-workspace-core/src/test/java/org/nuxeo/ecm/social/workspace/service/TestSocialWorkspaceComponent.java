@@ -33,6 +33,10 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.annotations.BackendType;
+import org.nuxeo.ecm.core.test.annotations.Granularity;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.ec.notification.service.NotificationServiceHelper;
 import org.nuxeo.ecm.platform.url.api.DocumentViewCodecManager;
 import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
@@ -41,6 +45,7 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
+@RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator")
 @Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
         "org.nuxeo.ecm.platform.notification.core" })
@@ -165,14 +170,11 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
     @Test
     public void testSocialWorkspaceContainer() throws ClientException {
-        assertFalse(session.exists(new PathRef(
-                "/default-domain/test-social-workspaces")));
+        assertTrue(session.exists(new PathRef("/collaboration")));
         DocumentModel container = socialWorkspaceService.getSocialWorkspaceContainer(session);
-        assertEquals("test-social-workspaces", container.getTitle());
-        assertEquals("/default-domain",
+        assertEquals("Collaboration", container.getTitle());
+        assertEquals("/",
                 session.getDocument(container.getParentRef()).getPathAsString());
-        assertTrue(session.exists(new PathRef(
-                "/default-domain/test-social-workspaces")));
     }
 
     protected DocumentModel createUserForTest(String userEmail, String userId)
