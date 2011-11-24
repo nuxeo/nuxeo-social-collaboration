@@ -46,6 +46,30 @@
       </property>
     </widgetType>
 
+    <!-- override the default userVirtualGroups widget type to hide the
+    virtual groups referencing social workspace memberships -->
+    <widgetType name="userVirtualGroups">
+      <configuration>
+        <sinceVersion>5.5</sinceVersion>
+        <title>User virtual groups</title>
+        <description>
+          This widget displays the user virtual groups.
+        </description>
+        <categories>
+          <category>document</category>
+        </categories>
+        <supportedModes>
+          <mode>view</mode>
+        </supportedModes>
+      </configuration>
+      <handler-class>
+        org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
+      </handler-class>
+      <property name="template">
+        /widgets/social_collaboration_user_vgoups_widget_template.xhtml
+      </property>
+    </widgetType>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"

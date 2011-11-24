@@ -18,11 +18,14 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.PAGE;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ADMINISTRATORS_GROUP_SUFFIX;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.MEMBERS_GROUP_SUFFIX;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -41,6 +44,7 @@ import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.computedgroups.SocialWorkspaceGroupComputer;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
+import org.nuxeo.ecm.webapp.security.UserManagementActions;
 
 /**
  * Bean to manage social workspace actions.
@@ -80,6 +84,9 @@ public class ManageSocialWorkspaceActions implements Serializable {
 
     @In(create = true)
     protected ResourcesAccessor resourcesAccessor;
+
+    @In(create = true)
+    protected UserManagementActions userManagementActions;
 
     protected SocialWorkspaceGroupComputer computer = new SocialWorkspaceGroupComputer();
 
@@ -135,6 +142,22 @@ public class ManageSocialWorkspaceActions implements Serializable {
 
     public void setMembers(List<String> members) {
         this.members = members;
+    }
+
+    public List<String> getFilteredUserVirtualGroups(String userId)
+            throws Exception {
+        List<String> virtualGroups = userManagementActions.getUserVirtualGroups(userId);
+        if (virtualGroups != null) {
+            List<String> filteredVirtualGroups = new ArrayList<String>();
+            for (String virtualGroup : virtualGroups) {
+                if (!virtualGroup.endsWith(MEMBERS_GROUP_SUFFIX)
+                        && !virtualGroup.endsWith(ADMINISTRATORS_GROUP_SUFFIX)) {
+                    filteredVirtualGroups.add(virtualGroup);
+                }
+            }
+            return filteredVirtualGroups;
+        }
+        return null;
     }
 
 }

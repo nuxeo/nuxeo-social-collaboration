@@ -120,7 +120,19 @@ public class SocialConstants {
 
     public static final String CTX_PRINCIPALS_PROPERTY = "socialWorkspacePrincipals";
 
+    // Social Workspace groups
+    public static final String SEPARATOR = "_";
+
+    public static final String ADMINISTRATORS_SUFFIX = "administrators";
+
+    public static final String MEMBERS_SUFFIX = "members";
+
+    public static final String ADMINISTRATORS_GROUP_SUFFIX = SEPARATOR + ADMINISTRATORS_SUFFIX;
+
+    public static final String MEMBERS_GROUP_SUFFIX = SEPARATOR + MEMBERS_SUFFIX;
+
     private SocialConstants() {
+        // Constants class
     }
 
 }
