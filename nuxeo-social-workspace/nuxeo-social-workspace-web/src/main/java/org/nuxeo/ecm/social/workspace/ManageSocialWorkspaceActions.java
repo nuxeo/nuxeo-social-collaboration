@@ -18,6 +18,8 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.PAGE;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ADMINISTRATORS_GROUP_SUFFIX;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.MEMBERS_GROUP_SUFFIX;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
@@ -41,7 +43,6 @@ import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.computedgroups.SocialWorkspaceGroupComputer;
-import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.ecm.webapp.security.UserManagementActions;
 
@@ -148,13 +149,9 @@ public class ManageSocialWorkspaceActions implements Serializable {
         List<String> virtualGroups = userManagementActions.getUserVirtualGroups(userId);
         if (virtualGroups != null) {
             List<String> filteredVirtualGroups = new ArrayList<String>();
-            String members_suffix = SocialWorkspaceHelper.SEPARATOR
-                    + SocialWorkspaceHelper.MEMBERS_SUFFIX;
-            String administrator_suffix = SocialWorkspaceHelper.SEPARATOR
-                    + SocialWorkspaceHelper.ADMINISTRATORS_SUFFIX;
             for (String virtualGroup : virtualGroups) {
-                if (!virtualGroup.endsWith(members_suffix)
-                        && !virtualGroup.endsWith(administrator_suffix)) {
+                if (!virtualGroup.endsWith(MEMBERS_GROUP_SUFFIX)
+                        && !virtualGroup.endsWith(ADMINISTRATORS_GROUP_SUFFIX)) {
                     filteredVirtualGroups.add(virtualGroup);
                 }
             }
@@ -162,6 +159,5 @@ public class ManageSocialWorkspaceActions implements Serializable {
         }
         return null;
     }
-
 
 }
