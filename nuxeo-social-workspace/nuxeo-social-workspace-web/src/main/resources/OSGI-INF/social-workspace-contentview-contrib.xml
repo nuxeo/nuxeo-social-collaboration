@@ -120,6 +120,40 @@
     </resultLayouts>
   </contentView>
 
+  <contentView name="file_listing_view">
+    <coreQueryPageProvider>
+      <property name="coreSession">#{documentManager}</property>
+      <pattern>
+        SELECT *
+          FROM File
+         WHERE ecm:isProxy = ?
+               AND ecm:mixinType != 'HiddenInNavigation'
+               AND ecm:isCheckedInVersion = 0
+               AND ecm:currentLifeCycleState != 'deleted'
+               AND ecm:path STARTSWITH ?
+        </pattern>
+      <pageSize>50</pageSize>
+      <parameter>#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() ? 0 : 1}
+      </parameter>
+      <parameter>#{socialWorkspaceActions.getSocialWorkspace().getPath()}
+      </parameter>
+    </coreQueryPageProvider>
+    <showPageSizeSelector>false</showPageSizeSelector>
+    <showRefreshCommand>false</showRefreshCommand>
+    <useGlobalPageSize>false</useGlobalPageSize>
+    <refresh>
+      <event>documentChanged</event>
+      <event>documentChildrenChanged</event>
+    </refresh>
+    <cacheKey>#{currentDocument.id}</cacheKey>
+    <cacheSize>10</cacheSize>
+    <selectionList>CURRENT_SELECTION</selectionList>
+    <resultLayouts>
+      <layout name="file_listing" title="document_listing"
+        translateTitle="false" iconPath="/icons/document_listing_icon.png" />
+    </resultLayouts>
+  </contentView>
+
         <contentView name="user_social_workspace_view">
       <coreQueryPageProvider>
         <property name="coreSession">#{documentManager}</property>

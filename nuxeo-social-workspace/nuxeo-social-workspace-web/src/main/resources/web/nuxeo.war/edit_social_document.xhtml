@@ -26,7 +26,7 @@
         </ui:define>
       </ui:decorate>
       <ui:include src="/incl/message_banner.xhtml" />
-      <h:form class="singlePage">
+      <h:form enctype="multipart/form-data" class="singlePage">
         <nxl:documentLayout mode="edit" value="#{currentDocument}" />
         <ui:include src="/incl/document_versioning.xhtml" />
         <p class="buttonsGadget">
