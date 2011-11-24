@@ -76,6 +76,8 @@ public class FullscreenManagementActionsBean implements Serializable {
 
     private static final String ARTICLES_VIEW = "articles";
 
+    private static final String FILES_VIEW = "files";
+
     private static final long serialVersionUID = 1L;
 
     public static final String FULLSCREEN_VIEW_ID = "fullscreen";
@@ -302,4 +304,9 @@ public class FullscreenManagementActionsBean implements Serializable {
         }
         return false;
     }
+
+    public String navigateToFiles() throws ClientException {
+        return navigateToListing(FILES_VIEW);
+    }
+
 }

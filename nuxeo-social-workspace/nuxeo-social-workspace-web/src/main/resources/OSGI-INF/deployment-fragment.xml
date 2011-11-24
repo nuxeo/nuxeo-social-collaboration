@@ -44,6 +44,11 @@
       <redirect />
     </navigation-case>
     <navigation-case>
+      <from-outcome>files</from-outcome>
+      <to-view-id>/files.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
       <from-outcome>view_collaboration</from-outcome>
       <to-view-id>/view_collaboration.xhtml</to-view-id>
       <redirect />
