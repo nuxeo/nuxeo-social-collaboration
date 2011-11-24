@@ -193,9 +193,21 @@
         <view id="fullscreen" value="dashboard" />
         <view id="articles" value="articles"/>
         <view id="news_items" value="news_items"/>
+        <view id="files" value="files"/>
       </views>
     </type>
 
+    <type id="File">
+      <layouts mode="fullscreen">
+        <layout>file_fullscreen</layout>
+      </layouts>
+      <views>
+        <view id="fullscreen" value="view_social_document" />
+        <view id="after-social-collaboration-creation" value="view_social_document"/>
+        <view id="edit_social_document" value="edit_social_document"/>
+        <view id="after-social-collaboration-edition" value="view_social_document"/>
+      </views>
+    </type>
   </extension>
 
 </component>

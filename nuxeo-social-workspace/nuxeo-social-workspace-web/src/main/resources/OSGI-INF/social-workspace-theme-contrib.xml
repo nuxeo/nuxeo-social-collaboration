@@ -50,6 +50,10 @@
         <theme>social-collaboration/dashboard</theme>
       </view>
 
+      <view id="/files.xhtml">
+        <theme>social-collaboration/dashboard</theme>
+      </view>
+
    </application>
   </extension>
 
