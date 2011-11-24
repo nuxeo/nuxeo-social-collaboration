@@ -143,27 +143,6 @@ public class ManageSocialWorkspaceActions implements Serializable {
         this.members = members;
     }
 
-    // public List<String> getFilteredUserVirtualGroups(String userId)
-    // throws Exception {
-    // NuxeoPrincipal principal = userManager.getPrincipal(userId);
-    // if (principal instanceof NuxeoPrincipalImpl) {
-    // NuxeoPrincipalImpl user = (NuxeoPrincipalImpl) principal;
-    // List<String> filteredVirtualGroups = new ArrayList<String>();
-    // String members_suffix = SocialWorkspaceHelper.SEPARATOR
-    // + SocialWorkspaceHelper.MEMBERS_SUFFIX;
-    // String administrator_suffix = SocialWorkspaceHelper.SEPARATOR
-    // + SocialWorkspaceHelper.ADMINISTRATORS_SUFFIX;
-    // for (String virtualGroup : user.getVirtualGroups()) {
-    // if (!virtualGroup.endsWith(members_suffix)
-    // && !virtualGroup.endsWith(administrator_suffix)) {
-    // filteredVirtualGroups.add(virtualGroup);
-    // }
-    // }
-    // return filteredVirtualGroups;
-    // }
-    // return null;
-    // }
-
     public List<String> getFilteredUserVirtualGroups(String userId)
             throws Exception {
         List<String> virtualGroups = userManagementActions.getUserVirtualGroups(userId);
