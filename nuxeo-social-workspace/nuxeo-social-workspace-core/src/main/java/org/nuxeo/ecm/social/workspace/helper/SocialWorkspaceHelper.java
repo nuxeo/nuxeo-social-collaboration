@@ -17,9 +17,12 @@
 
 package org.nuxeo.ecm.social.workspace.helper;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.ADMINISTRATORS_SUFFIX;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.MEMBERS_SUFFIX;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ROOT_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PRIVATE_SECTION_RELATIVE_PATH;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.PUBLIC_SECTION_RELATIVE_PATH;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SEPARATOR;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_CONTAINER_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
@@ -37,19 +40,13 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
  * Class to provide around Social Workspace.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
- * @since 5.4.1
+ * @since 5.5
  */
 public class SocialWorkspaceHelper {
 
     private static final Log log = LogFactory.getLog(SocialWorkspaceHelper.class);
 
     private static final String KIND_GROUP = "socialworkspace";
-
-    private static final String SEPARATOR = "_";
-
-    private static final String ADMINISTRATORS_SUFFIX = "administrators";
-
-    private static final String MEMBERS_SUFFIX = "members";
 
     private static final String ADMINISTRATORS_LABEL_PREFIX = "Administrators of ";
 
@@ -125,7 +122,8 @@ public class SocialWorkspaceHelper {
     }
 
     public static boolean isSocialWorkspaceContainer(DocumentModel doc) {
-        return doc != null && doc.getType().equals(SOCIAL_WORKSPACE_CONTAINER_TYPE);
+        return doc != null
+                && doc.getType().equals(SOCIAL_WORKSPACE_CONTAINER_TYPE);
     }
 
     public static boolean isSocialWorkspace(DocumentModel doc) {
