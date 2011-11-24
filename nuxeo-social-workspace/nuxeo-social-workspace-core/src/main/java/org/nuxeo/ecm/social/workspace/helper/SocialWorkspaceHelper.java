@@ -45,11 +45,11 @@ public class SocialWorkspaceHelper {
 
     private static final String KIND_GROUP = "socialworkspace";
 
-    private static final String SEPARATOR = "_";
+    public static final String SEPARATOR = "_";
 
-    private static final String ADMINISTRATORS_SUFFIX = "administrators";
+    public static final String ADMINISTRATORS_SUFFIX = "administrators";
 
-    private static final String MEMBERS_SUFFIX = "members";
+    public static final String MEMBERS_SUFFIX = "members";
 
     private static final String ADMINISTRATORS_LABEL_PREFIX = "Administrators of ";
 

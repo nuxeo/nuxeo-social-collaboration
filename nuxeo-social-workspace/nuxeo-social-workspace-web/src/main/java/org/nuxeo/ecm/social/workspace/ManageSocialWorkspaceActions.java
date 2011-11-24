@@ -23,6 +23,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSoc
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -40,7 +41,9 @@ import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.computedgroups.SocialWorkspaceGroupComputer;
+import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
+import org.nuxeo.ecm.webapp.security.UserManagementActions;
 
 /**
  * Bean to manage social workspace actions.
@@ -80,6 +83,9 @@ public class ManageSocialWorkspaceActions implements Serializable {
 
     @In(create = true)
     protected ResourcesAccessor resourcesAccessor;
+
+    @In(create = true)
+    protected UserManagementActions userManagementActions;
 
     protected SocialWorkspaceGroupComputer computer = new SocialWorkspaceGroupComputer();
 
@@ -136,5 +142,47 @@ public class ManageSocialWorkspaceActions implements Serializable {
     public void setMembers(List<String> members) {
         this.members = members;
     }
+
+    // public List<String> getFilteredUserVirtualGroups(String userId)
+    // throws Exception {
+    // NuxeoPrincipal principal = userManager.getPrincipal(userId);
+    // if (principal instanceof NuxeoPrincipalImpl) {
+    // NuxeoPrincipalImpl user = (NuxeoPrincipalImpl) principal;
+    // List<String> filteredVirtualGroups = new ArrayList<String>();
+    // String members_suffix = SocialWorkspaceHelper.SEPARATOR
+    // + SocialWorkspaceHelper.MEMBERS_SUFFIX;
+    // String administrator_suffix = SocialWorkspaceHelper.SEPARATOR
+    // + SocialWorkspaceHelper.ADMINISTRATORS_SUFFIX;
+    // for (String virtualGroup : user.getVirtualGroups()) {
+    // if (!virtualGroup.endsWith(members_suffix)
+    // && !virtualGroup.endsWith(administrator_suffix)) {
+    // filteredVirtualGroups.add(virtualGroup);
+    // }
+    // }
+    // return filteredVirtualGroups;
+    // }
+    // return null;
+    // }
+
+    public List<String> getFilteredUserVirtualGroups(String userId)
+            throws Exception {
+        List<String> virtualGroups = userManagementActions.getUserVirtualGroups(userId);
+        if (virtualGroups != null) {
+            List<String> filteredVirtualGroups = new ArrayList<String>();
+            String members_suffix = SocialWorkspaceHelper.SEPARATOR
+                    + SocialWorkspaceHelper.MEMBERS_SUFFIX;
+            String administrator_suffix = SocialWorkspaceHelper.SEPARATOR
+                    + SocialWorkspaceHelper.ADMINISTRATORS_SUFFIX;
+            for (String virtualGroup : virtualGroups) {
+                if (!virtualGroup.endsWith(members_suffix)
+                        && !virtualGroup.endsWith(administrator_suffix)) {
+                    filteredVirtualGroups.add(virtualGroup);
+                }
+            }
+            return filteredVirtualGroups;
+        }
+        return null;
+    }
+
 
 }
