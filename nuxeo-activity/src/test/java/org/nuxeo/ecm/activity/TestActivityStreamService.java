@@ -324,4 +324,29 @@ public class TestActivityStreamService {
                 });
     }
 
+    @Test
+    public void shouldStoreActivityStreams() {
+        Map<String, ActivityStream> activityStreams = ((ActivityStreamServiceImpl) activityStreamService).activityStreamRegistry.activityStreams;
+        assertNotNull(activityStreams);
+        assertEquals(2, activityStreams.size());
+
+        ActivityStream activityStream = activityStreamService.getActivityStream("userActivityStream");
+        assertNotNull(activityStream);
+        assertEquals("userActivityStream", activityStream.getName());
+        List<String> verbs = activityStream.getVerbs();
+        assertNotNull(verbs);
+        assertEquals(3, verbs.size());
+        assertTrue(verbs.contains("documentCreated"));
+        assertTrue(verbs.contains("documentModified"));
+        assertTrue(verbs.contains("circle"));
+
+        activityStream = activityStreamService.getActivityStream("anotherStream");
+        assertNotNull(activityStream);
+        assertEquals("anotherStream", activityStream.getName());
+        verbs = activityStream.getVerbs();
+        assertNotNull(verbs);
+        assertEquals(1, verbs.size());
+        assertTrue(verbs.contains("documentDeleted"));
+    }
+
 }

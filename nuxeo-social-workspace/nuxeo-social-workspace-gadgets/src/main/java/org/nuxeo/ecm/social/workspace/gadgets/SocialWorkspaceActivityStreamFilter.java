@@ -17,10 +17,6 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.DOCUMENT_CREATED_IN_SOCIAL_WORKSPACE_VERB;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.DOCUMENT_UPDATED_IN_SOCIAL_WORKSPACE_VERB;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.MAKE_DOCUMENT_PUBLIC_VERB;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,11 +51,7 @@ public class SocialWorkspaceActivityStreamFilter implements
 
     public static final String SOCIAL_WORKSPACE_ID_PARAMETER = "socialWorkspaceId";
 
-    public static final String[] VERBS = new String[] {
-            MAKE_DOCUMENT_PUBLIC_VERB,
-            DOCUMENT_CREATED_IN_SOCIAL_WORKSPACE_VERB,
-            DOCUMENT_UPDATED_IN_SOCIAL_WORKSPACE_VERB,
-            "socialworkspace:members" };
+    public static final String SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME = "socialWorkspaceActivityStream";
 
     private UserRelationshipService userRelationshipService;
 
@@ -118,7 +110,10 @@ public class SocialWorkspaceActivityStreamFilter implements
                 + "and activity.target = :target order by activity.publishedDate desc");
         query.setParameter("actors", actors);
         query.setParameter("target", socialWorkspaceActivityObject);
-        query.setParameter("verbs", Arrays.asList(VERBS));
+
+        List<String> verbs = activityStreamService.getActivityStream(
+                SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME).getVerbs();
+        query.setParameter("verbs", verbs);
 
         if (limit > 0) {
             query.setMaxResults((int) limit);

@@ -9,4 +9,17 @@
 
   </extension>
 
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreams">
+
+    <activityStream name="userActivityStream">
+      <verbs>
+        <verb>documentCreated</verb>
+        <verb>documentModified</verb>
+        <verb>documentRemoved</verb>
+      </verbs>
+    </activityStream>
+
+  </extension>
+
 </component>

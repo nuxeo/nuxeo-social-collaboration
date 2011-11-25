@@ -25,5 +25,20 @@
     <activityStreamFilter class="org.nuxeo.ecm.activity.TweetActivityStreamFilter" />
   </extension>
 
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreams">
+    <activityStream name="userActivityStream">
+      <verbs>
+        <verb>documentCreated</verb>
+        <verb>documentModified</verb>
+        <verb>circle</verb>
+      </verbs>
+    </activityStream>
+    <activityStream name="anotherStream">
+      <verbs append="true">
+        <verb>documentDeleted</verb>
+      </verbs>
+    </activityStream>
+  </extension>
 
 </component>

@@ -4,7 +4,7 @@ Bundle-Name: Nuxeo User Activity Stream
 Bundle-SymbolicName: org.nuxeo.ecm.social.user.activity.stream;singleton:=true
 Bundle-Vendor: Nuxeo
 Bundle-Version: 1.0.0
-Nuxeo-Component: OSGI-INF/activity-stream-filters-contrib.xml,
+Nuxeo-Component: OSGI-INF/activity-stream-contrib.xml,
  OSGI-INF/operations-contrib.xml,
  OSGI-INF/pageproviders-contrib.xml,
  OSGI-INF/contentviews-contrib.xml,

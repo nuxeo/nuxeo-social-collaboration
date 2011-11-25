@@ -7,12 +7,10 @@
     @author Thomas Roger (troger@nuxeo.com)
   </documentation>
 
-  <implementation
-    class="org.nuxeo.ecm.activity.ActivityStreamServiceImpl" />
+  <implementation class="org.nuxeo.ecm.activity.ActivityStreamServiceImpl" />
 
   <service>
-    <provide
-      interface="org.nuxeo.ecm.activity.ActivityStreamService" />
+    <provide interface="org.nuxeo.ecm.activity.ActivityStreamService" />
   </service>
 
   <extension-point name="activityStreamFilters">
@@ -21,16 +19,38 @@
 
       The ActivityStreamService delegates to the contributed filters.
     </documentation>
-    <object
-      class="org.nuxeo.ecm.activity.ActivityStreamFilterDescriptor" />
+    <object class="org.nuxeo.ecm.activity.ActivityStreamFilterDescriptor" />
   </extension-point>
 
   <extension-point name="activityMessageLabels">
     <documentation>
       An ActivityMessageLabel stores a mapping between an Activity verb and a label key.
     </documentation>
-    <object
-      class="org.nuxeo.ecm.activity.ActivityMessageLabelDescriptor" />
+    <object class="org.nuxeo.ecm.activity.ActivityMessageLabelDescriptor" />
+  </extension-point>
+
+  <extension-point name="activityStreams">
+    <documentation>
+      An ActivityStream stores the information about a given stream (user
+      activity stream, a social workspace activity stream, etc).
+
+      It contains:
+      <ul>
+        <li>a name;</li>
+        <li>a list of Activity verbs related to the stream.</li>
+      </ul>
+
+      <code>
+        <activityStream name="userActivityStream">
+          <verbs append="true">
+            <verb>documentCreated</verb>
+            <verb>documentModified</verb>
+            <verb>circle</verb>
+          </verbs>
+        </activityStream>
+      </code>
+    </documentation>
+    <object class="org.nuxeo.ecm.activity.ActivityStream" />
   </extension-point>
 
   <require>org.nuxeo.ecm.core.persistence.PersistenceComponent</require>

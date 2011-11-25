@@ -80,4 +80,10 @@ public interface ActivityStreamService {
 
     String toFormattedMessage(Activity activity, Locale locale);
 
+    /**
+     * Returns the {@link ActivityStream} with the given {@code name},
+     * {@code null} if it does not exist.
+     */
+    ActivityStream getActivityStream(String name);
+
 }

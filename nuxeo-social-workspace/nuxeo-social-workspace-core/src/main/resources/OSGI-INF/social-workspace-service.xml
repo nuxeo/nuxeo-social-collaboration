@@ -16,11 +16,11 @@
 
       Sample:
       <code>
-        <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl"
-    point="configuration">
+        <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService"
+          point="configuration">
           <configuration>
             <validationTimeInDays>15</validationTimeInDays>
-            </configuration>
+          </configuration>
         </extension>
       </code>
     </documentation>
@@ -33,8 +33,8 @@
       stored.
 
       <code>
-        <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl"
-    point="socialWorkspaceContainer">
+        <extension target="org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService"
+          point="socialWorkspaceContainer">
           <socialWorkspaceContainer path="/collaboration" title="Collaboration" />
         </extension>
       </code>

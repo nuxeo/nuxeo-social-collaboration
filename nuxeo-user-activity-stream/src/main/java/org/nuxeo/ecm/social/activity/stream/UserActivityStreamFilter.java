@@ -17,12 +17,7 @@
 
 package org.nuxeo.ecm.social.activity.stream;
 
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_REMOVED;
-import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
-
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +58,7 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
 
     public static final String ACTOR_PARAMETER = "actor";
 
-    public static final String[] VERBS = new String[] { DOCUMENT_CREATED,
-            DOCUMENT_UPDATED, DOCUMENT_REMOVED, "socialworkspace:members",
-            "circle" };
+    public static final String USER_ACTIVITY_STREAM_NAME = "userActivityStream";
 
     private UserRelationshipService userRelationshipService;
 
@@ -108,6 +101,9 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
         }
         actor = ActivityHelper.createUserActivityObject(actor);
 
+        List<String> verbs = activityStreamService.getActivityStream(
+                USER_ACTIVITY_STREAM_NAME).getVerbs();
+
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
         switch (queryType) {
@@ -123,12 +119,12 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
 
             query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) order by activity.publishedDate desc");
             query.setParameter("actors", actors);
-            query.setParameter("verbs", Arrays.asList(VERBS));
+            query.setParameter("verbs", verbs);
             break;
         case ACTIVITY_STREAM_FROM_ACTOR:
             query = em.createQuery("select activity from Activity activity where activity.actor = :actor and activity.verb in (:verbs) order by activity.publishedDate desc");
             query.setParameter("actor", actor);
-            query.setParameter("verbs", Arrays.asList(VERBS));
+            query.setParameter("verbs", verbs);
             break;
         default:
             throw new IllegalArgumentException("Invalid QueryType parameter");

@@ -63,11 +63,15 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
 
     public static final String ACTIVITY_MESSAGE_LABELS_EP = "activityMessageLabels";
 
+    public static final String ACTIVITY_STREAMS_EP = "activityStreams";
+
     protected final ThreadLocal<EntityManager> localEntityManager = new ThreadLocal<EntityManager>();
 
     protected final Map<String, ActivityStreamFilter> activityStreamFilters = new HashMap<String, ActivityStreamFilter>();
 
     protected final Map<String, String> activityMessageLabels = new HashMap<String, String>();
+
+    protected ActivityStreamRegistry activityStreamRegistry;
 
     protected PersistenceProvider persistenceProvider;
 
@@ -230,7 +234,8 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
             messageTemplate = I18NUtils.getMessageString("messages", labelKey,
                     null, locale);
         } catch (MissingResourceException e) {
-            log.error(e, e);
+            log.error(e.getMessage());
+            log.debug(e, e);
             // just return the labelKey if we have no resource bundle
             return labelKey;
         }
@@ -252,6 +257,11 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
             }
         }
         return messageTemplate;
+    }
+
+    @Override
+    public ActivityStream getActivityStream(String name) {
+        return activityStreamRegistry.get(name);
     }
 
     public EntityManager getEntityManager() {
@@ -286,6 +296,12 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     }
 
     @Override
+    public void activate(ComponentContext context) throws Exception {
+        super.activate(context);
+        activityStreamRegistry = new ActivityStreamRegistry();
+    }
+
+    @Override
     public void deactivate(ComponentContext context) throws Exception {
         deactivatePersistenceProvider();
         super.deactivate(context);
@@ -297,9 +313,10 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
             throws Exception {
         if (ACTIVITY_STREAM_FILTER_EP.equals(extensionPoint)) {
             registerActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
-
         } else if (ACTIVITY_MESSAGE_LABELS_EP.equals(extensionPoint)) {
             registerActivityMessageLabel((ActivityMessageLabelDescriptor) contribution);
+        } else if (ACTIVITY_STREAMS_EP.equals(extensionPoint)) {
+            registerActivityStream((ActivityStream) contribution);
         }
     }
 
@@ -335,6 +352,12 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         activityMessageLabels.put(activityVerb, descriptor.getLabelKey());
     }
 
+    private void registerActivityStream(ActivityStream activityStream) {
+        log.info(String.format("Registering activity stream '%s'",
+                activityStream.getName()));
+        activityStreamRegistry.addContribution(activityStream);
+    }
+
     @Override
     public void unregisterContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
@@ -343,6 +366,8 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
             unregisterActivityStreamFilter((ActivityStreamFilterDescriptor) contribution);
         } else if (ACTIVITY_MESSAGE_LABELS_EP.equals(extensionPoint)) {
             unregisterActivityMessageLabel((ActivityMessageLabelDescriptor) contribution);
+        } else if (ACTIVITY_STREAMS_EP.equals(extensionPoint)) {
+            unregisterActivityStream((ActivityStream) contribution);
         }
     }
 
@@ -360,6 +385,12 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
         activityMessageLabels.remove(activityVerb);
         log.info("Unregistering activity message label for verb "
                 + activityVerb);
+    }
+
+    private void unregisterActivityStream(ActivityStream activityStream) {
+        activityStreamRegistry.removeContribution(activityStream);
+        log.info(String.format("Unregistering activity stream '%s'",
+                activityStream.getName()));
     }
 
 }

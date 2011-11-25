@@ -1,4 +1,4 @@
-<component name="org.nuxeo.ecm.survey.test">
+<component name="org.nuxeo.ecm.social.user.activity.test">
 
   <extension target="org.nuxeo.ecm.core.persistence.PersistenceComponent"
 		point="hibernate">
@@ -59,6 +59,19 @@
     point="types">
     <kind group="circle" name="friends" label="%s is friend with %s" />
     <kind group="circle" name="coworkers" label="%s works with %s" />
+  </extension>
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreams">
+
+    <activityStream name="userActivityStream">
+      <verbs append="true">
+        <verb>circle</verb>
+        <verb>documentModified</verb>
+        <verb>documentRemoved</verb>
+      </verbs>
+    </activityStream>
+
   </extension>
 
 </component>
