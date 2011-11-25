@@ -27,13 +27,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.activity.AbstractActivityPageProvider;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.platform.htmlsanitizer.HtmlSanitizerService;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
-import org.nuxeo.runtime.api.Framework;
 
 /**
  * Helper methods to deal with mini messages.
@@ -50,15 +49,15 @@ public class MiniMessageHelper {
     }
 
     public static String replaceURLsByLinks(String message) {
-        Matcher m = HTTP_URL_PATTERN.matcher(message);
-        StringBuffer sb = new StringBuffer(message.length());
+        String escapedMessage = StringEscapeUtils.escapeHtml(message);
+        Matcher m = HTTP_URL_PATTERN.matcher(escapedMessage);
+        StringBuffer sb = new StringBuffer(escapedMessage.length());
         while (m.find()) {
             String url = m.group(1);
             m.appendReplacement(sb, computeLinkFor(url));
         }
         m.appendTail(sb);
-        return Framework.getLocalService(HtmlSanitizerService.class).sanitizeString(
-                sb.toString(), null);
+        return sb.toString();
     }
 
     private static String computeLinkFor(String url) {
