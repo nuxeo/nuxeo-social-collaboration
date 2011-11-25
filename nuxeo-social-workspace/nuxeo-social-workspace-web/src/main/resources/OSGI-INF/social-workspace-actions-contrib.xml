@@ -236,7 +236,7 @@
 
     <action id="SocialWorkspacesAdministration"
       link="view_admin-fragment.xhtml"
-      label="label.social.workspace.administration"
+      label="label.social.collaboration.administration"
       order="150">
       <category>NUXEO_ADMIN</category>
       <filter-id>only_for_manager</filter-id>

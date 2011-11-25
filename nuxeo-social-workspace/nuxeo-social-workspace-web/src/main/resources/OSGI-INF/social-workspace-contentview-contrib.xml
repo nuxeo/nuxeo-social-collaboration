@@ -262,9 +262,9 @@
       </columns>
       <widget name="listing_title_link" type="listing_title_link">
         <labels>
-          <label mode="any">Title with link</label>
+          <label mode="any">label.content.header.title</label>
         </labels>
-        <translated>false</translated>
+        <translated>true</translated>
         <fields>
           <field>data</field>
           <field>data.ref</field>
@@ -276,9 +276,9 @@
       </widget>
       <widget name="created" type="datetime">
         <labels>
-          <label mode="any">Creation Date</label>
+          <label mode="any">label.content.header.created</label>
         </labels>
-        <translated>false</translated>
+        <translated>true</translated>
         <fields>
           <field>data.dc.created</field>
         </fields>
@@ -286,9 +286,9 @@
       </widget>
       <widget name="creator" type="text">
         <labels>
-          <label mode="any">Creator</label>
+          <label mode="any">label.content.header.author</label>
         </labels>
-        <translated>false</translated>
+        <translated>true</translated>
         <fields>
           <field>data.dc.creator</field>
         </fields>
@@ -296,9 +296,9 @@
       </widget>
       <widget name="description" type="text">
         <labels>
-          <label mode="any">Description</label>
+          <label mode="any">label.content.header.description</label>
         </labels>
-        <translated>false</translated>
+        <translated>true</translated>
         <fields>
           <field>data.dc.description</field>
         </fields>
@@ -306,9 +306,9 @@
       </widget>
       <widget name="isPublic" type="checkbox">
         <labels>
-          <label mode="any">IsPublic</label>
+          <label mode="any">label.content.header.public</label>
         </labels>
-        <translated>false</translated>
+        <translated>true</translated>
         <fields>
           <field>data.socialw.isPublic</field>
         </fields>
@@ -316,9 +316,9 @@
       </widget>
       <widget name="listing_lifecycle" type="listing_lifecycle">
         <labels>
-          <label mode="any">Lifecycle state</label>
+          <label mode="any">label.content.header.currentLifecycleState</label>
         </labels>
-        <translated>false</translated>
+        <translated>true</translated>
         <fields>
           <field>data.currentLifeCycleState</field>
         </fields>
