@@ -39,7 +39,9 @@
         <field>data</field>
       </fields>
       <properties mode="any">
-        <property name="template">/widgets/listing_mini_message_widget_template.xhtml</property>
+        <property name="template">
+          /widgets/listing/listing_mini_message_widget_template.xhtml
+        </property>
       </properties>
       <widgetModes>
         <mode value="edit">hidden</mode>
