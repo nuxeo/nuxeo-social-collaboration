@@ -78,7 +78,11 @@ public interface ActivityStreamService {
      */
     ActivitiesList query(String filterId, Map<String, Serializable> parameters);
 
-    String toFormattedMessage(Activity activity, Locale locale);
+    /**
+     * Computes an {@link ActivityMessage} from the given {@code activity} and
+     * {@code locale}.
+     */
+    ActivityMessage toActivityMessage(Activity activity, Locale locale);
 
     /**
      * Returns the {@link ActivityStream} with the given {@code name},

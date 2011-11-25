@@ -221,11 +221,12 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public String toFormattedMessage(final Activity activity, Locale locale) {
+    public ActivityMessage toActivityMessage(final Activity activity,
+            Locale locale) {
         Map<String, String> fields = activity.toMap();
 
         if (!activityMessageLabels.containsKey(activity.getVerb())) {
-            return activity.toString();
+            return new ActivityMessage(activity, activity.toString());
         }
 
         String labelKey = activityMessageLabels.get(activity.getVerb());
@@ -237,7 +238,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
             log.error(e.getMessage());
             log.debug(e, e);
             // just return the labelKey if we have no resource bundle
-            return labelKey;
+            return new ActivityMessage(activity, labelKey);
         }
 
         Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
@@ -256,7 +257,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
                 messageTemplate = messageTemplate.replace(m.group(), value);
             }
         }
-        return messageTemplate;
+        return new ActivityMessage(activity, messageTemplate);
     }
 
     @Override

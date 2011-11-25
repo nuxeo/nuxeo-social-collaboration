@@ -144,10 +144,8 @@ public class ActivitiesListImpl extends ArrayList<Activity> implements
         ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
         List<ActivityMessage> messages = new ArrayList<ActivityMessage>();
         for (Activity activity : this) {
-            ActivityMessage activityMessage = new ActivityMessage(
-                    activity.getId(), activityStreamService.toFormattedMessage(
-                            activity, locale), activity.getPublishedDate());
-            messages.add(activityMessage);
+            messages.add(activityStreamService.toActivityMessage(activity,
+                    locale));
         }
         return messages;
     }

@@ -43,6 +43,10 @@ public final class ActivityMessage implements Serializable {
         this.publishedDate = publishedDate;
     }
 
+    public ActivityMessage(Activity activity, String message) {
+        this(activity.getId(), message, activity.getPublishedDate());
+    }
+
     public Serializable getActivityId() {
         return activityId;
     }
