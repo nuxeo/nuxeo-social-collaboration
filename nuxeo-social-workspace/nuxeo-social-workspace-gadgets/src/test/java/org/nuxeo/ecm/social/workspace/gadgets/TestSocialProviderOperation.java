@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,8 +85,10 @@ public class TestSocialProviderOperation {
     FeaturesRunner featuresRunner;
 
     @Before
-    public void disableActivityStreamListener() {
+    public void disableListeners() {
         eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
+                false);
+        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text",
                 false);
     }
 
@@ -126,6 +129,11 @@ public class TestSocialProviderOperation {
         article2 = session.createDocument(article2);
 
         session.save();
+    }
+
+    @After
+    public void waitForAsyncEvents() {
+        Framework.getLocalService(EventService.class).waitForAsyncCompletion();
     }
 
     @Test

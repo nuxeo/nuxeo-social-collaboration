@@ -111,6 +111,12 @@ public abstract class AbstractUserActivityTest {
                 });
     }
 
+    @Before
+    public void disableBinaryTextListener() {
+        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text",
+                false);
+    }
+
     protected void changeUser(String username) {
         featuresRunner.getFeature(CoreFeature.class).getRepository().switchUser(
                 username);

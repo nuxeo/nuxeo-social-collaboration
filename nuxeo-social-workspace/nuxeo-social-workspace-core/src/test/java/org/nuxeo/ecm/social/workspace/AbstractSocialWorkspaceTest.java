@@ -56,7 +56,7 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.user.relationships" })
 @LocalDeploy({
         "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml"})
+        "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
@@ -79,8 +79,10 @@ public abstract class AbstractSocialWorkspaceTest {
     protected DocumentModel socialWorkspaceDoc;
 
     @Before
-    public void disableActivityStreamListener() {
+    public void disableListeners() {
         eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
+                false);
+        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text",
                 false);
     }
 
