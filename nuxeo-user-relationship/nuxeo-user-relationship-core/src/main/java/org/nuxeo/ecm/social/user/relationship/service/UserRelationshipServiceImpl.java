@@ -50,6 +50,7 @@ import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
@@ -70,18 +71,38 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     private static final Log log = LogFactory.getLog(UserRelationshipServiceImpl.class);
 
+    protected List<UserRelationshipKindDescriptor> pendingDescriptors;
+
     protected DirectoryService directoryService;
 
     protected UserManager userManager;
 
-    protected HashMap<String, List<RelationshipKind>> registeredKinds;
+    protected Map<String, List<RelationshipKind>> registeredKinds;
+
+    @Override
+    public void activate(ComponentContext context) throws Exception {
+        pendingDescriptors = new ArrayList<UserRelationshipKindDescriptor>();
+    }
+
+    @Override
+    public void deactivate(ComponentContext context) throws Exception {
+        pendingDescriptors = null;
+    }
+
+    @Override
+    public void applicationStarted(ComponentContext context) throws Exception {
+        super.applicationStarted(context);
+        for (UserRelationshipKindDescriptor desc : pendingDescriptors) {
+            addRelationshipKind(desc);
+        }
+    }
 
     @Override
     public void registerContribution(Object contribution,
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
         if (KINDS_EXTENSION_POINT.equals(extensionPoint)) {
-            addRelationshipKind((UserRelationshipKindDescriptor) contribution);
+            pendingDescriptors.add((UserRelationshipKindDescriptor) contribution);
         }
     }
 

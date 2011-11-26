@@ -40,9 +40,6 @@ public class UserRelationshipKindDescriptor {
     @XNode("@group")
     protected String group;
 
-    @XNode("@label")
-    protected String label;
-
     public String getName() {
         return name;
     }
@@ -59,18 +56,9 @@ public class UserRelationshipKindDescriptor {
         this.group = group;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
     public Map<String, Object> getMap() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("name", name);
-        map.put("label", label);
         map.put("group", group);
         return map;
     }

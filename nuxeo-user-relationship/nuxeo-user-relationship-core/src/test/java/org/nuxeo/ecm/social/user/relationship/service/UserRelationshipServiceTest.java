@@ -1,17 +1,14 @@
-package org.nuxeo.ecm.test;
+package org.nuxeo.ecm.social.user.relationship.service;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.nuxeo.ecm.social.user.relationship.service.UserRelationshipServiceImpl.KINDS_EXTENSION_POINT;
 
 import java.util.List;
 
-import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.activity.ActivityHelper;
@@ -24,14 +21,13 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipKindDescriptor;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipServiceImpl;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
+
+import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
@@ -40,7 +36,7 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(repositoryName = "default", type = BackendType.H2, user = "Administrator", cleanup = Granularity.METHOD)
-@LocalDeploy("org.nuxeo.ecm.user.relationships:OSGI-INF/user-relationship-directories-test-contrib.xml")
+@LocalDeploy("org.nuxeo.ecm.user.relationships:OSGI-INF/user-relationship-test-contrib.xml")
 @Deploy("org.nuxeo.ecm.user.relationships")
 public class UserRelationshipServiceTest {
 
@@ -52,25 +48,6 @@ public class UserRelationshipServiceTest {
 
     @Inject
     UserManager userManager;
-
-    @BeforeClass
-    public static void setUp() throws Exception {
-        // Register default kinds here, to ensure datasource is correctly defined.
-        UserRelationshipServiceImpl service = (UserRelationshipServiceImpl)Framework.getLocalService(UserRelationshipService.class);
-        service.registerContribution(buildKind("user", "friend"), KINDS_EXTENSION_POINT, null);
-        service.registerContribution(buildKind("user", "coworker"), KINDS_EXTENSION_POINT, null);
-        service.registerContribution(buildKind("user", "connected"), KINDS_EXTENSION_POINT, null);
-        service.registerContribution(buildKind("user", "relation"), KINDS_EXTENSION_POINT, null);
-        service.registerContribution(buildKind("other", "trucmuch"), KINDS_EXTENSION_POINT, null);
-
-    }
-
-    protected static UserRelationshipKindDescriptor buildKind(String group, String name) {
-        UserRelationshipKindDescriptor desc = new UserRelationshipKindDescriptor();
-        desc.setGroup(group);
-        desc.setName(name);
-        return desc;
-    }
 
     @Test
     public void testServiceRegistering() throws Exception {
