@@ -77,6 +77,11 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 	<td>pwd</td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
+	<td>members</td>
+</tr>
+<tr>
 	<td>typeKeys</td>
 	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
 	<td>members</td>
@@ -103,7 +108,7 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 </tr>
 <tr>
 	<td>waitForA4jRequest</td>
-	<td>1000</td>
+	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -152,6 +157,11 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 	<td>pwd</td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
+	<td>members</td>
+</tr>
+<tr>
 	<td>typeKeys</td>
 	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
 	<td>members</td>
@@ -178,7 +188,7 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 </tr>
 <tr>
 	<td>waitForA4jRequest</td>
-	<td>1000</td>
+	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -227,6 +237,11 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 	<td>pwd</td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
+	<td>members</td>
+</tr>
+<tr>
 	<td>typeKeys</td>
 	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
 	<td>members</td>
@@ -253,7 +268,7 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 </tr>
 <tr>
 	<td>waitForA4jRequest</td>
-	<td>1000</td>
+	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -302,6 +317,11 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 	<td>pwd</td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
+	<td>members</td>
+</tr>
+<tr>
 	<td>typeKeys</td>
 	<td>//input[@name='createUserView:createUser:nxl_user:nxw_groups_suggest']</td>
 	<td>members</td>
@@ -328,7 +348,7 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 </tr>
 <tr>
 	<td>waitForA4jRequest</td>
-	<td>1000</td>
+	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -467,9 +487,14 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 	<td></td>
 </tr>
 <tr>
-	<td>typeKeys</td>
+	<td>type</td>
 	<td>//*[@id=&quot;createGroupView:createGroup:nxl_group:nxw_group_name&quot;]</td>
 	<td>AnotherGroup</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggest']</td>
+	<td>memberOfAnotherGroup1</td>
 </tr>
 <tr>
 	<td>typeKeys</td>
@@ -478,11 +503,6 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//*[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggestionBox:suggest']/x:tbody/x:tr/x:td[2]</td>
-	<td>memberOfAnotherGroup1</td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
 	<td>//*[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggestionBox:suggest']/x:tbody/x:tr/x:td[2]</td>
 	<td>memberOfAnotherGroup1</td>
 </tr>
@@ -502,10 +522,16 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 	<td></td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>//input[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggest']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>typeKeys</td>
 	<td>//input[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggest']</td>
 	<td></td>
 </tr>
+
 <tr>
 	<td>typeKeys</td>
 	<td>//input[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggest']</td>
@@ -518,11 +544,6 @@ ll<?xml version="1.0" encoding="UTF-8"?>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//*[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggestionBox:suggest']/x:tbody/x:tr/x:td[2]</td>
-	<td>memberOfAnotherGroup2</td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
 	<td>//*[@id='createGroupView:createGroup:nxl_group:nxw_group_members_suggestionBox:suggest']/x:tbody/x:tr/x:td[2]</td>
 	<td>memberOfAnotherGroup2</td>
 </tr>

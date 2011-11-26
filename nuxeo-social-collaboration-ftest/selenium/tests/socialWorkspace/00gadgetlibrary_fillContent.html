@@ -42,9 +42,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Collaboration</td>
-	<td></td>
+  <td>clickAndWait</td>
+  <td>//form[@id='document_content']/table/tbody/tr/td[3]/div/a[1]</td>
+  <td></td>
 </tr>
 <tr>
 	<td>mouseDown</td>
@@ -86,7 +86,7 @@
 <!-- create first folder -->
 <tr>
 	<td>open</td>
-	<td>nxpath/default/Collaboration/testBrowserSocialWorkspa@view_documents?tabIds=%3ATAB_CONTENT</td>
+	<td>nxpath/default/collaboration/testBrowserSocialWorkspa@view_documents?tabIds=%3ATAB_CONTENT</td>
 	<td></td>
 </tr>
 <tr>
@@ -117,7 +117,7 @@
 <!-- create 2nd folder -->
 <tr>
 	<td>open</td>
-	<td>nxpath/default/Collaboration/testBrowserSocialWorkspa@view_documents?tabIds=%3ATAB_CONTENT</td>
+	<td>nxpath/default/collaboration/testBrowserSocialWorkspa@view_documents?tabIds=%3ATAB_CONTENT</td>
 	<td></td>
 </tr>
 <tr>
@@ -198,9 +198,14 @@
 	<td>test article</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>//input[@value=&quot;Create&quot;]</td>
 	<td></td>
+</tr>
+<tr>
+  <td>verifyTextPresent</td>
+  <td>test article</td>
+  <td></td>
 </tr>
 </tbody></table>
 </body>
