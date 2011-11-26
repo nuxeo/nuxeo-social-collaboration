@@ -16,6 +16,7 @@
   <modules>
     <module>nuxeo-activity</module>
     <module>nuxeo-social-workspace</module>
+    <module>nuxeo-relationship</module>
     <module>nuxeo-user-relationship</module>
     <module>nuxeo-mini-message</module>
     <module>nuxeo-user-activity-stream</module>
