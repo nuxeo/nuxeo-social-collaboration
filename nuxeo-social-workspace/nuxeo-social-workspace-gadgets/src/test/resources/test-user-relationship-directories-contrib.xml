@@ -40,7 +40,7 @@
   </extension>
 
   <extension target="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService"
-    point="types">
+    point="relationshipKinds">
     <kind group="user" name="friend" label="%s is friend with %s" />
     <kind group="user" name="coworker" label="%s works with %s" />
     <kind group="user" name="connected" label="%s is connected to %s" />

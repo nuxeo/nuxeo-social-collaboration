@@ -13,13 +13,13 @@
       interface="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService" />
   </service>
 
-  <extension-point name="types">
+  <extension-point name="relationshipKinds">
     <documentation>
       <code>
         <kind group="user" name="friend" label="%s is friend with %s" />
       </code>
     </documentation>
     <object
-      class="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipKindDescriptor" />
+      class="org.nuxeo.ecm.social.user.relationship.service.RelationshipKindDescriptor" />
   </extension-point>
 </component>

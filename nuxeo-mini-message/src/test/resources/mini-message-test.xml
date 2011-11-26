@@ -56,7 +56,7 @@
   </extension>
 
   <extension target="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService"
-    point="types">
+    point="relationshipKinds">
     <kind group="circle" name="friends" label="%s is friend with %s" />
     <kind group="circle" name="coworkers" label="%s works with %s" />
   </extension>

@@ -1,20 +1,18 @@
 /*
- * (C) Copyright 2006-2011 Nuxeo SA (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2006-2011 Nuxeo SA (http://nuxeo.com/) and others.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser General Public License
+ * (LGPL) version 2.1 which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-2.1.html
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
  *
  * Contributors:
- *     Nuxeo
+ *     Thomas Roger <troger@nuxeo.com>
  */
 
 package org.nuxeo.ecm.social.user.relationship.service;
@@ -63,7 +61,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
 public class UserRelationshipServiceImpl extends DefaultComponent implements
         UserRelationshipService {
 
-    public static final String KINDS_EXTENSION_POINT = "types";
+    public static final String KINDS_EXTENSION_POINT = "relationshipKinds";
 
     protected static final String RELATIONSHIP_DIRECTORY_NAME = "actorRelationshipDirectory";
 
@@ -71,7 +69,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     private static final Log log = LogFactory.getLog(UserRelationshipServiceImpl.class);
 
-    protected List<UserRelationshipKindDescriptor> pendingDescriptors;
+    protected List<RelationshipKindDescriptor> pendingDescriptors;
 
     protected DirectoryService directoryService;
 
@@ -81,7 +79,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     @Override
     public void activate(ComponentContext context) throws Exception {
-        pendingDescriptors = new ArrayList<UserRelationshipKindDescriptor>();
+        pendingDescriptors = new ArrayList<RelationshipKindDescriptor>();
     }
 
     @Override
@@ -92,7 +90,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
     @Override
     public void applicationStarted(ComponentContext context) throws Exception {
         super.applicationStarted(context);
-        for (UserRelationshipKindDescriptor desc : pendingDescriptors) {
+        for (RelationshipKindDescriptor desc : pendingDescriptors) {
             addRelationshipKind(desc);
         }
     }
@@ -102,11 +100,11 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
         if (KINDS_EXTENSION_POINT.equals(extensionPoint)) {
-            pendingDescriptors.add((UserRelationshipKindDescriptor) contribution);
+            pendingDescriptors.add((RelationshipKindDescriptor) contribution);
         }
     }
 
-    protected void addRelationshipKind(UserRelationshipKindDescriptor type) {
+    protected void addRelationshipKind(RelationshipKindDescriptor type) {
         Session typeDirectory = null;
         try {
             typeDirectory = getDirectoryService().open(KIND_DIRECTORY_NAME);
@@ -114,7 +112,6 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
             // Add a new relationship kind if not exists
             if (null == typeDirectory.getEntry(type.getName())) {
                 typeDirectory.createEntry(type.getMap());
-                typeDirectory.commit();
             }
         } catch (ClientException e) {
             throw new ClientRuntimeException(

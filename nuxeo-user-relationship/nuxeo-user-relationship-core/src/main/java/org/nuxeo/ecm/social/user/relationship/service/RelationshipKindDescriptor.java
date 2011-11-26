@@ -32,7 +32,7 @@ import org.nuxeo.common.xmap.annotation.XObject;
  * @since 5.5
  */
 @XObject("kind")
-public class UserRelationshipKindDescriptor {
+public class RelationshipKindDescriptor {
 
     @XNode("@name")
     protected String name;
