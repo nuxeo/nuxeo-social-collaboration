@@ -26,7 +26,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 

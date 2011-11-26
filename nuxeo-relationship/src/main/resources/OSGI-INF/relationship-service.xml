@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
-<component name="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService">
+<component name="org.nuxeo.ecm.social.relationship.service.RelationshipService">
 
   <documentation>
     @author Arnaud Kervern (akervern@nuxeo.com)
   </documentation>
 
   <implementation
-    class="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipServiceImpl" />
+    class="org.nuxeo.ecm.social.relationship.service.RelationshipServiceImpl" />
 
   <service>
     <provide
-      interface="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService" />
+      interface="org.nuxeo.ecm.social.relationship.service.RelationshipService" />
   </service>
 
   <extension-point name="relationshipKinds">
@@ -20,6 +20,6 @@
       </code>
     </documentation>
     <object
-      class="org.nuxeo.ecm.social.user.relationship.service.RelationshipKindDescriptor" />
+      class="org.nuxeo.ecm.social.relationship.service.RelationshipKindDescriptor" />
   </extension-point>
 </component>

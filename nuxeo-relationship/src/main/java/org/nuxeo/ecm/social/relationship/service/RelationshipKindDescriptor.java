@@ -17,7 +17,7 @@
  *     Nuxeo
  */
 
-package org.nuxeo.ecm.social.user.relationship.service;
+package org.nuxeo.ecm.social.relationship.service;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -15,7 +15,7 @@
  *     Thomas Roger <troger@nuxeo.com>
  */
 
-package org.nuxeo.ecm.social.user.relationship;
+package org.nuxeo.ecm.social.relationship;
 
 /**
  * User relationship constants class
@@ -23,9 +23,9 @@ package org.nuxeo.ecm.social.user.relationship;
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
-public class UserRelationshipConstants {
+public class RelationshipConstants {
 
-    private UserRelationshipConstants() {
+    private RelationshipConstants() {
         // Constants class
     }
 
@@ -54,6 +54,4 @@ public class UserRelationshipConstants {
     public static final String KIND_PROPERTY_NAME = KIND_SCHEMA_NAME + ":"
             + KIND_FIELD_NAME;
 
-    // Default group for circle relations
-    public static final String CIRCLE_RELATIONSHIP_KIND_GROUP = "circle";
 }

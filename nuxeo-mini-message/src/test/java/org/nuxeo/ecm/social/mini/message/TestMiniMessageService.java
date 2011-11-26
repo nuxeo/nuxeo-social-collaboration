@@ -41,7 +41,7 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
     @Test
     public void serviceRegistration() throws IOException {
         assertNotNull(miniMessageService);
-        assertNotNull(userRelationshipService);
+        assertNotNull(relationshipService);
     }
 
     @Test

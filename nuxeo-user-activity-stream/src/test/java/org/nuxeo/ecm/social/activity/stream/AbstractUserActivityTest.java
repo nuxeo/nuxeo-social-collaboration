@@ -51,8 +51,9 @@ import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
+import org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -80,7 +81,7 @@ public abstract class AbstractUserActivityTest {
     protected ActivityStreamService activityStreamService;
 
     @Inject
-    protected UserRelationshipService userRelationshipService;
+    protected RelationshipService relationshipService;
 
     @Inject
     protected EventService eventService;
@@ -128,11 +129,11 @@ public abstract class AbstractUserActivityTest {
         RelationshipKind coworkers = RelationshipKind.newInstance(
                 CIRCLE_RELATIONSHIP_KIND_GROUP, "coworkers");
 
-        userRelationshipService.addRelation(leelaActivityObject,
+        relationshipService.addRelation(leelaActivityObject,
                 benderActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject,
+        relationshipService.addRelation(leelaActivityObject,
                 fryActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject,
+        relationshipService.addRelation(leelaActivityObject,
                 zappActivityObject, coworkers);
 
         initializeRelationsActivities();

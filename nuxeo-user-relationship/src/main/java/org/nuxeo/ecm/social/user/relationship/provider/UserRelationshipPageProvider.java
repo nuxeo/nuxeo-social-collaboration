@@ -36,8 +36,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.user.center.profile.UserProfileService;
 import org.nuxeo.runtime.api.Framework;
 
@@ -48,7 +48,7 @@ import org.nuxeo.runtime.api.Framework;
  * the username of which user you want the relations, and the second one to be
  * filled with a search string.
  * <p>
- * 
+ *
  * @since 5.5
  */
 public class UserRelationshipPageProvider extends
@@ -62,7 +62,7 @@ public class UserRelationshipPageProvider extends
 
     protected List<DocumentModel> relationshipPage;
 
-    protected UserRelationshipService userRelationshipService;
+    protected RelationshipService relationshipService;
 
     protected UserManager userManager;
 
@@ -109,20 +109,20 @@ public class UserRelationshipPageProvider extends
 
     protected void fillRelationshipsForCurrentUser() {
         relationships = new ArrayList<String>();
-        relationships.addAll(getUserRelationshipService().getTargetsOfKind(
+        relationships.addAll(getRelationshipService().getTargetsOfKind(
                 getCurrentUser(),
                 RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP)));
     }
 
-    protected UserRelationshipService getUserRelationshipService() {
-        if (userRelationshipService == null) {
+    protected RelationshipService getRelationshipService() {
+        if (relationshipService == null) {
             try {
-                userRelationshipService = Framework.getService(UserRelationshipService.class);
+                relationshipService = Framework.getService(RelationshipService.class);
             } catch (Exception e) {
                 log.warn("Failed to get UserRelationshipService", e);
             }
         }
-        return userRelationshipService;
+        return relationshipService;
     }
 
     protected UserManager getUserManager() {

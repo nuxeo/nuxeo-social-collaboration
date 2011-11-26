@@ -1,4 +1,4 @@
-package org.nuxeo.ecm.social.user.relationship;
+package org.nuxeo.ecm.social.relationship;
 
 import java.io.Serializable;
 

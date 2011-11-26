@@ -15,15 +15,15 @@
  *     Thomas Roger <troger@nuxeo.com>
  */
 
-package org.nuxeo.ecm.social.user.relationship.service;
+package org.nuxeo.ecm.social.relationship.service;
 
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.KIND_PROPERTY_GROUP;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.KIND_PROPERTY_NAME;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_ACTOR;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_KIND;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_FIELD_TARGET;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_PROPERTY_KIND;
-import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.RELATIONSHIP_SCHEMA_NAME;
+import static org.nuxeo.ecm.social.relationship.RelationshipConstants.KIND_PROPERTY_GROUP;
+import static org.nuxeo.ecm.social.relationship.RelationshipConstants.KIND_PROPERTY_NAME;
+import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_FIELD_ACTOR;
+import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_FIELD_KIND;
+import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_FIELD_TARGET;
+import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_PROPERTY_KIND;
+import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_SCHEMA_NAME;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,20 +46,20 @@ import org.nuxeo.ecm.directory.DirectoryException;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
 /**
- * Default implementation of {@see UserRelationshipService}.
+ * Default implementation of {@see RelationshipService}.
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
-public class UserRelationshipServiceImpl extends DefaultComponent implements
-        UserRelationshipService {
+public class RelationshipServiceImpl extends DefaultComponent implements
+        RelationshipService {
 
     public static final String KINDS_EXTENSION_POINT = "relationshipKinds";
 
@@ -67,7 +67,7 @@ public class UserRelationshipServiceImpl extends DefaultComponent implements
 
     protected static final String KIND_DIRECTORY_NAME = "actorRelationshipKindDirectory";
 
-    private static final Log log = LogFactory.getLog(UserRelationshipServiceImpl.class);
+    private static final Log log = LogFactory.getLog(RelationshipServiceImpl.class);
 
     protected List<RelationshipKindDescriptor> pendingDescriptors;
 

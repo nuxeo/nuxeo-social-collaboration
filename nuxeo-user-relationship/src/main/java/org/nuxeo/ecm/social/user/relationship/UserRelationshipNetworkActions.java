@@ -55,7 +55,6 @@ public class UserRelationshipNetworkActions implements Serializable {
     @In(create = true)
     protected transient WebActions webActions;
 
-
     @Observer(USER_RELATIONSHIP_CHANGED)
     public void resetContentView() {
         log.debug("Resetting current user relationship content view");

@@ -20,7 +20,11 @@
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.social</groupId>
-      <artifactId>nuxeo-user-relationship-core</artifactId>
+      <artifactId>nuxeo-relationship</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.social</groupId>
+      <artifactId>nuxeo-user-relationship</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>

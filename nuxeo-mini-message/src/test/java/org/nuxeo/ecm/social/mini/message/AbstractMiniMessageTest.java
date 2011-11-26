@@ -42,8 +42,8 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.UserAlreadyExistsException;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -77,7 +77,7 @@ public abstract class AbstractMiniMessageTest {
     protected ActivityStreamService activityStreamService;
 
     @Inject
-    protected UserRelationshipService userRelationshipService;
+    protected RelationshipService relationshipService;
 
     @Inject
     protected MiniMessageService miniMessageService;
@@ -162,11 +162,11 @@ public abstract class AbstractMiniMessageTest {
         String benderActivityObject = ActivityHelper.createUserActivityObject(bender.getName());
         String fryActivityObject = ActivityHelper.createUserActivityObject(fry.getName());
         String zappActivityObject = ActivityHelper.createUserActivityObject(zapp.getName());
-        userRelationshipService.addRelation(leelaActivityObject,
+        relationshipService.addRelation(leelaActivityObject,
                 benderActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject,
+        relationshipService.addRelation(leelaActivityObject,
                 fryActivityObject, friends);
-        userRelationshipService.addRelation(leelaActivityObject,
+        relationshipService.addRelation(leelaActivityObject,
                 zappActivityObject, coworkers);
     }
 

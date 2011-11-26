@@ -21,7 +21,7 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 
 /**
  * Service handling mini messages.

@@ -32,7 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 

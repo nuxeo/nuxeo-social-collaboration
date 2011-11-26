@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.platform.computedgroups.AbstractGroupComputer;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -31,7 +31,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
 
-    protected UserRelationshipService relationshipService;
+    protected RelationshipService relationshipService;
 
     private static final Log log = LogFactory.getLog(SocialWorkspaceGroupComputer.class);
 
@@ -82,12 +82,12 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
         return null;
     }
 
-    protected UserRelationshipService getRelationshipService() {
+    protected RelationshipService getRelationshipService() {
         if (relationshipService == null) {
             try {
-                relationshipService = Framework.getService(UserRelationshipService.class);
+                relationshipService = Framework.getService(RelationshipService.class);
             } catch (Exception e) {
-                log.warn("Cannot retrieve UserRelationship Service");
+                log.warn("Cannot retrieve RelationshipService Service");
                 log.debug(e, e);
             }
         }

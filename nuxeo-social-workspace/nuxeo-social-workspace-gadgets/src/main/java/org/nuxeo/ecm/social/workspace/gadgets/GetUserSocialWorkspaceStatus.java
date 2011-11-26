@@ -35,8 +35,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
@@ -59,7 +59,7 @@ public class GetUserSocialWorkspaceStatus {
     protected SocialWorkspaceService socialWorkspaceService;
 
     @Context
-    protected UserRelationshipService userRelationshipService;
+    protected RelationshipService relationshipService;
 
     @Param(name = "contextPath", required = true)
     protected String contextPath;
@@ -70,7 +70,7 @@ public class GetUserSocialWorkspaceStatus {
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
 
-        List<String> targets = userRelationshipService.getTargetsOfKind(
+        List<String> targets = relationshipService.getTargetsOfKind(
                 ActivityHelper.createDocumentActivityObject(
                         socialWorkspace.getDocument().getRepositoryName(),
                         socialWorkspace.getId()),

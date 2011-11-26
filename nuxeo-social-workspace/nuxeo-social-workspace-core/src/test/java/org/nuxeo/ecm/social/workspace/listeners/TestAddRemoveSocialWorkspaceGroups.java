@@ -44,21 +44,21 @@ public class TestAddRemoveSocialWorkspaceGroups extends
 
         String activityObject = ActivityHelper.createDocumentActivityObject(socialWorkspaceDoc);
         assertEquals(1,
-                userRelationshipService.getTargets(activityObject).size());
+                relationshipService.getTargets(activityObject).size());
         assertEquals(
                 1,
-                userRelationshipService.getTargetsOfKind(activityObject,
+                relationshipService.getTargetsOfKind(activityObject,
                         buildRelationAdministratorKind()).size());
         assertEquals(
                 1,
-                userRelationshipService.getTargetsOfKind(activityObject,
+                relationshipService.getTargetsOfKind(activityObject,
                         buildRelationMemberKind()).size());
 
         session.removeDocument(socialWorkspaceDoc.getRef());
         session.save();
 
         assertEquals(0,
-                userRelationshipService.getTargets(activityObject).size());
+                relationshipService.getTargets(activityObject).size());
     }
 
 }

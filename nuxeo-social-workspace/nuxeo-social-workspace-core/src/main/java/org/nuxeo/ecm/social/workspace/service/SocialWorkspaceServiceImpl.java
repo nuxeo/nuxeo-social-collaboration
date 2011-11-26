@@ -26,7 +26,6 @@ import static org.nuxeo.ecm.core.api.security.SecurityConstants.WRITE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.CTX_PRINCIPALS_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_ADDED;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.EVENT_MEMBERS_REMOVED;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_CONTAINER_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
@@ -50,7 +49,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.collections.ScopeType;
-import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
@@ -78,8 +76,8 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
@@ -115,7 +113,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     private SocialWorkspaceContainerDescriptor socialWorkspaceContainer;
 
-    private UserRelationshipService relationshipService;
+    private RelationshipService relationshipService;
 
     private ActivityStreamService activityStreamService;
 
@@ -247,8 +245,9 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     @Override
     public DocumentModel getSocialWorkspaceContainer(CoreSession session) {
         try {
-            return session.getDocument(new PathRef(socialWorkspaceContainer.getPath()));
-        } catch(ClientException e) {
+            return session.getDocument(new PathRef(
+                    socialWorkspaceContainer.getPath()));
+        } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
     }
@@ -338,7 +337,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     @Override
     public void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
-        getUserRelationshipService().removeRelation(socialWorkspace.getId(),
+        getRelationshipService().removeRelation(socialWorkspace.getId(),
                 null, SocialWorkspaceHelper.buildRelationKind());
     }
 
@@ -559,18 +558,18 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     private boolean addPrincipalToSocialWorkspace(String principalName,
             String socialWorkspaceId, RelationshipKind kind) {
-        boolean added = getUserRelationshipService().addRelation(principalName,
+        boolean added = getRelationshipService().addRelation(principalName,
                 socialWorkspaceId, kind);
-        added &= getUserRelationshipService().addRelation(socialWorkspaceId,
+        added &= getRelationshipService().addRelation(socialWorkspaceId,
                 principalName, kind);
         return added;
     }
 
     private boolean removePrincipalFromSocialWorkspace(String principalName,
             String socialWorkspaceId, RelationshipKind kind) {
-        boolean removed = getUserRelationshipService().removeRelation(
+        boolean removed = getRelationshipService().removeRelation(
                 principalName, socialWorkspaceId, kind);
-        removed |= getUserRelationshipService().removeRelation(
+        removed |= getRelationshipService().removeRelation(
                 socialWorkspaceId, principalName, kind);
         return removed;
     }
@@ -735,7 +734,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     @Override
     public List<String> searchUsers(SocialWorkspace socialWorkspace,
             RelationshipKind kind, String pattern) {
-        List<String> targets = getUserRelationshipService().getTargetsWithFulltext(
+        List<String> targets = getRelationshipService().getTargetsWithFulltext(
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
                 kind, pattern);
         List<String> users = new ArrayList<String>();
@@ -794,17 +793,17 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         return members;
     }
 
-    private UserRelationshipService getUserRelationshipService() {
+    private RelationshipService getRelationshipService() {
         if (relationshipService == null) {
             try {
-                relationshipService = Framework.getService(UserRelationshipService.class);
+                relationshipService = Framework.getService(RelationshipService.class);
             } catch (Exception e) {
                 throw new ClientRuntimeException(e);
             }
         }
         if (relationshipService == null) {
             throw new ClientRuntimeException(
-                    "UserRelationship service is not registered.");
+                    "RelationshipService is not registered.");
         }
         return relationshipService;
     }

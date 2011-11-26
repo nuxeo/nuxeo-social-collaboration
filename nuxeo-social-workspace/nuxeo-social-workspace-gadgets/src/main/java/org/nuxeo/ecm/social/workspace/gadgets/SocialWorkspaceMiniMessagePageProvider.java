@@ -27,7 +27,7 @@ import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
 import org.nuxeo.ecm.social.mini.message.MiniMessageService;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
 
 /**

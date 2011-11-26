@@ -1,4 +1,4 @@
-package org.nuxeo.ecm.social.user.relationship.service;
+package org.nuxeo.ecm.social.relationship.service;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -20,7 +20,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -36,22 +36,22 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(repositoryName = "default", type = BackendType.H2, user = "Administrator", cleanup = Granularity.METHOD)
-@LocalDeploy("org.nuxeo.ecm.user.relationships:OSGI-INF/user-relationship-test-contrib.xml")
+@LocalDeploy("org.nuxeo.ecm.user.relationships:OSGI-INF/relationship-test-contrib.xml")
 @Deploy("org.nuxeo.ecm.user.relationships")
-public class UserRelationshipServiceTest {
+public class RelationshipServiceTest {
 
     @Inject
     CoreSession session;
 
     @Inject
-    UserRelationshipService relationshipService;
+    RelationshipService relationshipService;
 
     @Inject
     UserManager userManager;
 
     @Test
     public void testServiceRegistering() throws Exception {
-        UserRelationshipService tmp = Framework.getService(UserRelationshipService.class);
+        RelationshipService tmp = Framework.getService(RelationshipService.class);
         assertNotNull(tmp);
         assertNotNull(session);
         assertNotNull(relationshipService);

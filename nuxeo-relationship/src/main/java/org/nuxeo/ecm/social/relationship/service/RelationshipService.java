@@ -17,11 +17,11 @@
  *     Nuxeo
  */
 
-package org.nuxeo.ecm.social.user.relationship.service;
+package org.nuxeo.ecm.social.relationship.service;
 
 import java.util.List;
 
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 
 /**
  * Service to manage relations between entities.
@@ -29,7 +29,7 @@ import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
-public interface UserRelationshipService {
+public interface RelationshipService {
 
     /**
      * Gets all existing relationship kinds between an actor and a target.

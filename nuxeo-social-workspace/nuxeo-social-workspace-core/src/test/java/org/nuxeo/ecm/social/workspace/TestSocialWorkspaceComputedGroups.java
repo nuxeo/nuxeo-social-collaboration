@@ -17,8 +17,8 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.computedgroups.ComputedGroupsService;
 import org.nuxeo.ecm.platform.computedgroups.UserManagerWithComputedGroups;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.computedgroups.SocialWorkspaceGroupComputer;
 
@@ -31,7 +31,7 @@ public class TestSocialWorkspaceComputedGroups extends
         AbstractSocialWorkspaceTest {
 
     @Inject
-    UserRelationshipService relationshipService;
+    RelationshipService relationshipService;
 
     @Inject
     ComputedGroupsService computedGroupsService;

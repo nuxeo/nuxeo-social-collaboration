@@ -18,7 +18,6 @@
 package org.nuxeo.ecm.social.workspace.gadgets;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +33,8 @@ import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
-import org.nuxeo.ecm.social.user.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -53,7 +52,7 @@ public class SocialWorkspaceActivityStreamFilter implements
 
     public static final String SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME = "socialWorkspaceActivityStream";
 
-    private UserRelationshipService userRelationshipService;
+    private RelationshipService relationshipService;
 
     @Override
     public String getId() {
@@ -98,7 +97,7 @@ public class SocialWorkspaceActivityStreamFilter implements
         Query query;
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
                 repositoryName, socialWorkspaceId);
-        List<String> actors = getUserRelationshipService().getTargetsOfKind(
+        List<String> actors = getRelationshipService().getTargetsOfKind(
                 socialWorkspaceActivityObject,
                 RelationshipKind.fromString("socialworkspace:members"));
         actors.add(socialWorkspaceActivityObject);
@@ -124,22 +123,22 @@ public class SocialWorkspaceActivityStreamFilter implements
         return new ActivitiesListImpl(query.getResultList());
     }
 
-    private UserRelationshipService getUserRelationshipService()
+    private RelationshipService getRelationshipService()
             throws ClientRuntimeException {
-        if (userRelationshipService == null) {
+        if (relationshipService == null) {
             try {
-                userRelationshipService = Framework.getService(UserRelationshipService.class);
+                relationshipService = Framework.getService(RelationshipService.class);
             } catch (Exception e) {
-                final String errMsg = "Error connecting to UserRelationshipService. "
+                final String errMsg = "Error connecting to RelationshipService. "
                         + e.getMessage();
                 throw new ClientRuntimeException(errMsg, e);
             }
-            if (userRelationshipService == null) {
+            if (relationshipService == null) {
                 throw new ClientRuntimeException(
-                        "UserRelationshipService service not bound");
+                        "RelationshipService service not bound");
             }
         }
-        return userRelationshipService;
+        return relationshipService;
     }
 
 }

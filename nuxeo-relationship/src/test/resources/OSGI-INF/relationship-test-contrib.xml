@@ -43,7 +43,7 @@
 
   </extension>
 
-  <extension target="org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService"
+  <extension target="org.nuxeo.ecm.social.relationship.service.RelationshipService"
     point="relationshipKinds">
     <kind group="user" name="friend" />
     <kind group="user" name="coworker" />

@@ -13,7 +13,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Unwrap;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -22,39 +22,37 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
-@Name("userRelationshipService")
+@Name("relationshipService")
 @Scope(CONVERSATION)
 public class UserRelationshipServiceBusinessDelegate implements Serializable {
     private static final long serialVersionUID = -1;
 
     private static final Log log = LogFactory.getLog(UserRelationshipServiceBusinessDelegate.class);
 
-    protected UserRelationshipService userRelationshipService;
+    protected RelationshipService relationshipService;
 
     @Unwrap
-    public UserRelationshipService getUserRelationshipService()
-            throws ClientException {
-        if (null == userRelationshipService) {
+    public RelationshipService getRelationshipService() throws ClientException {
+        if (null == relationshipService) {
             try {
-                userRelationshipService = Framework.getService(UserRelationshipService.class);
+                relationshipService = Framework.getService(RelationshipService.class);
             } catch (Exception e) {
                 throw new ClientException(
-                        "Error while trying to acquire UserRelationshipService",
-                        e);
+                        "Error while trying to acquire RelationshipService", e);
             }
 
-            if (null == userRelationshipService) {
-                throw new ClientException("UserRelationshipService not bound");
+            if (null == relationshipService) {
+                throw new ClientException("RelationshipService not bound");
             }
         }
-        return userRelationshipService;
+        return relationshipService;
     }
 
     @Destroy
     @PermitAll
     public void destroy() {
-        if (null != userRelationshipService) {
-            userRelationshipService = null;
+        if (null != relationshipService) {
+            relationshipService = null;
         }
     }
 }

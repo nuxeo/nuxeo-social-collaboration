@@ -34,14 +34,15 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.Functions;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.social.user.relationship.service.UserRelationshipService;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
+import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.ecm.webapp.security.UserManagementActions;
 import org.nuxeo.runtime.api.Framework;
 
 /**
  * Social User Relationship action bean.
- * 
+ *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
@@ -59,7 +60,7 @@ public class UserRelationshipActions implements Serializable {
     private static final String PUBLICPROFILE_FIELD = "socialprofile:publicprofile";
 
     @In(create = true)
-    protected transient UserRelationshipService userRelationshipService;
+    protected transient RelationshipService relationshipService;
 
     @In
     protected transient UserManagementActions userManagementActions;
@@ -111,7 +112,7 @@ public class UserRelationshipActions implements Serializable {
             relationshipsWithUser = new HashMap<String, List<RelationshipKind>>();
         }
         if (!relationshipsWithUser.containsKey(username)) {
-            List<RelationshipKind> relations = userRelationshipService.getRelationshipKinds(
+            List<RelationshipKind> relations = relationshipService.getRelationshipKinds(
                     ActivityHelper.createUserActivityObject(getCurrentUser()),
                     ActivityHelper.createUserActivityObject(username));
             relationshipsWithUser.put(username, relations);
@@ -127,7 +128,7 @@ public class UserRelationshipActions implements Serializable {
         String currentUser = ActivityHelper.createUserActivityObject(getCurrentUser());
         String selectedUser = ActivityHelper.createUserActivityObject(userName);
         RelationshipKind relationshipKind = RelationshipKind.fromString(kind);
-        if (userRelationshipService.addRelation(currentUser, selectedUser,
+        if (relationshipService.addRelation(currentUser, selectedUser,
                 relationshipKind)) {
             setFacesMessage("label.social.user.relationship.addRelation.success");
             addNewRelationActivity(currentUser, selectedUser, relationshipKind);
@@ -145,7 +146,7 @@ public class UserRelationshipActions implements Serializable {
     }
 
     protected void removeRelationship(String userName, String kind) {
-        if (userRelationshipService.removeRelation(
+        if (relationshipService.removeRelation(
                 ActivityHelper.createUserActivityObject(getCurrentUser()),
                 ActivityHelper.createUserActivityObject(userName),
                 RelationshipKind.fromString(kind))) {
@@ -162,7 +163,7 @@ public class UserRelationshipActions implements Serializable {
             throws ClientException {
         if (allRelationshipsState == null) {
             allRelationshipsState = new HashMap<RelationshipKind, Boolean>();
-            for (RelationshipKind kind : userRelationshipService.getRegisteredKinds(null)) {
+            for (RelationshipKind kind : relationshipService.getRegisteredKinds(null)) {
                 allRelationshipsState.put(kind, isActiveRelationship(kind));
             }
         }
@@ -170,11 +171,11 @@ public class UserRelationshipActions implements Serializable {
     }
 
     public List<RelationshipKind> getKinds() {
-        return userRelationshipService.getRegisteredKinds(CIRCLE_RELATIONSHIP_KIND_GROUP);
+        return relationshipService.getRegisteredKinds(CIRCLE_RELATIONSHIP_KIND_GROUP);
     }
 
     public List<String> getRelationshipsFromSelectedUser() {
-        List<String> targets = userRelationshipService.getTargetsOfKind(
+        List<String> targets = relationshipService.getTargetsOfKind(
                 ActivityHelper.createUserActivityObject(getSelectedUser()),
                 RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP));
 
@@ -260,7 +261,7 @@ public class UserRelationshipActions implements Serializable {
         String selectedUsrActObj = ActivityHelper.createUserActivityObject((String) userProfile.getProperty(
                 userManager.getUserSchemaName(), userManager.getUserIdField()));
         for (RelationshipKind kind : getKinds()) {
-            List<String> targetsOfKind = userRelationshipService.getTargetsOfKind(
+            List<String> targetsOfKind = relationshipService.getTargetsOfKind(
                     selectedUsrActObj, kind);
             if (targetsOfKind.contains(currentUsrActObj)) {
                 return true;
