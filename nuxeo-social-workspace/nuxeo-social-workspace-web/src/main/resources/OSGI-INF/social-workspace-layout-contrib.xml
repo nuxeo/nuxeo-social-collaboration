@@ -223,7 +223,6 @@
         <row>
           <widget>summary_current_document_description</widget>
           <widget>summary_note_with_picture</widget>
-          <widget>summary_current_document_comments</widget>
         </row>
         <row>
           <widget>summary_current_document_files</widget>
@@ -241,7 +240,6 @@
       </row>
         <row>
           <widget>summary_current_document_description</widget>
-          <widget>summary_current_document_comments</widget>
         </row>
         <row>
           <widget>summary_current_document_files</widget>
