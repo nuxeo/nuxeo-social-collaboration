@@ -60,8 +60,6 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
 
     public static final String USER_ACTIVITY_STREAM_NAME = "userActivityStream";
 
-    private RelationshipService relationshipService;
-
     @Override
     public String getId() {
         return ID;
@@ -108,10 +106,11 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
         Query query;
         switch (queryType) {
         case ACTIVITY_STREAM_FOR_ACTOR:
-            List<String> actors = getRelationshipService().getTargetsOfKind(
+            RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
+            List<String> actors = relationshipService.getTargetsOfKind(
                     actor,
                     RelationshipKind.fromString("socialworkspace:members"));
-            actors.addAll(getRelationshipService().getTargetsOfKind(actor,
+            actors.addAll(relationshipService.getTargetsOfKind(actor,
                     RelationshipKind.fromGroup("circle")));
             if (actors.isEmpty()) {
                 return new ActivitiesListImpl();
@@ -137,24 +136,6 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
             }
         }
         return new ActivitiesListImpl(query.getResultList());
-    }
-
-    private RelationshipService getRelationshipService()
-            throws ClientRuntimeException {
-        if (relationshipService == null) {
-            try {
-                relationshipService = Framework.getService(RelationshipService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to RelationshipService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (relationshipService == null) {
-                throw new ClientRuntimeException(
-                        "RelationshipService service not bound");
-            }
-        }
-        return relationshipService;
     }
 
 }

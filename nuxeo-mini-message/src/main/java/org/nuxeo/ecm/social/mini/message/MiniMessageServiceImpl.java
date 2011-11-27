@@ -19,9 +19,9 @@ package org.nuxeo.ecm.social.mini.message;
 
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.ACTOR_PARAMETER;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QUERY_TYPE_PARAMETER;
-import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FOR_ACTOR;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FROM_ACTOR;
+import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 
 import java.io.Serializable;
 import java.security.Principal;
@@ -36,7 +36,6 @@ import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamService;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
 
@@ -47,8 +46,6 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.5
  */
 public class MiniMessageServiceImpl implements MiniMessageService {
-
-    protected ActivityStreamService activityStreamService;
 
     @Override
     public MiniMessage addMiniMessage(Principal principal, String message,
@@ -104,22 +101,8 @@ public class MiniMessageServiceImpl implements MiniMessageService {
         return miniMessages;
     }
 
-    private ActivityStreamService getActivityStreamService()
-            throws ClientRuntimeException {
-        if (activityStreamService == null) {
-            try {
-                activityStreamService = Framework.getService(ActivityStreamService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to ActivityStreamService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (activityStreamService == null) {
-                throw new ClientRuntimeException(
-                        "ActivityStreamService service not bound");
-            }
-        }
-        return activityStreamService;
+    public ActivityStreamService getActivityStreamService() {
+        return Framework.getLocalService(ActivityStreamService.class);
     }
 
 }

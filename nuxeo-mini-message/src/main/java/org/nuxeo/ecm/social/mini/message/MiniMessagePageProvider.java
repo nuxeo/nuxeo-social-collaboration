@@ -58,8 +58,6 @@ public class MiniMessagePageProvider extends
 
     public static final String FROM_ACTOR_STREAM_TYPE = "fromActor";
 
-    protected MiniMessageService miniMessageService;
-
     protected List<MiniMessage> pageMiniMessages;
 
     @Override
@@ -68,13 +66,14 @@ public class MiniMessagePageProvider extends
             pageMiniMessages = new ArrayList<MiniMessage>();
             long pageSize = getMinMaxPageSize();
 
+            MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
             String streamType = getStreamType();
             if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFor(
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageFor(
                         getActor(), getRelationshipKind(),
                         getCurrentPageOffset(), pageSize));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(getMiniMessageService().getMiniMessageFrom(
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageFrom(
                         getActor(), getCurrentPageOffset(), pageSize));
             } else {
                 log.error("Unknown stream type: " + streamType);
@@ -83,24 +82,6 @@ public class MiniMessagePageProvider extends
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageMiniMessages;
-    }
-
-    protected MiniMessageService getMiniMessageService()
-            throws ClientRuntimeException {
-        if (miniMessageService == null) {
-            try {
-                miniMessageService = Framework.getService(MiniMessageService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to MiniMessageService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (miniMessageService == null) {
-                throw new ClientRuntimeException(
-                        "MiniMessageService service not bound");
-            }
-        }
-        return miniMessageService;
     }
 
     protected String getActor() {

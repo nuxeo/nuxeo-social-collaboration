@@ -337,8 +337,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     @Override
     public void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
-        getRelationshipService().removeRelation(socialWorkspace.getId(),
-                null, SocialWorkspaceHelper.buildRelationKind());
+        getRelationshipService().removeRelation(socialWorkspace.getId(), null,
+                SocialWorkspaceHelper.buildRelationKind());
     }
 
     protected UserManager getUserManager() {
@@ -532,7 +532,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
                 ActivityHelper.generateDisplayName(principal)).target(
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayTarget(
                 socialWorkspace.getTitle()).build();
-        getActivityStreamService().addActivity(activity);
+        Framework.getLocalService(ActivityStreamService.class).addActivity(
+                activity);
     }
 
     @Override
@@ -569,8 +570,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             String socialWorkspaceId, RelationshipKind kind) {
         boolean removed = getRelationshipService().removeRelation(
                 principalName, socialWorkspaceId, kind);
-        removed |= getRelationshipService().removeRelation(
-                socialWorkspaceId, principalName, kind);
+        removed |= getRelationshipService().removeRelation(socialWorkspaceId,
+                principalName, kind);
         return removed;
     }
 
@@ -806,24 +807,6 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
                     "RelationshipService is not registered.");
         }
         return relationshipService;
-    }
-
-    protected ActivityStreamService getActivityStreamService()
-            throws ClientRuntimeException {
-        if (activityStreamService == null) {
-            try {
-                activityStreamService = Framework.getService(ActivityStreamService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to ActivityStreamService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (activityStreamService == null) {
-                throw new ClientRuntimeException(
-                        "ActivityStreamService service not bound");
-            }
-        }
-        return activityStreamService;
     }
 
     private static class SocialWorkspaceFinder extends

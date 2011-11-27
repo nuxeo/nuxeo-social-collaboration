@@ -32,7 +32,6 @@ import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.runtime.api.Framework;
@@ -51,8 +50,6 @@ public class SocialWorkspaceActivityStreamFilter implements
     public static final String SOCIAL_WORKSPACE_ID_PARAMETER = "socialWorkspaceId";
 
     public static final String SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME = "socialWorkspaceActivityStream";
-
-    private RelationshipService relationshipService;
 
     @Override
     public String getId() {
@@ -97,7 +94,8 @@ public class SocialWorkspaceActivityStreamFilter implements
         Query query;
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
                 repositoryName, socialWorkspaceId);
-        List<String> actors = getRelationshipService().getTargetsOfKind(
+        RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
+        List<String> actors = relationshipService.getTargetsOfKind(
                 socialWorkspaceActivityObject,
                 RelationshipKind.fromString("socialworkspace:members"));
         actors.add(socialWorkspaceActivityObject);
@@ -121,24 +119,6 @@ public class SocialWorkspaceActivityStreamFilter implements
             }
         }
         return new ActivitiesListImpl(query.getResultList());
-    }
-
-    private RelationshipService getRelationshipService()
-            throws ClientRuntimeException {
-        if (relationshipService == null) {
-            try {
-                relationshipService = Framework.getService(RelationshipService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to RelationshipService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (relationshipService == null) {
-                throw new ClientRuntimeException(
-                        "RelationshipService service not bound");
-            }
-        }
-        return relationshipService;
     }
 
 }

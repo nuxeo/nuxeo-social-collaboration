@@ -25,7 +25,6 @@ import static org.nuxeo.ecm.core.schema.FacetNames.HIDDEN_IN_NAVIGATION;
 import java.security.Principal;
 
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -46,8 +45,6 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class ActivityStreamListener implements PostCommitEventListener {
 
-    private ActivityStreamService activityStreamService;
-
     @Override
     public void handleEvent(EventBundle events) throws ClientException {
         if (events.containsEventName(DOCUMENT_CREATED)
@@ -67,14 +64,15 @@ public class ActivityStreamListener implements PostCommitEventListener {
                     || DOCUMENT_UPDATED.equals(event.getName())) {
                 DocumentEventContext docEventContext = (DocumentEventContext) eventContext;
                 DocumentModel doc = docEventContext.getSourceDocument();
-                if (doc instanceof ShallowDocumentModel || doc.hasFacet(
-                        HIDDEN_IN_NAVIGATION)) {
+                if (doc instanceof ShallowDocumentModel
+                        || doc.hasFacet(HIDDEN_IN_NAVIGATION)) {
                     // Not really interested if document cannot be reconnected
                     // or if not visible
                     return;
                 }
                 Activity activity = toActivity(docEventContext, event);
-                getActivityStreamService().addActivity(activity);
+                ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
+                activityStreamService.addActivity(activity);
             }
         }
     }
@@ -102,24 +100,6 @@ public class ActivityStreamListener implements PostCommitEventListener {
         } catch (ClientException e) {
             return docRef.toString();
         }
-    }
-
-    private ActivityStreamService getActivityStreamService()
-            throws ClientRuntimeException {
-        if (activityStreamService == null) {
-            try {
-                activityStreamService = Framework.getService(ActivityStreamService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to ActivityStreamService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (activityStreamService == null) {
-                throw new ClientRuntimeException(
-                        "ActivityStreamService service not bound");
-            }
-        }
-        return activityStreamService;
     }
 
 }

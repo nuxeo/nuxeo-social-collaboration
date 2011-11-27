@@ -29,7 +29,6 @@ import org.nuxeo.ecm.activity.ActivityBuilder;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.Functions;
@@ -142,7 +141,8 @@ public class UserRelationshipActions implements Serializable {
                 Functions.userFullName(ActivityHelper.getUsername(actorActivityObject))).verb(
                 relationshipKind.getGroup()).object(targetActivityObject).displayObject(
                 Functions.userFullName(ActivityHelper.getUsername(targetActivityObject))).build();
-        getActivityStreamService().addActivity(activity);
+        Framework.getLocalService(ActivityStreamService.class).addActivity(
+                activity);
     }
 
     protected void removeRelationship(String userName, String kind) {
@@ -218,24 +218,6 @@ public class UserRelationshipActions implements Serializable {
     protected void setFacesMessage(String msg) {
         facesMessages.add(StatusMessage.Severity.INFO,
                 resourcesAccessor.getMessages().get(msg));
-    }
-
-    protected ActivityStreamService getActivityStreamService()
-            throws ClientRuntimeException {
-        if (activityStreamService == null) {
-            try {
-                activityStreamService = Framework.getService(ActivityStreamService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to ActivityStreamService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (activityStreamService == null) {
-                throw new ClientRuntimeException(
-                        "ActivityStreamService service not bound");
-            }
-        }
-        return activityStreamService;
     }
 
     public boolean canViewProfile(DocumentModel userProfile) {

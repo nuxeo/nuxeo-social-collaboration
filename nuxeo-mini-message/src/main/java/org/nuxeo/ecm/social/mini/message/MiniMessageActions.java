@@ -33,7 +33,6 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
 import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
 import org.nuxeo.runtime.api.Framework;
@@ -65,8 +64,6 @@ public class MiniMessageActions implements Serializable {
     @In(required = true, create = true)
     protected transient Principal currentUser;
 
-    protected transient MiniMessageService miniMessageService;
-
     protected String newMessage;
 
     protected static final Log log = LogFactory.getLog(MiniMessageActions.class);
@@ -80,35 +77,18 @@ public class MiniMessageActions implements Serializable {
     }
 
     public void createNewMiniMessage() {
-        MiniMessageService miniMessageService = getMiniMessageService();
+        MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
         miniMessageService.addMiniMessage(currentUser, newMessage);
         Events.instance().raiseEvent(MINI_MESSAGE_CREATED_EVENT);
         newMessage = null;
     }
 
     public void deleteMiniMessage(MiniMessage miniMessage) {
-        getMiniMessageService().removeMiniMessage(miniMessage);
+        MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
+        miniMessageService.removeMiniMessage(miniMessage);
         facesMessages.add(
                 StatusMessage.Severity.INFO,
                 resourcesAccessor.getMessages().get("info.mini.message.deleted"));
-    }
-
-    protected MiniMessageService getMiniMessageService()
-            throws ClientRuntimeException {
-        if (miniMessageService == null) {
-            try {
-                miniMessageService = Framework.getService(MiniMessageService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to MiniMessageService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (miniMessageService == null) {
-                throw new ClientRuntimeException(
-                        "MiniMessageService service not bound");
-            }
-        }
-        return miniMessageService;
     }
 
     @Observer(MINI_MESSAGE_CREATED_EVENT)

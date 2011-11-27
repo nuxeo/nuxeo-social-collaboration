@@ -31,7 +31,6 @@ import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.runtime.api.Framework;
@@ -60,8 +59,6 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
     public static final String ACTOR_PARAMETER = "actor";
 
     public static final String RELATIONSHIP_KIND_PARAMETER = "relationshipKind";
-
-    private RelationshipService relationshipService;
 
     @Override
     public String getId() {
@@ -106,8 +103,9 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
         switch (queryType) {
         case MINI_MESSAGES_FOR_ACTOR:
             RelationshipKind relationshipKind = (RelationshipKind) parameters.get(RELATIONSHIP_KIND_PARAMETER);
-            List<String> actors = getRelationshipService().getTargetsOfKind(
-                    actor, relationshipKind);
+            RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
+            List<String> actors = relationshipService.getTargetsOfKind(actor,
+                    relationshipKind);
             actors.add(actor);
             query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb = :verb order by activity.publishedDate desc");
             query.setParameter("actors", actors);
@@ -129,24 +127,6 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             }
         }
         return new ActivitiesListImpl(query.getResultList());
-    }
-
-    private RelationshipService getRelationshipService()
-            throws ClientRuntimeException {
-        if (relationshipService == null) {
-            try {
-                relationshipService = Framework.getService(RelationshipService.class);
-            } catch (Exception e) {
-                final String errMsg = "Error connecting to RelationshipService. "
-                        + e.getMessage();
-                throw new ClientRuntimeException(errMsg, e);
-            }
-            if (relationshipService == null) {
-                throw new ClientRuntimeException(
-                        "RelationshipService service not bound");
-            }
-        }
-        return relationshipService;
     }
 
 }
