@@ -55,12 +55,12 @@ import org.nuxeo.ecm.webapp.helpers.EventManager;
  * @author Benjamin JALON <bjalon@nuxeo.com>
  *
  */
-@Name("fullscreenManagementActions")
+@Name("collaborationActions")
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class FullscreenManagementActionsBean implements Serializable {
+public class CollaborationActions implements Serializable {
 
-    private static final Log log = LogFactory.getLog(FullscreenManagementActionsBean.class);
+    private static final Log log = LogFactory.getLog(CollaborationActions.class);
 
     private static final String AFTER_SOCIAL_COLLABORATION_EDITION_VIEW = "after-social-collaboration-edition";
 
@@ -80,7 +80,7 @@ public class FullscreenManagementActionsBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String FULLSCREEN_VIEW_ID = "fullscreen";
+    public static final String COLLABORATION_VIEW_ID = "collaboration";
 
     @In(create = true)
     protected transient CoreSession documentManager;
@@ -124,7 +124,7 @@ public class FullscreenManagementActionsBean implements Serializable {
                     socialWorkspace.getDashboardSpacesRootPath()));
             webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
             return navigationContext.navigateToDocument(dashboardSpacesRoot,
-                    FULLSCREEN_VIEW_ID);
+                    COLLABORATION_VIEW_ID);
         } else {
             return navigationContext.navigateToDocument(currentDocument);
         }
@@ -139,7 +139,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         return navigationContext.navigateToDocument(currentDocument);
     }
 
-    public String navigateToFullscreenView() throws ClientException {
+    public String navigateToCollaborationView() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
         if (isSocialWorkspace(currentDocument)) {
             SocialWorkspace socialWorkspace = toSocialWorkspace(currentDocument);
@@ -147,11 +147,11 @@ public class FullscreenManagementActionsBean implements Serializable {
                     socialWorkspace.getDashboardSpacesRootPath()));
             webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
             return navigationContext.navigateToDocument(dashboardSpacesRoot,
-                    FULLSCREEN_VIEW_ID);
+                    COLLABORATION_VIEW_ID);
         } else if (isSocialDocument(currentDocument)) {
             webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
             return navigationContext.navigateToDocument(currentDocument,
-                    FULLSCREEN_VIEW_ID);
+                    COLLABORATION_VIEW_ID);
         } else {
             return navigationContext.navigateToDocument(currentDocument);
         }
@@ -281,7 +281,7 @@ public class FullscreenManagementActionsBean implements Serializable {
         if (previous != null) {
             navigationContext.setCurrentDocument(previous);
             previous = null;
-            return navigateToFullscreenView();
+            return navigateToCollaborationView();
         }
         return null;
     }

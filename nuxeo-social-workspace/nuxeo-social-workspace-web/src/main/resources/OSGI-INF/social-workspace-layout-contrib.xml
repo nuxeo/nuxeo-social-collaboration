@@ -213,7 +213,7 @@
         </row>
       </rows>
     </layout>
-    <layout name="fullscreen">
+    <layout name="collaboration">
       <templates>
         <template mode="any">/layouts/layout_summary_template.xhtml</template>
       </templates>
@@ -231,7 +231,7 @@
       </rows>
     </layout>
 
-    <layout name="file_fullscreen">
+    <layout name="file_collaboration">
       <templates>
         <template mode="any">/layouts/layout_summary_template.xhtml</template>
       </templates>

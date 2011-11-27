@@ -167,7 +167,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         args.put(
                 "isPublicSocialWorkspace",
                 socialWorkspace.getPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY));
-        args.put("fullscreen_views", getFullscreenViews(docs));
+        args.put("collaboration_views", getCollaborationViews(docs));
 
         // add navigation arguments
         args.put("page", docs.getCurrentPageIndex());
@@ -462,7 +462,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return docsIdResult;
     }
 
-    protected static Map<String, String> getFullscreenViews(
+    protected static Map<String, String> getCollaborationViews(
             DocumentModelList docs) throws ClientException {
         Map<String, String> viewResults = new HashMap<String, String>();
         if (docs.isEmpty()) {
@@ -478,7 +478,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
         for (DocumentModel doc : docs) {
             Type type = typeManager.getType(doc.getType());
-            TypeView view = type.getView("fullscreen");
+            TypeView view = type.getView("collaboration");
             if (view != null) {
                 viewResults.put(doc.getId(), view.getValue());
             } else {

@@ -12,7 +12,7 @@
 
 
     <action id="BackToDashboard"
-      link="#{fullscreenManagementActions.backToDashboard()}"
+      link="#{collaborationActions.backToDashboard()}"
       label="label.social.workspace.backtodashboard"
       immediate="false"
       icon="/icons/back_to_social_workspace_dashboard.png"
@@ -22,7 +22,7 @@
     </action>
 
     <action id="GoToDMView"
-      link="#{fullscreenManagementActions.navigateToDMView()}"
+      link="#{collaborationActions.navigateToDMView()}"
       label="label.social.workspace.gotodmview"
       immediate="false"
       icon="/icons/goto_dm.png"
@@ -31,18 +31,18 @@
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
-    <action id="GoToFullScreenViewForDocument"
-      link="#{fullscreenManagementActions.navigateToFullscreenView()}"
+    <action id="GoToCollaborationViewForDocument"
+      link="#{collaborationActions.navigateToCollaborationView()}"
       label="label.social.workspace.gotosocialcollaboration"
       immediate="false"
-      icon="/icons/fullscreen.png"
+      icon="/icons/collaboration.png"
       order="10">
       <category>DOCUMENT_UPPER_ACTION</category>
-      <filter-id>has_fullscreen_view</filter-id>
+      <filter-id>has_collaboration_view</filter-id>
     </action>
 
     <action id="ListArticles"
-      link="#{fullscreenManagementActions.navigateToArticles()}"
+      link="#{collaborationActions.navigateToArticles()}"
       label="label.social.workspace.list.articles"
       immediate="false"
       icon="/icons/article_listing.png"
@@ -51,7 +51,7 @@
     </action>
 
     <action id="ListNewsItems"
-      link="#{fullscreenManagementActions.navigateToNewsItems()}"
+      link="#{collaborationActions.navigateToNewsItems()}"
       label="label.social.workspace.list.news.items"
       immediate="false"
       icon="/icons/news_item_listing.png"
@@ -61,7 +61,7 @@
     </action>
 
     <action id="ListFiles"
-      link="#{fullscreenManagementActions.navigateToFiles()}"
+      link="#{collaborationActions.navigateToFiles()}"
       label="label.social.workspace.list.files"
       immediate="false"
       icon="/icons/file_listing.png"
@@ -71,7 +71,7 @@
     </action>
 
     <action id="CreateArticles"
-      link="#{fullscreenManagementActions.createNewDocument('Article')}"
+      link="#{collaborationActions.createNewDocument('Article')}"
       label="label.social.workspace.create.articles"
       immediate="false"
       icon="/icons/create_article.png"
@@ -81,7 +81,7 @@
     </action>
 
     <action id="CreateNewsItems"
-      link="#{fullscreenManagementActions.createNewDocument('NewsItem')}"
+      link="#{collaborationActions.createNewDocument('NewsItem')}"
       label="label.social.workspace.create.news.items"
       immediate="false"
       icon="/icons/create_news_item.png"
@@ -91,7 +91,7 @@
     </action>
 
     <action id="CreateFiles"
-      link="#{fullscreenManagementActions.createNewDocument('File')}"
+      link="#{collaborationActions.createNewDocument('File')}"
       label="label.social.workspace.create.files"
       immediate="false"
       icon="/icons/create_file.png"
@@ -101,7 +101,7 @@
     </action>
 
     <action id="CreateSocialWorkspace"
-      link="#{fullscreenManagementActions.displayCreateSocialWorkspaceForm}"
+      link="#{collaborationActions.displayCreateSocialWorkspaceForm}"
       label="label.social.workspace.create.social.workspace"
       immediate="false"
       icon="/icons/create_soacial_workspace.png"
@@ -112,7 +112,7 @@
     </action>
 
     <action id="CreateSocialWorkspaceSaveButton"
-      link="#{fullscreenManagementActions.saveOncreate}"
+      link="#{collaborationActions.saveOncreate}"
       label="command.create"
       immediate="false"
       icon="/icons/create_news_item.png"
@@ -123,7 +123,7 @@
     </action>
 
     <action id="CreateSocialWorkspaceCancelButton"
-      link="#{fullscreenManagementActions.goToPreviousDocument}"
+      link="#{collaborationActions.goToPreviousDocument}"
       label="command.cancel"
       immediate="true"
       icon="/icons/create_news_item.png"
@@ -134,7 +134,7 @@
     </action>
 
     <action id="CreateSocialDocumentSaveButton"
-      link="#{fullscreenManagementActions.saveOncreate}"
+      link="#{collaborationActions.saveOncreate}"
       label="command.create"
       immediate="false"
       icon="/icons/create_news_item.png"
@@ -144,7 +144,7 @@
     </action>
 
     <action id="CreateSocialDocumentCancelButton"
-      link="#{fullscreenManagementActions.goBack}"
+      link="#{collaborationActions.goBack}"
       label="command.cancel"
       immediate="true"
       icon="/icons/create_news_item.png"
@@ -155,7 +155,7 @@
     </action>
 
     <action id="UpdateSocialDocumentSaveButton"
-      link="#{fullscreenManagementActions.updateCurrentDocument}"
+      link="#{collaborationActions.updateCurrentDocument}"
       label="command.save"
       immediate="false"
       icon="/icons/create_news_item.png"
@@ -165,7 +165,7 @@
     </action>
 
     <action id="EditArticles"
-      link="#{fullscreenManagementActions.editSocialDocument}"
+      link="#{collaborationActions.editSocialDocument}"
       label="label.social.workspace.edit.articles"
       immediate="false"
       icon="/icons/create_article.png"
@@ -204,7 +204,7 @@
 
 
     <action id="EditNewsItems"
-      link="#{fullscreenManagementActions.editSocialDocument}"
+      link="#{collaborationActions.editSocialDocument}"
       label="label.social.workspace.edit.news.items"
       immediate="false"
       icon="/icons/create_news_item.png"
@@ -217,7 +217,7 @@
 
 
     <action id="EditFiles"
-      link="#{fullscreenManagementActions.editSocialDocument}"
+      link="#{collaborationActions.editSocialDocument}"
       label="label.social.workspace.edit.files"
       immediate="false"
       icon="/icons/create_file.png"
@@ -323,7 +323,7 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="filters">
 
-    <filter id="can_be_created_and_modified_in_fullscreen_view">
+    <filter id="can_be_created_and_modified_in_collaboration_view">
       <rule grant="true">
         <type>Article</type>
         <type>NewsItem</type>
@@ -377,13 +377,13 @@
 
     <filter id="has_previous_document">
         <rule grant="true">
-            <condition>#{fullscreenManagementActions.previous != null}</condition>
+            <condition>#{collaborationActions.previous != null}</condition>
         </rule>
     </filter>
 
     <filter id="has_not_previous_document">
         <rule grant="true">
-            <condition>#{fullscreenManagementActions.previous == null}</condition>
+            <condition>#{collaborationActions.previous == null}</condition>
         </rule>
     </filter>
 
@@ -394,7 +394,7 @@
       </rule>
     </filter>
 
-    <filter id="has_fullscreen_view">
+    <filter id="has_collaboration_view">
       <rule grant="true">
         <facet>SocialDocument</facet>
         <facet>SocialWorkspace</facet>
@@ -407,7 +407,7 @@
 
     <filter id="social_workspace_dashboard_view">
       <rule grant="false">
-        <condition>#{fullscreenManagementActions.getViewId().equals("/social_dashboard.xhtml")}</condition>
+        <condition>#{collaborationActions.getViewId().equals("/social_dashboard.xhtml")}</condition>
       </rule>
     </filter>
 
@@ -510,7 +510,7 @@
 
     <filter id="canCreateSocialWorkspace">
       <rule grant="true">
-        <condition>#{fullscreenManagementActions.canCreateSocialWorkspace()}</condition>
+        <condition>#{collaborationActions.canCreateSocialWorkspace()}</condition>
       </rule>
     </filter>
 

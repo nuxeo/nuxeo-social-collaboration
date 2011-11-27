@@ -64,11 +64,11 @@
         <layout>article</layout>
         <layout>note</layout>
       </layouts>
-      <layouts mode="fullscreen">
-        <layout>fullscreen</layout>
+      <layouts mode="collaboration">
+        <layout>collaboration</layout>
       </layouts>
       <views>
-        <view id="fullscreen" value="view_social_document" />
+        <view id="collaboration" value="view_social_document" />
         <view id="after-social-collaboration-creation" value="view_social_document"/>
         <view id="edit_social_document" value="edit_social_document"/>
         <view id="after-social-collaboration-edition" value="view_social_document"/>
@@ -98,11 +98,11 @@
       <layouts mode="view">
         <layout>note</layout>
       </layouts>
-      <layouts mode="fullscreen">
-        <layout>fullscreen</layout>
+      <layouts mode="collaboration">
+        <layout>collaboration</layout>
       </layouts>
       <views>
-        <view id="fullscreen" value="view_social_document" />
+        <view id="collaboration" value="view_social_document" />
         <view id="after-social-collaboration-creation" value="view_social_document"/>
         <view id="edit_social_document" value="edit_social_document"/>
         <view id="after-social-collaboration-edition" value="view_social_document"/>
@@ -190,7 +190,7 @@
       <bigIcon>/icons/social_workspace_100.png</bigIcon>
       <default-view>view_documents</default-view>
       <views>
-        <view id="fullscreen" value="dashboard" />
+        <view id="collaboration" value="dashboard" />
         <view id="articles" value="articles"/>
         <view id="news_items" value="news_items"/>
       </views>
