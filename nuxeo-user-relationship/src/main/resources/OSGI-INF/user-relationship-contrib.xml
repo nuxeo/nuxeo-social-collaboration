@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<component name="org.nuxeo.ecm.social.user.relationship.service">
+<component name="org.nuxeo.ecm.social.user.relationship.contrib">
 
-  <extension target="RelationshipService"
+  <extension target="org.nuxeo.ecm.social.relationship.service.RelationshipService"
     point="relationshipKinds">
     <kind group="circle" name="friends" />
     <kind group="circle" name="coworkers" />
