@@ -159,8 +159,8 @@ gadgets.util.registerOnLoadHandler(function() {
 function fillToolbar() {
   if (isCreateMessagesActionDisplayed()) {
     createMiniMessageImg = document.createElement('img');
-    createMiniMessageImg.src=top.nxContextPath + '/icons/action_add.gif';
-    createMiniMessageImg.alt='create minimessage';
+    createMiniMessageImg.src = NXGadgetContext.clientSideBaseUrl + '/icons/action_add.gif';
+    createMiniMessageImg.alt = 'Create Mini mMssage';
 
     createMiniMessageLink = document.createElement('a');
     createMiniMessageLink.href='#';
