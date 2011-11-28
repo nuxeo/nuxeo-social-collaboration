@@ -59,7 +59,7 @@ public class RelationshipServiceTest {
 
     @Test
     public void testRegisteredTypes() {
-        assertEquals(5, relationshipService.getRegisteredKinds(null).size());
+        assertEquals(7, relationshipService.getRegisteredKinds(null).size());
         assertEquals(4, relationshipService.getRegisteredKinds("user").size());
         assertEquals(1, relationshipService.getRegisteredKinds("other").size());
         assertEquals(0, relationshipService.getRegisteredKinds("fake").size());

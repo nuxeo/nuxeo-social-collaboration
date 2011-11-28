@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.nuxeo.common.xmap.annotation.XNode;
 import org.nuxeo.common.xmap.annotation.XObject;
+import org.nuxeo.ecm.social.relationship.RelationshipKind;
 
 /**
  * User Relationship kind descriptor
@@ -39,6 +40,16 @@ public class RelationshipKindDescriptor {
 
     @XNode("@group")
     protected String group;
+
+    @XNode("@enabled")
+    protected boolean enabled = true;
+
+    /**
+     * Returns the ID of this {@code RelationshipKindDescriptor}.
+     */
+    public String getId() {
+        return group + RelationshipKind.SEPARATOR + name;
+    }
 
     public String getName() {
         return name;
@@ -56,10 +67,27 @@ public class RelationshipKindDescriptor {
         this.group = group;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public Map<String, Object> getMap() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("name", name);
         map.put("group", group);
         return map;
+    }
+
+    @Override
+    protected RelationshipKindDescriptor clone() {
+        RelationshipKindDescriptor clone = new RelationshipKindDescriptor();
+        clone.setGroup(group);
+        clone.setName(name);
+        clone.setEnabled(enabled);
+        return clone;
     }
 }

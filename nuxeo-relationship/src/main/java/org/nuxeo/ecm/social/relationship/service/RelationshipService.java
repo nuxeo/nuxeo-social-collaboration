@@ -20,6 +20,7 @@
 package org.nuxeo.ecm.social.relationship.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 

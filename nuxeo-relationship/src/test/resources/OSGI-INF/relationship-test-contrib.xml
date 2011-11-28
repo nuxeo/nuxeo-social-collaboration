@@ -50,6 +50,9 @@
     <kind group="user" name="connected" />
     <kind group="user" name="relation" />
     <kind group="other" name="anotherOne" />
+
+    <kind group="group" name="relation" />
+    <kind group="group" name="coworker" />
   </extension>
 
 </component>

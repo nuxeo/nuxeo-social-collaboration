@@ -17,8 +17,6 @@
 
 package org.nuxeo.ecm.social.relationship.service;
 
-import static org.nuxeo.ecm.social.relationship.RelationshipConstants.KIND_PROPERTY_GROUP;
-import static org.nuxeo.ecm.social.relationship.RelationshipConstants.KIND_PROPERTY_NAME;
 import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_FIELD_ACTOR;
 import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_FIELD_KIND;
 import static org.nuxeo.ecm.social.relationship.RelationshipConstants.RELATIONSHIP_FIELD_TARGET;
@@ -34,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.list.UnmodifiableList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,7 +42,6 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.directory.DirectoryException;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.directory.api.DirectoryService;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
@@ -71,20 +67,18 @@ public class RelationshipServiceImpl extends DefaultComponent implements
 
     protected List<RelationshipKindDescriptor> pendingDescriptors;
 
-    protected DirectoryService directoryService;
-
-    protected UserManager userManager;
-
-    protected Map<String, List<RelationshipKind>> registeredKinds;
+    protected RelationshipKindRegistry relationshipKindRegistry;
 
     @Override
     public void activate(ComponentContext context) throws Exception {
         pendingDescriptors = new ArrayList<RelationshipKindDescriptor>();
+        relationshipKindRegistry = new RelationshipKindRegistry();
     }
 
     @Override
     public void deactivate(ComponentContext context) throws Exception {
         pendingDescriptors = null;
+        relationshipKindRegistry = null;
     }
 
     @Override
@@ -104,15 +98,17 @@ public class RelationshipServiceImpl extends DefaultComponent implements
         }
     }
 
-    protected void addRelationshipKind(RelationshipKindDescriptor type) {
+    protected void addRelationshipKind(RelationshipKindDescriptor kind) {
+        DirectoryService directoryService = Framework.getLocalService(DirectoryService.class);
         Session typeDirectory = null;
         try {
-            typeDirectory = getDirectoryService().open(KIND_DIRECTORY_NAME);
+            typeDirectory = directoryService.open(KIND_DIRECTORY_NAME);
 
             // Add a new relationship kind if not exists
-            if (null == typeDirectory.getEntry(type.getName())) {
-                typeDirectory.createEntry(type.getMap());
+            if (null == typeDirectory.getEntry(kind.getName())) {
+                typeDirectory.createEntry(kind.getMap());
             }
+            relationshipKindRegistry.addContribution(kind);
         } catch (ClientException e) {
             throw new ClientRuntimeException(
                     "Unable to create a new relationship kind", e);
@@ -121,7 +117,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
                 try {
                     typeDirectory.close();
                 } catch (DirectoryException e) {
-                    log.error("Error while trying to close type directory");
+                    log.error("Error while trying to close kind directory");
                     log.debug("Exception occurred", e);
                 }
             }
@@ -144,6 +140,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
                 throw new ClientRuntimeException(e);
             }
         }
+        kinds = relationshipKindRegistry.filterUnregisteredRelationshipKinds(kinds);
         return new ArrayList<RelationshipKind>(kinds);
     }
 
@@ -189,58 +186,11 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     @Override
     @SuppressWarnings("unchecked")
     public List<RelationshipKind> getRegisteredKinds(String group) {
-        if (registeredKinds == null) {
-            registeredKinds = new HashMap<String, List<RelationshipKind>>();
-            for (DocumentModel type : getAllTypesFromDirectory()) {
-                try {
-                    String kindGroup = (String) type.getPropertyValue(KIND_PROPERTY_GROUP);
-                    String kindName = (String) type.getPropertyValue(KIND_PROPERTY_NAME);
-                    RelationshipKind kind = RelationshipKind.newInstance(
-                            kindGroup, kindName);
-
-                    if (!registeredKinds.containsKey(kindGroup)) {
-                        registeredKinds.put(kindGroup,
-                                new ArrayList<RelationshipKind>());
-                    }
-                    registeredKinds.get(kindGroup).add(kind);
-                } catch (ClientException e) {
-                    throw new ClientRuntimeException(e);
-                }
-            }
+        Set<RelationshipKind> kinds = relationshipKindRegistry.getRegisteredKinds(group);
+        if (kinds == null) {
+            return Collections.emptyList();
         }
-
-        List<RelationshipKind> allKinds = new ArrayList<RelationshipKind>();
-        if (StringUtils.isEmpty(group)) {
-            // Fill returned list with all registered RelationKind
-            for (List<RelationshipKind> kinds : registeredKinds.values()) {
-                allKinds.addAll(kinds);
-            }
-        } else {
-            allKinds = registeredKinds.get(group);
-        }
-
-        return allKinds != null ? UnmodifiableList.decorate(allKinds)
-                : Collections.<RelationshipKind> emptyList();
-    }
-
-    private DocumentModelList getAllTypesFromDirectory() {
-        Session typesDirectory = null;
-        try {
-            typesDirectory = getDirectoryService().open(KIND_DIRECTORY_NAME);
-            return typesDirectory.getEntries();
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(
-                    "Unable to fetch all relationsip kinds", e);
-        } finally {
-            if (typesDirectory != null) {
-                try {
-                    typesDirectory.close();
-                } catch (DirectoryException e) {
-                    log.error("Error while trying to close types directory");
-                    log.debug("Exception occurred", e);
-                }
-            }
-        }
+        return new ArrayList<RelationshipKind>(kinds);
     }
 
     @Override
@@ -250,10 +200,10 @@ public class RelationshipServiceImpl extends DefaultComponent implements
             throw new ClientRuntimeException("Type cannot be null");
         }
 
+        DirectoryService directoryService = Framework.getLocalService(DirectoryService.class);
         Session relationshipsDirectory = null;
         try {
-            relationshipsDirectory = getDirectoryService().open(
-                    RELATIONSHIP_DIRECTORY_NAME);
+            relationshipsDirectory = directoryService.open(RELATIONSHIP_DIRECTORY_NAME);
             // try to get an existing entry
             Map<String, Serializable> relationship = new HashMap<String, Serializable>();
             relationship.put(RELATIONSHIP_FIELD_ACTOR, actorId);
@@ -264,7 +214,6 @@ public class RelationshipServiceImpl extends DefaultComponent implements
             if (relationships.isEmpty()) {
                 relationshipsDirectory.createEntry(new HashMap<String, Object>(
                         relationship));
-                relationshipsDirectory.commit();
                 return true;
             } else {
                 return false;
@@ -287,10 +236,10 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     @Override
     public Boolean removeRelation(String actorId, String targetId,
             RelationshipKind kind) {
+        DirectoryService directoryService = Framework.getLocalService(DirectoryService.class);
         Session relationshipDirectory = null;
         try {
-            relationshipDirectory = getDirectoryService().open(
-                    RELATIONSHIP_DIRECTORY_NAME);
+            relationshipDirectory = directoryService.open(RELATIONSHIP_DIRECTORY_NAME);
 
             Map<String, Serializable> filter = new HashMap<String, Serializable>();
             filter.put(RELATIONSHIP_FIELD_ACTOR, actorId);
@@ -310,7 +259,6 @@ public class RelationshipServiceImpl extends DefaultComponent implements
                 for (DocumentModel relation : relations) {
                     relationshipDirectory.deleteEntry(relation.getId());
                 }
-                relationshipDirectory.commit();
                 return true;
             }
         } catch (ClientException e) {
@@ -330,10 +278,10 @@ public class RelationshipServiceImpl extends DefaultComponent implements
 
     protected DocumentModelList queryRelationshipsDirectory(
             Map<String, Serializable> filter, Boolean withFulltext) {
+        DirectoryService directoryService = Framework.getLocalService(DirectoryService.class);
         Session relationshipsDirectory = null;
         try {
-            relationshipsDirectory = getDirectoryService().open(
-                    RELATIONSHIP_DIRECTORY_NAME);
+            relationshipsDirectory = directoryService.open(RELATIONSHIP_DIRECTORY_NAME);
 
             Set<String> fulltextFields = new HashSet<String>();
             fulltextFields.add(RELATIONSHIP_FIELD_KIND);
@@ -380,28 +328,6 @@ public class RelationshipServiceImpl extends DefaultComponent implements
         Map<String, String> order = new HashMap<String, String>();
         order.put(RELATIONSHIP_FIELD_TARGET, "desc");
         return order;
-    }
-
-    protected UserManager getUserManager() {
-        if (userManager == null) {
-            try {
-                userManager = Framework.getService(UserManager.class);
-            } catch (Exception e) {
-                log.warn("Unable to get UserManager", e);
-            }
-        }
-        return userManager;
-    }
-
-    protected DirectoryService getDirectoryService() {
-        if (directoryService == null) {
-            try {
-                directoryService = Framework.getService(DirectoryService.class);
-            } catch (Exception e) {
-                log.warn("Unable to get DirectoryService", e);
-            }
-        }
-        return directoryService;
     }
 
 }
