@@ -12,8 +12,7 @@
   <extension target="org.nuxeo.theme.services.ThemeService" point="themes">
 
     <theme>
-      <!--src>themes/theme-social-collaboration.xml</src-->
-      <src>themes/theme-social-collaboration-new.xml</src>
+      <src>themes/social-collaboration.xml</src>
     </theme>
 
   </extension>
@@ -58,8 +57,6 @@
   </extension>
 
   <!-- mapping between theme pages and resources -->
-  <!---->
-
   <extension target="org.nuxeo.theme.styling.service" point="pages">
 
     <themePage name="social-collaboration/dashboard">
@@ -97,15 +94,5 @@
       <src>themes/css/social_collaboration_specific.css</src>
     </style>
   </extension>
-
-  <!-- Styles presets -->
-
-  <extension target="org.nuxeo.theme.services.ThemeService" point="presets">
-    <palette name="Social Collaboration borders" src="themes/palettes/social-collaboration-borders.properties" category="border" />
-    <palette name="Social Collaboration backgrounds" src="themes/palettes/social-collaboration-backgrounds.properties" category="background" />
-    <palette name="Social Collaboration fonts" src="themes/palettes/social-collaboration-fonts.properties" category="font" />
-    <palette name="Social Collaboration colors" src="themes/palettes/social-collaboration-colors.properties" category="color" />
-  </extension>
-
 
 </component>
