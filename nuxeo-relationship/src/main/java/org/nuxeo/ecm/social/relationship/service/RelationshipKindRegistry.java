@@ -26,6 +26,9 @@ import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.runtime.model.ContributionFragmentRegistry;
 
 /**
+ * Registry for relationship kinds, handling merge of registered
+ * {@link RelationshipKind} elements.
+ *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
@@ -34,10 +37,20 @@ public class RelationshipKindRegistry extends
 
     private Map<String, Set<RelationshipKind>> registeredKinds = new HashMap<String, Set<RelationshipKind>>();
 
+    /**
+     * Returns all the registered {@link RelationshipKind}s.
+     */
     public Set<RelationshipKind> getRegisteredKinds() {
         return getRegisteredKinds(null);
     }
 
+    /**
+     * Returns the registered {@link RelationshipKind}s for the given
+     * {@code group}.
+     * <p>
+     * If {@code group} is {@code null}, returns all the registered
+     * {@link RelationshipKind}s.
+     */
     public Set<RelationshipKind> getRegisteredKinds(String group) {
         if (group != null) {
             return registeredKinds.get(group);
@@ -50,6 +63,10 @@ public class RelationshipKindRegistry extends
         }
     }
 
+    /**
+     * Removes all the unregistered {@link RelationshipKind}s from the
+     * {@code kindsToFilter} Set.
+     */
     public Set<RelationshipKind> filterUnregisteredRelationshipKinds(
             Set<RelationshipKind> kindsToFilter) {
         Set<RelationshipKind> filteredKinds = new HashSet<RelationshipKind>();
