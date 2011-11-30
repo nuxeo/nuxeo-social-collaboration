@@ -79,10 +79,6 @@
         <style>foldable_boxes</style>
         <style>richfaces_components</style>
         <style>tabs_content</style>
-        <style>activity_stream</style>
-        <style>mini_messages</style>
-        <style>relationship_network</style>
-        <style>user_profile</style>
         <style>social_collaboration_specific</style>
       </styles>
     </themePage>

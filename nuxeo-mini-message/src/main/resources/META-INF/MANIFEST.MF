@@ -11,4 +11,5 @@ Nuxeo-Component: OSGI-INF/mini-message-service.xml,
  OSGI-INF/pageproviders-contrib.xml,
  OSGI-INF/contentviews-contrib.xml,
  OSGI-INF/layouts-contrib.xml,
- OSGI-INF/gadgets-contrib.xml
+ OSGI-INF/gadgets-contrib.xml,
+ OSGI-INF/theme-contrib.xml

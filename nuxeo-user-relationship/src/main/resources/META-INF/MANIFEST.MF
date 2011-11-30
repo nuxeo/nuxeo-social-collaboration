@@ -10,4 +10,5 @@ Nuxeo-Component: OSGI-INF/user-relationship-contrib.xml,
  OSGI-INF/user-relationship-actions-contrib.xml,
  OSGI-INF/user-relationship-activity-contrib.xml,
  OSGI-INF/user-relationship-urlservice-contrib.xml,
- OSGI-INF/user-relationship-core-types-contrib.xml
+ OSGI-INF/user-relationship-core-types-contrib.xml,
+ OSGI-INF/theme-contrib.xml

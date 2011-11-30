@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.mini.message.theme">
+
+  <require>org.nuxeo.ecm.user.center.theme</require>
+  <require>org.nuxeo.ecm.admin.center.theme</require>
+
+  <!-- mapping between theme pages and resources -->
+  <extension target="org.nuxeo.theme.styling.service" point="pages">
+
+    <themePage name="userCenter/default">
+      <styles append="true">
+        <style>mini_messages</style>
+      </styles>
+    </themePage>
+
+    <themePage name="admin/default">
+      <styles append="true">
+        <style>mini_messages</style>
+      </styles>
+    </themePage>
+
+  </extension>
+
+  <!-- CSS path declaration -->
+  <extension target="org.nuxeo.theme.styling.service" point="styles">
+
+    <style name="mini_messages">
+      <src>themes/css/mini_messages.css</src>
+    </style>
+
+  </extension>
+
+</component>
