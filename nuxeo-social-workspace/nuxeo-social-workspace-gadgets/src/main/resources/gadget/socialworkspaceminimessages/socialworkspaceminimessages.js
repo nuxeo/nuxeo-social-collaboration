@@ -10,8 +10,9 @@ var waitingOffset = 0;
 var hasMoreMiniMessages = true;
 
 function displayMiniMessages() {
-  var htmlContent = '';
+  displayNewMiniMessageForm();
 
+  var htmlContent = '';
   if (currentMiniMessages.length == 0) {
     htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.mini.message') + '</div>';
   } else {
@@ -40,6 +41,24 @@ function displayMiniMessages() {
     addNoMoreMiniMessageText();
   }
   gadgets.window.adjustHeight();
+}
+
+function displayNewMiniMessageForm() {
+  if (showMiniMessageForm()) {
+    var htmlContent = '';
+    htmlContent += '<form name="newMiniMessageForm" class="newMiniMessageForm">';
+    htmlContent += '<textarea rows="3" name="newMiniMessageText" class="miniMessageText"></textarea>';
+    htmlContent += '<p class="newMiniMessageActions">';
+    htmlContent += '<span class="miniMessageCounter"></span>';
+    htmlContent += '<input class="button writeMiniMessageButton" name="writeMiniMessageButton" type="button" onclick="createMiniMessage()" value="' + prefs.getMsg('command.write') + '" />';
+    htmlContent += '</p>';
+    htmlContent += '</form>';
+
+    _gel('newMiniMessage').innerHTML = htmlContent;
+    updateMiniMessageCounter();
+    jQuery('textarea[name="newMiniMessageText"]').keyup(updateMiniMessageCounter);
+    gadgets.window.adjustHeight();
+  }
 }
 
 function addMoreMiniMessagesBar() {
@@ -102,25 +121,25 @@ function loadMiniMessages() {
 }
 
 function pollMiniMessages() {
-var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
-  operationParams: {
-    language: prefs.getLang(),
-    contextPath: socialWorkspacePath
-  },
-  operationContext: {},
-  operationCallback: function(response, params) {
-    var newMiniMessages = response.data.miniMessages;
-    if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
-      // there is at least one new mini message
-      waitingMiniMessages = newMiniMessages;
-      waitingOffset = response.data.offset;
-      addNewMiniMessagesBar();
-      gadgets.window.adjustHeight();
+  var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceMiniMessages',
+    operationParams: {
+      language: prefs.getLang(),
+      contextPath: socialWorkspacePath
+    },
+    operationContext: {},
+    operationCallback: function(response, params) {
+      var newMiniMessages = response.data.miniMessages;
+      if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
+        // there is at least one new mini message
+        waitingMiniMessages = newMiniMessages;
+        waitingOffset = response.data.offset;
+        addNewMiniMessagesBar();
+        gadgets.window.adjustHeight();
+      }
     }
-  }
-};
+  };
 
-doAutomationRequest(NXRequestParams);
+  doAutomationRequest(NXRequestParams);
 }
 
 function addNewMiniMessagesBar() {
@@ -144,82 +163,28 @@ function showNewMiniMessages() {
 }
 
 gadgets.util.registerOnLoadHandler(function() {
-  fillToolbar();
   loadMiniMessages();
   window.setInterval(pollMiniMessages, 30*1000);
 });
 
-// fill the gadget toolbar
-function fillToolbar() {
-  if (isCreateMessagesActionDisplayed()) {
-    createMiniMessageImg = document.createElement('img');
-    createMiniMessageImg.src=top.nxContextPath + '/icons/action_add.gif';
-    createMiniMessageImg.alt='create minimessage';
-
-    createMiniMessageLink = document.createElement('a');
-    createMiniMessageLink.href='#';
-    createMiniMessageLink.className='toolbarActions';
-    createMiniMessageLink.appendChild(createMiniMessageImg);
-    createMiniMessageLink.onclick=showCreateMiniMessagePopup;
-
-    _gel('miniMessagesToolbar').appendChild(createMiniMessageLink);
-
-  }
-}
-
-function isCreateMessagesActionDisplayed() {
+function showMiniMessageForm() {
   return true;
 }
 
-function showCreateMiniMessagePopup() {
-    var t = '';
-    t += '<div class="formContainer">';
-    t += '<form name="createMiniMessageForm" class="createMiniMessageForm">';
-    t += '<textarea rows="4" name="miniMessageText" class="miniMessageText"></textarea>';
-    t += '<p class="newMiniMessageActions">';
-    t += '<span class="miniMessageCounter"></span>';
-    t += '<button name="ok" type="button" onclick="createMiniMessage()">'+ prefs.getMsg('label.ok') +'</button>';
-    t += '<button name="cancel" type="button" onclick="closePopUp()">' + prefs.getMsg('label.cancel') + '</button>';
-    t += '</p>';
-    t += '</form>';
-    t += '</div>';
-
-    jQuery.fancybox(t,
-       {
-          'width': '100%',
-          'autoScale': false,
-          'showCloseButton': false,
-          'autoDimensions': false,
-          'transitionIn': 'none',
-          'transitionOut': 'none',
-          'padding': 0,
-          'margin': 0
-       }
-    );
-    updateMiniMessageCounter();
-    jQuery('textarea[name="miniMessageText"]').keyup(updateMiniMessageCounter);
-    gadgets.window.adjustHeight(150);
-}
-
 function updateMiniMessageCounter() {
-    var delta = 140 - jQuery('textarea[name="miniMessageText"]').val().length;
-    var miniMessageCounter = jQuery('.miniMessageCounter');
-    miniMessageCounter.text(delta);
-    miniMessageCounter.toggleClass('warning', delta < 5);
-    if (delta < 0) {
-        jQuery('button[name="ok"]').attr('disabled', 'disabled');
-    } else {
-        jQuery('button[name="ok"]').removeAttr('disabled');
-    }
-}
-
-function closePopUp() {
-	jQuery.fancybox.close();
-	gadgets.window.adjustHeight();
+  var delta = 140 - jQuery('textarea[name="newMiniMessageText"]').val().length;
+  var miniMessageCounter = jQuery('.miniMessageCounter');
+  miniMessageCounter.text(delta);
+  miniMessageCounter.toggleClass('warning', delta < 5);
+  if (delta < 0) {
+    jQuery('.writeMiniMessageButton').attr('disabled', 'disabled');
+  } else {
+    jQuery('.writeMiniMessageButton').removeAttr('disabled');
+  }
 }
 
 function createMiniMessage(){
-  var miniMessageText = jQuery('textarea[name="miniMessageText"]').val();
+  var miniMessageText = jQuery('textarea[name="newMiniMessageText"]').val();
   var opCallParameters = {
      operationId: 'Services.AddMiniMessage',
      operationParams: {
@@ -234,5 +199,4 @@ function createMiniMessage(){
      }
   };
   doAutomationRequest(opCallParameters);
-  closePopUp();
 }

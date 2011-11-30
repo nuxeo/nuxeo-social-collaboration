@@ -15,7 +15,6 @@
   <head>
     <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
     <link rel="stylesheet" type="text/css" href="socialworkspaceminimessages.css"/>
-    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}/css/jquery.fancybox.css" />
 
     <!-- insert JS Context -->
     ${jsContext}
@@ -27,7 +26,7 @@
   <body>
 
     <div id="content">
-      <div id="miniMessagesToolbar">
+      <div id="newMiniMessage">
       </div>
       <div id="miniMessagesContainer">
       </div>

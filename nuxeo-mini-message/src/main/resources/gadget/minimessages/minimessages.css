@@ -48,25 +48,12 @@
 
 img { border: none }
 
+#newMiniMessage { text-align: center }
 
-textarea .miniMessageText {
-   border: 1px solid #C7C7C7;
-   font: bold 12px 'Lucida Grande',Verdana,Arial,sans-serif;
-   width: 90%;
-   margin: 5px;
-}
+.newMiniMessageForm textarea { font-size: 1.1em; font-weight: bold; margin: .5em 0 0; padding: .5em; width: 85% }
+.newMiniMessageForm .newMiniMessageActions { margin: 0 auto; padding: 0; text-align: right; width: 86% }
 
-.toolbarActions { float: right }
+.newMiniMessageForm .newMiniMessageActions .miniMessageCounter { font-size: 1.1em; font-weight: bold }
+.newMiniMessageForm .newMiniMessageActions .warning { color: #DE1A00; }
 
-.createMiniMessageForm { margin: 0; padding: 3px; text-align: center; }
-.miniMessageText { font: normal 12px 'Lucida Grande',Verdana,Arial,sans-serif; overflow: auto;
-	padding: 4px; width: 270px;}
-.miniMessageCounter {
-	font-size :110%;
-	font-weight : bold;
-	padding-right: 10px;
-}
-
-.warning {
-	color : #DE1A00;
-}
+.miniMessages .newMiniMessageForm input.button { margin: .5em 0 1em 1em }
