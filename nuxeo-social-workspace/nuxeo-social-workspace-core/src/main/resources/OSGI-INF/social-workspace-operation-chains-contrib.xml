@@ -8,7 +8,7 @@
         <param type="string" name="name">admins</param>
         <param type="object" name="value">group:administrators</param>
       </operation>
-      <operation id="Workflow.CreateTask">
+      <operation id="Workflow.CreateJBPMTask">
         <param type="string" name="task name">validateSocialWorkspace</param>
         <param type="string" name="directive">VERIFICATION</param>
         <param type="string" name="comment">Please validate social workspace</param>
