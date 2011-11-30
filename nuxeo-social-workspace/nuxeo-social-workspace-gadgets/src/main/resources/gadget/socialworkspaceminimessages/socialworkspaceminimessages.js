@@ -186,14 +186,14 @@ function showCreateMiniMessagePopup() {
 
     jQuery.fancybox(t,
        {
-          'width'			  : '100%',
-          'autoScale'         : false,
-          'showCloseButton'   : false,
-          'autoDimensions'    : false,
-          'transitionIn'      : 'none',
-          'transitionOut'     : 'none',
-          'padding'      	  : 0,
-          'margin'           : 0
+          'width': '100%',
+          'autoScale': false,
+          'showCloseButton': false,
+          'autoDimensions': false,
+          'transitionIn': 'none',
+          'transitionOut': 'none',
+          'padding': 0,
+          'margin': 0
        }
     );
     updateMiniMessageCounter();
@@ -221,10 +221,11 @@ function closePopUp() {
 function createMiniMessage(){
   var miniMessageText = jQuery('textarea[name="miniMessageText"]').val();
   var opCallParameters = {
-     operationId : 'Services.AddMiniMessage',
-     operationParams : {
-       message : miniMessageText,
-       language : prefs.getLang()
+     operationId: 'Services.AddMiniMessage',
+     operationParams: {
+       message: miniMessageText,
+       language: prefs.getLang(),
+       contextPath: getTargetContextPath()
      },
      entityType : 'blob',
      operationContext : {},

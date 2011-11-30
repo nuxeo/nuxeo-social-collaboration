@@ -60,6 +60,8 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
 
     public static final String RELATIONSHIP_KIND_PARAMETER = "relationshipKind";
 
+    public static final String TARGET_PARAMETER = "target";
+
     @Override
     public String getId() {
         return ID;
@@ -98,6 +100,8 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
         }
 
+        String target = (String) parameters.get(TARGET_PARAMETER);
+
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
         switch (queryType) {
@@ -107,9 +111,20 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             List<String> actors = relationshipService.getTargetsOfKind(actor,
                     relationshipKind);
             actors.add(actor);
-            query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb = :verb order by activity.publishedDate desc");
+
+            StringBuilder sb = new StringBuilder("select activity from Activity activity where activity.actor in (:actors) and activity.verb = :verb ");
+            if (target != null) {
+                sb.append("and activity.target = :target ");
+            } else {
+                sb.append("and activity.target is null ");
+            }
+            sb.append("order by activity.publishedDate desc");
+            query = em.createQuery(sb.toString());
             query.setParameter("actors", actors);
             query.setParameter("verb", VERB);
+            if (target != null) {
+                query.setParameter("target", target);
+            }
             break;
         case MINI_MESSAGES_FROM_ACTOR:
             query = em.createQuery("select activity from Activity activity where activity.actor = :actor and activity.verb = :verb order by activity.publishedDate desc");

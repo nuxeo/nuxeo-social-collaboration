@@ -26,14 +26,20 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
+import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
@@ -68,6 +74,9 @@ public class AddMiniMessage {
     @Param(name = "publishedDate", required = false)
     protected Date publishedDate;
 
+    @Param(name = "contextPath", required = false)
+    protected String contextPath;
+
     @OperationMethod
     public Blob run() throws Exception {
         if (publishedDate == null) {
@@ -79,8 +88,17 @@ public class AddMiniMessage {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
 
+        String target = null;
+        if (contextPath != null) {
+            TargetActivityObject targetActivityObject = new TargetActivityObject(session, contextPath);
+            targetActivityObject.runUnrestricted();
+            if (targetActivityObject.documentActivityObject != null) {
+                target = targetActivityObject.documentActivityObject;
+            }
+        }
+
         MiniMessage miniMessage = miniMessageService.addMiniMessage(
-                session.getPrincipal(), message, publishedDate);
+                session.getPrincipal(), message, publishedDate, target);
 
         NuxeoPrincipal principal = userManager.getPrincipal(miniMessage.getActor());
         String fullName = principal == null ? "" : principal.getFirstName()
@@ -102,6 +120,28 @@ public class AddMiniMessage {
 
         return new InputStreamBlob(new ByteArrayInputStream(
                 writer.toString().getBytes("UTF-8")), "application/json");
+    }
+
+    private static class TargetActivityObject extends UnrestrictedSessionRunner {
+
+        private String contextPath;
+
+        public String documentActivityObject;
+
+        public TargetActivityObject(CoreSession session, String contextPath) {
+            super(session);
+            this.contextPath = contextPath;
+        }
+
+        @Override
+        public void run() throws ClientException {
+            DocumentRef docRef = new PathRef(contextPath);
+            if (session.exists(docRef)) {
+                DocumentModel doc = session.getDocument(docRef);
+                documentActivityObject = ActivityHelper.createDocumentActivityObject(doc);
+            }
+        }
+
     }
 
 }

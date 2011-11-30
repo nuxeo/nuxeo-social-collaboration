@@ -68,7 +68,8 @@ public class SocialWorkspaceMiniMessagePageProvider extends
             MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
             pageMiniMessages.addAll(miniMessageService.getMiniMessageFor(
                     socialWorkspaceActivityObject, relationshipKind,
-                    getCurrentPageOffset(), pageSize));
+                    socialWorkspaceActivityObject, getCurrentPageOffset(),
+                    pageSize));
             nextOffset = offset + pageMiniMessages.size();
 
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);

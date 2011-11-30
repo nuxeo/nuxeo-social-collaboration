@@ -60,7 +60,6 @@ import com.google.inject.Inject;
 @RepositoryConfig(repositoryName = "default", type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
         "org.nuxeo.ecm.user.relationships",
-        "org.nuxeo.ecm.platform.htmlsanitizer",
         "org.nuxeo.ecm.social.mini.message", "org.nuxeo.ecm.platform.url.api",
         "org.nuxeo.ecm.platform.url.core",
         "org.nuxeo.ecm.platform.ui:OSGI-INF/urlservice-framework.xml",

@@ -40,6 +40,14 @@ public interface MiniMessageService {
             Date publishedDate);
 
     /**
+     * Add a new mini message for the given {@code target}.
+     *
+     * @return the newly created MiniMessage object.
+     */
+    MiniMessage addMiniMessage(Principal principal, String message,
+            Date publishedDate, String target);
+
+    /**
      * Add a new mini message.
      *
      * @return the newly created MiniMessage object.
@@ -62,6 +70,19 @@ public interface MiniMessageService {
      */
     List<MiniMessage> getMiniMessageFor(String actorActivityObject,
             RelationshipKind relationshipKind, long offset, long limit);
+
+    /**
+     * Returns the mini messages for the given {@code actorActivityObject} and
+     * {@code targetActivityObject}. The {@code relationshipKind} is used to
+     * find people with whom the actor has a relation.
+     *
+     * @param offset the offset (starting at 0) into the list of mini messages.
+     * @param limit the maximum number of mini messages to retrieve, or 0 for
+     *            all of them.
+     */
+    List<MiniMessage> getMiniMessageFor(String actorActivityObject,
+            RelationshipKind relationshipKind, String targetActivityObject,
+            long offset, long limit);
 
     /**
      * Returns the mini messages from the given {@code actorActivityObject}.
