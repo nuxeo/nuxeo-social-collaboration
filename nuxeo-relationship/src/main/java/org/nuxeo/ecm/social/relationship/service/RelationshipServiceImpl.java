@@ -61,32 +61,18 @@ public class RelationshipServiceImpl extends DefaultComponent implements
 
     protected static final String RELATIONSHIP_DIRECTORY_NAME = "actorRelationshipDirectory";
 
-    protected static final String KIND_DIRECTORY_NAME = "actorRelationshipKindDirectory";
-
     private static final Log log = LogFactory.getLog(RelationshipServiceImpl.class);
-
-    protected List<RelationshipKindDescriptor> pendingDescriptors;
 
     protected RelationshipKindRegistry relationshipKindRegistry;
 
     @Override
     public void activate(ComponentContext context) throws Exception {
-        pendingDescriptors = new ArrayList<RelationshipKindDescriptor>();
         relationshipKindRegistry = new RelationshipKindRegistry();
     }
 
     @Override
     public void deactivate(ComponentContext context) throws Exception {
-        pendingDescriptors = null;
         relationshipKindRegistry = null;
-    }
-
-    @Override
-    public void applicationStarted(ComponentContext context) throws Exception {
-        super.applicationStarted(context);
-        for (RelationshipKindDescriptor desc : pendingDescriptors) {
-            addRelationshipKind(desc);
-        }
     }
 
     @Override
@@ -94,33 +80,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
         if (KINDS_EXTENSION_POINT.equals(extensionPoint)) {
-            pendingDescriptors.add((RelationshipKindDescriptor) contribution);
-        }
-    }
-
-    protected void addRelationshipKind(RelationshipKindDescriptor kind) {
-        DirectoryService directoryService = Framework.getLocalService(DirectoryService.class);
-        Session typeDirectory = null;
-        try {
-            typeDirectory = directoryService.open(KIND_DIRECTORY_NAME);
-
-            // Add a new relationship kind if not exists
-            if (null == typeDirectory.getEntry(kind.getName())) {
-                typeDirectory.createEntry(kind.getMap());
-            }
-            relationshipKindRegistry.addContribution(kind);
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(
-                    "Unable to create a new relationship kind", e);
-        } finally {
-            if (typeDirectory != null) {
-                try {
-                    typeDirectory.close();
-                } catch (DirectoryException e) {
-                    log.error("Error while trying to close kind directory");
-                    log.debug("Exception occurred", e);
-                }
-            }
+            relationshipKindRegistry.addContribution((RelationshipKindDescriptor) contribution);
         }
     }
 

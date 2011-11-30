@@ -19,23 +19,6 @@
   <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
     point="directories">
 
-    <directory name="actorRelationshipKindDirectory" remove="true" />
-
-    <directory name="actorRelationshipKindDirectory">
-      <schema>actor_relationship_kind</schema>
-      <dbDriver>${nuxeo.test.vcs.driver}</dbDriver>
-      <dbUrl>${nuxeo.test.vcs.url}</dbUrl>
-      <dbUser>${nuxeo.test.vcs.user}</dbUser>
-      <dbPassword>${nuxeo.test.vcs.password}</dbPassword>
-      <cacheTimeout>3600</cacheTimeout>
-      <cacheMaxSize>1000</cacheMaxSize>
-      <table>actor_relationship_kind</table>
-      <idField>name</idField>
-      <autoincrementIdField>false</autoincrementIdField>
-      <createTablePolicy>on_missing_columns</createTablePolicy>
-      <substringMatchType>subany</substringMatchType>
-    </directory>
-
     <directory name="actorRelationshipDirectory" remove="true" />
 
     <directory name="actorRelationshipDirectory">

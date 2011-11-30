@@ -8,18 +8,6 @@
   <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
     point="directories">
 
-    <directory name="actorRelationshipKindDirectory">
-      <schema>actor_relationship_kind</schema>
-      <dataSource>java:/nxsqldirectory</dataSource>
-      <cacheTimeout>3600</cacheTimeout>
-      <cacheMaxSize>1000</cacheMaxSize>
-      <table>actor_relationship_kind</table>
-      <idField>name</idField>
-      <autoincrementIdField>false</autoincrementIdField>
-      <createTablePolicy>on_missing_columns</createTablePolicy>
-      <substringMatchType>subany</substringMatchType>
-    </directory>
-
     <directory name="actorRelationshipDirectory">
       <schema>actor_relationship</schema>
       <dataSource>java:/nxsqldirectory</dataSource>
