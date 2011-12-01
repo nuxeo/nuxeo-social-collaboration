@@ -53,6 +53,10 @@
         <verb>documentModified</verb>
         <verb>documentRemoved</verb>
       </verbs>
+      <relationshipKinds append="true">
+        <relationshipKind>circle</relationshipKind>
+        <relationshipKind>socialworkspace:members</relationshipKind>
+      </relationshipKinds>
     </activityStream>
 
   </extension>
