@@ -6,7 +6,7 @@
       <operation id="Context.FetchDocument"/>
       <operation id="Context.SetVar">
         <param type="string" name="name">admins</param>
-        <param type="object" name="value">group:administrators</param>
+        <param type="object" name="value">administrators</param>
       </operation>
       <operation id="Workflow.CreateTask">
         <param type="string" name="task name">validateSocialWorkspace</param>

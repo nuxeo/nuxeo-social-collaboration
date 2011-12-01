@@ -36,13 +36,13 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
-import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.contentview.seam.ContentViewActions;
-import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
-import org.nuxeo.ecm.platform.jbpm.JbpmService;
+import org.nuxeo.ecm.platform.task.Task;
+import org.nuxeo.ecm.platform.task.TaskService;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
@@ -175,20 +175,22 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
         documentManager.save();
     }
 
-    private static void removeValidationTasks(DocumentModel doc) {
-        List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
+    private void removeValidationTasks(DocumentModel doc) {
+        List<Task> canceledTasks = new ArrayList<Task>();
         try {
-            JbpmService jbpmService = Framework.getService(JbpmService.class);
-            List<TaskInstance> taskInstances = jbpmService.getTaskInstances(
-                    doc, null, (JbpmListFilter) null);
-            for (TaskInstance task : taskInstances) {
+            TaskService taskService = Framework.getService(TaskService.class);
+            List<Task> taskInstances = taskService.getTaskInstances(
+                    doc, (NuxeoPrincipal) null, documentManager);
+            for (Task task : taskInstances) {
                 if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())) {
-                    task.cancel();
+                    task.cancel(documentManager);
                     canceledTasks.add(task);
                 }
             }
             if (!canceledTasks.isEmpty()) {
-                jbpmService.saveTaskInstances(canceledTasks);
+                DocumentModel[] docToSave = new DocumentModel[canceledTasks.size()];
+                canceledTasks.toArray(docToSave);
+                documentManager.saveDocuments(docToSave);
             }
         } catch (Exception e) {
             log.warn(

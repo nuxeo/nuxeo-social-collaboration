@@ -24,18 +24,19 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
-import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
-import org.nuxeo.ecm.platform.jbpm.JbpmService;
+import org.nuxeo.ecm.platform.task.Task;
+import org.nuxeo.ecm.platform.task.TaskService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -48,7 +49,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class CheckSocialWorkspaceValidationTasks implements EventListener {
 
-    protected JbpmService jbpmService;
+    protected TaskService taskService;
 
     protected AutomationService automationService;
 
@@ -70,20 +71,21 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
         }
     }
 
-    private void checkTasksFor(DocumentModel doc) throws ClientException {
-        List<TaskInstance> taskInstances = getJbpmService().getTaskInstances(
-                doc, null, (JbpmListFilter) null);
-        List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
-        for (TaskInstance task : taskInstances) {
+    private void checkTasksFor(DocumentModel doc, CoreSession coreSession) throws ClientException {
+        List<Task> taskInstances = getTaskService().getTaskInstances(
+                doc, (NuxeoPrincipal) null, coreSession);
+        List<Task> canceledTasks = new ArrayList<Task>();
+        for (Task task : taskInstances) {
             if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())
                     && isExpired(task)) {
                 OperationContext ctx = new OperationContext(
                         doc.getCoreSession());
                 ctx.setInput(doc);
                 try {
+                    task.cancel(coreSession);
                     getAutomationService().run(ctx,
                             "SocialWorkspaceNotValidatedChain");
-                    task.cancel();
+                    task.cancel(coreSession);
                     canceledTasks.add(task);
                 } catch (Exception e) {
                     log.warn(
@@ -93,11 +95,13 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
             }
         }
         if (!canceledTasks.isEmpty()) {
-            getJbpmService().saveTaskInstances(canceledTasks);
+            DocumentModel[] docToSave = new DocumentModel[canceledTasks.size()];
+            canceledTasks.toArray(docToSave);
+            coreSession.saveDocuments(docToSave);
         }
     }
 
-    private static boolean isExpired(TaskInstance task) {
+    private static boolean isExpired(Task task) throws ClientException {
         Date date = task.getDueDate();
         return date != null && date.before(new Date());
     }
@@ -109,15 +113,15 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
         return automationService;
     }
 
-    protected JbpmService getJbpmService() {
-        if (jbpmService == null) {
+    protected TaskService getTaskService() {
+        if (taskService == null) {
             try {
-                jbpmService = Framework.getService(JbpmService.class);
+                taskService = Framework.getService(TaskService.class);
             } catch (Exception e) {
                 log.warn("failed to get JbpmService service", e);
             }
         }
-        return jbpmService;
+        return taskService;
     }
 
     protected class UnrestrictedSocialWorkspaceValidationTasksChecker extends
@@ -134,7 +138,7 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
             // get the list with all not validated social workspaces
             DocumentModelList list = session.query(QUERY_SELECT_NOT_VALIDATED_SOCIAL_WORKSPACES);
             for (DocumentModel doc : list) {
-                checkTasksFor(doc);
+                checkTasksFor(doc, session);
             }
         }
     }

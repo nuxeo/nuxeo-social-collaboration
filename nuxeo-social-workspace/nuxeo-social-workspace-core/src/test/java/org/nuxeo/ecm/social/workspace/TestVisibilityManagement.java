@@ -38,7 +38,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jbpm.taskmgmt.exe.TaskInstance;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -48,9 +47,9 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.event.impl.EventImpl;
-import org.nuxeo.ecm.platform.jbpm.JbpmListFilter;
-import org.nuxeo.ecm.platform.jbpm.JbpmService;
-import org.nuxeo.ecm.platform.jbpm.test.JbpmUTConstants;
+import org.nuxeo.ecm.platform.task.Task;
+import org.nuxeo.ecm.platform.task.TaskService;
+import org.nuxeo.ecm.platform.task.test.TaskUTConstants;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -65,9 +64,9 @@ import com.google.inject.Inject;
  */
 // no listener configured
 @Deploy({ "org.nuxeo.ecm.automation.core",
-        "org.nuxeo.ecm.platform.jbpm.automation",
-        "org.nuxeo.ecm.automation.features", JbpmUTConstants.CORE_BUNDLE_NAME,
-        JbpmUTConstants.TESTING_BUNDLE_NAME })
+        "org.nuxeo.ecm.platform.task.automation",TaskUTConstants.API_BUNDLE_NAME,
+        "org.nuxeo.ecm.automation.features", TaskUTConstants.CORE_BUNDLE_NAME,
+        TaskUTConstants.TESTING_BUNDLE_NAME })
 @LocalDeploy("org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml")
 public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
@@ -76,7 +75,7 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
     private static final Log log = LogFactory.getLog(TestVisibilityManagement.class);
 
     @Inject
-    protected JbpmService jbpmService;
+    protected TaskService taskService;
 
     @Inject
     protected EventService eventService;
@@ -291,41 +290,40 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     @Test
     public void testModeratedSocialWorkspaceCreation() throws Exception {
-        assertNotNull(jbpmService);
+        assertNotNull(taskService);
 
         DocumentModel moderated = createDocument(
                 session.getRootDocument().getPathAsString(), "willBeApproved",
                 SOCIAL_WORKSPACE_TYPE);
         assertEquals("project", moderated.getCurrentLifeCycleState());
-        List<TaskInstance> tasks = jbpmService.getTaskInstances(moderated,
-                null, (JbpmListFilter) null);
+        List<Task> tasks = taskService.getTaskInstances(moderated, (NuxeoPrincipal) null, session);
         assertEquals(1, tasks.size());
         assertEquals(VALIDATE_SOCIAL_WORKSPACE_TASK_NAME,
                 tasks.get(0).getName());
-        assertTrue(tasks.get(0).isOpen());
+        assertTrue(tasks.get(0).isOpened());
 
         assertTrue(moderated.followTransition("approve"));
         removeValidationTasks(moderated);
         session.save();
         assertEquals("approved", moderated.getCurrentLifeCycleState());
 
-        tasks = jbpmService.getTaskInstances(moderated, null,
-                (JbpmListFilter) null);
+        tasks = taskService.getTaskInstances(moderated,
+                (NuxeoPrincipal) null, session);
         assertNotNull(tasks);
         assertTrue(tasks.isEmpty());
 
         moderated = createDocument(session.getRootDocument().getPathAsString(),
                 "willBeRejected", SOCIAL_WORKSPACE_TYPE);
         assertEquals("project", moderated.getCurrentLifeCycleState());
-        assertFalse(jbpmService.getTaskInstances(moderated, null,
-                (JbpmListFilter) null).isEmpty());
+        assertFalse(taskService.getTaskInstances(moderated, (NuxeoPrincipal) null,
+                 session).isEmpty());
         assertTrue(moderated.followTransition("delete"));
         removeValidationTasks(moderated);
         session.save();
         assertEquals("deleted", moderated.getCurrentLifeCycleState());
 
-        assertTrue(jbpmService.getTaskInstances(moderated, null,
-                (JbpmListFilter) null).isEmpty());
+        assertTrue(taskService.getTaskInstances(moderated, (NuxeoPrincipal) null,
+                session).isEmpty());
     }
 
     @Test
@@ -337,13 +335,15 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
         assertEquals("project", socialWorkspace.getCurrentLifeCycleState());
 
         // Change task due date at two days before
-        List<TaskInstance> tasks = jbpmService.getTaskInstances(
-                socialWorkspace, null, (JbpmListFilter) null);
+        List<Task> tasks = taskService.getTaskInstances(
+                socialWorkspace, (NuxeoPrincipal) null, session);
         assertFalse(tasks.isEmpty());
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -2);
-        tasks.get(0).setDueDate(cal.getTime());
-        jbpmService.saveTaskInstances(tasks);
+        Task task = tasks.get(0);
+        task.setDueDate(cal.getTime());
+        session.saveDocument(task.getDocument());
+        session.save();
 
         CheckSocialWorkspaceValidationTasks fakeListener = new CheckSocialWorkspaceValidationTasks();
         DocumentEventContext docCtx = new DocumentEventContext(session,
@@ -366,10 +366,9 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
         cal.add(Calendar.DATE, 15);
 
         // Change task due date at two days before
-        List<TaskInstance> tasks = jbpmService.getTaskInstances(wk1, null,
-                (JbpmListFilter) null);
+        List<Task> tasks = taskService.getTaskInstances(wk1,(NuxeoPrincipal) null, session);
         assertEquals(1, tasks.size());
-        TaskInstance task = tasks.get(0);
+        Task task = tasks.get(0);
 
         Calendar dueDate = Calendar.getInstance();
         dueDate.setTime(task.getDueDate());
@@ -378,18 +377,20 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
     }
 
     protected void removeValidationTasks(DocumentModel doc) {
-        List<TaskInstance> canceledTasks = new ArrayList<TaskInstance>();
+        List<Task> canceledTasks = new ArrayList<Task>();
         try {
-            List<TaskInstance> taskInstances = jbpmService.getTaskInstances(
-                    doc, null, (JbpmListFilter) null);
-            for (TaskInstance task : taskInstances) {
+            List<Task> taskInstances = taskService.getTaskInstances(
+                    doc, (NuxeoPrincipal) null, session);
+            for (Task task : taskInstances) {
                 if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())) {
-                    task.cancel();
+                    task.cancel(session);
                     canceledTasks.add(task);
                 }
             }
             if (!canceledTasks.isEmpty()) {
-                jbpmService.saveTaskInstances(canceledTasks);
+                DocumentModel[] docToSave = new DocumentModel[canceledTasks.size()];
+                canceledTasks.toArray(docToSave);
+                session.saveDocuments(docToSave);
             }
         } catch (Exception e) {
             log.warn(
