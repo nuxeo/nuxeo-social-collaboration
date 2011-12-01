@@ -46,8 +46,12 @@
       }
     }
 
-    updateMiniMessageCounter();
-    jQuery('.newMiniMessageForm textarea').keyup(updateMiniMessageCounter);
+
+    jQuery(document).ready(function() {
+      updateMiniMessageCounter();
+      jQuery('.newMiniMessageForm textarea').keyup(updateMiniMessageCounter);
+      jQuery('.newMiniMessageForm').focusFirst();
+    });
 
   </script>
 

@@ -18,7 +18,7 @@
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,jquery.fancybox.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js"></script>
     <script src="${specDirectoryUrl}default-automation-request.js"></script>
     <script src="${specDirectoryUrl}context-management.js"></script>
     <script src="socialworkspaceminimessages.js"></script>
