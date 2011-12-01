@@ -90,7 +90,8 @@ public class AddMiniMessage {
 
         String target = null;
         if (contextPath != null) {
-            TargetActivityObject targetActivityObject = new TargetActivityObject(session, contextPath);
+            TargetActivityObject targetActivityObject = new TargetActivityObject(
+                    session, contextPath);
             targetActivityObject.runUnrestricted();
             if (targetActivityObject.documentActivityObject != null) {
                 target = targetActivityObject.documentActivityObject;

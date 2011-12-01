@@ -179,8 +179,8 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
         List<Task> canceledTasks = new ArrayList<Task>();
         try {
             TaskService taskService = Framework.getService(TaskService.class);
-            List<Task> taskInstances = taskService.getTaskInstances(
-                    doc, (NuxeoPrincipal) null, documentManager);
+            List<Task> taskInstances = taskService.getTaskInstances(doc,
+                    (NuxeoPrincipal) null, documentManager);
             for (Task task : taskInstances) {
                 if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())) {
                     task.cancel(documentManager);

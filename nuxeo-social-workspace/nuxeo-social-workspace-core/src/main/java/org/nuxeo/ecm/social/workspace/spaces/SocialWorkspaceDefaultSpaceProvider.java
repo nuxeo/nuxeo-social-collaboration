@@ -25,16 +25,20 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.user.center.dashboard.DefaultDashboardSpaceProvider;
 
 /**
- * Overriding the default {@link org.nuxeo.ecm.spaces.api.Space} for a Social Workspace.
+ * Overriding the default {@link org.nuxeo.ecm.spaces.api.Space} for a Social
+ * Workspace.
  * {@link org.nuxeo.ecm.user.center.dashboard.DefaultDashboardSpaceProvider}
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
-public class SocialWorkspaceDefaultSpaceProvider extends DefaultDashboardSpaceProvider {
+public class SocialWorkspaceDefaultSpaceProvider extends
+        DefaultDashboardSpaceProvider {
     @Override
-    protected DocumentRef getOrCreateDefaultDashboardSpace(CoreSession session, Map<String, String> parameters) throws ClientException {
-        SocialWorkspaceDefaultSpaceCreator creator = new SocialWorkspaceDefaultSpaceCreator(session, parameters);
+    protected DocumentRef getOrCreateDefaultDashboardSpace(CoreSession session,
+            Map<String, String> parameters) throws ClientException {
+        SocialWorkspaceDefaultSpaceCreator creator = new SocialWorkspaceDefaultSpaceCreator(
+                session, parameters);
         creator.runUnrestricted();
         return creator.defaultDashboardSpaceRef;
     }

@@ -34,8 +34,10 @@ import org.nuxeo.opensocial.container.shared.layout.api.LayoutHelper;
  *
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  */
-public class SocialWorkspaceDefaultSpaceCreator extends DefaultDashboardSpaceCreator {
-    public SocialWorkspaceDefaultSpaceCreator(CoreSession session, Map<String, String> parameters) {
+public class SocialWorkspaceDefaultSpaceCreator extends
+        DefaultDashboardSpaceCreator {
+    public SocialWorkspaceDefaultSpaceCreator(CoreSession session,
+            Map<String, String> parameters) {
         super(session, parameters);
     }
 
@@ -45,13 +47,14 @@ public class SocialWorkspaceDefaultSpaceCreator extends DefaultDashboardSpaceCre
     }
 
     @Override
-    protected void initializeGadgets(Space space, CoreSession session, Locale locale) throws ClientException {
+    protected void initializeGadgets(Space space, CoreSession session,
+            Locale locale) throws ClientException {
         WebContentHelper.createOpenSocialGadget(space, session, locale,
                 "usersocialworkspaces", 0, 0, 0);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "news",
+                0, 0, 1);
         WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "news", 0, 0, 1);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                        "publicsocialworkspaces", 0, 0, 2);
+                "publicsocialworkspaces", 0, 0, 2);
         WebContentHelper.createOpenSocialGadget(space, session, locale,
                 "userworkspaces", 0, 0, 3);
         WebContentHelper.createOpenSocialGadget(space, session, locale,

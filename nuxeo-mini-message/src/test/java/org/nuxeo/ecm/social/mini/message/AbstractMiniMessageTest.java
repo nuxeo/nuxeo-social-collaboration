@@ -163,8 +163,8 @@ public abstract class AbstractMiniMessageTest {
         String zappActivityObject = ActivityHelper.createUserActivityObject(zapp.getName());
         relationshipService.addRelation(leelaActivityObject,
                 benderActivityObject, friends);
-        relationshipService.addRelation(leelaActivityObject,
-                fryActivityObject, friends);
+        relationshipService.addRelation(leelaActivityObject, fryActivityObject,
+                friends);
         relationshipService.addRelation(leelaActivityObject,
                 zappActivityObject, coworkers);
     }

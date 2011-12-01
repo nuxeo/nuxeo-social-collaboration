@@ -70,7 +70,8 @@ public class SocialWorkspaceActions implements Serializable {
     public boolean isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() {
         DocumentModel doc = navigationContext.getCurrentDocument();
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(doc);
-        return socialWorkspace != null && socialWorkspace.isAdministratorOrMember(currentUser);
+        return socialWorkspace != null
+                && socialWorkspace.isAdministratorOrMember(currentUser);
     }
 
     public SocialWorkspace getSocialWorkspace(DocumentModel doc) {
@@ -86,7 +87,7 @@ public class SocialWorkspaceActions implements Serializable {
         return socialWorkspaceService.getSocialWorkspaceContainer(documentManager);
     }
 
-    public String getCollaborationMainTab(){
+    public String getCollaborationMainTab() {
         return MAIN_TABS_COLLABORATION;
     }
 

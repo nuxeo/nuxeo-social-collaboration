@@ -127,9 +127,11 @@ public class SocialConstants {
 
     public static final String MEMBERS_SUFFIX = "members";
 
-    public static final String ADMINISTRATORS_GROUP_SUFFIX = SEPARATOR + ADMINISTRATORS_SUFFIX;
+    public static final String ADMINISTRATORS_GROUP_SUFFIX = SEPARATOR
+            + ADMINISTRATORS_SUFFIX;
 
-    public static final String MEMBERS_GROUP_SUFFIX = SEPARATOR + MEMBERS_SUFFIX;
+    public static final String MEMBERS_GROUP_SUFFIX = SEPARATOR
+            + MEMBERS_SUFFIX;
 
     private SocialConstants() {
         // Constants class

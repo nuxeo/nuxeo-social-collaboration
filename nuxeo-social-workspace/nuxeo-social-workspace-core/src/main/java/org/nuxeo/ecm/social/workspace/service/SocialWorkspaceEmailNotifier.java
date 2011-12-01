@@ -103,7 +103,8 @@ public class SocialWorkspaceEmailNotifier {
         OperationContext ctx = new OperationContext(session);
         ctx.setInput(socialWorkspaceDoc);
 
-        Principal subscriptionRequestUser = getUserManager().getPrincipal(requestAdapter.getUsername());
+        Principal subscriptionRequestUser = getUserManager().getPrincipal(
+                requestAdapter.getUsername());
         ctx.put("subscriptionRequestUser", subscriptionRequestUser);
 
         OperationChain chain = new OperationChain("sendEMail");

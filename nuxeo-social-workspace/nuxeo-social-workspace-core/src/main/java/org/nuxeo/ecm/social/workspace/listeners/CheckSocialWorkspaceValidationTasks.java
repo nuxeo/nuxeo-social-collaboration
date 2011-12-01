@@ -71,9 +71,10 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
         }
     }
 
-    private void checkTasksFor(DocumentModel doc, CoreSession coreSession) throws ClientException {
-        List<Task> taskInstances = getTaskService().getTaskInstances(
-                doc, (NuxeoPrincipal) null, coreSession);
+    private void checkTasksFor(DocumentModel doc, CoreSession coreSession)
+            throws ClientException {
+        List<Task> taskInstances = getTaskService().getTaskInstances(doc,
+                (NuxeoPrincipal) null, coreSession);
         List<Task> canceledTasks = new ArrayList<Task>();
         for (Task task : taskInstances) {
             if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())

@@ -3,6 +3,7 @@ package org.nuxeo.ecm.social.relationship.service;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
+
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 

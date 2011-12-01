@@ -112,7 +112,8 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
                     relationshipKind);
             actors.add(actor);
 
-            StringBuilder sb = new StringBuilder("select activity from Activity activity where activity.actor in (:actors) and activity.verb = :verb ");
+            StringBuilder sb = new StringBuilder(
+                    "select activity from Activity activity where activity.actor in (:actors) and activity.verb = :verb ");
             if (target != null) {
                 sb.append("and activity.target = :target ");
             } else {

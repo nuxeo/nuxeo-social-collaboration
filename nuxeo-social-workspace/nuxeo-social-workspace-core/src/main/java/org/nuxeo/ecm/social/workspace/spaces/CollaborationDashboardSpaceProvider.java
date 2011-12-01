@@ -140,7 +140,6 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
                     "useractivitystream", 0, 1, 1);
         }
 
-
     }
 
 }

@@ -53,7 +53,6 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
-import org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -131,8 +130,8 @@ public abstract class AbstractUserActivityTest {
 
         relationshipService.addRelation(leelaActivityObject,
                 benderActivityObject, friends);
-        relationshipService.addRelation(leelaActivityObject,
-                fryActivityObject, friends);
+        relationshipService.addRelation(leelaActivityObject, fryActivityObject,
+                friends);
         relationshipService.addRelation(leelaActivityObject,
                 zappActivityObject, coworkers);
 
