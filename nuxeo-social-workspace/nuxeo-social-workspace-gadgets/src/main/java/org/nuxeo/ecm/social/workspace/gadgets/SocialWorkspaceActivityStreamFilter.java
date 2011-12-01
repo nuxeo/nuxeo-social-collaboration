@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.social.workspace.gadgets;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import org.nuxeo.ecm.activity.ActivitiesList;
 import org.nuxeo.ecm.activity.ActivitiesListImpl;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityStream;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
@@ -90,26 +92,30 @@ public class SocialWorkspaceActivityStreamFilter implements
                     + " is required");
         }
 
-        EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
-        Query query;
+        ActivityStream socialWorkspaceActivityStream = activityStreamService.getActivityStream(SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME);
+        List<String> verbs = socialWorkspaceActivityStream.getVerbs();
+        List<String> relationshipKinds = socialWorkspaceActivityStream.getRelationshipKinds();
+
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
                 repositoryName, socialWorkspaceId);
         RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
-        List<String> actors = relationshipService.getTargetsOfKind(
-                socialWorkspaceActivityObject,
-                RelationshipKind.fromString("socialworkspace:members"));
+        List<String> actors = new ArrayList<String>();
+        for (String relationshipKind : relationshipKinds) {
+            actors.addAll(relationshipService.getTargetsOfKind(
+                    socialWorkspaceActivityObject,
+                    RelationshipKind.fromString(relationshipKind)));
+        }
         actors.add(socialWorkspaceActivityObject);
         if (actors.isEmpty()) {
             return new ActivitiesListImpl();
         }
 
+        EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
+        Query query;
         query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) "
                 + "and activity.target = :target order by activity.publishedDate desc");
         query.setParameter("actors", actors);
         query.setParameter("target", socialWorkspaceActivityObject);
-
-        List<String> verbs = activityStreamService.getActivityStream(
-                SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME).getVerbs();
         query.setParameter("verbs", verbs);
 
         if (limit > 0) {

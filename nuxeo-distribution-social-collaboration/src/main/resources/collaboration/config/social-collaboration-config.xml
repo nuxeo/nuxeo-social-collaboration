@@ -1,4 +1,21 @@
-<component name="org.nuxeo.ecm.social.user.profile.layout.config">
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.collaboration.config">
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreams">
+
+    <activityStream name="userActivityStream">
+      <verbs append="true">
+        <verb>circle</verb>
+        <verb>socialworkspace:members</verb>
+      </verbs>
+      <relationshipKinds append="true">
+        <relationshipKind>circle</relationshipKind>
+        <relationshipKind>socialworkspace:members</relationshipKind>
+      </relationshipKinds>
+    </activityStream>
+
+  </extension>
 
   <require>org.nuxeo.ecm.social.user.relationship.layout</require>
 

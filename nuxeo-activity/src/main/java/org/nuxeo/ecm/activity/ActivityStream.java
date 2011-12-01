@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.activity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.nuxeo.common.xmap.annotation.XNode;
@@ -40,6 +41,12 @@ public class ActivityStream {
     @XNodeList(value = "verbs/verb", type = ArrayList.class, componentType = String.class)
     List<String> verbs;
 
+    @XNode("relationshipKinds@append")
+    boolean appendRelationshipKinds;
+
+    @XNodeList(value = "relationshipKinds/relationshipKind", type = ArrayList.class, componentType = String.class)
+    List<String> relationshipKinds;
+
     public String getName() {
         return name;
     }
@@ -57,11 +64,33 @@ public class ActivityStream {
     }
 
     public List<String> getVerbs() {
+        if (verbs == null) {
+            return Collections.emptyList();
+        }
         return verbs;
     }
 
     public void setVerbs(List<String> verbs) {
         this.verbs = verbs;
+    }
+
+    public boolean isAppendRelationshipKinds() {
+        return appendRelationshipKinds;
+    }
+
+    public void setAppendRelationshipKinds(boolean appendRelationshipKinds) {
+        this.appendRelationshipKinds = appendRelationshipKinds;
+    }
+
+    public List<String> getRelationshipKinds() {
+        if (relationshipKinds == null) {
+            return Collections.emptyList();
+        }
+        return relationshipKinds;
+    }
+
+    public void setRelationshipKinds(List<String> relationshipKinds) {
+        this.relationshipKinds = relationshipKinds;
     }
 
     @Override
@@ -76,6 +105,15 @@ public class ActivityStream {
                 newVerbs.add(verb);
             }
             clone.setVerbs(newVerbs);
+        }
+        clone.setAppendRelationshipKinds(isAppendRelationshipKinds());
+        List<String> relationshipKinds = getRelationshipKinds();
+        if (relationshipKinds != null) {
+            List<String> newRelationshipKinds = new ArrayList<String>();
+            for (String kind : relationshipKinds) {
+                newRelationshipKinds.add(kind);
+            }
+            clone.setRelationshipKinds(newRelationshipKinds);
         }
         return clone;
     }

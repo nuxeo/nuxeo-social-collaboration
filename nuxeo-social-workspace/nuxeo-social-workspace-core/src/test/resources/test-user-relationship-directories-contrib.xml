@@ -22,7 +22,7 @@
 
   </extension>
 
-  <extension target="RelationshipService"
+  <extension target="org.nuxeo.ecm.social.relationship.service.RelationshipService"
     point="relationshipKinds">
     <kind group="user" name="friend" label="%s is friend with %s" />
     <kind group="user" name="coworker" label="%s works with %s" />

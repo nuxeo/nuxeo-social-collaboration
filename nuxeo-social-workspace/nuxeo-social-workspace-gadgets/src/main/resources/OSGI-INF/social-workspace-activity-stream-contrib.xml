@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<component name="org.nuxeo.ecm.social.workspace.gadgets.activity.stream.filters">
+<component name="org.nuxeo.ecm.social.workspace.gadgets.activity.stream">
 
   <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
     point="activityStreamFilters">
@@ -19,6 +19,9 @@
         <verb>documentModifiedInSocialWorkspace</verb>
         <verb>socialworkspace:members</verb>
       </verbs>
+      <relationshipKinds>
+        <relationshipKind>socialworkspace:members</relationshipKind>
+      </relationshipKinds>
     </activityStream>
 
   </extension>

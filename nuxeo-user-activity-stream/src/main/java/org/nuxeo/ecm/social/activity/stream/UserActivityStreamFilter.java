@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.social.activity.stream;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +30,10 @@ import org.nuxeo.ecm.activity.ActivitiesList;
 import org.nuxeo.ecm.activity.ActivitiesListImpl;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityStream;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.runtime.api.Framework;
@@ -99,19 +100,20 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
         }
         actor = ActivityHelper.createUserActivityObject(actor);
 
-        List<String> verbs = activityStreamService.getActivityStream(
-                USER_ACTIVITY_STREAM_NAME).getVerbs();
+        ActivityStream userActivityStream = activityStreamService.getActivityStream(USER_ACTIVITY_STREAM_NAME);
+        List<String> verbs = userActivityStream.getVerbs();
+        List<String> relationshipKinds = userActivityStream.getRelationshipKinds();
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
         switch (queryType) {
         case ACTIVITY_STREAM_FOR_ACTOR:
             RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
-            List<String> actors = relationshipService.getTargetsOfKind(
-                    actor,
-                    RelationshipKind.fromString("socialworkspace:members"));
-            actors.addAll(relationshipService.getTargetsOfKind(actor,
-                    RelationshipKind.fromGroup("circle")));
+            List<String> actors = new ArrayList<String>();
+            for (String relationshipKind : relationshipKinds) {
+                actors.addAll(relationshipService.getTargetsOfKind(actor,
+                        RelationshipKind.fromString(relationshipKind)));
+            }
             if (actors.isEmpty()) {
                 return new ActivitiesListImpl();
             }

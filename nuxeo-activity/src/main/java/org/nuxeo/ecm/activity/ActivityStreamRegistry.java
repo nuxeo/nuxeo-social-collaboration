@@ -79,5 +79,20 @@ public class ActivityStreamRegistry extends
             dst.setVerbs(merged);
         }
 
+        List<String> newRelationshipKinds = src.getRelationshipKinds();
+        if (newRelationshipKinds != null) {
+            List<String> merged = new ArrayList<String>();
+            merged.addAll(newRelationshipKinds);
+            boolean keepOld = src.isAppendRelationshipKinds()
+                    || (newRelationshipKinds.isEmpty() && !src.isAppendRelationshipKinds());
+            if (keepOld) {
+                // add back old contributions
+                List<String> oldRelationshipKinds = dst.getRelationshipKinds();
+                if (oldRelationshipKinds != null) {
+                    merged.addAll(0, oldRelationshipKinds);
+                }
+            }
+            dst.setRelationshipKinds(merged);
+        }
     }
 }
