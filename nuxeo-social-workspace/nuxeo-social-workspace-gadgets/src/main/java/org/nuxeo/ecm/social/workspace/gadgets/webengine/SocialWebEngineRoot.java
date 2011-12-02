@@ -20,6 +20,7 @@ import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.ADD_CHILDREN;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE_CHILDREN;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
@@ -55,12 +56,14 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.schema.TypeService;
 import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
+import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
@@ -370,10 +373,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     protected static boolean isSocialWorkspace(DocumentModel doc) {
-        if (doc == null) {
-            return false;
-        }
-        return "SocialWorkspace".equals(doc.getType());
+        return doc != null && doc.hasFacet(SOCIAL_WORKSPACE_FACET);
     }
 
     protected static DocumentRef getDocumentRef(String ref) {
@@ -497,18 +497,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * used in document list template to check if a document has attachment
-     *
-     * @param doc - document to be check
-     * @return true if the document has a file attched
+     * Returns the main blob for the given {@code doc}, {@code null} if
+     * there is no main file available.
      */
-    public boolean hasAttachment(DocumentModel doc) {
-        try {
-            Serializable v = doc.getPropertyValue("file:content");
-            return (v instanceof Blob && ((Blob) v).getLength() > 0);
-        } catch (Exception e) {
-            return false;
-        }
+    public Blob getAttachment(DocumentModel doc) throws ClientException {
+        BlobHolder bh = doc.getAdapter(BlobHolder.class);
+        return bh != null ? bh.getBlob() : null;
     }
 
     public String escape(String text) {

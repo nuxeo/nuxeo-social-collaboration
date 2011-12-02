@@ -56,8 +56,9 @@
             <div class="tooltip">${Context.getMessage("tooltip.can.not.publish.document")}</div>
           </a>
         </#if>
-        <#if This.hasAttachment(doc)>
-          <a class="button" href="${contextPath}/nxfile/default/${doc.id}/file:content/">
+        <#assign attachment = This.getAttachment(doc) />
+        <#if attachment != null>
+          <a class="button" href="${contextPath}/nxfile/default/${doc.id}/blobholder:0/${attachment.filename}">
             <img src="${contextPath}/icons/download.png" alt="download"></img>
             <div class="tooltip">${Context.getMessage("label.action.download")}</div>
           </a>
