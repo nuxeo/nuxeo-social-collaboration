@@ -116,9 +116,9 @@
     <widgetType name="manage_user_relations">
       <configuration>
         <sinceVersion>5.5</sinceVersion>
-        <title>User Manage Realations</title>
+        <title>User Manage Relations</title>
         <description>
-          <p>This widgets will manage user relations</p>
+          <p>This widget will manage user relations</p>
         </description>
         <categories>
           <category>summary</category>
@@ -126,7 +126,31 @@
         <supportedModes>
           <mode>any</mode>
         </supportedModes>
-        <!-- no configurable properties -->
+        <properties>
+          <layouts mode="any">
+            <layout
+              name="manage_user_relations_widget_type_properties_any">
+              <rows>
+                <row>
+                  <widget>panelIdsToBeReRendered</widget>
+                </row>
+              </rows>
+              <widget name="panelIdsToBeReRendered" type="text">
+                <labels>
+                  <label mode="any">Panel IDs to be reRendered</label>
+                </labels>
+                <helpLabels>
+                  <label mode="any">
+                    The list of panel IDs to be reRendered separated by coma.
+                  </label>
+                </helpLabels>
+                <fields>
+                  <field>panelIdsToBeReRendered</field>
+                </fields>
+              </widget>
+            </layout>
+          </layouts>
+        </properties>
       </configuration>
       <handler-class>
         org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
@@ -153,6 +177,9 @@
       <fields>
         <field>data</field>
       </fields>
+      <properties mode="any">
+        <property name="panelIdsToBeReRendered">usersListingRelationshipPanel,userNetworkPanel</property>
+      </properties>
     </widget>
 
     <widget name="user_relationship_contacts" type="template">

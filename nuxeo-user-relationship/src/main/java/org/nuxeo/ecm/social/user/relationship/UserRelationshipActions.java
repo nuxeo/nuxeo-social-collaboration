@@ -1,6 +1,5 @@
 package org.nuxeo.ecm.social.user.relationship;
 
-import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.user.relationship.UserRelationshipConstants.CIRCLE_RELATIONSHIP_KIND_GROUP;
 import static org.nuxeo.ecm.webapp.security.UserManagementActions.USER_SELECTED_CHANGED;
@@ -15,6 +14,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
@@ -46,7 +46,7 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.5
  */
 @Name("userRelationshipActions")
-@Scope(CONVERSATION)
+@Scope(ScopeType.PAGE)
 @Install(precedence = FRAMEWORK)
 public class UserRelationshipActions implements Serializable {
 

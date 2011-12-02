@@ -35,21 +35,22 @@
 
         <div class="buttonContainer_#{widget.id}">
           <!--add button-->
-          <a4j:outputPanel rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}">
-            <a class="button relationship_#{widget.id}_button">
-              <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
-            </a>
-          </a4j:outputPanel>
+          <a4j:commandLink
+            rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}"
+            reRender="add_relationship_#{widget.id}"
+            styleClass="button relationship_#{widget.id}_button">
+            <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
+          </a4j:commandLink>
           <!--end add button-->
 
           <!--modify button-->
-          <a4j:outputPanel rendered="#{userRelationshipActions.isAlreadyConnected(userName)}">
-            <a class="button relationship_#{widget.id}_button">
-              <h:outputText value="#{messages['action.social.user.relationship.join']}" />
-            </a>
-          </a4j:outputPanel>
+          <a4j:commandLink
+            rendered="#{userRelationshipActions.isAlreadyConnected(userName)}"
+            reRender="add_relationship_#{widget.id}"
+            styleClass="button relationship_#{widget.id}_button">
+            <h:outputText value="#{messages['action.social.user.relationship.join']}" />
+          </a4j:commandLink>
           <!--end button-->
-
           <div class="relationPopUpContainer">
             <a4j:region id="#{widget.id}_region">
               <div id="add_relationship_#{widget.id}_popup" class="relationPopUp">
@@ -59,6 +60,7 @@
                   </f:facet>
                 </a4j:status>
                 <a4j:outputPanel id="add_relationship_#{widget.id}">
+                  #{userManagementActions.setSelectedUserName(userName)}
                   <nxu:dataTable id="#{widget.id}_add_relationship"
               value="#{userRelationshipActions.kinds}" var="kind"
               rendered="#{!(userRelationshipActions.isCurrentUser(userName))}">
@@ -66,7 +68,7 @@
                       <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipActions.relationshipCheckboxChanged}"
                   value="#{userRelationshipActions.allRelationshipsState[kind]}">
                         <a4j:support event="onchange"
-                    reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel">
+                    reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel,#{widgetProperty_panelIdsToBeReRendered}">
                           <f:param name="selectedKind" value="#{kind.toString()}" />
                           <f:param name="selectedUser" value="#{userName}" />
                         </a4j:support>
@@ -81,13 +83,16 @@
             </a4j:region>
           </div>
           <script type="text/javascript">
-          	var div = jQuery("#add_relationship_#{widget.id}_popup");
+            var div = jQuery("#add_relationship_#{widget.id}_popup");
             div.mouseleave(function() {
-                 div.fadeOut(500);
+                div.fadeOut(500);
             });
             var btn = jQuery(".relationship_#{widget.id}_button");
             btn.click(function() {
-           		 jQuery("#add_relationship_#{widget.id}_popup").fadeIn(500);
+                jQuery(".relationPopUp").each(function() {
+                    jQuery(this).fadeOut(500);
+                });
+                jQuery("#add_relationship_#{widget.id}_popup").fadeIn(500);
             });
           </script>
         </div>
