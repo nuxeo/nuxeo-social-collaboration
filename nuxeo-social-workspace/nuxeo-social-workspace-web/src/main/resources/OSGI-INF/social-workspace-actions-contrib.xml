@@ -405,6 +405,18 @@
       </rule>
     </filter>
 
+    <filter id="admin_publication_trees_filter" append="true">
+      <rule grant="false">
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
+    <filter id="has_local_configuration_available" append="true">
+      <rule grant="false">
+        <facet>SocialWorkspace</facet>
+      </rule>
+    </filter>
+
     <filter id="social_workspace_dashboard_view">
       <rule grant="false">
         <condition>#{collaborationActions.getViewId().equals("/social_dashboard.xhtml")}</condition>
