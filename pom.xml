@@ -22,18 +22,6 @@
     <module>nuxeo-user-activity-stream</module>
   </modules>
 
-  <profiles>
-    <profile>
-      <!-- Build all distributions -->
-      <id>all-distributions</id>
-      <modules>
-        <module>nuxeo-distribution-social-collaboration</module>
-        <module>nuxeo-distribution-social-collaboration-tomcat</module>
-        <module>nuxeo-marketplace-social-collaboration</module>
-      </modules>
-    </profile>
-  </profiles>
-
   <repositories>
     <repository>
       <id>public</id>
