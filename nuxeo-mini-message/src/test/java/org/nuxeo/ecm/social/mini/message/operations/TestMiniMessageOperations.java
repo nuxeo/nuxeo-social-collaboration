@@ -32,6 +32,8 @@ import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.social.mini.message.AbstractMiniMessageTest;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -51,8 +53,8 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
 
     @Test
     public void shouldAddAMiniMessage() throws Exception {
-        changeUser("Leela");
-        OperationContext ctx = new OperationContext(session);
+        CoreSession newSession = openSessionAs("Leela");
+        OperationContext ctx = new OperationContext(newSession);
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("testMiniMessageOperation");
@@ -69,13 +71,13 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         assertNotNull(messages);
         assertEquals(1, messages.size());
 
-        changeUser("Administrator");
+        CoreInstance.getInstance().close(newSession);
     }
 
     @Test
     public void shouldGetNoMiniMessage() throws Exception {
-        changeUser("Leela");
-        OperationContext ctx = new OperationContext(session);
+        CoreSession newSession = openSessionAs("Leela");
+        OperationContext ctx = new OperationContext(newSession);
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("testMiniMessageOperation");
@@ -93,16 +95,16 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertTrue(miniMessages.isEmpty());
 
-        changeUser("Administrator");
+        CoreInstance.getInstance().close(newSession);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void shouldGetPaginatedMiniMessages() throws Exception {
         initializeSomeMiniMessagesAndRelations();
-        changeUser("Leela");
+        CoreSession newSession = openSessionAs("Leela");
 
-        OperationContext ctx = new OperationContext(session);
+        OperationContext ctx = new OperationContext(newSession);
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("testMiniMessageOperation");
@@ -145,7 +147,7 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
         assertEquals(0, miniMessages.size());
 
-        changeUser("Administrator");
+        CoreInstance.getInstance().close(newSession);
     }
 
 }

@@ -30,6 +30,8 @@ import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.social.activity.stream.AbstractUserActivityTest;
 import org.nuxeo.runtime.test.runner.Deploy;
 
@@ -51,9 +53,9 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
         initializeSomeRelations();
         createDocumentsWithBender();
 
-        changeUser("Leela");
+        CoreSession newSession = openSessionAs("Leela");
 
-        OperationContext ctx = new OperationContext(session);
+        OperationContext ctx = new OperationContext(newSession);
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain(
@@ -71,6 +73,6 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
         List<Map<String, Object>> activities = (List<Map<String, Object>>) m.get("activities");
         assertEquals(4, activities.size());
 
-        changeUser("Administrator");
+        CoreInstance.getInstance().close(newSession);
     }
 }

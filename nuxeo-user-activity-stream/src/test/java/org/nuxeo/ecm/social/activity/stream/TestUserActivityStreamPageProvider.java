@@ -34,6 +34,8 @@ import java.util.Map;
 import org.junit.Test;
 import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -77,12 +79,12 @@ public class TestUserActivityStreamPageProvider extends
         initializeSomeRelations();
         createDocumentsWithBender();
 
-        changeUser("Leela");
+        CoreSession newSession = openSessionAs("Leela");
         Map<String, Serializable> properties = new HashMap<String, Serializable>();
         properties.put(ACTOR_PROPERTY, "Leela");
         properties.put(STREAM_TYPE_PROPERTY, FOR_ACTOR_STREAM_TYPE);
         properties.put(LOCALE_PROPERTY, new Locale("en"));
-        properties.put(CORE_SESSION_PROPERTY, (Serializable) session);
+        properties.put(CORE_SESSION_PROPERTY, (Serializable) newSession);
         PageProvider<ActivityMessage> userActivityStreamPageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
                 PROVIDER_NAME, null, null, null, properties);
         assertNotNull(userActivityStreamPageProvider);
@@ -90,7 +92,7 @@ public class TestUserActivityStreamPageProvider extends
         assertNotNull(activityMessages);
         assertEquals(4, activityMessages.size());
 
-        changeUser("Administrator");
+        CoreInstance.getInstance().close(newSession);
     }
 
 }

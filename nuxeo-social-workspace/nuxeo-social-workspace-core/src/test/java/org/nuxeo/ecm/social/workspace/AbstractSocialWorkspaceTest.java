@@ -142,13 +142,9 @@ public abstract class AbstractSocialWorkspaceTest {
         return user;
     }
 
-    protected void switchUser(String username) {
-        featuresRunner.getFeature(CoreFeature.class).getRepository().switchUser(
+    protected CoreSession openSessionAs(String username) throws ClientException {
+        CoreFeature coreFeature = featuresRunner.getFeature(CoreFeature.class);
+        return coreFeature.getRepository().getRepositoryHandler().openSessionAs(
                 username);
-    }
-
-    protected void switchBackToAdministrator() {
-        featuresRunner.getFeature(CoreFeature.class).getRepository().switchToAdminUser(
-                "Administrator");
     }
 }

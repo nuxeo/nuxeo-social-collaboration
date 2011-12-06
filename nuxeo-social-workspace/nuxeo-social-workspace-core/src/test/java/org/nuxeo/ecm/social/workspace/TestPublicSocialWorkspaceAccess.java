@@ -24,6 +24,8 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.UserPrincipal;
 import org.nuxeo.ecm.core.api.security.ACE;
@@ -55,22 +57,22 @@ public class TestPublicSocialWorkspaceAccess extends
 
     @Test
     public void shouldReturnPublicSocialWorkspace() throws Exception {
-        switchUser("John");
+        CoreSession newSession = openSessionAs("John");
 
         SocialWorkspaceService service = Framework.getService(SocialWorkspaceService.class);
-        List<SocialWorkspace> socialWorkspaces = service.getDetachedPublicSocialWorkspaces(session);
+        List<SocialWorkspace> socialWorkspaces = service.getDetachedPublicSocialWorkspaces(newSession);
         assertEquals(1, socialWorkspaces.size());
 
         String query = String.format("Select * From %s ",
                 SocialConstants.SOCIAL_WORKSPACE_TYPE);
-        DocumentModelList docs = session.query(query);
+        DocumentModelList docs = newSession.query(query);
         assertEquals(0, docs.size());
 
         socialWorkspaces = service.searchDetachedPublicSocialWorkspaces(
-                session, "marketing");
+                newSession, "marketing");
         assertEquals(1, socialWorkspaces.size());
 
-        switchBackToAdministrator();
+        CoreInstance.getInstance().close(newSession);
     }
 
 }
