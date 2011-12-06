@@ -45,7 +45,7 @@ function displayListOfArticles(entries,nxParams){
       html += "\" href=\"";
       html += NXGadgetContext.clientSideBaseUrl;
       html += "collaboration/default";
-      html += entry.path;
+      html += escape(entry.path);
       html += "@view_social_document";
       html += "\" >";
       html += entry.title;
