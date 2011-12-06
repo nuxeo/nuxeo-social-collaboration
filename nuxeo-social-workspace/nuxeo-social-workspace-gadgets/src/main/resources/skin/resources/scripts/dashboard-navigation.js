@@ -11,7 +11,7 @@ var mkCell = (function() {
     html += "\" href=\"";
     html += NXGadgetContext.clientSideBaseUrl;
     html += "collaboration/default";
-    html += dashBoardItem.path;
+    html += escape(dashBoardItem.path);
     html += "/social@";
     html += colDef.view;
     html += "\" />";
