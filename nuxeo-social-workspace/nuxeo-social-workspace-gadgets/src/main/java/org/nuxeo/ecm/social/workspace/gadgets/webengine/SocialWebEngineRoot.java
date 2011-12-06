@@ -24,12 +24,12 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FA
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -39,6 +39,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -63,7 +64,6 @@ import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
-import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
@@ -509,6 +509,17 @@ public class SocialWebEngineRoot extends ModuleRoot {
         text = StringEscapeUtils.escapeJavaScript(text);
         text = StringEscapeUtils.escapeHtml(text);
         text = StringEscapeUtils.escapeXml(text);
+        return text;
+    }
+
+    public String escapePath(String text) {
+        // text = text.replaceAll("\"", Matcher.quoteReplacement("\\\\\""));
+        text = text.replaceAll("'", Matcher.quoteReplacement("\\\'"));
+        try {
+            text = URIUtil.encodePath(text);
+        } catch (Exception e) {
+            log.debug("failed to encode:" + text, e);
+        }
         return text;
     }
 
