@@ -6,7 +6,7 @@
 
   <nxu:set var="contentView"
     value="#{contentViewActions.getContentViewWithProvider('user_social_workspace_view')}"
-    cache="true">
+    cache="false">
     <c:if test="#{contentView != null}">
       <nxu:set var="userSocialWorkspaces"
       value="#{contentView.currentPageProvider.currentPage}">

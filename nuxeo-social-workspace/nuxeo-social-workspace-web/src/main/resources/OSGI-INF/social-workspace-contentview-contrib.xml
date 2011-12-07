@@ -160,14 +160,18 @@
     <contentView name="user_social_workspace_view">
       <coreQueryPageProvider>
         <property name="coreSession">#{documentManager}</property>
-        <pattern>SELECT * FROM SocialWorkspace WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0)</pattern>
+        <pattern>SELECT * FROM SocialWorkspace WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState != 'deleted')</pattern>
         <sort column="dc:title" ascending="true"/>
       </coreQueryPageProvider>
       <showPageSizeSelector>false</showPageSizeSelector>
       <showRefreshCommand>false</showRefreshCommand>
       <useGlobalPageSize>false</useGlobalPageSize>
-      <cacheKey>#{currentDocument.id}</cacheKey>
-      <cacheSize>10</cacheSize>
+      <cacheKey>nocache</cacheKey>
+      <cacheSize>1</cacheSize>
+      <refresh>
+        <event>documentChanged</event>
+        <event>documentChildrenChanged</event>
+      </refresh>
     </contentView>
 
   </extension>

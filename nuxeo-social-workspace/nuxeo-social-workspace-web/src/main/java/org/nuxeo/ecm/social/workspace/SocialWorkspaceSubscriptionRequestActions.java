@@ -15,7 +15,7 @@
  *     eugen
  */
 package org.nuxeo.ecm.social.workspace;
-
+import static org.nuxeo.ecm.webapp.helpers.EventNames.DOCUMENT_CHANGED;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_PENDING_STATE;
@@ -156,6 +156,7 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
     public void rejectSocialWorkspaces() throws ClientException {
         List<DocumentModel> list = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_SELECTION);
         processSocialWorkspaces(list, "delete");
+        Events.instance().raiseEvent(DOCUMENT_CHANGED);
     }
 
     protected void processSocialWorkspaces(List<DocumentModel> list,
