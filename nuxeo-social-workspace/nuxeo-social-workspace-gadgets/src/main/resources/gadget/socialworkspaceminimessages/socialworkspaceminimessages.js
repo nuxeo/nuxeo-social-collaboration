@@ -10,8 +10,6 @@ var waitingOffset = 0;
 var hasMoreMiniMessages = true;
 
 function displayMiniMessages() {
-  displayNewMiniMessageForm();
-
   var htmlContent = '';
   if (currentMiniMessages.length == 0) {
     htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.mini.message') + '</div>';
@@ -165,6 +163,7 @@ function showNewMiniMessages() {
 gadgets.util.registerOnLoadHandler(function() {
   loadMiniMessages();
   window.setInterval(pollMiniMessages, 30*1000);
+  getUserStatus();
 });
 
 function showMiniMessageForm() {
@@ -199,4 +198,26 @@ function createMiniMessage(){
      }
   };
   doAutomationRequest(opCallParameters);
+}
+
+function getUserStatus() {
+   var getSocialWorkspaceQuery = 'select * from SocialWorkspace where ecm:path = \'' + socialWorkspacePath + '\'';
+   var opCallParameters = {
+       operationId : 'SocialWorkspace.UserStatus',
+       operationParams : {
+        contextPath : socialWorkspacePath
+       },
+       entityType : 'blob',
+       operationContext : {},
+       operationCallback : checkUserStatus
+   };
+   doAutomationRequest(opCallParameters);
+}
+
+
+function checkUserStatus(response, nxParams) {
+	var status = response.data["status"];
+	if ( "MEMBER" == status ) {
+		displayNewMiniMessageForm();
+	}
 }
