@@ -142,7 +142,7 @@ public class ActivityStreamServiceImpl extends DefaultComponent implements
 
     @SuppressWarnings("unchecked")
     protected ActivitiesList queryAll(EntityManager em, long offset, long limit) {
-        Query query = em.createQuery("from Activity activity");
+        Query query = em.createQuery("from Activity activity order by activity.id asc");
         if (limit > 0) {
             query.setMaxResults((int) limit);
             if (offset > 0) {
