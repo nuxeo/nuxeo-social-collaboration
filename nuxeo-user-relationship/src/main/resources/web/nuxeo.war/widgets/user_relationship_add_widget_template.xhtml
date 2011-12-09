@@ -14,7 +14,7 @@
 
     <a4j:outputPanel rendered="#{!userRelationshipActions.isCurrentUser(userName)}" id="user_relationship_#{widget.id}">
 
-      <a4j:outputPanel styleClass="action_bar" id="add_relationship_#{widget.id}_btn">
+      <a4j:outputPanel id="add_relationship_#{widget.id}_btn">
         <a4j:outputPanel styleClass="relationship_label" rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}">
           <h:outputFormat value="#{messages['action.social.user.relationship.not.in.relation']}">
             <f:param value="#{displayedName}" />
