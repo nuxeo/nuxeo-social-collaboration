@@ -201,7 +201,6 @@ function createMiniMessage(){
 }
 
 function getUserStatus() {
-   var getSocialWorkspaceQuery = 'select * from SocialWorkspace where ecm:path = \'' + socialWorkspacePath + '\'';
    var opCallParameters = {
        operationId : 'SocialWorkspace.UserStatus',
        operationParams : {
