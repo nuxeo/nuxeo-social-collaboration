@@ -24,7 +24,7 @@ function displayArticles(entries, nxParams) {
       html = '<p>' + nxParams.noEntryLabel + '</p> </br>';
       _gel('pageNavigationControls').style.display = 'none';
     }else{
-      html=displayListOfArticles(entries,nxParams);
+      html = displayListOfArticles(entries,nxParams);
     }
   _gel("nxDocumentListData").innerHTML = html;
 
@@ -37,7 +37,7 @@ function displayListOfArticles(entries,nxParams){
   var html ="";
   for (var i = 0; i < entries.length; i++) {
       var entry = entries[i];
-      var date = new Date(entry.properties["dc:modified"]);
+      var date = getDateForDisplay(entry.properties["dc:modified"]);
       html += '<div class="article">';
       html += '<p class="infos">' + entry.properties["dc:creator"] + ', ' + date.toLocaleDateString() + ' - ';
       html += '<a target ="_top" class="article_title" title="';
