@@ -19,6 +19,7 @@ package org.nuxeo.ecm.social.workspace;
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.ADD_CHILDREN;
+import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
@@ -272,7 +273,9 @@ public class CollaborationActions implements Serializable {
         previous = navigationContext.getCurrentDocument();
         if (previous != null
                 && DASHBOARD_SPACES_CONTAINER_TYPE.equals(previous.getType())) {
-            previous = documentManager.getDocument(previous.getParentRef());
+            if (documentManager.hasPermission(previous.getParentRef(), READ)) {
+                previous = documentManager.getDocument(previous.getParentRef());
+            }
         }
         return createNewDocument(SOCIAL_WORKSPACE_TYPE);
     }
