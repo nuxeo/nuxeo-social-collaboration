@@ -24,7 +24,7 @@ function displayListOfArticles(entries,nxParams){
       var entry = entries[i];
       var date = getDateForDisplay(entry.properties["dc:modified"]);
       html += '<div class="news">';
-      html += '<p class="infos">' + entry.properties["dc:creator"] + ', ' + date.toLocaleDateString() + ' - ';
+      html += '<p class="infos">' + entry.properties["dc:creator"] + ', ' + date + ' - ';
       html += '<a target ="_top" class="news_title" title="';
       html += entry.title;
       html += "\" href=\"";
