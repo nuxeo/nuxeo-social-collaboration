@@ -10,6 +10,7 @@
   </parent>
   <artifactId>nuxeo-social-workspace-gadgets</artifactId>
   <name>Nuxeo Social Workspace Gadgets</name>
+  <version>5.5.0-HF00</version>
   <description>Nuxeo Social Workspace Gadgets</description>
 
   <dependencies>
