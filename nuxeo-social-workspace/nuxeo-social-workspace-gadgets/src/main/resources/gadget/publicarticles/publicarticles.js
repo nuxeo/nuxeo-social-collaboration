@@ -32,7 +32,7 @@ function displayArticles(entries, nxParams) {
     html += "\" href=\"";
     html += NXGadgetContext.clientSideBaseUrl;
     html += "nxpath/default";
-    html += entry.path;
+    html += encode(entry.path);
     html += "@view_social_document";
     html += "\" >";
     html += entry.title;

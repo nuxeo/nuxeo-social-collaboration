@@ -48,7 +48,15 @@ function publishDocument(targetRef, public){
 }
 
 function goToDocument(path, viewId) {
-   window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + escape(path) + "@" + viewId;
+   window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + encode(path) + "@" + viewId;
+}
+
+function encode(path) {
+  var segments = path.split('/');
+  for (var i = 0; i < segments.length; i++) {
+    segments[i] = encodeURIComponent(segments[i]);
+  }
+  return segments.join('/');
 }
 
 // load navigation info from context form
