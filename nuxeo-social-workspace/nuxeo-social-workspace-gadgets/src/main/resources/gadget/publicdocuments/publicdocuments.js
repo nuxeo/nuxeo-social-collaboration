@@ -28,7 +28,7 @@ function displayDocuments(entries,nxParams){
       html += "\" href=\"";
       html += NXGadgetContext.clientSideBaseUrl;
       html += "collaboration/default";
-      html += entry.path;
+      html += encode(entry.path);
       html += "@view_documents";
       html += '\" >';
       html += entry.title;
