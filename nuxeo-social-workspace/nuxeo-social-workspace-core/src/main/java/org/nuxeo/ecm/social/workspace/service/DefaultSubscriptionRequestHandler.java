@@ -17,7 +17,7 @@
 
 package org.nuxeo.ecm.social.workspace.service;
 
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.*;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_INFO_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_REJECT_TRANSITION;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE;
@@ -37,6 +37,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
@@ -45,6 +46,7 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.runtime.api.Framework;
@@ -186,6 +188,66 @@ public class DefaultSubscriptionRequestHandler implements
             throw new ClientRuntimeException(e);
         }
         return !subscriptionRequests.isEmpty();
+    }
+
+    /**
+     * Returns status of subscription request for the given {@code principal}
+     * Values returned are: pending, accepted, rejected or null if there is no
+     * subscription request
+     *
+     */
+    public String getSubscriptionRequestStatus(
+            final SocialWorkspace socialWorkspace, final Principal principal) {
+        try {
+            String repositoryName = socialWorkspace.getDocument().getRepositoryName();
+            SubscriptionRequestStatusComputer computer = new SubscriptionRequestStatusComputer(
+                    repositoryName, principal.getName(),
+                    socialWorkspace.getId());
+            computer.runUnrestricted();
+            return computer.getSubscriptionRequestStatus();
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
+    }
+
+    class SubscriptionRequestStatusComputer extends UnrestrictedSessionRunner {
+
+        String socialWorkspaceId;
+
+        String user;
+
+        public SubscriptionRequestStatusComputer(String repositoryName,
+                String user, String socialWorkspaceId) {
+            super(repositoryName, user);
+            this.user = user;
+            this.socialWorkspaceId = socialWorkspaceId;
+        }
+        String subscriptionRequestStatus = null;
+
+        @Override
+        public void run() throws ClientException {
+            String queryTemplate = "SELECT * FROM SubscriptionRequest WHERE req:type = '%s' AND req:username = '%s' AND req:info = '%s' ORDER BY dc:created DESC";
+            String query = String.format(queryTemplate,
+                    SUBSCRIPTION_REQUEST_TYPE_JOIN, user, socialWorkspaceId);
+            // get last subscription request
+            DocumentModelList subscriptions = session.query(query, 1);
+            if (subscriptions.size() == 0) {
+                subscriptionRequestStatus = null;
+            } else {
+                subscriptionRequestStatus = subscriptions.get(0).getCurrentLifeCycleState();
+            }
+        }
+
+        /**
+         * Returns status of subscription request for the given
+         * {@code principal} Values returned are: pending, accepted, rejected or
+         * null if there is no subscription request
+         * 
+         */
+        public String getSubscriptionRequestStatus() {
+            return subscriptionRequestStatus;
+        }
+
     }
 
     @Override
