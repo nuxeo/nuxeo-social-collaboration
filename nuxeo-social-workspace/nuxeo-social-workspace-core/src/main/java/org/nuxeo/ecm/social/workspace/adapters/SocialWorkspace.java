@@ -203,6 +203,14 @@ public interface SocialWorkspace {
     boolean isSubscriptionRequestPending(Principal principal);
 
     /**
+     * Returns status of subscription request for the given {@code principal}
+     * Values returned are: pending, accepted, rejected or null if there is no
+     * subscription request
+     * 
+     */
+    String getSubscriptionRequestStatus(Principal principal);
+
+    /**
      * Accepts this {@code subscriptionRequest}.
      */
     void acceptSubscriptionRequest(SubscriptionRequest subscriptionRequest);

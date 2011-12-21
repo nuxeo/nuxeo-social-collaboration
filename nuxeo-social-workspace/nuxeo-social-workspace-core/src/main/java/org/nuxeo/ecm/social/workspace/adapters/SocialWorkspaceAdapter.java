@@ -234,6 +234,12 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     @Override
+    public String getSubscriptionRequestStatus(Principal principal) {
+        return getSocialWorkspaceService().getSubscriptionRequestStatus(this,
+                principal);
+    }
+
+    @Override
     public void acceptSubscriptionRequest(
             SubscriptionRequest subscriptionRequest) {
         getSocialWorkspaceService().acceptSubscriptionRequest(this,

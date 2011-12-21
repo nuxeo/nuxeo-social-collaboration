@@ -37,6 +37,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
+import org.nuxeo.ecm.social.workspace.SocialConstants;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
@@ -47,7 +48,7 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 public class GetUserSocialWorkspaceStatus {
 
     enum Status {
-        NOT_MEMBER, REQUEST_PENDING, MEMBER
+        MEMBER, NOT_MEMBER, REQUEST_PENDING, REQUEST_REJECTED
     }
 
     public static final String ID = "SocialWorkspace.UserStatus";
@@ -79,12 +80,21 @@ public class GetUserSocialWorkspaceStatus {
             return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
         } else if (socialWorkspace.isAdministratorOrMember(currentUser)) {
             return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
-        } else if (socialWorkspace.isSubscriptionRequestPending(currentUser)) {
-            return buildResponse(socialWorkspace.getDocument(),
-                    Status.REQUEST_PENDING);
         } else {
-            return buildResponse(socialWorkspace.getDocument(),
-                    Status.NOT_MEMBER);
+            String reqestStatus = socialWorkspace.getSubscriptionRequestStatus(currentUser);
+            if ( reqestStatus == null ){ // no subscrition requests
+                return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
+            } else if ( SocialConstants.SUBSCRIPTION_REQUEST_PENDING_STATE.equals(reqestStatus)){
+                return buildResponse(socialWorkspace.getDocument(), Status.REQUEST_PENDING);
+            } else if ( SocialConstants.SUBSCRIPTION_REQUEST_REJECTED_STATE.equals(reqestStatus)){
+                return buildResponse(socialWorkspace.getDocument(), Status.REQUEST_REJECTED);
+            } else if ( SocialConstants.SUBSCRIPTION_REQUEST_ACCEPTED_STATE.equals(reqestStatus)){
+                // the case when user !isAdministratorOrMember but he has a accepted subscription request
+                // TODO: review the behavior for this case
+                return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
+            } else {
+                return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
+            }
         }
     }
 

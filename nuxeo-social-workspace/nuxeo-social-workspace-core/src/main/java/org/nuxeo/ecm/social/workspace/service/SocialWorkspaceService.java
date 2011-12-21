@@ -168,6 +168,15 @@ public interface SocialWorkspaceService {
             Principal principal);
 
     /**
+     * Returns status of subscription request for the given {@code principal}
+     * Values returned are: pending, accepted, rejected or null if there is no
+     * subscription request
+     * 
+     */
+    String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
+            Principal principal);
+
+    /**
      * Accepts the {@code subscriptionRequest} for {@code socialWorkspace}.
      */
     void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
