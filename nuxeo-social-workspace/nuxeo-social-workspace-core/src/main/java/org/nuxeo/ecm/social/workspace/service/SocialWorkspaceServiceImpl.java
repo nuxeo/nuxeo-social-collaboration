@@ -154,7 +154,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
                 DocumentModelList docs = session.query(query);
                 for (DocumentModel doc : docs) {
-                    ((DocumentModelImpl) doc).detach(true);
+                    doc.detach(true);
                     socialWorkspaces.add(toSocialWorkspace(doc));
                 }
             }
@@ -827,8 +827,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             for (DocumentModel parent : parents) {
                 if (isSocialWorkspace(parent)) {
                     socialWorkspace = parent;
+                    socialWorkspace.detach(true);
                     if (socialWorkspace instanceof DocumentModelImpl) {
-                        ((DocumentModelImpl) socialWorkspace).detach(true);
                         break;
                     }
                 }
