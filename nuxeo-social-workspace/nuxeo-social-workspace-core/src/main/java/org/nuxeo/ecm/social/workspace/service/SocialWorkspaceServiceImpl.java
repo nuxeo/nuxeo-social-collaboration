@@ -310,31 +310,6 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
     }
 
-    private void addGroupToPrincipal(String groupName, Principal principal) {
-        try {
-            if (principal instanceof NuxeoPrincipal) {
-                NuxeoPrincipal nuxeoPrincipal = (NuxeoPrincipal) principal;
-                DocumentModel user = nuxeoPrincipal.getModel();
-                if (user == null) {
-                    return;
-                }
-
-                UserManager userManager = getUserManager();
-                String userSchemaName = userManager.getUserSchemaName();
-                List<String> groups = (List<String>) user.getProperty(
-                        userSchemaName, "groups");
-                if (groups == null) {
-                    groups = new ArrayList<String>();
-                }
-                groups.add(groupName);
-                user.setProperty(userSchemaName, "groups", groups);
-                nuxeoPrincipal.setModel(user);
-            }
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(e);
-        }
-    }
-
     @Override
     public void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace) {
         getRelationshipService().removeRelation(socialWorkspace.getId(), null,
@@ -412,9 +387,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
                 buildRelationAdministratorKind())) {
             addSocialWorkspaceMember(socialWorkspace, principal);
-            addGroupToPrincipal(
-                    getSocialWorkspaceAdministratorsGroupName(socialWorkspace.getDocument()),
-                    principal);
+            updatePrincipalGroups(principal);
             return true;
         }
         return false;
@@ -426,13 +399,21 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         Boolean memberCreated = addSocialWorkspaceMemberWithoutNotification(
                 socialWorkspace, principal);
         if (memberCreated) {
-            addGroupToPrincipal(
-                    getSocialWorkspaceMembersGroupName(socialWorkspace.getDocument()),
-                    principal);
+            updatePrincipalGroups(principal);
             fireEventMembersManagement(socialWorkspace,
                     Arrays.asList(principal), EVENT_MEMBERS_ADDED);
         }
         return memberCreated;
+    }
+
+    private void updatePrincipalGroups(Principal principal) {
+        try {
+            if (principal instanceof NuxeoPrincipalImpl) {
+                ((NuxeoPrincipalImpl) principal).updateAllGroups();
+            }
+        } catch (ClientException e) {
+            throw new ClientRuntimeException(e);
+        }
     }
 
     private boolean addSocialWorkspaceMemberWithoutNotification(
