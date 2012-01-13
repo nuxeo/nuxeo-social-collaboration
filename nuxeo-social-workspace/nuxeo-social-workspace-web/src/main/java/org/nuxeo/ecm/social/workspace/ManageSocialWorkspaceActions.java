@@ -93,8 +93,10 @@ public class ManageSocialWorkspaceActions implements Serializable {
     public List<String> getAdministrators() throws Exception {
         if (administrators == null) {
             DocumentModel currentDocument = navigationContext.getCurrentDocument();
-            administrators = ActivityHelper.getUsernames(computer.getGroupMembers(getSocialWorkspaceAdministratorsGroupName(currentDocument)));
-            originalAdministrators = administrators;
+            if (currentDocument != null) {
+                administrators = ActivityHelper.getUsernames(computer.getGroupMembers(getSocialWorkspaceAdministratorsGroupName(currentDocument)));
+                originalAdministrators = administrators;
+            }
         }
         return administrators;
     }
@@ -102,8 +104,10 @@ public class ManageSocialWorkspaceActions implements Serializable {
     public List<String> getMembers() throws Exception {
         if (members == null) {
             DocumentModel currentDocument = navigationContext.getCurrentDocument();
-            members = ActivityHelper.getUsernames(computer.getGroupMembers(getSocialWorkspaceMembersGroupName(currentDocument)));
-            originalMembers = members;
+            if (currentDocument != null) {
+                members = ActivityHelper.getUsernames(computer.getGroupMembers(getSocialWorkspaceMembersGroupName(currentDocument)));
+                originalMembers = members;
+            }
         }
         return members;
     }
