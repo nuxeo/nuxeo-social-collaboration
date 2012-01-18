@@ -700,6 +700,13 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
+    public String getSubscriptionRequestStatus(
+            SocialWorkspace socialWorkspace, Principal principal) {
+        return subscriptionRequestHandler.getSubscriptionRequestStatus(
+                socialWorkspace, principal);
+    }
+
+    @Override
     public void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest) {
         subscriptionRequestHandler.acceptSubscriptionRequest(socialWorkspace,
