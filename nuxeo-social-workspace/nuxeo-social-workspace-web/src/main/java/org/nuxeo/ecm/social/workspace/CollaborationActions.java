@@ -294,16 +294,15 @@ public class CollaborationActions implements Serializable {
     }
 
     public boolean canCreateSocialWorkspace() {
-        DocumentModel parent = socialWorkspaceService.getSocialWorkspaceContainer(documentManager);
-        if (parent != null) {
-            try {
+        try {
+            DocumentModel parent = socialWorkspaceService.getSocialWorkspaceContainer(documentManager);
+            if (parent != null) {
                 return (documentManager.hasPermission(parent.getRef(),
                         ADD_CHILDREN));
-            } catch (ClientException e) {
-                log.debug(
-                        "failed to check permission on SocialWorkspace container",
-                        e);
             }
+        } catch (Exception e) {
+            log.debug(e, e);
+            // do nothing, user cannot create SW
         }
         return false;
     }
