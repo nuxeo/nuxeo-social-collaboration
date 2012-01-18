@@ -30,8 +30,6 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FA
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationAdministratorKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName;
-import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
@@ -696,6 +694,13 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     public boolean isSubscriptionRequestPending(
             SocialWorkspace socialWorkspace, Principal principal) {
         return subscriptionRequestHandler.isSubscriptionRequestPending(
+                socialWorkspace, principal);
+    }
+
+    @Override
+    public String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
+            Principal principal) {
+        return subscriptionRequestHandler.getSubscriptionRequestStatus(
                 socialWorkspace, principal);
     }
 

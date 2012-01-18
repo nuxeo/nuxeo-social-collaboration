@@ -36,6 +36,9 @@ public interface SubscriptionRequestHandler {
     boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace,
             Principal principal);
 
+    String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
+            Principal principal);
+
     void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest);
 
