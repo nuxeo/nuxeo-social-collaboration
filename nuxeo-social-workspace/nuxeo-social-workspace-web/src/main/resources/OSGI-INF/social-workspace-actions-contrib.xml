@@ -130,6 +130,7 @@
       order="50">
       <category>SOCIAL_WORKSPACE_CREATION_FORM</category>
       <filter-id>canCreateSocialWorkspace</filter-id>
+      <filter-id>not_in_social_workspace</filter-id>
     </action>
 
     <action id="CreateSocialDocumentSaveButton"
