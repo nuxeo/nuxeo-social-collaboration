@@ -18,17 +18,19 @@
 
       <c:choose>
         <c:when test="#{(field_1 == 'text/html') or (empty field_1)}">
-          <c:set var="preprocessedHtml" value="#{nxu:test(!empty widget.properties.translatedHtml, widget.properties.translatedHtml, null)}" />
-          <c:if test="#{!empty preprocessedHtml}">
-            <nxh:outputText value="#{preprocessedHtml}" escape="false" />
+          <c:if test="#{!empty widgetProperty_translatedHtml}">
+            <h:outputText value="#{widgetProperty_translatedHtml}" escape="false" />
           </c:if>
-          <c:if test="#{empty htmlPreprocess}">
+          <c:if test="#{empty widgetProperty_translatedHtml}">
             <h:outputText value="#{field_0}" escape="false" />
           </c:if>
         </c:when>
+        <c:when test="#{field_1 == 'text/x-web-markdown'}">
+          <h:outputText value="#{richTextEditorActions.convertToHtml(field_0, field_1)}" escape="false" />
+        </c:when>
         <c:otherwise>
           <pre>
-            <h:outputText value="#{field_0}"/>
+            <h:outputText value="#{field_0}" />
           </pre>
         </c:otherwise>
       </c:choose>
