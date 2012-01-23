@@ -198,7 +198,7 @@ public abstract class AbstractUserActivityTest {
         acl.add(new ACE("Leela", READ, true));
         doc.setACP(acp, true);
         newSession.save();
-        session.save();
+        newSession.save();
 
         doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(),
                 "file2", "File");
