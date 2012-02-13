@@ -7,8 +7,7 @@ h3.summaryTitle {color:#333; font-weight:bold; padding:0 0 .3em }
 .description_block { font-size:120%; padding:0 0 2em 1.4em }
 .actions_block,  .content_block,  .metadata_block { margin-bottom: 2em }
 .description_block { border-bottom: 1px dashed #ddd; color: #999; margin: 0 0 2em; padding: 0 }
-.note_content_block {	border:  none; margin: 0; padding: 1.4em 0 0 0 }
-.note_content_block h2 { font-size: 1.1em; line-height: 1.5em; margin: 0 0 1em; padding: 0 }
+.note_content_block {	border: none; margin: 0; padding: 1.4em 0 0 }
 
 .summary_div_0 { background-color: white; border: 1px solid #ddd; box-shadow: 1px 3px 2px #ccc; padding: 1.5em 1.5em 2em; width: 58% }
 .summary_div_0 p { color:#444; font-size: 1em; line-height: 160%; }
