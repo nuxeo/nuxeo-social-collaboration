@@ -74,6 +74,13 @@ public class SocialWorkspaceActions implements Serializable {
                 && socialWorkspace.isAdministratorOrMember(currentUser);
     }
 
+    public boolean isCurrentUserAdministratorOfCurrentSocialWorkspace() {
+        DocumentModel doc = navigationContext.getCurrentDocument();
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(doc);
+        return socialWorkspace != null
+                && socialWorkspace.isAdministrator(currentUser);
+    }
+
     public SocialWorkspace getSocialWorkspace(DocumentModel doc) {
         return socialWorkspaceService.getDetachedSocialWorkspace(doc);
     }

@@ -31,7 +31,7 @@
           </p>
         </description>
         <categories>
-          <category>summary</category>
+          <category>listing</category>
         </categories>
         <supportedModes>
           <mode>view</mode>
@@ -43,6 +43,39 @@
       </handler-class>
       <property name="template">
         /widgets/social_document_visibility_widget_template.xhtml
+      </property>
+    </widgetType>
+
+    <widgetType name="listing_social_document_consultation">
+      <configuration>
+        <sinceVersion>5.5</sinceVersion>
+        <title>Social document listing widget</title>
+        <description>
+          <p>
+            This widgets displays the title and related actions. To be used in a
+            listing of social documents.
+          </p>
+          <p>
+            It supports the following properties:
+            <ul>
+              <li>displayActions: display or not the actions (edit, delete, ...) for
+              the document.</li>
+            </ul>
+          </p>
+        </description>
+        <categories>
+          <category>summary</category>
+        </categories>
+        <supportedModes>
+          <mode>view</mode>
+        </supportedModes>
+        <!-- no configurable properties -->
+      </configuration>
+      <handler-class>
+        org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
+      </handler-class>
+      <property name="template">
+        /widgets/listing_social_document_widget_template.xhtml
       </property>
     </widgetType>
 
@@ -263,7 +296,7 @@
           <properties mode="edit_sort_infos">
             <property name="showInSortInfoSelection">true</property>
           </properties>
-          <widget>listing_social_document_consultation</widget>
+          <widget>listing_article_consultation</widget>
         </column>
       </columns>
     </layout>
@@ -283,7 +316,7 @@
           <properties mode="edit_sort_infos">
             <property name="showInSortInfoSelection">true</property>
           </properties>
-          <widget>listing_social_document_consultation</widget>
+          <widget>listing_news_consultation</widget>
         </column>
       </columns>
     </layout>
@@ -580,10 +613,11 @@
       </properties>
     </widget>
 
-    <widget name="listing_social_document_consultation" type="template">
+    <widget name="listing_article_consultation" type="listing_social_document_consultation">
       <labels>
-        <label mode="any">actions</label>
+        <label mode="any"></label>
       </labels>
+      <translated>false</translated>
       <fields>
         <field>data</field>
       </fields>
@@ -591,8 +625,23 @@
         <mode value="any">view</mode>
       </widgetModes>
       <properties mode="any">
-        <property name="template">/widgets/listing_social_document_widget_template.xhtml
-        </property>
+        <property name="displayActions">true</property>
+      </properties>
+    </widget>
+
+    <widget name="listing_news_consultation" type="listing_social_document_consultation">
+      <labels>
+        <label mode="any"></label>
+      </labels>
+      <translated>false</translated>
+      <fields>
+        <field>data</field>
+      </fields>
+      <widgetModes>
+        <mode value="any">view</mode>
+      </widgetModes>
+      <properties mode="any">
+        <property name="displayActions">#{socialWorkspaceActions.isCurrentUserAdministratorOfCurrentSocialWorkspace()}</property>
       </properties>
     </widget>
 

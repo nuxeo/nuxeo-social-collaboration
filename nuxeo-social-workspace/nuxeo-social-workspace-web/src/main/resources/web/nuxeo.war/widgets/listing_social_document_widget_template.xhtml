@@ -12,6 +12,8 @@
   <c:if test="#{widget.mode == 'view'}">
     <c:set var="cssClass"
       value="#{nxu:test(!empty widget.properties.cssClass, widget.properties.cssClass, '')}" />
+    <c:set var="displayActions"
+          value="#{nxu:test(!empty widgetProperty_displayActions, widgetProperty_displayActions, true)}" />
 
     <div class="#{cssClass}">
 
@@ -21,7 +23,7 @@
           #{nxd:titleOrId(field_0)} </span>
         </nxd:restDocumentLink>
         <c:if
-          test="#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
+          test="#{displayActions and socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
           <div class="tool">
             <ul class="actions">
               <li><h:graphicImage url="/icons/tools.png"
@@ -53,7 +55,6 @@
                         immediate="true" />
                     </c:if>
                   </li>
-
                 </ul>
               </li>
             </ul>
