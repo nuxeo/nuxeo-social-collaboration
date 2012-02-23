@@ -57,7 +57,6 @@
       icon="/icons/news_item_listing.png"
       order="11">
       <category>SOCIAL_WORKSPACE_LISTING</category>
-      <filter-id>is_social_workspace_administrator</filter-id>
     </action>
 
     <action id="ListFiles"
