@@ -11,7 +11,6 @@
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
-  <#include "context-prefs.ftl"/>
   <Content type="html">
 
 <![CDATA[
@@ -25,7 +24,6 @@
   ${jsContext}
 
   <script src="${specDirectoryUrl}default-automation-request.js"></script>
-  <script src="${specDirectoryUrl}context-management.js"></script>
   <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
   <script src="${specDirectoryUrl}dashboard-navigation.js"></script>
 
@@ -77,7 +75,6 @@ gadgets.util.registerOnLoadHandler(function() {displaySearchForm(); getPublicSoc
  <body>
    <div class="tools">
      <div id="search"></div>
-     <#include "context-chooser-ui.ftl"/>
    </div>
    <div id="content">
      <#include "default-documentlist-layout.ftl"/>

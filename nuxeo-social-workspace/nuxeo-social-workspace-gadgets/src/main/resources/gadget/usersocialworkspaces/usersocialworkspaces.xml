@@ -10,7 +10,6 @@
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
-  <#include "context-prefs.ftl"/>
   <Content type="html">
 
 <![CDATA[
@@ -26,13 +25,11 @@
 
   <script src="${specDirectoryUrl}default-automation-request.js"></script>
   <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
-  <script src="${specDirectoryUrl}context-management.js"></script>
   <script src="${specDirectoryUrl}dashboard-navigation.js"></script>
 
   <script type="text/javascript">
     var prefs = new gadgets.Prefs();
 
-    var requestScope = getTargetContextPath();
     // configure Automation REST call
     var NXRequestParams = {
       operationId: 'Document.PageProvider',
@@ -56,7 +53,6 @@
 
     // execute automation request onload
     gadgets.util.registerOnLoadHandler(function() {
-      initContextPathSettingsButton();
       doAutomationRequest(NXRequestParams);
     });
   </script>
@@ -64,9 +60,6 @@
   </head>
    <body>
    <div class="tools">
-     <div class="links">
-     </div>
-     <#include "context-chooser-ui.ftl"/>
    </div>
    <div id="content">
      <#include "default-documentlist-layout.ftl"/>
