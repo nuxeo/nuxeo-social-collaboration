@@ -83,6 +83,8 @@ public class CollaborationActions implements Serializable {
 
     public static final String COLLABORATION_VIEW_ID = "collaboration";
 
+    public static final String MAIN_TABS_DOCUMENTS = "MAIN_TABS:documents";
+
     @In(create = true)
     protected transient CoreSession documentManager;
 
@@ -135,6 +137,7 @@ public class CollaborationActions implements Serializable {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
         if (DASHBOARD_SPACES_CONTAINER_TYPE.equals(currentDocument.getType())) {
             DocumentModel superSpace = documentManager.getSuperSpace(currentDocument);
+            webActions.setCurrentTabIds(MAIN_TABS_DOCUMENTS);
             return navigationContext.navigateToDocument(superSpace);
         }
         return navigationContext.navigateToDocument(currentDocument);
