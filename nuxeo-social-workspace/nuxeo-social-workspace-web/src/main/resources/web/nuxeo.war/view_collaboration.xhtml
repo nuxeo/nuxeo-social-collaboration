@@ -36,6 +36,10 @@
           <ui:define name="opensocial_container_actions">
             <div class="globalActionBar">
               <h:form id="collaborativeViewActions">
+
+                <nxu:set var="collaborationActions" value="#{webActions.getActionsList('COLLABORATION_TAB_ACTIONS')}" cache="true">
+
+                <c:if test="#{not empty collaborationActions or currentUser.administrator}">
                 <ul class="actionList">
                   <li class="dropDownMenu button dropdown">
                     <h:outputText value="#{messages['label.social.workspace.actions']}" />
@@ -50,21 +54,23 @@
                         <div class="separator"></div>
                       </c:if>
 
-                      <nxu:set var="actions" value="#{webActions.getActionsList('COLLABORATION_TAB_ACTIONS')}" cache="true">
-                        <c:if test="#{!empty actions}">
-                          <nxu:dataList layout="simple" var="action" value="#{actions}">
-                            <li>
-                              <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
-                                <h:outputText value=" #{messages[action.label]}" />
-                              </nxh:commandLink>
-                            </li>
-                          </nxu:dataList>
-                          <div class="separator"></div>
-                        </c:if>
-                      </nxu:set>
+                      <c:if test="#{!empty collaborationActions}">
+                        <nxu:dataList layout="simple" var="action" value="#{collaborationActions}">
+                          <li>
+                            <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
+                              <h:outputText value=" #{messages[action.label]}" />
+                            </nxh:commandLink>
+                          </li>
+                        </nxu:dataList>
+                        <div class="separator"></div>
+                      </c:if>
                     </ul>
                   </li>
                 </ul>
+                </c:if>
+
+                </nxu:set>
+
                 <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>
               </h:form>
             </div>
