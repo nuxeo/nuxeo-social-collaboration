@@ -5,63 +5,99 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	class="headerTitleAndTools">
 
+<c:if test="false">
+  Template showing the list of Social Workspaces available for the current user,
+  and an actions list.
+
+  Optional parameters used to override default behavior:
+  - showActions
+  - showUserSocialWorkspaceList
+
+  Templating zones that can be replaced using facelets tag ui:define:
+  - social_collaboration_title
+  - social_collaboration_after_actions
+  - social_collaboration_actions
+  - action_menu_before
+  - before_submenu_actions
+  - after_submenu_actions
+  - action_menu_after
+  - social_collaboration_before_actions
+  - user_social_workspace_list
+</c:if>
+
   <ui:insert name="social_collaboration_title" />
 
   <div class="globalActionBar">
     <h:form id="socialWorkspaceCollaborationListForm">
       <ui:insert name="social_collaboration_after_actions" />
-      <ul class="actionList">
-        <li class="dropDownMenu button dropdown">
-          <h:outputText value="#{messages['label.social.workspace.actions']}" />
-          <ui:insert name="action_menu_before" />
-          <ul class="actionSubList">
-            <ui:insert name="before_submenu_actions" />
-            <nxu:set var="actions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}" cache="true">
-              <c:if test="#{!empty actions}">
-                <nxu:dataList layout="simple" var="action" value="#{actions}">
-                  <li>
-                    <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
-                      <h:outputText value=" #{messages[action.label]}" />
-                    </nxh:commandLink>
-                  </li>
-                </nxu:dataList>
-                <div class="separator"></div>
-              </c:if>
-            </nxu:set>
 
-            <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}" cache="true">
-              <c:if test="#{!empty displaysDocumentActions}">
-                <nxu:dataList layout="simple" var="action" value="#{displaysDocumentActions}">
-                  <li>
-                    <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
-                      <h:outputText value=" #{messages[action.label]}" />
-                    </nxh:commandLink>
-                  </li>
-                </nxu:dataList>
-                <div class="separator"></div>
-              </c:if>
-            </nxu:set>
+      <nxu:set var="finalShowActions"
+        value="#{nxu:test(empty showActions, true, showActions)}">
+        <c:if test="#{finalShowActions}">
+          <ui:insert name="social_collaboration_actions">
+            <ul class="actionList">
+              <li class="dropDownMenu button dropdown">
+                <h:outputText value="#{messages['label.social.workspace.actions']}" />
+                <ui:insert name="action_menu_before" />
+                <ul class="actionSubList">
+                  <ui:insert name="before_submenu_actions" />
+                  <nxu:set var="actions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_ACTIONS')}" cache="true">
+                    <c:if test="#{!empty actions}">
+                      <nxu:dataList layout="simple" var="action" value="#{actions}">
+                        <li>
+                          <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
+                            <h:outputText value=" #{messages[action.label]}" />
+                          </nxh:commandLink>
+                        </li>
+                      </nxu:dataList>
+                      <div class="separator"></div>
+                    </c:if>
+                  </nxu:set>
 
-            <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_NAVIGATION')}" cache="true">
-              <c:if test="#{!empty displaysDocumentActions}">
-                <nxu:dataList layout="simple" var="action" value="#{displaysDocumentActions}">
-                  <li>
-                    <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
-                      <h:outputText value=" #{messages[action.label]}" />
-                    </nxh:commandLink>
-                  </li>
-                </nxu:dataList>
-                <div class="separator"></div>
-              </c:if>
-            </nxu:set>
-            <ui:insert name="after_submenu_actions" />
-          </ul>
+                  <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_LISTING')}" cache="true">
+                    <c:if test="#{!empty displaysDocumentActions}">
+                      <nxu:dataList layout="simple" var="action" value="#{displaysDocumentActions}">
+                        <li>
+                          <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
+                            <h:outputText value=" #{messages[action.label]}" />
+                          </nxh:commandLink>
+                        </li>
+                      </nxu:dataList>
+                      <div class="separator"></div>
+                    </c:if>
+                  </nxu:set>
 
-          <ui:insert name="action_menu_after" />
-        </li>
-      </ul>
+                  <nxu:set var="displaysDocumentActions" value="#{webActions.getActionsList('SOCIAL_WORKSPACE_NAVIGATION')}" cache="true">
+                    <c:if test="#{!empty displaysDocumentActions}">
+                      <nxu:dataList layout="simple" var="action" value="#{displaysDocumentActions}">
+                        <li>
+                          <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
+                            <h:outputText value=" #{messages[action.label]}" />
+                          </nxh:commandLink>
+                        </li>
+                      </nxu:dataList>
+                      <div class="separator"></div>
+                    </c:if>
+                  </nxu:set>
+                  <ui:insert name="after_submenu_actions" />
+                </ul>
+
+                <ui:insert name="action_menu_after" />
+              </li>
+            </ul>
+          </ui:insert>
+        </c:if>
+      </nxu:set>
       <ui:insert name="social_collaboration_before_actions" />
-      <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>
+
+      <nxu:set var="finalShowUserSocialWorkspaceList"
+        value="#{nxu:test(empty showUserSocialWorkspaceList, true, showUserSocialWorkspaceList)}">
+        <c:if test="#{finalShowUserSocialWorkspaceList}">
+          <ui:insert name="user_social_workspace_list">
+            <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>
+          </ui:insert>
+        </c:if>
+      </nxu:set>
     </h:form>
   </div>
 

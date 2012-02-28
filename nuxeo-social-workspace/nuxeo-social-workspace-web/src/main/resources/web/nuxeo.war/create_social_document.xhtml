@@ -19,14 +19,18 @@
   <ui:define name="body">
     <c:set var="changeableSocialDocument" value="#{collaborationActions.changeableSocialDocument}" />
     <div>
-      <ui:decorate
-        template="incl/social_collaborative_title_and_actions.xhtml">
-        <ui:define name="social_collaboration_title">
-          <h1>
-            <span>#{currentDocument.title} /</span> #{messages['title.create.document']} #{messages[nxd:typeInfo(changeableSocialDocument).label]}
-          </h1>
-        </ui:define>
-      </ui:decorate>
+      <nxu:set var="hasSocialWorkspaceFacet" value="#{changeableSocialDocument.hasFacet('SocialWorkspace')}">
+        <ui:decorate
+          template="incl/social_collaborative_title_and_actions.xhtml">
+          <ui:param name="showActions" value="#{not hasSocialWorkspaceFacet}" />
+          <ui:param name="showUserSocialWorkspaceList" value="#{not hasSocialWorkspaceFacet}" />
+          <ui:define name="social_collaboration_title">
+            <h1>
+              <span>#{currentDocument.title} /</span> #{messages['title.create.document']} #{messages[nxd:typeInfo(changeableSocialDocument).label]}
+            </h1>
+          </ui:define>
+        </ui:decorate>
+      </nxu:set>
       <ui:include src="/incl/message_banner.xhtml" />
       <h:form enctype="multipart/form-data" id="document_create" class="singlePage">
         <nxl:documentLayout mode="create" value="#{changeableSocialDocument}" />
