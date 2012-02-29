@@ -11,4 +11,5 @@ Nuxeo-Component: OSGI-INF/social-workspace-actions-contrib.xml,
  OSGI-INF/social-workspace-space-provider-contrib.xml,
  OSGI-INF/social-workspace-theme-contrib.xml,
  OSGI-INF/social-workspace-listeners-contrib.xml,
- OSGI-INF/social-workspace-urlservice-contrib.xml
+ OSGI-INF/social-workspace-urlservice-contrib.xml,
+ OSGI-INF/social-workspace-auth-contrib.xml
