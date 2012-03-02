@@ -131,7 +131,7 @@ public class SocialWorkspaceHelper {
     }
 
     public static boolean isSocialDocument(DocumentModel doc) {
-        return doc != null && !doc.isProxy()
+        return doc != null && !doc.isProxy() && !doc.isVersion()
                 && doc.hasFacet(SOCIAL_DOCUMENT_FACET);
     }
 
