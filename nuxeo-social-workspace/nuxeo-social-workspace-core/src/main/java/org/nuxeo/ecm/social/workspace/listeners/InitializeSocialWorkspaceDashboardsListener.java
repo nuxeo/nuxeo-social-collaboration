@@ -65,11 +65,14 @@ public class InitializeSocialWorkspaceDashboardsListener implements
             DocumentEventContext documentEventContext = (DocumentEventContext) eventContext;
             DocumentModel doc = documentEventContext.getSourceDocument();
 
+            if (!SPACE_DOCUMENT_TYPE.equals(doc.getType()) || doc.isProxy()) {
+                return;
+            }
+
             SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(
                     doc);
 
-            if (socialWorkspace != null
-                    && SPACE_DOCUMENT_TYPE.equals(doc.getType())) {
+            if (socialWorkspace != null) {
                 initializeDashboards(documentEventContext.getCoreSession(),
                         doc, socialWorkspace);
             }
