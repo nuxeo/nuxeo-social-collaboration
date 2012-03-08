@@ -1,5 +1,22 @@
 var prefs = new gadgets.Prefs();
 
+//configuration leaved here to allow label traduction by shindig
+// configure Automation REST call
+var NXRequestParams = { operationId:'Social.Provider', // id of operation or chain to execute
+  operationParams:{ query:"SELECT * FROM File WHERE ecm:currentLifeCycleState <> 'deleted'",
+    pageSize:5,
+    contextPath:getTargetContextPath(),
+    onlyPublicDocuments:"true", //restrict the research to public-section
+    sortInfo:"dc:modified 1"
+  }, // parameters for the chain or operation
+  operationContext:{}, // context
+  operationDocumentProperties:"common,dublincore,note,file", // schema that must be fetched from resulting documents
+  entityType:'documents', // result type : only document is supported for now
+  usePagination:true, // manage pagination or not
+  displayMethod:displayResultsForPublicDocument, // js method used to display the result
+  noEntryLabel: prefs.getMsg('label.gadget.no.document')
+};
+
 function displayResultsForPublicDocument(entries, nxParams) {
 
   var html = "";

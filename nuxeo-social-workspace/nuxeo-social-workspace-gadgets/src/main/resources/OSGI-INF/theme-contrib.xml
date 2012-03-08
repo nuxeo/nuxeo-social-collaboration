@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.workspace.gadgets.theme">
+
+  <require>org.nuxeo.theme.nuxeo.default</require>
+
+  <extension target="org.nuxeo.theme.services.ThemeService" point="resources">
+    <!-- CSS -->
+    <!-- Gadgets CSS -->
+    <resource name="gadget-articles.css">
+      <path>css/opensocial/gadgets/articles.css</path>
+    </resource>
+    <resource name="gadget-join.css">
+      <path>css/opensocial/gadgets/join.css</path>
+    </resource>
+    <resource name="gadget-members.css">
+      <path>css/opensocial/gadgets/members.css</path>
+    </resource>
+    <resource name="gadget-news.css">
+      <path>css/opensocial/gadgets/news.css</path>
+    </resource>
+    <resource name="gadget-publicarticles.css">
+      <path>css/opensocial/gadgets/publicarticles.css</path>
+    </resource>
+    <resource name="gadget-publicdocuments.css">
+      <path>css/opensocial/gadgets/publicdocuments.css</path>
+    </resource>
+    <resource name="gadget-publicsocialworkspaces.css">
+      <path>css/opensocial/gadgets/publicsocialworkspaces.css</path>
+    </resource>
+    <resource name="gadget-socialworkspaceactivitystream.css">
+      <path>css/opensocial/gadgets/socialworkspaceactivitystream.css</path>
+    </resource>
+    <resource name="gadget-socialworkspaceminimessages.css">
+      <path>css/opensocial/gadgets/socialworkspaceminimessages.css</path>
+    </resource>
+    <resource name="gadget-usersocialworkspaces.css">
+      <path>css/opensocial/gadgets/usersocialworkspaces.css</path>
+    </resource>
+    <resource name="gadget-library.css">
+      <path>css/opensocial/gadgets/library.css</path>
+    </resource>
+
+    <!-- JS -->
+    <!-- Common JS -->
+    <resource name="gadget-dashboard-navigation.js">
+      <path>scripts/opensocial/gadgets/dashboard-navigation.js</path>
+    </resource>
+    <!-- Gadgets JS -->
+    <resource name="gadget-articles.js">
+      <path>scripts/opensocial/gadgets/articles.js</path>
+    </resource>
+    <resource name="gadget-join.js">
+      <path>scripts/opensocial/gadgets/join.js</path>
+    </resource>
+    <resource name="gadget-members.js">
+      <path>scripts/opensocial/gadgets/members.js</path>
+    </resource>
+    <resource name="gadget-news.js">
+      <path>scripts/opensocial/gadgets/news.js</path>
+    </resource>
+    <resource name="gadget-publicarticles.js">
+      <path>scripts/opensocial/gadgets/publicarticles.js</path>
+    </resource>
+    <resource name="gadget-publicdocuments.js">
+      <path>scripts/opensocial/gadgets/publicdocuments.js</path>
+    </resource>
+    <resource name="gadget-publicsocialworkspaces.js">
+      <path>scripts/opensocial/gadgets/publicsocialworkspaces.js</path>
+    </resource>
+    <resource name="gadget-socialworkspaceactivitystream.js">
+      <path>scripts/opensocial/gadgets/socialworkspaceactivitystream.js</path>
+    </resource>
+    <resource name="gadget-socialworkspaceminimessages.js">
+      <path>scripts/opensocial/gadgets/socialworkspaceminimessages.js</path>
+    </resource>
+    <resource name="gadget-usersocialworkspaces.js">
+      <path>scripts/opensocial/gadgets/usersocialworkspaces.js</path>
+    </resource>
+    <resource name="gadget-library.js">
+      <path>scripts/opensocial/gadgets/library.js</path>
+    </resource>
+  </extension>
+
+</component>

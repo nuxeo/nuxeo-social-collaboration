@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <component name="org.nuxeo.ecm.social.user.activity.stream.theme">
 
+  <require>org.nuxeo.theme.nuxeo.default</require>
+
   <!-- mapping between theme pages and resources -->
   <extension target="org.nuxeo.theme.styling.service" point="pages">
 
@@ -19,6 +21,16 @@
       <src>themes/css/activity_stream.css</src>
     </style>
 
+  </extension>
+
+  <extension target="org.nuxeo.theme.services.ThemeService" point="resources">
+    <resource name="gadget-useractivitystream.css">
+      <path>css/opensocial/gadgets/useractivitystream.css</path>
+    </resource>
+
+    <resource name="gadget-useractivitystream.js">
+      <path>scripts/opensocial/gadgets/useractivitystream.js</path>
+    </resource>
   </extension>
 
 </component>

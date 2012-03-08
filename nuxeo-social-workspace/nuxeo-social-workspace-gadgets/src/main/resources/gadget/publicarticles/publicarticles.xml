@@ -16,18 +16,11 @@
 <![CDATA[
 <html>
   <head>
-  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/gadget-common.css"/>
-  <link rel="stylesheet" type="text/css" href="/nuxeo/site/skin/gadgets/css/documentlists.css"/>
-  <link rel="stylesheet" type="text/css" href="publicarticles.css"/>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-documentlists.css,gadget-publicarticles.css?path=${contextPath}&basepath=${contextPath}"/>
 
-  <!-- insert JS Context -->
-  ${jsContext}
-
-  <script src="${specDirectoryUrl}default-automation-request.js"></script>
-  <script src="${specDirectoryUrl}context-management.js"></script>
-  <script src="${specDirectoryUrl}default-documentlist-display.js"></script>
-  <script type="text/javascript" language="javascript" src="publicarticles.js"></script>
-
+    <!-- insert JS Context -->
+    ${jsContext}
+    <script src="${clientSideBaseUrl}nxthemes-lib/gadget-default-automation-request.js,gadget-context-management.js,gadget-default-documentlist-display.js,gadget-publicarticles.js"></script>
   </head>
 
   <body>

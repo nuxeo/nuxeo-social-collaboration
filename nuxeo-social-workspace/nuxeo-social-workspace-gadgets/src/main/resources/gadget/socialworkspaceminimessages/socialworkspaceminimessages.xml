@@ -13,15 +13,11 @@
 <![CDATA[
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
-    <link rel="stylesheet" type="text/css" href="socialworkspaceminimessages.css"/>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-socialworkspaceminimessages.css?path=${contextPath}&basepath=${contextPath}"/>
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js"></script>
-    <script src="${specDirectoryUrl}default-automation-request.js"></script>
-    <script src="${specDirectoryUrl}context-management.js"></script>
-    <script src="socialworkspaceminimessages.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,gadget-default-automation-request.js,gadget-context-management.js,gadget-socialworkspaceminimessages.js"></script>
   </head>
   <body>
 

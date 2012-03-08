@@ -14,15 +14,11 @@
 <![CDATA[
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}gadget-common.css"/>
-    <link rel="stylesheet" type="text/css" href="${specDirectoryUrl}minimessages.css"/>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-minimessages.css?path=${contextPath}&basepath=${contextPath}"/>
 
     <!-- insert JS Context -->
     ${jsContext}
-	<script src="${clientSideBaseUrl}nxthemes-lib/jquery.js"></script>
-    <script src="${specDirectoryUrl}default-automation-request.js"></script>
-    <script src="${specDirectoryUrl}minimessages.js"></script>
-
+    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,gadget-default-automation-request.js,gadget-minimessages.js"></script>
   </head>
   <body>
     <div id="content">
