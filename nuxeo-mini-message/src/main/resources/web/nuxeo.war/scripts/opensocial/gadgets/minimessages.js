@@ -52,7 +52,7 @@ function displayNewMiniMessageForm() {
     htmlContent += '<textarea rows="3" name="newMiniMessageText" class="miniMessageText"></textarea>';
     htmlContent += '<p class="newMiniMessageActions">';
     htmlContent += '<span class="miniMessageCounter"></span>';
-    htmlContent += '<input class="button writeMiniMessageButton" name="writeMiniMessageButton" type="button" onclick="createMiniMessage()" value="' +prefs.getMsg('command.write') + '" />';
+    htmlContent += '<input class="button writeMiniMessageButton" name="writeMiniMessageButton" type="button" onclick="createMiniMessage()" value="' + prefs.getMsg('command.write') + '" />';
     htmlContent += '</p>';
     htmlContent += '</form>';
 
@@ -83,7 +83,7 @@ function addNoMoreMiniMessageText() {
 }
 
 function showMoreMiniMessages() {
-  var NXRequestParams= { operationId : 'Services.GetMiniMessages',
+  var NXRequestParams = { operationId: 'Services.GetMiniMessages',
     operationParams: {
       language: prefs.getLang(),
       actor: actor,
@@ -91,7 +91,7 @@ function showMoreMiniMessages() {
       offset: offset
     },
     operationContext: {},
-    operationCallback: function(response, params) {
+    operationCallback: function (response, params) {
       var newMiniMessages = response.data.miniMessages;
       if (newMiniMessages.length > 0) {
         currentMiniMessages = currentMiniMessages.concat(response.data.miniMessages);
@@ -108,14 +108,14 @@ function showMoreMiniMessages() {
 
 
 function loadMiniMessages() {
-  var NXRequestParams= { operationId : 'Services.GetMiniMessages',
+  var NXRequestParams = { operationId: 'Services.GetMiniMessages',
     operationParams: {
       language: prefs.getLang(),
       actor: actor,
       miniMessagesStreamType: miniMessagesStreamType
     },
     operationContext: {},
-    operationCallback: function(response, params) {
+    operationCallback: function (response, params) {
       currentMiniMessages = response.data.miniMessages;
       offset = response.data.offset;
       displayMiniMessages();
@@ -126,26 +126,26 @@ function loadMiniMessages() {
 }
 
 function pollMiniMessages() {
-var NXRequestParams= { operationId : 'Services.GetMiniMessages',
-  operationParams: {
-    language: prefs.getLang(),
-    actor: actor,
-    miniMessagesStreamType: miniMessagesStreamType
-  },
-  operationContext: {},
-  operationCallback: function(response, params) {
-    var newMiniMessages = response.data.miniMessages;
-    if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
-      // there is at least one new mini message
-      waitingMiniMessages = newMiniMessages;
-      waitingOffset = response.data.offset;
-      addNewMiniMessagesBar();
-      gadgets.window.adjustHeight();
+  var NXRequestParams = { operationId: 'Services.GetMiniMessages',
+    operationParams: {
+      language: prefs.getLang(),
+      actor: actor,
+      miniMessagesStreamType: miniMessagesStreamType
+    },
+    operationContext: {},
+    operationCallback: function (response, params) {
+      var newMiniMessages = response.data.miniMessages;
+      if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
+        // there is at least one new mini message
+        waitingMiniMessages = newMiniMessages;
+        waitingOffset = response.data.offset;
+        addNewMiniMessagesBar();
+        gadgets.window.adjustHeight();
+      }
     }
-  }
-};
+  };
 
-doAutomationRequest(NXRequestParams);
+  doAutomationRequest(NXRequestParams);
 }
 
 function addNewMiniMessagesBar() {
@@ -168,9 +168,9 @@ function showNewMiniMessages() {
   displayMiniMessages();
 }
 
-gadgets.util.registerOnLoadHandler(function() {
+gadgets.util.registerOnLoadHandler(function () {
   loadMiniMessages();
-  window.setInterval(pollMiniMessages, 30*1000);
+  window.setInterval(pollMiniMessages, 30 * 1000);
 });
 
 function showMiniMessageForm() {
@@ -189,19 +189,19 @@ function updateMiniMessageCounter() {
   }
 }
 
-function createMiniMessage(){
+function createMiniMessage() {
   var miniMessageText = jQuery('textarea[name="newMiniMessageText"]').val();
   var opCallParameters = {
-     operationId : 'Services.AddMiniMessage',
-     operationParams : {
-       message : miniMessageText,
-       language : prefs.getLang()
-     },
-     entityType : 'blob',
-     operationContext : {},
-     operationCallback : function(response, opCallParameters) {
-       loadMiniMessages();
-     }
+    operationId: 'Services.AddMiniMessage',
+    operationParams: {
+      message: miniMessageText,
+      language: prefs.getLang()
+    },
+    entityType: 'blob',
+    operationContext: {},
+    operationCallback: function (response, opCallParameters) {
+      loadMiniMessages();
+    }
   };
   doAutomationRequest(opCallParameters);
 }
