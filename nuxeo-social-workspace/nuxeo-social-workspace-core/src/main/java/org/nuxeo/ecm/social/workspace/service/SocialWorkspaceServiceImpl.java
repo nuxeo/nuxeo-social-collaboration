@@ -73,7 +73,6 @@ import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.platform.usermanager.exceptions.GroupAlreadyExistsException;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -280,32 +279,6 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         // matching this virtual group.
         ((NuxeoPrincipal) principal).getAllGroups().add(
                 socialWorkspace.getAdministratorsGroupName());
-    }
-
-    private void createGroup(String groupName, String groupLabel,
-            String principal) {
-        UserManager userManager = getUserManager();
-        try {
-            String groupSchemaName = userManager.getGroupSchemaName();
-
-            DocumentModel group = userManager.getBareGroupModel();
-            group.setProperty(groupSchemaName, userManager.getGroupIdField(),
-                    groupName);
-            group.setProperty(groupSchemaName,
-                    userManager.getGroupLabelField(), groupLabel);
-            group = userManager.createGroup(group);
-
-            if (!StringUtils.isBlank(principal)) {
-                group.setProperty(groupSchemaName,
-                        userManager.getGroupMembersField(),
-                        Arrays.asList(principal));
-            }
-            userManager.updateGroup(group);
-        } catch (GroupAlreadyExistsException e) {
-            log.info("Group already exists : " + groupName);
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(e);
-        }
     }
 
     @Override
