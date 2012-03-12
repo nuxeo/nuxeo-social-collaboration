@@ -71,6 +71,7 @@ import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.platform.computedgroups.ComputedGroupsService;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
@@ -378,12 +379,10 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     private void updatePrincipalGroups(Principal principal) {
-        try {
-            if (principal instanceof NuxeoPrincipalImpl) {
-                ((NuxeoPrincipalImpl) principal).updateAllGroups();
-            }
-        } catch (ClientException e) {
-            throw new ClientRuntimeException(e);
+        if (principal instanceof NuxeoPrincipalImpl) {
+            NuxeoPrincipalImpl nuxeoPrincipal = (NuxeoPrincipalImpl) principal;
+            ComputedGroupsService computedGroupsService = Framework.getLocalService(ComputedGroupsService.class);
+            computedGroupsService.updateGroupsForUser(nuxeoPrincipal);
         }
     }
 
