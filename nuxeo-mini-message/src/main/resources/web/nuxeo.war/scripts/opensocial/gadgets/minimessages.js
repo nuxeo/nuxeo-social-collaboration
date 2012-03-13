@@ -247,6 +247,11 @@ function removeMiniMessage(miniMessageId) {
 }
 
 gadgets.util.registerOnLoadHandler(function () {
+  var contentStyleClass = prefs.getString("contentStyleClass");
+  if (contentStyleClass) {
+    _gel('content').className = contentStyleClass;
+  }
+
   loadMiniMessages();
   window.setInterval(pollMiniMessages, 30 * 1000);
 });

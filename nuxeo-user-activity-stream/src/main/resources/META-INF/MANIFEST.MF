@@ -7,7 +7,6 @@ Bundle-Version: 1.0.0
 Nuxeo-Component: OSGI-INF/activity-stream-contrib.xml,
  OSGI-INF/operations-contrib.xml,
  OSGI-INF/pageproviders-contrib.xml,
- OSGI-INF/contentviews-contrib.xml,
  OSGI-INF/layouts-contrib.xml,
  OSGI-INF/gadgets-contrib.xml,
  OSGI-INF/actions-contrib.xml,

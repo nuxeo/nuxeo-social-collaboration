@@ -8,54 +8,31 @@
   xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
   class="miniMessages">
 
-  <a4j:outputPanel id="miniMessagesPanel" styleClass="miniMessagePanel" >
-    <h:form id="newMiniMessageForm" class="newMiniMessageForm">
-      <h:inputTextarea id="newMiniMessageText" value="#{miniMessageActions.newMessage}" rows="4">
-        <f:validateLength maximum="140" minimum="1"/>
-      </h:inputTextarea>
-      <h:message styleClass="errorMessage" for="newMiniMessageText"
-        id="newMiniMessageText_errorMessage" />
-      <p class="newMiniMessageActions">
-        <span class="miniMessageCounter"></span>
-        <a4j:commandButton styleClass="button writeMiniMessageButton" value="#{messages['command.write']}"
-          action="#{miniMessageActions.createNewMiniMessage()}"
-          reRender="miniMessagesPanel" />
-      </p>
-    </h:form>
-
-    <nxu:set var="contentViewName" value="mini_messages_for_user">
-      <ui:decorate template="/incl/content_view.xhtml">
-        <ui:define name="pageNavigationControls">
-        </ui:define>
-        <ui:define name="content_view_syndication_buttons">
-      </ui:define>
-      </ui:decorate>
-  </nxu:set>
+  <div class="gadgets gadget-user-mini-messages fullWidth"></div>
 
   <script type="text/javascript">
-
-    function updateMiniMessageCounter() {
-      var delta = 140 - jQuery('.newMiniMessageForm textarea').val().length;
-      var miniMessageCounter = jQuery('.miniMessageCounter');
-      miniMessageCounter.text(delta);
-      miniMessageCounter.toggleClass('warning', delta &lt; 5);
-      if (delta &lt; 0) {
-        jQuery('.writeMiniMessageButton').attr('disabled', 'disabled');
-      } else {
-        jQuery('.writeMiniMessageButton').removeAttr('disabled');
-      }
-    }
-
-
-    jQuery(document).ready(function() {
-      updateMiniMessageCounter();
-      jQuery('.newMiniMessageForm textarea').keyup(updateMiniMessageCounter);
-      jQuery('.newMiniMessageForm').focusFirst();
+    jQuery('.gadget-user-mini-messages').openSocialGadget({
+      baseURL: '#{baseURL}',
+      language: '#{localeSelector.language}',
+      gadgetDefs: [
+        { specUrl: '#{gadgetsBaseURL}/site/gadgets/minimessages/minimessages.xml',
+          title: '#{nxu:javaScriptEscape(messages['mini.messages.tab.view'])}',
+          userPrefs: {
+            miniMessagesStreamType: {
+              value: 'forActor'
+            },
+            actor: {
+              value: '#{currentUser.name}'
+            },
+            contentStyleClass: {
+              value: 'fullScale'
+            }
+          },
+          displayTitleBar: false,
+          width: '100%'
+        }
+      ]
     });
-
   </script>
-
-
-  </a4j:outputPanel>
 
 </div>
