@@ -11,6 +11,8 @@
       class="org.nuxeo.ecm.social.mini.message.operations.GetMiniMessages" />
     <operation
       class="org.nuxeo.ecm.social.mini.message.operations.AddMiniMessage" />
+    <operation
+      class="org.nuxeo.ecm.social.mini.message.operations.RemoveMiniMessage" />
 
   </extension>
 

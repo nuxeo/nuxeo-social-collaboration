@@ -57,3 +57,6 @@ img { border: none }
 .newMiniMessageForm .newMiniMessageActions .warning { color: #DE1A00; }
 
 .miniMessages .newMiniMessageForm input.button { margin: .5em 0 1em 1em }
+
+.miniMessage .deleteMiniMessage { text-align: right }
+.miniMessage .deleteMiniMessage a, .miniMessage .deleteMiniMessage a:link { color: #9A9A9A }

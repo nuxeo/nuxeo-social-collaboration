@@ -49,7 +49,7 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
     public static final String ID = "MiniMessageActivityStreamFilter";
 
     public enum QueryType {
-        MINI_MESSAGES_FOR_ACTOR, MINI_MESSAGES_FROM_ACTOR
+        MINI_MESSAGES_FOR_ACTOR, MINI_MESSAGES_FROM_ACTOR, MINI_MESSAGE_BY_ID
     }
 
     public static final String VERB = "minimessage";
@@ -61,6 +61,8 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
     public static final String RELATIONSHIP_KIND_PARAMETER = "relationshipKind";
 
     public static final String TARGET_PARAMETER = "target";
+
+    public static final String MINI_MESSAGE_ID_PARAMETER = "miniMessageId";
 
     @Override
     public String getId() {
@@ -94,18 +96,17 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             throw new IllegalArgumentException(QUERY_TYPE_PARAMETER
                     + " is required.");
         }
-
         String actor = (String) parameters.get(ACTOR_PARAMETER);
-        if (actor == null) {
-            throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
-        }
-
         String target = (String) parameters.get(TARGET_PARAMETER);
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
         switch (queryType) {
         case MINI_MESSAGES_FOR_ACTOR:
+            if (actor == null) {
+                throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
+            }
+
             RelationshipKind relationshipKind = (RelationshipKind) parameters.get(RELATIONSHIP_KIND_PARAMETER);
             RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
             List<String> actors = relationshipService.getTargetsOfKind(actor,
@@ -128,9 +129,20 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             }
             break;
         case MINI_MESSAGES_FROM_ACTOR:
+            if (actor == null) {
+                throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
+            }
             query = em.createQuery("select activity from Activity activity where activity.actor = :actor and activity.verb = :verb order by activity.publishedDate desc");
             query.setParameter(ACTOR_PARAMETER, actor);
             query.setParameter("verb", VERB);
+            break;
+        case MINI_MESSAGE_BY_ID:
+            query = em.createQuery("select activity from Activity activity where activity.id = :id");
+            Serializable miniMessageId = parameters.get(MINI_MESSAGE_ID_PARAMETER);
+            if (miniMessageId == null) {
+                throw new IllegalArgumentException(MINI_MESSAGE_ID_PARAMETER + " is required");
+            }
+            query.setParameter("id", miniMessageId);
             break;
         default:
             throw new IllegalArgumentException("Invalid QueryType parameter");

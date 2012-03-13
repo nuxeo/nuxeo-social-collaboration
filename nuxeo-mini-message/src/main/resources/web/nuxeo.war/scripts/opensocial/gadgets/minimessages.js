@@ -32,6 +32,11 @@ function displayMiniMessages() {
       htmlContent += '<div class="message">';
       htmlContent += currentMiniMessages[i].message;
       htmlContent += '</div>';
+
+      if (miniMessagesStreamType == 'forActor' && currentMiniMessages[i].isCurrentUserMiniMessage) {
+        htmlContent += createDeleteMiniMessageAction(currentMiniMessages[i]);
+      }
+
       htmlContent += '</div>';
     }
   }
@@ -42,7 +47,32 @@ function displayMiniMessages() {
   } else {
     addNoMoreMiniMessageText();
   }
+
+  registerMiniMessageHandlers();
+
   gadgets.window.adjustHeight();
+}
+
+function createDeleteMiniMessageAction(miniMessage) {
+  var htmlContent = '<div class="deleteMiniMessage">';
+  htmlContent += '<a href="#" data-miniMessageId="' + miniMessage.id + '">' + prefs.getMsg('command.delete') + '</a>';
+  htmlContent += '</div>';
+  return htmlContent;
+}
+
+function registerMiniMessageHandlers() {
+  // delete mini message
+  jQuery('a[data-miniMessageId]').click(function() {
+    var miniMessageId = jQuery(this).attr("data-miniMessageId");
+    if (!confirmDeleteMiniMessage()) {
+      return false;
+    }
+    removeMiniMessage(miniMessageId);
+  });
+}
+
+function confirmDeleteMiniMessage() {
+  return confirm(prefs.getMsg('label.mini.message.confirmDelete'));
 }
 
 function displayNewMiniMessageForm() {
@@ -168,11 +198,6 @@ function showNewMiniMessages() {
   displayMiniMessages();
 }
 
-gadgets.util.registerOnLoadHandler(function () {
-  loadMiniMessages();
-  window.setInterval(pollMiniMessages, 30 * 1000);
-});
-
 function showMiniMessageForm() {
   return miniMessagesStreamType == 'forActor';
 }
@@ -205,3 +230,23 @@ function createMiniMessage() {
   };
   doAutomationRequest(opCallParameters);
 }
+
+function removeMiniMessage(miniMessageId) {
+  var opCallParameters = {
+    operationId: 'Services.RemoveMiniMessage',
+    operationParams: {
+      miniMessageId: miniMessageId
+    },
+    entityType: 'blob',
+    operationContext: {},
+    operationCallback: function (response, opCallParameters) {
+      loadMiniMessages();
+    }
+  };
+  doAutomationRequest(opCallParameters);
+}
+
+gadgets.util.registerOnLoadHandler(function () {
+  loadMiniMessages();
+  window.setInterval(pollMiniMessages, 30 * 1000);
+});

@@ -150,4 +150,63 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
         CoreInstance.getInstance().close(newSession);
     }
 
+    @Test
+    public void shouldRemoveAMiniMessage() throws Exception {
+        initializeSomeMiniMessagesAndRelations();
+        CoreSession newSession = openSessionAs("Bender");
+
+        String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
+        List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
+                benderActivityObject, 0, 0);
+        assertEquals(5, messages.size());
+        MiniMessage miniMessage = messages.get(0);
+
+        OperationContext ctx = new OperationContext(newSession);
+        assertNotNull(ctx);
+
+        OperationChain chain = new OperationChain("testMiniMessageOperation");
+        chain.add(RemoveMiniMessage.ID).set("miniMessageId", String.valueOf(miniMessage.getId()));
+        automationService.run(ctx, chain);
+
+        messages = miniMessageService.getMiniMessageFrom(
+                benderActivityObject, 0, 0);
+        assertEquals(4, messages.size());
+
+        miniMessage = messages.get(0);
+        chain = new OperationChain("testMiniMessageOperation");
+        chain.add(RemoveMiniMessage.ID).set("miniMessageId", String.valueOf(miniMessage.getId()));
+        automationService.run(ctx, chain);
+
+        messages = miniMessageService.getMiniMessageFrom(
+                benderActivityObject, 0, 0);
+        assertEquals(3, messages.size());
+
+        CoreInstance.getInstance().close(newSession);
+    }
+
+    @Test
+    public void shouldNotBeAbleToRemoveOtherUserMiniMessage() throws Exception {
+        initializeSomeMiniMessagesAndRelations();
+        CoreSession newSession = openSessionAs("Leela");
+
+        String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
+        List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
+                benderActivityObject, 0, 0);
+        assertEquals(5, messages.size());
+        MiniMessage miniMessage = messages.get(0);
+
+        OperationContext ctx = new OperationContext(newSession);
+        assertNotNull(ctx);
+
+        OperationChain chain = new OperationChain("testMiniMessageOperation");
+        chain.add(RemoveMiniMessage.ID).set("miniMessageId", String.valueOf(miniMessage.getId()));
+        automationService.run(ctx, chain);
+
+        messages = miniMessageService.getMiniMessageFrom(
+                benderActivityObject, 0, 0);
+        assertEquals(5, messages.size());
+
+        CoreInstance.getInstance().close(newSession);
+    }
+
 }

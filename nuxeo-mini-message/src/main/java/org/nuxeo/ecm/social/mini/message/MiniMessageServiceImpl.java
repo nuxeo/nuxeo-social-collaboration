@@ -18,9 +18,11 @@
 package org.nuxeo.ecm.social.mini.message;
 
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.ACTOR_PARAMETER;
+import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.MINI_MESSAGE_ID_PARAMETER;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QUERY_TYPE_PARAMETER;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FOR_ACTOR;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGES_FROM_ACTOR;
+import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.QueryType.MINI_MESSAGE_BY_ID;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.TARGET_PARAMETER;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter.VERB;
 
@@ -74,6 +76,17 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     public void removeMiniMessage(MiniMessage miniMessage) {
         getActivityStreamService().removeActivities(
                 Collections.singleton(miniMessage.getId()));
+    }
+
+    @Override
+    public MiniMessage getMiniMessage(Serializable miniMessageId) {
+        Map<String, Serializable> parameters = new HashMap<String, Serializable>();
+        parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGE_BY_ID);
+        parameters.put(MINI_MESSAGE_ID_PARAMETER, miniMessageId);
+        List<Activity> activities = getActivityStreamService().query(
+                MiniMessageActivityStreamFilter.ID, parameters);
+        return activities.isEmpty() ? null
+                : MiniMessage.fromActivity(activities.get(0));
     }
 
     @Override

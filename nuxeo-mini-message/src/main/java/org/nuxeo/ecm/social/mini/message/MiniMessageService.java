@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.social.mini.message;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,14 @@ public interface MiniMessageService {
      * Remove a mini message.
      */
     void removeMiniMessage(MiniMessage miniMessage);
+
+    /**
+     * Returns the mini message for the given {@code miniMessageId}, or {@code null}
+     * if no mini message exists with the given {@code miniMessageId}.
+     *
+     * @since 5.6
+     */
+    MiniMessage getMiniMessage(Serializable miniMessageId);
 
     /**
      * Returns the mini messages for the given {@code actorActivityObject}. The
