@@ -4,7 +4,6 @@
     description="Diplay public articles list using Nuxeo REST Automation API "
     author="ei" author_email="ei@nuxeo.com"
     height="420">
-    <Optional feature="nuxeo"/>
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
     <Require feature="dynamic-height" />

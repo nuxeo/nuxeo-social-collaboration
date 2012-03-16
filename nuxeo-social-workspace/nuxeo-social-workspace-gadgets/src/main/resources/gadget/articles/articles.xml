@@ -4,7 +4,6 @@
     description="Diplay public Articles of the Social Workspace"
     author="Eugen Ionica" author_email="ei@nuxeo.com"
     height="420">
-    <Optional feature="nuxeo"/>
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
     <Require feature="dynamic-height" />

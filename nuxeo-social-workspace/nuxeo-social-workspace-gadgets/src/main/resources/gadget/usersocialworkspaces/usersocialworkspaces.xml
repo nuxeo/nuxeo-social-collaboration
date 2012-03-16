@@ -3,8 +3,6 @@
   <ModulePrefs title="My Social Workspaces"
     description="Lists Social Workspace, that I'm member"
     author="Ronan Le Gall" author_email="rlg@nuxeo.com">
-
-    <Require feature="nuxeo" />
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
     <Require feature="dynamic-height" />

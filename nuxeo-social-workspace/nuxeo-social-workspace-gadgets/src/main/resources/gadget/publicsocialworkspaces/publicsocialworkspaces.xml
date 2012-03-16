@@ -5,7 +5,6 @@
     author="Benjamin JALON" author_email="bjalon@nuxeo.com" height="280">
 
     <Require feature="jquery" />
-    <Require feature="nuxeo" />
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>
     <Require feature="dynamic-height" />
