@@ -7,13 +7,30 @@
   xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
   class="userActivityStream">
 
-  <nxu:set var="contentViewName" value="activity_stream_for_user">
-    <ui:decorate template="/incl/content_view.xhtml">
-      <ui:define name="pageNavigationControls">
-      </ui:define>
-      <ui:define name="content_view_syndication_buttons">
-      </ui:define>
-    </ui:decorate>
-  </nxu:set>
+  <div class="gadgets gadget-user-activity-stream threeQuarterWidth"></div>
 
+  <script type="text/javascript">
+    jQuery('.gadget-user-activity-stream').openSocialGadget({
+      baseURL: '#{baseURL}',
+      language: '#{localeSelector.language}',
+      gadgetDefs: [
+        { specUrl: '#{gadgetsBaseURL}/site/gadgets/useractivitystream/useractivitystream.xml',
+          title: '#{nxu:javaScriptEscape(messages['user.activity.stream.tab.view'])}',
+          userPrefs: {
+            activityStreamType: {
+              value: 'forActor'
+            },
+            actor: {
+              value: '#{currentUser.name}'
+            },
+            contentStyleClass: {
+              value: 'fullScale'
+            }
+          },
+          displayTitleBar: false,
+          width: '100%'
+        }
+      ]
+    });
+  </script>
 </div>

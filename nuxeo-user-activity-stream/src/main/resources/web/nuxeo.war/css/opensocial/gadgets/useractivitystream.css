@@ -12,9 +12,7 @@
 	color: #999;
 }
 
-.activityMessage {
-	margin: 0 0 0 75px;
-}
+.activityMessage { margin: 0 0 0 8em }
 
 .newActivitiesBar {
     background-color: #F2F7FC;
@@ -41,3 +39,6 @@
     background-color: #fff;
     cursor: default;
 }
+
+/* Style for fullScale gadget */
+.fullScale .activity { border-bottom: 1px solid #ddd; margin: 0; padding: .7em .5em .8em }

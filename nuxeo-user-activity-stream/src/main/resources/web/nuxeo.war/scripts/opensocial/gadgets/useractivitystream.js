@@ -143,6 +143,11 @@ function showNewActivities() {
 }
 
 gadgets.util.registerOnLoadHandler(function() {
+  var contentStyleClass = prefs.getString("contentStyleClass");
+  if (contentStyleClass) {
+    _gel('content').className = contentStyleClass;
+  }
+
   loadActivityStream();
   window.setInterval(pollActivityStream, 30*1000);
 });
