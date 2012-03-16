@@ -3,7 +3,6 @@
   <ModulePrefs title="Public Social Workspaces"
     description="Gives the possibility to find public Social Workspaces"
     author="Benjamin JALON" author_email="bjalon@nuxeo.com" height="280">
-
     <Require feature="jquery" />
     <Require feature="setprefs"/>
     <#include "dynamic-translations.ftl"/>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
   <ModulePrefs title="Mini Messages"
-    description=""
     author="troger" author_email="troger@nuxeo.com" height="280">
     <#include "dynamic-translations.ftl"/>
     <Require feature="dynamic-height" />
