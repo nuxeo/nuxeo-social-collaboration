@@ -4,6 +4,8 @@
 	padding: 3px 0;
 }
 
+.miniMessage:hover { background-color: #e6f1ff }
+
 .username {
 	font-weight: bold;
 	margin-right: 10px;
@@ -13,9 +15,7 @@
 	color: #999;
 }
 
-.message {
-	padding: 1px 0 5px;
-}
+.message { clear: both; padding: .2em 0 .4em }
 
 .username a { color: #519eec; }
 .owner .username a { color: #000; }
@@ -53,10 +53,28 @@ img { border: none }
 .newMiniMessageForm textarea { font-size: 1.1em; font-weight: bold; margin: .5em 0 0; padding: .5em; width: 85% }
 .newMiniMessageForm .newMiniMessageActions { margin: 0 auto; padding: 0; text-align: right; width: 86% }
 
-.newMiniMessageForm .newMiniMessageActions .miniMessageCounter { font-size: 1.1em; font-weight: bold }
+.newMiniMessageForm .newMiniMessageActions .miniMessageCounter { color: #9A9A9A; font-size: 1.1em; font-weight: bold }
 .newMiniMessageForm .newMiniMessageActions .warning { color: #DE1A00; }
 
-.miniMessages .newMiniMessageForm input.button { margin: .5em 0 1em 1em }
+.newMiniMessageActions input.button { background-color: #E7E7E7;
+    border: 1px solid #C9C9C9;
+    border-radius: 3px;
+    box-shadow: 0 10px 8px #FFFFFF inset;
+    color: #000000;
+    cursor: pointer;
+    font-size: .9em;
+    font-weight: bold;
+    margin: .4em 0 .9em .9em;
+    padding: .3em .7em;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 #fff;
+    white-space: nowrap }
 
-.miniMessage .deleteMiniMessage { text-align: right }
-.miniMessage .deleteMiniMessage a, .miniMessage .deleteMiniMessage a:link { color: #9A9A9A }
+.miniMessage .deleteMiniMessage { display: none; float: right }
+.miniMessage:hover .deleteMiniMessage { display: block }
+.miniMessage .deleteMiniMessage a, .miniMessage .deleteMiniMessage a:link { color: #9a9a9a }
+
+/* Style for fullScale gadget */
+.fullScale .miniMessage { padding: 0.5em }
+.fullScale .newMiniMessageForm .newMiniMessageActions input.button { margin: .5em 0 1em 1em }
+

@@ -28,15 +28,15 @@ function displayMiniMessages() {
       htmlContent += '<div>';
       htmlContent += '<span class="username">' + currentMiniMessages[i].displayActor + '</span>';
       htmlContent += '<span class="timestamp">' + currentMiniMessages[i].publishedDate + '</span>';
-      htmlContent += '</div>';
-      htmlContent += '<div class="message">';
-      htmlContent += currentMiniMessages[i].message;
-      htmlContent += '</div>';
 
       if (miniMessagesStreamType == 'forActor' && currentMiniMessages[i].isCurrentUserMiniMessage) {
         htmlContent += createDeleteMiniMessageAction(currentMiniMessages[i]);
       }
 
+      htmlContent += '</div>';
+      htmlContent += '<div class="message">';
+      htmlContent += currentMiniMessages[i].message;
+      htmlContent += '</div>';
       htmlContent += '</div>';
     }
   }
