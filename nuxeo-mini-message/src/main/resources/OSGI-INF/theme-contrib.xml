@@ -3,26 +3,6 @@
 
   <require>org.nuxeo.theme.nuxeo.default</require>
 
-  <!-- mapping between theme pages and resources -->
-  <extension target="org.nuxeo.theme.styling.service" point="pages">
-
-    <themePage name="*">
-      <styles append="true">
-        <style>mini_messages</style>
-      </styles>
-    </themePage>
-
-  </extension>
-
-  <!-- CSS path declaration -->
-  <extension target="org.nuxeo.theme.styling.service" point="styles">
-
-    <style name="mini_messages">
-      <src>themes/css/mini_messages.css</src>
-    </style>
-
-  </extension>
-
   <extension target="org.nuxeo.theme.services.ThemeService" point="resources">
     <resource name="gadget-minimessages.css">
       <path>css/opensocial/gadgets/minimessages.css</path>
