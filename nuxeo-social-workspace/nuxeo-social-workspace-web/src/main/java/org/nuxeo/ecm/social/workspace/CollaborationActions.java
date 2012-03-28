@@ -47,6 +47,7 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.ui.web.api.WebActions;
+import org.nuxeo.ecm.platform.ui.web.rest.RestHelper;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
@@ -54,7 +55,7 @@ import org.nuxeo.ecm.webapp.helpers.EventManager;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
- *
+ * 
  */
 @Name("collaborationActions")
 @Scope(CONVERSATION)
@@ -82,6 +83,8 @@ public class CollaborationActions implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String COLLABORATION_VIEW_ID = "collaboration";
+    
+    public static final String DASHBOARD_VIEW_ID = "dashboard";
 
     public static final String MAIN_TABS_DOCUMENTS = "MAIN_TABS:documents";
 
@@ -102,6 +105,9 @@ public class CollaborationActions implements Serializable {
 
     @In(create = true)
     protected transient WebActions webActions;
+    
+    @In(create = true)
+    protected transient RestHelper restHelper;
 
     protected DocumentModel previous;
 
@@ -131,6 +137,12 @@ public class CollaborationActions implements Serializable {
         } else {
             return navigationContext.navigateToDocument(currentDocument);
         }
+    }
+
+    public String getCurrentDashboardUrl() throws ClientException {
+        DocumentModel dashboard = documentManager.getDocument(new PathRef(
+                socialWorkspaceActions.getSocialWorkspace().getDashboardSpacesRootPath()));
+        return restHelper.getDocumentUrl(dashboard, DASHBOARD_VIEW_ID, false);
     }
 
     public String navigateToDMView() throws ClientException {
