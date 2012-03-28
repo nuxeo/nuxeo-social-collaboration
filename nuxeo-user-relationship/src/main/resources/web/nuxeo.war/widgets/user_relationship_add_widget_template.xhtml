@@ -28,7 +28,7 @@
 
           <c:forEach var="relation" items="#{userRelationshipActions.getRelationshipsWithUser(userName)}" varStatus="status">
             <c:if test="#{!status.first}">#{status.last ? andLabel : ', '}</c:if>
-            <h:outputText value="#{relation.name}" />
+            <h:outputText value="#{messages['label.relation.'.concat(relation.name)]}" />
           </c:forEach>
         </a4j:outputPanel>
 
@@ -73,7 +73,7 @@
                           <f:param name="selectedUser" value="#{userName}" />
                         </a4j:support>
                         <span>
-                          <h:outputText value="#{kind.name}" />
+                          <h:outputText value="#{messages['label.relation.'.concat(kind.name)]}" />
                         </span>
                       </h:selectBooleanCheckbox>
                     </nxu:column>
