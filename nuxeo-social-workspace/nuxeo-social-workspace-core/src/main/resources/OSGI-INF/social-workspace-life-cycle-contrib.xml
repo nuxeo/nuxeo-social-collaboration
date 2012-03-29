@@ -35,8 +35,11 @@
     point="types">
     <types>
       <type name="SocialDomain">default</type>
+      <type name="SocialSection">default</type>
       <type name="SocialWorkspace">default</type>
       <type name="NewsItem">default</type>
+      <type name="NewsItemsRoot">default</type>
+      <type name="DashboardSpacesContainer">default</type>
       <type name="Article">default</type>
       <type name="SubscriptionRequest">subscriptionRequestLifecycle</type>
     </types>
