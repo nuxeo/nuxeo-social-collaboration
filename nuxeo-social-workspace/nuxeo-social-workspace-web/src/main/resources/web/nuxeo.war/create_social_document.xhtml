@@ -26,7 +26,7 @@
           <ui:param name="showUserSocialWorkspaceList" value="#{not hasSocialWorkspaceFacet}" />
           <ui:define name="social_collaboration_title">
             <h1>
-              <span>#{currentDocument.title} /</span> #{messages['title.create.document']} #{messages[nxd:typeInfo(changeableSocialDocument).label]}
+              <span><a href="#{collaborationActions.currentDashboardUrl}">#{currentDocument.title}</a> /</span> #{messages['title.create.document']} #{messages[nxd:typeInfo(changeableSocialDocument).label]}
             </h1>
           </ui:define>
         </ui:decorate>
