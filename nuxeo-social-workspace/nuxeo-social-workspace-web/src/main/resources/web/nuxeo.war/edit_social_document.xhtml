@@ -21,7 +21,7 @@
         template="incl/social_collaborative_title_and_actions.xhtml">
         <ui:define name="social_collaboration_title">
           <h1>
-            <span>#{socialWorkspaceActions.socialWorkspace.title} /</span> #{messages['title.edit']} #{currentType.id}
+            <span><a href="#{collaborationActions.currentDashboardUrl}">#{socialWorkspaceActions.socialWorkspace.title}</a> /</span> #{messages['title.edit']} #{currentType.id}
           </h1>
         </ui:define>
       </ui:decorate>
