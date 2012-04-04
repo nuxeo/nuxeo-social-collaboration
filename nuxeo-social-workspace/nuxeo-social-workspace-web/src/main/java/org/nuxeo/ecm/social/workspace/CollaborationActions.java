@@ -140,9 +140,17 @@ public class CollaborationActions implements Serializable {
     }
 
     public String getCurrentDashboardUrl() throws ClientException {
-        DocumentModel dashboard = documentManager.getDocument(new PathRef(
-                socialWorkspaceActions.getSocialWorkspace().getDashboardSpacesRootPath()));
-        return restHelper.getDocumentUrl(dashboard, DASHBOARD_VIEW_ID, false);
+        SocialWorkspace sw = socialWorkspaceActions.getSocialWorkspace();
+        DocumentModel dashboard;
+        String view = DASHBOARD_VIEW_ID;
+        if (sw == null) {
+            dashboard = navigationContext.getCurrentDocument();
+            view = "view_collaboration";
+        } else {
+            dashboard = documentManager.getDocument(new PathRef(sw.getDashboardSpacesRootPath()));
+        }
+
+        return restHelper.getDocumentUrl(dashboard, view, false);
     }
 
     public String navigateToDMView() throws ClientException {
