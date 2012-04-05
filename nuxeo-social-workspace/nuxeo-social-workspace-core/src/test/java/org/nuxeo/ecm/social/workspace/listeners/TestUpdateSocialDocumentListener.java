@@ -14,13 +14,13 @@
  */
 package org.nuxeo.ecm.social.workspace.listeners;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
