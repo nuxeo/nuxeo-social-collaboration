@@ -1,17 +1,12 @@
 package org.nuxeo.ecm.social.relationship.service;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;

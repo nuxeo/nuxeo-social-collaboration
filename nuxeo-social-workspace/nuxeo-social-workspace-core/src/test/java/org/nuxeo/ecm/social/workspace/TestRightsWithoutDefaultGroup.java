@@ -16,9 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.EVERYTHING;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.READ_WRITE;
@@ -27,6 +24,8 @@ import java.security.Principal;
 
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 
