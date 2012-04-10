@@ -4,7 +4,7 @@
   <require>org.nuxeo.ecm.platform.webengine.sites.actions</require>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
-    point="actions">
+             point="actions">
 
     <action id="collaboration" link="view_collaboration" label="label.main.tab.collaboration" order="60">
       <category>MAIN_TABS</category>
@@ -12,163 +12,163 @@
 
 
     <action id="BackToDashboard"
-      link="#{collaborationActions.backToDashboard()}"
-      label="label.social.workspace.backtodashboard"
-      immediate="false"
-      icon="/icons/back_to_social_workspace_dashboard.png"
-      order="20">
+            link="#{collaborationActions.backToDashboard()}"
+            label="label.social.workspace.backtodashboard"
+            immediate="false"
+            icon="/icons/back_to_social_workspace_dashboard.png"
+            order="20">
       <category>SOCIAL_WORKSPACE_LISTING</category>
       <filter-id>social_workspace_dashboard_view</filter-id>
     </action>
 
     <action id="GoToDMView"
-      link="#{collaborationActions.navigateToDMView()}"
-      label="label.social.workspace.gotodmview"
-      immediate="false"
-      icon="/icons/goto_dm.png"
-      order="99">
+            link="#{collaborationActions.navigateToDMView()}"
+            label="label.social.workspace.gotodmview"
+            immediate="false"
+            icon="/icons/goto_dm.png"
+            order="99">
       <category>SOCIAL_WORKSPACE_NAVIGATION</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
     <action id="GoToCollaborationViewForDocument"
-      link="#{collaborationActions.navigateToCollaborationView()}"
-      label="label.social.workspace.gotosocialcollaboration"
-      immediate="false"
-      icon="/icons/collaboration.png"
-      order="10">
+            link="#{collaborationActions.navigateToCollaborationView()}"
+            label="label.social.workspace.gotosocialcollaboration"
+            immediate="false"
+            icon="/icons/collaboration.png"
+            order="10">
       <category>DOCUMENT_UPPER_ACTION</category>
       <filter-id>has_collaboration_view</filter-id>
     </action>
 
     <action id="ListArticles"
-      link="#{collaborationActions.navigateToArticles()}"
-      label="label.social.workspace.list.articles"
-      immediate="false"
-      icon="/icons/article_listing.png"
-      order="10">
+            link="#{collaborationActions.navigateToArticles()}"
+            label="label.social.workspace.list.articles"
+            immediate="false"
+            icon="/icons/article_listing.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_LISTING</category>
     </action>
 
     <action id="ListNewsItems"
-      link="#{collaborationActions.navigateToNewsItems()}"
-      label="label.social.workspace.list.news.items"
-      immediate="false"
-      icon="/icons/news_item_listing.png"
-      order="11">
+            link="#{collaborationActions.navigateToNewsItems()}"
+            label="label.social.workspace.list.news.items"
+            immediate="false"
+            icon="/icons/news_item_listing.png"
+            order="11">
       <category>SOCIAL_WORKSPACE_LISTING</category>
     </action>
 
     <action id="ListFiles"
-      link="#{collaborationActions.navigateToFiles()}"
-      label="label.social.workspace.list.files"
-      immediate="false"
-      icon="/icons/file_listing.png"
-      order="11">
+            link="#{collaborationActions.navigateToFiles()}"
+            label="label.social.workspace.list.files"
+            immediate="false"
+            icon="/icons/file_listing.png"
+            order="11">
       <category>SOCIAL_WORKSPACE_LISTING</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
     <action id="CreateArticles"
-      link="#{collaborationActions.createNewDocument('Article')}"
-      label="label.social.workspace.create.articles"
-      immediate="false"
-      icon="/icons/create_article.png"
-      order="10">
+            link="#{collaborationActions.createNewDocument('Article')}"
+            label="label.social.workspace.create.articles"
+            immediate="false"
+            icon="/icons/create_article.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
     <action id="CreateNewsItems"
-      link="#{collaborationActions.createNewDocument('NewsItem')}"
-      label="label.social.workspace.create.news.items"
-      immediate="false"
-      icon="/icons/create_news_item.png"
-      order="10">
+            link="#{collaborationActions.createNewDocument('NewsItem')}"
+            label="label.social.workspace.create.news.items"
+            immediate="false"
+            icon="/icons/create_news_item.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>is_social_workspace_administrator</filter-id>
     </action>
 
     <action id="CreateFiles"
-      link="#{collaborationActions.createNewDocument('File')}"
-      label="label.social.workspace.create.files"
-      immediate="false"
-      icon="/icons/create_file.png"
-      order="10">
+            link="#{collaborationActions.createNewDocument('File')}"
+            label="label.social.workspace.create.files"
+            immediate="false"
+            icon="/icons/create_file.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
     <action id="CreateSocialWorkspace"
-      link="#{collaborationActions.displayCreateSocialWorkspaceForm}"
-      label="label.social.workspace.create.social.workspace"
-      immediate="false"
-      icon="/icons/create_soacial_workspace.png"
-      order="10">
+            link="#{collaborationActions.displayCreateSocialWorkspaceForm}"
+            label="label.social.workspace.create.social.workspace"
+            immediate="false"
+            icon="/icons/create_soacial_workspace.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <category>COLLABORATION_TAB_ACTIONS</category>
       <filter-id>canCreateSocialWorkspace</filter-id>
     </action>
 
     <action id="CreateSocialWorkspaceSaveButton"
-      link="#{collaborationActions.saveOncreate}"
-      label="command.create"
-      immediate="false"
-      icon="/icons/create_news_item.png"
-      order="0">
+            link="#{collaborationActions.saveOncreate}"
+            label="command.create"
+            immediate="false"
+            icon="/icons/create_news_item.png"
+            order="0">
       <category>SOCIAL_WORKSPACE_CREATION_FORM</category>
       <filter-id>canCreateSocialWorkspace</filter-id>
       <filter-id>not_in_social_workspace</filter-id>
     </action>
 
     <action id="CreateSocialWorkspaceCancelButton"
-      link="view_collaboration"
-      label="command.cancel"
-      immediate="true"
-      icon="/icons/create_news_item.png"
-      order="50">
+            link="view_collaboration"
+            label="command.cancel"
+            immediate="true"
+            icon="/icons/create_news_item.png"
+            order="50">
       <category>SOCIAL_WORKSPACE_CREATION_FORM</category>
       <filter-id>canCreateSocialWorkspace</filter-id>
       <filter-id>not_in_social_workspace</filter-id>
     </action>
 
     <action id="CreateSocialDocumentSaveButton"
-      link="#{collaborationActions.saveOncreate}"
-      label="command.create"
-      immediate="false"
-      icon="/icons/create_news_item.png"
-      order="0">
+            link="#{collaborationActions.saveOncreate}"
+            label="command.create"
+            immediate="false"
+            icon="/icons/create_news_item.png"
+            order="0">
       <category>SOCIAL_WORKSPACE_CREATION_FORM</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
     <action id="CreateSocialDocumentCancelButton"
-      link="#{collaborationActions.goBack}"
-      label="command.cancel"
-      immediate="true"
-      icon="/icons/create_news_item.png"
-      order="50">
+            link="#{collaborationActions.goBack}"
+            label="command.cancel"
+            immediate="true"
+            icon="/icons/create_news_item.png"
+            order="50">
       <category>SOCIAL_WORKSPACE_CREATION_FORM</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
       <filter-id>has_not_previous_document</filter-id>
     </action>
 
     <action id="UpdateSocialDocumentSaveButton"
-      link="#{collaborationActions.updateCurrentDocument}"
-      label="command.save"
-      immediate="false"
-      icon="/icons/create_news_item.png"
-      order="0">
+            link="#{collaborationActions.updateCurrentDocument}"
+            label="command.save"
+            immediate="false"
+            icon="/icons/create_news_item.png"
+            order="0">
       <category>SOCIAL_WORKSPACE_EDIT_FORM</category>
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
     <action id="EditArticles"
-      link="#{collaborationActions.editSocialDocument}"
-      label="label.social.workspace.edit.articles"
-      immediate="false"
-      icon="/icons/create_article.png"
-      order="10">
+            link="#{collaborationActions.editSocialDocument}"
+            label="label.social.workspace.edit.articles"
+            immediate="false"
+            icon="/icons/create_article.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>isCurrentDocArticle</filter-id>
       <filter-id>mutable_document</filter-id>
@@ -176,10 +176,10 @@
     </action>
 
     <action id="RestrictSocialDocumentToSocialWorkspace"
-      link="#{socialDocumentVisibilityActions.restrictToMembers}"
-      label="command.restrictToSocialWorkspace"
-      immediate="true"
-      order="10">
+            link="#{socialDocumentVisibilityActions.restrictToMembers}"
+            label="command.restrictToSocialWorkspace"
+            immediate="true"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>isNotSocialWorkspaceContainer</filter-id>
       <filter-id>social_document</filter-id>
@@ -189,10 +189,10 @@
     </action>
 
     <action id="MakeSocialDocumentPublic"
-      link="#{socialDocumentVisibilityActions.makePublic}"
-      label="command.makePublic"
-      immediate="true"
-      order="10">
+            link="#{socialDocumentVisibilityActions.makePublic}"
+            label="command.makePublic"
+            immediate="true"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>isNotSocialWorkspaceContainer</filter-id>
       <filter-id>social_document</filter-id>
@@ -203,11 +203,11 @@
 
 
     <action id="EditNewsItems"
-      link="#{collaborationActions.editSocialDocument}"
-      label="label.social.workspace.edit.news.items"
-      immediate="false"
-      icon="/icons/create_news_item.png"
-      order="10">
+            link="#{collaborationActions.editSocialDocument}"
+            label="label.social.workspace.edit.news.items"
+            immediate="false"
+            icon="/icons/create_news_item.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>isCurrentDocNewsItem</filter-id>
       <filter-id>mutable_document</filter-id>
@@ -216,11 +216,11 @@
 
 
     <action id="EditFiles"
-      link="#{collaborationActions.editSocialDocument}"
-      label="label.social.workspace.edit.files"
-      immediate="false"
-      icon="/icons/create_file.png"
-      order="10">
+            link="#{collaborationActions.editSocialDocument}"
+            label="label.social.workspace.edit.files"
+            immediate="false"
+            icon="/icons/create_file.png"
+            order="10">
       <category>SOCIAL_WORKSPACE_ACTIONS</category>
       <filter-id>isCurrentDocFile</filter-id>
       <filter-id>mutable_document</filter-id>
@@ -228,56 +228,56 @@
     </action>
 
     <action id="newNewsItem" link="#{documentActions.createDocument('NewsItem')}"
-      label="command.create.news.item" icon="/icons/action_add.gif">
+            label="command.create.news.item" icon="/icons/action_add.gif">
       <category>SUBVIEW_UPPER_LIST</category>
       <filter-id>new_news_item</filter-id>
     </action>
 
     <action id="SocialWorkspacesAdministration"
-      link="view_admin-fragment.xhtml"
-      label="label.social.collaboration.administration"
-      order="150">
+            link="view_admin-fragment.xhtml"
+            label="label.social.collaboration.administration"
+            order="150">
       <category>NUXEO_ADMIN</category>
       <filter-id>only_for_manager</filter-id>
     </action>
 
     <action id="SocialWorkspacesRequests"
-      link="/incl/social_workspace_administration/social_workspace_requests.xhtml"
-      label="label.socialworkspace.requests"
-      order="10">
+            link="/incl/social_workspace_administration/social_workspace_requests.xhtml"
+            label="label.socialworkspace.requests"
+            order="10">
       <category>SocialWorkspacesAdministration_sub_tab</category>
       <filter-id>only_for_manager</filter-id>
     </action>
 
     <action id="TAB_MANAGE_SOCIAL_WORKSPACE"
-      link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml"
-      order="10" label="action.view.membership.management" icon="/icons/file.gif">
+            link="/incl/tabs/social_workspace_groupManager_action_tabs.xhtml"
+            order="10" label="action.view.membership.management" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
     <action id="TAB_MANAGE_SOCIAL_WORKSPACE_IMPORT"
-      link="/incl/tabs/social_workspace_bulk_import_action_tabs.xhtml"
-      order="15" label="label.social.workspace.actions.bulk.import" icon="/icons/file.gif">
+            link="/incl/tabs/social_workspace_bulk_import_action_tabs.xhtml"
+            order="15" label="label.social.workspace.actions.bulk.import" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
     <action id="TAB_MANAGE_REQUESTS" link="/incl/tabs/manage_requests_action_tab.xhtml"
-      order="20" label="action.view.manage.requests" icon="/icons/file.gif">
+            order="20" label="action.view.manage.requests" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
       <filter-id>workspace_administrator</filter-id>
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PRIVATE_DASHBOARD" link="/incl/tabs/social_workspace_private_dashboard.xhtml"
-      order="5" label="action.view.private.dashboard" icon="/icons/file.gif">
+            order="5" label="action.view.private.dashboard" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>social_workspace</filter-id>
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PUBLIC_DASHBOARD" link="/incl/tabs/social_workspace_public_dashboard.xhtml"
-      order="6" label="action.view.public.dashboard" icon="/icons/file.gif">
+            order="6" label="action.view.public.dashboard" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>manage_social_workspace</filter-id>
       <filter-id>social_workspace</filter-id>
@@ -288,14 +288,14 @@
       <filter-id>hide_rights_tab</filter-id>
     </action>
 
-    <action id="UsersGroupsHome" label="label.groupManager.groups" />
+    <action id="UsersGroupsHome" label="label.groupManager.groups"/>
 
     <action id="UsersHome" enabled="false"/>
 
-    <action id="newDomain" enabled="false" />
+    <action id="newDomain" enabled="false"/>
 
     <extension target="org.nuxeo.ecm.platform.actions.ActionService"
-                 point="actions">
+               point="actions">
       <action id="UserRegistrationRequestsCreate">
         <filter-id>not_in_social_workspace</filter-id>
       </action>
@@ -304,7 +304,7 @@
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
-    point="filters">
+             point="filters">
 
     <filter id="can_be_created_and_modified_in_collaboration_view">
       <rule grant="true">
@@ -329,9 +329,9 @@
     </filter>
 
     <filter id="not_in_social_workspace">
-        <rule grant="true">
-            <condition>#{socialWorkspaceService.getSocialWorkspace(currentDocument) == null}</condition>
-        </rule>
+      <rule grant="true">
+        <condition>#{socialWorkspaceService.getSocialWorkspace(currentDocument) == null}</condition>
+      </rule>
     </filter>
 
     <filter id="social_workspace">
@@ -359,15 +359,15 @@
     </filter>
 
     <filter id="has_previous_document">
-        <rule grant="true">
-            <condition>#{collaborationActions.previous != null}</condition>
-        </rule>
+      <rule grant="true">
+        <condition>#{collaborationActions.previous != null}</condition>
+      </rule>
     </filter>
 
     <filter id="has_not_previous_document">
-        <rule grant="true">
-            <condition>#{collaborationActions.previous == null}</condition>
-        </rule>
+      <rule grant="true">
+        <condition>#{collaborationActions.previous == null}</condition>
+      </rule>
     </filter>
 
     <filter id="hide_rights_tab">
