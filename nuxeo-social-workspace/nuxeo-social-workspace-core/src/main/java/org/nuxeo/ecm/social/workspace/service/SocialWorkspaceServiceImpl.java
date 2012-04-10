@@ -687,7 +687,15 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     @Override
     public String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
             Principal principal) {
-        log.warn("Deprecated call to org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl#getSubscriptionRequestStatus");
+        DocumentModelList docs = null;
+        try {
+            docs = getRegistrationService().getRegistrationsForUser(socialWorkspace.getId(), principal.getName());
+            if (docs.size() > 0) {
+                return docs.get(0).getCurrentLifeCycleState();
+            }
+        } catch (ClientException e) {
+            log.warn(e, e);
+        }
         return null;
     }
 

@@ -173,7 +173,6 @@ public interface SocialWorkspaceService {
      * Returns status of subscription request for the given {@code principal}
      * Values returned are: pending, accepted, rejected or null if there is no
      * subscription request
-     * @deprecated since 5.6 see SocialWorkspace
      */
     @Deprecated
     String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,

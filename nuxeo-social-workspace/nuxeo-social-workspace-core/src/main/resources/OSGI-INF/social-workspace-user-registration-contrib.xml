@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <component name="org.nuxeo.ecm.collaboration.user.registration">
 
+  <require>org.nuxeo.ecm.user.registration.core.types.contrib</require>
+
   <extension target="org.nuxeo.ecm.core.schema.TypeService"
              point="schema">
     <schema name="registration" src="schemas/registration.xsd"

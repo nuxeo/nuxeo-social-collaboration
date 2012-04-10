@@ -72,29 +72,6 @@ public class SocialConstants {
 
     public static final String DC_AUTHOR_PROPERTY = "dc:author";
 
-    // Subscription Request
-    public static final String SUBSCRIPTION_REQUEST_TYPE = "SubscriptionRequest";
-
-    public static final String SUBSCRIPTION_REQUEST_SCHEMA = "subscription_request";
-
-    public static final String SUBSCRIPTION_REQUEST_TYPE_JOIN = "joinRequest";
-
-    public static final String SUBSCRIPTION_REQUEST_USERNAME_PROPERTY = "req:username";
-
-    public static final String SUBSCRIPTION_REQUEST_USER_EMAIL_PROPERTY = "req:userEmail";
-
-    public static final String SUBSCRIPTION_REQUEST_TYPE_PROPERTY = "req:type";
-
-    public static final String SUBSCRIPTION_REQUEST_INFO_PROPERTY = "req:info";
-
-    public static final String SUBSCRIPTION_REQUEST_PROCESSED_DATE_PROPERTY = "req:processedDate";
-
-    public static final String SUBSCRIPTION_REQUEST_PROCESSED_COMMENT_PROPERTY = "req:processedComment";
-
-    public static final String SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION = "accept";
-
-    public static final String SUBSCRIPTION_REQUEST_REJECT_TRANSITION = "reject";
-
     // Activity stuff
     public static final String MAKE_DOCUMENT_PUBLIC_VERB = "makedocumentpublic";
 

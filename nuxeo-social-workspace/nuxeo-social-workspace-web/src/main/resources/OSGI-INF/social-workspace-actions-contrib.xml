@@ -256,18 +256,11 @@
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
-    <action id="TAB_MANAGE_SOCIAL_WORKSPACE_IMPORT"
+    <action id="TAB_MANAGE_SOCIAL_WORKSPACE_BULK_IMPORT"
             link="/incl/tabs/social_workspace_bulk_import_action_tabs.xhtml"
             order="15" label="label.social.workspace.actions.bulk.import" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
-    </action>
-
-    <action id="TAB_MANAGE_REQUESTS" link="/incl/tabs/manage_requests_action_tab.xhtml"
-            order="20" label="action.view.manage.requests" icon="/icons/file.gif">
-      <category>TAB_MANAGE_sub_tab</category>
-      <filter-id>manage_social_workspace</filter-id>
-      <filter-id>workspace_administrator</filter-id>
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PRIVATE_DASHBOARD" link="/incl/tabs/social_workspace_private_dashboard.xhtml"
@@ -294,12 +287,13 @@
 
     <action id="newDomain" enabled="false"/>
 
-    <extension target="org.nuxeo.ecm.platform.actions.ActionService"
-               point="actions">
-      <action id="UserRegistrationRequestsCreate">
-        <filter-id>not_in_social_workspace</filter-id>
-      </action>
-    </extension>
+    <action id="UserRegistrationRequestsCreate">
+      <filter-id>not_in_social_workspace</filter-id>
+    </action>
+
+    <action id="UserRegistrationRequestsMultipleCreate">
+      <filter-id>not_in_social_workspace</filter-id>
+    </action>
 
   </extension>
 
@@ -449,7 +443,7 @@
         <type>SocialFolder</type>
         <condition>
           #{typeManager.getAllowedSubTypes(document.getType(), document).size()
-          > 0}
+         > 0}
         </condition>
       </rule>
     </filter>
@@ -464,7 +458,7 @@
         <type>SocialFolder</type>
         <condition>
           #{typeManager.getAllowedSubTypes(document.getType(), document).size()
-          > 0}
+         > 0}
         </condition>
       </rule>
     </filter>
