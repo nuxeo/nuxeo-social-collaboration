@@ -21,7 +21,6 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 /**
  * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 public class SocialConstants {
 
@@ -91,12 +90,6 @@ public class SocialConstants {
     public static final String SUBSCRIPTION_REQUEST_PROCESSED_DATE_PROPERTY = "req:processedDate";
 
     public static final String SUBSCRIPTION_REQUEST_PROCESSED_COMMENT_PROPERTY = "req:processedComment";
-
-    public static final String SUBSCRIPTION_REQUEST_PENDING_STATE = "pending";
-
-    public static final String SUBSCRIPTION_REQUEST_ACCEPTED_STATE = "accepted";
-
-    public static final String SUBSCRIPTION_REQUEST_REJECTED_STATE = "rejected";
 
     public static final String SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION = "accept";
 

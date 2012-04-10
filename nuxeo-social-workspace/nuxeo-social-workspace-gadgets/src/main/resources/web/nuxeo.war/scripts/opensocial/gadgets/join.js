@@ -32,11 +32,15 @@ function displayStatus(response, nxParams) {
   var status = response.data["status"];
   _gel("socialWorkspaceDescription").innerHTML = response.data["description"];
   if ("REQUEST_PENDING" == status) {
-    _gel("statusMessage").innerHTML = "__MSG_label.request.alreadyRegistered__";
+    _gel("statusMessage").innerHTML = prefs.getMsg("label.request.alreadyRegistered");
+    _gel("joinButton").style.display = 'none';
+  }
+  if ("REQUEST_ACCEPTED" == status) {
+    _gel("statusMessage").innerHTML = prefs.getMsg("label.request.accepted");
     _gel("joinButton").style.display = 'none';
   }
   if ("REQUEST_REJECTED" == status) {
-    _gel("statusMessage").innerHTML = "__MSG_label.request.rejected__";
+    _gel("statusMessage").innerHTML = prefs.getMsg("label.request.rejected");
     _gel("joinButton").style.display = 'none';
   }
   if ("MEMBER" == status) {

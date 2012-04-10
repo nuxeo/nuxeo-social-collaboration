@@ -163,7 +163,9 @@ public interface SocialWorkspaceService {
     /**
      * Returns {@code true} if there is a pending Subscription Request for the
      * given {@code principal}, {@code false} otherwise.
+     * @deprecated since 5.6 see SocialWorkspace
      */
+    @Deprecated
     boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace,
             Principal principal);
 
@@ -171,20 +173,25 @@ public interface SocialWorkspaceService {
      * Returns status of subscription request for the given {@code principal}
      * Values returned are: pending, accepted, rejected or null if there is no
      * subscription request
-     *
+     * @deprecated since 5.6 see SocialWorkspace
      */
+    @Deprecated
     String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
             Principal principal);
 
     /**
      * Accepts the {@code subscriptionRequest} for {@code socialWorkspace}.
+     * @deprecated since 5.6 see SocialWorkspace
      */
+    @Deprecated
     void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest);
 
     /**
      * Rejects the {@code subscriptionRequest} for {@code socialWorkspace}.
+     * @deprecated since 5.6 see SocialWorkspace
      */
+    @Deprecated
     void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest);
 

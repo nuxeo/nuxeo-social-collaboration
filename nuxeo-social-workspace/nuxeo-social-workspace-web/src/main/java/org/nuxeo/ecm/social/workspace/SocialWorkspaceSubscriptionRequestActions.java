@@ -15,13 +15,14 @@
  *     eugen
  */
 package org.nuxeo.ecm.social.workspace;
-import static org.nuxeo.ecm.webapp.helpers.EventNames.DOCUMENT_CHANGED;
+
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_PENDING_STATE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
+import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationConstant.REQUEST_PENDING_STATE;
 import static org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager.CURRENT_DOCUMENT_SELECTION;
+import static org.nuxeo.ecm.webapp.helpers.EventNames.DOCUMENT_CHANGED;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class SocialWorkspaceSubscriptionRequestActions implements Serializable {
             return false;
         }
         for (DocumentModel doc : list) {
-            if (!SUBSCRIPTION_REQUEST_PENDING_STATE.equals(doc.getCurrentLifeCycleState())) {
+            if (!REQUEST_PENDING_STATE.equals(doc.getCurrentLifeCycleState())) {
                 return false;
             }
         }

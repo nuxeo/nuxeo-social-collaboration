@@ -317,6 +317,13 @@
 
     <action id="newDomain" enabled="false" />
 
+    <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+                 point="actions">
+      <action id="UserRegistrationRequestsCreate">
+        <filter-id>not_in_social_workspace</filter-id>
+      </action>
+    </extension>
+
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"

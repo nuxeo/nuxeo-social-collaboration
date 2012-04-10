@@ -197,6 +197,11 @@ public interface SocialWorkspace {
     void handleSubscriptionRequest(Principal principal);
 
     /**
+     * Returns if the principal should be invited
+     */
+    public boolean shouldRequestSubscription(Principal principal);
+
+    /**
      * Returns {@code true} if there is a pending Subscription Request for the
      * given {@code principal}, {@code false} otherwise.
      */

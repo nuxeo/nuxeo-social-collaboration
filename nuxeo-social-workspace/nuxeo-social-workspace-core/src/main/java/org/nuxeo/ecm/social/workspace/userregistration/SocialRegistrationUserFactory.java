@@ -1,0 +1,66 @@
+package org.nuxeo.ecm.social.workspace.userregistration;
+
+import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+import static org.nuxeo.ecm.user.registration.DocumentRegistrationInfo.DOCUMENT_ID_FIELD;
+import static org.nuxeo.ecm.user.registration.UserRegistrationInfo.USERNAME_FIELD;
+
+import java.security.Principal;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
+import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.ecm.user.registration.DefaultRegistrationUserFactory;
+import org.nuxeo.runtime.api.Framework;
+
+/**
+ * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
+ */
+public class SocialRegistrationUserFactory extends
+        DefaultRegistrationUserFactory {
+    private static final Log log = LogFactory.getLog(SocialRegistrationUserFactory.class);
+
+    @Override
+    public DocumentModel doAddDocumentPermission(CoreSession session,
+            DocumentModel registrationDoc) throws ClientException {
+        String docId = (String) registrationDoc.getPropertyValue(DOCUMENT_ID_FIELD);
+        if (StringUtils.isBlank(docId)) {
+            throw new ClientException("SocialWorkspace id is missing");
+        }
+        SocialWorkspace sw = toSocialWorkspace(session.getDocument(new IdRef(
+                docId)));
+        if (sw == null) {
+            throw new ClientException(
+                    "Document passed is not a Social Workspace");
+        }
+        String login = (String) registrationDoc.getPropertyValue(USERNAME_FIELD);
+        Principal principal = getUserManager().getPrincipal(login);
+
+        if (!getSocialWorkspaceService().addSocialWorkspaceMember(sw, principal)) {
+            return null;
+        }
+
+        return sw.getDocument();
+    }
+
+    @Override
+    public void doPostAddDocumentPermission(CoreSession session,
+            DocumentModel registrationDoc, DocumentModel document)
+            throws ClientException {
+        // Nothing to do
+    }
+
+    public SocialWorkspaceService getSocialWorkspaceService() {
+        return Framework.getLocalService(SocialWorkspaceService.class);
+    }
+
+    public UserManager getUserManager() {
+        return Framework.getLocalService(UserManager.class);
+    }
+}
