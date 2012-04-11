@@ -409,7 +409,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             }
 
             if (socialWorkspace.shouldRequestSubscription(principal)) {
-                handleSubscriptionRequest(socialWorkspace, principal);
+                // Pass false to admin validation as only admins can bulk add users
+                handleSubscriptionRequest(socialWorkspace, principal, true);
                 importedUsers.add(userName);
                 importedPrincipal.add(principal);
             }
@@ -448,7 +449,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             NuxeoPrincipal principal = userManager.getPrincipal(foundUsers.get(
                     0).getId());
             if (socialWorkspace.shouldRequestSubscription(principal)) {
-                handleSubscriptionRequest(socialWorkspace, principal);
+                // Pass false to admin validation as only admins can bulk add users
+                handleSubscriptionRequest(socialWorkspace, principal, true);
                 memberAddedList.add(email);
                 principalAdded.add(principal);
             }
@@ -644,6 +646,12 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     @Override
     public void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
             Principal principal) {
+        handleSubscriptionRequest(socialWorkspace, principal,
+                !socialWorkspace.mustApproveSubscription());
+    }
+
+    protected void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
+            Principal principal, boolean autoAccept) {
         UserRegistrationInfo userInfo = buildUserRegistrationInfo(
                 socialWorkspace, (NuxeoPrincipal) principal);
         DocumentRegistrationInfo docInfo = buildDocumentRegistrationInfo(socialWorkspace);
@@ -652,8 +660,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         try {
             getRegistrationService().submitRegistrationRequest(
                     SOCIAL_CONFIGURATION_NAME, userInfo, docInfo,
-                    additionalInfo, EMAIL,
-                    socialWorkspace.mustApproveSubscription());
+                    additionalInfo, EMAIL, autoAccept);
         } catch (ClientException e) {
             log.warn("Unable to submit social registration", e);
         }
@@ -689,7 +696,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             Principal principal) {
         DocumentModelList docs = null;
         try {
-            docs = getRegistrationService().getRegistrationsForUser(socialWorkspace.getId(), principal.getName());
+            docs = getRegistrationService().getRegistrationsForUser(
+                    socialWorkspace.getId(), principal.getName());
             if (docs.size() > 0) {
                 return docs.get(0).getCurrentLifeCycleState();
             }
