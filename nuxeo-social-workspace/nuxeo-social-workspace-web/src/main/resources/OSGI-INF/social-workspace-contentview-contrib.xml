@@ -4,35 +4,6 @@
 <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
   point="contentViews">
 
-
-  <contentView name="requests_view">
-
-    <coreQueryPageProvider>
-      <property name="coreSession">#{documentManager}</property>
-      <pattern>
-        SELECT * FROM SubscriptionRequest WHERE ecm:isCheckedInVersion = 0
-        AND ecm:isProxy = 0 AND req:info = ? AND ecm:currentLifeCycleState = 'pending'
-      </pattern>
-      <parameter>#{currentDocument.id}</parameter>
-      <pageSize>20</pageSize>
-    </coreQueryPageProvider>
-
-    <cacheKey>#{currentDocument.id}</cacheKey>
-    <cacheSize>10</cacheSize>
-    <refresh>
-      <event>subscriptionRequestsUpdated</event>
-    </refresh>
-
-    <resultLayouts>
-     <layout name="requests_summary_layout" title="document_listing"
-          translateTitle="true" iconPath="/icons/document_listing_icon.png" />
-    </resultLayouts>
-
-    <selectionList>CURRENT_SELECTION</selectionList>
-    <actions category="MANAGE_REQUESTS" />
-
-  </contentView>
-
     <contentView name="SocialWorkspaces">
       <coreQueryPageProvider>
         <property name="coreSession">#{documentManager}</property>

@@ -19,7 +19,6 @@ package org.nuxeo.ecm.social.workspace.adapters;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_SCHEMA;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,10 +49,6 @@ public class AdapterFactory implements DocumentAdapterFactory {
         }
         if (itf == Article.class && ARTICLE_TYPE.equals(doc.getType())) {
             return new ArticleAdapter(doc);
-        }
-        if (itf == SubscriptionRequest.class
-                && doc.hasSchema(SUBSCRIPTION_REQUEST_SCHEMA)) {
-            return new SubscriptionRequestAdapter(doc);
         }
         return null;
     }

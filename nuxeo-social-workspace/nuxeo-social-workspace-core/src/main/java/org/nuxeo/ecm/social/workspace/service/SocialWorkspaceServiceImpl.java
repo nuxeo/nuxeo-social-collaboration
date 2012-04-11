@@ -32,6 +32,8 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildR
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildRelationMemberKind;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.isSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationConstant.SOCIAL_CONFIGURATION_NAME;
+import static org.nuxeo.ecm.user.registration.UserRegistrationService.ValidationMethod.EMAIL;
 
 import java.io.Serializable;
 import java.security.Principal;
@@ -80,8 +82,10 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener;
+import org.nuxeo.ecm.user.registration.DocumentRegistrationInfo;
+import org.nuxeo.ecm.user.registration.UserRegistrationInfo;
+import org.nuxeo.ecm.user.registration.UserRegistrationService;
 import org.nuxeo.runtime.api.Framework;
-import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
@@ -104,8 +108,6 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     public static final String PUBLIC_SOCIAL_WORKSPACE_ACL_NAME = "publicSocialWorkspaceAcl";
 
     private UserManager userManager;
-
-    private SubscriptionRequestHandler subscriptionRequestHandler;
 
     private int validationDays;
 
@@ -165,18 +167,6 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
 
         return socialWorkspaces;
-    }
-
-    @Override
-    public void activate(ComponentContext context) throws Exception {
-        super.activate(context);
-        subscriptionRequestHandler = new DefaultSubscriptionRequestHandler();
-    }
-
-    @Override
-    public void deactivate(ComponentContext context) throws Exception {
-        super.deactivate(context);
-        subscriptionRequestHandler = null;
     }
 
     @Override
@@ -412,14 +402,15 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         List<String> importedUsers = new ArrayList<String>();
         List<Principal> importedPrincipal = new ArrayList<Principal>();
         for (String userName : group.getMemberUsers()) {
-            Principal principal = userManager.getPrincipal(userName);
+            NuxeoPrincipal principal = userManager.getPrincipal(userName);
             if (principal == null) {
                 log.info(String.format("User (%s) doesn't exist.", userName));
                 continue;
             }
 
-            if (addSocialWorkspaceMemberWithoutNotification(socialWorkspace,
-                    principal)) {
+            if (socialWorkspace.shouldRequestSubscription(principal)) {
+                // Pass false to admin validation as only admins can bulk add users
+                handleSubscriptionRequest(socialWorkspace, principal, true);
                 importedUsers.add(userName);
                 importedPrincipal.add(principal);
             }
@@ -455,17 +446,14 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
                         + " several user were found. First one used.");
             }
 
-            DocumentModel firstUser = foundUsers.get(0);
-            NuxeoPrincipalImpl principal = new NuxeoPrincipalImpl(
-                    firstUser.getId());
-            principal.setModel(firstUser, false);
-
-            if (addSocialWorkspaceMemberWithoutNotification(socialWorkspace,
-                    principal)) {
+            NuxeoPrincipal principal = userManager.getPrincipal(foundUsers.get(
+                    0).getId());
+            if (socialWorkspace.shouldRequestSubscription(principal)) {
+                // Pass false to admin validation as only admins can bulk add users
+                handleSubscriptionRequest(socialWorkspace, principal, true);
                 memberAddedList.add(email);
                 principalAdded.add(principal);
             }
-
         }
         // Notify bulk import
         fireEventMembersManagement(socialWorkspace, principalAdded,
@@ -658,36 +646,77 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     @Override
     public void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
             Principal principal) {
-        subscriptionRequestHandler.handleSubscriptionRequestFor(
-                socialWorkspace, principal);
+        handleSubscriptionRequest(socialWorkspace, principal,
+                !socialWorkspace.mustApproveSubscription());
+    }
+
+    protected void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
+            Principal principal, boolean autoAccept) {
+        UserRegistrationInfo userInfo = buildUserRegistrationInfo(
+                socialWorkspace, (NuxeoPrincipal) principal);
+        DocumentRegistrationInfo docInfo = buildDocumentRegistrationInfo(socialWorkspace);
+        Map<String, Serializable> additionalInfo = new HashMap<String, Serializable>();
+
+        try {
+            getRegistrationService().submitRegistrationRequest(
+                    SOCIAL_CONFIGURATION_NAME, userInfo, docInfo,
+                    additionalInfo, EMAIL, autoAccept);
+        } catch (ClientException e) {
+            log.warn("Unable to submit social registration", e);
+        }
+    }
+
+    private DocumentRegistrationInfo buildDocumentRegistrationInfo(
+            SocialWorkspace socialWorkspace) {
+        DocumentRegistrationInfo docInfo = new DocumentRegistrationInfo();
+        docInfo.setDocumentId(socialWorkspace.getId());
+        return docInfo;
+    }
+
+    private UserRegistrationInfo buildUserRegistrationInfo(
+            SocialWorkspace socialWorkspace, NuxeoPrincipal principal) {
+        UserRegistrationInfo userInfo = new UserRegistrationInfo();
+        userInfo.setLogin(principal.getName());
+        userInfo.setEmail(principal.getEmail());
+        userInfo.setFirstName(principal.getFirstName());
+        userInfo.setLastName(principal.getLastName());
+        userInfo.setCompany(principal.getCompany());
+        return userInfo;
     }
 
     @Override
     public boolean isSubscriptionRequestPending(
             SocialWorkspace socialWorkspace, Principal principal) {
-        return subscriptionRequestHandler.isSubscriptionRequestPending(
-                socialWorkspace, principal);
+        log.warn("Deprecated call to org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl#getSubscriptionRequestStatus");
+        return false;
     }
 
     @Override
     public String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
             Principal principal) {
-        return subscriptionRequestHandler.getSubscriptionRequestStatus(
-                socialWorkspace, principal);
+        DocumentModelList docs = null;
+        try {
+            docs = getRegistrationService().getRegistrationsForUser(
+                    socialWorkspace.getId(), principal.getName());
+            if (docs.size() > 0) {
+                return docs.get(0).getCurrentLifeCycleState();
+            }
+        } catch (ClientException e) {
+            log.warn(e, e);
+        }
+        return null;
     }
 
     @Override
     public void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest) {
-        subscriptionRequestHandler.acceptSubscriptionRequest(socialWorkspace,
-                subscriptionRequest);
+        log.warn("Deprecated call to org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl#acceptSubscriptionRequest");
     }
 
     @Override
     public void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
             SubscriptionRequest subscriptionRequest) {
-        subscriptionRequestHandler.rejectSubscriptionRequest(socialWorkspace,
-                subscriptionRequest);
+        log.warn("Deprecated call to org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl#rejectSubscriptionRequest");
     }
 
     @Override
@@ -765,6 +794,10 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
                     "RelationshipService is not registered.");
         }
         return relationshipService;
+    }
+
+    private UserRegistrationService getRegistrationService() {
+        return Framework.getLocalService(UserRegistrationService.class);
     }
 
     private static class SocialWorkspaceFinder extends

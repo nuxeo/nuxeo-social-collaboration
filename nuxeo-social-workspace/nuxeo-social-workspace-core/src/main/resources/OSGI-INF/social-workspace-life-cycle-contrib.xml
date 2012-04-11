@@ -4,34 +4,6 @@
   <require>org.nuxeo.ecm.core.LifecycleCoreExtensions</require>
 
   <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
-    point="lifecycle">
-
-    <lifecycle name="subscriptionRequestLifecycle" defaultInitial="pending">
-      <transitions>
-        <transition name="accept" destinationState="accepted">
-          <description>Accept the registration request</description>
-        </transition>
-        <transition name="reject" destinationState="rejected">
-          <description>Reject the registration request</description>
-        </transition>
-      </transitions>
-
-      <states>
-        <state name="pending" description="Default state" initial="true">
-          <transitions>
-            <transition>accept</transition>
-            <transition>reject</transition>
-          </transitions>
-        </state>
-        <state name="accepted" description="Request has been accepted">
-        </state>
-        <state name="rejected" description="Request has been rejected">
-        </state>
-      </states>
-    </lifecycle>
-  </extension>
-
-  <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
     point="types">
     <types>
       <type name="SocialDomain">default</type>
@@ -41,7 +13,6 @@
       <type name="NewsItemsRoot">default</type>
       <type name="DashboardSpacesContainer">default</type>
       <type name="Article">default</type>
-      <type name="SubscriptionRequest">subscriptionRequestLifecycle</type>
     </types>
   </extension>
 

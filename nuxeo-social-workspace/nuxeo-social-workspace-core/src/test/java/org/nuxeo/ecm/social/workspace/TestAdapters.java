@@ -19,14 +19,10 @@ package org.nuxeo.ecm.social.workspace;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE_JOIN;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SUBSCRIPTION_REQUEST_TYPE_PROPERTY;
 
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.social.workspace.adapters.Article;
-import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
@@ -49,22 +45,6 @@ public class TestAdapters extends AbstractSocialWorkspaceTest {
         Article adapter = article.getAdapter(Article.class);
         assertNotNull(adapter);
         assertNotNull(adapter.getCreated());
-    }
-
-    @Test
-    public void testRequestAdapter() throws Exception {
-        DocumentModel request = session.createDocumentModel(
-                session.getRootDocument().getPathAsString(), "request",
-                SUBSCRIPTION_REQUEST_TYPE);
-        request.setPropertyValue(SUBSCRIPTION_REQUEST_TYPE_PROPERTY,
-                SUBSCRIPTION_REQUEST_TYPE_JOIN);
-        assertNotNull(request);
-        request = session.createDocument(request);
-        session.save();
-
-        SubscriptionRequest adapter = request.getAdapter(SubscriptionRequest.class);
-        assertNotNull(adapter);
-        assertNotNull(adapter.getType());
     }
 
     @Test

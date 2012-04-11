@@ -14,8 +14,6 @@
       factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
     <adapter class="org.nuxeo.ecm.social.workspace.adapters.Article"
       factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
-    <adapter class="org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest"
-      factory="org.nuxeo.ecm.social.workspace.adapters.AdapterFactory" />
 
   </extension>
 

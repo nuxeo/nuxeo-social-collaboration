@@ -35,7 +35,6 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
-import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.ec.notification.service.NotificationServiceHelper;
 import org.nuxeo.ecm.platform.url.api.DocumentViewCodecManager;
@@ -48,11 +47,12 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator")
 @Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
-        "org.nuxeo.ecm.platform.notification.core" })
+        "org.nuxeo.ecm.platform.notification.core", "org.nuxeo.ecm.user.registration" })
 @LocalDeploy({
         "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml" })
+        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml",
+        "org.nuxeo.ecm.social.workspace.core:test-user-registration-contrib.xml"})
 public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
     @Inject
@@ -110,8 +110,12 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
                 "userNewMember2@mail.net", nonExsitingUser1Email,
                 "nonExistingUser2@mail.net", fulltextEmailUser1.getId());
 
+        Framework.getLocalService(EventService.class).waitForAsyncCompletion();
+
         List<String> addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
                 socialWorkspace, emails);
+        assertEquals(3, socialWorkspace.getMembers().size());
+        assertTrue(socialWorkspace.isAdministratorOrMember(userManager.getPrincipal("userAlreadyMember1")));
         assertEquals(3, addedUsers.size());
         assertEquals(5, ImportEventListener.getMemberAddedCount());
         assertEquals(3, ImportEventListener.getLastPrincipalsCount());
@@ -119,9 +123,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         assertFalse(addedUsers.contains(nonExsitingUser1Email));
         assertTrue(addedUsers.contains(userNewMember1Email));
 
-        addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
-                socialWorkspace, emails);
-        assertTrue(addedUsers.isEmpty());
+        session.save();
 
         addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
                 socialWorkspace, new ArrayList<String>());

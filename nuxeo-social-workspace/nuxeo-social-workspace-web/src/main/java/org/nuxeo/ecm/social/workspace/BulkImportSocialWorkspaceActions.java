@@ -35,6 +35,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.common.collections.ScopeType;
@@ -127,6 +128,7 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
             }
             resetMemberNotificationDisabled(socialWorkspace);
             resetRawListOfEmails();
+            notifyRequestsDocumentsChanged();
         } catch (ClientException e) {
             log.warn(e, e);
             facesMessages.add(
@@ -134,6 +136,10 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
                     resourcesAccessor.getMessages().get(
                             USERS_IMPORTED_ERROR_LABEL));
         }
+    }
+
+    protected void notifyRequestsDocumentsChanged() {
+        Events.instance().raiseEvent("requestDocumentsChanged");
     }
 
     private void resetMemberNotificationDisabled(SocialWorkspace socialWorkspace) {
@@ -161,6 +167,7 @@ public class BulkImportSocialWorkspaceActions implements Serializable {
                         convertToString(importedUsers));
                 resetGroupsToImport();
                 resetMemberNotificationDisabled(socialWorkspace);
+                notifyRequestsDocumentsChanged();
             } catch (ClientException e) {
                 log.warn(e, e);
                 facesMessages.add(

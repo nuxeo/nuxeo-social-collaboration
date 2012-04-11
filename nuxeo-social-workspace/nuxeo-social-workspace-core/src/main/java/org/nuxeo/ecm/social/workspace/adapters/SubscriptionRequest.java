@@ -22,8 +22,9 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
+ * @deprecated since 5.6
  */
+@Deprecated
 public interface SubscriptionRequest {
 
     String getUsername();

@@ -11,6 +11,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.buildR
 import java.security.Principal;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -227,10 +228,13 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
         getSocialWorkspaceService().handleSubscriptionRequest(this, principal);
     }
 
+    public boolean shouldRequestSubscription(Principal principal) {
+        return !(isAdministratorOrMember((NuxeoPrincipal)principal) || isSubscriptionRequestPending(principal));
+    }
+
     @Override
     public boolean isSubscriptionRequestPending(Principal principal) {
-        return getSocialWorkspaceService().isSubscriptionRequestPending(this,
-                principal);
+        return !StringUtils.isEmpty(getSubscriptionRequestStatus(principal));
     }
 
     @Override

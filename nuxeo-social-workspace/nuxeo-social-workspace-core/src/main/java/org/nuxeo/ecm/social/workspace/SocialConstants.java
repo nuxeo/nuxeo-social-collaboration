@@ -21,7 +21,6 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 
 /**
  * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 public class SocialConstants {
 
@@ -72,35 +71,6 @@ public class SocialConstants {
     public static final String DC_CREATED_PROPERTY = "dc:created";
 
     public static final String DC_AUTHOR_PROPERTY = "dc:author";
-
-    // Subscription Request
-    public static final String SUBSCRIPTION_REQUEST_TYPE = "SubscriptionRequest";
-
-    public static final String SUBSCRIPTION_REQUEST_SCHEMA = "subscription_request";
-
-    public static final String SUBSCRIPTION_REQUEST_TYPE_JOIN = "joinRequest";
-
-    public static final String SUBSCRIPTION_REQUEST_USERNAME_PROPERTY = "req:username";
-
-    public static final String SUBSCRIPTION_REQUEST_USER_EMAIL_PROPERTY = "req:userEmail";
-
-    public static final String SUBSCRIPTION_REQUEST_TYPE_PROPERTY = "req:type";
-
-    public static final String SUBSCRIPTION_REQUEST_INFO_PROPERTY = "req:info";
-
-    public static final String SUBSCRIPTION_REQUEST_PROCESSED_DATE_PROPERTY = "req:processedDate";
-
-    public static final String SUBSCRIPTION_REQUEST_PROCESSED_COMMENT_PROPERTY = "req:processedComment";
-
-    public static final String SUBSCRIPTION_REQUEST_PENDING_STATE = "pending";
-
-    public static final String SUBSCRIPTION_REQUEST_ACCEPTED_STATE = "accepted";
-
-    public static final String SUBSCRIPTION_REQUEST_REJECTED_STATE = "rejected";
-
-    public static final String SUBSCRIPTION_REQUEST_ACCEPT_TRANSITION = "accept";
-
-    public static final String SUBSCRIPTION_REQUEST_REJECT_TRANSITION = "reject";
 
     // Activity stuff
     public static final String MAKE_DOCUMENT_PUBLIC_VERB = "makedocumentpublic";
