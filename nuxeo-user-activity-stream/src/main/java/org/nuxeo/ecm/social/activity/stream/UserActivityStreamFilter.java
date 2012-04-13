@@ -118,12 +118,16 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
                 return new ActivitiesListImpl();
             }
 
-            query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) order by activity.publishedDate desc");
+            query = em.createQuery("select activity from Activity activity " +
+                    "where activity.actor in (:actors) and activity.verb in (:verbs) " +
+                    "and activity.context is null order by activity.publishedDate desc");
             query.setParameter("actors", actors);
             query.setParameter("verbs", verbs);
             break;
         case ACTIVITY_STREAM_FROM_ACTOR:
-            query = em.createQuery("select activity from Activity activity where activity.actor = :actor and activity.verb in (:verbs) order by activity.publishedDate desc");
+            query = em.createQuery("select activity from Activity activity " +
+                    "where activity.actor = :actor and activity.verb in (:verbs) " +
+                    "and activity.context is null order by activity.publishedDate desc");
             query.setParameter("actor", actor);
             query.setParameter("verbs", verbs);
             break;

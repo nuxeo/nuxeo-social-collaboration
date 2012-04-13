@@ -60,7 +60,7 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
 
     public static final String RELATIONSHIP_KIND_PARAMETER = "relationshipKind";
 
-    public static final String TARGET_PARAMETER = "target";
+    public static final String CONTEXT_PARAMETER = "context";
 
     public static final String MINI_MESSAGE_ID_PARAMETER = "miniMessageId";
 
@@ -97,14 +97,15 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
                     + " is required.");
         }
         String actor = (String) parameters.get(ACTOR_PARAMETER);
-        String target = (String) parameters.get(TARGET_PARAMETER);
+        String context = (String) parameters.get(CONTEXT_PARAMETER);
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
         switch (queryType) {
         case MINI_MESSAGES_FOR_ACTOR:
             if (actor == null) {
-                throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
+                throw new IllegalArgumentException(ACTOR_PARAMETER
+                        + " is required");
             }
 
             RelationshipKind relationshipKind = (RelationshipKind) parameters.get(RELATIONSHIP_KIND_PARAMETER);
@@ -115,24 +116,29 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
 
             StringBuilder sb = new StringBuilder(
                     "select activity from Activity activity where activity.actor in (:actors) and activity.verb = :verb ");
-            if (target != null) {
-                sb.append("and activity.target = :target ");
+            if (context != null) {
+                sb.append("and (activity.context = :context or activity.target = :target) ");
             } else {
-                sb.append("and activity.target is null ");
+                sb.append("and activity.context is null and activity.target is null ");
             }
             sb.append("order by activity.publishedDate desc");
             query = em.createQuery(sb.toString());
             query.setParameter("actors", actors);
             query.setParameter("verb", VERB);
-            if (target != null) {
-                query.setParameter("target", target);
+            if (context != null) {
+                query.setParameter("context", context);
+                query.setParameter("target", context);
             }
             break;
         case MINI_MESSAGES_FROM_ACTOR:
             if (actor == null) {
-                throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
+                throw new IllegalArgumentException(ACTOR_PARAMETER
+                        + " is required");
             }
-            query = em.createQuery("select activity from Activity activity where activity.actor = :actor and activity.verb = :verb order by activity.publishedDate desc");
+            query = em.createQuery("select activity from Activity activity "
+                    + "where activity.actor = :actor and activity.verb = :verb "
+                    + "and activity.context is null and activity.target is null "
+                    + "order by activity.publishedDate desc");
             query.setParameter(ACTOR_PARAMETER, actor);
             query.setParameter("verb", VERB);
             break;
@@ -140,7 +146,8 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             query = em.createQuery("select activity from Activity activity where activity.id = :id");
             Serializable miniMessageId = parameters.get(MINI_MESSAGE_ID_PARAMETER);
             if (miniMessageId == null) {
-                throw new IllegalArgumentException(MINI_MESSAGE_ID_PARAMETER + " is required");
+                throw new IllegalArgumentException(MINI_MESSAGE_ID_PARAMETER
+                        + " is required");
             }
             query.setParameter("id", miniMessageId);
             break;

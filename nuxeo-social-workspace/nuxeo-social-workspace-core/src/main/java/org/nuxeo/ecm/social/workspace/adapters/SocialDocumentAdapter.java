@@ -208,6 +208,7 @@ public class SocialDocumentAdapter implements SocialDocument {
 
     protected void addMakeDocumentPublicActivity(DocumentModel doc,
             Principal principal) {
+        String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument());
         ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
         Activity activity = new ActivityBuilder().verb(
                 MAKE_DOCUMENT_PUBLIC_VERB).actor(
@@ -215,7 +216,7 @@ public class SocialDocumentAdapter implements SocialDocument {
                 ActivityHelper.generateDisplayName(principal)).object(
                 ActivityHelper.createDocumentActivityObject(doc)).displayObject(
                 ActivityHelper.getDocumentTitle(doc)).target(
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayTarget(
+                socialWorkspaceActivityObject).displayTarget(
                 socialWorkspace.getTitle()).build();
         activityStreamService.addActivity(activity);
     }

@@ -470,12 +470,13 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     private void addNewActivity(Principal principal,
             SocialWorkspace socialWorkspace, RelationshipKind kind) {
+        String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument());
         Activity activity = new ActivityBuilder().actor(
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayActor(
                 socialWorkspace.getTitle()).verb(kind.toString()).object(
                 ActivityHelper.createUserActivityObject(principal.getName())).displayObject(
                 ActivityHelper.generateDisplayName(principal)).target(
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayTarget(
+                socialWorkspaceActivityObject).displayTarget(
                 socialWorkspace.getTitle()).build();
         Framework.getLocalService(ActivityStreamService.class).addActivity(
                 activity);

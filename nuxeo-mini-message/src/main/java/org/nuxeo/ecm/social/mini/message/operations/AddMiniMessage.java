@@ -77,6 +77,9 @@ public class AddMiniMessage {
     @Param(name = "contextPath", required = false)
     protected String contextPath;
 
+    @Param(name = "document", required = false)
+    protected DocumentModel doc;
+
     @OperationMethod
     public Blob run() throws Exception {
         if (publishedDate == null) {
@@ -88,18 +91,20 @@ public class AddMiniMessage {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 locale);
 
-        String target = null;
-        if (contextPath != null) {
-            TargetActivityObject targetActivityObject = new TargetActivityObject(
+        String context = null;
+        if (doc != null) {
+            context = ActivityHelper.createDocumentActivityObject(doc);
+        } else if (contextPath != null) {
+            ContextActivityObject contextActivityObject = new ContextActivityObject(
                     session, contextPath);
-            targetActivityObject.runUnrestricted();
-            if (targetActivityObject.documentActivityObject != null) {
-                target = targetActivityObject.documentActivityObject;
+            contextActivityObject.runUnrestricted();
+            if (contextActivityObject.documentActivityObject != null) {
+                context = contextActivityObject.documentActivityObject;
             }
         }
 
         MiniMessage miniMessage = miniMessageService.addMiniMessage(
-                session.getPrincipal(), message, publishedDate, target);
+                session.getPrincipal(), message, publishedDate, context);
 
         NuxeoPrincipal principal = userManager.getPrincipal(miniMessage.getActor());
         String fullName = principal == null ? "" : principal.getFirstName()
@@ -123,13 +128,14 @@ public class AddMiniMessage {
                 writer.toString().getBytes("UTF-8")), "application/json");
     }
 
-    private static class TargetActivityObject extends UnrestrictedSessionRunner {
+    private static class ContextActivityObject extends
+            UnrestrictedSessionRunner {
 
         private String contextPath;
 
         public String documentActivityObject;
 
-        public TargetActivityObject(CoreSession session, String contextPath) {
+        public ContextActivityObject(CoreSession session, String contextPath) {
             super(session);
             this.contextPath = contextPath;
         }

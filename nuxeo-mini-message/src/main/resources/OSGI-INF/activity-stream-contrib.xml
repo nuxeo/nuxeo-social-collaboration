@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.social.mini.message.activity.stream">
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreamFilters">
+
+    <activityStreamFilter
+      class="org.nuxeo.ecm.social.mini.message.MiniMessageActivityStreamFilter" />
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityMessageLabels">
+
+    <activityMessageLabel activityVerb="minimessage"
+      labelKey="label.activity.minimessage" />
+
+  </extension>
+
+</component>
