@@ -19,182 +19,163 @@ package org.nuxeo.ecm.social.workspace;
 
 import static org.jboss.seam.ScopeType.CONVERSATION;
 import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.jboss.seam.international.StatusMessage.Severity.ERROR;
+import static org.jboss.seam.international.StatusMessage.Severity.INFO;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
+import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationUserFactory.ADMINISTRATOR_RIGHT;
+import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationUserFactory.MEMBER_RIGHT;
+import static org.nuxeo.ecm.user.registration.UserRegistrationService.ValidationMethod.EMAIL;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.core.Events;
-import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.international.StatusMessage;
-import org.nuxeo.common.collections.ScopeType;
-import org.nuxeo.common.collections.ScopedMap;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
+import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
+import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
-import org.nuxeo.ecm.webapp.helpers.ResourcesAccessor;
+import org.nuxeo.ecm.user.registration.UserRegistrationInfo;
+import org.nuxeo.ecm.user.registration.actions.UserRegistrationActions;
 
 /**
  * Action bean to manage bulk user import in a Social Workspace
- *
+ * 
  * @author Arnaud KERVERN <akervern@nuxeo.com>
  * @since 5.5
  */
 @Name("bulkImportSocialWorkspaceActions")
 @Scope(CONVERSATION)
 @Install(precedence = FRAMEWORK)
-public class BulkImportSocialWorkspaceActions implements Serializable {
+public class BulkImportSocialWorkspaceActions extends UserRegistrationActions {
     private static final long serialVersionUID = 1L;
-
-    public static final String USERS_IMPORTED_LABEL = "label.social.workspace.users.imported";
-
-    public static final String USERS_NOT_IMPORTED_LABEL = "label.social.workspace.users.imported.not";
-
-    public static final String USERS_IMPORTED_ERROR_LABEL = "label.social.workspace.users.imported.error";
-
-    private static final String MEMBER_NOTIFICATION_DISABLED = "memberNotificationDisabled";
 
     private static final Log log = LogFactory.getLog(BulkImportSocialWorkspaceActions.class);
 
     @In(create = true)
-    protected transient SocialWorkspaceService socialWorkspaceService;
-
-    @In(create = true)
     protected transient UserManager userManager;
 
-    @In(create = true)
-    protected transient NavigationContext navigationContext;
+    protected boolean doNotNotifyMembers = false;
 
-    @In(create = true, required = false)
-    protected FacesMessages facesMessages;
+    protected List<Map<String, String>> rightsMenuEntries = null;
 
-    @In(create = true)
-    protected ResourcesAccessor resourcesAccessor;
-
-    protected String rawListOfEmails;
-
-    protected List<String> groupsToImport;
-
-    public List<String> getGroupsToImport() {
-        return groupsToImport;
+    public boolean isDoNotNotifyMembers() {
+        return doNotNotifyMembers;
     }
 
-    public void setGroupsToImport(List<String> selectedGroups) {
-        this.groupsToImport = selectedGroups;
+    public void setDoNotNotifyMembers(boolean doNotNotifyMembers) {
+        this.doNotNotifyMembers = doNotNotifyMembers;
     }
 
-    public String getRawListOfEmails() {
-        return rawListOfEmails;
+    public List<Map<String, String>> getRightsMenuEntries() {
+        if (rightsMenuEntries == null) {
+            rightsMenuEntries = new ArrayList<Map<String, String>>();
+            rightsMenuEntries.add(buildEntry("label.social.workspace.member",
+                    MEMBER_RIGHT));
+            rightsMenuEntries.add(buildEntry(
+                    "label.social.workspace.administrator", ADMINISTRATOR_RIGHT));
+        }
+        return rightsMenuEntries;
     }
 
-    public void setRawListOfEmails(String rawListOfEmails) {
-        this.rawListOfEmails = rawListOfEmails;
+    protected static Map<String, String> buildEntry(String label, String value) {
+        Map<String, String> entry = new HashMap<String, String>();
+        entry.put("value", value);
+        entry.put("label", label);
+        return entry;
     }
 
     public void importUserFromListOfEmail() {
-        List<String> emails = new ArrayList<String>(
-                Arrays.asList(rawListOfEmails.split("\\s")));
-        SocialWorkspace socialWorkspace = toSocialWorkspace(navigationContext.getCurrentDocument());
-        try {
-            List<String> emailOfUsersAdded = socialWorkspaceService.addSocialWorkspaceMembers(
-                    socialWorkspace, emails);
-            emails.removeAll(emailOfUsersAdded);
-
-            // Display message about new imported users
-            facesMessages.add(StatusMessage.Severity.INFO,
-                    resourcesAccessor.getMessages().get(USERS_IMPORTED_LABEL),
-                    emailOfUsersAdded.size(),
-                    convertToString(emailOfUsersAdded));
-            if (!emails.isEmpty()) {
-                // Display message about not imported users if there are.
-                facesMessages.add(
-                        StatusMessage.Severity.WARN,
-                        resourcesAccessor.getMessages().get(
-                                USERS_NOT_IMPORTED_LABEL), emails.size(),
-                        convertToString(emails));
-            }
-            resetMemberNotificationDisabled(socialWorkspace);
-            resetRawListOfEmails();
-            notifyRequestsDocumentsChanged();
-        } catch (ClientException e) {
-            log.warn(e, e);
-            facesMessages.add(
-                    StatusMessage.Severity.ERROR,
-                    resourcesAccessor.getMessages().get(
-                            USERS_IMPORTED_ERROR_LABEL));
-        }
-    }
-
-    protected void notifyRequestsDocumentsChanged() {
-        Events.instance().raiseEvent("requestDocumentsChanged");
-    }
-
-    private void resetMemberNotificationDisabled(SocialWorkspace socialWorkspace) {
-        ScopedMap contextData = socialWorkspace.getDocument().getContextData();
-        contextData.putScopedValue(ScopeType.REQUEST,
-                MEMBER_NOTIFICATION_DISABLED, false);
-
+        throw new ClientRuntimeException("Deprecated");
     }
 
     public void importUserFromGroups() {
-        if (groupsToImport != null) {
-            Set<String> importedUsers = new HashSet<String>();
-            SocialWorkspace socialWorkspace = toSocialWorkspace(navigationContext.getCurrentDocument());
+        throw new ClientRuntimeException("Deprecated");
+    }
 
-            try {
-                for (String groupName : groupsToImport) {
-                    importedUsers.addAll(socialWorkspaceService.addSocialWorkspaceMembers(
-                            socialWorkspace, groupName));
-                }
+    @Override
+    protected Map<String, Serializable> getAdditionalsParameters() {
+        Map<String, Serializable> additionalsParameters = super.getAdditionalsParameters();
+        additionalsParameters.put("doNotNotifyMembers", doNotNotifyMembers);
+        return additionalsParameters;
+    }
+
+    @Override
+    public void resetPojos() {
+        super.resetPojos();
+        doNotNotifyMembers = false;
+    }
+
+    @Override
+    protected void doSubmitUserRegistration(String configurationName) {
+        if (StringUtils.isBlank(configurationName)) {
+            configurationName = "social_collaboration";
+        }
+
+        try {
+            userinfo.setPassword(RandomStringUtils.randomAlphanumeric(6));
+
+            SocialWorkspace sw = toSocialWorkspace(navigationContext.getCurrentDocument());
+            if (isInvitationPossible(sw, userinfo)) {
+                boolean autoAccept = !(StringUtils.isBlank(multipleEmails)
+                        && sw.mustApproveSubscription());
+
+                userRegistrationService.submitRegistrationRequest(
+                        configurationName, userinfo, docinfo,
+                        getAdditionalsParameters(), EMAIL, autoAccept);
 
                 facesMessages.add(
-                        StatusMessage.Severity.INFO,
+                        INFO,
                         resourcesAccessor.getMessages().get(
-                                USERS_IMPORTED_LABEL), importedUsers.size(),
-                        convertToString(importedUsers));
-                resetGroupsToImport();
-                resetMemberNotificationDisabled(socialWorkspace);
-                notifyRequestsDocumentsChanged();
-            } catch (ClientException e) {
-                log.warn(e, e);
-                facesMessages.add(
-                        StatusMessage.Severity.ERROR,
-                        resourcesAccessor.getMessages().get(
-                                USERS_IMPORTED_ERROR_LABEL));
+                                "label.user.invited.success"));
             }
+        } catch (ClientException e) {
+            log.info("Unable to register user: " + e.getMessage());
+            log.debug(e, e);
+            facesMessages.add(
+                    ERROR,
+                    resourcesAccessor.getMessages().get(
+                            "label.unable.invite.user"));
         }
     }
 
-    protected String convertToString(Collection<String> users) {
-        StringBuilder sb = new StringBuilder();
-        for (String user : users) {
-            sb.append(user).append(", ");
-        }
-        if (sb.length() > 0) {
-            sb.delete(sb.length() - 2, sb.length());
-        }
-        sb.append(".");
-        return sb.toString();
-    }
+    protected boolean isInvitationPossible(SocialWorkspace sw,
+            UserRegistrationInfo userInfo) {
 
-    public void resetGroupsToImport() {
-        groupsToImport = null;
-    }
+        try {
+            // Build userManager filters
+            Map<String, Serializable> filter = new HashMap<String, Serializable>();
+            String emailKey = userManager.getUserEmailField();
+            filter.put(emailKey, userInfo.getEmail());
+            Set<String> pattern = new HashSet<String>();
+            pattern.add(emailKey);
 
-    public void resetRawListOfEmails() {
-        rawListOfEmails = null;
+            DocumentModelList users = userManager.searchUsers(filter, pattern);
+            if (users.size() > 0) {
+                userInfo.setLogin(users.get(0).getId());
+                NuxeoPrincipal nxp = userManager.getPrincipal(users.get(0).getId());
+                return sw.shouldRequestSubscription(nxp);
+            } else {
+                return StringUtils.isBlank(sw.getSubscriptionRequestStatus(new NuxeoPrincipalImpl(
+                        userInfo.getLogin())));
+            }
+        } catch (ClientException e) {
+            log.debug(e, e);
+        }
+        return true;
     }
 }

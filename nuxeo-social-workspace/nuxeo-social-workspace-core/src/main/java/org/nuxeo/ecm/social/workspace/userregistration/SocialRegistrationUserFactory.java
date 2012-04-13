@@ -1,7 +1,9 @@
 package org.nuxeo.ecm.social.workspace.userregistration;
 
+import static org.nuxeo.ecm.social.workspace.adapters.SocialWorkspaceAdapter.MEMBER_NOTIFICATION_DISABLED;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 import static org.nuxeo.ecm.user.registration.DocumentRegistrationInfo.DOCUMENT_ID_FIELD;
+import static org.nuxeo.ecm.user.registration.DocumentRegistrationInfo.DOCUMENT_RIGHT_FIELD;
 import static org.nuxeo.ecm.user.registration.UserRegistrationInfo.USERNAME_FIELD;
 
 import java.security.Principal;
@@ -24,6 +26,11 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class SocialRegistrationUserFactory extends
         DefaultRegistrationUserFactory {
+    public static final String NOT_NOTIFY_MEMBER_FIELD = "socialer:doNotNotifyMembers";
+
+    public static final String ADMINISTRATOR_RIGHT = "administrator";
+    public static final String MEMBER_RIGHT = "member";
+
     private static final Log log = LogFactory.getLog(SocialRegistrationUserFactory.class);
 
     @Override
@@ -42,11 +49,23 @@ public class SocialRegistrationUserFactory extends
         String login = (String) registrationDoc.getPropertyValue(USERNAME_FIELD);
         Principal principal = getUserManager().getPrincipal(login);
 
-        if (!getSocialWorkspaceService().addSocialWorkspaceMember(sw, principal)) {
-            return null;
+        // Set if new member notification is needed
+        sw.getDocument().putContextData(MEMBER_NOTIFICATION_DISABLED,
+                        registrationDoc.getPropertyValue(NOT_NOTIFY_MEMBER_FIELD));
+
+        Boolean isAdded;
+        if (ADMINISTRATOR_RIGHT.equals(registrationDoc.getPropertyValue(DOCUMENT_RIGHT_FIELD))) {
+            isAdded = getSocialWorkspaceService().addSocialWorkspaceAdministrator(sw, principal);
+        } else {
+            isAdded = getSocialWorkspaceService().addSocialWorkspaceMember(sw, principal);
         }
 
-        return sw.getDocument();
+        try {
+            return isAdded ? sw.getDocument() : null;
+        } finally {
+            // reset notification flag
+            sw.getDocument().putContextData(MEMBER_NOTIFICATION_DISABLED, false);
+        }
     }
 
     @Override

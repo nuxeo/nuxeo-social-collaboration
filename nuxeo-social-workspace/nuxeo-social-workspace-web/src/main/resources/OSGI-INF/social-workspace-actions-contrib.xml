@@ -256,11 +256,18 @@
       <filter-id>manage_social_workspace</filter-id>
     </action>
 
-    <action id="TAB_MANAGE_SOCIAL_WORKSPACE_BULK_IMPORT"
-            link="/incl/tabs/social_workspace_bulk_import_action_tabs.xhtml"
-            order="15" label="label.social.workspace.actions.bulk.import" icon="/icons/file.gif">
+    <action id="TAB_MANAGE_SOCIAL_WORKSPACE_BULK_INVITE"
+            link="/incl/tabs/social_workspace_bulk_invite_tabs.xhtml"
+            order="15" label="tab.userregistration.requests.multiple.create" icon="/icons/file.gif">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
+    </action>
+
+    <action id="TAB_MANAGE_SOCIAL_WORKSPACE_SIMPLE_INVITE"
+            link="/incl/tabs/social_workspace_simple_invite_tabs.xhtml"
+            order="15" label="tab.userregistration.requests.create" icon="/icons/file.gif">
+    <category>TAB_MANAGE_sub_tab</category>
+    <filter-id>manage_social_workspace</filter-id>
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PRIVATE_DASHBOARD" link="/incl/tabs/social_workspace_private_dashboard.xhtml"

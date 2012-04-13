@@ -31,7 +31,7 @@ import org.nuxeo.runtime.api.Framework;
 public class SocialWorkspaceAdapter extends BaseAdapter implements
         SocialWorkspace {
 
-    private static final String MEMBER_NOTIFICATION_DISABLED = "memberNotificationDisabled";
+    public static final String MEMBER_NOTIFICATION_DISABLED = "memberNotificationDisabled";
 
     public SocialWorkspaceAdapter(DocumentModel doc) {
         super(doc);

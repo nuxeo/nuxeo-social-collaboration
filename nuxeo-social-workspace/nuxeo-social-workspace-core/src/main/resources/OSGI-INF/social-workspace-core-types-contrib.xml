@@ -8,12 +8,17 @@
     <schema name="social_workspace" prefix="socialw" src="schemas/social_workspace.xsd" />
     <schema name="social_document" prefix="socialdoc" src="schemas/social_document.xsd" />
     <schema name="content_picture" prefix="contentpict" src="schemas/content_picture.xsd" />
+    <schema name="social_user_registration" prefix="socialer" src="schemas/social_user_registration.xsd" />
   </extension>
 
   <extension target="org.nuxeo.ecm.core.schema.TypeService"
     point="doctype">
     <facet name="SocialWorkspace">
       <schema name="social_workspace" />
+    </facet>
+
+    <facet name="SocialUserRegistration">
+      <schema name="social_user_registration" />
     </facet>
 
     <facet name="SocialDocument">
