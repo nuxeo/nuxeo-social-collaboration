@@ -45,6 +45,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletRequest;
+
+import com.sun.faces.config.WebConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,8 +78,10 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.computedgroups.ComputedGroupsService;
+import org.nuxeo.ecm.platform.ui.web.util.BaseURL;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.platform.web.common.ServletHelper;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -656,7 +662,6 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
                 socialWorkspace, (NuxeoPrincipal) principal);
         DocumentRegistrationInfo docInfo = buildDocumentRegistrationInfo(socialWorkspace);
         Map<String, Serializable> additionalInfo = new HashMap<String, Serializable>();
-
         try {
             getRegistrationService().submitRegistrationRequest(
                     SOCIAL_CONFIGURATION_NAME, userInfo, docInfo,
