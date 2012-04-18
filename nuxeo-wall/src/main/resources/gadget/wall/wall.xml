@@ -16,7 +16,7 @@
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,jquery.fancybox.js,bootstrap-modal.js,mustache.js,gadget-default-automation-request.js,gadget-wall.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,jquery.fancybox.js,mustache.js,gadget-default-automation-request.js,gadget-wall.js"></script>
   </head>
   <body>
 

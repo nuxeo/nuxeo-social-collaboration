@@ -11,9 +11,6 @@
     <resource name="mustache.js">
       <path>scripts/mustache.js</path>
     </resource>
-    <resource name="bootstrap-modal.js">
-      <path>scripts/bootstrap-modal.js</path>
-    </resource>
     <resource name="gadget-wall.js">
       <path>scripts/opensocial/gadgets/wall.js</path>
     </resource>
