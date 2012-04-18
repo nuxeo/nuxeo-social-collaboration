@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.wall.activity.stream.filters">
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreamFilters">
+
+    <activityStreamFilter
+      class="org.nuxeo.ecm.wall.WallActivityStreamFilter" />
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityStreams">
+
+    <activityStream name="wallActivityStream">
+      <verbs>
+        <verb>documentCreated</verb>
+        <verb>documentModified</verb>
+        <verb>minimessage</verb>
+      </verbs>
+    </activityStream>
+
+  </extension>
+
+</component>

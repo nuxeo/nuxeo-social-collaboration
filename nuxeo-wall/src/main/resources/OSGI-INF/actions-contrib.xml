@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.wall.actions">
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="actions">
+
+    <action id="TAB_WALL" link="/incl/tabs/document_wall.xhtml" order="5"
+      label="action.view.wall" icon="/icons/file.gif">
+      <category>VIEW_ACTION_LIST</category>
+      <filter-id>showWall</filter-id>
+    </action>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="filters">
+
+    <filter id="showWall">
+      <rule grant="true">
+        <type>Workspace</type>
+        <type>SocialWorkspace</type>
+      </rule>
+    </filter>
+
+  </extension>
+
+</component>

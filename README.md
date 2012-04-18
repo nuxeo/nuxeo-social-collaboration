@@ -8,6 +8,7 @@ Here is the list of Social modules you can find inside this addon:
 * Nuxeo User Relationship: provides a Service handling relations between two objects, a UI to manage relations between users.
 * Nuxeo Mini Message: provides a service, JSF view and OpenSocial gadget to add / remove / display mini messages created by users.
 * Nuxeo User Activity Stream: provides a JSF view and OpenSocial gadget to display what are doing the users you added in your relations.
+* Nuxeo Wall: provides an OpenSocial gadget to display a wall for a Document, Workspace and Social Workspace for now.
 
 ## How to build
 

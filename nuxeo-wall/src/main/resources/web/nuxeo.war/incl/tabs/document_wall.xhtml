@@ -1,0 +1,26 @@
+<div xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jstl/core">
+
+  <div class="gadget-wall"></div>
+
+  <script type="text/javascript">
+    jQuery('.gadget-wall').openSocialGadget({
+      baseURL: '#{baseURL}',
+      language: '#{localeSelector.language}',
+      gadgetDefs: [
+        { specUrl: '#{gadgetsBaseURL}/site/gadgets/wall/wall.xml',
+          title: '',
+          userPrefs: {
+            docId: {
+              value: '#{currentDocument.id}'
+            }
+          },
+          displayTitleBar: false,
+          width: '100%'
+        }
+      ]
+    });
+  </script>
+</div>

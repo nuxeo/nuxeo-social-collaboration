@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Wall"
+    description=""
+    author="troger" author_email="troger@nuxeo.com" height="280">
+    <#include "dynamic-translations.ftl"/>
+    <Require feature="dynamic-height" />
+    <#include "default-oauth-prefs.ftl"/>
+  </ModulePrefs>
+  <Content type="html">
+
+<![CDATA[
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/jquery.fancybox.style.css,gadget-common.css,gadget-wall.css?path=${contextPath}&basepath=${contextPath}"/>
+
+    <!-- insert JS Context -->
+    ${jsContext}
+    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,jquery.fancybox.js,bootstrap-modal.js,mustache.js,gadget-default-automation-request.js,gadget-wall.js"></script>
+  </head>
+  <body>
+
+    <div id="content">
+      <div id="wall"></div>
+      <div class="navigationBar"></div>
+      <div style="clear:both;"></div>
+    </div>
+
+    <#include "default-request-controls.ftl"/>
+
+  </body>
+</html>
+]]>
+  </Content>
+</Module>
