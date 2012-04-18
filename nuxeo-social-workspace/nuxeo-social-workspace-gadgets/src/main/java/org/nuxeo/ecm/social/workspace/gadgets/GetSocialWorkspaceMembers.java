@@ -24,7 +24,7 @@ import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityMessageHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -105,7 +105,7 @@ public class GetSocialWorkspaceMembers {
             o.element("firstName", principal.getFirstName());
             o.element("lastName", principal.getLastName());
             o.element("profileURL",
-                    ActivityHelper.getUserProfileURL(principal.getName()));
+                    ActivityMessageHelper.getUserProfileURL(principal.getName()));
             o.element("avatarURL", getAvatarURL(principal));
             array.add(o);
         }
