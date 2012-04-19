@@ -88,29 +88,23 @@
       '<div class="newActivitiesBar jsNewActivitiesBar">{{newActivitiesMessage}}</div>';
 
   templates.newMiniMessageForm =
-      '<div style="display: none;">' +
-        '<div id="newMiniMessage">' +
-          '<form name="newMiniMessageForm" class="newMiniMessageForm">' +
-            '<textarea rows="3" name="newMiniMessageText" class="miniMessageText jsMiniMessageText"></textarea>' +
-            '<p class="newMiniMessageActions">' +
-              '<span class="miniMessageCounter jsMiniMessageCounter"></span>' +
-              '<input class="button writeMiniMessageButton jsWriteMiniMessageButton" name="writeMiniMessageButton" type="button" value="{{writeLabel}}" />' +
-            '</p>' +
-          '</form>' +
-        '</div>' +
+      '<div class="displayN jsNewMiniMessage">' +
+        '<form name="newMiniMessageForm" class="newMiniMessageForm">' +
+          '<textarea rows="3" name="newMiniMessageText" class="miniMessageText jsMiniMessageText"></textarea>' +
+          '<p class="newMiniMessageActions">' +
+            '<span class="miniMessageCounter jsMiniMessageCounter"></span>' +
+            '<input class="button writeMiniMessageButton jsWriteMiniMessageButton" name="writeMiniMessageButton" type="button" value="{{writeLabel}}" />' +
+          '</p>' +
+        '</form>' +
       '</div>';
 
   templates.newActivityCommentForm =
-      '<div style="display: none;">' +
-        '<div id="newActivityComment">' +
-          '<form name="newMiniMessageForm" class="newMiniMessageForm">' +
-            '<textarea rows="3" name="newMiniMessageText" class="miniMessageText jsActivityCommentText"></textarea>' +
-            '<p class="newMiniMessageActions">' +
-              '<span class="miniMessageCounter jsActivityCommentCounter"></span>' +
-              '<input class="button jsWriteActivityCommentButton" name="writeActivityCommentButton" type="button" value="{{writeLabel}}" />' +
-            '</p>' +
-          '</form>' +
-        '</div>' +
+      '<div class="displayN jsNewActivityComment" data-activityid="{{activityId}}">' +
+        '<form>' +
+          '<textarea rows="1" class="jsActivityCommentText"></textarea>' +
+            '<span class="miniMessageCounter jsActivityCommentCounter"></span>' +
+            '<input class="button jsWriteActivityCommentButton" name="writeActivityCommentButton" type="button" value="{{writeLabel}}" />' +
+        '</form>' +
       '</div>';
 
   templates.deleteActivityAction =
@@ -168,6 +162,12 @@
     addReplyLinks();
     registerMoreCommentsHandler();
 
+
+    jQuery('.jsActivityCommentText').keyup(function () {
+      var newActivityComment = $(this).parents('.jsNewActivityComment');
+      updateActivityCommentMessageCounter(newActivityComment);
+    });
+
     if (hasMoreActivities) {
       addMoreActivitiesBar();
     } else {
@@ -182,7 +182,7 @@
       if (activity.comments.length > 3) {
         var moreCommentsMessage = prefs.getMsg('label.show.all') + ' ' +
           activity.comments.length + ' ' + prefs.getMsg('label.comments');
-        commentsHtml += Mustache.render(templates.moreCommentsBar, {
+          commentsHtml += Mustache.render(templates.moreCommentsBar, {
           moreCommentsMessage: moreCommentsMessage
         });
       }
@@ -192,6 +192,11 @@
         commentsHtml += Mustache.render(templates.comment, comment);
       }
     }
+
+    commentsHtml += Mustache.render(templates.newActivityCommentForm, {
+      activityId: activity.id,
+      writeLabel: prefs.getMsg('command.reply') });
+
     activity.commentsHtml = commentsHtml;
     return Mustache.render(template, activity);
   }
@@ -219,21 +224,9 @@
     });
 
     jQuery('.jsPostMessage').click(function () {
-      jQuery('<a href="#newMiniMessage"></a>').fancybox({
-        'autoScale': true,
-        'type': 'inline',
-        'transitionIn': 'none',
-        'transitionOut': 'none',
-        'enableEscapeButton': true,
-        'centerOnScroll': true
-      }).click();
-      jQuery('textarea.jsMiniMessageText').focus();
+      $('.jsNewMiniMessage').removeClass('displayN');
+      jQuery('.jsNewMiniMessage textarea.jsMiniMessageText').focus();
     });
-
-    // $('#newMiniMessage').on('shown', function() {
-    //   alert('shown!');
-    // });
-    // $('#newMiniMessage').modal();
   }
 
   function addDeleteLinks() {
@@ -306,24 +299,24 @@
           { activityId: activityId, replyImageURL: replyImageURL,
             replyMessage: prefs.getMsg('command.reply') });
       actions.append(htmlContent);
-
-      $(this).find('div[data-commentid]').each(function() {
-        var actions = $(this).find('div.jsCommentActions');
-        actions.append(htmlContent);
-      });
     });
 
     jQuery('.jsReply').click(function() {
-      jQuery('.jsWriteActivityCommentButton').attr('data-activityid', $(this).attr('data-activityid'));
-      jQuery('<a href="#newActivityComment"></a>').fancybox({
-        'autoScale': true,
-        'type': 'inline',
-        'transitionIn': 'none',
-        'transitionOut': 'none',
-        'enableEscapeButton': true,
-        'centerOnScroll': true
-      }).click();
-      jQuery('textarea.jsActivityCommentText').focus();
+      var activityId = $(this).attr('data-activityid');
+      var newActivityComment = $('.jsNewActivityComment[data-activityid="' + activityId + '"]');
+      updateActivityCommentMessageCounter(newActivityComment);
+      newActivityComment.removeClass('displayN');
+      newActivityComment.find('textarea.jsActivityCommentText').focus();
+    });
+
+    $('.jsNewActivityComment').each(function() {
+      var newActivityComment = $(this);
+      var activityId = $(this).attr('data-activityid');
+      var writeButton = $(this).find('.jsWriteActivityCommentButton');
+      writeButton.attr('data-activityid', activityId);
+      writeButton.click(function() {
+        createActivityComment(newActivityComment);
+      });
     });
   }
 
@@ -444,13 +437,13 @@
     var htmlContent = Mustache.render(templates.newMiniMessageForm,
         { writeLabel: prefs.getMsg('command.write') });
 
-    $(htmlContent).insertAfter('#wall');
+    $(htmlContent).insertBefore('#wall');
 
-    jQuery('input.jsWriteMiniMessageButton').click(function() {
+    jQuery('.jsNewMiniMessage .jsWriteMiniMessageButton').click(function() {
       createMiniMessage();
     });
     updateMiniMessageCounter();
-    jQuery('textarea.jsMiniMessageText').keyup(updateMiniMessageCounter);
+    jQuery('.jsNewMiniMessage textarea.jsMiniMessageText').keyup(updateMiniMessageCounter);
     gadgets.window.adjustHeight();
   }
 
@@ -479,12 +472,12 @@
       operationContext: {},
       operationCallback: function (response, opCallParameters) {
         loadActivityStream();
-        $('textarea.jsMiniMessageText').val('');
+        $('.jsNewMiniMessage').addClass('displayN');
+        $('.jsNewMiniMessage textarea.jsMiniMessageText').val('');
         updateMiniMessageCounter();
       }
     };
     doAutomationRequest(opCallParameters);
-    $.fancybox.close();
   }
 
   function confirmDeleteMiniMessage() {
@@ -580,36 +573,21 @@
     doAutomationRequest(opCallParameters);
   }
 
-  function addNewActivityCommentForm() {
-    var htmlContent = Mustache.render(templates.newActivityCommentForm,
-        { writeLabel: prefs.getMsg('command.write') });
-
-    $(htmlContent).insertAfter('#wall');
-
-    jQuery('input.jsWriteActivityCommentButton').click(function() {
-      createActivityComment();
-    });
-    updateActivityCommentMessageCounter();
-    jQuery('textarea.jsActivityCommentText').keyup(updateActivityCommentMessageCounter);
-    gadgets.window.adjustHeight();
-  }
-
-  function updateActivityCommentMessageCounter() {
-    var delta = 140 - jQuery('textarea.jsActivityCommentText').val().length;
-    var miniMessageCounter = jQuery('.jsActivityCommentCounter');
+  function updateActivityCommentMessageCounter(newActivityComment) {
+    var delta = 140 - newActivityComment.find('textarea.jsActivityCommentText').val().length;
+    var miniMessageCounter = newActivityComment.find('.jsActivityCommentCounter');
     miniMessageCounter.text(delta);
     miniMessageCounter.toggleClass('warning', delta < 5);
     if (delta < 0) {
-      jQuery('.jsWriteActivityCommentButton').attr('disabled', 'disabled');
+      newActivityComment.find('.jsWriteActivityCommentButton').attr('disabled', 'disabled');
     } else {
-      jQuery('.jsWriteActivityCommentButton').removeAttr('disabled');
+      newActivityComment.find('.jsWriteActivityCommentButton').removeAttr('disabled');
     }
   }
 
-  function createActivityComment() {
-    var activityCommentText = jQuery('textarea.jsActivityCommentText').val();
-    var button = jQuery('.jsWriteActivityCommentButton');
-    var activityId = button.attr('data-activityid');
+  function createActivityComment(newActivityComment) {
+    var activityCommentText = newActivityComment.find('textarea.jsActivityCommentText').val();
+    var activityId = newActivityComment.attr('data-activityid');
     var opCallParameters = {
       operationId: 'Services.AddActivityComment',
       operationParams: {
@@ -620,8 +598,9 @@
       entityType: 'blob',
       operationContext: {},
       operationCallback: function (response, opCallParameters) {
-        $('textarea.jsActivityCommentText').val('');
-        updateActivityCommentMessageCounter();
+        newActivityComment.find('.jsActivityCommentText').val('');
+        updateActivityCommentMessageCounter(newActivityComment);
+        newActivityComment.addClass('displayN');
 
         var commentsContainer = $('div[data-activityId="' + activityId + '"]')
           .find('.jsCommentsContainer');
@@ -630,7 +609,7 @@
         comment.likeStatus.likesCount = 0;
         comment.likeStatus.userLikeStatus = 0;
         var commentHtml = Mustache.render(templates.comment, comment);
-        commentsContainer.append(commentHtml);
+        $(commentHtml).insertBefore(commentsContainer.find('.jsNewActivityComment'));
 
         commentsContainer.find('div[data-commentid="' + comment.id + '"]').each(function() {
           // like status
@@ -658,31 +637,11 @@
               removeActivityComment(activityId, commentId);
             });
           }
-
-          var activityId = $(this).parents('div[data-activityid]').attr('data-activityid');
-          var replyImageURL = NXGadgetContext.clientSideBaseUrl + 'icons/reply.png';
-          var htmlContent = Mustache.render(templates.replyAction,
-              { activityId: activityId, replyImageURL: replyImageURL,
-                replyMessage: prefs.getMsg('command.reply') });
-          commentActions.append(htmlContent);
-
-          $(this).find('.jsReply').click(function() {
-            jQuery('.jsWriteActivityCommentButton').attr('data-activityid', $(this).attr('data-activityid'));
-            jQuery('<a href="#newActivityComment"></a>').fancybox({
-              'autoScale': true,
-              'type': 'inline',
-              'transitionIn': 'none',
-              'transitionOut': 'none',
-              'enableEscapeButton': true,
-              'centerOnScroll': true
-            }).click();
-            jQuery('textarea.jsActivityCommentText').focus();
-          });
         });
+        gadgets.window.adjustHeight();
       }
     };
     doAutomationRequest(opCallParameters);
-    $.fancybox.close();
   }
   /* end activity comments */
 
@@ -695,7 +654,6 @@
 
     addTabLine();
     addNewMiniMessageForm();
-    addNewActivityCommentForm();
 
     loadActivityStream();
     window.setInterval(pollActivityStream, 30*1000);
