@@ -376,6 +376,7 @@
     $('.jsPostMessage').click(function () {
       $('.jsNewMiniMessage').removeClass('displayN');
       $('.jsNewMiniMessage textarea.jsMiniMessageText').focus();
+      gadgets.window.adjustHeight();
     });
 
     $('.jsNewMiniMessage .jsWriteMiniMessageButton').click(function() {
@@ -476,6 +477,7 @@
       updateActivityCommentMessageCounter(newActivityComment);
       newActivityComment.removeClass('displayN');
       newActivityComment.find('textarea.jsActivityCommentText').focus();
+      gadgets.window.adjustHeight();
     });
   }
 
