@@ -108,7 +108,7 @@ iframe.gwt-Frame { overflow: auto!important; overflow-x: scroll!important }
 
 .miniMessage .container:hover { background-color: #e6f1ff }
 
-.username { font-weight: bold; margin-right: 10px }
+.username { font-weight: bold; margin-right: .5em }
 
 .timestamp { color: #999 }
 
@@ -147,11 +147,12 @@ img { border: none }
 
 #newMiniMessage { text-align: center }
 
+.newMiniMessageForm { text-align: center }
 .newMiniMessageForm textarea { font-size: 1.1em; font-weight: bold; margin: .5em 0 0; padding: .5em; width: 85% }
 .newMiniMessageForm .newMiniMessageActions { margin: 0 auto; padding: 0; text-align: right; width: 86% }
 
-.newMiniMessageForm .newMiniMessageActions .miniMessageCounter { color: #9A9A9A; font-size: 1.1em; font-weight: bold }
-.newMiniMessageForm .newMiniMessageActions .warning { color: #DE1A00; }
+.newMiniMessageActions .miniMessageCounter { color: #9A9A9A; font-size: 1.1em; font-weight: bold }
+.newMiniMessageActions .warning { color: #DE1A00; }
 
 .newMiniMessageActions input.button { background-color: #E7E7E7;
     border: 1px solid #C9C9C9;
@@ -181,16 +182,17 @@ img { border: none }
 .miniMessage .avatar { float: left; height: 20px; margin-right: .5em; width: 20px }
 .miniMessage .avatar img { max-width: 20px; max-height: 20px }
 
-.miniMessage .timestamp { float: none; margin-right: .8em }
+.miniMessage .timestamp { float: none; margin-right: .5em }
 
 .container .actions { display: none; float: right }
 .container:hover .actions { display: block }
 .container .actions a, .miniMessage .actions a:link { color: #9a9a9a }
 
-.miniMessage .answers { font-size: 85%; padding: 0 0 0 3em }
+.miniMessage .answers { font-size: 85%; padding: 0 0 0 2.5em }
 .miniMessage .answers .miniMessage { border-top: 1px dotted #ededed; border-bottom: none }
 
 .answers .miniMessage .message { display: inline; line-height: 150% }
+.answers .miniMessage .actions { margin: -1.5em 0 0 }
 
 .miniMessage .event { margin-left: 2.5em }
 .miniMessage .event:after { clear: both }
@@ -199,6 +201,10 @@ img { border: none }
 
 .actionItem { display: inline; margin-left: 5px }
 .actionItem img { margin: 0 .3em -0.2em; cursor: pointer }
+
+.answers .messageBlock { border-top: 1px dotted #eee; padding: .5em 0 0 3em }
+.answers textarea { display: block; width: 90% }
+.answers .newMiniMessageActions { text-align: right; width: 90% }
 
 .tabLine { border-bottom: 2px solid rgb(235, 235, 235); font-weight: bold; font-size: 120%; height: 40px; line-height: 40px; margin: 1em 0 }
 
@@ -209,9 +215,3 @@ img { border: none }
 .tabLineButtons a.button { border: 1px solid rgb(204, 204, 204); border-radius: 3px; padding: .5em }
 
 .displayN { display: none; }
-
-/*
-#fancybox-wrap {
-  position: fixed !important;
-  top: 100px !important;
-} */

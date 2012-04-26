@@ -87,11 +87,13 @@
       '</div>';
 
   templates.newActivityComment =
-      '<div class="displayN jsNewActivityComment" data-activityid="{{activityId}}">' +
+      '<div class="displayN jsNewActivityComment messageBlock" data-activityid="{{activityId}}">' +
         '<form>' +
           '<textarea rows="1" class="jsActivityCommentText"></textarea>' +
+          '<p class="newMiniMessageActions">' +
             '<span class="miniMessageCounter jsActivityCommentCounter"></span>' +
             '<input class="button jsWriteActivityCommentButton" name="writeActivityCommentButton" type="button" value="{{writeLabel}}" />' +
+          '</p>' +
         '</form>' +
       '</div>';
 
