@@ -117,6 +117,23 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return buildDocumentList(ref, pageSize, page, queryText);
     }
 
+    @GET
+    @Path("documentListGet")
+    public Object documentListGet(@Context
+    HttpServletRequest request) throws Exception {
+        FormData formData = new FormData(request);
+
+        String lang = formData.getString("lang");
+        setLanguage(lang);
+
+        // get the arguments
+        String ref = formData.getString("docRef");
+        String queryText = formData.getString("queryText");
+        int pageSize = getIntFromString(formData.getString("limit"));
+        int page = getIntFromString(formData.getString("page"));
+        return buildDocumentList(ref, pageSize, page, queryText);
+    }
+
     Object buildDocumentList(String ref, int pageSize, int page,
             String queryText) throws Exception {
         DocumentRef docRef = getDocumentRef(ref);
