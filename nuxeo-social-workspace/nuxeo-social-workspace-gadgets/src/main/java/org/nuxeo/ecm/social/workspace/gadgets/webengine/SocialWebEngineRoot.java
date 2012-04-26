@@ -77,7 +77,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 /**
  * @author rlegall
- *
+ * 
  */
 @Path("/social")
 @WebObject(type = "social")
@@ -102,8 +102,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context HttpServletRequest request)
-            throws Exception {
+    public Object documentList(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -188,8 +188,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object publishDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -215,8 +215,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object deleteDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
@@ -236,9 +236,10 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef") String ref,
-            @QueryParam("doctype") String docTypeId,
-            @QueryParam("lang") String lang) throws Exception {
+    public Object createDocumentForm(@QueryParam("docRef")
+    String ref, @QueryParam("doctype")
+    String docTypeId, @QueryParam("lang")
+    String lang) throws Exception {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -257,8 +258,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref,
-            @QueryParam("lang") String lang) throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef")
+    String ref, @QueryParam("lang")
+    String lang) throws ClientException {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -293,8 +295,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object createDocument(@Context
+    HttpServletRequest request) throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();
@@ -497,8 +499,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * Returns the main blob for the given {@code doc}, {@code null} if
-     * there is no main file available.
+     * Returns the main blob for the given {@code doc}, {@code null} if there is
+     * no main file available.
      */
     public Blob getAttachment(DocumentModel doc) throws ClientException {
         BlobHolder bh = doc.getAdapter(BlobHolder.class);
@@ -526,7 +528,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     /**
      * Indicates if the current user has the right to Add Children to the
      * current Document
-     *
+     * 
      * @param docId the reference of the document
      * @return true if the current user has the right to Add Children to the
      *         current Document and false otherwise
