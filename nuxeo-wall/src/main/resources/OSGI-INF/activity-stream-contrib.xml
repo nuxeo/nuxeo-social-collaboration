@@ -12,11 +12,21 @@
   <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
     point="activityStreams">
 
-    <activityStream name="wallActivityStream">
+    <activityStream name="defaultWallActivityStream">
       <verbs>
         <verb>documentCreated</verb>
         <verb>documentModified</verb>
         <verb>minimessage</verb>
+      </verbs>
+    </activityStream>
+
+    <activityStream name="socialWorkspaceWallActivityStream">
+      <verbs>
+        <verb>documentCreated</verb>
+        <verb>documentModified</verb>
+        <verb>makedocumentpublic</verb>
+        <verb>minimessage</verb>
+        <verb>socialworkspace:members</verb>
       </verbs>
     </activityStream>
 

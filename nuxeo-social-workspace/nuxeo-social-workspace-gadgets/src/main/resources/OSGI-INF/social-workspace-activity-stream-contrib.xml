@@ -14,14 +14,11 @@
 
     <activityStream name="socialWorkspaceActivityStream">
       <verbs>
+        <verb>documentCreated</verb>
+        <verb>documentModified</verb>
         <verb>makedocumentpublic</verb>
-        <verb>documentCreatedInSocialWorkspace</verb>
-        <verb>documentModifiedInSocialWorkspace</verb>
         <verb>socialworkspace:members</verb>
       </verbs>
-      <relationshipKinds>
-        <relationshipKind>socialworkspace:members</relationshipKind>
-      </relationshipKinds>
     </activityStream>
 
   </extension>

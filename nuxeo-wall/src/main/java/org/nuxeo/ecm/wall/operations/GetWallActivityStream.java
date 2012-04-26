@@ -19,6 +19,8 @@ package org.nuxeo.ecm.wall.operations;
 
 import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
 import static org.nuxeo.ecm.activity.ActivityMessageHelper.getUserAvatarURL;
+import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.ACTIVITY_STREAM_NAME_PROPERTY;
+import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CONTEXT_DOCUMENT_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CORE_SESSION_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.LOCALE_PROPERTY;
 
@@ -72,6 +74,9 @@ public class GetWallActivityStream {
     @Context
     protected LikeService likeService;
 
+    @Param(name = "activityStreamName", required = false)
+    protected String activityStreamName;
+
     @Param(name = "document", required = false)
     protected DocumentModel doc;
 
@@ -99,7 +104,8 @@ public class GetWallActivityStream {
                 language) : Locale.ENGLISH;
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
-        props.put(WallActivityStreamPageProvider.CONTEXT_DOCUMENT_PROPERTY, doc);
+        props.put(ACTIVITY_STREAM_NAME_PROPERTY, activityStreamName);
+        props.put(CONTEXT_DOCUMENT_PROPERTY, doc);
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         @SuppressWarnings("unchecked")

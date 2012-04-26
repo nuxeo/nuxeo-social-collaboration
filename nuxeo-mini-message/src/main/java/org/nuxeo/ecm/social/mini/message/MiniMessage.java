@@ -24,6 +24,7 @@ import java.util.Date;
 
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityMessageHelper;
 
 /**
  * Immutable object representing a mini message.
@@ -56,7 +57,7 @@ public final class MiniMessage {
         String message = MiniMessageHelper.replaceURLsByLinks(activity.getObject());
         return new MiniMessage(activity.getId(),
                 getUsername(activity.getActor()),
-                ActivityHelper.getUserProfileLink(activity.getActor(),
+                ActivityMessageHelper.getUserProfileLink(activity.getActor(),
                         activity.getDisplayActor()), message,
                 activity.getPublishedDate());
     }

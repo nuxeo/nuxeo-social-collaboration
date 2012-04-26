@@ -43,9 +43,11 @@ public class WallActivityStreamFilter implements ActivityStreamFilter {
 
     public static final String ID = "WallActivityStreamFilter";
 
-    public static final String WALL_ACTIVITY_STREAM_NAME = "wallActivityStream";
+    public static final String DEFAULT_WALL_ACTIVITY_STREAM_NAME = "defaultWallActivityStream";
 
     public static final String CONTEXT_DOCUMENT_PARAMETER = "contextDocumentParameter";
+
+    public static final String ACTIVITY_STREAM_PARAMETER = "activityStreamParameter";
 
     @Override
     public String getId() {
@@ -75,21 +77,27 @@ public class WallActivityStreamFilter implements ActivityStreamFilter {
             Map<String, Serializable> parameters, long offset, long limit) {
         DocumentModel doc = (DocumentModel) parameters.get(CONTEXT_DOCUMENT_PARAMETER);
         if (doc == null) {
-            throw new IllegalArgumentException(CONTEXT_DOCUMENT_PARAMETER + " is required");
+            throw new IllegalArgumentException(CONTEXT_DOCUMENT_PARAMETER
+                    + " is required");
         }
         String docActivityObject = ActivityHelper.createDocumentActivityObject(doc);
 
-        ActivityStream wallActivityStream = activityStreamService.getActivityStream(WALL_ACTIVITY_STREAM_NAME);
+        String activityStreamName = (String) parameters.get(ACTIVITY_STREAM_PARAMETER);
+        if (activityStreamName == null) {
+            activityStreamName = DEFAULT_WALL_ACTIVITY_STREAM_NAME;
+        }
+        ActivityStream wallActivityStream = activityStreamService.getActivityStream(activityStreamName);
         List<String> verbs = wallActivityStream.getVerbs();
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
-        Query query = em.createQuery("select activity from Activity activity " +
-                "where (activity.context = :context or activity.object = :object) " +
-                "and activity.verb in (:verbs) " +
-                "order by activity.publishedDate desc");
+        Query query = em.createQuery("select activity from Activity activity "
+                + "where activity.context = :context "
+                + "and activity.verb in (:verbs) "
+                + "and activity.actor like :actor "
+                + "order by activity.publishedDate desc");
         query.setParameter("context", docActivityObject);
-        query.setParameter("object", docActivityObject);
         query.setParameter("verbs", verbs);
+        query.setParameter("actor", "user:%");
 
         if (limit > 0) {
             query.setMaxResults((int) limit);

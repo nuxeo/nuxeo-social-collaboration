@@ -3,7 +3,19 @@
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:c="http://java.sun.com/jstl/core">
 
-  <div class="gadget-wall"></div>
+  <c:if test="false">
+   Template rendering the wall OpenSocial gadget.
+
+   Parameters:
+   - document: the document for which to display the wall.
+   - activityStreamName: the name of the activity stream to be used by the wall
+     to display the activities.
+   -
+  </c:if>
+
+  <nxu:set var="docId" value="#{nxu:test(!empty document, document.id, '')}">
+
+  <div class="gadget-wall threeQuarterWidth"></div>
 
   <script type="text/javascript">
     jQuery('.gadget-wall').openSocialGadget({
@@ -14,8 +26,12 @@
           title: '',
           userPrefs: {
             docId: {
-              value: '#{currentDocument.id}'
+              value: '#{docId}'
+            },
+            activityStreamName: {
+              value: '#{activityStreamName}'
             }
+
           },
           displayTitleBar: false,
           width: '100%'
@@ -23,4 +39,6 @@
       ]
     });
   </script>
+
+  </nxu:set>
 </div>

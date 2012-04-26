@@ -94,28 +94,15 @@ public class SocialWorkspaceActivityStreamFilter implements
 
         ActivityStream socialWorkspaceActivityStream = activityStreamService.getActivityStream(SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME);
         List<String> verbs = socialWorkspaceActivityStream.getVerbs();
-        List<String> relationshipKinds = socialWorkspaceActivityStream.getRelationshipKinds();
 
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
                 repositoryName, socialWorkspaceId);
-        RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
-        List<String> actors = new ArrayList<String>();
-        for (String relationshipKind : relationshipKinds) {
-            actors.addAll(relationshipService.getTargetsOfKind(
-                    socialWorkspaceActivityObject,
-                    RelationshipKind.fromString(relationshipKind)));
-        }
-        actors.add(socialWorkspaceActivityObject);
-        if (actors.isEmpty()) {
-            return new ActivitiesListImpl();
-        }
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;
-        query = em.createQuery("select activity from Activity activity where activity.actor in (:actors) and activity.verb in (:verbs) "
-                + "and activity.target = :target order by activity.publishedDate desc");
-        query.setParameter("actors", actors);
-        query.setParameter("target", socialWorkspaceActivityObject);
+        query = em.createQuery("select activity from Activity activity where activity.verb in (:verbs) "
+                + "and activity.context = :context order by activity.publishedDate desc");
+        query.setParameter("context", socialWorkspaceActivityObject);
         query.setParameter("verbs", verbs);
 
         if (limit > 0) {

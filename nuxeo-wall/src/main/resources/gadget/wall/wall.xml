@@ -12,7 +12,7 @@
 <![CDATA[
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-wall.css?path=${contextPath}&basepath=${contextPath}"/>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-wall.css?path=${contextPath}&amp;basepath=${contextPath}"/>
 
     <!-- insert JS Context -->
     ${jsContext}

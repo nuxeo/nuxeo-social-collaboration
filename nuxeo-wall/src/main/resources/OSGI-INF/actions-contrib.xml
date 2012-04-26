@@ -4,10 +4,16 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <action id="TAB_WALL" link="/incl/tabs/document_wall.xhtml" order="5"
+    <action id="TAB_WORKSPACE_WALL" link="/incl/tabs/default_document_wall.xhtml" order="-10"
       label="action.view.wall" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
-      <filter-id>showWall</filter-id>
+      <filter-id>showWorkspaceWall</filter-id>
+    </action>
+
+    <action id="TAB_SOCIAL_WORKSPACE_WALL" link="/incl/tabs/social_workspace_wall.xhtml" order="-10"
+      label="action.view.wall" icon="/icons/file.gif">
+      <category>VIEW_ACTION_LIST</category>
+      <filter-id>showSocialWorkspaceWall</filter-id>
     </action>
 
   </extension>
@@ -15,9 +21,14 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="filters">
 
-    <filter id="showWall">
+    <filter id="showWorkspaceWall">
       <rule grant="true">
         <type>Workspace</type>
+      </rule>
+    </filter>
+
+    <filter id="showSocialWorkspaceWall">
+      <rule grant="true">
         <type>SocialWorkspace</type>
       </rule>
     </filter>

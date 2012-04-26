@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.wall;
 
+import static org.nuxeo.ecm.wall.WallActivityStreamFilter.ACTIVITY_STREAM_PARAMETER;
 import static org.nuxeo.ecm.wall.WallActivityStreamFilter.CONTEXT_DOCUMENT_PARAMETER;
 
 import java.io.Serializable;
@@ -48,6 +49,8 @@ public class WallActivityStreamPageProvider extends
 
     private static final Log log = LogFactory.getLog(WallActivityStreamPageProvider.class);
 
+    public static final String ACTIVITY_STREAM_NAME_PROPERTY = "activityStreamName";
+
     public static final String CONTEXT_DOCUMENT_PROPERTY = "contextDocument";
 
     public static final String LOCALE_PROPERTY = "locale";
@@ -64,6 +67,7 @@ public class WallActivityStreamPageProvider extends
 
             ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
             Map<String, Serializable> parameters = new HashMap<String, Serializable>();
+            parameters.put(ACTIVITY_STREAM_PARAMETER, getActivityStreamName());
             parameters.put(CONTEXT_DOCUMENT_PARAMETER, getContextDocument());
             ActivitiesList activities = activityStreamService.query(
                     WallActivityStreamFilter.ID, parameters,
@@ -74,6 +78,16 @@ public class WallActivityStreamPageProvider extends
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageActivityMessages;
+    }
+
+    protected String getActivityStreamName() {
+        Map<String, Serializable> props = getProperties();
+        String activityStreamName = (String) props.get(ACTIVITY_STREAM_NAME_PROPERTY);
+        if (activityStreamName == null) {
+            throw new ClientRuntimeException("Cannot find "
+                    + ACTIVITY_STREAM_NAME_PROPERTY + " property.");
+        }
+        return activityStreamName;
     }
 
     protected DocumentModel getContextDocument() {
