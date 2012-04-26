@@ -206,12 +206,17 @@ img { border: none }
 .answers textarea { display: block; width: 90% }
 .answers .newMiniMessageActions { text-align: right; width: 90% }
 
+textarea:-moz-placeholder { color: #bbb }
+textarea::-webkit-input-placeholder { color: #bbb }
+
 .tabLine { border-bottom: 2px solid rgb(235, 235, 235); font-weight: bold; font-size: 120%; height: 40px; line-height: 40px; margin: 1em 0 }
 
-.tabLineLinks a { border-color: rgb(0, 0, 0); float: left; padding: 0pt 1em; text-decoration: none }
+.tabLineLinks a, .tabLineLinks a:visited { color: #519eec; border-color: rgb(0, 0, 0); float: left; padding: 0 1em; text-decoration: none }
 .tabLineLinks a.selected, .tablineLinks a.hover { border-bottom: 2px solid rgb(0, 0, 0) }
 
 .tabLineButtons { float: right; padding: 0 .5em 0 0 }
-.tabLineButtons a.button { border: 1px solid rgb(204, 204, 204); border-radius: 3px; padding: .5em }
+.tabLineButtons a.button, .tabLineButtons a.button:visited { border: 1px solid rgb(204, 204, 204); border-radius: 3px; color: #519eec; font-size: .9em; padding: .4em; text-decoration: none }
+.tabLineButtons a.button:hover { border-color: #519eec}
 
 .displayN { display: none; }
+.newMiniMessageActions input.disabled { background: #f6f6f6; border: 1px solid #e7e7e7; color: #bababa; cursor: default }
