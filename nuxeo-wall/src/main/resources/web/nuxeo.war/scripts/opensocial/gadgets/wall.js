@@ -390,14 +390,12 @@
 
     // hide the form when clicking outside
     $('body').click(function(e) {
-      if ($(e.target).hasClass('jsPostMessage')
-          || $(e.target).hasClass('jsNewMiniMessage')) {
+      if ($(e.target).hasClass('jsPostMessage') || $(e.target).hasClass('jsNewMiniMessage')) {
         return;
       }
       if ($(e.target).parents('.jsNewMiniMessage').length > 0) {
         return;
       }
-
       if ($('.jsNewMiniMessage textarea.jsMiniMessageText').val().length == 0) {
         $('.jsNewMiniMessage').hide();
       }
@@ -560,7 +558,7 @@
   }
 
   function registerNewActivitiesBarHandler() {
-    $('.jsNnewActivitiesBar').click(function() {
+    $('.jsNewActivitiesBar').click(function() {
       showNewActivities();
     });
   }
