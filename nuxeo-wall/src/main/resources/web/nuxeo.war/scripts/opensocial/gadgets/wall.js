@@ -34,12 +34,12 @@
         '<div class="container">' +
           '<div class="messageHeader">' +
             '<span class="timestamp">{{publishedDate}}</span>' +
-            '<div class="actions jsActions"></div>' +
           '</div>' +
           '<div class="message">' +
             '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
             '<div class="event">{{{activityMessage}}}</div>' +
           '</div>' +
+          '<div class="actions jsActions"></div>' +
         '</div>' +
         '<div class="answers jsCommentsContainer">{{{commentsHtml}}}</div>' +
       '</div>';
@@ -52,9 +52,9 @@
             '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
             '<span class="username">{{{displayActorLink}}}</span>' +
             '<span class="timestamp">{{{publishedDate}}}</span>' +
-            '<div class="actions jsActions"></div>' +
           '</div>' +
           '<div class="message">{{{activityMessage}}}</div>' +
+          '<div class="actions jsActions"></div>' +
         '</div>' +
         '<div class="answers jsCommentsContainer">{{{commentsHtml}}}</div>' +
       '</div>';
@@ -98,10 +98,16 @@
       '</div>';
 
   templates.deleteActivityAction =
-      '<a href="#" class="jsDelete" data-activityid="{{activityId}}">{{deleteMessage}}</a>';
+      '<div class="actionItem">' +
+        '<img src="{{deleteImageURL}}" />' +
+        '<a href="#" class="jsDelete" data-activityid="{{activityId}}">{{deleteMessage}}</a>' +
+      '</div>';
 
   templates.deleteActivityCommentAction =
-      '<a href="#" class="jsDelete" data-commentid="{{commentId}}" >{{deleteMessage}}</a>';
+      '<div class="actionItem">' +
+        '<img src="{{deleteImageURL}}" />' +
+        '<a href="#" class="jsDelete" data-commentid="{{commentId}}" >{{deleteMessage}}</a>' +
+      '</div>';
 
   templates.replyAction =
       '<div class="actionItem">' +
@@ -276,10 +282,12 @@
     $('div[data-activityid][data-allowdeletion="true"]').each(function() {
       $(this).removeAttr('data-allowdeletion');
       var activityId = $(this).attr('data-activityid');
+      var deleteImageURL = NXGadgetContext.clientSideBaseUrl + 'icons/delete.png'
 
       var actions = $(this).find('div.jsActions');
       var htmlContent = Mustache.render(templates.deleteActivityAction,
-          { activityId: activityId, deleteMessage: prefs.getMsg('command.delete') });
+          { activityId: activityId, deleteImageURL: deleteImageURL,
+            deleteMessage: prefs.getMsg('command.delete') });
       actions.prepend(htmlContent);
     });
 
@@ -287,10 +295,12 @@
     $('div[data-commentid][data-allowdeletion="true"]').each(function() {
       $(this).removeAttr('data-allowdeletion');
       var commentId = $(this).attr('data-commentid');
+      var deleteImageURL = NXGadgetContext.clientSideBaseUrl + 'icons/delete.png'
 
       var actions = $(this).find('div.jsCommentActions');
       var htmlContent = Mustache.render(templates.deleteActivityCommentAction,
-          { commentId: commentId, deleteMessage: prefs.getMsg('command.delete') });
+          { commentId: commentId, deleteImageURL: deleteImageURL,
+            deleteMessage: prefs.getMsg('command.delete') });
       actions.prepend(htmlContent);
     });
   }

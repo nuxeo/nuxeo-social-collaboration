@@ -91,7 +91,7 @@ iframe.gwt-Frame { overflow: auto!important; overflow-x: scroll!important }
     color: #999;
     cursor: pointer;
     padding: 3px;
-    margin: 6px 0 0;
+    margin: .6em 0 .3em;
     text-align: center;
 }
 .noMore {
@@ -104,7 +104,7 @@ iframe.gwt-Frame { overflow: auto!important; overflow-x: scroll!important }
 
 
 .miniMessage { border-bottom: 1px solid #ededed; font-size: 110% }
-.miniMessage .container { padding: .4em .3em .6em }
+.miniMessage .container { border-radius: 5px, padding: .4em .3em .6em }
 
 .miniMessage .container:hover { background-color: #e6f1ff }
 
@@ -179,28 +179,29 @@ img { border: none }
 /* Wall */
 .miniMessage .messageHeader { line-height: 2em }
 
-.miniMessage .avatar { float: left; height: 20px; margin-right: .5em; width: 20px }
+.miniMessage .avatar { float: left; height: 20px; margin: .1em .5em 0 0; width: 20px }
 .miniMessage .avatar img { max-width: 20px; max-height: 20px }
 
-.miniMessage .timestamp { float: none; margin-right: .5em }
+.miniMessage .timestamp { float: none; font-size: 95%; margin-right: .5em }
 
-.container .actions { display: none; float: right }
+.container .actions { clear: both; font-size: 11px; margin: 0 0 .3em }
 .container:hover .actions { display: block }
 .container .actions a, .miniMessage .actions a:link { color: #9a9a9a }
+.miniMessage .actions a:hover { color: #519eec }
 
 .miniMessage .answers { font-size: 85%; padding: 0 0 0 2.5em }
 .miniMessage .answers .miniMessage { border-top: 1px dotted #ededed; border-bottom: none }
 
 .answers .miniMessage .message { display: inline; line-height: 150% }
-.answers .miniMessage .actions { margin: -1.5em 0 0 }
+.answers .miniMessage .actions { }
 
 .miniMessage .event { margin-left: 2.5em }
 .miniMessage .event:after { clear: both }
 
 .owner .miniMessage a { color: #519eec }
 
-.actionItem { display: inline; margin-left: 5px }
-.actionItem img { margin: 0 .3em -0.2em; cursor: pointer }
+.actionItem { display: inline; margin-right: .5em }
+.actionItem img { margin: 0 .3em -0.2em -0.2em; cursor: pointer }
 
 .answers .messageBlock { border-top: 1px dotted #eee; padding: .5em 0 0 3em }
 .answers textarea { display: block; width: 90% }
