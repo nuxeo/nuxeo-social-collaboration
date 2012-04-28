@@ -327,8 +327,8 @@
     activityOrComment.find('.jsLike').remove();
 
     var likeImageURL = userLikeStatus == 1
-        ? NXGadgetContext.clientSideBaseUrl + 'icons/vote_up_active.png'
-        : NXGadgetContext.clientSideBaseUrl + 'icons/vote_up_unactive.png';
+        ? NXGadgetContext.clientSideBaseUrl + 'icons/like_active.png'
+        : NXGadgetContext.clientSideBaseUrl + 'icons/like_unactive.png';
 
     var htmlContent = Mustache.render(templates.likeAction,
         { likeImageURL: likeImageURL, likesCount: likesCount });
