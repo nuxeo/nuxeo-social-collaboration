@@ -8,7 +8,9 @@
 <link rel="stylesheet" type="text/css" href="${skinPath}/css/library.css"/>
 
 <script type="text/javascript" src="${skinPath}/script/library.js"></script>
-<script src="${skinPath}/script/jquery/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="${skinPath}/script/context-management.js"></script>
+<script type="text/javascript" src="${skinPath}/script/jquery/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="${skinPath}/script/jquery/jquery.fancybox.pack.js"></script>
 
 </head>
 
