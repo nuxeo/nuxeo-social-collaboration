@@ -1,10 +1,12 @@
+var ContextManagement={};
+
 var contextListLoaded = false;
 
-function getTargetRepository() {
+ContextManagement.getTargetRepository = function () {
     return gadgets.util.unescapeString(prefs.getString("nuxeoTargetRepository"));
 }
 
-function getTargetContextPath() {
+ContextManagement.getTargetContextPath = function () {
     var targetContextPath = gadgets.util.unescapeString(prefs.getString("nuxeoTargetContextPath"));
     if (targetContextPath == null || targetContextPath == '') {
         targetContextPath = "/"; //in Nuxeo pref should be set at creation time
@@ -12,7 +14,7 @@ function getTargetContextPath() {
     return targetContextPath;
 }
 
-function getTargetContextObject() {
+ContextManagement.getTargetContextObject = function () {
     var targetContextObject = gadgets.util.unescapeString(prefs.getString("nuxeoTargetContextObject"));
     if (targetContextObject == null || targetContextObject == '') {
         targetContextObject = "Domain"; //in Nuxeo pref should be set at creation time
@@ -20,16 +22,16 @@ function getTargetContextObject() {
     return targetContextObject;
 }
 
-function saveContext() {
+ContextManagement.saveContext = function () {
     var contextPath = _gel("contextPathChooser").value;
     prefs.set("nuxeoTargetContextPath", contextPath);
     _gel("contextChooser").style.display = "none";
 }
 
-function displayContextChooser() {
+ContextManagement.displayContextChooser = function () {
 
     var query = "select * from ";
-    query += getTargetContextObject();
+    query += ContextManagement.getTargetContextObject();
     query += " where ecm:currentLifeCycleState != 'deleted'";
 
     var ContextRequestParams = { operationId : 'Document.Query',
@@ -38,22 +40,22 @@ function displayContextChooser() {
         operationDocumentProperties : "dublincore",
         entityType : 'documents',
         usePagination : false,
-        displayMethod : availableContextsReceived
+        displayMethod : ContextManagement.availableContextsReceived
     };
 
     if (contextListLoaded) {
-        showContextPathSelector();
+    	ContextManagement.showContextPathSelector();
     }
     else {
         doAutomationRequest(ContextRequestParams);
     }
 }
 
-function availableContextsReceived(entries, nxParams) {
+ContextManagement.availableContextsReceived = function (entries, nxParams) {
 
     var elSel = _gel("contextPathChooser");
 
-    var selectedValue = getTargetContextPath();
+    var selectedValue = ContextManagement.getTargetContextPath();
 
     for (var i = 0; i < entries.length; i++) {
 
@@ -71,14 +73,14 @@ function availableContextsReceived(entries, nxParams) {
         }
     }
     contextListLoaded = true;
-    showContextPathSelector();
+    ContextManagement.showContextPathSelector();
 }
 
-function showContextPathSelector() {
+ContextManagement.showContextPathSelector = function () {
     _gel("contextChooser").style.display = "block";
 }
 
-function initContextPathSettingsButton() {
+ContextManagement.initContextPathSettingsButton = function () {
   if (gadgets.nuxeo) {
     var permission = gadgets.nuxeo.isEditable();
     if(permission) {

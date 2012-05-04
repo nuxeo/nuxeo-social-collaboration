@@ -1,7 +1,9 @@
+var Library={};
+
 var prefs = new gadgets.Prefs();
 // load the page that will display the content of document specified
-function documentList(docRef, page){
-  data = loadContext();
+Library.documentList = function (docRef, page){
+  data = Library.loadContext();
 
   if ( typeof page == 'number' ) {
     data.page = page;
@@ -11,47 +13,47 @@ function documentList(docRef, page){
   // set new value of docRef
   data.docRef = docRef;
 
-  loadContent(getBasePath() + '/' + "documentList", data);
+  Library.loadContent(Library.getBasePath() + '/' + "documentList", data);
 }
 
-function confirmDeleteDocument(targetRef, targetTitle){
+Library.confirmDeleteDocument = function (targetRef, targetTitle){
   message = prefs.getMsg("label.gadget.library.delete")+' "' +  targetTitle + '"'+ prefs.getMsg("label.gadget.library.interrogation.mark");
   code = 'deleteDocument( \'' + targetRef + '\' );' ;
-  showConfirmationPopup(message, code);
+  Library.showConfirmationPopup(message, code);
 }
 
 // delete specified document from repository
-function deleteDocument(targetRef){
-  data = loadContext();
+Library.deleteDocument = function (targetRef){
+  data = Library.loadContext();
   data.targetRef = targetRef;
-  loadContent(getBasePath() + '/' + "deleteDocument", data);
+  Library.loadContent(Library.getBasePath() + '/' + "deleteDocument", data);
 }
 
-function confirmPublishDocument(targetRef, targetTitle, public){
+Library.confirmPublishDocument = function (targetRef, targetTitle, public){
   if ( public ) {
     message = prefs.getMsg("label.gadget.library.make.public.begining")+' "' +  targetTitle + '" '+prefs.getMsg("label.gadget.library.make.public.end");
   } else {
     message = prefs.getMsg("label.gadget.library.make.restricted.begining")+' "' +  targetTitle + '" '+prefs.getMsg("label.gadget.library.make.restricted.end");
   }
   code = 'publishDocument( \'' + targetRef + '\', ' + public + ' );' ;
-  showConfirmationPopup(message, code);
+  Library.showConfirmationPopup(message, code);
 }
 
 // publish targetDocument
-function publishDocument(targetRef, public){
-  data = loadContext();
+Library.publishDocument = function (targetRef, public){
+  data = Library.loadContext();
   data.targetRef = targetRef;
   if ( typeof public != 'undefined' ) {
     data.public = public;
   }
-  loadContent(getBasePath() + '/' + "publishDocument", data);
+  Library.loadContent(Library.getBasePath() + '/' + "publishDocument", data);
 }
 
-function goToDocument(path, viewId) {
-   window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + encode(path) + "@" + viewId;
+Library.goToDocument = function (path, viewId) {
+   window.parent.location = top.nxContextPath + "/nxpath/" + ContextManagement.getTargetRepository() + Library.encode(path) + "@" + viewId;
 }
 
-function encode(path) {
+Library.encode = function (path) {
   var segments = path.split('/');
   for (var i = 0; i < segments.length; i++) {
     segments[i] = encodeURIComponent(segments[i]);
@@ -60,7 +62,7 @@ function encode(path) {
 }
 
 // load navigation info from context form
-function loadContext() {
+Library.loadContext = function () {
     context = {};
   jQuery.each(jQuery('[name="contextInfoForm"]').serializeArray(), function(i, field){
     context[field.name]=field.value;
@@ -68,38 +70,32 @@ function loadContext() {
   return context;
 }
 
-
-
-
-
-function loadContent(path, data) {
+Library.loadContent = function (path, data) {
   // add language
   data.lang = prefs.getLang();
 
   jQuery.post(
     path,
     data,
-    contentLoadedHandler
+    Library.contentLoadedHandler
   );
 }
 
-
 // called when iframe  is loaded ; used for multipart forms ( see create_document_form.ftl)
-function iframeLoaded(iframe) {
+Library.iframeLoaded = function (iframe) {
 	text=jQuery(iframe).contents().find('body').html();
-	if ( !isEmpty(text) ) {
+	if ( !Library.isEmpty(text) ) {
 		jQuery.fancybox.close();
-		contentLoadedHandler(text);
+		Library.contentLoadedHandler(text);
 	}
 }
 
-
 //
-function contentLoadedHandler(data){
+Library.contentLoadedHandler = function (data){
   // set the new content in "content" element
   jQuery("#content").html(data);
 
-  addPopupBoxTo(jQuery(".addPopup"));
+  Library.addPopupBoxTo(jQuery(".addPopup"));
 
   // intercept forms submit event and add custom behavior
   jQuery("form").submit(
@@ -110,7 +106,7 @@ function contentLoadedHandler(data){
         name: 'limit' ,
         value : prefs.getString("limit")
       });
-      loadContent(jQuery(this).attr("action"),data);
+      Library.loadContent(jQuery(this).attr("action"),data);
     }
   );
 
@@ -134,17 +130,15 @@ function contentLoadedHandler(data){
   gadgets.window.adjustHeight();
 }
 
-
 // return the path to access social webengine module
-function getBasePath() {
+Library.getBasePath = function () {
   return basePath = top.nxContextPath + '/site/social';
 }
-
 
 // display an confirmation dialog
 // message - message that will be displayed
 // code - code that will be executed(as string) if ok button is pressed
-function showConfirmationPopup(message, code ) {
+Library.showConfirmationPopup = function (message, code ) {
   t = '<div class="fancyContent">';
   t += '<div class="fancyMessage">' + message + '</div>';
   t += '<div class="center">';
@@ -166,7 +160,7 @@ function showConfirmationPopup(message, code ) {
   );
 }
 
-function addPopupBoxTo(a) {
+Library.addPopupBoxTo = function (a) {
       jQuery(a).fancybox({
         'width'             : '100%',
         'height'            : '100%',
@@ -184,14 +178,12 @@ function addPopupBoxTo(a) {
 }
 
 // called when gadget is load first time
-function loadInitialContent() {
-  documentList(getTargetContextPath());
+Library.loadInitialContent = function () {
+    Library.documentList(getTargetContextPath());
 }
 
-function isEmpty(s) {
+Library.isEmpty = function (s) {
     return (!s || s.length === 0 );
 }
 
-
-
-gadgets.util.registerOnLoadHandler(loadInitialContent);
+gadgets.util.registerOnLoadHandler(Library.loadInitialContent);
