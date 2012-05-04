@@ -1,6 +1,12 @@
 var Library = {};
 
-var prefs = new gadgets.Prefs();
+var isGadget = true;
+
+try {
+    var prefs = new gadgets.Prefs();
+} catch (error) {
+    isGadget = false;
+}
 
 // load the page that will display the content of document specified
 Library.documentList = function (docRef, page) {
@@ -9,8 +15,11 @@ Library.documentList = function (docRef, page) {
     if (typeof page == 'number') {
         data.page = page;
     }
-    data.limit = prefs.getString("limit");
-
+    if (isGadget) {
+        data.limit = prefs.getString("limit");
+    } else {
+        data.limit = 5;
+    }
     // set new value of docRef
     data.docRef = docRef;
 
@@ -18,7 +27,11 @@ Library.documentList = function (docRef, page) {
 }
 
 Library.confirmDeleteDocument = function (targetRef, targetTitle) {
-    message = prefs.getMsg("label.gadget.library.delete") + ' "' + targetTitle + '"' + prefs.getMsg("label.gadget.library.interrogation.mark");
+    if (isGadget) {
+        message = prefs.getMsg("label.gadget.library.delete") + ' "' + targetTitle + '"' + prefs.getMsg("label.gadget.library.interrogation.mark");
+    } else {
+        message = "Delete " + targetTitle + " ?";
+    }
     code = 'deleteDocument( \'' + targetRef + '\' );';
     Library.showConfirmationPopup(message, code);
 }
@@ -31,10 +44,18 @@ Library.deleteDocument = function (targetRef) {
 }
 
 Library.confirmPublishDocument = function (targetRef, targetTitle, public) {
-    if (public) {
-        message = prefs.getMsg("label.gadget.library.make.public.begining") + ' "' + targetTitle + '" ' + prefs.getMsg("label.gadget.library.make.public.end");
+    if (isGadget) {
+        if (public) {
+            message = prefs.getMsg("label.gadget.library.make.public.begining") + ' "' + targetTitle + '" ' + prefs.getMsg("label.gadget.library.make.public.end");
+        } else {
+            message = prefs.getMsg("label.gadget.library.make.restricted.begining") + ' "' + targetTitle + '" ' + prefs.getMsg("label.gadget.library.make.restricted.end");
+        }
     } else {
-        message = prefs.getMsg("label.gadget.library.make.restricted.begining") + ' "' + targetTitle + '" ' + prefs.getMsg("label.gadget.library.make.restricted.end");
+        if (public) {
+            message = "Make the document " + ' "' + targetTitle + " public?";
+        } else {
+            message = "Restrict the document " + targetTitle + " to the social workspace?";
+        }
     }
     code = 'publishDocument( \'' + targetRef + '\', ' + public + ' );';
     Library.showConfirmationPopup(message, code);
@@ -73,8 +94,11 @@ Library.loadContext = function () {
 
 Library.loadContent = function (path, data) {
     // add language
-    data.lang = prefs.getLang();
-
+    if (isGadget) {
+        data.lang = prefs.getLang();
+    } else {
+        data.lang = "en";
+    }
     jQuery.post(
     path, data, Library.contentLoadedHandler);
 }
@@ -101,15 +125,26 @@ Library.contentLoadedHandler = function (data) {
     function (event) {
         event.preventDefault();
         data = jQuery(this).serializeArray();
-        data.push({
-            name: 'limit',
-            value: prefs.getString("limit")
-        });
+        if (isGadget) {
+            data.push({
+                name: 'limit',
+                value: prefs.getString("limit")
+            });
+        } else {
+            data.push({
+                name: 'limit',
+                value: 5
+            });
+        }
         Library.loadContent(jQuery(this).attr("action"), data);
     });
 
     // add the language parameter to all links
-    l = prefs.getLang();
+    if (isGadget) {
+        l = prefs.getLang();
+    } else {
+        l = "en";
+    }
     jQuery("a").attr('href', function (i, h) {
         if (typeof h != 'undefined') {
             if (h.indexOf("javascript") == 0) { // don't add language to href starting with javascript
