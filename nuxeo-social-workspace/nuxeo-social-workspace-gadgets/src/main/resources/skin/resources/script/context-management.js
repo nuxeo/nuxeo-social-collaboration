@@ -1,4 +1,4 @@
-var ContextManagement={};
+var ContextManagement = {};
 
 var contextListLoaded = false;
 
@@ -34,19 +34,21 @@ ContextManagement.displayContextChooser = function () {
     query += ContextManagement.getTargetContextObject();
     query += " where ecm:currentLifeCycleState != 'deleted'";
 
-    var ContextRequestParams = { operationId : 'Document.Query',
-        operationParams : {query: query},
-        operationContext : {},
-        operationDocumentProperties : "dublincore",
-        entityType : 'documents',
-        usePagination : false,
-        displayMethod : ContextManagement.availableContextsReceived
+    var ContextRequestParams = {
+        operationId: 'Document.Query',
+        operationParams: {
+            query: query
+        },
+        operationContext: {},
+        operationDocumentProperties: "dublincore",
+        entityType: 'documents',
+        usePagination: false,
+        displayMethod: ContextManagement.availableContextsReceived
     };
 
     if (contextListLoaded) {
-    	ContextManagement.showContextPathSelector();
-    }
-    else {
+        ContextManagement.showContextPathSelector();
+    } else {
         doAutomationRequest(ContextRequestParams);
     }
 }
@@ -67,8 +69,7 @@ ContextManagement.availableContextsReceived = function (entries, nxParams) {
         }
         try {
             elSel.add(elOptNew, null); // standards compliant; doesn't work in IE
-        }
-        catch(ex) {
+        } catch (ex) {
             elSel.add(elOptNew); // IE only
         }
     }
@@ -81,12 +82,12 @@ ContextManagement.showContextPathSelector = function () {
 }
 
 ContextManagement.initContextPathSettingsButton = function () {
-  if (gadgets.nuxeo) {
-    var permission = gadgets.nuxeo.isEditable();
-    if(permission) {
-      _gel("contextButton").style.display = "block";
+    if (gadgets.nuxeo) {
+        var permission = gadgets.nuxeo.isEditable();
+        if (permission) {
+            _gel("contextButton").style.display = "block";
+        }
+    } else {
+        _gel("contextButton").style.display = "block";
     }
-  } else {
-    _gel("contextButton").style.display = "block";
-  }
 }
