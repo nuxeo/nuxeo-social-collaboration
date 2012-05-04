@@ -12,12 +12,12 @@
       <div class="tooltip">${Context.getMessage("tooltip.can.not.create.directory")}</div>
     </a>
   </#if>
-  <a href="javascript: documentList('${currentDoc.id}', ${page})"><img src="${skinPath}/icons/refresh.png" alt="refresh"/></a>
+  <a href="javascript: Library.documentList('${currentDoc.id}', ${page})"><img src="${skinPath}/icons/refresh.png" alt="refresh"/></a>
 
   <#if parent?? >
-    <a href="javascript: documentList('${parent.id}')"><img src="${skinPath}/icons/folder_up.png" alt="goToParent"/></a>
+    <a href="javascript: Library.documentList('${parent.id}')"><img src="${skinPath}/icons/folder_up.png" alt="goToParent"/></a>
   </#if>
   <#if (ancestors?size > 1) >
-    <a href="javascript: documentList('${socialWorkspace.id}')"><img src="${skinPath}/icons/root.png" alt="goToRoot"/></a>
+    <a href="javascript: Library.documentList('${socialWorkspace.id}')"><img src="${skinPath}/icons/root.png" alt="goToRoot"/></a>
   </#if>
 </div>

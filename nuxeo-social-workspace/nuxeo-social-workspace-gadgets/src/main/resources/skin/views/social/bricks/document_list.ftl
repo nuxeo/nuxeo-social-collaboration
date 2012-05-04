@@ -3,11 +3,11 @@
   	${Context.getMessage("label.empty.list")}
   <#else>
   <div id="pageNavigationControls">
-    <input type="image" onclick="javascript: documentList('${currentDoc.id}', 0,)" id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
-      <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${prevPage})" id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
+    <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', 0,)" id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${prevPage})" id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
       <span class="currentPageStatus" id="nxDocumentListPage">${page + 1}/${maxPage}</span>
-      <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${nextPage})" id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
-      <input type="image" onclick="javascript: documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${nextPage})" id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
   </div>
 
   <table class="dataList">
@@ -24,28 +24,28 @@
     <tr>
       <td><img src="${contextPath}${doc["common:icon"]}" alt="icon"/></td>
       <#if doc.isFolder>
-        <td><a href="javascript: documentList('${doc.id}')" class="navigation">${doc.title?xml}</a></td>
+        <td><a href="javascript: Library.documentList('${doc.id}')" class="navigation">${doc.title?xml}</a></td>
       <#else>
-        <td><a href="javascript: goToDocument('${This.escapePath(doc.path)}', '${collaboration_views[doc.id]}')" class="navigation">${doc.title?xml}</a></td>
+        <td><a href="javascript: Library.goToDocument('${This.escapePath(doc.path)}', '${collaboration_views[doc.id]}')" class="navigation">${doc.title?xml}</a></td>
       </#if>
       <td>${doc["dc:modified"]?string("yyyy-MM-dd HH:mm")}</td>
       <td>${doc["dc:creator"]}</td>
       <td>
         <#if removable?seq_contains(doc.id)>
-          <a class="button" href="javascript:confirmDeleteDocument('${doc.id}' , '${This.escape(doc.title)}' )">
+          <a class="button" href="javascript:Library.confirmDeleteDocument('${doc.id}' , '${This.escape(doc.title)}' )">
             <img src="${contextPath}/icons/action_delete.gif" alt="remove"></img>
             <div class="tooltip">${Context.getMessage("tooltip.remove.document")}</div>
           </a>
         </#if>
         <#if isPublicSocialWorkspace>
           <#if publishablePublic?seq_contains(doc.id)>
-            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', true )">
+            <a class="button" href="javascript:Library.confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', true )">
               <img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></img>
               <div class="tooltip">${Context.getMessage("tooltip.publish.document")}</div>
             </a>
           </#if>
           <#if publishablePrivate?seq_contains(doc.id)>
-            <a class="button" href="javascript:confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', false )">
+            <a class="button" href="javascript:Library.confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', false )">
               <img src="${skinPath}/icons/publish_to_social_workspace.png" alt="make it public"></img>
               <div class="tooltip">${Context.getMessage("tooltip.restrict.document")}</div>
             </a>
