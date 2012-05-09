@@ -23,7 +23,11 @@ Library.documentList = function (docRef, page) {
     // set new value of docRef
     data.docRef = docRef;
 
-    Library.loadContent(Library.getBasePath() + '/' + "documentList", data);
+    if (isGadget) {
+        Library.loadContent(Library.getBasePath() + '/' + "documentList", data);
+    } else {
+        Library.loadContent("documentListGet", data);
+    }
 }
 
 Library.confirmDeleteDocument = function (targetRef, targetTitle) {
@@ -99,8 +103,13 @@ Library.loadContent = function (path, data) {
     } else {
         data.lang = "en";
     }
-    jQuery.post(
-    path, data, Library.contentLoadedHandler);
+    if (isGadget) {
+        jQuery.post(
+        path, data, Library.contentLoadedHandler);
+    } else {
+        jQuery.get(
+        path, data, Library.contentLoadedHandler);
+    }
 }
 
 // called when iframe  is loaded ; used for multipart forms ( see create_document_form.ftl)
@@ -159,8 +168,9 @@ Library.contentLoadedHandler = function (data) {
     if (jQuery.browser.msie) {
         jQuery("img").removeAttr("alt");
     }
-
-    gadgets.window.adjustHeight();
+    if (isGadget) {
+        gadgets.window.adjustHeight();
+    }
 }
 
 // return the path to access social webengine module
@@ -216,5 +226,6 @@ Library.loadInitialContent = function () {
 Library.isEmpty = function (s) {
     return (!s || s.length === 0);
 }
-
-gadgets.util.registerOnLoadHandler(Library.loadInitialContent);
+if (isGadget) {
+    gadgets.util.registerOnLoadHandler(Library.loadInitialContent);
+}
