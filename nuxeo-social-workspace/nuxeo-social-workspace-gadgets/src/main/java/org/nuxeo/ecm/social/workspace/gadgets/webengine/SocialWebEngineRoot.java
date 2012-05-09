@@ -60,6 +60,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.schema.TypeService;
+import org.nuxeo.ecm.platform.comment.api.CommentableDocument;
 import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
@@ -559,5 +560,16 @@ public class SocialWebEngineRoot extends ModuleRoot {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public List<DocumentModel> getComments(DocumentModel doc)
+            throws ClientException {
+        // Load document comments if exist
+        List<DocumentModel> comments = null;
+        CommentableDocument commentableDoc = doc.getAdapter(CommentableDocument.class);
+        if (commentableDoc != null && !doc.isFolder()) {
+            comments = commentableDoc.getComments();
+        }
+        return comments;
     }
 }

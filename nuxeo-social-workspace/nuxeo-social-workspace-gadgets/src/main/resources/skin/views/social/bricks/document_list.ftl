@@ -69,6 +69,9 @@
         </a>
       </td>
     </tr>
+    <#if (!doc.isFolder)>
+      <#include "@bricks/document_comments">
+    </#if>
     </#list>
   </table>
   </#if>
