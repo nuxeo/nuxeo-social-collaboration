@@ -567,8 +567,19 @@ public class SocialWebEngineRoot extends ModuleRoot {
         // Load document comments if exist
         List<DocumentModel> comments = null;
         CommentableDocument commentableDoc = doc.getAdapter(CommentableDocument.class);
-        if (commentableDoc != null && !doc.isFolder()) {
+        if (commentableDoc != null) {
             comments = commentableDoc.getComments();
+        }
+        return comments;
+    }
+
+    public List<DocumentModel> getCommentChildren(DocumentModel doc,
+            DocumentModel parent) throws ClientException {
+        // Load all comment children of the document doc
+        List<DocumentModel> comments = null;
+        CommentableDocument commentableDoc = doc.getAdapter(CommentableDocument.class);
+        if (commentableDoc != null) {
+            comments = commentableDoc.getComments(parent);
         }
         return comments;
     }
