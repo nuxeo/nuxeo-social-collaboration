@@ -35,9 +35,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.nuxeo.ecm.activity.ActivityCommentMessage;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityMessage;
+import org.nuxeo.ecm.activity.ActivityReplyMessage;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -130,9 +130,9 @@ public class GetWallActivityStream {
             o.put("activityMessage", activityMessage.getMessage());
             o.put("publishedDate",
                     dateFormat.format(activityMessage.getPublishedDate()));
-            o.put("comments",
-                    toActivityCommentMessagesJSON(session,
-                            activityMessage.getActivityCommentMessages()));
+            o.put("replies",
+                    toActivityReplyMessagesJSON(session,
+                            activityMessage.getActivityReplyMessages()));
 
             if (activityMessage.getVerb().equals("minimessage")) {
                 o.put("allowDeletion",
@@ -161,32 +161,32 @@ public class GetWallActivityStream {
                 writer.toString().getBytes("UTF-8")), "application/json");
     }
 
-    private List<Map<String, Object>> toActivityCommentMessagesJSON(
+    private List<Map<String, Object>> toActivityReplyMessagesJSON(
             CoreSession session,
-            List<ActivityCommentMessage> activityCommentMessages)
+            List<ActivityReplyMessage> activityReplyMessages)
             throws ClientException {
-        List<Map<String, Object>> comments = new ArrayList<Map<String, Object>>();
-        for (ActivityCommentMessage activityCommentMessage : activityCommentMessages) {
+        List<Map<String, Object>> replies = new ArrayList<Map<String, Object>>();
+        for (ActivityReplyMessage activityReplyMessage : activityReplyMessages) {
             Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", activityCommentMessage.getActivityCommentId());
-            o.put("actor", activityCommentMessage.getActor());
-            o.put("displayActor", activityCommentMessage.getDisplayActor());
+            o.put("id", activityReplyMessage.getActivityReplyId());
+            o.put("actor", activityReplyMessage.getActor());
+            o.put("displayActor", activityReplyMessage.getDisplayActor());
             o.put("displayActorLink",
-                    activityCommentMessage.getDisplayActorLink());
-            String actorUsername = getUsername(activityCommentMessage.getActor());
+                    activityReplyMessage.getDisplayActorLink());
+            String actorUsername = getUsername(activityReplyMessage.getActor());
             o.put("actorAvatarURL", getUserAvatarURL(session, actorUsername));
-            o.put("message", activityCommentMessage.getMessage());
-            o.put("publishedDate", activityCommentMessage.getPublishedDate());
+            o.put("message", activityReplyMessage.getMessage());
+            o.put("publishedDate", activityReplyMessage.getPublishedDate());
             o.put("allowDeletion",
                     session.getPrincipal().getName().equals(actorUsername));
 
-            String activityObject = ActivityHelper.createActivityObject(activityCommentMessage.getActivityCommentId());
+            String activityObject = ActivityHelper.createActivityObject(activityReplyMessage.getActivityReplyId());
             LikeStatus likeStatus = likeService.getLikeStatus(
                     session.getPrincipal().getName(), activityObject);
             o.put("likeStatus", likeStatus.toMap());
-            comments.add(o);
+            replies.add(o);
         }
-        return comments;
+        return replies;
     }
 
 }

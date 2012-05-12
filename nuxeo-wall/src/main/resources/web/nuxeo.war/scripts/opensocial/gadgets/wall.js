@@ -41,7 +41,7 @@
           '</div>' +
           '<div class="actions jsActions"></div>' +
         '</div>' +
-        '<div class="answers jsCommentsContainer">{{{commentsHtml}}}</div>' +
+        '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
       '</div>';
 
   templates.miniMessage =
@@ -56,11 +56,11 @@
           '<div class="message">{{{activityMessage}}}</div>' +
           '<div class="actions jsActions"></div>' +
         '</div>' +
-        '<div class="answers jsCommentsContainer">{{{commentsHtml}}}</div>' +
+        '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
       '</div>';
 
-  templates.comment =
-      '<div class="miniMessage {{commentClass}}" data-commentid="{{id}}" data-likescount="{{likeStatus.likesCount}}" ' +
+  templates.reply =
+      '<div class="miniMessage {{replyClass}}" data-replyid="{{id}}" data-likescount="{{likeStatus.likesCount}}" ' +
           'data-userlikestatus="{{likeStatus.userLikeStatus}}" data-allowdeletion="{{allowDeletion}}">' +
         '<div class="container">' +
           '<div class="message">' +
@@ -71,7 +71,7 @@
               '<div class="message">{{{message}}}</div>' +
             '</div>' +
           '</div>' +
-          '<div class="actions jsCommentActions"></div>' +
+          '<div class="actions jsReplyActions"></div>' +
         '</div>' +
       '</div>';
 
@@ -86,13 +86,13 @@
         '</form>' +
       '</div>';
 
-  templates.newActivityComment =
-      '<div class="displayN jsNewActivityComment messageBlock" data-activityid="{{activityId}}">' +
+  templates.newActivityReply =
+      '<div class="displayN jsNewActivityReply messageBlock" data-activityid="{{activityId}}">' +
         '<form>' +
-          '<textarea placeholder="{{placeholderMessage}}" rows="1" class="jsActivityCommentText"></textarea>' +
+          '<textarea placeholder="{{placeholderMessage}}" rows="1" class="jsActivityReplyText"></textarea>' +
           '<p class="newMiniMessageActions">' +
-            '<span class="miniMessageCounter jsActivityCommentCounter"></span>' +
-            '<input class="button disabled jsWriteActivityCommentButton" name="writeActivityCommentButton" type="button" value="{{writeLabel}}" />' +
+            '<span class="miniMessageCounter jsActivityReplyCounter"></span>' +
+            '<input class="button disabled jsWriteActivityReplyButton" name="writeActivityReplyButton" type="button" value="{{writeLabel}}" />' +
           '</p>' +
         '</form>' +
       '</div>';
@@ -103,10 +103,10 @@
         '<a href="#" class="jsDelete" data-activityid="{{activityId}}">{{deleteMessage}}</a>' +
       '</div>';
 
-  templates.deleteActivityCommentAction =
+  templates.deleteActivityReplyAction =
       '<div class="actionItem">' +
         '<img src="{{deleteImageURL}}" />' +
-        '<a href="#" class="jsDelete" data-commentid="{{commentId}}" >{{deleteMessage}}</a>' +
+        '<a href="#" class="jsDelete" data-replyid="{{replyId}}" >{{deleteMessage}}</a>' +
       '</div>';
 
   templates.replyAction =
@@ -127,8 +127,8 @@
   templates.noMoreActivitiesBar =
       '<div class="moreActivitiesBar noMore">{{noMoreActivitiesMessage}}</div>';
 
-  templates.moreCommentsBar =
-      '<div class="moreActivitiesBar jsMoreCommentsBar">{{moreCommentsMessage}}</div>';
+  templates.moreRepliesBar =
+      '<div class="moreActivitiesBar jsMoreRepliesBar">{{moreRepliesMessage}}</div>';
 
   templates.newActivitiesBar =
       '<div class="newActivitiesBar jsNewActivitiesBar">{{newActivitiesMessage}}</div>';
@@ -216,8 +216,8 @@
     registerLikeStatusHandler();
     registerDeleteLinksHandler();
     registerReplyLinksHandler();
-    registerNewActivityCommentHandler();
-    registerMoreCommentsHandler();
+    registerNewActivityReplyHandler();
+    registerMoreRepliesHandler();
 
     if (hasMoreActivities) {
       addMoreActivitiesBarHtml();
@@ -239,28 +239,28 @@
   }
 
   function buildActivityHtml(template, activity) {
-    var commentsHtml = '';
-    if (activity.comments.length > 0) {
-      if (activity.comments.length > 3) {
-        var moreCommentsMessage = prefs.getMsg('label.view.all') + ' ' +
-          activity.comments.length + ' ' + prefs.getMsg('label.activity.comments');
-          commentsHtml += Mustache.render(templates.moreCommentsBar, {
-          moreCommentsMessage: moreCommentsMessage
+    var repliesHtml = '';
+    if (activity.replies.length > 0) {
+      if (activity.replies.length > 3) {
+        var moreRepliesMessage = prefs.getMsg('label.view.all') + ' ' +
+          activity.replies.length + ' ' + prefs.getMsg('label.activity.replies');
+          repliesHtml += Mustache.render(templates.moreRepliesBar, {
+          moreRepliesMessage: moreRepliesMessage
         });
       }
-      for (var i = 0; i < activity.comments.length; i++) {
-        var comment = activity.comments[i];
-        comment.commentClass = i < activity.comments.length - 3 ? 'displayN' : '';
-        commentsHtml += Mustache.render(templates.comment, comment);
+      for (var i = 0; i < activity.replies.length; i++) {
+        var reply = activity.replies[i];
+        reply.replyClass = i < activity.replies.length - 3 ? 'displayN' : '';
+        repliesHtml += Mustache.render(templates.reply, reply);
       }
     }
 
-    commentsHtml += Mustache.render(templates.newActivityComment, {
+    repliesHtml += Mustache.render(templates.newActivityReply, {
       activityId: activity.id,
-      placeholderMessage: prefs.getMsg('label.placeholder.new.activity.comment'),
+      placeholderMessage: prefs.getMsg('label.placeholder.new.activity.reply'),
       writeLabel: prefs.getMsg('command.reply') });
 
-    activity.commentsHtml = commentsHtml;
+    activity.repliesHtml = repliesHtml;
     return Mustache.render(template, activity);
   }
 
@@ -291,15 +291,15 @@
       actions.prepend(htmlContent);
     });
 
-    // activity comments
-    $('div[data-commentid][data-allowdeletion="true"]').each(function() {
+    // activity replies
+    $('div[data-replyid][data-allowdeletion="true"]').each(function() {
       $(this).removeAttr('data-allowdeletion');
-      var commentId = $(this).attr('data-commentid');
+      var replyId = $(this).attr('data-replyid');
       var deleteImageURL = NXGadgetContext.clientSideBaseUrl + 'icons/delete.png'
 
-      var actions = $(this).find('div.jsCommentActions');
-      var htmlContent = Mustache.render(templates.deleteActivityCommentAction,
-          { commentId: commentId, deleteImageURL: deleteImageURL,
+      var actions = $(this).find('div.jsReplyActions');
+      var htmlContent = Mustache.render(templates.deleteActivityReplyAction,
+          { replyId: replyId, deleteImageURL: deleteImageURL,
             deleteMessage: prefs.getMsg('command.delete') });
       actions.prepend(htmlContent);
     });
@@ -314,17 +314,17 @@
       addActivityLikeStatusHtml($(this), actions, activityId, likesCount, userLikeStatus);
     });
 
-    $('div[data-commentid][data-likescount]').each(function() {
-      var commentId = $(this).attr('data-commentid');
+    $('div[data-replyid][data-likescount]').each(function() {
+      var replyId = $(this).attr('data-replyid');
       var likesCount = $(this).attr('data-likescount');
       var userLikeStatus = $(this).attr('data-userlikestatus');
-      var actions = $(this).find('div.jsCommentActions');
-      addActivityLikeStatusHtml($(this), actions, commentId, likesCount, userLikeStatus);
+      var actions = $(this).find('div.jsReplyActions');
+      addActivityLikeStatusHtml($(this), actions, replyId, likesCount, userLikeStatus);
     });
   }
 
-  function addActivityLikeStatusHtml(activityOrComment, actions, activityId, likesCount, userLikeStatus) {
-    activityOrComment.find('.jsLike').remove();
+  function addActivityLikeStatusHtml(activityOrReply, actions, activityId, likesCount, userLikeStatus) {
+    activityOrReply.find('.jsLike').remove();
 
     var likeImageURL = userLikeStatus == 1
         ? NXGadgetContext.clientSideBaseUrl + 'icons/like_active.png'
@@ -333,7 +333,7 @@
     var htmlContent = Mustache.render(templates.likeAction,
         { likeImageURL: likeImageURL, likesCount: likesCount });
 
-    var deleteLink = $(activityOrComment).find('a.jsDelete');
+    var deleteLink = $(activityOrReply).find('a.jsDelete');
     if (deleteLink.length > 0) {
       $(htmlContent).insertAfter(deleteLink);
     } else {
@@ -434,11 +434,11 @@
       var likeIcon = $(this).find('.jsLikeIcon');
       registerLikeStatusHandlerFor(activityId, likeIcon);
     });
-    // comments
-    $('div[data-commentid]').each(function() {
-      var commentId = $(this).attr('data-commentid');
+    // replies
+    $('div[data-replyid]').each(function() {
+      var replyId = $(this).attr('data-replyid');
       var likeIcon = $(this).find('.jsLikeIcon');
-      registerLikeStatusHandlerFor(commentId, likeIcon);
+      registerLikeStatusHandlerFor(replyId, likeIcon);
     });
   }
 
@@ -468,11 +468,11 @@
               registerLikeStatusHandlerFor(activityId, $(this).find('.jsLikeIcon'));
             });
           } else {
-            // comment
-            $('div[data-commentid="' + activityId + '"]').each(function() {
+            // reply
+            $('div[data-replyid="' + activityId + '"]').each(function() {
               $(this).attr('data-likescount', likeStatus.likesCount);
               $(this).attr('data-userlikestatus', likeStatus.userLikeStatus);
-              var actions = $(this).find('div.jsCommentActions');
+              var actions = $(this).find('div.jsReplyActions');
               addActivityLikeStatusHtml($(this), actions, activityId,
                 likeStatus.likesCount, likeStatus.userLikeStatus);
               registerLikeStatusHandlerFor(activityId, $(this).find('.jsLikeIcon'));
@@ -494,67 +494,67 @@
       removeMiniMessage(activityId);
     });
 
-    $('a.jsDelete[data-commentid]').each(function() {
-      handleDeleteActivityComment($(this));
+    $('a.jsDelete[data-replyid]').each(function() {
+      handleDeleteActivityReply($(this));
     });
   }
 
-  function handleDeleteActivityComment(deleteLink) {
+  function handleDeleteActivityReply(deleteLink) {
     deleteLink.click(function() {
       if (!confirmDeleteMiniMessage()) {
         return false;
       }
 
-      var commentId = $(deleteLink).attr('data-commentid');
+      var replyId = $(deleteLink).attr('data-replyid');
       var activityId = $(deleteLink).parents('div[data-activityid]').attr('data-activityid');
-      removeActivityComment(activityId, commentId);
+      removeActivityReply(activityId, replyId);
     });
   }
 
   function registerReplyLinksHandler() {
     $('.jsReply').click(function() {
       var activityId = $(this).attr('data-activityid');
-      var newActivityComment = $('.jsNewActivityComment[data-activityid="' + activityId + '"]');
-      updateActivityCommentMessageCounter(newActivityComment);
-      newActivityComment.show();
-      newActivityComment.find('textarea.jsActivityCommentText').focus();
+      var newActivityReply = $('.jsNewActivityReply[data-activityid="' + activityId + '"]');
+      updateActivityReplyMessageCounter(newActivityReply);
+      newActivityReply.show();
+      newActivityReply.find('textarea.jsActivityReplyText').focus();
       gadgets.window.adjustHeight();
     });
   }
 
-  function registerNewActivityCommentHandler() {
-    $('.jsActivityCommentText').keyup(function () {
-      var writeButton = $(this).siblings('.newMiniMessageActions').find('.jsWriteActivityCommentButton');
+  function registerNewActivityReplyHandler() {
+    $('.jsActivityReplyText').keyup(function () {
+      var writeButton = $(this).siblings('.newMiniMessageActions').find('.jsWriteActivityReplyButton');
       if ($(this).val().length == 0) {
         writeButton.addClass('disabled');
       } else {
         writeButton.removeClass('disabled');
       }
 
-      var newActivityComment = $(this).parents('.jsNewActivityComment');
-      updateActivityCommentMessageCounter(newActivityComment);
+      var newActivityReply = $(this).parents('.jsNewActivityReply');
+      updateActivityReplyMessageCounter(newActivityReply);
     });
 
-    $('.jsNewActivityComment').each(function() {
-      var newActivityComment = $(this);
+    $('.jsNewActivityReply').each(function() {
+      var newActivityReply = $(this);
       var activityId = $(this).attr('data-activityid');
-      var writeButton = $(this).find('.jsWriteActivityCommentButton');
+      var writeButton = $(this).find('.jsWriteActivityReplyButton');
       writeButton.attr('data-activityid', activityId);
       writeButton.click(function() {
-        if ($(this).siblings('.jsActivityCommentText').val().length > 0) {
-          createActivityComment(newActivityComment);
+        if ($(this).siblings('.jsActivityReplyText').val().length > 0) {
+          createActivityReply(newActivityReply);
         }
       });
     });
   }
 
-  function registerMoreCommentsHandler() {
-    $('.jsMoreCommentsBar').click(function() {
-      var commentsContainer = $(this).parents('.jsCommentsContainer');
-      commentsContainer.find('div[data-commentid]').each(function() {
+  function registerMoreRepliesHandler() {
+    $('.jsMoreRepliesBar').click(function() {
+      var repliesContainer = $(this).parents('.jsRepliesContainer');
+      repliesContainer.find('div[data-replyid]').each(function() {
         $(this).show();
       });
-      commentsContainer.find('.jsMoreCommentsBar').each(function() {
+      repliesContainer.find('.jsMoreRepliesBar').each(function() {
         $(this).remove();
       });
       gadgets.window.adjustHeight();
@@ -629,63 +629,63 @@
   }
   /* end mini message */
 
-  /* activity comments */
-  function updateActivityCommentMessageCounter(newActivityComment) {
-    var delta = 140 - newActivityComment.find('textarea.jsActivityCommentText').val().length;
-    var miniMessageCounter = newActivityComment.find('.jsActivityCommentCounter');
+  /* activity replies */
+  function updateActivityReplyMessageCounter(newActivityReply) {
+    var delta = 140 - newActivityReply.find('textarea.jsActivityReplyText').val().length;
+    var miniMessageCounter = newActivityReply.find('.jsActivityReplyCounter');
     miniMessageCounter.text(delta);
     miniMessageCounter.toggleClass('warning', delta < 5);
     if (delta < 0) {
-      newActivityComment.find('.jsWriteActivityCommentButton').attr('disabled', 'disabled');
+      newActivityReply.find('.jsWriteActivityReplyButton').attr('disabled', 'disabled');
     } else {
-      newActivityComment.find('.jsWriteActivityCommentButton').removeAttr('disabled');
+      newActivityReply.find('.jsWriteActivityReplyButton').removeAttr('disabled');
     }
   }
 
-  function createActivityComment(newActivityComment) {
-    var activityCommentText = newActivityComment.find('textarea.jsActivityCommentText').val();
-    var activityId = newActivityComment.attr('data-activityid');
+  function createActivityReply(newActivityReply) {
+    var activityReplyText = newActivityReply.find('textarea.jsActivityReplyText').val();
+    var activityId = newActivityReply.attr('data-activityid');
     var opCallParameters = {
-      operationId: 'Services.AddActivityComment',
+      operationId: 'Services.AddActivityReply',
       operationParams: {
-        message: activityCommentText,
+        message: activityReplyText,
         language: prefs.getLang(),
         activityId: activityId
       },
       entityType: 'blob',
       operationContext: {},
       operationCallback: function (response, opCallParameters) {
-        newActivityComment.find('.jsActivityCommentText').val('');
-        updateActivityCommentMessageCounter(newActivityComment);
-        newActivityComment.hide();
+        newActivityReply.find('.jsActivityReplyText').val('');
+        updateActivityReplyMessageCounter(newActivityReply);
+        newActivityReply.hide();
 
-        var commentsContainer = $('div[data-activityId="' + activityId + '"]')
-          .find('.jsCommentsContainer');
-        var comment = response.data;
-        comment.likeStatus = {};
-        comment.likeStatus.likesCount = 0;
-        comment.likeStatus.userLikeStatus = 0;
-        var commentHtml = Mustache.render(templates.comment, comment);
-        $(commentHtml).insertBefore(commentsContainer.find('.jsNewActivityComment'));
+        var repliesContainer = $('div[data-activityId="' + activityId + '"]')
+          .find('.jsRepliesContainer');
+        var reply = response.data;
+        reply.likeStatus = {};
+        reply.likeStatus.likesCount = 0;
+        reply.likeStatus.userLikeStatus = 0;
+        var replyHtml = Mustache.render(templates.reply, reply);
+        $(replyHtml).insertBefore(repliesContainer.find('.jsNewActivityReply'));
 
-        commentsContainer.find('div[data-commentid="' + comment.id + '"]').each(function() {
+        repliesContainer.find('div[data-replyid="' + reply.id + '"]').each(function() {
           // like status
-          var commentId = $(this).attr('data-commentid');
+          var replyId = $(this).attr('data-replyid');
           var likesCount = $(this).attr('data-likescount');
           var userLikeStatus = $(this).attr('data-userlikestatus');
-          var commentActions = $(this).find('div.jsCommentActions');
-          addActivityLikeStatusHtml($(this), commentActions, commentId, likesCount, userLikeStatus);
+          var replyActions = $(this).find('div.jsReplyActions');
+          addActivityLikeStatusHtml($(this), replyActions, replyId, likesCount, userLikeStatus);
 
           // delete link
           var allowDeletion = $(this).attr('data-allowdeletion');
           if (allowDeletion) {
             $(this).removeAttr('data-allowdeletion');
-            var htmlContent = Mustache.render(templates.deleteActivityCommentAction,
-                { commentId: commentId, deleteMessage: prefs.getMsg('command.delete') });
-            commentActions.prepend(htmlContent);
+            var htmlContent = Mustache.render(templates.deleteActivityReplyAction,
+                { replyId: replyId, deleteMessage: prefs.getMsg('command.delete') });
+            replyActions.prepend(htmlContent);
 
-            commentActions.find('a[data-commentid="' + commentId + '"]').each(function() {
-              handleDeleteActivityComment($(this));
+            replyActions.find('a[data-replyid="' + replyId + '"]').each(function() {
+              handleDeleteActivityReply($(this));
             });
           }
         });
@@ -695,25 +695,25 @@
     doAutomationRequest(opCallParameters);
   }
 
-  function removeActivityComment(activityId, commentId) {
+  function removeActivityReply(activityId, replyId) {
     var opCallParameters = {
-      operationId: 'Services.RemoveActivityComment',
+      operationId: 'Services.RemoveActivityReply',
       operationParams: {
         activityId: activityId,
-        commentId: commentId
+        replyId: replyId
       },
       entityType: 'blob',
       operationContext: {},
       operationCallback: function (response, opCallParameters) {
         if (response.rc > 200 && response.rc < 300) {
-          $('div[data-commentid="'+ commentId + '"]').remove();
+          $('div[data-replyid="'+ replyId + '"]').remove();
           gadgets.window.adjustHeight();
         }
       }
     };
     doAutomationRequest(opCallParameters);
   }
-  /* end activity comments */
+  /* end activity replies */
 
   function showMoreActivities() {
     var NXRequestParams= { operationId : 'Services.GetWallActivityStream',
