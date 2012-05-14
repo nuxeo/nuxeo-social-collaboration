@@ -98,15 +98,15 @@
       '</div>';
 
   templates.deleteActivityAction =
-      '<div class="actionItem">' +
+      '<div class="actionItem jsDelete">' +
         '<img src="{{deleteImageURL}}" />' +
-        '<a href="#" class="jsDelete" data-activityid="{{activityId}}">{{deleteMessage}}</a>' +
+        '<a href="#" class="jsDeleteLink" data-activityid="{{activityId}}">{{deleteMessage}}</a>' +
       '</div>';
 
   templates.deleteActivityReplyAction =
-      '<div class="actionItem">' +
+      '<div class="actionItem jsDelete">' +
         '<img src="{{deleteImageURL}}" />' +
-        '<a href="#" class="jsDelete" data-replyid="{{replyId}}" >{{deleteMessage}}</a>' +
+        '<a href="#" class="jsDeleteLink" data-replyid="{{replyId}}" >{{deleteMessage}}</a>' +
       '</div>';
 
   templates.replyAction =
@@ -269,10 +269,10 @@
         { allFilter: constants.filter.all,
           allMessage: prefs.getMsg('label.activities.filter.all'),
           discussionsFilter: constants.filter.discussions,
-          discussionsMessage: prefs.getMsg('label.activities.filter.discussions'),
+          discussionsMessage: prefs.getMsg('label.activities.filter.messages'),
           eventsFilter: constants.filter.events,
           eventsMessage: prefs.getMsg('label.activities.filter.events'),
-          postMessage: prefs.getMsg('label.post.message')
+          postMessage: prefs.getMsg('label.write.message')
         });
     $(htmlContent).insertBefore('#wall');
   }
@@ -311,7 +311,7 @@
       var likesCount = $(this).attr('data-likescount');
       var userLikeStatus = $(this).attr('data-userlikestatus');
       var actions = $(this).find('div.jsActions');
-      addActivityLikeStatusHtml($(this), actions, activityId, likesCount, userLikeStatus);
+      addActivityLikeStatusHtml(actions, activityId, likesCount, userLikeStatus);
     });
 
     $('div[data-replyid][data-likescount]').each(function() {
@@ -319,12 +319,12 @@
       var likesCount = $(this).attr('data-likescount');
       var userLikeStatus = $(this).attr('data-userlikestatus');
       var actions = $(this).find('div.jsReplyActions');
-      addActivityLikeStatusHtml($(this), actions, replyId, likesCount, userLikeStatus);
+      addActivityLikeStatusHtml(actions, replyId, likesCount, userLikeStatus);
     });
   }
 
-  function addActivityLikeStatusHtml(activityOrReply, actions, activityId, likesCount, userLikeStatus) {
-    activityOrReply.find('.jsLike').remove();
+  function addActivityLikeStatusHtml(actions, activityId, likesCount, userLikeStatus) {
+    actions.find('.jsLike').remove();
 
     var likeImageURL = userLikeStatus == 1
         ? NXGadgetContext.clientSideBaseUrl + 'icons/like_active.png'
@@ -333,9 +333,9 @@
     var htmlContent = Mustache.render(templates.likeAction,
         { likeImageURL: likeImageURL, likesCount: likesCount });
 
-    var deleteLink = $(activityOrReply).find('a.jsDelete');
-    if (deleteLink.length > 0) {
-      $(htmlContent).insertAfter(deleteLink);
+    var deleteAction = $(actions).find('.jsDelete');
+    if (deleteAction.length > 0) {
+      $(htmlContent).insertAfter(deleteAction);
     } else {
       actions.prepend(htmlContent);
     }
@@ -431,13 +431,13 @@
     // activities
     $('div.jsMainActivity[data-activityid]').each(function() {
       var activityId = $(this).attr('data-activityid');
-      var likeIcon = $(this).find('.jsLikeIcon');
+      var likeIcon = $(this).find('.jsActions .jsLikeIcon');
       registerLikeStatusHandlerFor(activityId, likeIcon);
     });
     // replies
     $('div[data-replyid]').each(function() {
       var replyId = $(this).attr('data-replyid');
-      var likeIcon = $(this).find('.jsLikeIcon');
+      var likeIcon = $(this).find('.jsReplyActions .jsLikeIcon');
       registerLikeStatusHandlerFor(replyId, likeIcon);
     });
   }
@@ -463,9 +463,9 @@
               $(this).attr('data-likescount', likeStatus.likesCount);
               $(this).attr('data-userlikestatus', likeStatus.userLikeStatus);
               var actions = $(this).find('div.jsActions');
-              addActivityLikeStatusHtml($(this), actions, activityId,
+              addActivityLikeStatusHtml(actions, activityId,
                 likeStatus.likesCount, likeStatus.userLikeStatus);
-              registerLikeStatusHandlerFor(activityId, $(this).find('.jsLikeIcon'));
+              registerLikeStatusHandlerFor(activityId, actions.find('.jsLikeIcon'));
             });
           } else {
             // reply
@@ -473,9 +473,9 @@
               $(this).attr('data-likescount', likeStatus.likesCount);
               $(this).attr('data-userlikestatus', likeStatus.userLikeStatus);
               var actions = $(this).find('div.jsReplyActions');
-              addActivityLikeStatusHtml($(this), actions, activityId,
+              addActivityLikeStatusHtml(actions, activityId,
                 likeStatus.likesCount, likeStatus.userLikeStatus);
-              registerLikeStatusHandlerFor(activityId, $(this).find('.jsLikeIcon'));
+              registerLikeStatusHandlerFor(activityId, actions.find('.jsLikeIcon'));
             });
           }
         }
@@ -485,8 +485,8 @@
   }
 
   function registerDeleteLinksHandler() {
-    $('a.jsDelete[data-activityid]').click(function() {
-      if (!confirmDeleteMiniMessage()) {
+    $('a.jsDeleteLink[data-activityid]').click(function() {
+      if (!confirmDeleteMessage()) {
         return false;
       }
 
@@ -494,14 +494,14 @@
       removeMiniMessage(activityId);
     });
 
-    $('a.jsDelete[data-replyid]').each(function() {
+    $('a.jsDeleteLink[data-replyid]').each(function() {
       handleDeleteActivityReply($(this));
     });
   }
 
   function handleDeleteActivityReply(deleteLink) {
     deleteLink.click(function() {
-      if (!confirmDeleteMiniMessage()) {
+      if (!confirmDeleteReply()) {
         return false;
       }
 
@@ -541,7 +541,7 @@
       var writeButton = $(this).find('.jsWriteActivityReplyButton');
       writeButton.attr('data-activityid', activityId);
       writeButton.click(function() {
-        if ($(this).siblings('.jsActivityReplyText').val().length > 0) {
+        if (newActivityReply.find('textarea.jsActivityReplyText').val().length > 0) {
           createActivityReply(newActivityReply);
         }
       });
@@ -609,8 +609,8 @@
     doAutomationRequest(opCallParameters);
   }
 
-  function confirmDeleteMiniMessage() {
-    return confirm(prefs.getMsg('label.mini.message.confirmDelete'));
+  function confirmDeleteMessage() {
+    return confirm(prefs.getMsg('label.wall.message.confirmDelete'));
   }
 
   function removeMiniMessage(miniMessageId) {
@@ -674,14 +674,17 @@
           var likesCount = $(this).attr('data-likescount');
           var userLikeStatus = $(this).attr('data-userlikestatus');
           var replyActions = $(this).find('div.jsReplyActions');
-          addActivityLikeStatusHtml($(this), replyActions, replyId, likesCount, userLikeStatus);
+          addActivityLikeStatusHtml(replyActions, replyId, likesCount, userLikeStatus);
+          registerLikeStatusHandlerFor(replyId, replyActions.find('.jsLikeIcon'));
 
           // delete link
           var allowDeletion = $(this).attr('data-allowdeletion');
           if (allowDeletion) {
             $(this).removeAttr('data-allowdeletion');
+            var deleteImageURL = NXGadgetContext.clientSideBaseUrl + 'icons/delete.png'
             var htmlContent = Mustache.render(templates.deleteActivityReplyAction,
-                { replyId: replyId, deleteMessage: prefs.getMsg('command.delete') });
+                { replyId: replyId, deleteImageURL: deleteImageURL,
+                  deleteMessage: prefs.getMsg('command.delete') });
             replyActions.prepend(htmlContent);
 
             replyActions.find('a[data-replyid="' + replyId + '"]').each(function() {
@@ -693,6 +696,10 @@
       }
     };
     doAutomationRequest(opCallParameters);
+  }
+
+  function confirmDeleteReply() {
+    return confirm(prefs.getMsg('label.wall.reply.confirmDelete'));
   }
 
   function removeActivityReply(activityId, replyId) {
