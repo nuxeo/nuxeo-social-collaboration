@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.activity.ActivityMessage;
@@ -47,6 +48,7 @@ import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
@@ -80,6 +82,9 @@ public class GetWallActivityStream {
     @Param(name = "document", required = false)
     protected DocumentModel doc;
 
+    @Param(name = "contextPath", required = false)
+    protected String contextPath;
+
     @Param(name = "language", required = false)
     protected String language;
 
@@ -98,6 +103,12 @@ public class GetWallActivityStream {
         Long targetLimit = null;
         if (limit != null) {
             targetLimit = limit.longValue();
+        }
+
+        if (doc == null && !StringUtils.isBlank(contextPath)) {
+            doc = session.getDocument(new PathRef(contextPath));
+            // assume we are on a Social workspace
+            activityStreamName = "socialWorkspaceWallActivityStream";
         }
 
         Locale locale = language != null && !language.isEmpty() ? new Locale(

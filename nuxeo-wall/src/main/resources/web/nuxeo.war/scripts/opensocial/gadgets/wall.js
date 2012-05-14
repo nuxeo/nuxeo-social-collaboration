@@ -138,6 +138,22 @@
 
   var docId = prefs.getString("docId");
   var activityStreamName = prefs.getString("activityStreamName");
+  var documentContextPath = prefs.getString("nuxeoTargetContextPath");
+
+  var wallOperationParams;
+  if (docId !== 'undefined' && docId.length > 0) {
+    wallOperationParams = {
+      language: prefs.getLang(),
+      document: docId,
+      activityStreamName: activityStreamName
+    }
+  } else {
+    wallOperationParams = {
+      language: prefs.getLang(),
+      contextPath: documentContextPath,
+      activityStreamName: activityStreamName
+    }
+  }
 
   var currentActivities = [];
   var waitingActivities = [];
@@ -152,11 +168,7 @@
   function loadWallActivityStream() {
     var NXRequestParams = {
       operationId: 'Services.GetWallActivityStream',
-      operationParams: {
-        language: prefs.getLang(),
-        document: docId,
-        activityStreamName: activityStreamName
-      },
+      operationParams: wallOperationParams,
       operationContext: {},
       operationCallback: function(response, params) {
         currentActivities = response.data.activities;
@@ -170,11 +182,7 @@
 
   function pollWallActivityStream() {
     var NXRequestParams= { operationId : 'Services.GetWallActivityStream',
-      operationParams: {
-        language: prefs.getLang(),
-        document: docId,
-        activityStreamName: activityStreamName
-      },
+      operationParams: wallOperationParams,
       operationContext: {},
       operationCallback: function(response, params) {
         var newActivities = response.data.activities;
@@ -724,12 +732,7 @@
 
   function showMoreActivities() {
     var NXRequestParams= { operationId : 'Services.GetWallActivityStream',
-      operationParams: {
-        language: prefs.getLang(),
-        document: docId,
-        activityStreamName: activityStreamName,
-        offset: offset
-      },
+      operationParams: wallOperationParams,
       operationContext: {},
       operationCallback: function(response, params) {
         var newActivities = response.data.activities;
