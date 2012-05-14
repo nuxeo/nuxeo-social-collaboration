@@ -13,14 +13,6 @@
       <event>documentRemoved</event>
     </listener>
 
-    <listener name="socialWorkspaceActivityListener" async="false"
-      postCommit="false"
-      class="org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceActivityListener"
-      priority="150">
-      <event>documentCreated</event>
-      <event>documentModified</event>
-    </listener>
-
     <listener name="initializeSocialWorkspaceDashboardsListener" async="false"
       postCommit="false"
       class="org.nuxeo.ecm.social.workspace.listeners.InitializeSocialWorkspaceDashboardsListener"

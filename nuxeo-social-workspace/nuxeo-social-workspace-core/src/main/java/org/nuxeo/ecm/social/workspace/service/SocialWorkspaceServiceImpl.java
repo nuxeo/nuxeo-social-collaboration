@@ -45,10 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletRequest;
-
-import com.sun.faces.config.WebConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -78,10 +74,8 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.computedgroups.ComputedGroupsService;
-import org.nuxeo.ecm.platform.ui.web.util.BaseURL;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.platform.web.common.ServletHelper;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -415,7 +409,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             }
 
             if (socialWorkspace.shouldRequestSubscription(principal)) {
-                // Pass false to admin validation as only admins can bulk add users
+                // Pass false to admin validation as only admins can bulk add
+                // users
                 handleSubscriptionRequest(socialWorkspace, principal, true);
                 importedUsers.add(userName);
                 importedPrincipal.add(principal);
@@ -455,7 +450,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             NuxeoPrincipal principal = userManager.getPrincipal(foundUsers.get(
                     0).getId());
             if (socialWorkspace.shouldRequestSubscription(principal)) {
-                // Pass false to admin validation as only admins can bulk add users
+                // Pass false to admin validation as only admins can bulk add
+                // users
                 handleSubscriptionRequest(socialWorkspace, principal, true);
                 memberAddedList.add(email);
                 principalAdded.add(principal);
@@ -472,14 +468,16 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             SocialWorkspace socialWorkspace, RelationshipKind kind) {
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument());
         Activity activity = new ActivityBuilder().actor(
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayActor(
-                socialWorkspace.getTitle()).verb(kind.toString()).object(
-                ActivityHelper.createUserActivityObject(principal.getName())).displayObject(
-                ActivityHelper.generateDisplayName(principal)).target(
+                ActivityHelper.createUserActivityObject(principal.getName())).displayActor(
+                ActivityHelper.generateDisplayName(principal)).verb(
+                kind.toString()).object(
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayObject(
+                socialWorkspace.getTitle()).target(
                 socialWorkspaceActivityObject).displayTarget(
-                socialWorkspace.getTitle()).build();
-        Framework.getLocalService(ActivityStreamService.class).addActivity(
-                activity);
+                socialWorkspace.getTitle()).context(
+                socialWorkspaceActivityObject).build();
+        ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
+        activityStreamService.addActivity(activity);
     }
 
     @Override

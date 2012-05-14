@@ -19,6 +19,7 @@
     <module>nuxeo-user-relationship</module>
     <module>nuxeo-mini-message</module>
     <module>nuxeo-user-activity-stream</module>
+    <module>nuxeo-wall</module>
   </modules>
 
   <repositories>
