@@ -1,5 +1,7 @@
-<div>
-  <script type="text/javascript" >
+<#list This.getComments(doc) as comment>
+  <#include "@bricks/document_comments">
+</#list>
+<script type="text/javascript">
     $(document).ready(function()
       {
         //Activate comment box toggle effect
@@ -10,8 +12,4 @@
         $("#slide"+id).style.display = true;
         return false;
       });});
-  </script>
-  <#list This.getComments(doc) as comment>
-    <#include "@bricks/document_comments">
-  </#list>
-</div>
+</script>

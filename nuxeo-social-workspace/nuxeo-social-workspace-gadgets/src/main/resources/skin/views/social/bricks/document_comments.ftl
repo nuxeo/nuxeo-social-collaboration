@@ -19,13 +19,11 @@
           <input type="submit" value=" Comment " />
       </form>
     </div>
-  <td>
+  </td>
 </tr>
-<tr>
-  <#assign commentChildren = This.getCommentChildren(doc,comment)>
-  <#if commentChildren??>
-    <#list commentChildren as comment>
-      <#include "@bricks/document_comments">
-    </#list>
-  </#if>
-</tr>
+<#assign commentChildren = This.getCommentChildren(doc,comment)>
+<#if commentChildren??>
+  <#list commentChildren as comment>
+    <#include "@bricks/document_comments">
+  </#list>
+</#if>
