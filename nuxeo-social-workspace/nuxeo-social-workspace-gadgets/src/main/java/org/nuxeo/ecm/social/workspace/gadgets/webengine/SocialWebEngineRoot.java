@@ -573,6 +573,19 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return comments;
     }
 
+    @GET
+    @Path("documentCommentList")
+    public Object documentCommentList(@QueryParam("docRef")
+    String ref) throws Exception {
+        // build freemarker arguments map
+        Map<String, Object> args = new HashMap<String, Object>();
+        CoreSession session = ctx.getCoreSession();
+        IdRef docRef = new IdRef(ref);
+        DocumentModel doc = session.getDocument(docRef);
+        args.put("doc", doc);
+        return getView("document_comments_template").args(args);
+    }
+
     public List<DocumentModel> getCommentChildren(DocumentModel doc,
             DocumentModel parent) throws ClientException {
         // Load all comment children of the document doc

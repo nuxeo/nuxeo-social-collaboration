@@ -9,7 +9,13 @@
       <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${nextPage})" id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
       <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
   </div>
-
+  <script type="text/javascript" >
+      $(document).ready(function(){
+	    for (i=0;i<listDocIds.length;i++){
+          Library.documentCommentList(listDocIds[i]);
+		}
+      });
+  </script>
   <table class="dataList">
     <thead>
       <tr>
@@ -20,8 +26,9 @@
         <th>&nbsp;</th>
       </tr>
     </thead>
+	<trBody>
     <#list docs as doc>
-    <tr>
+    <tr id="${doc.id}">
       <td><img src="${contextPath}${doc["common:icon"]}" alt="icon"/></td>
       <#if doc.isFolder>
         <td><a href="javascript: Library.documentList('${doc.id}')" class="navigation">${doc.title?xml}</a></td>
@@ -69,10 +76,13 @@
         </a>
       </td>
     </tr>
-    <#if (!doc.isFolder)>
-      <#include "@bricks/document_comments_template">
-    </#if>
+	<#if (!doc.isFolder)>
+    <script type="text/javascript" >
+        listDocIds.push('${doc.id}');
+    </script>
+    </#if> 
     </#list>
+	</trBody>
   </table>
   </#if>
 </div>

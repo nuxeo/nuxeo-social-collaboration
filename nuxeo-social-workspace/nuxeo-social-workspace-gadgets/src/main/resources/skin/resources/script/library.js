@@ -2,6 +2,10 @@ var Library = {};
 
 var isGadget = true;
 
+var currentDocRef = "";
+
+var listDocIds = [];
+
 try {
     var prefs = new gadgets.Prefs();
 } catch (error) {
@@ -220,7 +224,33 @@ Library.addPopupBoxTo = function (a) {
 
 // called when gadget is load first time
 Library.loadInitialContent = function () {
-    Library.documentList(getTargetContextPath());
+    Library.documentList(ContextManagement.getTargetContextPath());
+}
+
+// called when document is ready, loads document comments
+Library.documentCommentList = function (docRef) {
+    data = Library.loadContext();
+    // set new value of docRef
+    data.docRef = docRef;
+    // set global value of current doc ref
+    currentDocRef = docRef;
+    if (isGadget) {
+        jQuery.post(Library.getBasePath() + '/' + "documentCommentList", data, Library.commentLoadedHandler);
+    } else {
+        jQuery.ajax({
+            url: "documentCommentList",
+            type: "GET",
+            data: data,
+            async: false,
+            success: Library.commentLoadedHandler
+        });
+    }
+}
+
+// DocumentCommentList ajax call success method
+Library.commentLoadedHandler = function (response) {
+    // set comments after related doc row
+    $("#" + currentDocRef).after(response);
 }
 
 Library.isEmpty = function (s) {
