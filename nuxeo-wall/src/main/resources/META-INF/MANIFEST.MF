@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Nuxeo Wall
+Bundle-SymbolicName: org.nuxeo.ecm.wall;singleton:=true
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Nuxeo-Component: OSGI-INF/activity-stream-contrib.xml,
+ OSGI-INF/operations-contrib.xml,
+ OSGI-INF/pageproviders-contrib.xml,
+ OSGI-INF/gadgets-contrib.xml,
+ OSGI-INF/actions-contrib.xml,
+ OSGI-INF/theme-contrib.xml

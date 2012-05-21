@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2011 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2006-2012 Nuxeo SA (http://nuxeo.com/) and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
@@ -15,10 +15,9 @@
  *     Thomas Roger <troger@nuxeo.com>
  */
 
-package org.nuxeo.ecm.social.workspace.gadgets;
+package org.nuxeo.ecm.wall;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -34,24 +33,21 @@ import org.nuxeo.ecm.activity.ActivityStream;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
-import org.nuxeo.ecm.social.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.relationship.service.RelationshipService;
-import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.5
+ * @since 5.6
  */
-public class SocialWorkspaceActivityStreamFilter implements
-        ActivityStreamFilter {
+public class WallActivityStreamFilter implements ActivityStreamFilter {
 
-    public static final String ID = "SocialWorkspaceActivityStreamFilter";
+    public static final String ID = "WallActivityStreamFilter";
 
-    public static final String REPOSITORY_NAME_PARAMETER = "repositoryName";
+    public static final String DEFAULT_WALL_ACTIVITY_STREAM_NAME = "defaultWallActivityStream";
 
-    public static final String SOCIAL_WORKSPACE_ID_PARAMETER = "socialWorkspaceId";
+    public static final String CONTEXT_DOCUMENT_PARAMETER = "contextDocumentParameter";
 
-    public static final String SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME = "socialWorkspaceActivityStream";
+    public static final String ACTIVITY_STREAM_PARAMETER = "activityStreamParameter";
 
     @Override
     public String getId() {
@@ -76,34 +72,32 @@ public class SocialWorkspaceActivityStreamFilter implements
         // nothing for now
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public ActivitiesList query(ActivityStreamService activityStreamService,
             Map<String, Serializable> parameters, long offset, long limit) {
-        String repositoryName = (String) parameters.get(REPOSITORY_NAME_PARAMETER);
-        if (repositoryName == null) {
-            throw new IllegalArgumentException(REPOSITORY_NAME_PARAMETER
+        DocumentModel doc = (DocumentModel) parameters.get(CONTEXT_DOCUMENT_PARAMETER);
+        if (doc == null) {
+            throw new IllegalArgumentException(CONTEXT_DOCUMENT_PARAMETER
                     + " is required");
         }
+        String docActivityObject = ActivityHelper.createDocumentActivityObject(doc);
 
-        String socialWorkspaceId = (String) parameters.get(SOCIAL_WORKSPACE_ID_PARAMETER);
-        if (socialWorkspaceId == null) {
-            throw new IllegalArgumentException(SOCIAL_WORKSPACE_ID_PARAMETER
-                    + " is required");
+        String activityStreamName = (String) parameters.get(ACTIVITY_STREAM_PARAMETER);
+        if (activityStreamName == null) {
+            activityStreamName = DEFAULT_WALL_ACTIVITY_STREAM_NAME;
         }
-
-        ActivityStream socialWorkspaceActivityStream = activityStreamService.getActivityStream(SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME);
-        List<String> verbs = socialWorkspaceActivityStream.getVerbs();
-
-        String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
-                repositoryName, socialWorkspaceId);
+        ActivityStream wallActivityStream = activityStreamService.getActivityStream(activityStreamName);
+        List<String> verbs = wallActivityStream.getVerbs();
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
-        Query query;
-        query = em.createQuery("select activity from Activity activity where activity.verb in (:verbs) "
-                + "and activity.context = :context order by activity.publishedDate desc");
-        query.setParameter("context", socialWorkspaceActivityObject);
+        Query query = em.createQuery("select activity from Activity activity "
+                + "where activity.context = :context "
+                + "and activity.verb in (:verbs) "
+                + "and activity.actor like :actor "
+                + "order by activity.publishedDate desc");
+        query.setParameter("context", docActivityObject);
         query.setParameter("verbs", verbs);
+        query.setParameter("actor", "user:%");
 
         if (limit > 0) {
             query.setMaxResults((int) limit);
@@ -113,5 +107,4 @@ public class SocialWorkspaceActivityStreamFilter implements
         }
         return new ActivitiesListImpl(query.getResultList());
     }
-
 }

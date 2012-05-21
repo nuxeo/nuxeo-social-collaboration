@@ -1,0 +1,223 @@
+/* Gadget Common CSS */
+html, body {}
+body { font: normal 11px 'Lucida Grande', Verdana, Arial, sans-serif }
+body, td, div, span, p { font-family: 'Lucida Grande', Verdana, Arial, sans-serif }
+
+p, div, table { margin: 0; padding: 0 }
+
+a:link { color: #519eec; text-decoration: none }
+a:hover { text-decoration: underline }
+
+img { border: none }
+
+button {
+  line-height: 100%;
+  cursor: pointer;
+  color: #333;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.1em 0.5em 0.2em;
+  margin:.5em 1em .5em 0;
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
+  -webkit-border-radius: .3em;
+  -moz-border-radius: .3em;
+  border-radius: .3em;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    border: solid 1px #da7c0c;
+    background: -moz-linear-gradient(top, #ffffff 0%, #eaeaea 100%) #f1f2f3;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#eaeaea)) #f1f2f3;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f1f2f3');
+}
+
+#content { padding: .5em; overflow: auto }
+
+.tools { background-color: #f7f7f7; padding: .5em }
+
+#nxDocumentList { width:98%; margin:0 auto }
+
+.fullScale { font-size: 125% }
+
+/* Form elements /
+textarea { border: 1px solid #bbb;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px #e0e0e0 inset;
+    color: #666;
+    display: inline-block;
+    font-family: 'Lucida Grande',Arial,Helvetica,Geneva,sans-serif;
+    font-size: 1em;
+    line-height: 18px;
+    padding: .3em }
+
+/ Override GWT default values */
+iframe.gwt-Frame { overflow: auto!important; overflow-x: scroll!important }
+
+/* ======================================= */
+
+/* Wall CSS */
+
+.activitiesContainer {
+    margin:  3px 0;
+    font-size: 105%;
+}
+
+.activity {
+    margin:    0 0 5px;
+}
+
+.timestamp {
+    float: left;
+    color: #999;
+}
+
+.activityMessage { margin: 0 0 0 8em }
+
+.newActivitiesBar {
+    background-color: #F2F7FC;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    color: #0066CC;
+    cursor: pointer;
+    padding: 3px;
+    margin: 1px 0 6px;
+    text-align: center;
+}
+
+.moreActivitiesBar {
+    background-color: #F3F3F3;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    color: #999;
+    cursor: pointer;
+    padding: 3px;
+    margin: .6em 0 .3em;
+    text-align: center;
+}
+.noMore {
+    background-color: #fff;
+    cursor: default;
+}
+
+/* Style for fullScale gadget */
+.fullScale .activity { border-bottom: 1px solid #ddd; margin: 0; padding: .7em .5em .8em }
+
+
+.miniMessage { border-bottom: 1px solid #ededed; font-size: 110% }
+.miniMessage .container { border-radius: 5px, padding: .4em .3em .6em }
+
+.miniMessage .container:hover { background-color: #e6f1ff }
+
+.username { font-weight: bold; margin-right: .5em }
+
+.timestamp { color: #999 }
+
+.message { clear: both; padding: .2em 0 .4em }
+
+.username a { color: #519eec; }
+.owner .username a { color: #000; }
+
+.newMiniMessagesBar {
+    background-color: #F2F7FC;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #0066CC;
+    cursor: pointer;
+    padding: 3px;
+    margin: 1px 0 6px;
+    text-align: center;
+}
+
+.moreMiniMessagesBar {
+    background-color: #F3F3F3;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    color: #999;
+    cursor: pointer;
+    padding: 3px;
+    margin: 6px 0 0;
+    text-align: center;
+}
+.noMore {
+    background-color: #fff;
+    cursor: default;
+}
+
+img { border: none }
+
+#newMiniMessage { text-align: center }
+
+.newMiniMessageForm { text-align: center }
+.newMiniMessageForm textarea { font-size: 1.1em; font-weight: bold; margin: .5em 0 0; padding: .5em; width: 85% }
+.newMiniMessageForm .newMiniMessageActions { margin: 0 auto; padding: 0; text-align: right; width: 86% }
+
+.newMiniMessageActions .miniMessageCounter { color: #9A9A9A; font-size: 1.1em; font-weight: bold }
+.newMiniMessageActions .warning { color: #DE1A00; }
+
+.newMiniMessageActions input.button { background-color: #E7E7E7;
+    border: 1px solid #C9C9C9;
+    border-radius: 3px;
+    box-shadow: 0 10px 8px #FFFFFF inset;
+    color: #000000;
+    cursor: pointer;
+    font-size: .9em;
+    font-weight: bold;
+    margin: .4em 0 .9em .9em;
+    padding: .3em .7em;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 #fff;
+    white-space: nowrap }
+
+.container .deleteMiniMessage { display: none; float: right }
+.container:hover .deleteMiniMessage { display: block }
+.miniMessage .deleteMiniMessage a, .miniMessage .deleteMiniMessage a:link { color: #9a9a9a }
+
+/* Style for fullScale gadget */
+.fullScale .miniMessage { padding: .5em }
+.fullScale .newMiniMessageForm .newMiniMessageActions input.button { margin: .5em 0 1em 1em }
+
+/* Wall */
+.miniMessage .messageHeader { line-height: 2em }
+
+.miniMessage .avatar { float: left; height: 20px; margin: .1em .5em 0 0; width: 20px }
+.miniMessage .avatar img { max-width: 20px; max-height: 20px }
+
+.miniMessage .timestamp { float: none; font-size: 95%; margin-right: .5em }
+
+.container .actions { clear: both; font-size: 11px; margin: 0 0 .3em }
+.container:hover .actions { display: block }
+.container .actions a, .miniMessage .actions a:link { color: #9a9a9a }
+.miniMessage .actions a:hover { color: #519eec }
+
+.miniMessage .answers { font-size: 85%; padding: 0 0 0 2.5em }
+.miniMessage .answers .miniMessage { border-top: 1px dotted #ededed; border-bottom: none }
+
+.answers .miniMessage .message { display: inline; line-height: 150% }
+.answers .miniMessage .actions { }
+
+.miniMessage .event { margin-left: 2.5em }
+.miniMessage .event:after { clear: both }
+
+.owner .miniMessage a { color: #519eec }
+
+.actionItem { display: inline; margin-right: .5em }
+.actionItem img { margin: 0 .3em -0.2em -0.2em; cursor: pointer }
+
+.answers .messageBlock { border-top: 1px dotted #eee; padding: .5em 0 0 3em }
+.answers textarea { display: block; width: 90% }
+.answers .newMiniMessageActions { text-align: right; width: 90% }
+
+textarea:-moz-placeholder { color: #bbb }
+textarea::-webkit-input-placeholder { color: #bbb }
+
+.tabLine { border-bottom: 2px solid rgb(235, 235, 235); font-weight: bold; font-size: 120%; height: 40px; line-height: 40px; margin: 1em 0 }
+
+.tabLineLinks a, .tabLineLinks a:visited { color: #519eec; border-color: rgb(0, 0, 0); float: left; padding: 0 1em; text-decoration: none }
+.tabLineLinks a.selected, .tablineLinks a.hover { border-bottom: 2px solid rgb(0, 0, 0) }
+
+.tabLineButtons { float: right; padding: 0 .5em 0 0 }
+.tabLineButtons a.button, .tabLineButtons a.button:visited { border: 1px solid rgb(204, 204, 204); border-radius: 3px; color: #519eec; font-size: .9em; padding: .4em; text-decoration: none }
+.tabLineButtons a.button:hover { border-color: #519eec}
+
+.displayN { display: none; }
+.newMiniMessageActions input.disabled { background: #f6f6f6; border: 1px solid #e7e7e7; color: #bababa; cursor: default }

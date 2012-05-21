@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.wall.gadgets" version="1.0">
+
+  <extension target="org.nuxeo.opensocial.gadgets.service" point="gadget">
+
+    <internalGadget name="wall" disabled="false">
+      <mountPoint>/wall</mountPoint>
+      <entryPoint>wall.xml</entryPoint>
+      <category>Nuxeo</category>
+      <icon>gadget-wall.png</icon>
+    </internalGadget>
+
+  </extension>
+
+</component>

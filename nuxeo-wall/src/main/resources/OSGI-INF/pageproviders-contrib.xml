@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.wall.pageproviders">
+
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+    point="providers">
+
+    <genericPageProvider name="wall_activity_stream"
+      class="org.nuxeo.ecm.wall.WallActivityStreamPageProvider">
+      <pageSize>10</pageSize>
+    </genericPageProvider>
+
+  </extension>
+
+</component>

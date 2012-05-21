@@ -217,7 +217,8 @@ public class SocialDocumentAdapter implements SocialDocument {
                 ActivityHelper.createDocumentActivityObject(doc)).displayObject(
                 ActivityHelper.getDocumentTitle(doc)).target(
                 socialWorkspaceActivityObject).displayTarget(
-                socialWorkspace.getTitle()).build();
+                socialWorkspace.getTitle()).context(
+                socialWorkspaceActivityObject).build();
         activityStreamService.addActivity(activity);
     }
 

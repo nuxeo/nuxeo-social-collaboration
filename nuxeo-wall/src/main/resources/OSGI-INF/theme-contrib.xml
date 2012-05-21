@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.wall.theme">
+
+  <require>org.nuxeo.theme.nuxeo.default</require>
+
+  <extension target="org.nuxeo.theme.services.ThemeService" point="resources">
+    <resource name="gadget-wall.css">
+      <path>css/opensocial/gadgets/wall.css</path>
+    </resource>
+
+    <resource name="mustache.js">
+      <path>scripts/mustache.js</path>
+    </resource>
+    <resource name="gadget-wall.js">
+      <path>scripts/opensocial/gadgets/wall.js</path>
+    </resource>
+  </extension>
+
+</component>
