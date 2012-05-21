@@ -25,6 +25,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -61,6 +62,8 @@ import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.schema.TypeService;
 import org.nuxeo.ecm.platform.comment.api.CommentableDocument;
+import org.nuxeo.ecm.platform.comment.workflow.utils.CommentsConstants;
+import org.nuxeo.ecm.platform.comment.workflow.utils.FollowTransitionUnrestricted;
 import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
@@ -595,5 +598,51 @@ public class SocialWebEngineRoot extends ModuleRoot {
             comments = commentableDoc.getComments(parent);
         }
         return comments;
+    }
+
+    @POST
+    @Path("addComment")
+    public void addComment() throws ClientException {
+        try {
+            HttpServletRequest request = ctx.getRequest();
+            CoreSession session = ctx.getCoreSession();
+            // Create pending comment
+            DocumentModel myComment = session.createDocumentModel("Comment");
+            // Set comment properties
+            myComment.setProperty("comment", "author",
+                    ctx.getPrincipal().getName());
+            myComment.setProperty("comment", "text",
+                    request.getParameter("commentContent"));
+            myComment.setProperty("comment", "creationDate",
+                    Calendar.getInstance());
+            // Retrieve document to comment
+            String docToCommentRef = request.getParameter("docToCommentRef");
+            DocumentModel docToComment = session.getDocument(new IdRef(
+                    docToCommentRef));
+            String commentParentRef = request.getParameter("commentParentRef");
+            // Create comment
+            CommentableDocument commentableDoc = null;
+            if (docToComment != null) {
+                commentableDoc = docToComment.getAdapter(CommentableDocument.class);
+            }
+            DocumentModel newComment;
+            if (commentParentRef != null) {
+                // if exists retrieve comment parent
+                DocumentModel commentParent = session.getDocument(new IdRef(
+                        commentParentRef));
+                newComment = commentableDoc.addComment(commentParent, myComment);
+            } else {
+                newComment = commentableDoc.addComment(myComment);
+            }
+            // automatically validate the comments
+            if (CommentsConstants.COMMENT_LIFECYCLE.equals(newComment.getLifeCyclePolicy())) {
+                new FollowTransitionUnrestricted(ctx.getCoreSession(),
+                        newComment.getRef(),
+                        CommentsConstants.TRANSITION_TO_PUBLISHED_STATE).runUnrestricted();
+            }
+        } catch (Throwable t) {
+            log.error("failed to add comment", t);
+            throw ClientException.wrap(t);
+        }
     }
 }

@@ -14,9 +14,11 @@
   <td/>
   <td>
     <div class='panel' id="slide${comment.id}" style="display:none">
-      <form action="" method="post">
-        <textarea style="width:390px;height:23px; border:1px solid #999999;"></textarea><br />
-          <input type="submit" value=" Comment " />
+      <form name="addComment" method="POST" action="${This.path}/addComment" accept-charset="utf-8">
+        <textarea name="commentContent" style="width:390px;height:23px; border:1px solid #999999;"></textarea><br />
+        <input type="hidden" name="docToCommentRef" value="${doc.id}" />
+        <input type="hidden" name="commentParentRef" value="${comment.id}" />
+        <input type="submit" value="Comment" />
       </form>
     </div>
   </td>
