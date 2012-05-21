@@ -4,6 +4,8 @@ var isGadget = true;
 
 var currentDocRef = "";
 
+var currentCommentRef = "";
+
 var listDocIds = [];
 
 try {
@@ -258,4 +260,32 @@ Library.isEmpty = function (s) {
 }
 if (isGadget) {
     gadgets.util.registerOnLoadHandler(Library.loadInitialContent);
+}
+
+Library.addComment = function (docToCommentRef,commentParentRef){
+// set data
+data.docToCommentRef = docToCommentRef;
+data.commentParentRef = commentParentRef;
+// retrieve comment content
+data.commentContent = $("#commentContent_"+commentParentRef).val();
+// set global value of parent comment ref
+currentCommentRef = commentParentRef;
+// Ajax request
+if (isGadget) {
+        jQuery.post(Library.getBasePath() + '/' + "addComment", data, Library.addNewUIComment);
+    } else {
+        jQuery.ajax({
+            url: "addComment",
+            type: "POST",
+            data: data,
+            async: false,
+            success: Library.addNewUIComment
+        });
+    }
+}
+
+//Rerender current document comments
+Library.addNewUIComment = function(response){
+  // set new ui comment
+  $("tr."+currentCommentRef).after(response);
 }

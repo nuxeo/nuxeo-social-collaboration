@@ -19,8 +19,8 @@
         $(".comment_button").click(function(){
           var element = $(this);
           var id = element.attr("id");
-          $("#slide"+id).slideToggle(300);
-          $("#slide"+id).style.display = true;
+          $("#box_"+id).slideToggle(300);
+          $("#box_"+id).style.display = true;
           return false;
         });
         // Display

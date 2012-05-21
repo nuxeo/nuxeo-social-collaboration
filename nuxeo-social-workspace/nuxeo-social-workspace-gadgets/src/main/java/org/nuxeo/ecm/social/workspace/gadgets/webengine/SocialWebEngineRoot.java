@@ -600,9 +600,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return comments;
     }
 
+    /**
+     * Add comment to the related document and parent comment
+     */
     @POST
     @Path("addComment")
-    public void addComment() throws ClientException {
+    public Object addComment() throws ClientException {
         try {
             HttpServletRequest request = ctx.getRequest();
             CoreSession session = ctx.getCoreSession();
@@ -640,6 +643,11 @@ public class SocialWebEngineRoot extends ModuleRoot {
                         newComment.getRef(),
                         CommentsConstants.TRANSITION_TO_PUBLISHED_STATE).runUnrestricted();
             }
+            // Return the new comment view
+            Map<String, Object> args = new HashMap<String, Object>();
+            args.put("doc", docToComment);
+            args.put("comment", newComment);
+            return getView("bricks/document_comments").args(args);
         } catch (Throwable t) {
             log.error("failed to add comment", t);
             throw ClientException.wrap(t);

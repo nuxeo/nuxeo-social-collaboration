@@ -9,17 +9,13 @@
     <a href="#" id="${comment.id}" class="comment_button">Answer</a>
   </td>
 </tr>
-<tr>
+<tr class="${comment.id}">
   <td/>
   <td/>
   <td>
-    <div class='panel' id="slide${comment.id}" style="display:none">
-      <form name="addComment" method="POST" action="${This.path}/addComment" accept-charset="utf-8">
-        <textarea name="commentContent" style="width:390px;height:23px; border:1px solid #999999;"></textarea><br />
-        <input type="hidden" name="docToCommentRef" value="${doc.id}" />
-        <input type="hidden" name="commentParentRef" value="${comment.id}" />
-        <input type="submit" value="Comment" />
-      </form>
+    <div class='panel' id="box_${comment.id}" style="display:none">
+        <textarea id="commentContent_${comment.id}" style="width:390px;height:23px; border:1px solid #999999;"></textarea><br/>
+        <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','${comment.id}')"/>
     </div>
   </td>
 </tr>
