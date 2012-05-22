@@ -3,6 +3,7 @@
     <#assign comments = This.getComments(doc)>
     <a href="#" id="${doc.id}" class="comment_display_button">Show ${comments?size} threads</a>
     <a href="#" id="${doc.id}" class="root_comment_button">Comment</a>
+	<a href="#" id="like_${doc.id}" onclick="Library.docLike('${doc.id}');" class="like_link">${This.getLikeStatus(doc)}</a>
     <div class='panel' id="box_comment_${doc.id}" style="display:none">
         <textarea id="rootCommentContent_${doc.id}" style="width:390px;height:23px; border:1px solid #999999;"></textarea><br/>
         <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','#rootCommentContent_${doc.id}')"/>

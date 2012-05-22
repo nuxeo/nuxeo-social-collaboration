@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -68,6 +69,7 @@ import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
+import org.nuxeo.ecm.rating.api.LikeService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
@@ -651,6 +653,43 @@ public class SocialWebEngineRoot extends ModuleRoot {
         } catch (Throwable t) {
             log.error("failed to add comment", t);
             throw ClientException.wrap(t);
+        }
+    }
+
+    /**
+     * Like/Unlike the related document
+     */
+    @POST
+    @Path("docLike")
+    public String docLike(@FormParam("docRef")
+    String docRef) throws Exception {
+        // Get document
+        CoreSession session = ctx.getCoreSession();
+        DocumentModel docToLike = session.getDocument(new IdRef(docRef));
+        // Get Like Services
+        LikeService LikeService = Framework.getLocalService(LikeService.class);
+        // Get user name
+        String userName = ctx.getPrincipal().getName();
+        if (LikeService.hasUserLiked(userName, docToLike)) {
+            LikeService.dislike(userName, docToLike);
+            return getLikeStatus(docToLike);
+        } else {
+            LikeService.like(userName, docToLike);
+            return getLikeStatus(docToLike);
+        }
+    }
+
+    /**
+     * Return like status (Likes number / if current user likes)
+     */
+    public String getLikeStatus(DocumentModel doc) {
+        LikeService LikeService = Framework.getLocalService(LikeService.class);
+        String userName = ctx.getPrincipal().getName();
+        long nbLikes = LikeService.getLikesCount(doc);
+        if (LikeService.hasUserLiked(userName, doc)) {
+            return "Unlike (" + String.valueOf(nbLikes) + ")";
+        } else {
+            return "Like (" + String.valueOf(nbLikes) + ")";
         }
     }
 }

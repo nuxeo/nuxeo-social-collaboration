@@ -262,6 +262,7 @@ if (isGadget) {
     gadgets.util.registerOnLoadHandler(Library.loadInitialContent);
 }
 
+// Add Comment action handler
 Library.addComment = function (docToCommentRef, commentContent, commentParentRef) {
     // set data
     data.docToCommentRef = docToCommentRef;
@@ -288,10 +289,37 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
 
 //Rerender current document comments
 Library.addNewUIComment = function (response) {
-    // set new ui comment
+    // set new ui comment depending if an answer or a thread
     if (currentCommentRef != undefined) {
+        //Answer
         $("tr." + currentCommentRef).after(response);
     } else {
+        //Thread
         $("#comments_list_" + currentDocRef).append(response);
     }
+}
+
+//Like action handler
+Library.docLike = function (docRef) {
+    // set data
+    data.docRef = docRef;
+    // set global value of current doc ref
+    currentDocRef = docRef;
+    // Ajax request
+    if (isGadget) {
+        jQuery.post(Library.getBasePath() + '/' + "docLike", data, Library.addNewUIComment);
+    } else {
+        jQuery.ajax({
+            url: "docLike",
+            type: "POST",
+            data: data,
+            async: false,
+            success: Library.addLikeUI
+        });
+    }
+}
+
+//Rerender document like number area
+Library.addLikeUI = function (response) {
+    $("a#like_" + currentDocRef).text(response);
 }
