@@ -731,8 +731,10 @@
   /* end activity replies */
 
   function showMoreActivities() {
+    var newParams = jQuery.extend(true, {}, wallOperationParams);
+    newParams.offset = offset;
     var NXRequestParams= { operationId : 'Services.GetWallActivityStream',
-      operationParams: wallOperationParams,
+      operationParams: newParams,
       operationContext: {},
       operationCallback: function(response, params) {
         var newActivities = response.data.activities;
