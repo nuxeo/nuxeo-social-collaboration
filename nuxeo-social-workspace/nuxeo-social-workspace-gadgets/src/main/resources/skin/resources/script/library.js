@@ -270,6 +270,8 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
     data.commentContent = $(commentContent).val();
     // set global value of parent comment ref
     currentCommentRef = commentParentRef;
+    // set global value of current doc ref
+    currentDocRef = docToCommentRef;
     // Ajax request
     if (isGadget) {
         jQuery.post(Library.getBasePath() + '/' + "addComment", data, Library.addNewUIComment);
@@ -287,5 +289,9 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
 //Rerender current document comments
 Library.addNewUIComment = function (response) {
     // set new ui comment
-    $("tr." + currentCommentRef).after(response);
+    if (currentCommentRef != undefined) {
+        $("tr." + currentCommentRef).after(response);
+    } else {
+        $("#comments_list_" + currentDocRef).append(response);
+    }
 }
