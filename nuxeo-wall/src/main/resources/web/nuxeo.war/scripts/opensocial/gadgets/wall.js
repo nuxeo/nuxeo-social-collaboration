@@ -140,19 +140,27 @@
   var activityStreamName = prefs.getString("activityStreamName");
   var documentContextPath = prefs.getString("nuxeoTargetContextPath");
 
-  var wallOperationParams;
+  var wallOperationParams, miniMessageOperationParams;
   if (docId !== 'undefined' && docId.length > 0) {
     wallOperationParams = {
       language: prefs.getLang(),
       document: docId,
       activityStreamName: activityStreamName
-    }
+    };
+    miniMessageOperationParams = {
+      language: prefs.getLang(),
+      document: docId
+    };
   } else {
     wallOperationParams = {
       language: prefs.getLang(),
       contextPath: documentContextPath,
       activityStreamName: activityStreamName
     }
+    miniMessageOperationParams = {
+      language: prefs.getLang(),
+      contextPath: documentContextPath
+    };
   }
 
   var currentActivities = [];
@@ -597,13 +605,11 @@
 
   function createMiniMessage() {
     var miniMessageText = $('textarea.jsMiniMessageText').val();
+    var newOperationParams = jQuery.extend(true, {}, miniMessageOperationParams);
+    newOperationParams.message = miniMessageText;
     var opCallParameters = {
       operationId: 'Services.AddMiniMessage',
-      operationParams: {
-        message: miniMessageText,
-        language: prefs.getLang(),
-        document: docId
-      },
+      operationParams: newOperationParams,
       entityType: 'blob',
       operationContext: {},
       operationCallback: function (response, opCallParameters) {
@@ -731,10 +737,10 @@
   /* end activity replies */
 
   function showMoreActivities() {
-    var newParams = jQuery.extend(true, {}, wallOperationParams);
-    newParams.offset = offset;
+    var newOperationParams = jQuery.extend(true, {}, wallOperationParams);
+    newOperationParams.offset = offset;
     var NXRequestParams= { operationId : 'Services.GetWallActivityStream',
-      operationParams: newParams,
+      operationParams: newOperationParams,
       operationContext: {},
       operationCallback: function(response, params) {
         var newActivities = response.data.activities;
