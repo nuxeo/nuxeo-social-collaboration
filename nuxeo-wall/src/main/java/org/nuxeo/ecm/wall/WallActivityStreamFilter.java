@@ -66,9 +66,17 @@ public class WallActivityStreamFilter implements ActivityStreamFilter {
     }
 
     @Override
+    @Deprecated
     public void handleRemovedActivities(
             ActivityStreamService activityStreamService,
             Collection<Serializable> activityIds) {
+        // nothing for now
+    }
+
+    @Override
+    public void handleRemovedActivities(
+            ActivityStreamService activityStreamService,
+            ActivitiesList activities) {
         // nothing for now
     }
 
