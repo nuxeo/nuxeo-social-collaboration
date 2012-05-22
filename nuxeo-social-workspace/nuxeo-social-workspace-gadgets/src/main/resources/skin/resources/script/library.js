@@ -262,12 +262,12 @@ if (isGadget) {
     gadgets.util.registerOnLoadHandler(Library.loadInitialContent);
 }
 
-Library.addComment = function (docToCommentRef, commentParentRef) {
+Library.addComment = function (docToCommentRef, commentContent, commentParentRef) {
     // set data
     data.docToCommentRef = docToCommentRef;
     data.commentParentRef = commentParentRef;
     // retrieve comment content
-    data.commentContent = $("#commentContent_" + commentParentRef).val();
+    data.commentContent = $(commentContent).val();
     // set global value of parent comment ref
     currentCommentRef = commentParentRef;
     // Ajax request

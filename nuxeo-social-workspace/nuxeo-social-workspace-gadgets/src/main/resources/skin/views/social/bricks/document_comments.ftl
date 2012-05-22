@@ -15,7 +15,7 @@
   <td>
     <div class='panel' id="box_${comment.id}" style="display:none">
         <textarea id="commentContent_${comment.id}" style="width:390px;height:23px; border:1px solid #999999;"></textarea><br/>
-        <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','${comment.id}')"/>
+        <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','#commentContent_${comment.id}','${comment.id}')"/>
     </div>
   </td>
 </tr>
