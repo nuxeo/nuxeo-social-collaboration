@@ -4,7 +4,7 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <action id="TAB_WORKSPACE_WALL" link="/incl/tabs/default_document_wall.xhtml" order="-10"
+    <action id="TAB_WORKSPACE_WALL" link="/incl/tabs/default_document_wall.xhtml" order="15"
       label="action.view.wall" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>showWorkspaceWall</filter-id>

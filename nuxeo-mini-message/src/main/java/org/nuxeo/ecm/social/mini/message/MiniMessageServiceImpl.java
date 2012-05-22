@@ -75,8 +75,9 @@ public class MiniMessageServiceImpl implements MiniMessageService {
 
     @Override
     public void removeMiniMessage(MiniMessage miniMessage) {
-        getActivityStreamService().removeActivities(
-                Collections.singleton(miniMessage.getId()));
+        ActivityStreamService activityStreamService = getActivityStreamService();
+        Activity activity = activityStreamService.getActivity(miniMessage.getId());
+        activityStreamService.removeActivities(Collections.singleton(activity));
     }
 
     @Override

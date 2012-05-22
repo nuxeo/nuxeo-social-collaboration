@@ -81,10 +81,17 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
     }
 
     @Override
+    @Deprecated
     public void handleRemovedActivities(
             ActivityStreamService activityStreamService,
             Collection<Serializable> activityIds) {
         // nothing to do
+    }
+
+    @Override
+    public void handleRemovedActivities(
+            ActivityStreamService activityStreamService,
+            ActivitiesList activities) {
     }
 
     @SuppressWarnings("unchecked")

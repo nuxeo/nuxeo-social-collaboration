@@ -98,21 +98,21 @@
       '</div>';
 
   templates.deleteActivityAction =
-      '<div class="actionItem jsDelete">' +
+      '<div class="actionItem jsDelete" data-activityid="{{activityId}}">' +
         '<img src="{{deleteImageURL}}" />' +
-        '<a href="#" class="jsDeleteLink" data-activityid="{{activityId}}">{{deleteMessage}}</a>' +
+        '<a href="#">{{deleteMessage}}</a>' +
       '</div>';
 
   templates.deleteActivityReplyAction =
-      '<div class="actionItem jsDelete">' +
+      '<div class="actionItem jsDelete" data-replyid="{{replyId}}">' +
         '<img src="{{deleteImageURL}}" />' +
-        '<a href="#" class="jsDeleteLink" data-replyid="{{replyId}}" >{{deleteMessage}}</a>' +
+        '<a href="#">{{deleteMessage}}</a>' +
       '</div>';
 
   templates.replyAction =
-      '<div class="actionItem">' +
+      '<div class="actionItem jsReply" data-activityid="{{activityId}}">' +
         '<img src="{{replyImageURL}}" />' +
-        '<a href="#" class="jsReply" data-activityid="{{activityId}}" >{{replyMessage}}</a>' +
+        '<a href="#">{{replyMessage}}</a>' +
       '</div>';
 
   templates.likeAction =
@@ -493,7 +493,7 @@
   }
 
   function registerDeleteLinksHandler() {
-    $('a.jsDeleteLink[data-activityid]').click(function() {
+    $('div.jsDelete[data-activityid]').click(function() {
       if (!confirmDeleteMessage()) {
         return false;
       }
@@ -502,7 +502,7 @@
       removeMiniMessage(activityId);
     });
 
-    $('a.jsDeleteLink[data-replyid]').each(function() {
+    $('div.jsDelete[data-replyid]').each(function() {
       handleDeleteActivityReply($(this));
     });
   }
@@ -695,7 +695,7 @@
                   deleteMessage: prefs.getMsg('command.delete') });
             replyActions.prepend(htmlContent);
 
-            replyActions.find('a[data-replyid="' + replyId + '"]').each(function() {
+            replyActions.find('div.jsDelete[data-replyid="' + replyId + '"]').each(function() {
               handleDeleteActivityReply($(this));
             });
           }

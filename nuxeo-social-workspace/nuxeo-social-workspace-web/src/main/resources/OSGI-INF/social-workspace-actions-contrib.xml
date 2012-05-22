@@ -271,13 +271,13 @@
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PRIVATE_DASHBOARD" link="/incl/tabs/social_workspace_private_dashboard.xhtml"
-            order="5" label="action.view.private.dashboard" icon="/icons/file.gif">
+            order="15" label="action.view.private.dashboard" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>social_workspace</filter-id>
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PUBLIC_DASHBOARD" link="/incl/tabs/social_workspace_public_dashboard.xhtml"
-            order="6" label="action.view.public.dashboard" icon="/icons/file.gif">
+            order="16" label="action.view.public.dashboard" icon="/icons/file.gif">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>manage_social_workspace</filter-id>
       <filter-id>social_workspace</filter-id>

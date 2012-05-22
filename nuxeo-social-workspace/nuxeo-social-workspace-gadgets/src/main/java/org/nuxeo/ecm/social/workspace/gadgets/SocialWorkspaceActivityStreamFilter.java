@@ -18,7 +18,6 @@
 package org.nuxeo.ecm.social.workspace.gadgets;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +33,6 @@ import org.nuxeo.ecm.activity.ActivityStream;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
-import org.nuxeo.ecm.social.relationship.RelationshipKind;
-import org.nuxeo.ecm.social.relationship.service.RelationshipService;
-import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
@@ -70,10 +66,17 @@ public class SocialWorkspaceActivityStreamFilter implements
     }
 
     @Override
+    @Deprecated
     public void handleRemovedActivities(
             ActivityStreamService activityStreamService,
             Collection<Serializable> activityIds) {
         // nothing for now
+    }
+
+    @Override
+    public void handleRemovedActivities(
+            ActivityStreamService activityStreamService,
+            ActivitiesList activities) {
     }
 
     @SuppressWarnings("unchecked")
