@@ -19,6 +19,10 @@
 </tr>
 <script type="text/javascript">
 $(document).ready(function () {
+    // Init comment display link
+    if(${comments?size}==0){
+        $(".comment_display_button").hide();
+    }
     // Activate comment box toggles
     // All comments display handler
     $(".comment_display_button").click(function () {

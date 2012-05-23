@@ -291,6 +291,8 @@ Library.addNewUIComment = function (response, status, jqXHR) {
         var id = jqXHR.getResponseHeader("docRef");
         // Rerender new comment
         $("#comments_list_" + id).append(response);
+        // Display comments list if first thread
+        $(".comment_display_button").show();
         // Display comments if not
         $("#display_" + id).slideToggle(300);
         // Close comment box
