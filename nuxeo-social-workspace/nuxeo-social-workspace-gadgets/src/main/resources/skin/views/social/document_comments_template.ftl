@@ -18,31 +18,37 @@
   </td>
 </tr>
 <script type="text/javascript">
-    $(document).ready(function()
-      {
-        // Activate comment box toggles
-        // All comments display handler
-        $(".comment_display_button").click(function(){
-          var element = $(this);
-          var id = element.attr("id");
-          $("#display_"+id).slideToggle(300);
-          $("#display_"+id).style.display = true;
-          return false;
-        });
-        // 'Comment' display handler
-        $(".root_comment_button").click(function(){
-          var element = $(this);
-          var id = element.attr("id");
-          $("#box_comment_"+id).slideToggle(300);
-          $("#box_comment_"+id).style.display = true;
-          return false;
-        });
-        // 'Answer' display handler
-        $(".comment_button").click(function(){
-          var element = $(this);
-          var id = element.attr("id");
-          $("#box_"+id).slideToggle(300);
-          $("#box_"+id).style.display = true;
-          return false;
-        });});
+$(document).ready(function () {
+    // Activate comment box toggles
+    // All comments display handler
+    $(".comment_display_button").click(function () {
+        var element = $(this);
+        var id = element.attr("id");
+        $("#display_" + id).slideToggle(300);
+        // Switch Show/Hide Comments label
+        if ($(this).text().startsWith("Show")) {
+            $(this).text("Hide ${comments?size} Comments");
+        } else {
+            $(this).text("Show ${comments?size} Comments");
+        }
+        $("#display_" + id).style.display = true;
+        return false;
+    });
+    // 'Comment' display handler
+    $(".root_comment_button").click(function () {
+        var element = $(this);
+        var id = element.attr("id");
+        $("#box_comment_" + id).slideToggle(300);
+        $("#box_comment_" + id).style.display = true;
+        return false;
+    });
+    // 'Answer' display handler
+    $(".comment_button").click(function () {
+        var element = $(this);
+        var id = element.attr("id");
+        $("#box_" + id).slideToggle(300);
+        $("#box_" + id).style.display = true;
+        return false;
+    });
+});
 </script>
