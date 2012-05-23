@@ -322,10 +322,26 @@ Library.addLikeUI = function (response, status, jqXHR) {
 }
 
 // Handle Link click event
-Library.handleLinkClick = function(controller, divId){
-	var element = controller;
+Library.handleLinkClick = function (controller, divId) {
+    var element = controller;
     var id = element.attr("id");
     $(divId + id).slideToggle(300);
     $(divId + id).style.display = true;
     return false;
+}
+
+//Utils String function "startsWith"
+if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function (str) {
+        return this.indexOf(str) == 0;
+    };
+}
+
+// Switch Show/Hide Comments label
+Library.commentsDisplayHandler = function (controller, nbComments) {
+    if (controller.text().startsWith("Show")) {
+        controller.text("Hide " + nbComments + " Comments");
+    } else {
+        controller.text("Show " + nbComments + " Comments");
+    }
 }

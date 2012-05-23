@@ -22,10 +22,12 @@ $(document).ready(function () {
     // Activate comment box toggles
     // All comments display handler
     $(".comment_display_button").click(function () {
+        Library.commentsDisplayHandler($(this), ${comments?size});
         Library.handleLinkClick($(this), "#display_");
     });
     // 'Comment' display handler
     $(".root_comment_button").click(function () {
+        Library.commentsDisplayHandler($(".comment_display_button"), ${comments?size});
         Library.handleLinkClick($(this), "#box_comment_");
     });
     // 'Answer' display handler
