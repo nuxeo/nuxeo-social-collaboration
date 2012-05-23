@@ -40,6 +40,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -588,7 +589,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
         IdRef docRef = new IdRef(ref);
         DocumentModel doc = session.getDocument(docRef);
         args.put("doc", doc);
-        return getView("document_comments_template").args(args);
+        return Response.ok(getView("document_comments_template").args(args)).header(
+                "docRef", ref).build();
     }
 
     public List<DocumentModel> getCommentChildren(DocumentModel doc,
@@ -649,7 +651,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
             Map<String, Object> args = new HashMap<String, Object>();
             args.put("doc", docToComment);
             args.put("comment", newComment);
-            return getView("bricks/document_comments").args(args);
+            return Response.ok(getView("bricks/document_comments").args(args)).header(
+                    "docRef", docToCommentRef).header("parentCommentRef",
+                    commentParentRef).build();
         } catch (Throwable t) {
             log.error("failed to add comment", t);
             throw ClientException.wrap(t);
@@ -661,7 +665,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("docLike")
-    public String docLike(@FormParam("docRef")
+    public Object docLike(@FormParam("docRef")
     String docRef) throws Exception {
         // Get document
         CoreSession session = ctx.getCoreSession();
@@ -672,10 +676,14 @@ public class SocialWebEngineRoot extends ModuleRoot {
         String userName = ctx.getPrincipal().getName();
         if (LikeService.hasUserLiked(userName, docToLike)) {
             LikeService.dislike(userName, docToLike);
-            return getLikeStatus(docToLike);
+            return Response.ok(
+                    "Unlike (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
+                    "docRef", docRef).build();
         } else {
             LikeService.like(userName, docToLike);
-            return getLikeStatus(docToLike);
+            return Response.ok(
+                    "Like (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
+                    "docRef", docRef).build();
         }
     }
 
@@ -683,13 +691,20 @@ public class SocialWebEngineRoot extends ModuleRoot {
      * Return like status (Likes number / if current user likes)
      */
     public String getLikeStatus(DocumentModel doc) {
-        LikeService LikeService = Framework.getLocalService(LikeService.class);
+        LikeService likeService = Framework.getLocalService(LikeService.class);
         String userName = ctx.getPrincipal().getName();
-        long nbLikes = LikeService.getLikesCount(doc);
-        if (LikeService.hasUserLiked(userName, doc)) {
-            return "Unlike (" + String.valueOf(nbLikes) + ")";
+        if (likeService.hasUserLiked(userName, doc)) {
+            String data = "Unlike (" + String.valueOf(getLikesCount(doc)) + ")";
+            return data;
         } else {
-            return "Like (" + String.valueOf(nbLikes) + ")";
+            String data = "Like (" + String.valueOf(getLikesCount(doc)) + ")";
+            return data;
         }
+    }
+
+    public long getLikesCount(DocumentModel doc) {
+        LikeService likeService = Framework.getLocalService(LikeService.class);
+        String userName = ctx.getPrincipal().getName();
+        return likeService.getLikesCount(doc);
     }
 }

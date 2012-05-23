@@ -2,10 +2,6 @@ var Library = {};
 
 var isGadget = true;
 
-var currentDocRef = "";
-
-var currentCommentRef = "";
-
 var listDocIds = [];
 
 try {
@@ -234,8 +230,6 @@ Library.documentCommentList = function (docRef) {
     data = Library.loadContext();
     // set new value of docRef
     data.docRef = docRef;
-    // set global value of current doc ref
-    currentDocRef = docRef;
     if (isGadget) {
         jQuery.post(Library.getBasePath() + '/' + "documentCommentList", data, Library.commentLoadedHandler);
     } else {
@@ -243,16 +237,16 @@ Library.documentCommentList = function (docRef) {
             url: "documentCommentList",
             type: "GET",
             data: data,
-            async: false,
+            async: true,
             success: Library.commentLoadedHandler
         });
     }
 }
 
-// DocumentCommentList ajax call success method
-Library.commentLoadedHandler = function (response) {
+//DocumentCommentList ajax call success method
+Library.commentLoadedHandler = function (response, status, jqXHR) {
     // set comments after related doc row
-    $("#" + currentDocRef).after(response);
+    $("#" + jqXHR.getResponseHeader("docRef")).after(response);
 }
 
 Library.isEmpty = function (s) {
@@ -269,10 +263,6 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
     data.commentParentRef = commentParentRef;
     // retrieve comment content
     data.commentContent = $(commentContent).val();
-    // set global value of parent comment ref
-    currentCommentRef = commentParentRef;
-    // set global value of current doc ref
-    currentDocRef = docToCommentRef;
     // Ajax request
     if (isGadget) {
         jQuery.post(Library.getBasePath() + '/' + "addComment", data, Library.addNewUIComment);
@@ -281,21 +271,22 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
             url: "addComment",
             type: "POST",
             data: data,
-            async: false,
+            async: true,
             success: Library.addNewUIComment
         });
     }
 }
 
 //Rerender current document comments
-Library.addNewUIComment = function (response) {
+Library.addNewUIComment = function (response, status, jqXHR) {
     // set new ui comment depending if an answer or a thread
-    if (currentCommentRef != undefined) {
+    var parentCommentRef = jqXHR.getResponseHeader("parentCommentRef")
+    if (parentCommentRef != null) {
         //Answer
-        $("tr." + currentCommentRef).after(response);
+        $("tr." + parentCommentRef).after(response);
     } else {
         //Thread
-        $("#comments_list_" + currentDocRef).append(response);
+        $("#comments_list_" + jqXHR.getResponseHeader("docRef")).append(response);
     }
 }
 
@@ -303,8 +294,6 @@ Library.addNewUIComment = function (response) {
 Library.docLike = function (docRef) {
     // set data
     data.docRef = docRef;
-    // set global value of current doc ref
-    currentDocRef = docRef;
     // Ajax request
     if (isGadget) {
         jQuery.post(Library.getBasePath() + '/' + "docLike", data, Library.addNewUIComment);
@@ -313,13 +302,13 @@ Library.docLike = function (docRef) {
             url: "docLike",
             type: "POST",
             data: data,
-            async: false,
+            async: true,
             success: Library.addLikeUI
         });
     }
 }
 
 //Rerender document like number area
-Library.addLikeUI = function (response) {
-    $("a#like_" + currentDocRef).text(response);
+Library.addLikeUI = function (response, status, jqXHR) {
+    $("a#like_" + jqXHR.getResponseHeader("docRef")).text(response);
 }
