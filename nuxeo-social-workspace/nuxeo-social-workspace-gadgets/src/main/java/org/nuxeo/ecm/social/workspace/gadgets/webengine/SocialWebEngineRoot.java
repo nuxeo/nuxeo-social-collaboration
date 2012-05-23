@@ -677,12 +677,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
         if (LikeService.hasUserLiked(userName, docToLike)) {
             LikeService.dislike(userName, docToLike);
             return Response.ok(
-                    "Unlike (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
+                    "Like (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
                     "docRef", docRef).build();
         } else {
             LikeService.like(userName, docToLike);
             return Response.ok(
-                    "Like (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
+                    "Unlike (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
                     "docRef", docRef).build();
         }
     }
