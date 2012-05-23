@@ -102,7 +102,7 @@ public class WallActivityStreamFilter implements ActivityStreamFilter {
                 + "where activity.context = :context "
                 + "and activity.verb in (:verbs) "
                 + "and activity.actor like :actor "
-                + "order by activity.publishedDate desc");
+                + "order by activity.lastUpdatedDate desc");
         query.setParameter("context", docActivityObject);
         query.setParameter("verbs", verbs);
         query.setParameter("actor", "user:%");

@@ -8,9 +8,6 @@
       <path>css/opensocial/gadgets/wall.css</path>
     </resource>
 
-    <resource name="mustache.js">
-      <path>scripts/mustache.js</path>
-    </resource>
     <resource name="gadget-wall.js">
       <path>scripts/opensocial/gadgets/wall.js</path>
     </resource>
