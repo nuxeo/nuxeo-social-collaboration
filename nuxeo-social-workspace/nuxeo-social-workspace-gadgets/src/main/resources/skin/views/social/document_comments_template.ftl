@@ -8,7 +8,7 @@
         <textarea id="rootCommentContent_${doc.id}" style="width:390px;height:23px; border:1px solid #999999;"></textarea><br/>
         <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','#rootCommentContent_${doc.id}')"/>
     </div>
-    <div id="${doc.id}_display" style="display:none">
+    <div id="display_${doc.id}" style="display:none">
       <table id="comments_list_${doc.id}" class="dataList">
         <#list comments as comment>
           <#include "@bricks/document_comments">
@@ -25,8 +25,8 @@
         $(".comment_display_button").click(function(){
           var element = $(this);
           var id = element.attr("id");
-          $("#"+id+"_display").slideToggle(300);
-          $("#"+id+"_display").style.display = true;
+          $("#display_"+id).slideToggle(300);
+          $("#display_"+id).style.display = true;
           return false;
         });
         // 'Comment' display handler

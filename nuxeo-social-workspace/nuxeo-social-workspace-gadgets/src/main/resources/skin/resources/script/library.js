@@ -280,13 +280,21 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
 //Rerender current document comments
 Library.addNewUIComment = function (response, status, jqXHR) {
     // set new ui comment depending if an answer or a thread
-    var parentCommentRef = jqXHR.getResponseHeader("parentCommentRef")
+    var parentCommentRef = jqXHR.getResponseHeader("parentCommentRef");
     if (parentCommentRef != null) {
         //Answer
         $("tr." + parentCommentRef).after(response);
+        // Close comment box
+        $("#box_" + parentCommentRef).slideToggle(300);
     } else {
         //Thread
-        $("#comments_list_" + jqXHR.getResponseHeader("docRef")).append(response);
+        var id = jqXHR.getResponseHeader("docRef");
+        // Rerender new comment
+        $("#comments_list_" + id).append(response);
+        // Display comments if not
+        $("#display_" + id).slideToggle(300);
+        // Close comment box
+        $("#box_comment_" + id).slideToggle(300);
     }
 }
 
