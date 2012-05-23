@@ -320,3 +320,12 @@ Library.docLike = function (docRef) {
 Library.addLikeUI = function (response, status, jqXHR) {
     $("a#like_" + jqXHR.getResponseHeader("docRef")).text(response);
 }
+
+// Handle Link click event
+Library.handleLinkClick = function(controller, divId){
+	var element = controller;
+    var id = element.attr("id");
+    $(divId + id).slideToggle(300);
+    $(divId + id).style.display = true;
+    return false;
+}
