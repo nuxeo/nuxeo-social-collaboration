@@ -1,5 +1,5 @@
 <tr>
-  <td colspan="4">
+  <td colspan="4" style="border-style:none;">
     <#assign comments = This.getComments(doc)>
     <a href="#" id="${doc.id}" class="comment_display_button">Show ${comments?size} threads</a>
     <a href="#" id="${doc.id}" class="root_comment_button">Comment</a>
@@ -9,7 +9,7 @@
         <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','#rootCommentContent_${doc.id}')"/>
     </div>
     <div id="display_${doc.id}" style="display:none">
-      <table id="comments_list_${doc.id}" class="dataList">
+      <table id="comments_list_${doc.id}" style="border-bottom: 0px;width: 100%">
         <#list comments as comment>
           <#include "@bricks/document_comments">
         </#list>
