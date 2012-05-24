@@ -1,3 +1,5 @@
+<tr><td colspan="4" style="border:0; padding-left:15px">
+<table style="width: 100%;">
 <tr>
   <td style="border-style:none;width:30%">
     ${comment.comment.author}
@@ -21,13 +23,10 @@
 </tr>
 <#assign commentChildren = This.getCommentChildren(doc,comment)>
 <#if commentChildren??>
-<tr>
-<td colspan="4" style="border-style:none;padding-left:15px;">
-  <table style="width: 100%;">
   <#list commentChildren as comment>
     <#include "@bricks/document_comments">
   </#list>
-  </table>
-  </td>
-  </tr>
 </#if>
+</table>
+</td>
+</tr>
