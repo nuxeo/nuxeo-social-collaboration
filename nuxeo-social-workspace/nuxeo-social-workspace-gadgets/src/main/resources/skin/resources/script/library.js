@@ -340,10 +340,10 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 // Switch Show/Hide Comments label
-Library.commentsDisplayHandler = function (controller, nbComments) {
-    if (controller.text().startsWith("Show")) {
-        controller.text("Hide " + nbComments + " Comments");
+Library.commentsDisplayHandler = function (controller, nbComments, docId) {
+    if (controller.text().startsWith("Show") && $("#display_"+docId).is(":hidden")) {
+        controller.text("Hide " + nbComments + " threads");
     } else {
-        controller.text("Show " + nbComments + " Comments");
+        controller.text("Show " + nbComments + " threads");
     }
 }
