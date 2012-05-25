@@ -230,17 +230,15 @@ Library.documentCommentList = function (docRef) {
     data = Library.loadContext();
     // set new value of docRef
     data.docRef = docRef;
-    if (isGadget) {
-        jQuery.post(Library.getBasePath() + '/' + "documentCommentList", data, Library.commentLoadedHandler);
-    } else {
-        jQuery.ajax({
-            url: "documentCommentList",
-            type: "GET",
-            data: data,
-            async: true,
-            success: Library.commentLoadedHandler
-        });
-    }
+    // Ajax request
+    var callFunction = isGadget?Library.getBasePath() + '/' + "documentCommentList":"documentCommentList";
+    jQuery.ajax({
+        url: callFunction,
+        type: "GET",
+        data: data,
+        async: true,
+        success: Library.commentLoadedHandler
+    });
 }
 
 //DocumentCommentList ajax call success method
@@ -263,20 +261,17 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
     data.commentParentRef = commentParentRef;
     // retrieve comment content
     data.commentContent = $(commentContent).val();
-	// clear content
-	$(commentContent).val("");
+    // clear content
+    $(commentContent).val("");
     // Ajax request
-    if (isGadget) {
-        jQuery.post(Library.getBasePath() + '/' + "addComment", data, Library.addNewUIComment);
-    } else {
-        jQuery.ajax({
-            url: "addComment",
-            type: "POST",
-            data: data,
-            async: true,
-            success: Library.addNewUIComment
-        });
-    }
+    var callFunction = isGadget?Library.getBasePath() + '/' + "addComment":"addComment";
+    jQuery.ajax({
+        url: callFunction,
+        type: "POST",
+        data: data,
+        async: true,
+        success: Library.addNewUIComment
+    });
 }
 
 //Rerender current document comments
@@ -308,17 +303,14 @@ Library.docLike = function (docRef) {
     // set data
     data.docRef = docRef;
     // Ajax request
-    if (isGadget) {
-        jQuery.post(Library.getBasePath() + '/' + "docLike", data, Library.addNewUIComment);
-    } else {
-        jQuery.ajax({
-            url: "docLike",
-            type: "POST",
-            data: data,
-            async: true,
-            success: Library.addLikeUI
-        });
-    }
+    var callFunction = isGadget?Library.getBasePath() + '/' + "docLike":"docLike";
+    jQuery.ajax({
+        url: callFunction,
+        type: "POST",
+        data: data,
+        async: true,
+        success: Library.addLikeUI
+    });
 }
 
 //Rerender document like number area
