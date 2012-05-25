@@ -263,6 +263,8 @@ Library.addComment = function (docToCommentRef, commentContent, commentParentRef
     data.commentParentRef = commentParentRef;
     // retrieve comment content
     data.commentContent = $(commentContent).val();
+	// clear content
+	$(commentContent).val("");
     // Ajax request
     if (isGadget) {
         jQuery.post(Library.getBasePath() + '/' + "addComment", data, Library.addNewUIComment);
@@ -295,8 +297,8 @@ Library.addNewUIComment = function (response, status, jqXHR) {
         $("#box_comment_" + id).slideToggle(300);
         // Display comments list
         if ($("#display_" + id).is(":hidden")) {
-            Library.handleLinkClick("#display_", id);
             Library.commentsDisplayHandler($("#comment_display_button_" + id), id);
+            Library.handleLinkClick("#display_", id);
         }
     }
 }
