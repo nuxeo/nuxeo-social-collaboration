@@ -79,10 +79,7 @@ public class GetWallActivityStream {
     @Param(name = "activityStreamName", required = false)
     protected String activityStreamName;
 
-    @Param(name = "document", required = false)
-    protected DocumentModel doc;
-
-    @Param(name = "contextPath", required = false)
+    @Param(name = "contextPath", required = true)
     protected String contextPath;
 
     @Param(name = "language", required = false)
@@ -105,8 +102,8 @@ public class GetWallActivityStream {
             targetLimit = limit.longValue();
         }
 
-        if (doc == null && !StringUtils.isBlank(contextPath)) {
-            doc = session.getDocument(new PathRef(contextPath));
+        DocumentModel doc = session.getDocument(new PathRef(contextPath));
+        if (StringUtils.isBlank(activityStreamName)) {
             // assume we are on a Social workspace
             activityStreamName = "socialWorkspaceWallActivityStream";
         }
