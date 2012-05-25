@@ -8,7 +8,7 @@
     ${comment.comment.text}
   </td>
   <td style="border-style:none;width:40%">
-    <a href="#" id="${comment.id}" class="comment_button">Answer</a>
+    <a href="#" id="comment_button_${comment.id}">Answer</a>
   </td>
 </tr>
 <tr class="${comment.id}">
@@ -21,6 +21,14 @@
     </div>
   </td>
 </tr>
+<script type="text/javascript">
+$(document).ready(function () {
+    // 'Answer' display handler
+    $("#comment_button_"+'${comment.id}').click(function () {
+        Library.handleLinkClick("#box_",'${comment.id}');
+    });
+});
+</script>
 <#assign commentChildren = This.getCommentChildren(doc,comment)>
 <#if commentChildren??>
   <#list commentChildren as comment>

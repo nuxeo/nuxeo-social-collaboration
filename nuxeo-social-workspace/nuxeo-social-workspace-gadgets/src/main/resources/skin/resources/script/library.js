@@ -291,12 +291,13 @@ Library.addNewUIComment = function (response, status, jqXHR) {
         var id = jqXHR.getResponseHeader("docRef");
         // Rerender new comment
         $("#comments_list_" + id).append(response);
-        // Display comments list if first thread
-        $(".comment_display_button").show();
-        // Display comments if not
-        $("#display_" + id).slideToggle(300);
         // Close comment box
         $("#box_comment_" + id).slideToggle(300);
+        // Display comments list
+        if ($("#display_" + id).is(":hidden")) {
+            Library.handleLinkClick("#display_", id);
+            Library.commentsDisplayHandler($("#comment_display_button_" + id), id);
+        }
     }
 }
 
@@ -324,26 +325,17 @@ Library.addLikeUI = function (response, status, jqXHR) {
 }
 
 // Handle Link click event
-Library.handleLinkClick = function (controller, divId) {
-    var element = controller;
-    var id = element.attr("id");
-    $(divId + id).slideToggle(300);
-    $(divId + id).style.display = true;
+Library.handleLinkClick = function (divId, docId) {
+    $(divId + docId).slideToggle(300);
+    $(divId + docId).style.display = true;
     return false;
 }
 
-//Utils String function "startsWith"
-if (typeof String.prototype.startsWith != 'function') {
-    String.prototype.startsWith = function (str) {
-        return this.indexOf(str) == 0;
-    };
-}
-
 // Switch Show/Hide Comments label
-Library.commentsDisplayHandler = function (controller, nbComments, docId) {
-    if (controller.text().startsWith("Show") && $("#display_"+docId).is(":hidden")) {
-        controller.text("Hide " + nbComments + " threads");
+Library.commentsDisplayHandler = function (controller, docId) {
+    if ($("#display_" + docId).is(":hidden")) {
+        controller.text("Hide threads");
     } else {
-        controller.text("Show " + nbComments + " threads");
+        controller.text("Show threads");
     }
 }
