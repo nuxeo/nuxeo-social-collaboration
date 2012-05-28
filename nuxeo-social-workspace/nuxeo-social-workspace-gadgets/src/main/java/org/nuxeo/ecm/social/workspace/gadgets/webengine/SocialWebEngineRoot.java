@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011 Nuxeo SA (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2012 Nuxeo SA (http://nuxeo.com/) and contributors.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
@@ -13,6 +13,7 @@
  *
  * Contributors:
  *     eugen
+ *     vpasquier <vpasquier@nuxeo.com>
  */
 package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 
@@ -24,7 +25,6 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FA
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -71,6 +71,7 @@ import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
+import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
 import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.ecm.rating.api.LikeService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
@@ -79,8 +80,6 @@ import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
-
-import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
 
 /**
  * WebEngine handler for gadgets requests.
