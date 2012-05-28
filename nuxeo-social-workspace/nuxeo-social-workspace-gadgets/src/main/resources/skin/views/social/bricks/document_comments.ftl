@@ -2,7 +2,9 @@
 <table style="width: 100%;">
 <tr>
   <td style="border-style:none;width:30%">
+    <img src="${This.getAvatarURL(comment.dublincore.creator)}" style="width:30px;"/>
     ${comment.comment.author}
+    ${comment.dublincore.created}
   </td>
   <td style="border-style:none;width:30%">
     ${comment.comment.text}

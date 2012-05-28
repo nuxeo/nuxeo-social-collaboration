@@ -24,6 +24,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FA
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -70,12 +71,16 @@ import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
+import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.ecm.rating.api.LikeService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
+import org.nuxeo.ecm.user.center.profile.UserProfileService;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
+
+import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
 
 /**
  * WebEngine handler for gadgets requests.
@@ -94,6 +99,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
     private static final Log log = LogFactory.getLog(SocialWebEngineRoot.class);
 
     static AutomationService automationService;
+
+    public static final String AVATAR_PROPERTY = "userprofile:avatar";
 
     /**
      * Main method that return a html snipped with the list of documents
@@ -704,7 +711,28 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     public long getLikesCount(DocumentModel doc) {
         LikeService likeService = Framework.getLocalService(LikeService.class);
-        String userName = ctx.getPrincipal().getName();
         return likeService.getLikesCount(doc);
+    }
+
+    /**
+     * Get the related user avatar to display in the UI comment
+     */
+    public String getAvatarURL(String commentUser) throws ClientException {
+        String url = VirtualHostHelper.getContextPathProperty()
+                + "/icons/missing_avatar.png";
+        UserProfileService userProfileService = Framework.getLocalService(UserProfileService.class);
+        DocumentModel userProfileDoc = userProfileService.getUserProfileDocument(
+                commentUser, ctx.getCoreSession());
+        if (userProfileDoc == null) {
+            return url;
+        }
+
+        if (userProfileDoc.getPropertyValue(AVATAR_PROPERTY) != null) {
+            url = VirtualHostHelper.getContextPathProperty()
+                    + "/"
+                    + DocumentModelFunctions.fileUrl("downloadFile",
+                            userProfileDoc, AVATAR_PROPERTY, "avatar");
+        }
+        return url;
     }
 }
