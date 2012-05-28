@@ -136,32 +136,18 @@
 
   var prefs = new gadgets.Prefs();
 
-  var docId = prefs.getString("docId");
   var activityStreamName = prefs.getString("activityStreamName");
-  var documentContextPath = prefs.getString("nuxeoTargetContextPath");
+  var documentContextPath = gadgets.util.unescapeString(prefs.getString("nuxeoTargetContextPath"));
 
-  var wallOperationParams, miniMessageOperationParams;
-  if (docId !== 'undefined' && docId.length > 0) {
-    wallOperationParams = {
-      language: prefs.getLang(),
-      document: docId,
-      activityStreamName: activityStreamName
-    };
-    miniMessageOperationParams = {
-      language: prefs.getLang(),
-      document: docId
-    };
-  } else {
-    wallOperationParams = {
-      language: prefs.getLang(),
-      contextPath: documentContextPath,
-      activityStreamName: activityStreamName
-    }
-    miniMessageOperationParams = {
-      language: prefs.getLang(),
-      contextPath: documentContextPath
-    };
-  }
+  var wallOperationParams = {
+    language: prefs.getLang(),
+    contextPath: documentContextPath,
+    activityStreamName: activityStreamName
+  };
+  var  miniMessageOperationParams = {
+    language: prefs.getLang(),
+    contextPath: documentContextPath
+  };
 
   var currentActivities = [];
   var waitingActivities = [];

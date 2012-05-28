@@ -63,6 +63,7 @@
         <type>SocialFolder</type>
         <type>Article</type>
         <type>File</type>
+        <type>VEVENT</type>
       </subtypes>
       <contentViews category="content">
         <contentView>document_content</contentView>
@@ -182,6 +183,7 @@
         <type>SocialFolder</type>
         <type>Article</type>
         <type>File</type>
+        <type>VEVENT</type>
       </subtypes>
       <layouts mode="any">
         <layout>heading</layout>

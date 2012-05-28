@@ -99,6 +99,16 @@
       <filter-id>isSocialWorkspaceMember</filter-id>
     </action>
 
+    <action id="CreateEvents"
+            link="#{collaborationActions.createNewDocument('VEVENT')}"
+            label="label.social.workspace.create.vevents"
+            immediate="false"
+            icon="/icons/create_vevent.png"
+            order="10">
+      <category>SOCIAL_WORKSPACE_ACTIONS</category>
+      <filter-id>isSocialWorkspaceMember</filter-id>
+    </action>
+
     <action id="CreateSocialWorkspace"
             link="#{collaborationActions.displayCreateSocialWorkspaceForm}"
             label="label.social.workspace.create.social.workspace"
