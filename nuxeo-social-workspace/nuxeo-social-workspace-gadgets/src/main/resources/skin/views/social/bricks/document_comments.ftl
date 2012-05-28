@@ -2,9 +2,9 @@
 <table style="width: 100%;">
 <tr>
   <td style="border-style:none;width:30%">
-    <img src="${This.getAvatarURL(comment.dublincore.creator)}" style="width:30px;"/>
+    <img src="${This.getAvatarURL(comment.comment.author)}" style="width:30px;"/>
     ${comment.comment.author}
-    ${comment.dublincore.created}
+    ${comment.comment.creationDate.getInstance().getTime()?string("dd/MM/yyyy")}
   </td>
   <td style="border-style:none;width:30%">
     ${comment.comment.text}

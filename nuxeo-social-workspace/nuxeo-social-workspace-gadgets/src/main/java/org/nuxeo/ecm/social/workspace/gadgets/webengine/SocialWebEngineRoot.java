@@ -99,7 +99,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     static AutomationService automationService;
 
-    public static final String AVATAR_PROPERTY = "userprofile:avatar";
+    protected static final String AVATAR_PROPERTY = "userprofile:avatar";
 
     /**
      * Main method that return a html snipped with the list of documents
