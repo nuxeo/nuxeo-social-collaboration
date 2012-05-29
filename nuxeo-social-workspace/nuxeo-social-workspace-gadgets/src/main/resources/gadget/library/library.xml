@@ -21,7 +21,7 @@
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,jquery.fancybox.js,gadget-context-management.js,gadget-library.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,gadget-context-management.js,gadget-library.js"></script>
   </head>
 
   <body>

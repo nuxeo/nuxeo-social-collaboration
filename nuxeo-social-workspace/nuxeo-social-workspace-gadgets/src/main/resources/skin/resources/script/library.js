@@ -78,7 +78,7 @@ Library.publishDocument = function (targetRef, public) {
 }
 
 Library.goToDocument = function (path, viewId) {
-    window.parent.location = top.nxContextPath + "/nxpath/" + ContextManagement.getTargetRepository() + Library.encode(path) + "@" + viewId;
+    window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + Library.encode(path) + "@" + viewId;
 }
 
 Library.encode = function (path) {
@@ -222,7 +222,7 @@ Library.addPopupBoxTo = function (a) {
 
 // called when gadget is load first time
 Library.loadInitialContent = function () {
-    Library.documentList(ContextManagement.getTargetContextPath());
+    Library.documentList(getTargetContextPath());
 }
 
 // called when document is ready, loads document comments
