@@ -63,7 +63,11 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.social.mini.message", "org.nuxeo.ecm.platform.url.api",
         "org.nuxeo.ecm.platform.url.core",
         "org.nuxeo.ecm.platform.ui:OSGI-INF/urlservice-framework.xml",
-        "org.nuxeo.ecm.user.center:OSGI-INF/urlservice-contrib.xml" })
+        "org.nuxeo.ecm.user.center:OSGI-INF/urlservice-contrib.xml",
+        "org.nuxeo.ecm.platform.userworkspace.types",
+        "org.nuxeo.ecm.platform.userworkspace.api",
+        "org.nuxeo.ecm.platform.userworkspace.core",
+        "org.nuxeo.ecm.user.center.profile" })
 @LocalDeploy("org.nuxeo.ecm.social.mini.message:mini-message-test.xml")
 public abstract class AbstractMiniMessageTest {
 

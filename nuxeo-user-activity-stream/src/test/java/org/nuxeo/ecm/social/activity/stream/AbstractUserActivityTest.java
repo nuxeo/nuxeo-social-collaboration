@@ -70,7 +70,11 @@ import com.google.inject.Inject;
 @RepositoryConfig(repositoryName = "default", type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator", cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
         "org.nuxeo.ecm.user.relationships",
-        "org.nuxeo.ecm.social.user.activity.stream" })
+        "org.nuxeo.ecm.social.user.activity.stream",
+        "org.nuxeo.ecm.platform.userworkspace.types",
+        "org.nuxeo.ecm.platform.userworkspace.api",
+        "org.nuxeo.ecm.platform.userworkspace.core",
+        "org.nuxeo.ecm.user.center.profile" })
 @LocalDeploy("org.nuxeo.ecm.social.user.activity.stream:user-activity-stream-test.xml")
 public abstract class AbstractUserActivityTest {
 

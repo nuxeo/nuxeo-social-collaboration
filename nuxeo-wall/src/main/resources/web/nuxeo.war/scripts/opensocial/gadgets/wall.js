@@ -11,7 +11,9 @@
       all: "all",
       discussions: "discussions",
       events: "events"
-    }
+    },
+
+    noActivityTypeIcon: "icons/activity_empty.png"
   };
   /* end constants */
 
@@ -32,14 +34,14 @@
   templates.activity =
       '<div class="miniMessage jsMainActivity" data-activityid="{{id}}" data-likescount="{{likeStatus.likesCount}}" data-userlikestatus="{{likeStatus.userLikeStatus}}">' +
         '<div class="container">' +
-          '<div class="messageHeader">' +
-            '<span class="timestamp">{{publishedDate}}</span>' +
-          '</div>' +
           '<div class="message">' +
+            '<span class="activityType"><img src="{{icon}}"></span>' +
             '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
             '<div class="event">{{{activityMessage}}}</div>' +
           '</div>' +
-          '<div class="actions jsActions"></div>' +
+          '<div class="actions jsActions">' +
+            '<span class="timestamp">{{publishedDate}}</span>' +
+          '</div>' +
         '</div>' +
         '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
       '</div>';
@@ -49,12 +51,14 @@
           'data-userlikestatus="{{likeStatus.userLikeStatus}}" data-allowdeletion="{{allowDeletion}}">' +
         '<div class="container">'+
           '<div class="messageHeader">' +
+            '<span class="activityType"><img src="{{icon}}"></span>' +
             '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
             '<span class="username">{{{displayActorLink}}}</span>' +
-            '<span class="timestamp">{{{publishedDate}}}</span>' +
           '</div>' +
           '<div class="message">{{{activityMessage}}}</div>' +
-          '<div class="actions jsActions"></div>' +
+          '<div class="actions jsActions">' +
+            '<span class="timestamp">{{{publishedDate}}}</span>' +
+          '</div>' +
         '</div>' +
         '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
       '</div>';
@@ -67,11 +71,12 @@
             '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
             '<div class="event">' +
               '<span class="username">{{{displayActorLink}}}</span>' +
-              '<span class="timestamp">{{{publishedDate}}}</span>' +
               '<div class="message">{{{message}}}</div>' +
             '</div>' +
           '</div>' +
-          '<div class="actions jsReplyActions"></div>' +
+          '<div class="actions jsReplyActions">' +
+            '<span class="timestamp">{{{publishedDate}}}</span>' +
+          '</div>' +
         '</div>' +
       '</div>';
 
@@ -121,8 +126,8 @@
         '<span class="likesCount">{{likesCount}}</span>' +
       '</div>';
 
-    templates.moreActivitiesBar =
-      '<div class="moreActivitiesBar jsMoreActivitiesBar">{{moreActivitiesMessage}}</div>';
+  templates.moreActivitiesBar =
+    '<div class="moreActivitiesBar jsMoreActivitiesBar">{{moreActivitiesMessage}}</div>';
 
   templates.noMoreActivitiesBar =
       '<div class="moreActivitiesBar noMore">{{noMoreActivitiesMessage}}</div>';
@@ -209,7 +214,7 @@
         }
       }
     }
-    $('#wall').html(htmlContent);
+    $('#container').html(htmlContent);
 
     addLikeStatusHtml();
     addDeleteLinksHtml();
@@ -236,7 +241,7 @@
         { placeholderMessage: prefs.getMsg('label.placeholder.new.message'),
           writeLabel: prefs.getMsg('command.write') });
 
-    $(htmlContent).insertBefore('#wall');
+    $(htmlContent).insertBefore('#container');
     gadgets.window.adjustHeight();
   }
 
@@ -263,6 +268,17 @@
       writeLabel: prefs.getMsg('command.reply') });
 
     activity.repliesHtml = repliesHtml;
+    var icon = activity.icon;
+    if (icon != null && icon.length > 0) {
+      if (icon[0] == '/') {
+        icon = icon.substring(1);
+      }
+    } else {
+      icon = constants.noActivityTypeIcon;
+    }
+    if (activity.icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
+      activity.icon = NXGadgetContext.clientSideBaseUrl + icon;
+    }
     return Mustache.render(template, activity);
   }
 
@@ -276,7 +292,7 @@
           eventsMessage: prefs.getMsg('label.activities.filter.events'),
           postMessage: prefs.getMsg('label.write.message')
         });
-    $(htmlContent).insertBefore('#wall');
+    $(htmlContent).insertBefore('#container');
   }
 
   function addDeleteLinksHtml() {
@@ -290,7 +306,7 @@
       var htmlContent = Mustache.render(templates.deleteActivityAction,
           { activityId: activityId, deleteImageURL: deleteImageURL,
             deleteMessage: prefs.getMsg('command.delete') });
-      actions.prepend(htmlContent);
+      $(htmlContent).insertAfter(actions.find('.timestamp'));
     });
 
     // activity replies
@@ -303,7 +319,7 @@
       var htmlContent = Mustache.render(templates.deleteActivityReplyAction,
           { replyId: replyId, deleteImageURL: deleteImageURL,
             deleteMessage: prefs.getMsg('command.delete') });
-      actions.prepend(htmlContent);
+      $(htmlContent).insertAfter(actions.find('.timestamp'));
     });
   }
 
@@ -339,7 +355,7 @@
     if (deleteAction.length > 0) {
       $(htmlContent).insertAfter(deleteAction);
     } else {
-      actions.prepend(htmlContent);
+      $(htmlContent).insertAfter(actions.find('.timestamp'));
     }
   }
 
@@ -359,13 +375,13 @@
   function addMoreActivitiesBarHtml() {
     var htmlContent = Mustache.render(templates.moreActivitiesBar,
         { moreActivitiesMessage: prefs.getMsg('label.show.more.activities') });
-    $('#wall').append(htmlContent);
+    $('#container').append(htmlContent);
   }
 
   function addNoMoreActivitiesTextHtml() {
     var htmlContent = Mustache.render(templates.noMoreActivitiesBar,
         { noMoreActivitiesMessage: prefs.getMsg('label.no.more.activities') });
-    $('#wall').append(htmlContent);
+    $('#container').append(htmlContent);
   }
 
   function addNewActivitiesBarHtml() {
@@ -375,7 +391,7 @@
 
     var htmlContent = Mustache.render(templates.newActivitiesBar,
         { newActivitiesMessage: prefs.getMsg('label.show.new.activities') });
-    $('#wall').prepend(htmlContent);
+    $('#container').prepend(htmlContent);
   }
   /* end HTML building functions */
 

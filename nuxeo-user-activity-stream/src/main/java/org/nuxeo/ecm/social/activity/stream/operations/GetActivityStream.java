@@ -113,16 +113,9 @@ public class GetActivityStream {
                 PROVIDER_NAME, null, targetLimit, 0L, props);
         pageProvider.setCurrentPageOffset(targetOffset);
 
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                locale);
         List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
-            Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", activityMessage.getActivityId());
-            o.put("activityMessage", activityMessage.getMessage());
-            o.put("publishedDate",
-                    dateFormat.format(activityMessage.getPublishedDate()));
-            activities.add(o);
+            activities.add(activityMessage.toMap(session, locale));
         }
 
         Map<String, Object> m = new HashMap<String, Object>();

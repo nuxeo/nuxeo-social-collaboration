@@ -2,9 +2,9 @@
 <component name="org.nuxeo.ecm.social.user.relationship.activity">
 
   <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
-    point="activityMessageLabels">
+    point="activityVerbs">
 
-    <activityMessageLabel activityVerb="circle"
+    <activityVerb activityVerb="circle"
       labelKey="label.activity.circle" />
 
   </extension>

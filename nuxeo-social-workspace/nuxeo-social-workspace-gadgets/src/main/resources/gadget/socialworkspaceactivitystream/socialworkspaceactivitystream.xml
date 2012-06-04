@@ -12,19 +12,17 @@
 <![CDATA[
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-socialworkspaceactivitystream.css?path=${contextPath}&basepath=${contextPath}"/>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-common-activity.css,gadget-socialworkspaceactivitystream.css?path=${contextPath}&basepath=${contextPath}"/>
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/gadget-default-automation-request.js,gadget-context-management.js,gadget-socialworkspaceactivitystream.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/gadget-default-automation-request.js,jquery.js,mustache.js,gadget-context-management.js,gadget-socialworkspaceactivitystream.js"></script>
   </head>
   <body>
 
     <div id="content">
-      <div id="activitiesContainer">
-      </div>
-      <div class="navigationBar">
-      </div>
+      <div id="container"></div>
+      <div class="navigationBar"></div>
       <div style="clear:both;"></div>
     </div>
 

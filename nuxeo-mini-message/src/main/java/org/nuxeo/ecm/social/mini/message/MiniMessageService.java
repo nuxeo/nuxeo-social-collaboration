@@ -22,6 +22,8 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
+import org.nuxeo.ecm.activity.ActivitiesList;
+import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 
 /**
@@ -102,6 +104,46 @@ public interface MiniMessageService {
      *            all of them.
      */
     List<MiniMessage> getMiniMessageFrom(String actorActivityObject,
+            long offset, long limit);
+
+    /**
+     * Returns the mini messages, as a list of {@link Activity}, for the given
+     * {@code actorActivityObject}. The {@code relationshipKind} is used to find
+     * people with whom the actor has a relation.
+     *
+     * @param offset the offset (starting at 0) into the list of mini messages.
+     * @param limit the maximum number of mini messages to retrieve, or 0 for
+     *            all of them.
+     * @since 5.6
+     */
+    ActivitiesList getMiniMessageActivitiesFor(String actorActivityObject,
+            RelationshipKind relationshipKind, long offset, long limit);
+
+    /**
+     * Returns the mini messages, as a list of {@link Activity}, for the given
+     * {@code actorActivityObject} and {@code contextActivityObject}. The
+     * {@code relationshipKind} is used to find people with whom the actor has a
+     * relation.
+     *
+     * @param offset the offset (starting at 0) into the list of mini messages.
+     * @param limit the maximum number of mini messages to retrieve, or 0 for
+     *            all of them.
+     * @since 5.6
+     */
+    ActivitiesList getMiniMessageActivitiesFor(String actorActivityObject,
+            RelationshipKind relationshipKind, String contextActivityObject,
+            long offset, long limit);
+
+    /**
+     * Returns the mini messages, as a list of {@link Activity}, from the given
+     * {@code actorActivityObject}.
+     *
+     * @param offset the offset (starting at 0) into the list of mini messages.
+     * @param limit the maximum number of mini messages to retrieve, or 0 for
+     *            all of them.
+     * @since 5.6
+     */
+    ActivitiesList getMiniMessageActivitiesFrom(String actorActivityObject,
             long offset, long limit);
 
 }

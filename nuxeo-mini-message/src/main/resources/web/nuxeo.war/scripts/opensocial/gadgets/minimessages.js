@@ -1,257 +1,327 @@
-var prefs = new gadgets.Prefs();
+(function() {
 
-var miniMessagesStreamType = prefs.getString("miniMessagesStreamType");
-var actor = prefs.getString("actor");
+  /* templates */
+  var templates = {};
+  templates.miniMessage =
+      '<div class="miniMessage {{cssClass}} jsMainActivity" data-activityid="{{id}}" ' +
+          'data-allowdeletion="{{allowDeletion}}">' +
+        '<div class="container">'+
+          '<div class="messageHeader">' +
+            '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
+            '<span class="username">{{{displayActorLink}}}</span>' +
+          '</div>' +
+          '<div class="message">{{{activityMessage}}}</div>' +
+          '<div class="actions jsActions">' +
+            '<span class="timestamp">{{{publishedDate}}}</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
 
-var currentMiniMessages = [];
-var waitingMiniMessages = [];
+  templates.newMiniMessage =
+      '<div class="jsNewMiniMessage">' +
+        '<form name="newMiniMessageForm" class="newMiniMessageForm">' +
+          '<textarea placeholder="{{placeholderMessage}}" rows="3" name="newMiniMessageText" class="miniMessageText jsMiniMessageText"></textarea>' +
+          '<p class="newMiniMessageActions">' +
+            '<span class="miniMessageCounter jsMiniMessageCounter"></span>' +
+            '<input class="button writeMiniMessageButton disabled jsWriteMiniMessageButton" name="writeMiniMessageButton" type="button" value="{{writeLabel}}" disabled="disabled" />' +
+          '</p>' +
+        '</form>' +
+      '</div>';
 
-var offset = 0;
-var waitingOffset = 0;
+  templates.deleteActivityAction =
+      '<div class="actionItem jsDelete" data-activityid="{{activityId}}">' +
+        '<img src="{{deleteImageURL}}" />' +
+        '<a href="#">{{deleteMessage}}</a>' +
+      '</div>';
 
-var hasMoreMiniMessages = true;
+  templates.moreActivitiesBar =
+    '<div class="moreActivitiesBar jsMoreActivitiesBar">{{moreActivitiesMessage}}</div>';
 
-function displayMiniMessages() {
-  displayNewMiniMessageForm();
+  templates.noMoreActivitiesBar =
+      '<div class="moreActivitiesBar noMore">{{noMoreActivitiesMessage}}</div>';
 
-  var htmlContent = '';
-  if (currentMiniMessages.length == 0) {
-    htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.mini.message') + '</div>';
-  } else {
-    for (var i = 0; i < currentMiniMessages.length; i++) {
-      var cssClass = 'miniMessage';
-      if (currentMiniMessages[i].isCurrentUserMiniMessage) {
-        cssClass += ' owner';
-      }
+  templates.newActivitiesBar =
+      '<div class="newActivitiesBar jsNewActivitiesBar">{{newActivitiesMessage}}</div>';
+  /* end templates */
 
-      htmlContent += '<div class="' + cssClass + '">';
-      htmlContent += '<div>';
-      htmlContent += '<span class="username">' + currentMiniMessages[i].displayActor + '</span>';
-      htmlContent += '<span class="timestamp">' + currentMiniMessages[i].publishedDate + '</span>';
+  var prefs = new gadgets.Prefs();
 
-      if (miniMessagesStreamType == 'forActor' && currentMiniMessages[i].isCurrentUserMiniMessage) {
-        htmlContent += createDeleteMiniMessageAction(currentMiniMessages[i]);
-      }
+  var miniMessagesStreamType = prefs.getString("miniMessagesStreamType");
+  var actor = prefs.getString("actor");
 
-      htmlContent += '</div>';
-      htmlContent += '<div class="message">';
-      htmlContent += currentMiniMessages[i].message;
-      htmlContent += '</div>';
-      htmlContent += '</div>';
-    }
-  }
+  var currentMiniMessages = [];
+  var waitingMiniMessages = [];
 
-  _gel('miniMessagesContainer').innerHTML = htmlContent;
-  if (hasMoreMiniMessages) {
-    addMoreMiniMessagesBar();
-  } else {
-    addNoMoreMiniMessageText();
-  }
+  var offset = 0;
+  var waitingOffset = 0;
 
-  registerMiniMessageHandlers();
+  var hasMoreMiniMessages = true;
 
-  gadgets.window.adjustHeight();
-}
-
-function createDeleteMiniMessageAction(miniMessage) {
-  var htmlContent = '<div class="deleteMiniMessage">';
-  htmlContent += '<a href="#" data-miniMessageId="' + miniMessage.id + '">' + prefs.getMsg('command.delete') + '</a>';
-  htmlContent += '</div>';
-  return htmlContent;
-}
-
-function registerMiniMessageHandlers() {
-  // delete mini message
-  jQuery('a[data-miniMessageId]').click(function() {
-    var miniMessageId = jQuery(this).attr("data-miniMessageId");
-    if (!confirmDeleteMiniMessage()) {
-      return false;
-    }
-    removeMiniMessage(miniMessageId);
-  });
-}
-
-function confirmDeleteMiniMessage() {
-  return confirm(prefs.getMsg('label.mini.message.confirmDelete'));
-}
-
-function displayNewMiniMessageForm() {
-  if (showMiniMessageForm()) {
+  function displayMiniMessages() {
     var htmlContent = '';
-    htmlContent += '<form name="newMiniMessageForm" class="newMiniMessageForm">';
-    htmlContent += '<textarea rows="3" name="newMiniMessageText" class="miniMessageText"></textarea>';
-    htmlContent += '<p class="newMiniMessageActions">';
-    htmlContent += '<span class="miniMessageCounter"></span>';
-    htmlContent += '<input class="button writeMiniMessageButton" name="writeMiniMessageButton" type="button" onclick="createMiniMessage()" value="' + prefs.getMsg('command.write') + '" />';
-    htmlContent += '</p>';
-    htmlContent += '</form>';
 
-    _gel('newMiniMessage').innerHTML = htmlContent;
-    updateMiniMessageCounter();
-    jQuery('textarea[name="newMiniMessageText"]').keyup(updateMiniMessageCounter);
+    if (currentMiniMessages.length == 0) {
+      htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.activity') + '</div>';
+    } else {
+      for (var i = 0; i < currentMiniMessages.length; i++) {
+        var currentActivity = currentMiniMessages[i];
+        if (currentActivity.isCurrentUserMiniMessage) {
+          currentActivity.cssClass = 'owner';
+        }
+        htmlContent += buildActivityHtml(templates.miniMessage, currentActivity);
+      }
+    }
+    $('#container').html(htmlContent);
+
+    addDeleteLinksHtml();
+    registerDeleteLinksHandler();
+
+    if (hasMoreMiniMessages) {
+      addMoreActivitiesBarHtml();
+      registerMoreActivityBarHandler();
+    } else {
+      addNoMoreActivitiesTextHtml();
+    }
     gadgets.window.adjustHeight();
   }
-}
 
-function addMoreMiniMessagesBar() {
-  var bar = document.createElement('div');
-  bar.id = 'moreMiniMessagesBar';
-  bar.className = 'moreMiniMessagesBar';
-  bar.innerHTML = prefs.getMsg('label.show.more.mini.messages');
-  bar.onclick = showMoreMiniMessages;
-  var container = _gel('miniMessagesContainer');
-  container.insertBefore(bar, null);
-}
+  /* HTML building functions */
+  function addNewMiniMessageHtml() {
+    var htmlContent = Mustache.render(templates.newMiniMessage,
+        { placeholderMessage: prefs.getMsg('label.placeholder.new.message'),
+          writeLabel: prefs.getMsg('command.write') });
 
-function addNoMoreMiniMessageText() {
-  var bar = document.createElement('div');
-  bar.id = 'moreMiniMessagesBar';
-  bar.className = 'moreMiniMessagesBar noMore';
-  bar.innerHTML = prefs.getMsg('label.no.more.mini.messages');
-  var container = _gel('miniMessagesContainer');
-  container.insertBefore(bar, null);
-}
+    $(htmlContent).insertBefore('#container');
+    gadgets.window.adjustHeight();
+  }
 
-function showMoreMiniMessages() {
-  var NXRequestParams = { operationId: 'Services.GetMiniMessages',
-    operationParams: {
-      language: prefs.getLang(),
-      actor: actor,
-      miniMessagesStreamType: miniMessagesStreamType,
-      offset: offset
-    },
-    operationContext: {},
-    operationCallback: function (response, params) {
-      var newMiniMessages = response.data.miniMessages;
-      if (newMiniMessages.length > 0) {
-        currentMiniMessages = currentMiniMessages.concat(response.data.miniMessages);
-        offset = response.data.offset;
+  function buildActivityHtml(template, activity) {
+    return Mustache.render(template, activity);
+  }
+
+  function addDeleteLinksHtml() {
+    // activities
+    $('div[data-activityid][data-allowdeletion="true"]').each(function() {
+      $(this).removeAttr('data-allowdeletion');
+      var activityId = $(this).attr('data-activityid');
+      var deleteImageURL = NXGadgetContext.clientSideBaseUrl + 'icons/delete.png'
+
+      var actions = $(this).find('div.jsActions');
+      var htmlContent = Mustache.render(templates.deleteActivityAction,
+          { activityId: activityId, deleteImageURL: deleteImageURL,
+            deleteMessage: prefs.getMsg('command.delete') });
+      $(htmlContent).insertAfter(actions.find('.timestamp'));
+    });
+  }
+
+  function addMoreActivitiesBarHtml() {
+    var htmlContent = Mustache.render(templates.moreActivitiesBar,
+        { moreActivitiesMessage: prefs.getMsg('label.show.more.mini.messages') });
+    $('#container').append(htmlContent);
+  }
+
+  function addNoMoreActivitiesTextHtml() {
+    var htmlContent = Mustache.render(templates.noMoreActivitiesBar,
+        { noMoreActivitiesMessage: prefs.getMsg('label.no.more.mini.messages') });
+    $('#container').append(htmlContent);
+  }
+
+  function addNewActivitiesBarHtml() {
+    if ($('.jsNewActivitiesBar').length > 0) {
+      return;
+    }
+
+    var htmlContent = Mustache.render(templates.newActivitiesBar,
+        { newActivitiesMessage: prefs.getMsg('label.show.new.mini.messages') });
+    $('#container').prepend(htmlContent);
+  }
+  /* end HTML building functions */
+
+  /* handler functions */
+  function registerNewMiniMessageHandler() {
+    $('.jsNewMiniMessage .jsWriteMiniMessageButton').click(function() {
+      if ($('.jsNewMiniMessage textarea.jsMiniMessageText').val().length > 0) {
+        createMiniMessage();
+      }
+    });
+    updateMiniMessageCounter();
+    $('.jsNewMiniMessage textarea.jsMiniMessageText').keyup(function() {
+      if ($(this).val().length == 0) {
+        $('.jsNewMiniMessage .jsWriteMiniMessageButton').addClass('disabled');
       } else {
-        hasMoreMiniMessages = false;
+        $('.jsNewMiniMessage .jsWriteMiniMessageButton').removeClass('disabled');
       }
-      displayMiniMessages();
-    }
-  };
+      updateMiniMessageCounter();
+    });
+  }
 
-  doAutomationRequest(NXRequestParams);
-}
-
-
-function loadMiniMessages() {
-  var NXRequestParams = { operationId: 'Services.GetMiniMessages',
-    operationParams: {
-      language: prefs.getLang(),
-      actor: actor,
-      miniMessagesStreamType: miniMessagesStreamType
-    },
-    operationContext: {},
-    operationCallback: function (response, params) {
-      currentMiniMessages = response.data.miniMessages;
-      offset = response.data.offset;
-      displayMiniMessages();
-    }
-  };
-
-  doAutomationRequest(NXRequestParams);
-}
-
-function pollMiniMessages() {
-  var NXRequestParams = { operationId: 'Services.GetMiniMessages',
-    operationParams: {
-      language: prefs.getLang(),
-      actor: actor,
-      miniMessagesStreamType: miniMessagesStreamType
-    },
-    operationContext: {},
-    operationCallback: function (response, params) {
-      var newMiniMessages = response.data.miniMessages;
-      if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
-        // there is at least one new mini message
-        waitingMiniMessages = newMiniMessages;
-        waitingOffset = response.data.offset;
-        addNewMiniMessagesBar();
-        gadgets.window.adjustHeight();
+  function registerDeleteLinksHandler() {
+    $('div.jsDelete[data-activityid]').click(function() {
+      if (!confirmDeleteMessage()) {
+        return false;
       }
-    }
-  };
 
-  doAutomationRequest(NXRequestParams);
-}
-
-function addNewMiniMessagesBar() {
-  if (document.getElementById('newMiniMessagesBar') !== null) {
-    return;
+      var activityId = $(this).attr("data-activityid");
+      removeMiniMessage(activityId);
+    });
   }
 
-  var bar = document.createElement('div');
-  bar.id = 'newMiniMessagesBar';
-  bar.className = 'newMiniMessagesBar';
-  bar.innerHTML = prefs.getMsg('label.show.new.mini.messages');
-  bar.onclick = showNewMiniMessages;
-  var container = _gel('miniMessagesContainer');
-  container.insertBefore(bar, container.firstChild);
-}
-
-function showNewMiniMessages() {
-  currentMiniMessages = waitingMiniMessages;
-  offset = waitingOffset;
-  displayMiniMessages();
-}
-
-function showMiniMessageForm() {
-  return miniMessagesStreamType == 'forActor';
-}
-
-function updateMiniMessageCounter() {
-  var delta = 140 - jQuery('textarea[name="newMiniMessageText"]').val().length;
-  var miniMessageCounter = jQuery('.miniMessageCounter');
-  miniMessageCounter.text(delta);
-  miniMessageCounter.toggleClass('warning', delta < 5);
-  if (delta < 0) {
-    jQuery('.writeMiniMessageButton').attr('disabled', 'disabled');
-  } else {
-    jQuery('.writeMiniMessageButton').removeAttr('disabled');
-  }
-}
-
-function createMiniMessage() {
-  var miniMessageText = jQuery('textarea[name="newMiniMessageText"]').val();
-  var opCallParameters = {
-    operationId: 'Services.AddMiniMessage',
-    operationParams: {
-      message: miniMessageText,
-      language: prefs.getLang()
-    },
-    entityType: 'blob',
-    operationContext: {},
-    operationCallback: function (response, opCallParameters) {
-      loadMiniMessages();
-    }
-  };
-  doAutomationRequest(opCallParameters);
-}
-
-function removeMiniMessage(miniMessageId) {
-  var opCallParameters = {
-    operationId: 'Services.RemoveMiniMessage',
-    operationParams: {
-      miniMessageId: miniMessageId
-    },
-    entityType: 'blob',
-    operationContext: {},
-    operationCallback: function (response, opCallParameters) {
-      loadMiniMessages();
-    }
-  };
-  doAutomationRequest(opCallParameters);
-}
-
-gadgets.util.registerOnLoadHandler(function () {
-  var contentStyleClass = prefs.getString("contentStyleClass");
-  if (contentStyleClass) {
-    _gel('content').className = contentStyleClass;
+  function registerMoreActivityBarHandler() {
+    $('.jsMoreActivitiesBar').click(function() {
+      showMoreMiniMessages();
+    });
   }
 
-  loadMiniMessages();
-  window.setInterval(pollMiniMessages, 30 * 1000);
-});
+  function registerNewActivitiesBarHandler() {
+    $('.jsNewActivitiesBar').click(function() {
+      showNewMiniMessages();
+    });
+  }
+  /* end handler functions */
+
+  /* mini message */
+  function updateMiniMessageCounter() {
+    var delta = 140 - $('textarea.jsMiniMessageText').val().length;
+    var miniMessageCounter = $('.miniMessageCounter');
+    miniMessageCounter.text(delta);
+    miniMessageCounter.toggleClass('warning', delta < 5);
+    if (delta < 0) {
+      $('.jsWriteMiniMessageButton').attr('disabled', 'disabled');
+    } else {
+      $('.jsWriteMiniMessageButton').removeAttr('disabled');
+    }
+  }
+
+  function createMiniMessage() {
+    var miniMessageText = $('textarea.jsMiniMessageText').val();
+    var opCallParameters = {
+      operationId: 'Services.AddMiniMessage',
+      operationParams: {
+        language: prefs.getLang(),
+        actor: actor,
+        message: miniMessageText
+      },
+      entityType: 'blob',
+      operationContext: {},
+      operationCallback: function (response, opCallParameters) {
+        loadMiniMessages();
+        $('.jsNewMiniMessage textarea.jsMiniMessageText').val('');
+        $('.jsNewMiniMessage .jsWriteMiniMessageButton').attr('disabled', 'disabled');
+        updateMiniMessageCounter();
+      }
+    };
+    doAutomationRequest(opCallParameters);
+  }
+
+  function confirmDeleteMessage() {
+    return confirm(prefs.getMsg('label.mini.message.confirmDelete'));
+  }
+
+  function removeMiniMessage(miniMessageId) {
+    var opCallParameters = {
+      operationId: 'Services.RemoveMiniMessage',
+      operationParams: {
+        miniMessageId: miniMessageId
+      },
+      entityType: 'blob',
+      operationContext: {},
+      operationCallback: function (response, opCallParameters) {
+        loadMiniMessages();
+      }
+    };
+    doAutomationRequest(opCallParameters);
+  }
+  /* end mini message */
+
+  function showMoreMiniMessages() {
+    var NXRequestParams = { operationId: 'Services.GetMiniMessages',
+      operationParams: {
+        language: prefs.getLang(),
+        actor: actor,
+        miniMessagesStreamType: miniMessagesStreamType,
+        offset: offset,
+        asActivities: true
+      },
+      operationContext: {},
+      operationCallback: function (response, params) {
+        var newMiniMessages = response.data.miniMessages;
+        if (newMiniMessages.length > 0) {
+          currentMiniMessages = currentMiniMessages.concat(newMiniMessages);
+          offset = response.data.offset;
+        } else {
+          hasMoreMiniMessages = false;
+        }
+        displayMiniMessages();
+      }
+    };
+
+    doAutomationRequest(NXRequestParams);
+  }
+
+  function showNewMiniMessages() {
+    currentMiniMessages = waitingMiniMessages;
+    offset = waitingOffset;
+    displayMiniMessages();
+  }
+
+  // gadget initialization
+  gadgets.util.registerOnLoadHandler(function() {
+    var contentStyleClass = prefs.getString("contentStyleClass");
+    if (contentStyleClass) {
+      _gel('content').className = contentStyleClass;
+    }
+
+    if (miniMessagesStreamType == 'forActor') {
+      addNewMiniMessageHtml();
+      registerNewMiniMessageHandler();
+    }
+
+    loadMiniMessages();
+    window.setInterval(pollMiniMessages, 30 * 1000);
+  });
+
+  function loadMiniMessages() {
+    var NXRequestParams = { operationId: 'Services.GetMiniMessages',
+      operationParams: {
+        language: prefs.getLang(),
+        actor: actor,
+        miniMessagesStreamType: miniMessagesStreamType,
+        asActivities: true
+      },
+      operationContext: {},
+      operationCallback: function (response, params) {
+        currentMiniMessages = response.data.miniMessages;
+        offset = response.data.offset;
+        displayMiniMessages();
+      }
+    };
+
+    doAutomationRequest(NXRequestParams);
+  }
+
+  function pollMiniMessages() {
+    var NXRequestParams = { operationId: 'Services.GetMiniMessages',
+      operationParams: {
+        language: prefs.getLang(),
+        actor: actor,
+        miniMessagesStreamType: miniMessagesStreamType,
+        asActivities: true
+      },
+      operationContext: {},
+      operationCallback: function (response, params) {
+        var newMiniMessages = response.data.miniMessages;
+        if (newMiniMessages.length > 0 && currentMiniMessages[0].id !== newMiniMessages[0].id) {
+          // there is at least one new mini message
+          waitingMiniMessages = newMiniMessages;
+          waitingOffset = response.data.offset;
+          addNewActivitiesBarHtml();
+          registerNewActivitiesBarHandler();
+          gadgets.window.adjustHeight();
+        }
+      }
+    };
+
+    doAutomationRequest(NXRequestParams);
+  }
+
+}());

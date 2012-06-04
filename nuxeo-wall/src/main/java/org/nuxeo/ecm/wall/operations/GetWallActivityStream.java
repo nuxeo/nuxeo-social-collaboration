@@ -122,26 +122,15 @@ public class GetWallActivityStream {
         pageProvider.setCurrentPageOffset(targetOffset);
 
         String username = session.getPrincipal().getName();
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                locale);
         List<ActivityMessage> activityMessages = pageProvider.getCurrentPage();
         List<Map<String, Object>> activitiesJSON = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : activityMessages) {
-            Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", activityMessage.getActivityId());
-            o.put("actor", activityMessage.getActor());
-            o.put("displayActor", activityMessage.getDisplayActor());
-            o.put("displayActorLink", activityMessage.getDisplayActorLink());
-            String actorUsername = getUsername(activityMessage.getActor());
-            o.put("actorAvatarURL", getUserAvatarURL(session, actorUsername));
-            o.put("activityVerb", activityMessage.getVerb());
-            o.put("activityMessage", activityMessage.getMessage());
-            o.put("publishedDate",
-                    dateFormat.format(activityMessage.getPublishedDate()));
+            Map<String, Object> o = activityMessage.toMap(session, locale);
             o.put("replies",
                     toActivityReplyMessagesJSON(session,
                             activityMessage.getActivityReplyMessages()));
 
+            String actorUsername = getUsername(activityMessage.getActor());
             if (activityMessage.getVerb().equals("minimessage")) {
                 o.put("allowDeletion",
                         session.getPrincipal().getName().equals(actorUsername));

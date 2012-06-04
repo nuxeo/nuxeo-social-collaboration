@@ -10,10 +10,11 @@
   </extension>
 
   <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
-    point="activityMessageLabels">
+    point="activityVerbs">
 
-    <activityMessageLabel activityVerb="minimessage"
-      labelKey="label.activity.minimessage" />
+    <activityVerb verb="minimessage"
+      labelKey="label.activity.minimessage"
+      icon="/icons/activity_message.png"/>
 
   </extension>
 

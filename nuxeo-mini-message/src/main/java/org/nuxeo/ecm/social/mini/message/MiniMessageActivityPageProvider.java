@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2011 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2006-2012 Nuxeo SA (http://nuxeo.com/) and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
@@ -17,52 +17,51 @@
 
 package org.nuxeo.ecm.social.mini.message;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.activity.AbstractActivityPageProvider;
-import org.nuxeo.ecm.activity.ActivityHelper;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
+import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
-import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Page provider listing mini messages for a given actor
+ * Page provider listing mini messages, as a list of {@link Activity}, for a
+ * given actor
  * <p>
  * This page provider requires two properties: the first one to be filled with
  * the actor, and the second one to be filled with the relationship kind to use.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
- * @since 5.5
+ * @since 5.6
  */
-public class MiniMessagePageProvider extends
-        AbstractMiniMessagePageProvider<MiniMessage> implements
-        PageProvider<MiniMessage> {
+public class MiniMessageActivityPageProvider extends
+        AbstractMiniMessagePageProvider<ActivityMessage> implements
+        PageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Log log = LogFactory.getLog(MiniMessagePageProvider.class);
+    private static final Log log = LogFactory.getLog(MiniMessageActivityPageProvider.class);
 
     @Override
-    public List<MiniMessage> getCurrentPage() {
+    public List<ActivityMessage> getCurrentPage() {
         if (pageMiniMessages == null) {
-            pageMiniMessages = new ArrayList<MiniMessage>();
+            pageMiniMessages = new ArrayList<ActivityMessage>();
             long pageSize = getMinMaxPageSize();
 
             MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
             String streamType = getStreamType();
             if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(miniMessageService.getMiniMessageFor(
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFor(
                         getActor(), getRelationshipKind(),
-                        getCurrentPageOffset(), pageSize));
+                        getCurrentPageOffset(), pageSize).toActivityMessages(
+                        getLocale()));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(miniMessageService.getMiniMessageFrom(
-                        getActor(), getCurrentPageOffset(), pageSize));
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFrom(
+                        getActor(), getCurrentPageOffset(), pageSize).toActivityMessages(
+                        getLocale()));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }

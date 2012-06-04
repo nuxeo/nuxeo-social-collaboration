@@ -12,21 +12,17 @@
 <![CDATA[
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-socialworkspaceminimessages.css?path=${contextPath}&basepath=${contextPath}"/>
+    <link rel="stylesheet" type="text/css" href="${clientSideBaseUrl}nxthemes-lib/gadget-common.css,gadget-common-activity.css,gadget-socialworkspaceminimessages.css?path=${contextPath}&basepath=${contextPath}"/>
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,gadget-default-automation-request.js,gadget-context-management.js,gadget-socialworkspaceminimessages.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/jquery.js,mustache.js,gadget-default-automation-request.js,gadget-context-management.js,gadget-socialworkspaceminimessages.js"></script>
   </head>
   <body>
 
     <div id="content">
-      <div id="newMiniMessage">
-      </div>
-      <div id="miniMessagesContainer">
-      </div>
-      <div class="navigationBar">
-      </div>
+      <div id="container"></div>
+      <div class="navigationBar"></div>
       <div style="clear:both;"></div>
     </div>
 

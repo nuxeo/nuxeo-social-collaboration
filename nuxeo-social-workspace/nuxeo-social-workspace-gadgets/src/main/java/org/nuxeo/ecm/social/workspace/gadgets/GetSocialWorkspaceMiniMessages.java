@@ -17,6 +17,8 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
+import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.LOCALE_PROPERTY;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageHelper.toJSON;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessagePageProvider.REPOSITORY_NAME_PROPERTY;
@@ -24,11 +26,17 @@ import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceMiniMessageP
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.nuxeo.ecm.activity.AbstractActivityPageProvider;
+import org.nuxeo.ecm.activity.ActivityMessage;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -59,6 +67,8 @@ public class GetSocialWorkspaceMiniMessages {
 
     public static final String PROVIDER_NAME = "social_workspace_mini_messages";
 
+    public static final String ACTIVITIES_PROVIDER_NAME = "social_workspace_mini_message_activities";
+
     @Context
     protected CoreSession session;
 
@@ -82,6 +92,12 @@ public class GetSocialWorkspaceMiniMessages {
 
     @Param(name = "limit", required = false)
     protected Integer limit;
+
+    /**
+     * @since 5.6
+     */
+    @Param(name = "asActivities", required = false)
+    protected Boolean asActivities = false;
 
     @OperationMethod
     public Blob run() throws Exception {
@@ -108,19 +124,50 @@ public class GetSocialWorkspaceMiniMessages {
                 session, new PathRef(contextPath));
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
+        props.put(LOCALE_PROPERTY, locale);
         props.put(SOCIAL_WORKSPACE_ID_PROPERTY, socialWorkspace.getId());
         props.put(REPOSITORY_NAME_PROPERTY,
                 socialWorkspace.getDocument().getRepositoryName());
         props.put(RELATIONSHIP_KIND_PROPERTY, kind);
 
-        @SuppressWarnings("unchecked")
-        PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, targetLimit, 0L, props);
-        pageProvider.setCurrentPageOffset(targetOffset);
+        if (asActivities) {
+            @SuppressWarnings("unchecked")
+            PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
+                    ACTIVITIES_PROVIDER_NAME, null, targetLimit, 0L, props);
+            pageProvider.setCurrentPageOffset(targetOffset);
 
-        String json = toJSON(pageProvider, locale, session);
-        return new InputStreamBlob(new ByteArrayInputStream(
-                json.getBytes("UTF-8")), "application/json");
+            List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
+            for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
+                Map<String, Object> o = activityMessage.toMap(session, locale);
+                String actorUsername = getUsername(activityMessage.getActor());
+                o.put("allowDeletion",
+                        session.getPrincipal().getName().equals(actorUsername));
+                miniMessages.add(o);
+            }
+
+            Map<String, Object> m = new HashMap<String, Object>();
+            m.put("offset",
+                    ((AbstractActivityPageProvider) pageProvider).getNextOffset());
+            m.put("limit", pageProvider.getCurrentPageSize());
+            m.put("miniMessages", miniMessages);
+
+            ObjectMapper mapper = new ObjectMapper();
+            StringWriter writer = new StringWriter();
+            mapper.writeValue(writer, m);
+
+            String json = writer.toString();
+            return new InputStreamBlob(new ByteArrayInputStream(
+                    json.getBytes("UTF-8")), "application/json");
+        } else {
+            @SuppressWarnings("unchecked")
+            PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
+                    PROVIDER_NAME, null, targetLimit, 0L, props);
+            pageProvider.setCurrentPageOffset(targetOffset);
+
+            String json = toJSON(pageProvider, locale, session);
+            return new InputStreamBlob(new ByteArrayInputStream(
+                    json.getBytes("UTF-8")), "application/json");
+        }
     }
 
 }

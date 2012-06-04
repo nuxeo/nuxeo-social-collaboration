@@ -44,17 +44,9 @@ import org.nuxeo.runtime.api.Framework;
  * @since 5.5
  */
 public class SocialWorkspaceMiniMessagePageProvider extends
-        AbstractActivityPageProvider<MiniMessage> {
+        AbstractSocialWorkspaceMiniMessagePageProvider<MiniMessage> {
 
     private static final long serialVersionUID = 1L;
-
-    public static final String SOCIAL_WORKSPACE_ID_PROPERTY = "socialWorkspaceId";
-
-    public static final String REPOSITORY_NAME_PROPERTY = "repositoryName";
-
-    public static final String RELATIONSHIP_KIND_PROPERTY = "relationshipKind";
-
-    protected List<MiniMessage> pageMiniMessages;
 
     @Override
     public List<MiniMessage> getCurrentPage() {
@@ -75,53 +67,6 @@ public class SocialWorkspaceMiniMessagePageProvider extends
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageMiniMessages;
-    }
-
-    protected String getSocialWorkspaceId() {
-        Map<String, Serializable> props = getProperties();
-        String socialWorkspaceId = (String) props.get(SOCIAL_WORKSPACE_ID_PROPERTY);
-        if (socialWorkspaceId == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + SOCIAL_WORKSPACE_ID_PROPERTY + " property.");
-        }
-        return socialWorkspaceId;
-    }
-
-    protected String getRepositoryName() {
-        Map<String, Serializable> props = getProperties();
-        String repositoryName = (String) props.get(REPOSITORY_NAME_PROPERTY);
-        if (repositoryName == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + REPOSITORY_NAME_PROPERTY + " property.");
-        }
-        return repositoryName;
-    }
-
-    protected RelationshipKind getRelationshipKind() {
-        Map<String, Serializable> props = getProperties();
-        String relationshipKind = (String) props.get(RELATIONSHIP_KIND_PROPERTY);
-        if (relationshipKind == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + RELATIONSHIP_KIND_PROPERTY + " property.");
-        }
-        return RelationshipKind.fromString(relationshipKind);
-    }
-
-    @Override
-    public boolean isSortable() {
-        return false;
-    }
-
-    @Override
-    protected void pageChanged() {
-        super.pageChanged();
-        pageMiniMessages = null;
-    }
-
-    @Override
-    public void refresh() {
-        super.refresh();
-        pageMiniMessages = null;
     }
 
 }
