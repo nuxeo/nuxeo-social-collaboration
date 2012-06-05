@@ -248,7 +248,7 @@
             label="label.social.collaboration.administration"
             order="150">
       <category>NUXEO_ADMIN</category>
-      <filter-id>only_for_manager</filter-id>
+      <filter-id>socialCollaborationManagementAccess</filter-id>
     </action>
 
     <action id="SocialWorkspacesRequests"
@@ -316,6 +316,13 @@
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
              point="filters">
+
+    <filter id="socialCollaborationManagementAccess">
+      <rule grant="true">
+        <condition>#{currentUser.administrator}</condition>
+        <condition>#{currentUser.isMemberOf('powerusers')}</condition>
+      </rule>
+    </filter>
 
     <filter id="can_be_created_and_modified_in_collaboration_view">
       <rule grant="true">
