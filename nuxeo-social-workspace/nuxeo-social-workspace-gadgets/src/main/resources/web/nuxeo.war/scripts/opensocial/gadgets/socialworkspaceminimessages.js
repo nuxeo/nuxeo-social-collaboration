@@ -63,7 +63,7 @@ var prefs = new gadgets.Prefs();
     var htmlContent = '';
 
     if (currentMiniMessages.length == 0) {
-      htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.activity') + '</div>';
+      htmlContent += '<div class="noStream">' + prefs.getMsg('label.no.mini.message') + '</div>';
     } else {
       for (var i = 0; i < currentMiniMessages.length; i++) {
         var currentActivity = currentMiniMessages[i];
