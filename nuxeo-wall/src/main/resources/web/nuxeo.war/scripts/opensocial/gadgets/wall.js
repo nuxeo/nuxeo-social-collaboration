@@ -32,45 +32,53 @@
       '</div>';
 
   templates.activity =
-      '<div class="miniMessage jsMainActivity" data-activityid="{{id}}" data-likescount="{{likeStatus.likesCount}}" data-userlikestatus="{{likeStatus.userLikeStatus}}">' +
+      '<div class="activityContainerItem jsMainActivity" data-activityid="{{id}}" data-likescount="{{likeStatus.likesCount}}" data-userlikestatus="{{likeStatus.userLikeStatus}}">' +
         '<div class="container">' +
-          '<div class="message">' +
+          '<div class="activityTypeContainer">' +
             '<span class="activityType"><img src="{{icon}}"></span>' +
-            '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
-            '<div class="event">{{{activityMessage}}}</div>' +
           '</div>' +
-          '<div class="actions jsActions">' +
-            '<span class="timestamp">{{publishedDate}}</span>' +
+          '<div class="activityContentContainer">' +
+            '<div class="message">' +
+              '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
+              '<div class="event">{{{activityMessage}}}</div>' +
+            '</div>' +
+            '<div class="actions jsActions">' +
+              '<span class="timestamp">{{publishedDate}}</span>' +
+            '</div>' +
+            '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
           '</div>' +
         '</div>' +
-        '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
       '</div>';
 
   templates.miniMessage =
-      '<div class="miniMessage jsMainActivity" data-activityid="{{id}}" data-likescount="{{likeStatus.likesCount}}" ' +
+      '<div class="activityContainerItem jsMainActivity" data-activityid="{{id}}" data-likescount="{{likeStatus.likesCount}}" ' +
           'data-userlikestatus="{{likeStatus.userLikeStatus}}" data-allowdeletion="{{allowDeletion}}">' +
         '<div class="container">'+
-          '<div class="messageHeader">' +
+          '<div class="activityTypeContainer">' +
             '<span class="activityType"><img src="{{icon}}"></span>' +
-            '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
-            '<span class="username">{{{displayActorLink}}}</span>' +
           '</div>' +
-          '<div class="message">{{{activityMessage}}}</div>' +
-          '<div class="actions jsActions">' +
-            '<span class="timestamp">{{{publishedDate}}}</span>' +
+          '<div class="activityContentContainer">' +
+            '<div class="messageHeader">' +
+              '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
+              '{{{displayActorLink}}}' +
+            '</div>' +
+            '<div class="message">{{{activityMessage}}}</div>' +
+            '<div class="actions jsActions">' +
+              '<span class="timestamp">{{{publishedDate}}}</span>' +
+            '</div>' +
+            '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
           '</div>' +
         '</div>' +
-        '<div class="answers jsRepliesContainer">{{{repliesHtml}}}</div>' +
       '</div>';
 
   templates.reply =
-      '<div class="miniMessage {{replyClass}}" data-replyid="{{id}}" data-likescount="{{likeStatus.likesCount}}" ' +
+      '<div class="activityContainerItem {{replyClass}}" data-replyid="{{id}}" data-likescount="{{likeStatus.likesCount}}" ' +
           'data-userlikestatus="{{likeStatus.userLikeStatus}}" data-allowdeletion="{{allowDeletion}}">' +
         '<div class="container">' +
           '<div class="message">' +
             '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
             '<div class="event">' +
-              '<span class="username">{{{displayActorLink}}}</span>' +
+              '{{{displayActorLink}}}' +
               '<div class="message">{{{message}}}</div>' +
             '</div>' +
           '</div>' +

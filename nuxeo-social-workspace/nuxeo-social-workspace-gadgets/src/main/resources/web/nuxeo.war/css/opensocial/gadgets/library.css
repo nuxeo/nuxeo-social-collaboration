@@ -1,10 +1,9 @@
 .content { font: normal 11px / 14px 'Lucida Grande',Verdana,Arial,sans-serif; height: 100% }
-
 .links { float: right }
 
 /* STYLES SEARCH FIELD */
 .customSearchBox { float: right }
 .customSearchBox form { margin: 0 10px 0 0 }
-.customSearchBox .wideDefinition { border: 1px solid #ccc; padding: 2px 0 2px 2px }
+.customSearchBox .wideDefinition { border: 1px solid #ccc; padding: .2em 0 .2em .2em }
 .customSearchBox .searchBox { background: none transparent; border: none; width: 105px }
-.customSearchBox .button {background: transparent url(${basePath}/icons/gadget_library_search.png) no-repeat left center; border:none; cursor: pointer; width: 20px }
+.customSearchBox .button { background: transparent url(${basePath}/icons/gadget_library_search.png) no-repeat left center; border: none; cursor: pointer; width: 20px }

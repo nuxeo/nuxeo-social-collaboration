@@ -11,15 +11,19 @@ var prefs = new gadgets.Prefs();
   /* templates */
   var templates = {};
   templates.activity =
-    '<div class="miniMessage jsMainActivity" data-activityid="{{id}}" data-likescount="{{likeStatus.likesCount}}" data-userlikestatus="{{likeStatus.userLikeStatus}}">' +
+    '<div class="activityContainerItem jsMainActivity" data-activityid="{{id}}" data-likescount="{{likeStatus.likesCount}}" data-userlikestatus="{{likeStatus.userLikeStatus}}">' +
       '<div class="container">' +
-        '<div class="message">' +
+        '<div class="activityTypeContainer">' +
           '<span class="activityType"><img src="{{icon}}"></span>' +
-          '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
-          '<div class="event">{{{activityMessage}}}</div>' +
         '</div>' +
-        '<div class="actions jsActions">' +
-          '<span class="timestamp">{{publishedDate}}</span>' +
+        '<div class="activityContentContainer">' +
+          '<div class="message">' +
+            '<span class="avatar"><img src="{{actorAvatarURL}}" alt="{{displayActor}}" /></span>' +
+            '<div class="event">{{{activityMessage}}}</div>' +
+          '</div>' +
+          '<div class="actions jsActions">' +
+            '<span class="timestamp">{{publishedDate}}</span>' +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>';

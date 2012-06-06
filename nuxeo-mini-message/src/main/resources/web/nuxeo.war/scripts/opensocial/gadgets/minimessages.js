@@ -3,7 +3,7 @@
   /* templates */
   var templates = {};
   templates.miniMessage =
-      '<div class="miniMessage {{cssClass}} jsMainActivity" data-activityid="{{id}}" ' +
+      '<div class="activityContainerItem {{cssClass}} jsMainActivity" data-activityid="{{id}}" ' +
           'data-allowdeletion="{{allowDeletion}}">' +
         '<div class="container">'+
           '<div class="messageHeader">' +
