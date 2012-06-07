@@ -18,6 +18,10 @@
       <artifactId>nuxeo-social-workspace-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.nuxeo.rating</groupId>
+      <artifactId>nuxeo-rating-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.nuxeo.activity</groupId>
       <artifactId>nuxeo-activity</artifactId>
     </dependency>

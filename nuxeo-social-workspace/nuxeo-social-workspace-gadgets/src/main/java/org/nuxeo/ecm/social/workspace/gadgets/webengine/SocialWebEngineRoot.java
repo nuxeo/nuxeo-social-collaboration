@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011 Nuxeo SA (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2012 Nuxeo SA (http://nuxeo.com/) and contributors.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
@@ -13,6 +13,7 @@
  *
  * Contributors:
  *     eugen
+ *     vpasquier <vpasquier@nuxeo.com>
  */
 package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 
@@ -25,6 +26,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_IS
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -32,12 +34,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -60,11 +64,18 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.schema.TypeService;
+import org.nuxeo.ecm.platform.comment.api.CommentableDocument;
+import org.nuxeo.ecm.platform.comment.workflow.utils.CommentsConstants;
+import org.nuxeo.ecm.platform.comment.workflow.utils.FollowTransitionUnrestricted;
 import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
+import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
+import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
+import org.nuxeo.ecm.rating.api.LikeService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
+import org.nuxeo.ecm.user.center.profile.UserProfileService;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
@@ -77,7 +88,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 /**
  * @author rlegall
- *
+ * 
  */
 @Path("/social")
 @WebObject(type = "social")
@@ -87,6 +98,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
     private static final Log log = LogFactory.getLog(SocialWebEngineRoot.class);
 
     static AutomationService automationService;
+
+    protected static final String AVATAR_PROPERTY = "userprofile:avatar";
 
     /**
      * Main method that return a html snipped with the list of documents
@@ -102,8 +115,25 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context HttpServletRequest request)
-            throws Exception {
+    public Object documentList(@Context
+    HttpServletRequest request) throws Exception {
+        FormData formData = new FormData(request);
+
+        String lang = formData.getString("lang");
+        setLanguage(lang);
+
+        // get the arguments
+        String ref = formData.getString("docRef");
+        String queryText = formData.getString("queryText");
+        int pageSize = getIntFromString(formData.getString("limit"));
+        int page = getIntFromString(formData.getString("page"));
+        return buildDocumentList(ref, pageSize, page, queryText);
+    }
+
+    @GET
+    @Path("documentListGet")
+    public Object documentListGet(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -188,8 +218,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object publishDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -215,8 +245,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object deleteDocument(@Context
+    HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
@@ -236,9 +266,10 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef") String ref,
-            @QueryParam("doctype") String docTypeId,
-            @QueryParam("lang") String lang) throws Exception {
+    public Object createDocumentForm(@QueryParam("docRef")
+    String ref, @QueryParam("doctype")
+    String docTypeId, @QueryParam("lang")
+    String lang) throws Exception {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -257,8 +288,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref,
-            @QueryParam("lang") String lang) throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef")
+    String ref, @QueryParam("lang")
+    String lang) throws ClientException {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -293,8 +325,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object createDocument(@Context
+    HttpServletRequest request) throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();
@@ -497,8 +529,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * Returns the main blob for the given {@code doc}, {@code null} if
-     * there is no main file available.
+     * Returns the main blob for the given {@code doc}, {@code null} if there is
+     * no main file available.
      */
     public Blob getAttachment(DocumentModel doc) throws ClientException {
         BlobHolder bh = doc.getAdapter(BlobHolder.class);
@@ -526,7 +558,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     /**
      * Indicates if the current user has the right to Add Children to the
      * current Document
-     *
+     * 
      * @param docId the reference of the document
      * @return true if the current user has the right to Add Children to the
      *         current Document and false otherwise
@@ -540,5 +572,166 @@ public class SocialWebEngineRoot extends ModuleRoot {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public List<DocumentModel> getComments(DocumentModel doc)
+            throws ClientException {
+        // Load document comments if exist
+        List<DocumentModel> comments = null;
+        CommentableDocument commentableDoc = doc.getAdapter(CommentableDocument.class);
+        if (commentableDoc != null) {
+            comments = commentableDoc.getComments();
+        }
+        return comments;
+    }
+
+    @GET
+    @Path("documentCommentList")
+    public Object documentCommentList(@QueryParam("docRef")
+    String ref) throws Exception {
+        // build freemarker arguments map
+        Map<String, Object> args = new HashMap<String, Object>();
+        CoreSession session = ctx.getCoreSession();
+        IdRef docRef = new IdRef(ref);
+        DocumentModel doc = session.getDocument(docRef);
+        args.put("doc", doc);
+        return Response.ok(getView("document_comments_template").args(args)).header(
+                "docRef", ref).build();
+    }
+
+    public List<DocumentModel> getCommentChildren(DocumentModel doc,
+            DocumentModel parent) throws ClientException {
+        // Load all comment children of the document doc
+        List<DocumentModel> comments = null;
+        CommentableDocument commentableDoc = doc.getAdapter(CommentableDocument.class);
+        if (commentableDoc != null) {
+            comments = commentableDoc.getComments(parent);
+        }
+        return comments;
+    }
+
+    /**
+     * Add comment to the related document and parent comment
+     */
+    @POST
+    @Path("addComment")
+    public Object addComment() throws ClientException {
+        try {
+            HttpServletRequest request = ctx.getRequest();
+            CoreSession session = ctx.getCoreSession();
+            // Create pending comment
+            DocumentModel myComment = session.createDocumentModel("Comment");
+            // Set comment properties
+            myComment.setProperty("comment", "author",
+                    ctx.getPrincipal().getName());
+            myComment.setProperty("comment", "text",
+                    request.getParameter("commentContent"));
+            myComment.setProperty("comment", "creationDate",
+                    Calendar.getInstance());
+            // Retrieve document to comment
+            String docToCommentRef = request.getParameter("docToCommentRef");
+            DocumentModel docToComment = session.getDocument(new IdRef(
+                    docToCommentRef));
+            String commentParentRef = request.getParameter("commentParentRef");
+            // Create comment
+            CommentableDocument commentableDoc = null;
+            if (docToComment != null) {
+                commentableDoc = docToComment.getAdapter(CommentableDocument.class);
+            }
+            DocumentModel newComment;
+            if (commentParentRef != null) {
+                // if exists retrieve comment parent
+                DocumentModel commentParent = session.getDocument(new IdRef(
+                        commentParentRef));
+                newComment = commentableDoc.addComment(commentParent, myComment);
+            } else {
+                newComment = commentableDoc.addComment(myComment);
+            }
+            // automatically validate the comments
+            if (CommentsConstants.COMMENT_LIFECYCLE.equals(newComment.getLifeCyclePolicy())) {
+                new FollowTransitionUnrestricted(ctx.getCoreSession(),
+                        newComment.getRef(),
+                        CommentsConstants.TRANSITION_TO_PUBLISHED_STATE).runUnrestricted();
+            }
+            // Return the new comment view
+            Map<String, Object> args = new HashMap<String, Object>();
+            args.put("doc", docToComment);
+            args.put("comment", newComment);
+            return Response.ok(getView("bricks/document_comments").args(args)).header(
+                    "docRef", docToCommentRef).header("parentCommentRef",
+                    commentParentRef).build();
+        } catch (Throwable t) {
+            log.error("failed to add comment", t);
+            throw ClientException.wrap(t);
+        }
+    }
+
+    /**
+     * Like/Unlike the related document
+     */
+    @POST
+    @Path("docLike")
+    public Object docLike(@FormParam("docRef")
+    String docRef) throws Exception {
+        // Get document
+        CoreSession session = ctx.getCoreSession();
+        DocumentModel docToLike = session.getDocument(new IdRef(docRef));
+        // Get Like Services
+        LikeService LikeService = Framework.getLocalService(LikeService.class);
+        // Get user name
+        String userName = ctx.getPrincipal().getName();
+        if (LikeService.hasUserLiked(userName, docToLike)) {
+            LikeService.dislike(userName, docToLike);
+            return Response.ok(
+                    "Like (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
+                    "docRef", docRef).build();
+        } else {
+            LikeService.like(userName, docToLike);
+            return Response.ok(
+                    "Unlike (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
+                    "docRef", docRef).build();
+        }
+    }
+
+    /**
+     * Return like status (Likes number / if current user likes)
+     */
+    public String getLikeStatus(DocumentModel doc) {
+        LikeService likeService = Framework.getLocalService(LikeService.class);
+        String userName = ctx.getPrincipal().getName();
+        if (likeService.hasUserLiked(userName, doc)) {
+            String data = "Unlike (" + String.valueOf(getLikesCount(doc)) + ")";
+            return data;
+        } else {
+            String data = "Like (" + String.valueOf(getLikesCount(doc)) + ")";
+            return data;
+        }
+    }
+
+    public long getLikesCount(DocumentModel doc) {
+        LikeService likeService = Framework.getLocalService(LikeService.class);
+        return likeService.getLikesCount(doc);
+    }
+
+    /**
+     * Get the related user avatar to display in the UI comment
+     */
+    public String getAvatarURL(String commentUser) throws ClientException {
+        String url = VirtualHostHelper.getContextPathProperty()
+                + "/icons/missing_avatar.png";
+        UserProfileService userProfileService = Framework.getLocalService(UserProfileService.class);
+        DocumentModel userProfileDoc = userProfileService.getUserProfileDocument(
+                commentUser, ctx.getCoreSession());
+        if (userProfileDoc == null) {
+            return url;
+        }
+
+        if (userProfileDoc.getPropertyValue(AVATAR_PROPERTY) != null) {
+            url = VirtualHostHelper.getContextPathProperty()
+                    + "/"
+                    + DocumentModelFunctions.fileUrl("downloadFile",
+                            userProfileDoc, AVATAR_PROPERTY, "avatar");
+        }
+        return url;
     }
 }
