@@ -177,7 +177,7 @@ Library.contentLoadedHandler = function (data) {
 
 // return the path to access social webengine module
 Library.getBasePath = function () {
-    return basePath = top.nxContextPath + '/site/social';
+    return basePath = NXGadgetContext.clientSideBaseUrl + 'site/social';
 }
 
 // display an confirmation dialog
