@@ -2,6 +2,10 @@
   <#if (docs?size == 0)>
   	${Context.getMessage("label.empty.list")}
   <#else>
+
+  <script type="text/javascript" >
+    listDocIds = [];
+  </script>
   <div id="pageNavigationControls">
     <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', 0)" id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
       <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${prevPage})" id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
@@ -9,13 +13,6 @@
       <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${nextPage})" id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
       <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
   </div>
-  <script type="text/javascript" >
-      $(document).ready(function(){
-	    for (i=0;i<listDocIds.length;i++){
-          Library.documentCommentList(listDocIds[i]);
-		}
-      });
-  </script>
   <table class="dataList">
     <thead>
       <tr>
@@ -78,12 +75,19 @@
     </tr>
 	<#if (!doc.isFolder)>
     <script type="text/javascript" >
-        listDocIds.push('${doc.id}');
+      listDocIds.push('${doc.id}');
     </script>
-    </#if> 
+    </#if>
     </#list>
 	</trBody>
   </table>
   </#if>
+  <script type="text/javascript" >
+    $(document).ready(function(){
+    for (i=0;i<listDocIds.length;i++){
+      Library.documentCommentList(listDocIds[i]);
+    }
+    });
+  </script>
 </div>
 <#include "@bricks/context">
