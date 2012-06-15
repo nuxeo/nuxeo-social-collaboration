@@ -88,7 +88,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 /**
  * @author rlegall
- * 
+ *
  */
 @Path("/social")
 @WebObject(type = "social")
@@ -115,8 +115,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context
-    HttpServletRequest request) throws Exception {
+    public Object documentList(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -132,8 +132,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @GET
     @Path("documentListGet")
-    public Object documentListGet(@Context
-    HttpServletRequest request) throws Exception {
+    public Object documentListGet(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -218,8 +218,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object publishDocument(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -245,8 +245,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object deleteDocument(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
@@ -266,10 +266,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef")
-    String ref, @QueryParam("doctype")
-    String docTypeId, @QueryParam("lang")
-    String lang) throws Exception {
+    public Object createDocumentForm(@QueryParam("docRef") String ref,
+            @QueryParam("doctype") String docTypeId,
+            @QueryParam("lang") String lang) throws Exception {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -288,9 +287,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef")
-    String ref, @QueryParam("lang")
-    String lang) throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref,
+            @QueryParam("lang") String lang) throws ClientException {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -325,8 +323,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object createDocument(@Context HttpServletRequest request)
+            throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();
@@ -359,7 +357,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "AND ecm:parentId = '" + doc.getId() + "'";
 
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
-                "pageSize", pageSize).set("page", page);
+                "page", page).set("pageSize", pageSize > 0 ? pageSize : 5);
 
         return (PaginableDocumentModelList) getAutomationService().run(ctx,
                 chain);
@@ -382,7 +380,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "AND ecm:fulltext = '" + escapedQueryText + "' "
                 + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "'";
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
-                "limit", pageSize).set("page", page);
+                "page", page).set("pageSize", pageSize > 0 ? pageSize : 5);
 
         return (PaginableDocumentModelList) getAutomationService().run(ctx,
                 chain);
@@ -558,7 +556,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     /**
      * Indicates if the current user has the right to Add Children to the
      * current Document
-     * 
+     *
      * @param docId the reference of the document
      * @return true if the current user has the right to Add Children to the
      *         current Document and false otherwise
@@ -587,8 +585,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @GET
     @Path("documentCommentList")
-    public Object documentCommentList(@QueryParam("docRef")
-    String ref) throws Exception {
+    public Object documentCommentList(@QueryParam("docRef") String ref)
+            throws Exception {
         // build freemarker arguments map
         Map<String, Object> args = new HashMap<String, Object>();
         CoreSession session = ctx.getCoreSession();
@@ -671,8 +669,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("docLike")
-    public Object docLike(@FormParam("docRef")
-    String docRef) throws Exception {
+    public Object docLike(@FormParam("docRef") String docRef) throws Exception {
         // Get document
         CoreSession session = ctx.getCoreSession();
         DocumentModel docToLike = session.getDocument(new IdRef(docRef));
