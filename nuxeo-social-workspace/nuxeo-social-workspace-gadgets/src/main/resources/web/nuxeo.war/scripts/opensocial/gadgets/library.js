@@ -123,12 +123,13 @@ Library.iframeLoaded = function (iframe) {
     }
 }
 
-//
 Library.contentLoadedHandler = function (data) {
     // set the new content in "content" element
     jQuery("#content").html(data);
 
-    Library.addPopupBoxTo(jQuery(".addPopup"));
+  jQuery(".addPopup").each(function() {
+    Library.addPopupBoxTo($(this));
+  });
 
     // intercept forms submit event and add custom behavior
     jQuery("form").submit(

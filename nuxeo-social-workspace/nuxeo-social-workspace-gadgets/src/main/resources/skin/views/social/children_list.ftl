@@ -10,6 +10,13 @@
 
   <script src="${contextPath}/nxthemes-lib/jquery.js,jquery.fancybox.js,gadget-library.js"></script>
 
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+      jQuery(".addPopup").each(function() {
+        Library.addPopupBoxTo($(this));
+      });
+    });
+  </script>
 </head>
 </#if>
 

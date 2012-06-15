@@ -58,7 +58,7 @@ ${Context.getMessage("label.create.a.document")}
 </table>
 <div class="actions">
 <input class="border" type="submit" name="createDocument" value="${Context.getMessage("label.action.create")}"/>
-<button class="border" name="cancel" value="Cancel" type="button" onclick="jQuery.fancybox.close()">${Context.getMessage("label.action.cancel")}</button>
+<button class="border" name="cancel" value="Cancel" type="button" onclick="parent.jQuery.fancybox.close()">${Context.getMessage("label.action.cancel")}</button>
 <input type="hidden" name="docRef" value="${currentDoc.id}" />
 <input type="hidden" name="doctype" value="${docType.id}" />
 </div>
