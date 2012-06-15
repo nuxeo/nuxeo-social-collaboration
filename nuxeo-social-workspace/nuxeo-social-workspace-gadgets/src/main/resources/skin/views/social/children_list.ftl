@@ -1,3 +1,4 @@
+<#if (renderFullHtml)>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" class="no-js">
 <head>
@@ -10,6 +11,8 @@
   <script src="${contextPath}/nxthemes-lib/jquery.js,jquery.fancybox.js,gadget-library.js"></script>
 
 </head>
+</#if>
+
 <div id="content">
 <div class="header">
   <#include "@bricks/toolbar">
@@ -21,4 +24,7 @@
 </div>
 <#include "@bricks/document_list">
 </div>
+
+<#if (renderFullHtml)>
 </html>
+</#if>

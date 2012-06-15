@@ -38,7 +38,7 @@ Library.confirmDeleteDocument = function (targetRef, targetTitle) {
     } else {
         message = "Delete " + targetTitle + " ?";
     }
-    code = 'deleteDocument( \'' + targetRef + '\' );';
+    code = 'Library.deleteDocument( \'' + targetRef + '\' );';
     Library.showConfirmationPopup(message, code);
 }
 
@@ -46,7 +46,7 @@ Library.confirmDeleteDocument = function (targetRef, targetTitle) {
 Library.deleteDocument = function (targetRef) {
     data = Library.loadContext();
     data.targetRef = targetRef;
-    Library.loadContent(Library.getBasePath() + '/' + "deleteDocument", data);
+    Library.loadContent(isGadget ? Library.getBasePath() + '/' + "deleteDocument" : "deleteDocument", data, true);
 }
 
 Library.confirmPublishDocument = function (targetRef, targetTitle, public) {
@@ -63,7 +63,7 @@ Library.confirmPublishDocument = function (targetRef, targetTitle, public) {
             message = "Restrict the document " + targetTitle + " to the social workspace?";
         }
     }
-    code = 'publishDocument( \'' + targetRef + '\', ' + public + ' );';
+    code = 'Library.publishDocument( \'' + targetRef + '\', ' + public + ' );';
     Library.showConfirmationPopup(message, code);
 }
 
@@ -74,7 +74,7 @@ Library.publishDocument = function (targetRef, public) {
     if (typeof public != 'undefined') {
         data.public = public;
     }
-    Library.loadContent(Library.getBasePath() + '/' + "publishDocument", data);
+    Library.loadContent(isGadget ? Library.getBasePath()  + '/' + "publishDocument" : "publishDocument", data, true);
 }
 
 Library.goToDocument = function (path, viewId) {
@@ -98,14 +98,14 @@ Library.loadContext = function () {
     return context;
 }
 
-Library.loadContent = function (path, data) {
+Library.loadContent = function (path, data, forcePost) {
     // add language
     if (isGadget) {
         data.lang = prefs.getLang();
     } else {
         data.lang = "en";
     }
-    if (isGadget) {
+    if (isGadget || forcePost) {
         jQuery.post(
         path, data, Library.contentLoadedHandler);
     } else {
@@ -191,8 +191,7 @@ Library.showConfirmationPopup = function (message, code) {
     t += '<button class="border" name="cancel" type="button" onclick="jQuery.fancybox.close()">Cancel</button>';
     t += '</div>';
     t += '</div>';
-    jQuery.fancybox(
-    t, {
+    jQuery.fancybox(t, {
         'showCloseButton': false,
         'autoDimensions': false,
         'width': '94%',

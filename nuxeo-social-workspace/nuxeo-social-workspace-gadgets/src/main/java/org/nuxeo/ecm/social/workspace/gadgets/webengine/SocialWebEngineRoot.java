@@ -77,6 +77,7 @@ import org.nuxeo.ecm.rating.api.LikeService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.user.center.profile.UserProfileService;
 import org.nuxeo.ecm.webengine.forms.FormData;
+import org.nuxeo.ecm.webengine.model.Template;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.ModuleRoot;
 import org.nuxeo.runtime.api.Framework;
@@ -100,6 +101,22 @@ public class SocialWebEngineRoot extends ModuleRoot {
     static AutomationService automationService;
 
     protected static final String AVATAR_PROPERTY = "userprofile:avatar";
+
+    @GET
+    public Object index(@Context HttpServletRequest request) throws Exception {
+        FormData formData = new FormData(request);
+
+        String lang = formData.getString("lang");
+        setLanguage(lang);
+
+        // get the arguments
+        String ref = formData.getString("docRef");
+        String queryText = formData.getString("queryText");
+        int pageSize = getIntFromString(formData.getString("limit"));
+        int page = getIntFromString(formData.getString("page"));
+        return buildDocumentList(ref, pageSize, page, queryText).arg(
+                "renderFullHtml", true);
+    }
 
     /**
      * Main method that return a html snipped with the list of documents
@@ -147,13 +164,13 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return buildDocumentList(ref, pageSize, page, queryText);
     }
 
-    Object buildDocumentList(String ref, int pageSize, int page,
+    Template buildDocumentList(String ref, int pageSize, int page,
             String queryText) throws Exception {
         DocumentRef docRef = getDocumentRef(ref);
         return buildDocumentList(docRef, pageSize, page, queryText);
     }
 
-    Object buildDocumentList(DocumentRef docRef, int pageSize, int page,
+    Template buildDocumentList(DocumentRef docRef, int pageSize, int page,
             String queryText) throws Exception {
         boolean isSearch = queryText != null && queryText.trim().length() > 0;
 
