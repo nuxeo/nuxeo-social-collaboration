@@ -1,24 +1,22 @@
-<tr><td colspan="4" style="border:0; padding-left:15px">
-<table style="width: 100%;">
+<tr><td colspan="4" class="messageRow">
+<table>
 <tr>
-  <td style="border-style:none;width:30%">
-    <img src="${This.getAvatarURL(comment.comment.author)}" style="width:30px;"/>
-    ${comment.comment.author}
-    ${comment.comment.creationDate.getInstance().getTime()?string("dd/MM/yyyy")}
+  <td class="messageUserInfos">
+    <span class="avatar"><img src="${This.getAvatarURL(comment.comment.author)}"/></span>
+    <span class="username">${comment.comment.author}</span>
+    <span class="timestamp">${comment.comment.creationDate.getInstance().getTime()?string("dd/MM/yyyy")}</span>
   </td>
-  <td style="border-style:none;width:30%">
-    ${comment.comment.text}
+  <td class="messageContent">
+    <span class="message comment">${comment.comment.text}</span>
   </td>
-  <td style="border-style:none;width:40%">
-    <a href="#" id="comment_button_${comment.id}">Answer</a>
+  <td class="messageReply">
+    <a href="#" class="actionItem" id="comment_button_${comment.id}"><img src="${contextPath}/icons/reply.png" />Reply</a>
   </td>
 </tr>
 <tr class="${comment.id}">
-  <td style="border-style:none;"/>
-  <td style="border-style:none;"/>
-  <td style="border-style:none;">
+  <td colspan="3">
     <div id="box_${comment.id}" style="display:none">
-        <textarea id="commentContent_${comment.id}" ></textarea><br/>
+        <textarea id="commentContent_${comment.id}" ></textarea>
         <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','#commentContent_${comment.id}','${comment.id}')"/>
     </div>
   </td>

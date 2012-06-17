@@ -7,3 +7,19 @@
 .customSearchBox .wideDefinition { border: 1px solid #ccc; padding: .2em 0 .2em .2em }
 .customSearchBox .searchBox { background: none transparent; border: none; width: 105px }
 .customSearchBox .button { background: transparent url(${basePath}/icons/gadget_library_search.png) no-repeat left center; border: none; cursor: pointer; width: 20px }
+
+/* Comments, threads and like actions */
+.dataList td.actions { background-color: #f4f4f4; border-top:  1px dotted #ddd; font-size: 10px }
+  .actions .actionItem { margin-right: .5em }
+  .actions a.actionItem:link, .actions a.actionItem:visited { color: #9db6d1 }
+  .actionItem img { margin: 0 .3em -0.2em -0.2em }
+
+.dataList .documentThread td { border-top: 1px dotted #ededed; border-bottom: none }
+.dataList .documentThread table { width: 90% }
+.dataList .messageUserInfos { width: 30% }
+.dataList .messageContent { width: 50% }
+.dataList .messageReply { width: 20% }
+.dataList td.messageRow { border: none; padding: 0 }
+
+.newMessageForm { margin: 0 auto; width: 90% }
+.newMessageForm textarea { height: 35px; margin: .5em 0 0; width: 75% }

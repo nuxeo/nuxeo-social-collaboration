@@ -707,19 +707,10 @@ public class SocialWebEngineRoot extends ModuleRoot {
         }
     }
 
-    /**
-     * Return like status (Likes number / if current user likes)
-     */
-    public String getLikeStatus(DocumentModel doc) {
+    public boolean hasUserLiked(DocumentModel doc) {
         LikeService likeService = Framework.getLocalService(LikeService.class);
         String userName = ctx.getPrincipal().getName();
-        if (likeService.hasUserLiked(userName, doc)) {
-            String data = "Unlike (" + String.valueOf(getLikesCount(doc)) + ")";
-            return data;
-        } else {
-            String data = "Like (" + String.valueOf(getLikesCount(doc)) + ")";
-            return data;
-        }
+        return likeService.hasUserLiked(userName, doc);
     }
 
     public long getLikesCount(DocumentModel doc) {

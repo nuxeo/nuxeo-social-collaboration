@@ -7,7 +7,6 @@
   <title>Library Gadget</title>
 
   <link rel="stylesheet" type="text/css" href="${contextPath}/nxthemes-lib/gadget-common.css,jquery.fancybox.style.css,gadget-library.css?path=${contextPath}&basepath=${contextPath}"/>
-
   <script src="${contextPath}/nxthemes-lib/jquery.js,jquery.fancybox.js,gadget-library.js"></script>
 
   <script type="text/javascript">

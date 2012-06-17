@@ -1,15 +1,23 @@
-<tr>
-  <td colspan="4" style="border-style:none;">
+  <tr>
+  <td colspan="5" class="actions">
     <#assign comments = This.getComments(doc)>
-    <a href="#" id="comment_display_button_${doc.id}">Show ${comments?size} threads</a>
-    <a href="#" id="root_comment_button_${doc.id}">Comment</a>
-    <a href="#" id="like_${doc.id}" onclick="Library.docLike('${doc.id}');" class="like_link">${This.getLikeStatus(doc)}</a>
-    <div class='panel' id="box_comment_${doc.id}" style="display:none">
-        <textarea id="rootCommentContent_${doc.id}" style="width:390px;height:23px; border:1px solid #999999;"></textarea><br/>
-        <input type="button" value="Comment" onclick="Library.addComment('${doc.id}','#rootCommentContent_${doc.id}')"/>
+    <a class="actionItem" href="#" id="comment_display_button_${doc.id}">Show ${comments?size} threads</a>
+    <a class="actionItem" href="#" id="root_comment_button_${doc.id}"><img src="${contextPath}/icons/comment.png" />Comment</a>
+    <a class="actionItem" href="#" id="like_${doc.id}" onclick="Library.docLike('${doc.id}');" class="like_link">
+    <#if This.hasUserLiked(doc)>
+      <img src="${contextPath}/icons/unlike.png" />
+      ${This.getLikesCount(doc)}
+    <#else>
+      <img src="${contextPath}/icons/like.png" />
+      ${This.getLikesCount(doc)}
+    </#if>
+    </a>
+    <div class="newMessageForm" id="box_comment_${doc.id}" style="display:none">
+        <textarea id="rootCommentContent_${doc.id}"></textarea>
+        <input class="button" type="button" value="Comment" onclick="Library.addComment('${doc.id}','#rootCommentContent_${doc.id}')"/>
     </div>
     <div id="display_${doc.id}" style="display:none">
-      <table id="comments_list_${doc.id}" style="border-bottom: 0px;width: 100%">
+      <table id="comments_list_${doc.id}" class="documentThread">
         <#list comments as comment>
           <#include "@bricks/document_comments">
         </#list>
