@@ -117,21 +117,7 @@ public class GetSocialWorkspaceMembers {
     }
 
     protected String getAvatarURL(Principal principal) throws ClientException {
-        String url = VirtualHostHelper.getContextPathProperty()
-                + "/icons/missing_avatar.png";
-        DocumentModel userProfileDoc = userProfileService.getUserProfileDocument(
-                principal.getName(), session);
-        if (userProfileDoc == null) {
-            return url;
-        }
-
-        if (userProfileDoc.getPropertyValue(AVATAR_PROPERTY) != null) {
-            url = VirtualHostHelper.getContextPathProperty()
-                    + "/"
-                    + DocumentModelFunctions.fileUrl("downloadFile",
-                            userProfileDoc, AVATAR_PROPERTY, "avatar");
-        }
-        return url;
+        return ActivityMessageHelper.getUserAvatarURL(session, principal.getName());
     }
 
 }
