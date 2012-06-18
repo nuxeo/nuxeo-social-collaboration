@@ -415,6 +415,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         String query = "SELECT * FROM Document "
                 + "WHERE ecm:mixinType != 'HiddenInNavigation' "
                 + "AND ecm:isCheckedInVersion = 0 "
+                + "AND ecm:isProxy = 0 "
                 + "AND ecm:currentLifeCycleState != 'deleted' "
                 + "AND ecm:fulltext = '" + escapedQueryText + "' "
                 + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "'";
