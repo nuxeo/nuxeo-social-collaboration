@@ -691,20 +691,17 @@ public class SocialWebEngineRoot extends ModuleRoot {
         CoreSession session = ctx.getCoreSession();
         DocumentModel docToLike = session.getDocument(new IdRef(docRef));
         // Get Like Services
-        LikeService LikeService = Framework.getLocalService(LikeService.class);
+        LikeService likeService = Framework.getLocalService(LikeService.class);
         // Get user name
         String userName = ctx.getPrincipal().getName();
-        if (LikeService.hasUserLiked(userName, docToLike)) {
-            LikeService.dislike(userName, docToLike);
-            return Response.ok(
-                    "Like (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
-                    "docRef", docRef).build();
+        if (likeService.hasUserLiked(userName, docToLike)) {
+            likeService.dislike(userName, docToLike);
         } else {
-            LikeService.like(userName, docToLike);
-            return Response.ok(
-                    "Unlike (" + String.valueOf(getLikesCount(docToLike)) + ")").header(
-                    "docRef", docRef).build();
+            likeService.like(userName, docToLike);
         }
+        return Response.ok(
+                getView("bricks/document_like").arg("doc", docToLike)).header(
+                "docRef", docRef).build();
     }
 
     public boolean hasUserLiked(DocumentModel doc) {

@@ -315,7 +315,7 @@ Library.docLike = function (docRef) {
 
 //Rerender document like number area
 Library.addLikeUI = function (response, status, jqXHR) {
-    $("a#like_" + jqXHR.getResponseHeader("docRef")).text(response);
+    $("a#like_" + jqXHR.getResponseHeader("docRef")).html(response);
 }
 
 // Handle Link click event
