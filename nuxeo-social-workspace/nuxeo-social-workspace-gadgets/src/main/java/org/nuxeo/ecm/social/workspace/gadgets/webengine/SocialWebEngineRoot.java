@@ -393,7 +393,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "WHERE ecm:mixinType != 'HiddenInNavigation' "
                 + "AND ecm:isCheckedInVersion = 0 "
                 + "AND ecm:currentLifeCycleState != 'deleted'"
-                + "AND ecm:parentId = '" + doc.getId() + "'";
+                + "AND ecm:parentId = '" + doc.getId() + "' "
+                + "ORDER BY dc:title";
 
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
                 "page", page).set("pageSize", pageSize > 0 ? pageSize : 5);
@@ -418,7 +419,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "AND ecm:isProxy = 0 "
                 + "AND ecm:currentLifeCycleState != 'deleted' "
                 + "AND ecm:fulltext = '" + escapedQueryText + "' "
-                + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "'";
+                + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "' "
+                + "ORDER BY dc:title";
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
                 "page", page).set("pageSize", pageSize > 0 ? pageSize : 5);
 
