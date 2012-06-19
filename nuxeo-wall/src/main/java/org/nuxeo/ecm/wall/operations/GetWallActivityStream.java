@@ -18,7 +18,6 @@
 package org.nuxeo.ecm.wall.operations;
 
 import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
-import static org.nuxeo.ecm.activity.ActivityMessageHelper.getUserAvatarURL;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.ACTIVITY_STREAM_NAME_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CONTEXT_DOCUMENT_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CORE_SESSION_PROPERTY;
@@ -27,7 +26,6 @@ import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.LOCALE_PROPERTY;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -127,20 +125,13 @@ public class GetWallActivityStream {
         for (ActivityMessage activityMessage : activityMessages) {
             Map<String, Object> o = activityMessage.toMap(session, locale);
             o.put("replies",
-                    toActivityReplyMessagesJSON(session,
+                    toActivityReplyMessagesJSON(session, locale,
                             activityMessage.getActivityReplyMessages()));
-
-            String actorUsername = getUsername(activityMessage.getActor());
             if (activityMessage.getVerb().equals("minimessage")) {
                 o.put("allowDeletion",
-                        session.getPrincipal().getName().equals(actorUsername));
+                        getAllowDeletion(activityMessage.getActor()));
             }
-
-            String activityObject = ActivityHelper.createActivityObject(activityMessage.getActivityId());
-            LikeStatus likeStatus = likeService.getLikeStatus(username,
-                    activityObject);
-            o.put("likeStatus", likeStatus.toMap());
-
+            o.put("likeStatus", getLikeStatus(activityMessage.getActivityId()));
             activitiesJSON.add(o);
         }
 
@@ -159,31 +150,31 @@ public class GetWallActivityStream {
     }
 
     private List<Map<String, Object>> toActivityReplyMessagesJSON(
-            CoreSession session,
+            CoreSession session, Locale locale,
             List<ActivityReplyMessage> activityReplyMessages)
             throws ClientException {
         List<Map<String, Object>> replies = new ArrayList<Map<String, Object>>();
         for (ActivityReplyMessage activityReplyMessage : activityReplyMessages) {
-            Map<String, Object> o = new HashMap<String, Object>();
-            o.put("id", activityReplyMessage.getActivityReplyId());
-            o.put("actor", activityReplyMessage.getActor());
-            o.put("displayActor", activityReplyMessage.getDisplayActor());
-            o.put("displayActorLink",
-                    activityReplyMessage.getDisplayActorLink());
-            String actorUsername = getUsername(activityReplyMessage.getActor());
-            o.put("actorAvatarURL", getUserAvatarURL(session, actorUsername));
-            o.put("message", activityReplyMessage.getMessage());
-            o.put("publishedDate", activityReplyMessage.getPublishedDate());
+            Map<String, Object> o = activityReplyMessage.toMap(session, locale);
             o.put("allowDeletion",
-                    session.getPrincipal().getName().equals(actorUsername));
-
-            String activityObject = ActivityHelper.createActivityObject(activityReplyMessage.getActivityReplyId());
-            LikeStatus likeStatus = likeService.getLikeStatus(
-                    session.getPrincipal().getName(), activityObject);
-            o.put("likeStatus", likeStatus.toMap());
+                    getAllowDeletion(activityReplyMessage.getActor()));
+            o.put("likeStatus",
+                    getLikeStatus(activityReplyMessage.getActivityReplyId()));
             replies.add(o);
         }
         return replies;
+    }
+
+    private boolean getAllowDeletion(String actor) {
+        String actorUsername = getUsername(actor);
+        return session.getPrincipal().getName().equals(actorUsername);
+    }
+
+    private Map<String, Serializable> getLikeStatus(Serializable id) {
+        String activityObject = ActivityHelper.createActivityObject(id);
+        LikeStatus likeStatus = likeService.getLikeStatus(
+                session.getPrincipal().getName(), activityObject);
+        return likeStatus.toMap();
     }
 
 }
