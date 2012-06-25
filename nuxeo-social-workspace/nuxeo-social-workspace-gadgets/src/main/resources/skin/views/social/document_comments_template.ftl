@@ -1,8 +1,8 @@
   <tr>
   <td colspan="5" class="actions">
     <#assign comments = This.getComments(doc)>
-    <a class="actionItem" href="#" id="comment_display_button_${doc.id}">Show ${comments?size} threads</a>
-    <a class="actionItem" href="#" id="root_comment_button_${doc.id}"><img src="${contextPath}/icons/comment.png" />Comment</a>
+    <a class="actionItem" href="#" id="comment_display_button_${doc.id}">${Context.getMessage("label.gadget.library.show")} ${comments?size} ${Context.getMessage("label.gadget.library.threads")}</a>
+    <a class="actionItem" href="#" id="root_comment_button_${doc.id}"><img src="${contextPath}/icons/comment.png" />${Context.getMessage("label.gadget.library.comment")}</a>
     <a class="actionItem" href="#" id="like_${doc.id}" onclick="Library.docLike('${doc.id}');" class="like_link">
     <#if This.hasUserLiked(doc)>
       <img src="${contextPath}/icons/unlike.png" />
