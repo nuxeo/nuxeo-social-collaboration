@@ -39,6 +39,8 @@
     </ui:decorate>
 
     <div>
+      <nxu:set var="documentLinkBuilder" value="doccollaboration">
+      <nxu:set var="activityLinkBuilder" value="collaboration">
       <c:if test="#{socialWorkspaceActions.isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace()}">
         <ui:decorate template="/incl/tabs/social_workspace_private_dashboard.xhtml">
           <ui:define name="social_workspace_dashboard_actions"/>
@@ -49,6 +51,8 @@
           <ui:define name="social_workspace_dashboard_actions"/>
         </ui:decorate>
       </c:if>
+      </nxu:set>
+      </nxu:set>
     </div>
   </ui:define>
 </nxthemes:composition>

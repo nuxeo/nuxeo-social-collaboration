@@ -9,6 +9,7 @@
   </ModulePrefs>
   <#include "context-prefs.ftl"/>
   <UserPref name="activityStreamName" datatype="hidden" default_value="" />
+  <UserPref name="activityLinkBuilder" datatype="hidden" default_value="" />
   <Content type="html">
 
 <![CDATA[

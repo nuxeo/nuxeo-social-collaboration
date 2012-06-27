@@ -68,6 +68,8 @@ public class UserActivityStreamPageProvider extends
 
     public static final String STREAM_TYPE_PROPERTY = "streamType";
 
+    public static final String ACTIVITY_LINK_BUILDER_NAME_PROPERTY = "activityLinkBuilderName";
+
     public static final String FOR_ACTOR_STREAM_TYPE = "forActor";
 
     public static final String FROM_ACTOR_STREAM_TYPE = "fromActor";
@@ -91,7 +93,8 @@ public class UserActivityStreamPageProvider extends
                         getCurrentPageOffset(), pageSize);
                 nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
-                pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
+                pageActivityMessages.addAll(activities.toActivityMessages(
+                        getLocale(), getActivityLinkBuilderName()));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
                 Map<String, Serializable> parameters = new HashMap<String, Serializable>();
                 parameters.put(ACTOR_PARAMETER, getActor());
@@ -101,7 +104,8 @@ public class UserActivityStreamPageProvider extends
                         getCurrentPageOffset(), pageSize);
                 nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
-                pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
+                pageActivityMessages.addAll(activities.toActivityMessages(
+                        getLocale(), getActivityLinkBuilderName()));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
@@ -148,6 +152,11 @@ public class UserActivityStreamPageProvider extends
             streamType = FOR_ACTOR_STREAM_TYPE;
         }
         return streamType;
+    }
+
+    protected String getActivityLinkBuilderName() {
+        Map<String, Serializable> props = getProperties();
+        return (String) props.get(ACTIVITY_LINK_BUILDER_NAME_PROPERTY);
     }
 
     @Override

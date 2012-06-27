@@ -40,6 +40,7 @@ var prefs = new gadgets.Prefs();
 
   var activityStreamType = prefs.getString("activityStreamType");
   var actor = prefs.getString("actor");
+  var activityLinkBuilder = prefs.getString("activityLinkBuilder");
 
   var currentActivities = [];
   var waitingActivities = [];
@@ -124,6 +125,7 @@ var prefs = new gadgets.Prefs();
       operationParams: {
         language: prefs.getLang(),
         contextPath: socialWorkspacePath,
+        activityLinkBuilder: activityLinkBuilder,
         offset: offset
       },
       operationContext: {},
@@ -169,7 +171,8 @@ var prefs = new gadgets.Prefs();
     var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceActivityStream',
       operationParams: {
         language: prefs.getLang(),
-        contextPath: socialWorkspacePath
+        contextPath: socialWorkspacePath,
+        activityLinkBuilder: activityLinkBuilder
       },
       operationContext: {},
       operationCallback: function(response, params) {
@@ -186,7 +189,8 @@ var prefs = new gadgets.Prefs();
     var NXRequestParams= { operationId : 'Services.GetSocialWorkspaceActivityStream',
       operationParams: {
         language: prefs.getLang(),
-        contextPath: socialWorkspacePath
+        contextPath: socialWorkspacePath,
+        activityLinkBuilder: activityLinkBuilder
       },
       operationContext: {},
       operationCallback: function(response, params) {

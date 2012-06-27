@@ -40,6 +40,7 @@
 
   var activityStreamType = prefs.getString("activityStreamType");
   var actor = prefs.getString("actor");
+  var activityLinkBuilder = prefs.getString("activityLinkBuilder");
 
   var currentActivities = [];
   var waitingActivities = [];
@@ -123,6 +124,7 @@
         language: prefs.getLang(),
         actor: actor,
         activityStreamType: activityStreamType,
+        activityLinkBuilder: activityLinkBuilder,
         offset: offset
       },
       operationContext: {},
@@ -169,7 +171,8 @@
       operationParams: {
         language: prefs.getLang(),
         actor: actor,
-        activityStreamType: activityStreamType
+        activityStreamType: activityStreamType,
+        activityLinkBuilder: activityLinkBuilder
       },
       operationContext: {},
       operationCallback: function(response, params) {
@@ -187,7 +190,8 @@
       operationParams: {
         language: prefs.getLang(),
         actor: actor,
-        activityStreamType: activityStreamType
+        activityStreamType: activityStreamType,
+        activityLinkBuilder: activityLinkBuilder
       },
       operationContext: {},
       operationCallback: function(response, params) {

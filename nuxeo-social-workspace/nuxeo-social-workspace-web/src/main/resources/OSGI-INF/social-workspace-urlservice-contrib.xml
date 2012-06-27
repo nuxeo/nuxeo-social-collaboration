@@ -4,14 +4,14 @@
     target="org.nuxeo.ecm.platform.url.service.DocumentViewCodecService"
     point="codecs">
 
-    <documentViewCodec name="docpathcollaboration" enabled="true" default="false"
-      prefix="collaboration"
-      class="org.nuxeo.ecm.platform.url.codec.DocumentPathCodec" />
-
     <documentation>
       Codec used for collaboration tab.
       Urls are of the form http://site/nuxeo/collaboration/path/to/doc@view?extraargs
     </documentation>
+
+    <documentViewCodec name="doccollaboration" enabled="true" default="false"
+      prefix="collaboration"
+      class="org.nuxeo.ecm.social.workspace.CollaborationCodec" />
 
   </extension>
 
@@ -23,7 +23,7 @@
       <needBaseURL>true</needBaseURL>
       <needRedirectFilter>true</needRedirectFilter>
       <needFilterPreprocessing>true</needFilterPreprocessing>
-      <codecName>docpathcollaboration</codecName>
+      <codecName>doccollaboration</codecName>
       <actionBinding>#{restHelper.initContextFromRestRequest}</actionBinding>
       <documentViewBindingApplies>
         #{mainTabsActions.isOnMainTab('collaboration')}

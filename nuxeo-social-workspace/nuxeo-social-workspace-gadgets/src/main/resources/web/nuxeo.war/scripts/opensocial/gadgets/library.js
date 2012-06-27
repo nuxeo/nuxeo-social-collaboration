@@ -77,8 +77,8 @@ Library.publishDocument = function (targetRef, public) {
     Library.loadContent(isGadget ? Library.getBasePath()  + '/' + "publishDocument" : "publishDocument", data, true);
 }
 
-Library.goToDocument = function (path, viewId) {
-    window.parent.location = top.nxContextPath + "/nxpath/" + getTargetRepository() + Library.encode(path) + "@" + viewId;
+Library.goToDocument = function (documentURL) {
+    window.parent.location = documentURL;
 }
 
 Library.encode = function (path) {
@@ -102,6 +102,7 @@ Library.loadContent = function (path, data, forcePost) {
     // add language
     if (isGadget) {
         data.lang = prefs.getLang();
+        data.documentLinkBuilder = prefs.getString("documentLinkBuilder");
     } else {
         data.lang = "en";
     }

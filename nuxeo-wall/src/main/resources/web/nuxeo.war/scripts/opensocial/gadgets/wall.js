@@ -154,8 +154,10 @@
 
   var wallOperationParams = {
     language: prefs.getLang(),
+    timeZone: prefs.getString("timeZone"),
     contextPath: documentContextPath,
-    activityStreamName: activityStreamName
+    activityStreamName: activityStreamName,
+    activityLinkBuilder: prefs.getString("activityLinkBuilder")
   };
   var  miniMessageOperationParams = {
     language: prefs.getLang(),
@@ -674,7 +676,8 @@
       operationParams: {
         message: activityReplyText,
         language: prefs.getLang(),
-        activityId: activityId
+        activityId: activityId,
+        activityLinkBuilderName: prefs.getString("activityLinkBuilderName")
       },
       entityType: 'blob',
       operationContext: {},

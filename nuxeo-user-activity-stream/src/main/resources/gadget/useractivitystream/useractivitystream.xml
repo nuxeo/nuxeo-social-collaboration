@@ -8,6 +8,7 @@
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
   <UserPref name="activityStreamType" datatype="hidden" default_value="forActor" />
+  <UserPref name="activityLinkBuilder" datatype="hidden" default_value="" />
   <Content type="html">
 
 <![CDATA[

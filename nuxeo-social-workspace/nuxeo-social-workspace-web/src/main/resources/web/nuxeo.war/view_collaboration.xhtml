@@ -23,60 +23,64 @@
   <ui:define name="body">
 
     <nxu:set var="repositoryName" value="#{navigationContext.currentServerLocation.name}">
-      <nxu:set var="spaceProviderName" value="collaborationDashboardSpaceProvider">
+    <nxu:set var="spaceProviderName" value="collaborationDashboardSpaceProvider">
+    <nxu:set var="documentLinkBuilder" value="doccollaboration">
+    <nxu:set var="activityLinkBuilder" value="collaboration">
 
-        <ui:decorate template="/incl/opensocial_container_template.xhtml">
+    <ui:decorate template="/incl/opensocial_container_template.xhtml">
 
-          <ui:define name="opensocial_container_title">
-            <h1>
-              #{messages['label.main.tab.collaboration']}
-            </h1>
-          </ui:define>
+      <ui:define name="opensocial_container_title">
+        <h1>
+          #{messages['label.main.tab.collaboration']}
+        </h1>
+      </ui:define>
 
-          <ui:define name="opensocial_container_actions">
-            <div class="globalActionBar">
-              <h:form id="collaborativeViewActions">
+      <ui:define name="opensocial_container_actions">
+        <div class="globalActionBar">
+          <h:form id="collaborativeViewActions">
 
-                <nxu:set var="collaborationActions" value="#{webActions.getActionsList('COLLABORATION_TAB_ACTIONS')}" cache="true">
+            <nxu:set var="collaborationActions" value="#{webActions.getActionsList('COLLABORATION_TAB_ACTIONS')}" cache="true">
 
-                <c:if test="#{not empty collaborationActions or currentUser.administrator}">
-                <ul class="actionList">
-                  <li class="dropDownMenu button dropdown">
-                    <h:outputText value="#{messages['label.social.workspace.actions']}" />
-                    <ul class="actionSubList">
-                      <c:if test="#{currentUser.administrator}">
-                        <li>
-                          <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
-                        </li>
-                        <li>
-                          <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
-                        </li>
-                        <div class="separator"></div>
-                      </c:if>
+            <c:if test="#{not empty collaborationActions or currentUser.administrator}">
+            <ul class="actionList">
+              <li class="dropDownMenu button dropdown">
+                <h:outputText value="#{messages['label.social.workspace.actions']}" />
+                <ul class="actionSubList">
+                  <c:if test="#{currentUser.administrator}">
+                    <li>
+                      <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
+                    </li>
+                    <li>
+                      <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
+                    </li>
+                    <div class="separator"></div>
+                  </c:if>
 
-                      <c:if test="#{!empty collaborationActions}">
-                        <nxu:dataList layout="simple" var="action" value="#{collaborationActions}">
-                          <li>
-                            <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
-                              <h:outputText value=" #{messages[action.label]}" />
-                            </nxh:commandLink>
-                          </li>
-                        </nxu:dataList>
-                        <div class="separator"></div>
-                      </c:if>
-                    </ul>
-                  </li>
+                  <c:if test="#{!empty collaborationActions}">
+                    <nxu:dataList layout="simple" var="action" value="#{collaborationActions}">
+                      <li>
+                        <nxh:commandLink action="#{action.getLink()}" immediate="#{action.immediate}">
+                          <h:outputText value=" #{messages[action.label]}" />
+                        </nxh:commandLink>
+                      </li>
+                    </nxu:dataList>
+                    <div class="separator"></div>
+                  </c:if>
                 </ul>
-                </c:if>
+              </li>
+            </ul>
+            </c:if>
 
-                </nxu:set>
+            </nxu:set>
 
-                <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>
-              </h:form>
-            </div>
-          </ui:define>
-        </ui:decorate>
-      </nxu:set>
+            <ui:include src="/incl/social_collaborative_list_of_user_social_workspaces.xhtml"/>
+          </h:form>
+        </div>
+      </ui:define>
+    </ui:decorate>
+    </nxu:set>
+    </nxu:set>
+    </nxu:set>
     </nxu:set>
 
   </ui:define>

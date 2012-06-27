@@ -45,6 +45,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.utils.i18n.I18NUtils;
@@ -56,12 +57,14 @@ import org.nuxeo.ecm.automation.core.util.PaginableDocumentModelList;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentLocation;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
+import org.nuxeo.ecm.core.api.impl.DocumentLocationImpl;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.schema.TypeService;
 import org.nuxeo.ecm.platform.comment.api.CommentableDocument;
@@ -71,7 +74,11 @@ import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 import org.nuxeo.ecm.platform.types.Type;
 import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.types.TypeView;
+import org.nuxeo.ecm.platform.types.adapter.TypeInfo;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.DocumentModelFunctions;
+import org.nuxeo.ecm.platform.url.DocumentViewImpl;
+import org.nuxeo.ecm.platform.url.api.DocumentView;
+import org.nuxeo.ecm.platform.url.api.DocumentViewCodecManager;
 import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.ecm.rating.api.LikeService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
@@ -89,7 +96,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 /**
  * @author rlegall
- * 
+ *
  */
 @Path("/social")
 @WebObject(type = "social")
@@ -103,12 +110,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
     protected static final String AVATAR_PROPERTY = "userprofile:avatar";
 
     @GET
-    public Object index(@Context
-    HttpServletRequest request) throws Exception {
+    public Object index(@Context HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
         setLanguage(lang);
+        setDocumentLinkBuilder(formData.getString("documentLinkBuilder"));
 
         // get the arguments
         String ref = formData.getString("docRef");
@@ -133,12 +140,13 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context
-    HttpServletRequest request) throws Exception {
+    public Object documentList(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
         setLanguage(lang);
+        setDocumentLinkBuilder(formData.getString("documentLinkBuilder"));
 
         // get the arguments
         String ref = formData.getString("docRef");
@@ -150,12 +158,13 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @GET
     @Path("documentListGet")
-    public Object documentListGet(@Context
-    HttpServletRequest request) throws Exception {
+    public Object documentListGet(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
         setLanguage(lang);
+        setDocumentLinkBuilder(formData.getString("documentLinkBuilder"));
 
         // get the arguments
         String ref = formData.getString("docRef");
@@ -236,8 +245,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object publishDocument(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -263,8 +272,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object deleteDocument(@Context HttpServletRequest request)
+            throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
@@ -284,10 +293,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef")
-    String ref, @QueryParam("doctype")
-    String docTypeId, @QueryParam("lang")
-    String lang) throws Exception {
+    public Object createDocumentForm(@QueryParam("docRef") String ref,
+            @QueryParam("doctype") String docTypeId,
+            @QueryParam("lang") String lang) throws Exception {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -306,9 +314,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef")
-    String ref, @QueryParam("lang")
-    String lang) throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref,
+            @QueryParam("lang") String lang) throws ClientException {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
@@ -362,8 +369,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context
-    HttpServletRequest request) throws Exception {
+    public Object createDocument(@Context HttpServletRequest request)
+            throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();
@@ -415,8 +422,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
         String query = "SELECT * FROM Document "
                 + "WHERE ecm:mixinType != 'HiddenInNavigation' "
-                + "AND ecm:isCheckedInVersion = 0 "
-                + "AND ecm:isProxy = 0 "
+                + "AND ecm:isCheckedInVersion = 0 " + "AND ecm:isProxy = 0 "
                 + "AND ecm:currentLifeCycleState != 'deleted' "
                 + "AND ecm:fulltext = '" + escapedQueryText + "' "
                 + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "' "
@@ -463,6 +469,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
         if (lang != null && lang.trim().length() > 0) {
             Locale locale = new Locale(lang);
             ctx.setLocale(locale);
+        }
+    }
+
+    protected void setDocumentLinkBuilder(String documentLinkBuilder) {
+        if (!StringUtils.isBlank(documentLinkBuilder)) {
+            ctx.setProperty("documentLinkBuilder", documentLinkBuilder);
         }
     }
 
@@ -598,7 +610,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     /**
      * Indicates if the current user has the right to Add Children to the
      * current Document
-     * 
+     *
      * @param docId the reference of the document
      * @return true if the current user has the right to Add Children to the
      *         current Document and false otherwise
@@ -627,8 +639,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @GET
     @Path("documentCommentList")
-    public Object documentCommentList(@QueryParam("docRef")
-    String ref) throws Exception {
+    public Object documentCommentList(@QueryParam("docRef") String ref)
+            throws Exception {
         // build freemarker arguments map
         Map<String, Object> args = new HashMap<String, Object>();
         CoreSession session = ctx.getCoreSession();
@@ -711,8 +723,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("docLike")
-    public Object docLike(@FormParam("docRef")
-    String docRef) throws Exception {
+    public Object docLike(@FormParam("docRef") String docRef) throws Exception {
         // Get document
         CoreSession session = ctx.getCoreSession();
         DocumentModel docToLike = session.getDocument(new IdRef(docRef));
@@ -761,5 +772,24 @@ public class SocialWebEngineRoot extends ModuleRoot {
                             userProfileDoc, AVATAR_PROPERTY, "avatar");
         }
         return url;
+    }
+
+    /**
+     * Computes and returns the URL for the given {@code doc}, using the
+     * document link builder sets in the
+     * {@link org.nuxeo.ecm.webengine.model.WebContext}.
+     */
+    public String computeDocumentURL(DocumentModel doc) {
+        DocumentLocation docLoc = new DocumentLocationImpl(
+                doc.getRepositoryName(), new IdRef(doc.getId()));
+        DocumentView docView = new DocumentViewImpl(docLoc, doc.getAdapter(
+                TypeInfo.class).getDefaultView());
+        DocumentViewCodecManager documentViewCodecManager = Framework.getLocalService(DocumentViewCodecManager.class);
+        String documentLinkBuilder = (String) ctx.getProperty("documentLinkBuilder");
+        String codecName = documentLinkBuilder != null ? documentLinkBuilder
+                : documentViewCodecManager.getDefaultCodecName();
+        String baseURL = VirtualHostHelper.getBaseURL(ctx.getRequest());
+        return documentViewCodecManager.getUrlFromDocumentView(codecName,
+                docView, true, baseURL);
     }
 }

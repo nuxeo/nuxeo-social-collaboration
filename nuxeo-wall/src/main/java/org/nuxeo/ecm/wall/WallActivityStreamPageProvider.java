@@ -51,6 +51,8 @@ public class WallActivityStreamPageProvider extends
 
     public static final String ACTIVITY_STREAM_NAME_PROPERTY = "activityStreamName";
 
+    public static final String ACTIVITY_LINK_BUILDER_NAME_PROPERTY = "activityLinkBuilderName";
+
     public static final String CONTEXT_DOCUMENT_PROPERTY = "contextDocument";
 
     public static final String LOCALE_PROPERTY = "locale";
@@ -74,7 +76,8 @@ public class WallActivityStreamPageProvider extends
                     getCurrentPageOffset(), pageSize);
             nextOffset = offset + activities.size();
             activities = activities.filterActivities(getCoreSession());
-            pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
+            pageActivityMessages.addAll(activities.toActivityMessages(
+                    getLocale(), getActivityLinkBuilderName()));
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageActivityMessages;
@@ -108,6 +111,11 @@ public class WallActivityStreamPageProvider extends
                     + " property.");
         }
         return locale;
+    }
+
+    protected String getActivityLinkBuilderName() {
+        Map<String, Serializable> props = getProperties();
+        return (String) props.get(ACTIVITY_LINK_BUILDER_NAME_PROPERTY);
     }
 
     protected CoreSession getCoreSession() {

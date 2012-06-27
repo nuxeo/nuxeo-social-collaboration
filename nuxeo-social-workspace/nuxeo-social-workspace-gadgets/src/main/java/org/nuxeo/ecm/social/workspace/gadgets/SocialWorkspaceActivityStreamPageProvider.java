@@ -66,6 +66,8 @@ public class SocialWorkspaceActivityStreamPageProvider extends
 
     public static final String CORE_SESSION_PROPERTY = "coreSession";
 
+    public static final String ACTIVITY_LINK_BUILDER_NAME_PROPERTY = "activityLinkBuilderName";
+
     protected List<ActivityMessage> pageActivityMessages;
 
     @Override
@@ -85,7 +87,8 @@ public class SocialWorkspaceActivityStreamPageProvider extends
                     getCurrentPageOffset(), pageSize);
             nextOffset = offset + activities.size();
             activities = activities.filterActivities(getCoreSession());
-            pageActivityMessages.addAll(activities.toActivityMessages(getLocale()));
+            pageActivityMessages.addAll(activities.toActivityMessages(
+                    getLocale(), getActivityLinkBuilderName()));
 
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
@@ -130,6 +133,11 @@ public class SocialWorkspaceActivityStreamPageProvider extends
                     + CORE_SESSION_PROPERTY + " property.");
         }
         return session;
+    }
+
+    protected String getActivityLinkBuilderName() {
+        Map<String, Serializable> props = getProperties();
+        return (String) props.get(ACTIVITY_LINK_BUILDER_NAME_PROPERTY);
     }
 
     @Override

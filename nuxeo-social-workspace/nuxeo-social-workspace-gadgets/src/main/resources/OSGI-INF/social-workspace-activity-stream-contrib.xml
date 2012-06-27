@@ -23,4 +23,12 @@
 
   </extension>
 
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityLinkBuilders">
+
+    <activityLinkBuilder name="collaboration"
+      class="org.nuxeo.ecm.social.workspace.gadgets.CollaborationActivityLinkBuilder" />
+
+  </extension>
+
 </component>

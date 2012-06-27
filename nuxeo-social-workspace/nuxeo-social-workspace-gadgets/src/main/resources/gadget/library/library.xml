@@ -9,7 +9,8 @@
     <Require feature="dynamic-height" />
     <Require feature="settitle" />
   </ModulePrefs>
-  <UserPref name="limit" display_name="Docs per Page" default_value="5"/>
+  <UserPref name="limit" display_name="Docs per Page" default_value="5" />
+  <UserPref name="documentLinkBuilder" datatype="hidden" default_value="" />
 
   <#include "context-prefs.ftl"/>
   <Content type="html">

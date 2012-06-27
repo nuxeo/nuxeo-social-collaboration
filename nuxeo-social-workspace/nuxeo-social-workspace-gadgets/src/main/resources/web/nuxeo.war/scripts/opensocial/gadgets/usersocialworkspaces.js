@@ -5,7 +5,8 @@ var NXRequestParams = {
   operationId: 'Document.PageProvider',
   operationParams: {
     providerName: 'user_socialworkspaces',
-    pageSize: 5
+    pageSize: 5,
+    documentLinkBuilder: prefs.getString("documentLinkBuilder")
   },
   operationContext: {},
   operationDocumentProperties: "common,dublincore",

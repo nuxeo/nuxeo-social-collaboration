@@ -24,6 +24,7 @@ import static org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager.CURRENT_
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
@@ -52,7 +53,7 @@ public class SocialWorkspaceActions implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @In(create = true)
+    @In(create = true, required = false)
     protected transient CoreSession documentManager;
 
     @In(create = true)
@@ -118,7 +119,9 @@ public class SocialWorkspaceActions implements Serializable {
         return MAIN_TABS_COLLABORATION;
     }
 
-    public void setCollaborationMainTab(String string) {
-        webActions.setCurrentTabIds(MAIN_TABS_COLLABORATION);
+    public void setCollaborationMainTab(String tabs) {
+        webActions.setCurrentTabIds(!StringUtils.isBlank(tabs) ? tabs
+                : MAIN_TABS_COLLABORATION);
     }
+
 }

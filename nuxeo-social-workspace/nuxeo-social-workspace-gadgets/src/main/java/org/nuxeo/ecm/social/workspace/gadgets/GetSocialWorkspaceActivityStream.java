@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.social.workspace.gadgets;
 
+import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.ACTIVITY_LINK_BUILDER_NAME_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.CORE_SESSION_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.LOCALE_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStreamPageProvider.REPOSITORY_NAME_PROPERTY;
@@ -25,7 +26,6 @@ import static org.nuxeo.ecm.social.workspace.gadgets.SocialWorkspaceActivityStre
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +76,9 @@ public class GetSocialWorkspaceActivityStream {
     @Param(name = "language", required = false)
     protected String language;
 
+    @Param(name = "activityLinkBuilder", required = true)
+    protected String activityLinkBuilder;
+
     @Param(name = "offset", required = false)
     protected Integer offset;
 
@@ -106,13 +109,15 @@ public class GetSocialWorkspaceActivityStream {
                 socialWorkspace.getDocument().getRepositoryName());
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
+        props.put(ACTIVITY_LINK_BUILDER_NAME_PROPERTY, activityLinkBuilder);
         PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
                 PROVIDER_NAME, null, targetLimit, 0L, props);
         pageProvider.setCurrentPageOffset(targetOffset);
 
         List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
-            activities.add(activityMessage.toMap(session, locale));
+            activities.add(activityMessage.toMap(session, locale,
+                    activityLinkBuilder));
         }
 
         Map<String, Object> m = new HashMap<String, Object>();

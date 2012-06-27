@@ -30,7 +30,7 @@
       <#if doc.isFolder>
         <td><a href="javascript: Library.documentList('${doc.id}')" class="navigation">${doc.title?xml}</a></td>
       <#else>
-        <td><a href="javascript: Library.goToDocument('${This.escapePath(doc.path)}', '${collaboration_views[doc.id]}')" class="navigation">${doc.title?xml}</a></td>
+        <td><a href="javascript: Library.goToDocument('${This.computeDocumentURL(doc)}')" class="navigation">${doc.title?xml}</a></td>
       </#if>
       <td>${doc["dc:modified"]?string("yyyy-MM-dd HH:mm")}</td>
       <td>${doc["dc:creator"]}</td>

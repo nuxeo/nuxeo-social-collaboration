@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.social.activity.stream.operations;
 
+import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.ACTIVITY_LINK_BUILDER_NAME_PROPERTY;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.CORE_SESSION_PROPERTY;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.FOR_ACTOR_STREAM_TYPE;
 import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvider.LOCALE_PROPERTY;
@@ -25,7 +26,6 @@ import static org.nuxeo.ecm.social.activity.stream.UserActivityStreamPageProvide
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +76,9 @@ public class GetActivityStream {
     @Param(name = "activityStreamType", required = false)
     protected String activityStreamType;
 
+    @Param(name = "activityLinkBuilder", required = false)
+    protected String activityLinkBuilder;
+
     @Param(name = "offset", required = false)
     protected Integer offset;
 
@@ -107,6 +110,7 @@ public class GetActivityStream {
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(UserActivityStreamFilter.ACTOR_PARAMETER, actor);
         props.put(STREAM_TYPE_PROPERTY, activityStreamType);
+        props.put(ACTIVITY_LINK_BUILDER_NAME_PROPERTY, activityLinkBuilder);
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
@@ -115,7 +119,8 @@ public class GetActivityStream {
 
         List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
-            activities.add(activityMessage.toMap(session, locale));
+            activities.add(activityMessage.toMap(session, locale,
+                    activityLinkBuilder));
         }
 
         Map<String, Object> m = new HashMap<String, Object>();

@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.wall.operations;
 
 import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
+import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.ACTIVITY_LINK_BUILDER_NAME_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.ACTIVITY_STREAM_NAME_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CONTEXT_DOCUMENT_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CORE_SESSION_PROPERTY;
@@ -77,6 +78,9 @@ public class GetWallActivityStream {
     @Param(name = "activityStreamName", required = false)
     protected String activityStreamName;
 
+    @Param(name = "activityLinkBuilder", required = false)
+    protected String activityLinkBuilder;
+
     @Param(name = "contextPath", required = true)
     protected String contextPath;
 
@@ -111,6 +115,7 @@ public class GetWallActivityStream {
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(ACTIVITY_STREAM_NAME_PROPERTY, activityStreamName);
+        props.put(ACTIVITY_LINK_BUILDER_NAME_PROPERTY, activityLinkBuilder);
         props.put(CONTEXT_DOCUMENT_PROPERTY, doc);
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
@@ -119,11 +124,11 @@ public class GetWallActivityStream {
                 PROVIDER_NAME, null, targetLimit, 0L, props);
         pageProvider.setCurrentPageOffset(targetOffset);
 
-        String username = session.getPrincipal().getName();
         List<ActivityMessage> activityMessages = pageProvider.getCurrentPage();
         List<Map<String, Object>> activitiesJSON = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : activityMessages) {
-            Map<String, Object> o = activityMessage.toMap(session, locale);
+            Map<String, Object> o = activityMessage.toMap(session, locale,
+                    activityLinkBuilder);
             o.put("replies",
                     toActivityReplyMessagesJSON(session, locale,
                             activityMessage.getActivityReplyMessages()));
@@ -155,7 +160,8 @@ public class GetWallActivityStream {
             throws ClientException {
         List<Map<String, Object>> replies = new ArrayList<Map<String, Object>>();
         for (ActivityReplyMessage activityReplyMessage : activityReplyMessages) {
-            Map<String, Object> o = activityReplyMessage.toMap(session, locale);
+            Map<String, Object> o = activityReplyMessage.toMap(session, locale,
+                    activityLinkBuilder);
             o.put("allowDeletion",
                     getAllowDeletion(activityReplyMessage.getActor()));
             o.put("likeStatus",
