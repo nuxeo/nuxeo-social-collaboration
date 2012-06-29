@@ -5,7 +5,7 @@
     point="widgettypes">
     <widgetType name="summary_user_mini_messages">
       <configuration>
-        <sinceVersion>5.5.0-HF10-SNAPSHOT</sinceVersion>
+        <sinceVersion>5.5.0-HF11-SNAPSHOT</sinceVersion>
         <title>User Mini Messages Summary</title>
         <description>
           <p>This widgets displays the user mini messages
