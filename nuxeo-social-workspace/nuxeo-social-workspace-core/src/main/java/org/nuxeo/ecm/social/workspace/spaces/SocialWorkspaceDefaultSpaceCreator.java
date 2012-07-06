@@ -65,8 +65,6 @@ public class SocialWorkspaceDefaultSpaceCreator extends
         WebContentHelper.createOpenSocialGadget(space, session, locale,
                 "useractivitystream", 0, 1, 1);
         WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "waitingfor", 0, 1, 2);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
                 "tasks", 0, 1, 3);
     }
 }
