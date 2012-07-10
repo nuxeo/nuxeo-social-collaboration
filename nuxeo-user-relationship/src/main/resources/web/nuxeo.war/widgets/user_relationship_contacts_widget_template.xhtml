@@ -25,7 +25,7 @@
     <nxu:dataTable id="table_relations_#{widget.id}" var="relation"
       value="#{userRelationshipActions.relationshipsFromSelectedUser}">
       <nxu:column>
-        <h:graphicImage value="/icons/user.gif" alt="user.gif" />
+        <h:graphicImage value="/icons/user.png" alt="user" />
         <h:outputLink value="#{nxu:userUrl('user', relation, null, false)}">
           <h:outputText value="#{nxu:userFullName(relation)}" />
         </h:outputLink>
