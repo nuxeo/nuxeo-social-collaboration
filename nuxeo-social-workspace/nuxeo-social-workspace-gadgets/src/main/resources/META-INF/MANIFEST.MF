@@ -10,4 +10,3 @@ Nuxeo-Component: OSGI-INF/social-workspace-gadgets-contrib.xml,
  OSGI-INF/social-workspace-activity-stream-contrib.xml,
  OSGI-INF/social-workspace-relationship-contrib.xml,
  OSGI-INF/theme-contrib.xml
-Nuxeo-WebModule: org.nuxeo.ecm.webengine.app.WebEngineModule;name=social;package=org/nuxeo/ecm/social/workspace/gadgets/webengine

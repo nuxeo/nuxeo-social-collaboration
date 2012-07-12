@@ -16,6 +16,7 @@
     <module>nuxeo-social-workspace-core</module>
     <module>nuxeo-social-workspace-web</module>
     <module>nuxeo-social-workspace-gadgets</module>
+    <module>nuxeo-social-workspace-gadgets-library</module>
   </modules>
 
   <repositories>

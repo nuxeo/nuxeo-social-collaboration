@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Nuxeo Social Workspace Gadgets
+Bundle-SymbolicName: org.nuxeo.ecm.social.workspace.gadgets.library;singleton:=true
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Nuxeo-Component: OSGI-INF/gadgets-contrib.xml,
+ OSGI-INF/theme-contrib.xml
+Nuxeo-WebModule: org.nuxeo.ecm.webengine.app.WebEngineModule;name=social;package=org/nuxeo/ecm/social/workspace/gadgets/webengine
