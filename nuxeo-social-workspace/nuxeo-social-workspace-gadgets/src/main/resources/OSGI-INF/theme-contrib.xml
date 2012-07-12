@@ -36,9 +36,6 @@
     <resource name="gadget-usersocialworkspaces.css">
       <path>css/opensocial/gadgets/usersocialworkspaces.css</path>
     </resource>
-    <resource name="gadget-library.css">
-      <path>css/opensocial/gadgets/library.css</path>
-    </resource>
 
     <!-- JS -->
     <!-- Common JS -->
@@ -75,9 +72,6 @@
     </resource>
     <resource name="gadget-usersocialworkspaces.js">
       <path>scripts/opensocial/gadgets/usersocialworkspaces.js</path>
-    </resource>
-    <resource name="gadget-library.js">
-      <path>scripts/opensocial/gadgets/library.js</path>
     </resource>
   </extension>
 
