@@ -17,6 +17,7 @@
  */
 package org.nuxeo.ecm.social.workspace.gadgets.webengine;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.DELETE_TRANSITION;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.ADD_CHILDREN;
 import static org.nuxeo.ecm.core.api.security.SecurityConstants.REMOVE;
@@ -786,8 +787,8 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 TypeInfo.class).getDefaultView());
         DocumentViewCodecManager documentViewCodecManager = Framework.getLocalService(DocumentViewCodecManager.class);
         String documentLinkBuilder = (String) ctx.getProperty("documentLinkBuilder");
-        String codecName = documentLinkBuilder != null ? documentLinkBuilder
-                : documentViewCodecManager.getDefaultCodecName();
+        String codecName = isBlank(documentLinkBuilder) ? documentViewCodecManager.getDefaultCodecName()
+                : documentLinkBuilder;
         String baseURL = VirtualHostHelper.getBaseURL(ctx.getRequest());
         return documentViewCodecManager.getUrlFromDocumentView(codecName,
                 docView, true, baseURL);
