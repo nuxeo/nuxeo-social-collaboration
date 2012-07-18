@@ -485,8 +485,16 @@
         operationContext: {},
         operationCallback: function(response, params) {
           var likeStatus = response.data;
+          var i, activity;
 
           if ($('div.jsMainActivity[data-activityid="' + activityId + '"]').length > 0) {
+            for (i = 0; i < currentActivities.length; i++) {
+              activity = currentActivities[i];
+              if (activity.id == activityId) {
+                activity.likeStatus = likeStatus;
+              }
+            }
+
             $('div.jsMainActivity[data-activityid="' + activityId + '"]').each(function() {
               $(this).attr('data-likescount', likeStatus.likesCount);
               $(this).attr('data-userlikestatus', likeStatus.userLikeStatus);
@@ -497,6 +505,20 @@
             });
           } else {
             // reply
+            var parentActivityId = $('div[data-replyid="' + activityId + '"]').parents('div[data-activityid]').attr('data-activityid');
+            for (i = 0; i < currentActivities.length; i++) {
+              activity = currentActivities[i];
+              if (activity.id == parentActivityId) {
+                for (var j = 0; j < activity.replies.length; j++) {
+                  var reply = activity.replies[j];
+                  if (reply.id == activityId) {
+                    reply.likeStatus = likeStatus;
+                  }
+                }
+                activity.likeStatus = likeStatus;
+              }
+            }
+
             $('div[data-replyid="' + activityId + '"]').each(function() {
               $(this).attr('data-likescount', likeStatus.likesCount);
               $(this).attr('data-userlikestatus', likeStatus.userLikeStatus);
