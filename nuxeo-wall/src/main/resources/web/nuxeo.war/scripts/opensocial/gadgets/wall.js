@@ -714,6 +714,15 @@
         reply.likeStatus = {};
         reply.likeStatus.likesCount = 0;
         reply.likeStatus.userLikeStatus = 0;
+
+        // add the new reply to the reply list of the activity
+        for (i = 0; i < currentActivities.length; i++) {
+          activity = currentActivities[i];
+          if (activity.id == activityId) {
+            activity.replies.push(reply);
+          }
+        }
+
         var replyHtml = Mustache.render(templates.reply, reply);
         $(replyHtml).insertBefore(repliesContainer.find('.jsNewActivityReply'));
 
