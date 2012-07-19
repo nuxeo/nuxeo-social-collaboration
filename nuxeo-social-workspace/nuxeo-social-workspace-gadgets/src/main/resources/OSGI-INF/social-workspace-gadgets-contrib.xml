@@ -68,6 +68,70 @@
 
     <internalGadget name="socialworkspaceactivitystream"
       disabled="false">
+      <documentation>
+        This gadget displays the activities of a Social Workspace.
+
+        The following user preferences can be used to configure it:
+        - nuxeoTargetContextPath: the path of the Social Workspace for which
+          to retrieve the activities
+        - activityLinkBuilder: activity link builder name to use to generate
+          documents and user URLs
+
+        How to include the socialworkspaceactivitystream gadget in a JSF context:
+        <code>
+          <div class="gadget-socialworkspaceactivitystream threeQuarterWidth"></div>
+          <script type="text/javascript">
+            jQuery('.gadget-socialworkspaceactivitystream').openSocialGadget({
+              baseURL: '#{baseURL}',
+              language: '#{localeSelector.language}',
+              gadgetDefs: [
+                { specUrl: '#{gadgetsBaseURL}/site/gadgets/socialworkspaceactivitystream/socialworkspaceactivitystream.xml',
+                  title: '',
+                  userPrefs: {
+                    activityLinkBuilder: {
+                      value: 'default'
+                    },
+                    nuxeoTargetContextPath: {
+                      value: '#{currentDocument.pathAsString}'
+                    }
+                  },
+                  displayTitleBar: false,
+                  width: '100%'
+                }
+              ]
+            });
+          </script>
+        </code>
+
+        How to include the socialworkspaceactivitystream gadget in a WebEngine page:
+        <code>
+          <link rel="stylesheet" href="${contextPath}/css/opensocial/light-container-gadgets.css" />
+          <script type="text/javascript" src="${contextPath}/opensocial/gadgets/js/rpc.js?c=1"></script>
+          <script type="text/javascript" src="${contextPath}/js/?scripts=jquery.js|opensocial/cookies.js|opensocial/util.js|opensocial/gadgets.js|opensocial/cookiebaseduserprefstore.js|opensocial/jquery.opensocial.gadget.js"></script>
+
+          <div class="gadget-socialworkspaceactivitystream gadgets-gadget-chrome"></div>
+          <script type="text/javascript">
+            $('.gadget-socialworkspaceactivitystream').openSocialGadget({
+              baseURL: '${contextPath}' + '/',
+              language: '${Context.locale.language}',
+              gadgetDefs: [{
+                specUrl : '${Runtime.getProperty('nuxeo.loopback.url')}/site/gadgets/socialworkspaceactivitystream/socialworkspaceactivitystream.xml',
+                userPrefs: {
+                  activityLinkBuilder: {
+                    value: 'default'
+                  },
+                  nuxeoTargetContextPath: {
+                    value: '${doc.pathAsString}'
+                  }
+                },
+                displayTitleBar: false,
+                width: '100%'
+              }]
+            });
+          </script>
+        </code>
+      </documentation>
+
       <mountPoint>/socialworkspaceactivitystream</mountPoint>
       <directory>socialworkspaceactivitystream</directory>
       <entryPoint>socialworkspaceactivitystream.xml</entryPoint>
@@ -77,6 +141,69 @@
 
     <internalGadget name="socialworkspaceminimessages"
       disabled="false">
+      <documentation>
+        This gadget displays the mini messages of a Social Workspace.
+
+        The following user preferences can be used to configure it:
+        - nuxeoTargetContextPath: the path of the Social Workspace for which
+          to retrieve the mini messages
+        - activityLinkBuilder: activity link builder name to use to generate
+          documents and user URLs
+
+        How to include the socialworkspaceminimessages gadget in a JSF context:
+        <code>
+          <div class="gadget-socialworkspaceminimessages threeQuarterWidth"></div>
+          <script type="text/javascript">
+            jQuery('.gadget-socialworkspaceminimessages').openSocialGadget({
+              baseURL: '#{baseURL}',
+              language: '#{localeSelector.language}',
+              gadgetDefs: [
+                { specUrl: '#{gadgetsBaseURL}/site/gadgets/socialworkspaceminimessages/socialworkspaceminimessages.xml',
+                  title: '',
+                  userPrefs: {
+                    activityLinkBuilder: {
+                      value: 'default'
+                    },
+                    nuxeoTargetContextPath: {
+                      value: '#{currentDocument.pathAsString}'
+                    }
+                  },
+                  displayTitleBar: false,
+                  width: '100%'
+                }
+              ]
+            });
+          </script>
+        </code>
+
+        How to include the socialworkspaceminimessages gadget in a WebEngine page:
+        <code>
+          <link rel="stylesheet" href="${contextPath}/css/opensocial/light-container-gadgets.css" />
+          <script type="text/javascript" src="${contextPath}/opensocial/gadgets/js/rpc.js?c=1"></script>
+          <script type="text/javascript" src="${contextPath}/js/?scripts=jquery.js|opensocial/cookies.js|opensocial/util.js|opensocial/gadgets.js|opensocial/cookiebaseduserprefstore.js|opensocial/jquery.opensocial.gadget.js"></script>
+
+          <div class="gadget-socialworkspaceminimessages gadgets-gadget-chrome"></div>
+          <script type="text/javascript">
+            $('.gadget-socialworkspaceminimessages').openSocialGadget({
+              baseURL: '${contextPath}' + '/',
+              language: '${Context.locale.language}',
+              gadgetDefs: [{
+                specUrl : '${Runtime.getProperty('nuxeo.loopback.url')}/site/gadgets/socialworkspaceminimessages/socialworkspaceminimessages.xml',
+                userPrefs: {
+                  activityLinkBuilder: {
+                    value: 'default'
+                  },
+                  nuxeoTargetContextPath: {
+                    value: '${doc.pathAsString}'
+                  }
+                },
+                displayTitleBar: false,
+                width: '100%'
+              }]
+            });
+          </script>
+        </code>
+      </documentation>
       <mountPoint>/socialworkspaceminimessages</mountPoint>
       <directory>socialworkspaceminimessages</directory>
       <entryPoint>socialworkspaceminimessages.xml</entryPoint>
