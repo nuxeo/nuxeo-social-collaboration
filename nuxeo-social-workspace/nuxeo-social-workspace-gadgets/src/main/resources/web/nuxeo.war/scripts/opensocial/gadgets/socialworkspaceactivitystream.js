@@ -84,9 +84,10 @@ var prefs = new gadgets.Prefs();
     } else {
       icon = constants.noActivityTypeIcon;
     }
-    if (activity.icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
-      activity.icon = NXGadgetContext.clientSideBaseUrl + icon;
+    if (icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
+      icon = NXGadgetContext.clientSideBaseUrl + icon;
     }
+    activity.icon = icon;
     return Mustache.render(template, activity);
   }
 
