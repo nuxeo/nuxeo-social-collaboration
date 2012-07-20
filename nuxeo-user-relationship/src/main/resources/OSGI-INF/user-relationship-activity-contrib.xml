@@ -4,8 +4,8 @@
   <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
     point="activityVerbs">
 
-    <activityVerb activityVerb="circle"
-      labelKey="label.activity.circle" />
+    <activityVerb verb="circle" labelKey="label.activity.circle"
+      icon="/icons/activity_network.png" />
 
   </extension>
 

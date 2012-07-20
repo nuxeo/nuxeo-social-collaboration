@@ -74,17 +74,18 @@
 
   /* HTML building functions */
   function buildActivityHtml(template, activity) {
-    if (activity.icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
-      var icon = activity.icon;
-      if (icon != null && icon.length > 0) {
-        if (icon[0] == '/') {
-          icon = icon.substring(1);
-        }
-      } else {
-        icon = constants.noActivityTypeIcon;
+    var icon = activity.icon;
+    if (icon != null && icon.length > 0) {
+      if (icon[0] == '/') {
+        icon = icon.substring(1);
       }
-      activity.icon = NXGadgetContext.clientSideBaseUrl + icon;
+    } else {
+      icon = constants.noActivityTypeIcon;
     }
+    if (icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
+      icon = NXGadgetContext.clientSideBaseUrl + icon;
+    }
+    activity.icon = icon;
     return Mustache.render(template, activity);
   }
 
