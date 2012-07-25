@@ -516,7 +516,6 @@
                     reply.likeStatus = likeStatus;
                   }
                 }
-                activity.likeStatus = likeStatus;
               }
             }
 
