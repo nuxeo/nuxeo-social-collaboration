@@ -772,6 +772,17 @@
       operationCallback: function (response, opCallParameters) {
         if (response.rc > 200 && response.rc < 300) {
           $('div[data-replyid="'+ replyId + '"]').remove();
+          for (var i = 0; i < currentActivities.length; i++) {
+            var activity = currentActivities[i];
+            if (activity.id == activityId) {
+              for (var j = 0; j < activity.replies.length; j++) {
+                var reply = activity.replies[j];
+                if (reply.id == replyId) {
+                  activity.replies.splice(j, 1);
+                }
+              }
+            }
+          }
           gadgets.window.adjustHeight();
         }
       }
