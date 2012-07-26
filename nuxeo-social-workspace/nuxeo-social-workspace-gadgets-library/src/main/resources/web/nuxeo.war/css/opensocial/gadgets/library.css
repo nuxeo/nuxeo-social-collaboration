@@ -9,17 +9,20 @@
 .customSearchBox .button { background: transparent url(${basePath}/icons/gadget_library_search.png) no-repeat left center; border: none; cursor: pointer; width: 20px }
 
 /* Comments, threads and like actions */
-.dataList td.actions { background-color: #f4f4f4; border-top:  1px dotted #ddd; font-size: 10px }
+.dataList td.actions { background-color: #f8f8f8; border-top:  1px dotted #ddd; font-size: 10px }
   .actions .actionItem { margin-right: .5em }
   .actions a.actionItem:link, .actions a.actionItem:visited { color: #9db6d1 }
   .actionItem img { margin: 0 .3em -0.2em -0.2em }
 
-.dataList .documentThread td { border-top: 1px dotted #ededed; border-bottom: none }
-.dataList .documentThread table { width: 90% }
-.dataList .messageUserInfos { width: 30% }
-.dataList .messageContent { width: 50% }
-.dataList .messageReply { width: 20% }
+.dataList .documentThread { margin-top: 0.5em; padding: 0 0 0 0.4em; width: 100% }
+  table.messageBlock { border-spacing: 0; width: 100% }
+.dataList .documentThread td { border-top: 1px dotted #ededed; border-bottom: none; padding: .2em 0 0 }
+.dataList .messageUserInfos { float: left; margin-right: .5em }
+.dataList .messageContent { color: #777; font-size: 110%; line-height: 118%; margin-top: 0.36em }
+.dataList .messageBody { width: 82% }
+.dataList .messageReply { width: 18% }
+	.messageReply .timestamp { color: #ccc; font-size: 80% }
 .dataList td.messageRow { border: none; padding: 0 }
 
-.newMessageForm { margin: 0 auto; width: 90% }
-.newMessageForm textarea { height: 35px; margin: .5em 0 0; width: 75% }
+.newMessageForm, .replyMessageForm { margin: 0 auto; width: 90% }
+.newMessageForm textarea, .replyMessageForm textarea { height: 35px; margin: .5em 0 0; width: 75% }
