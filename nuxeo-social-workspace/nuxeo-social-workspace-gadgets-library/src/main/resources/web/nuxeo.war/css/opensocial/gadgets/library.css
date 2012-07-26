@@ -9,17 +9,23 @@
 .customSearchBox .button { background: transparent url(${basePath}/icons/gadget_library_search.png) no-repeat left center; border: none; box-shadow: none; cursor: pointer; text-indent: -9999px; height: 20px; margin: 0; width: 20px }
 
 /* Comments, threads and like actions */
-.dataList td.actions { background-color: #f4f4f4; border-top:  1px dotted #ddd; font-size: 10px }
+.dataList td.actions { background-color: #f8f8f8; border-top:  1px dotted #ddd; font-size: 10px }
   .actions .actionItem { margin-right: .5em }
   .actions a.actionItem:link, .actions a.actionItem:visited { color: #9db6d1 }
   .actionItem img { margin: 0 .3em -0.2em -0.2em }
 
-.dataList .documentThread td { border-top: 1px dotted #ededed; border-bottom: none }
-.dataList .documentThread table { width: 90% }
-.dataList .messageUserInfos { width: 30% }
-.dataList .messageContent { width: 50% }
-.dataList .messageReply { width: 20% }
+.dataList .documentThread { margin-top: 0.5em; padding: 0 0 0 0.4em; width: 100% }
+  table.messageBlock { border-spacing: 0; width: 100% }
+  .messageBlock .messageBlock { margin-left: .8em }
+  .messageBlock .avatar { display: inline-block }
+  .messageBlock .timestamp { color: #bbb }
+.dataList .documentThread td { border-top: 1px dotted #ededed; border-bottom: none; padding: .2em 0 0 }
+.dataList .messageUserInfos { float: left; margin-right: .5em }
+.dataList .messageContent { color: #777; line-height: 130%; margin-top: 0em }
+  .messageContent .comment { display: block; padding-top: .5em }
+.dataList .messageBody {}
+.dataList .messageReply { float: right; padding-top: .3em }
 .dataList td.messageRow { border: none; padding: 0 }
 
-.newMessageForm { margin: 0 auto; width: 90% }
-.newMessageForm textarea { height: 35px; margin: .5em 0 0; width: 75% }
+.newMessageForm, .replyMessageForm { margin: .4em auto 0 }
+.newMessageForm textarea, .replyMessageForm textarea { height: 35px; margin: 0; width: 75% }
