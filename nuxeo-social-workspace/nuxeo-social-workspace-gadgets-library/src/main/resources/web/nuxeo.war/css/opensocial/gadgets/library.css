@@ -4,9 +4,9 @@
 /* STYLES SEARCH FIELD */
 .customSearchBox { float: right }
 .customSearchBox form { margin: 0 10px 0 0 }
-.customSearchBox .wideDefinition { border: 1px solid #ccc; padding: .2em 0 .2em .2em }
+.customSearchBox .wideDefinition { border: 1px solid #ccc; border-radius: 3px; padding: .2em 0 .2em .2em }
 .customSearchBox .searchBox { background: none transparent; border: none; width: 105px }
-.customSearchBox .button { background: transparent url(${basePath}/icons/gadget_library_search.png) no-repeat left center; border: none; cursor: pointer; width: 20px }
+.customSearchBox .button { background: transparent url(${basePath}/icons/gadget_library_search.png) no-repeat left center; border: none; box-shadow: none; cursor: pointer; text-indent: -9999px; height: 20px; margin: 0; width: 20px }
 
 /* Comments, threads and like actions */
 .dataList td.actions { background-color: #f8f8f8; border-top:  1px dotted #ddd; font-size: 10px }
