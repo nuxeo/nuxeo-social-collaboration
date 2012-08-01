@@ -737,7 +737,7 @@
 
           // delete link
           var allowDeletion = $(this).attr('data-allowdeletion');
-          if (allowDeletion) {
+          if (allowDeletion === 'true') {
             $(this).removeAttr('data-allowdeletion');
             var deleteImageURL = NXGadgetContext.clientSideBaseUrl + 'icons/delete.png'
             var htmlContent = Mustache.render(templates.deleteActivityReplyAction,
