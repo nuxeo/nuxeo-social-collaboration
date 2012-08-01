@@ -151,10 +151,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
         // get the arguments
         String ref = formData.getString("docRef");
-        String queryText = formData.getString("queryText");
         int pageSize = getIntFromString(formData.getString("limit"));
         int page = getIntFromString(formData.getString("page"));
-        return buildDocumentList(ref, pageSize, page, queryText);
+        return buildDocumentList(ref, pageSize, page, null);
     }
 
     @GET
@@ -169,9 +168,29 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
         // get the arguments
         String ref = formData.getString("docRef");
-        String queryText = formData.getString("queryText");
         int pageSize = getIntFromString(formData.getString("limit"));
         int page = getIntFromString(formData.getString("page"));
+        return buildDocumentList(ref, pageSize, page, null);
+    }
+
+    /**
+     * @since 5.6
+     */
+    @POST
+    @Path("search")
+    public Object search(@Context HttpServletRequest request)
+            throws Exception {
+        FormData formData = new FormData(request);
+
+        String lang = formData.getString("lang");
+        setLanguage(lang);
+        setDocumentLinkBuilder(formData.getString("documentLinkBuilder"));
+
+        // get the arguments
+        String ref = formData.getString("docRef");
+        int pageSize = getIntFromString(formData.getString("limit"));
+        int page = getIntFromString(formData.getString("page"));
+        String queryText = formData.getString("queryText");
         return buildDocumentList(ref, pageSize, page, queryText);
     }
 
