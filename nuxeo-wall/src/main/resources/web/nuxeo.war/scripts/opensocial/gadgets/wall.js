@@ -280,14 +280,14 @@
     activity.repliesHtml = repliesHtml;
     var icon = activity.icon;
     if (icon != null && icon.length > 0) {
-      if (icon[0] == '/') {
-        icon = icon.substring(1);
+      if (icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
+        if (icon[0] == '/') {
+          icon = icon.substring(1);
+        }
+        icon = NXGadgetContext.clientSideBaseUrl + icon;
       }
     } else {
-      icon = constants.noActivityTypeIcon;
-    }
-    if (icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
-      icon = NXGadgetContext.clientSideBaseUrl + icon;
+      icon = NXGadgetContext.clientSideBaseUrl + constants.noActivityTypeIcon;
     }
     activity.icon = icon;
     return Mustache.render(template, activity);
