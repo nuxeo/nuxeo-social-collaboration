@@ -16,13 +16,16 @@
 
 .dataList .documentThread { margin-top: 0.5em; padding: 0 0 0 0.4em; width: 100% }
   table.messageBlock { border-spacing: 0; width: 100% }
+  .messageBlock .messageBlock { margin-left: .8em }
+  .messageBlock .avatar { display: inline-block }
+  .messageBlock .timestamp { color: #bbb }
 .dataList .documentThread td { border-top: 1px dotted #ededed; border-bottom: none; padding: .2em 0 0 }
 .dataList .messageUserInfos { float: left; margin-right: .5em }
-.dataList .messageContent { color: #777; font-size: 110%; line-height: 118%; margin-top: 0.36em }
-.dataList .messageBody { width: 82% }
-.dataList .messageReply { width: 18% }
-	.messageReply .timestamp { color: #ccc; font-size: 80% }
+.dataList .messageContent { color: #777; line-height: 130%; margin-top: 0em }
+  .messageContent .comment { display: block; padding-top: .5em }
+.dataList .messageBody {}
+.dataList .messageReply { float: right; padding-top: .3em }
 .dataList td.messageRow { border: none; padding: 0 }
 
-.newMessageForm, .replyMessageForm { margin: 0 auto; width: 90% }
-.newMessageForm textarea, .replyMessageForm textarea { height: 35px; margin: .5em 0 0; width: 75% }
+.newMessageForm, .replyMessageForm { margin: .4em auto 0 }
+.newMessageForm textarea, .replyMessageForm textarea { height: 35px; margin: 0; width: 75% }

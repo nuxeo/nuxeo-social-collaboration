@@ -24,6 +24,12 @@
           </div>
         </td>
       </tr>
+      <#assign commentChildren = This.getCommentChildren(doc,comment)>
+      <#if commentChildren??>
+        <#list commentChildren as comment>
+          <#include "@bricks/document_comments">
+        </#list>
+      </#if>
       <script type="text/javascript">
       $(document).ready(function () {
           // 'Answer' display handler
@@ -35,9 +41,3 @@
     </table>
   </td>
 </tr>
-<#assign commentChildren = This.getCommentChildren(doc,comment)>
-<#if commentChildren??>
-  <#list commentChildren as comment>
-    <#include "@bricks/document_comments">
-  </#list>
-</#if>
