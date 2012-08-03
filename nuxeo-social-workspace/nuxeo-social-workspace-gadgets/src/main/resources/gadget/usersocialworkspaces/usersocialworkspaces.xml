@@ -8,7 +8,7 @@
     <Require feature="dynamic-height" />
     <#include "default-oauth-prefs.ftl"/>
   </ModulePrefs>
-  <UserPref name="documentLinkBuilder" datatype="hidden" default_value="" />
+  <UserPref name="documentLinkBuilder" datatype="hidden" default_value="doccollaboration" />
   <Content type="html">
 
 <![CDATA[
@@ -18,7 +18,7 @@
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/gadget-default-automation-request.js,gadget-default-documentlist-display.js,gadget-dashboard-navigation.js,gadget-usersocialworkspaces.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/gadget-default-automation-request.js,gadget-default-documentlist-display.js,gadget-usersocialworkspaces.js"></script>
   </head>
    <body>
    <div class="tools">
