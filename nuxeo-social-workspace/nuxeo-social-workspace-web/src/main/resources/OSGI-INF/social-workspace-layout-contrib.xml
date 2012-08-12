@@ -3,6 +3,7 @@
 
   <require>org.nuxeo.ecm.platform.forms.layouts.webapp.summary</require>
   <require>org.nuxeo.ecm.platform.forms.layouts.webapp.base</require>
+  <require>org.nuxeo.ecm.user.registration.layouts.contrib</require>
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
     point="widgettypes">
@@ -767,6 +768,36 @@
         <options value="#{bulkImportSocialWorkspaceActions.rightsMenuEntries}"
           var="entry" itemValue="#{entry.value}" itemLabel="#{messages[entry.label]}" />
       </selectOptions>
+    </widget>
+
+    <widget name="user_request_accept" type="template">
+      <labels>
+        <label mode="any">command.userrequest.accept</label>
+      </labels>
+      <widgetModes>
+        <mode value="any">#{currentUser.isAdministrator() || socialWorkspaceActions.isCurrentUserAdministratorOfCurrentSocialWorkspace() ? 'edit' : 'hidden'}</mode>
+      </widgetModes>
+      <fields>
+        <field>data</field>
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/user_request_accept_widget_template.xhtml</property>
+      </properties>
+    </widget>
+
+    <widget name="user_request_reject" type="template">
+      <labels>
+        <label mode="any">command.userrequest.reject</label>
+      </labels>
+      <widgetModes>
+        <mode value="any">#{currentUser.isAdministrator() || socialWorkspaceActions.isCurrentUserAdministratorOfCurrentSocialWorkspace() ? 'edit' : 'hidden'}</mode>
+      </widgetModes>
+      <fields>
+        <field>data</field>
+      </fields>
+      <properties mode="any">
+        <property name="template">/widgets/user_request_reject_widget_template.xhtml</property>
+      </properties>
     </widget>
   </extension>
 
