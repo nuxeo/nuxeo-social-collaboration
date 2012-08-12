@@ -674,6 +674,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             SocialWorkspace socialWorkspace) {
         DocumentRegistrationInfo docInfo = new DocumentRegistrationInfo();
         docInfo.setDocumentId(socialWorkspace.getId());
+        docInfo.setDocumentTitle(socialWorkspace.getTitle());
         return docInfo;
     }
 
