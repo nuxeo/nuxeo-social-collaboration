@@ -29,6 +29,7 @@ import org.nuxeo.ecm.activity.ActivitiesList;
 import org.nuxeo.ecm.activity.ActivitiesListImpl;
 import org.nuxeo.ecm.activity.Activity;
 import org.nuxeo.ecm.activity.ActivityHelper;
+import org.nuxeo.ecm.activity.ActivityReply;
 import org.nuxeo.ecm.activity.ActivityStream;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
@@ -78,6 +79,12 @@ public class WallActivityStreamFilter implements ActivityStreamFilter {
             ActivityStreamService activityStreamService,
             ActivitiesList activities) {
         // nothing for now
+    }
+
+    @Override
+    public void handleRemovedActivityReply(
+            ActivityStreamService activityStreamService, Activity activity,
+            ActivityReply activityReply) {
     }
 
     @Override

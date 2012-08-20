@@ -28,6 +28,7 @@ import javax.persistence.Query;
 import org.nuxeo.ecm.activity.ActivitiesList;
 import org.nuxeo.ecm.activity.ActivitiesListImpl;
 import org.nuxeo.ecm.activity.Activity;
+import org.nuxeo.ecm.activity.ActivityReply;
 import org.nuxeo.ecm.activity.ActivityStreamFilter;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
@@ -92,6 +93,12 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
     public void handleRemovedActivities(
             ActivityStreamService activityStreamService,
             ActivitiesList activities) {
+    }
+
+    @Override
+    public void handleRemovedActivityReply(
+            ActivityStreamService activityStreamService, Activity activity,
+            ActivityReply activityReply) {
     }
 
     @SuppressWarnings("unchecked")
