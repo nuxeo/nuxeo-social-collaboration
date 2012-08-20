@@ -38,10 +38,6 @@
     </resource>
 
     <!-- JS -->
-    <!-- Common JS -->
-    <resource name="gadget-dashboard-navigation.js">
-      <path>scripts/opensocial/gadgets/dashboard-navigation.js</path>
-    </resource>
     <!-- Gadgets JS -->
     <resource name="gadget-articles.js">
       <path>scripts/opensocial/gadgets/articles.js</path>
