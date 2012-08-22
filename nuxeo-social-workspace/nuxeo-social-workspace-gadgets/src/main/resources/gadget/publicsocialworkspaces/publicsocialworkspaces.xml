@@ -18,7 +18,7 @@
 
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${clientSideBaseUrl}nxthemes-lib/gadget-default-automation-request.js,gadget-default-documentlist-display.js,gadget-publicsocialworkspaces.js"></script>
+    <script src="${clientSideBaseUrl}nxthemes-lib/gadget-default-automation-request.js,gadget-default-documentlist-display.js,gadget-dashboard-navigation.js,gadget-publicsocialworkspaces.js"></script>
  </head>
  <body>
    <div class="tools">
