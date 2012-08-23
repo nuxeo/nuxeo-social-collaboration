@@ -329,8 +329,8 @@ Library.handleLinkClick = function (divId, docId) {
 // Switch Show/Hide Comments label
 Library.commentsDisplayHandler = function (controller, docId) {
     if ($("#display_" + docId).is(":hidden")) {
-        controller.text("Hide threads");
+        controller.text(prefs.getMsg("label.gadget.library.action.hide.threads"));
     } else {
-        controller.text("Show threads");
+        controller.text(prefs.getMsg("label.gadget.library.action.show.threads"));
     }
 }
