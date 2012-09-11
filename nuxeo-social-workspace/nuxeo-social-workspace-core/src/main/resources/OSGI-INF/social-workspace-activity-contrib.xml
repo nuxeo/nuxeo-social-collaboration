@@ -13,4 +13,12 @@
 
   </extension>
 
+  <extension target="org.nuxeo.ecm.activity.ActivityStreamService"
+    point="activityUpgraders">
+
+    <activityUpgrader name="swMembersActivityUpgrader"
+      class="org.nuxeo.ecm.social.workspace.activity.SocialWorkspaceMembersActivityUpgrader" />
+
+  </extension>
+
 </component>
