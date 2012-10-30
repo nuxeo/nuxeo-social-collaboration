@@ -79,6 +79,7 @@
         <style>foldable_boxes</style>
         <style>richfaces_components</style>
         <style>tabs_content</style>
+        <style>helpers</style>
         <style>social_collaboration_specific</style>
       </styles>
     </themePage>
