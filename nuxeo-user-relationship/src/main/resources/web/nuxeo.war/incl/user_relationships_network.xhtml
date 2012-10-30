@@ -28,7 +28,7 @@
   <!-- search form -->
  <f:subview rendered="#{not userManagementActions.showUserOrGroup}"
     id="relationshipNetworkView">
-  <div class="userRelationsPanel half left">
+  <div class="userRelationsPanel halfWidth floatL">
     <h2>#{messages['label.relationship.search.relation']}</h2>
     <a4j:outputPanel id="usersListingRelationshipPanel">
       <nxu:set var="contentViewName" value="users_listing_relationship">
@@ -78,7 +78,7 @@
       </nxu:set>
     </a4j:outputPanel>
   </div>
-  <div class="userRelationsPanel half right">
+  <div class="userRelationsPanel halfWidth floatR">
     <h2>#{messages['label.relationship.network']}</h2>
     <a4j:outputPanel id="userNetworkPanel">
       <nxu:set var="contentViewName" value="user_relationships">
