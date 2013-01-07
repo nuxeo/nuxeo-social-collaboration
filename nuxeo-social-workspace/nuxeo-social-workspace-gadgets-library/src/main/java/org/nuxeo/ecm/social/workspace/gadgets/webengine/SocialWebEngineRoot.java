@@ -306,6 +306,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
             session.removeDocument(docRef);
         }
         
+        // Must save session to ensure that currentLifeCycleState is updated 
         session.save();
             
         return documentList(request);
