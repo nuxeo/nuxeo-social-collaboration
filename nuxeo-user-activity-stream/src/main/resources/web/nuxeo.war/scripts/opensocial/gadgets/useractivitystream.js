@@ -86,6 +86,18 @@
       icon = NXGadgetContext.clientSideBaseUrl + icon;
     }
     activity.icon = icon;
+    var icon = activity.icon;
+    if (icon != null && icon.length > 0) {
+      if (icon.indexOf(NXGadgetContext.clientSideBaseUrl) < 0) {
+        if (icon[0] == '/') {
+          icon = icon.substring(1);
+        }
+        icon = NXGadgetContext.clientSideBaseUrl + icon;
+      }
+    } else {
+      icon = NXGadgetContext.clientSideBaseUrl + constants.noActivityTypeIcon;
+    }
+    activity.icon = icon;
     return Mustache.render(template, activity);
   }
 
