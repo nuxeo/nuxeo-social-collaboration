@@ -227,8 +227,8 @@
     $('#container').html(htmlContent);
 
     addLikeStatusHtml();
-    addDeleteLinksHtml();
     addReplyLinksHtml();
+    addDeleteLinksHtml();
 
     registerLikeStatusHandler();
     registerDeleteLinksHandler();
@@ -317,7 +317,7 @@
       var htmlContent = Mustache.render(templates.deleteActivityAction,
           { activityId: activityId, deleteImageURL: deleteImageURL,
             deleteMessage: prefs.getMsg('command.delete') });
-      $(htmlContent).insertAfter(actions.find('.timestamp'));
+      actions.append(htmlContent);
     });
 
     // activity replies
@@ -330,7 +330,7 @@
       var htmlContent = Mustache.render(templates.deleteActivityReplyAction,
           { replyId: replyId, deleteImageURL: deleteImageURL,
             deleteMessage: prefs.getMsg('command.delete') });
-      $(htmlContent).insertAfter(actions.find('.timestamp'));
+      actions.append(htmlContent);
     });
   }
 
