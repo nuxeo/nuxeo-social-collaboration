@@ -25,6 +25,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSoc
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.platform.login.PrincipalImpl;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -121,7 +123,12 @@ public class ManageSocialWorkspaceActions implements Serializable {
         }
         for (String administrator : originalAdministrators) {
             if (!administrators.contains(administrator)) {
-                socialWorkspace.removeAdministrator(userManager.getPrincipal(administrator));
+                Principal principal = userManager.getPrincipal(administrator);
+                if (principal == null) {
+                    // build a standard principal, only its name will be used
+                    principal = new PrincipalImpl(administrator);
+                }
+                socialWorkspace.removeAdministrator(principal);
             }
         }
         for (String member : members) {
@@ -131,7 +138,12 @@ public class ManageSocialWorkspaceActions implements Serializable {
         }
         for (String member : originalMembers) {
             if (!members.contains(member)) {
-                socialWorkspace.removeMember(userManager.getPrincipal(member));
+                Principal principal = userManager.getPrincipal(member);
+                if (principal == null) {
+                    // build a standard principal, only its name will be used
+                    principal = new PrincipalImpl(member);
+                }
+                socialWorkspace.removeMember(principal);
             }
         }
 
