@@ -251,6 +251,20 @@
       <filter-id>socialCollaborationManagementAccess</filter-id>
     </action>
 
+    <action id="SWUserRegistrationRequestsListingLocal"
+            link="/incl/userregistration/requests_listing_local.xhtml"
+            order="240" label="tab.userregistration.requests">
+      <category>TAB_MANAGE_sub_tab</category>
+      <filter-id>manage_social_workspace</filter-id>
+      <filter-id>social_workspace</filter-id>
+      <filter id="displaySWRegistrationListingLocal">
+        <rule grant="true">
+          <condition>#{userRegistrationConfigurationActions.getRules('social_collaboration').isDisplayLocalTab()}
+          </condition>
+        </rule>
+      </filter>
+    </action>
+
     <action id="SocialWorkspacesRequests"
             link="/incl/social_workspace_administration/social_workspace_requests.xhtml"
             label="label.socialworkspace.requests"
@@ -309,6 +323,10 @@
     </action>
 
     <action id="UserRegistrationRequestsMultipleCreate">
+      <filter-id>not_in_social_workspace</filter-id>
+    </action>
+
+    <action id="UserRegistrationRequestsListingLocal">
       <filter-id>not_in_social_workspace</filter-id>
     </action>
 
