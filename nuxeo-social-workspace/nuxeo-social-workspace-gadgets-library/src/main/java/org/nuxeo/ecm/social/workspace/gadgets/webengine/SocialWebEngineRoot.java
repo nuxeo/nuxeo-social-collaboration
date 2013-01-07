@@ -305,6 +305,9 @@ public class SocialWebEngineRoot extends ModuleRoot {
         } else {
             session.removeDocument(docRef);
         }
+        
+        session.save();
+            
         return documentList(request);
     }
 
