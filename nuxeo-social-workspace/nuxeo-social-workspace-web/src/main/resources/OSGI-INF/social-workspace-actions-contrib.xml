@@ -6,7 +6,7 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
              point="actions">
 
-    <action id="collaboration" link="view_collaboration" label="label.main.tab.collaboration" order="60">
+    <action id="collab" link="view_collaboration" label="label.main.tab.collaboration" order="60">
       <category>MAIN_TABS</category>
     </action>
 

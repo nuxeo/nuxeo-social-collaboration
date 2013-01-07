@@ -17,6 +17,7 @@
 
 package org.nuxeo.ecm.social.workspace;
 
+import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
@@ -37,6 +38,7 @@ import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.ecm.platform.url.api.DocumentView;
 import org.nuxeo.ecm.platform.url.codec.DocumentIdCodec;
 import org.nuxeo.ecm.platform.url.codec.DocumentPathCodec;
+import org.nuxeo.ecm.platform.url.codec.api.DocumentViewCodec;
 import org.nuxeo.ecm.platform.url.service.AbstractDocumentViewCodec;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
@@ -76,21 +78,22 @@ public class CollaborationCodec extends AbstractDocumentViewCodec {
     @Override
     public DocumentView getDocumentViewFromUrl(String url) {
         Pattern pattern = Pattern.compile(getPrefix() + ID_URL_PATTERN);
+        DocumentViewCodec codec = null;
         Matcher m = pattern.matcher(url);
         if (m.matches()) {
-            DocumentIdCodec idCodec = new DocumentIdCodec();
-            idCodec.setPrefix(getPrefix());
-            DocumentView docView = idCodec.getDocumentViewFromUrl(url);
-            updateDocumentView(docView);
-            return docView;
+            codec = new DocumentIdCodec();
         } else {
             pattern = Pattern.compile(getPrefix() + PATH_URL_PATTERN);
             m = pattern.matcher(url);
             if (m.matches()) {
-                DocumentPathCodec pathCodec = new DocumentPathCodec();
-                pathCodec.setPrefix(getPrefix());
-                return pathCodec.getDocumentViewFromUrl(url);
+                codec = new DocumentPathCodec();
             }
+        }
+        if (codec != null) {
+            codec.setPrefix(getPrefix());
+            DocumentView docView = codec.getDocumentViewFromUrl(url);
+            updateDocumentView(docView);
+            return docView;
         }
         return null;
     }
@@ -122,6 +125,11 @@ public class CollaborationCodec extends AbstractDocumentViewCodec {
     protected DocumentView computeDocumentView(CoreSession session,
             DocumentView docView) throws ClientException {
         DocumentModel doc = session.getDocument(docView.getDocumentLocation().getDocRef());
+        // do nothing for the 'public' dashboard (sw/social document)
+        if (DASHBOARD_SPACES_CONTAINER_TYPE.equals(doc.getType())) {
+            return null;
+        }
+
         if (doc.hasFacet(SOCIAL_WORKSPACE_FACET)) {
             docView.setDocumentLocation(new DocumentLocationImpl(
                     session.getChild(doc.getRef(), "social")));

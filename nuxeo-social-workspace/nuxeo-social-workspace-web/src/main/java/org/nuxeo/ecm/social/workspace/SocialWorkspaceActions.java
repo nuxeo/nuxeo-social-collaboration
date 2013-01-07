@@ -49,7 +49,7 @@ import org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager;
 @Install(precedence = FRAMEWORK)
 public class SocialWorkspaceActions implements Serializable {
 
-    public static final String MAIN_TABS_COLLABORATION = "MAIN_TABS:collaboration";
+    public static final String MAIN_TABS_COLLABORATION = "MAIN_TABS:collab";
 
     private static final long serialVersionUID = 1L;
 
