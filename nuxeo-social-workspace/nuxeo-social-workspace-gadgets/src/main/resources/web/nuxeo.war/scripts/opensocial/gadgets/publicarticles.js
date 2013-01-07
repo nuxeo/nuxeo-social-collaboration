@@ -4,7 +4,8 @@ var prefs = new gadgets.Prefs();
 var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
   operationParams : { query : "Select * from Article WHERE ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted'",
        pageSize : 5,
-       contextPath : getTargetContextPath()
+       contextPath : getTargetContextPath(),
+       documentLinkBuilder: prefs.getString("documentLinkBuilder")
   },  // parameters for the chain or operation
   operationContext : {},                                                // context
   operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
@@ -30,10 +31,7 @@ function displayArticles(entries, nxParams) {
     html += '<a target ="_top" class="document_title" title="';
     html += entry.title;
     html += "\" href=\"";
-    html += NXGadgetContext.clientSideBaseUrl;
-    html += "nxpath/default";
-    html += encode(entry.path);
-    html += "@view_social_document";
+    html += entry.contextParameters.documentURL;
     html += "\" >";
     html += entry.title;
     html += '</a></p>';

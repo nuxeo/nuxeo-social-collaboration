@@ -18,6 +18,7 @@
 package org.nuxeo.ecm.social.workspace;
 
 import static org.nuxeo.ecm.social.workspace.SocialConstants.DASHBOARD_SPACES_CONTAINER_TYPE;
+import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_ROOT_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
 
@@ -138,8 +139,9 @@ public class CollaborationCodec extends AbstractDocumentViewCodec {
             TypeManager typeService = Framework.getLocalService(TypeManager.class);
             Type type = typeService.getType(doc.getType());
             if (doc.hasFacet(FacetNames.FOLDERISH)
-                    || !typeService.getAllowedSubTypes(SOCIAL_WORKSPACE_TYPE).contains(
-                            type)) {
+                    || (!typeService.getAllowedSubTypes(SOCIAL_WORKSPACE_TYPE).contains(
+                            type) && !typeService.getAllowedSubTypes(
+                            NEWS_ITEM_ROOT_TYPE).contains(type))) {
                 docView.setViewId(type.getDefaultView());
                 docView.addParameter("tabIds", "MAIN_TAB:documents");
             }
@@ -153,6 +155,7 @@ public class CollaborationCodec extends AbstractDocumentViewCodec {
         if (documentLocation.getPathRef() != null) {
             DocumentPathCodec pathCodec = new DocumentPathCodec();
             pathCodec.setPrefix(getPrefix());
+            docView.setViewId("view_social_document");
             return pathCodec.getUrlFromDocumentView(docView);
         } else {
             DocumentIdCodec idCodec = new DocumentIdCodec();

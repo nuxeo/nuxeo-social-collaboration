@@ -98,6 +98,9 @@ public class SocialProviderOperation {
     @Param(name = "queryParams", required = false)
     protected StringList strParameters;
 
+    @Param(name = "documentLinkBuilder", required = false)
+    protected String documentLinkBuilder;
+
     protected static final DocumentModelList EMPTY_LIST = new DocumentModelListImpl();
 
     @SuppressWarnings("unchecked")
@@ -162,7 +165,7 @@ public class SocialProviderOperation {
         return new PaginableDocumentModelListImpl(
                 (PageProvider<DocumentModel>) pps.getPageProvider(providerName,
                         desc, sortInfos, targetPageSize, new Long(page), props,
-                        parameters));
+                        parameters), documentLinkBuilder);
 
     }
 

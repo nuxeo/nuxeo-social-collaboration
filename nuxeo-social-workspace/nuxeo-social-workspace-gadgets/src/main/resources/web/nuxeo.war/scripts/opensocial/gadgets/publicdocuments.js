@@ -7,7 +7,8 @@ var NXRequestParams = { operationId:'Social.Provider', // id of operation or cha
     pageSize:5,
     contextPath:getTargetContextPath(),
     onlyPublicDocuments:"true", //restrict the research to public-section
-    sortInfo:"dc:modified 1"
+    sortInfo:"dc:modified 1",
+    documentLinkBuilder: prefs.getString("documentLinkBuilder")
   }, // parameters for the chain or operation
   operationContext:{}, // context
   operationDocumentProperties:"common,dublincore,note,file", // schema that must be fetched from resulting documents
@@ -43,10 +44,7 @@ function displayDocuments(entries,nxParams){
       html += '<a target ="_top" class="article_title" title="';
       html += entry.title;
       html += "\" href=\"";
-      html += NXGadgetContext.clientSideBaseUrl;
-      html += "collaboration/default";
-      html += encode(entry.path);
-      html += "@view_documents";
+      html += entry.contextParameters.documentURL;
       html += '\" >';
       html += entry.title;
       html += '</a>';

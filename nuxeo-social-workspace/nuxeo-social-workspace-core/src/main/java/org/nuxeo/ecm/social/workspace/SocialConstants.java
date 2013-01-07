@@ -51,6 +51,8 @@ public class SocialConstants {
 
     public static final String SOCIAL_WORKSPACE_CONTAINER_TYPE = "SocialDomain";
 
+    public static final String NEWS_ITEM_ROOT_TYPE = "NewsItemsRoot";
+
     // Social Document
     public static final String SOCIAL_DOCUMENT_FACET = "SocialDocument";
 

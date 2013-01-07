@@ -6,7 +6,8 @@ var NXRequestParams = { operationId: 'Social.Provider', // id of operation or ch
       "AND ecm:isProxy = 1",
     pageSize: 5,
     contextPath: getTargetContextPath(),
-    sortInfo: "dc:modified 1"
+    sortInfo: "dc:modified 1",
+    documentLinkBuilder: prefs.getString("documentLinkBuilder")
   }, // parameters for the chain or operation
   operationContext: {}, // context
   operationDocumentProperties: "common,dublincore,note", // schema that must be fetched from resulting documents
@@ -44,10 +45,7 @@ function displayListOfArticles(entries, nxParams) {
     html += '<a target ="_top" class="news_title" title="';
     html += entry.title;
     html += "\" href=\"";
-    html += NXGadgetContext.clientSideBaseUrl;
-    html += "collaboration/default";
-    html += encode(entry.path);
-    html += "@view_social_document";
+    html += entry.contextParameters.documentURL;
     html += "\" >";
     html += entry.title;
     html += '</a></p>';

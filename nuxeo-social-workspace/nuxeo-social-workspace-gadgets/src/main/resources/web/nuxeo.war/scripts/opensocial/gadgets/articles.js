@@ -5,7 +5,8 @@ var NXRequestParams = {
   operationParams : {
     query : "Select * from Article WHERE ecm:isProxy = 0 and ecm:currentLifeCycleState <> 'deleted'",
     pageSize : 5,
-    contextPath : getTargetContextPath()
+    contextPath : getTargetContextPath(),
+    documentLinkBuilder: prefs.getString("documentLinkBuilder")
   },  // parameters for the chain or operation
   operationContext : {},                                                // context
   operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
@@ -43,10 +44,7 @@ function displayListOfArticles(entries,nxParams){
       html += '<a target ="_top" class="article_title" title="';
       html += entry.title;
       html += "\" href=\"";
-      html += NXGadgetContext.clientSideBaseUrl;
-      html += "collaboration/default";
-      html += encode(entry.path);
-      html += "@view_social_document";
+      html += entry.contextParameters.documentURL;
       html += "\" >";
       html += entry.title;
       html += '</a></p>';
