@@ -300,7 +300,6 @@ var prefs = new gadgets.Prefs();
       operationParams: {
         language: prefs.getLang(),
         contextPath: socialWorkspacePath,
-        offset: offset,
         asActivities: true
       },
       operationContext: {},
