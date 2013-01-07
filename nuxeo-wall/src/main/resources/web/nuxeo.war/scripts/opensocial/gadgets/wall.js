@@ -716,8 +716,8 @@
         reply.likeStatus.userLikeStatus = 0;
 
         // add the new reply to the reply list of the activity
-        for (i = 0; i < currentActivities.length; i++) {
-          activity = currentActivities[i];
+        for (var i = 0; i < currentActivities.length; i++) {
+          var activity = currentActivities[i];
           if (activity.id == activityId) {
             activity.replies.push(reply);
           }
@@ -743,7 +743,7 @@
             var htmlContent = Mustache.render(templates.deleteActivityReplyAction,
                 { replyId: replyId, deleteImageURL: deleteImageURL,
                   deleteMessage: prefs.getMsg('command.delete') });
-            replyActions.prepend(htmlContent);
+            replyActions.append(htmlContent);
 
             replyActions.find('div.jsDelete[data-replyid="' + replyId + '"]').each(function() {
               handleDeleteActivityReply($(this));
