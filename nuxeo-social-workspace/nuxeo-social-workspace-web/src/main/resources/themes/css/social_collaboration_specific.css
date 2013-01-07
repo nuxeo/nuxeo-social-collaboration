@@ -44,5 +44,8 @@ h3.summaryTitle {color:#333; font-weight:bold; padding:0 0 .3em }
 
 /* Fix style inheritance for gadgets */
 body, table td, select { font-family: "default (__FLAVOR__ font)"; font-size: normal }
-#containerPanel { margin-top: -1.5em }
+
 #containerPanel .content { padding: 0 }
+
+/* @Deprecated since 5.7 */
+/* #containerPanel { margin-top: -1.5em } */
