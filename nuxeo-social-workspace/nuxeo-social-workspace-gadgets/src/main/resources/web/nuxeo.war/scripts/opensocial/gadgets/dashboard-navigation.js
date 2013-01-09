@@ -14,7 +14,7 @@ var mkCell = (function() {
     html += encode(dashBoardItem.path);
     html += "/social@";
     html += colDef.view;
-    html += "?tabIds=" + encodeURIComponent("MAIN_TABS:collaboration");
+    html += "?tabIds=" + encodeURIComponent("MAIN_TABS:collab");
     if (top && top.currentConversationId) {
       html += "&conversationId=" + top.currentConversationId;
     }
