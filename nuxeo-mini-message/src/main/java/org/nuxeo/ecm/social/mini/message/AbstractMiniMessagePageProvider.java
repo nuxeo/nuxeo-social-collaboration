@@ -96,13 +96,13 @@ public abstract class AbstractMiniMessagePageProvider<T> extends
 
     @Override
     protected void pageChanged() {
-        super.pageChanged();
         pageMiniMessages = null;
+        super.pageChanged();
     }
 
     @Override
     public void refresh() {
-        super.refresh();
         pageMiniMessages = null;
+        super.refresh();
     }
 }

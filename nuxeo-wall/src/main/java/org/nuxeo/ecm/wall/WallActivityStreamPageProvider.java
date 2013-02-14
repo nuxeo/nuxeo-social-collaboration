@@ -135,14 +135,14 @@ public class WallActivityStreamPageProvider extends
 
     @Override
     protected void pageChanged() {
-        super.pageChanged();
         pageActivityMessages = null;
+        super.pageChanged();
     }
 
     @Override
     public void refresh() {
-        super.refresh();
         pageActivityMessages = null;
+        super.refresh();
     }
 
 }
