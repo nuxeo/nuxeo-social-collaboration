@@ -425,6 +425,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
                 + "AND ecm:isCheckedInVersion = 0 "
                 + "AND ecm:currentLifeCycleState != 'deleted'"
                 + "AND ecm:parentId = '" + doc.getId() + "' "
+                + "AND ecm:primaryType != 'VEVENT'"
                 + "ORDER BY dc:title";
 
         chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
