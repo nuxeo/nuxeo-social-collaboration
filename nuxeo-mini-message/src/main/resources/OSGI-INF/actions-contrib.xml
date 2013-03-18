@@ -7,6 +7,7 @@
     <action id="MiniMessages" link="user_center_fragment.xhtml"
       label="mini.messages.tab.view" icon="/icons/minimessages.png" order="35">
       <category>USER_CENTER</category>
+      <filter-id>not_anonymous</filter-id>
     </action>
 
     <action id="UserMiniMessages" link="/incl/mini_messages.xhtml"

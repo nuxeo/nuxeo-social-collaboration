@@ -7,6 +7,7 @@
     <action id="relationship_network" link="user_center_fragment.xhtml"
       label="user.center.relationship.network" icon="/icons/relationship_network.png" order="25">
       <category>USER_CENTER</category>
+      <filter-id>not_anonymous</filter-id>
     </action>
 
     <action id="relationship_network_tab" link="/incl/user_relationships_network.xhtml"
