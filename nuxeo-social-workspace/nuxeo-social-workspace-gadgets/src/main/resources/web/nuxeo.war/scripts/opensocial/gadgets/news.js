@@ -4,7 +4,7 @@ var prefs = new gadgets.Prefs();
 var NXRequestParams = { operationId: 'Social.Provider', // id of operation or chain to execute
   operationParams: { query: "Select * from NewsItem WHERE ecm:currentLifeCycleState <> 'deleted'" +
       "AND ecm:isProxy = 1",
-    pageSize: 5,
+    limit: 5,
     contextPath: getTargetContextPath(),
     sortInfo: "dc:modified 1",
     documentLinkBuilder: prefs.getString("documentLinkBuilder")

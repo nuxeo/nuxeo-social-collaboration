@@ -4,7 +4,7 @@ var prefs = new gadgets.Prefs();
 // configure Automation REST call
 var NXRequestParams = { operationId:'Social.Provider', // id of operation or chain to execute
   operationParams:{ query:"SELECT * FROM File WHERE ecm:currentLifeCycleState <> 'deleted'",
-    pageSize:5,
+    limit:5,
     contextPath:getTargetContextPath(),
     onlyPublicDocuments:"true", //restrict the research to public-section
     sortInfo:"dc:modified 1",
