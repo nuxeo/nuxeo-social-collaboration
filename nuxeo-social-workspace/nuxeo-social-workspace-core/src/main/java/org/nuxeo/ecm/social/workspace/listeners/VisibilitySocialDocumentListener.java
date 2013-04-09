@@ -24,6 +24,7 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSoci
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.event.DeletedDocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
@@ -67,6 +68,10 @@ public class VisibilitySocialDocumentListener implements
             return;
         }
         DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
+        if (document instanceof DeletedDocumentModel) {
+            return;
+        }
+
         if (ctx.hasProperty(ALREADY_PROCESSED)) {
             return;
         }
