@@ -50,7 +50,7 @@ public class VisibilitySocialDocumentListener implements EventListener {
     public void handleEvent(Event event) throws ClientException {
         String eventName = event.getName();
         if (!DOCUMENT_CREATED.equals(eventName)
-                && DOCUMENT_UPDATED.equals(eventName)) {
+                && !DOCUMENT_UPDATED.equals(eventName)) {
             return;
         }
 
