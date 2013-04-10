@@ -134,7 +134,7 @@ public class CollaborationCodec extends AbstractDocumentViewCodec {
         if (doc.hasFacet(SOCIAL_WORKSPACE_FACET)) {
             docView.setDocumentLocation(new DocumentLocationImpl(
                     session.getChild(doc.getRef(), "social")));
-            docView.setViewId("social_dashboard");
+            docView.setViewId("dashboard");
         } else {
             TypeManager typeService = Framework.getLocalService(TypeManager.class);
             Type type = typeService.getType(doc.getType());
