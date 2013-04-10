@@ -14,7 +14,7 @@
 
   <extension target="faces-config#NAVIGATION">
     <navigation-case>
-      <from-outcome>social_dashboard</from-outcome>
+      <from-outcome>dashboard</from-outcome>
       <to-view-id>/social_dashboard.xhtml</to-view-id>
       <redirect />
     </navigation-case>
