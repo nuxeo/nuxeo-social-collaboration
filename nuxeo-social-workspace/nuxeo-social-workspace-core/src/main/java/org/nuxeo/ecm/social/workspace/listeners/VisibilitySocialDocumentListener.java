@@ -26,9 +26,8 @@ import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.DeletedDocumentModel;
 import org.nuxeo.ecm.core.event.Event;
-import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
-import org.nuxeo.ecm.core.event.PostCommitEventListener;
+import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
@@ -43,25 +42,17 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
  */
 
-public class VisibilitySocialDocumentListener implements
-        PostCommitEventListener {
+public class VisibilitySocialDocumentListener implements EventListener {
 
     public static final String ALREADY_PROCESSED = VisibilitySocialDocumentListener.class.getName();
 
     @Override
-    public void handleEvent(EventBundle events) throws ClientException {
-        if (events.containsEventName(DOCUMENT_CREATED)
-                || events.containsEventName(DOCUMENT_UPDATED)) {
-            for (Event event : events) {
-                if (DOCUMENT_CREATED.equals(event.getName())
-                        || DOCUMENT_UPDATED.equals(event.getName())) {
-                    handleEvent(event);
-                }
-            }
+    public void handleEvent(Event event) throws ClientException {
+        String eventName = event.getName();
+        if (!DOCUMENT_CREATED.equals(eventName)
+                && DOCUMENT_UPDATED.equals(eventName)) {
+            return;
         }
-    }
-
-    public static void handleEvent(Event event) throws ClientException {
 
         EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext)) {
