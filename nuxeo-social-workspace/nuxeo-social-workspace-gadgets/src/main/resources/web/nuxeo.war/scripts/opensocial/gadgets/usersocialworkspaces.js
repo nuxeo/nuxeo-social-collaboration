@@ -15,7 +15,7 @@ var NXRequestParams = {
   displayMethod: displayDocumentList,
   displayColumns: [
     {type: 'builtin', field: 'icon'},
-    {type: 'builtin', field: 'titleWithLink', label: prefs.getMsg('label.dublincore.title'), view: 'social_dashboard', codec: 'collaboration'},
+    {type: 'builtin', field: 'titleWithLink', label: prefs.getMsg('label.dublincore.title'), view: 'dashboard', codec: 'collaboration'},
     {type: 'date', field: 'dc:modified', label: prefs.getMsg('label.dublincore.modified')},
     {type: 'text', field: 'dc:creator', label: prefs.getMsg('label.dublincore.creator')}
   ],

@@ -2,7 +2,7 @@
 var mkCell = (function() {
   var original_mkCell = mkCell;
   return function(colDef, dashBoardItem) {
-    if (colDef.view != 'social_dashboard') {
+    if (colDef.view != 'dashboard') {
       return original_mkCell(colDef, dashBoardItem);
     }
     var html = "";

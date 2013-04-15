@@ -18,7 +18,7 @@
               <li>
                 <nxu:dataList layout="simple" var="userSocialWorkspace"
                 value="#{userSocialWorkspaces}">
-                  <nxd:restDocumentLink document="#{userSocialWorkspace}" view="social_dashboard" styleClass="title">
+                  <nxd:restDocumentLink document="#{userSocialWorkspace}" view="dashboard" styleClass="title">
                     <span id="title_#{userSocialWorkspace.dc.title}"
                       title="#{userSocialWorkspace.dc.title}">
                       #{nxd:titleOrId(userSocialWorkspace)}
