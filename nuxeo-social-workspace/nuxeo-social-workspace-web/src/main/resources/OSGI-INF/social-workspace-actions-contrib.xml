@@ -35,7 +35,7 @@
             link="#{collaborationActions.navigateToCollaborationView()}"
             label="label.social.workspace.gotosocialcollaboration"
             immediate="false"
-            icon="/icons/collaboration.png"
+            icon="/icons/switch.png"
             order="10">
       <category>DOCUMENT_UPPER_ACTION</category>
       <filter-id>has_collaboration_view</filter-id>
