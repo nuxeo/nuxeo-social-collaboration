@@ -128,7 +128,7 @@ public class GetMiniMessages {
         if (asActivities) {
             @SuppressWarnings("unchecked")
             PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                    ACTIVITIES_PROVIDER_NAME, null, targetLimit, 0L, props);
+                    ACTIVITIES_PROVIDER_NAME, null, targetLimit, 0L, props, null);
             pageProvider.setCurrentPageOffset(targetOffset);
 
             List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
@@ -156,7 +156,7 @@ public class GetMiniMessages {
         } else {
             @SuppressWarnings("unchecked")
             PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                    PROVIDER_NAME, null, targetLimit, 0L, props);
+                    PROVIDER_NAME, null, targetLimit, 0L, props, null);
             pageProvider.setCurrentPageOffset(targetOffset);
 
             String json = toJSON(pageProvider, locale, session);

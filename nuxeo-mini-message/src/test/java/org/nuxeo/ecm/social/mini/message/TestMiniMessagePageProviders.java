@@ -56,7 +56,7 @@ public class TestMiniMessagePageProviders extends AbstractMiniMessageTest {
         properties.put(ACTOR_PROPERTY, "Leela");
         properties.put(RELATIONSHIP_KIND_PROPERTY, "circle:");
         PageProvider<MiniMessage> miniMessagePageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, null, null, properties);
+                PROVIDER_NAME, null, null, null, properties, null);
         assertNotNull(miniMessagePageProvider);
         List<MiniMessage> miniMessages = miniMessagePageProvider.getCurrentPage();
         assertNotNull(miniMessages);
@@ -72,7 +72,7 @@ public class TestMiniMessagePageProviders extends AbstractMiniMessageTest {
         properties.put(ACTOR_PROPERTY, "Leela");
         properties.put(RELATIONSHIP_KIND_PROPERTY, "circle:");
         PageProvider<MiniMessage> miniMessagePageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, null, null, properties);
+                PROVIDER_NAME, null, null, null, properties, null);
         assertNotNull(miniMessagePageProvider);
         miniMessagePageProvider.setPageSize(3);
 

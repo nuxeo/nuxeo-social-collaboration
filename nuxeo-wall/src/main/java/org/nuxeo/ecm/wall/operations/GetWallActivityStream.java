@@ -121,7 +121,7 @@ public class GetWallActivityStream {
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         @SuppressWarnings("unchecked")
         PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, targetLimit, 0L, props);
+                PROVIDER_NAME, null, targetLimit, 0L, props, null);
         pageProvider.setCurrentPageOffset(targetOffset);
 
         List<ActivityMessage> activityMessages = pageProvider.getCurrentPage();

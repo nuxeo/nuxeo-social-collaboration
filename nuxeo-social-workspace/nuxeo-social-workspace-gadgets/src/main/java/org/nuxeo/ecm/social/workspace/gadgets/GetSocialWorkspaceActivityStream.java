@@ -111,7 +111,7 @@ public class GetSocialWorkspaceActivityStream {
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         props.put(ACTIVITY_LINK_BUILDER_NAME_PROPERTY, activityLinkBuilder);
         PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, targetLimit, 0L, props);
+                PROVIDER_NAME, null, targetLimit, 0L, props, null);
         pageProvider.setCurrentPageOffset(targetOffset);
 
         List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
