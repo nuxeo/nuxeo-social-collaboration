@@ -48,7 +48,6 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 
 @Operation(id = SocialProviderOperation.ID, category = Constants.CAT_FETCH, label = "Social Provider", description = "Social Provider")
@@ -165,7 +164,7 @@ public class SocialProviderOperation {
         return new PaginableDocumentModelListImpl(
                 (PageProvider<DocumentModel>) pps.getPageProvider(providerName,
                         desc, sortInfos, targetPageSize, new Long(page), props,
-                        parameters), documentLinkBuilder);
+                        null, parameters), documentLinkBuilder);
 
     }
 
