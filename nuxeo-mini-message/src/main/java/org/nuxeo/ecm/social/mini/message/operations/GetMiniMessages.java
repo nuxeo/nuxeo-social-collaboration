@@ -18,12 +18,12 @@
 package org.nuxeo.ecm.social.mini.message.operations;
 
 import static org.nuxeo.ecm.activity.ActivityHelper.getUsername;
+import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.ACTOR_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.FOR_ACTOR_STREAM_TYPE;
 import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.LOCALE_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.STREAM_TYPE_PROPERTY;
 import static org.nuxeo.ecm.social.mini.message.MiniMessageHelper.toJSON;
-import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.ACTOR_PROPERTY;
-import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.FOR_ACTOR_STREAM_TYPE;
-import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
-import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.STREAM_TYPE_PROPERTY;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
@@ -128,7 +128,7 @@ public class GetMiniMessages {
         if (asActivities) {
             @SuppressWarnings("unchecked")
             PageProvider<ActivityMessage> pageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                    ACTIVITIES_PROVIDER_NAME, null, targetLimit, 0L, props, null);
+                    ACTIVITIES_PROVIDER_NAME, null, targetLimit, 0L, props);
             pageProvider.setCurrentPageOffset(targetOffset);
 
             List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
@@ -156,7 +156,7 @@ public class GetMiniMessages {
         } else {
             @SuppressWarnings("unchecked")
             PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                    PROVIDER_NAME, null, targetLimit, 0L, props, null);
+                    PROVIDER_NAME, null, targetLimit, 0L, props);
             pageProvider.setCurrentPageOffset(targetOffset);
 
             String json = toJSON(pageProvider, locale, session);

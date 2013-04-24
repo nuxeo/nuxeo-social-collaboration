@@ -19,8 +19,8 @@ package org.nuxeo.ecm.social.mini.message;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.ACTOR_PROPERTY;
-import static org.nuxeo.ecm.social.mini.message.MiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.ACTOR_PROPERTY;
+import static org.nuxeo.ecm.social.mini.message.AbstractMiniMessagePageProvider.RELATIONSHIP_KIND_PROPERTY;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class TestMiniMessagePageProviders extends AbstractMiniMessageTest {
         properties.put(ACTOR_PROPERTY, "Leela");
         properties.put(RELATIONSHIP_KIND_PROPERTY, "circle:");
         PageProvider<MiniMessage> miniMessagePageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, null, null, properties, null);
+                PROVIDER_NAME, null, null, null, properties);
         assertNotNull(miniMessagePageProvider);
         List<MiniMessage> miniMessages = miniMessagePageProvider.getCurrentPage();
         assertNotNull(miniMessages);
@@ -72,7 +72,7 @@ public class TestMiniMessagePageProviders extends AbstractMiniMessageTest {
         properties.put(ACTOR_PROPERTY, "Leela");
         properties.put(RELATIONSHIP_KIND_PROPERTY, "circle:");
         PageProvider<MiniMessage> miniMessagePageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, null, null, properties, null);
+                PROVIDER_NAME, null, null, null, properties);
         assertNotNull(miniMessagePageProvider);
         miniMessagePageProvider.setPageSize(3);
 

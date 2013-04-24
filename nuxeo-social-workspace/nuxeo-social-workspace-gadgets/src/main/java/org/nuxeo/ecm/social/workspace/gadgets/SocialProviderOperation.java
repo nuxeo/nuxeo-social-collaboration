@@ -163,8 +163,8 @@ public class SocialProviderOperation {
         desc.setPattern(query);
         return new PaginableDocumentModelListImpl(
                 (PageProvider<DocumentModel>) pps.getPageProvider(providerName,
-                        desc, sortInfos, targetPageSize, new Long(page), props,
-                        null, parameters), documentLinkBuilder);
+                        desc, null, sortInfos, targetPageSize, new Long(page),
+                        props, parameters), documentLinkBuilder);
 
     }
 

@@ -67,7 +67,7 @@ public class TestUserActivityStreamPageProvider extends
         properties.put(LOCALE_PROPERTY, new Locale("en"));
         properties.put(CORE_SESSION_PROPERTY, (Serializable) session);
         PageProvider<ActivityMessage> userActivityStreamPageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, null, null, properties, null);
+                PROVIDER_NAME, null, null, null, properties);
         assertNotNull(userActivityStreamPageProvider);
         List<ActivityMessage> activityMessages = userActivityStreamPageProvider.getCurrentPage();
         assertNotNull(activityMessages);
@@ -86,7 +86,7 @@ public class TestUserActivityStreamPageProvider extends
         properties.put(LOCALE_PROPERTY, new Locale("en"));
         properties.put(CORE_SESSION_PROPERTY, (Serializable) newSession);
         PageProvider<ActivityMessage> userActivityStreamPageProvider = (PageProvider<ActivityMessage>) pageProviderService.getPageProvider(
-                PROVIDER_NAME, null, null, null, properties, null);
+                PROVIDER_NAME, null, null, null, properties);
         assertNotNull(userActivityStreamPageProvider);
         List<ActivityMessage> activityMessages = userActivityStreamPageProvider.getCurrentPage();
         assertNotNull(activityMessages);
