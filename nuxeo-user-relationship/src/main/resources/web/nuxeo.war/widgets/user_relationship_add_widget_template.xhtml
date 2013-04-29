@@ -10,18 +10,26 @@
   <c:set var="userSchema" value="#{userManager.userSchemaName}"/>
   <c:set var="userName" value="#{field_0[userSchema].username}" scope="page" />
   <c:set var="displayedName" value="#{nxu:test(empty field_0[userSchema].firstName, userName, field_0[userSchema].firstName)}" scope="page" />
-  <a4j:outputPanel id="userRelationPanel" >
+  <a4j:outputPanel id="userRelationPanel" layout="block">
 
-    <a4j:outputPanel rendered="#{!userRelationshipActions.isCurrentUser(userName)}" id="user_relationship_#{widget.id}">
+    <a4j:outputPanel
+      layout="block"
+      rendered="#{!userRelationshipActions.isCurrentUser(userName)}"
+      id="user_relationship_#{widget.id}">
 
-      <a4j:outputPanel id="add_relationship_#{widget.id}_btn">
-        <a4j:outputPanel styleClass="relationship_label" rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}">
+      <a4j:outputPanel id="add_relationship_#{widget.id}_btn"
+        layout="block">
+        <a4j:outputPanel styleClass="relationship_label"
+          rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}"
+          layout="block">
           <h:outputFormat value="#{messages['action.social.user.relationship.not.in.relation']}">
             <f:param value="#{displayedName}" />
           </h:outputFormat>
         </a4j:outputPanel>
 
-        <a4j:outputPanel styleClass="relationship_label" rendered="#{userRelationshipActions.isAlreadyConnected(userName)}">
+        <a4j:outputPanel styleClass="relationship_label"
+          layout="block"
+          rendered="#{userRelationshipActions.isAlreadyConnected(userName)}">
           <h:outputFormat value="#{messages['action.social.user.relationship.in.relation']} ">
             <f:param value="#{displayedName}" />
           </h:outputFormat>
@@ -59,7 +67,7 @@
                     <h:graphicImage value="/img/standart_waiter.gif" />
                   </f:facet>
                 </a4j:status>
-                <a4j:outputPanel id="add_relationship_#{widget.id}">
+                <a4j:outputPanel id="add_relationship_#{widget.id}" layout="block">
                   #{userManagementActions.setSelectedUserName(userName)}
                   <nxu:dataTable id="#{widget.id}_add_relationship"
               value="#{userRelationshipActions.kinds}" var="kind"

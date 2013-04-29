@@ -5,6 +5,7 @@
     xmlns:a4j="http://richfaces.org/a4j"
     xmlns:nxu="http://nuxeo.org/nxweb/util"
     xmlns:nxl="http://nuxeo.org/nxforms/layout"
+    layout="block"
     id="user_relationships_network">
 
    <!-- view form -->
@@ -30,7 +31,7 @@
     id="relationshipNetworkView">
   <div class="userRelationsPanel halfWidth floatL">
     <h2>#{messages['label.relationship.search.relation']}</h2>
-    <a4j:outputPanel id="usersListingRelationshipPanel">
+    <a4j:outputPanel id="usersListingRelationshipPanel" layout="block">
       <nxu:set var="contentViewName" value="users_listing_relationship">
         <div class="tabsContent">
           <ui:decorate template="/incl/content_view.xhtml">
@@ -80,7 +81,7 @@
   </div>
   <div class="userRelationsPanel halfWidth floatR">
     <h2>#{messages['label.relationship.network']}</h2>
-    <a4j:outputPanel id="userNetworkPanel">
+    <a4j:outputPanel id="userNetworkPanel" layout="block">
       <nxu:set var="contentViewName" value="user_relationships">
         <div class="tabsContent">
           <ui:decorate template="/incl/content_view.xhtml">
