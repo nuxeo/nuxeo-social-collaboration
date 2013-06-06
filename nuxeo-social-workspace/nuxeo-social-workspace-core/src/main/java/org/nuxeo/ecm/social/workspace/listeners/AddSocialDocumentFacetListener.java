@@ -75,7 +75,7 @@ public class AddSocialDocumentFacetListener implements EventListener {
                 || !allowedTypes.contains(document.getType())) {
             return;
         }
-        CoreSession session = document.getCoreSession();
+        CoreSession session = ctx.getCoreSession();
         DocumentModel documentParent = session.getDocument(document.getParentRef());
         SocialWorkspace sws = getSocialWorkspaceService().getSocialWorkspace(
                 documentParent);
