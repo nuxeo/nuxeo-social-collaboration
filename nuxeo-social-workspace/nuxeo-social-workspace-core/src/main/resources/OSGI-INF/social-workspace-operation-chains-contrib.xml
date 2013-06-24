@@ -33,6 +33,7 @@ Social Workspace &lt;a href="${docUrl}"&gt;${Document.title}&lt;/a&gt; was creat
         <param type="string" name="value">delete</param>
       </operation>
       <operation id="Notification.SendMail">
+        <param type="boolean" name="rollbackOnError">false</param>
         <param type="string" name="from">expr:Env["mail.from"]</param>
         <param type="string" name="message">Social Workspace "${Document.title}" was not validated by adminitrators and it will be suspended.</param>
         <param type="string" name="subject">expr:Social Workspace not validated: @{Document.title}</param>
