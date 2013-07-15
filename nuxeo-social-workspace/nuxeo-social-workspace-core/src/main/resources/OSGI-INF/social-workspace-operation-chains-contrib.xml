@@ -16,6 +16,7 @@
         <param type="boolean" name="create one task per actor">true</param>
       </operation>
       <operation id="Notification.SendMail">
+        <param type="boolean" name="rollbackOnError">false</param>
         <param type="string" name="from">expr:Env["mail.from"]</param>
         <param type="string" name="message">&lt;html&gt;
 Hello,
