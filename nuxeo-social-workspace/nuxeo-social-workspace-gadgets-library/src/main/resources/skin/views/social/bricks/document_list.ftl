@@ -37,38 +37,38 @@
       <td>
         <#if removable?seq_contains(doc.id)>
           <a class="button" href="javascript:Library.confirmDeleteDocument('${doc.id}' , '${This.escape(doc.title)}' )">
-            <img src="${contextPath}/icons/action_delete.gif" alt="remove"></img>
+            <img src="${contextPath}/icons/delete.png" alt="remove" />
             <div class="tooltip">${Context.getMessage("tooltip.remove.document")}</div>
           </a>
         </#if>
         <#if isPublicSocialWorkspace>
           <#if publishablePublic?seq_contains(doc.id)>
             <a class="button" href="javascript:Library.confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', true )">
-              <img src="${skinPath}/icons/publish_to_all.png" alt="publish private"></img>
+              <img src="${skinPath}/icons/publish_to_all.png" alt="publish private" />
               <div class="tooltip">${Context.getMessage("tooltip.publish.document")}</div>
             </a>
           </#if>
           <#if publishablePrivate?seq_contains(doc.id)>
             <a class="button" href="javascript:Library.confirmPublishDocument('${doc.id}', '${This.escape(doc.title)}', false )">
-              <img src="${skinPath}/icons/publish_to_social_workspace.png" alt="make it public"></img>
+              <img src="${skinPath}/icons/publish_to_social_workspace.png" alt="make it public" />
               <div class="tooltip">${Context.getMessage("tooltip.restrict.document")}</div>
             </a>
           </#if>
         <#else>
           <a class="button disabled" href="#">
-            <img src="${skinPath}/icons/publish_to_all_disabled.png" alt="publish public"></img>
+            <img src="${skinPath}/icons/publish_to_all_disabled.png" alt="publish public" />
             <div class="tooltip">${Context.getMessage("tooltip.can.not.publish.document")}</div>
           </a>
         </#if>
         <#assign attachment = This.getAttachment(doc) />
         <#if attachment != null>
           <a class="button" href="${contextPath}/nxfile/default/${doc.id}/blobholder:0/${attachment.filename}">
-            <img src="${contextPath}/icons/download.png" alt="download"></img>
+            <img src="${contextPath}/icons/download.png" alt="download" />
             <div class="tooltip">${Context.getMessage("label.action.download")}</div>
           </a>
         </#if>
         <a class="button" href="${contextPath}/nxpath/default${doc.path}@view_documents" target="_blank">
-          <img src="${contextPath}/icons/external.gif" alt="openInDM"></img>
+          <img src="${contextPath}/icons/external.gif" alt="openInDM" />
           <div class="tooltip">${Context.getMessage("label.action.openInDM")}</div>
         </a>
       </td>
