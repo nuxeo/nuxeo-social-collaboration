@@ -8,10 +8,10 @@
   </script>
   <div id="pageNavigationControls">
     <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', 0)" id="navFirstPage" src="${contextPath}/icons/navigation_first.png" />
-      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${prevPage})" id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${prevPage})" id="navPrevPage" src="${contextPath}/icons/navigation_previous.png"/>
       <span class="currentPageStatus" id="nxDocumentListPage">${page + 1}/${maxPage}</span>
-      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${nextPage})" id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
-      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${nextPage})" id="navNextPage" src="${contextPath}/icons/navigation_next.png"/>
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/navigation_last.png"/>
   </div>
   <table class="dataList">
     <thead>
