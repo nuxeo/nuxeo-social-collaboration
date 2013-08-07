@@ -39,7 +39,7 @@
 
     <notification name="Social Task assigned" channel="email" enabled="true" availableIn="SocialWorkspace"
       autoSubscribed="true" template="workflowTaskAssigned" subject="Task Assigned for ${docTitle}"
-      label="label.nuxeo.notifications.appReviewStarted">
+      label="label.nuxeo.notifications.taskAssigned">
       <event name="workflowTaskAssigned"/>
     </notification>
 
