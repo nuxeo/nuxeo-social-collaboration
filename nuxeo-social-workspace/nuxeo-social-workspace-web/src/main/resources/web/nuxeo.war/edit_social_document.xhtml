@@ -28,7 +28,8 @@
       <ui:include src="/incl/message_banner.xhtml" />
       <h:form enctype="multipart/form-data" class="singlePage">
         <nxl:documentLayout mode="edit" value="#{currentDocument}" />
-        <ui:include src="/incl/document_versioning.xhtml" />
+        <nxl:layout name="document_edit_form_options"
+          mode="edit" value="#{currentDocument}" />
         <p class="buttonsGadget">
           <input type="hidden" name="parentDocumentPath"
             value="#{currentDocument.pathAsString}" />
