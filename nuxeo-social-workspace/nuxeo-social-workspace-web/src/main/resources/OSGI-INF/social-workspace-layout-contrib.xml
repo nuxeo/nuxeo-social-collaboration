@@ -708,6 +708,7 @@
           /widgets/user_suggestion_widget_template.xhtml
         </property>
         <property name="userSuggestionSearchType">USER_TYPE</property>
+        <property name="operationId">UserGroup.Suggestion</property>
       </properties>
     </widget>
 
