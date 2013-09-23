@@ -163,7 +163,7 @@ public class SocialWorkspaceMembersManagementListener implements
                     true).set("subject", subject).set("message", message);
             Framework.getLocalService(AutomationService.class).run(ctx, chain);
         } catch (Exception e) {
-            log.error("Unable to notify about a member management.", e);
+            log.warn("Unable to notify members about a member management.", e);
             log.debug(e, e);
         }
     }
