@@ -48,7 +48,7 @@
                 <ul class="actionSubList">
                   <c:if test="#{currentUser.administrator}">
                     <li>
-                      <a onclick="nuxeo.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
+                      <a onclick="nuxeo.openSocial.container.openContainerBuilder();" id="openContainerBuilder" title="#{messages['label.opensocial.container.change.layout']}">#{messages['label.opensocial.container.change.layout']}</a>
                     </li>
                     <li>
                       <a id="addGadgetButton" href="#{baseURL}site/gadgets?language=#{localeSelector.language}">#{messages['label.opensocial.container.add.gadget']}</a>
