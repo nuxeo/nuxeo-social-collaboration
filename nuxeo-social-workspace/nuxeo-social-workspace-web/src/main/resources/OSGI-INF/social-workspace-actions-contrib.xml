@@ -5,7 +5,7 @@
     point="actions">
 
     <action id="collab" link="view_collaboration" label="label.main.tab.collaboration"
-      order="60">
+      order="60" type="main_tab">
       <category>MAIN_TABS</category>
     </action>
 
@@ -186,7 +186,7 @@
     </action>
 
     <action id="SWUserRegistrationRequestsListingLocal" link="/incl/userregistration/requests_listing_local.xhtml"
-      order="240" label="tab.userregistration.requests">
+      order="240" label="tab.userregistration.requests" type="rest_document_link">
       <category>TAB_MANAGE_sub_tab</category>
       <filter-id>manage_social_workspace</filter-id>
       <filter-id>social_workspace</filter-id>
@@ -225,13 +225,15 @@
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PRIVATE_DASHBOARD" link="/incl/tabs/social_workspace_private_dashboard.xhtml"
-      order="15" label="action.view.private.dashboard" icon="/icons/file.gif">
+      order="15" label="action.view.private.dashboard" icon="/icons/file.gif"
+      type="rest_document_link">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>social_workspace</filter-id>
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_PUBLIC_DASHBOARD" link="/incl/tabs/social_workspace_public_dashboard.xhtml"
-      order="16" label="action.view.public.dashboard" icon="/icons/file.gif">
+      order="16" label="action.view.public.dashboard" icon="/icons/file.gif"
+      type="rest_document_link">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>manage_social_workspace</filter-id>
       <filter-id>social_workspace</filter-id>

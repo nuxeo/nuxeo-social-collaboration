@@ -5,13 +5,13 @@
     point="actions">
 
     <action id="TAB_WORKSPACE_WALL" link="/incl/tabs/default_document_wall.xhtml" order="15"
-      label="action.view.wall" icon="/icons/file.gif">
+      label="action.view.wall" icon="/icons/file.gif" type="rest_document_link">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>showWorkspaceWall</filter-id>
     </action>
 
     <action id="TAB_SOCIAL_WORKSPACE_WALL" link="/incl/tabs/social_workspace_wall.xhtml" order="-10"
-      label="action.view.wall" icon="/icons/file.gif">
+      label="action.view.wall" icon="/icons/file.gif" type="rest_document_link">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>showSocialWorkspaceWall</filter-id>
     </action>
