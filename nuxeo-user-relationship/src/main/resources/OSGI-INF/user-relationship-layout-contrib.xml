@@ -278,10 +278,10 @@
         <field>userprofile:birthdate</field>
       </fields>
       <properties widgetMode="any">
-        <property name="pattern">#{nxu:basicDateFormater()}</property>
+        <property name="pattern">#{nxu:basicDateFormatter()}</property>
       </properties>
       <properties widgetMode="edit">
-        <property name="format">#{nxu:basicDateFormater()}</property>
+        <property name="format">#{nxu:basicDateFormatter()}</property>
       </properties>
       <widgetModes>
         <mode value="view">#{userRelationshipActions.canViewProfile(layoutValue) ? 'view' : 'hidden'}</mode>
