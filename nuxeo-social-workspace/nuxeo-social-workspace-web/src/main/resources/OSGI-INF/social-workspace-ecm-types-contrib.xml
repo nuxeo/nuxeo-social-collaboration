@@ -49,7 +49,6 @@
       <label>SocialWorkspace</label>
       <icon>/icons/social_workspace.png</icon>
       <bigIcon>/icons/social_workspace_100.png</bigIcon>
-      <icon-expanded>/icons/social_workspace_open.png</icon-expanded>
       <category>Collaborative</category>
       <default-view>view_documents</default-view>
       <layouts mode="any">
@@ -175,7 +174,6 @@
       <label>Folder</label>
       <icon>/icons/folder.gif</icon>
       <bigIcon>/icons/folder_100.png</bigIcon>
-      <icon-expanded>/icons/folder_open.gif</icon-expanded>
       <category>Collaborative</category>
       <description>Folder.description</description>
       <default-view>view_documents</default-view>
