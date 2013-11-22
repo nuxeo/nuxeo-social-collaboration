@@ -32,6 +32,50 @@
       <pageSize>5</pageSize>
     </genericPageProvider>
 
+    <!-- Page providers for gadgets -->
+    <coreQueryPageProvider name="articles">
+      <property name="maxResults">DEFAULT_NAVIGATION_RESULTS</property>
+      <pattern>
+        SELECT * FROM Article WHERE ecm:isProxy = 0
+        AND ecm:currentLifeCycleState != 'deleted'
+        AND ecm:path STARTSWITH ?
+      </pattern>
+      <sort column="dc:modified" ascending="false" />
+      <pageSize>5</pageSize>
+    </coreQueryPageProvider>
+
+    <coreQueryPageProvider name="news">
+      <property name="maxResults">DEFAULT_NAVIGATION_RESULTS</property>
+      <pattern>
+        SELECT * FROM NewsItem WHERE ecm:isProxy = 1
+        AND ecm:currentLifeCycleState != 'deleted'
+        AND ecm:path STARTSWITH ?
+      </pattern>
+      <sort column="dc:modified" ascending="false" />
+      <pageSize>5</pageSize>
+    </coreQueryPageProvider>
+
+    <coreQueryPageProvider name="public_articles">
+      <property name="maxResults">DEFAULT_NAVIGATION_RESULTS</property>
+      <pattern>
+        SELECT * FROM Article WHERE ecm:isProxy = 1
+        AND ecm:currentLifeCycleState != 'deleted'
+        AND ecm:path STARTSWITH ?
+      </pattern>
+      <sort column="dc:modified" ascending="false" />
+      <pageSize>5</pageSize>
+    </coreQueryPageProvider>
+
+    <coreQueryPageProvider name="public_documents">
+      <property name="maxResults">DEFAULT_NAVIGATION_RESULTS</property>
+      <pattern>
+        SELECT * FROM File WHERE ecm:currentLifeCycleState != 'deleted'
+        AND ecm:path STARTSWITH ?
+      </pattern>
+      <sort column="dc:modified" ascending="false" />
+      <pageSize>5</pageSize>
+    </coreQueryPageProvider>
+
   </extension>
 
 </component>
