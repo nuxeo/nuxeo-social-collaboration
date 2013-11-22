@@ -3,7 +3,8 @@ var prefs = new gadgets.Prefs();
 //configuration leaved here to allow label traduction by shindig
 // configure Automation REST call
 var NXRequestParams = { operationId:'Social.Provider', // id of operation or chain to execute
-  operationParams:{ query:"SELECT * FROM File WHERE ecm:currentLifeCycleState <> 'deleted'",
+  operationParams:{
+    providerName: 'public_documents',
     pageSize:5,
     contextPath:getTargetContextPath(),
     onlyPublicDocuments:"true", //restrict the research to public-section
