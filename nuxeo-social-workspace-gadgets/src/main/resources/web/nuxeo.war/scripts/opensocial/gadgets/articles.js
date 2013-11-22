@@ -3,7 +3,7 @@ var prefs = new gadgets.Prefs();
 var NXRequestParams = {
   operationId : 'Social.Provider',            // id of operation or chain to execute
   operationParams : {
-    query : "Select * from Article WHERE ecm:isProxy = 0 and ecm:currentLifeCycleState <> 'deleted'",
+    providerName: 'articles',
     pageSize : 5,
     contextPath : getTargetContextPath(),
     documentLinkBuilder: prefs.getString("documentLinkBuilder")
