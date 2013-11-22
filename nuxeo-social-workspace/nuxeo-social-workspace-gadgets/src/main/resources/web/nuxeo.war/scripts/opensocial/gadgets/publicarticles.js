@@ -2,9 +2,10 @@ var prefs = new gadgets.Prefs();
 
 // configure Automation REST call
 var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
-  operationParams : { query : "Select * from Article WHERE ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted'",
-       pageSize : 5,
-       contextPath : getTargetContextPath()
+  operationParams : {
+    providerName: 'public_articles',
+    pageSize : 5,
+    contextPath : getTargetContextPath()gadgets/src/main/resources/web/nuxeo.war/scripts/opensocial/gadgets/publicarticles.js
   },  // parameters for the chain or operation
   operationContext : {},                                                // context
   operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents
