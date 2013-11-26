@@ -13,7 +13,10 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>nuxeo-social-workspace</module>
+    <module>nuxeo-social-workspace-core</module>
+    <module>nuxeo-social-workspace-web</module>
+    <module>nuxeo-social-workspace-gadgets</module>
+    <module>nuxeo-social-workspace-gadgets-library</module>
     <module>nuxeo-relationship</module>
     <module>nuxeo-user-relationship</module>
     <module>nuxeo-mini-message</module>
