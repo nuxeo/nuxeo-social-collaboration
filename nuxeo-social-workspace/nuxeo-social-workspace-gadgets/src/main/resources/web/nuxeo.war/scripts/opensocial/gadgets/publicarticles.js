@@ -2,11 +2,10 @@ var prefs = new gadgets.Prefs();
 
 // configure Automation REST call
 var NXRequestParams={ operationId : 'Social.Provider',            // id of operation or chain to execute
-  operationParams : {
-    providerName: 'public_articles',
-    pageSize : 5,
-    contextPath : getTargetContextPath(),
-    documentLinkBuilder: prefs.getString("documentLinkBuilder")
+  operationParams : { query : "Select * from Article WHERE ecm:isProxy = 1 and ecm:currentLifeCycleState <> 'deleted'",
+       pageSize : 5,
+       contextPath : getTargetContextPath(),
+       documentLinkBuilder: prefs.getString("documentLinkBuilder")
   },  // parameters for the chain or operation
   operationContext : {},                                                // context
   operationDocumentProperties : "common,dublincore,note",               // schema that must be fetched from resulting documents

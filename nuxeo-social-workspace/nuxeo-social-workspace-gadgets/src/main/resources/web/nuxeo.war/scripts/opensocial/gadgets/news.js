@@ -2,8 +2,8 @@ var prefs = new gadgets.Prefs();
 
 // configure Automation REST call
 var NXRequestParams = { operationId: 'Social.Provider', // id of operation or chain to execute
-  operationParams: {
-    providerName: 'news',
+  operationParams: { query: "Select * from NewsItem WHERE ecm:currentLifeCycleState <> 'deleted'" +
+      "AND ecm:isProxy = 1",
     pageSize: 5,
     contextPath: getTargetContextPath(),
     sortInfo: "dc:modified 1",

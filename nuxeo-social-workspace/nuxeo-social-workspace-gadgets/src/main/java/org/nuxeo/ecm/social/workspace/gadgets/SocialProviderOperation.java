@@ -73,7 +73,7 @@ public class SocialProviderOperation {
     @Param(name = "providerName", required = false)
     protected String providerName;
 
-    @Param(name = "query", required = false)
+    @Param(name = "query", required = true)
     protected String query;
 
     @Param(name = "language", required = false, widget = Constants.W_OPTION, values = { "NXQL" })
@@ -140,9 +140,8 @@ public class SocialProviderOperation {
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
                 session, new PathRef(contextPath));
 
-        String finalPath = "/";
         if (socialWorkspace != null) {
-            finalPath = socialWorkspace.getDocument().getPathAsString();
+            String finalPath = socialWorkspace.getDocument().getPathAsString();
 
             if (onlyPublicDocuments != null
                     && Boolean.parseBoolean(onlyPublicDocuments)) {
@@ -160,25 +159,13 @@ public class SocialProviderOperation {
             }
         }
 
-        if (query != null) {
-            CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
-            desc.setPattern(query);
-            return new PaginableDocumentModelListImpl(
-                    (PageProvider<DocumentModel>) pps.getPageProvider("", desc,
-                            null, sortInfos, targetPageSize, new Long(page),
-                            props, parameters), documentLinkBuilder);
-        } else {
-            Object[] params = new Object[parameters != null ? parameters.length + 1
-                    : 1];
-            if (parameters != null) {
-                System.arraycopy(parameters, 0, params, 0, parameters.length);
-            }
-            params[params.length - 1] = finalPath;
-            return new PaginableDocumentModelListImpl(
-                    (PageProvider<DocumentModel>) pps.getPageProvider(
-                            providerName, sortInfos, targetPageSize, new Long(
-                                    page), props, params), documentLinkBuilder);
-        }
+        CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
+        desc.setPattern(query);
+        return new PaginableDocumentModelListImpl(
+                (PageProvider<DocumentModel>) pps.getPageProvider(providerName,
+                        desc, null, sortInfos, targetPageSize, new Long(page),
+                        props, parameters), documentLinkBuilder);
+
     }
 
     protected List<SortInfo> manageSortParameter() {
