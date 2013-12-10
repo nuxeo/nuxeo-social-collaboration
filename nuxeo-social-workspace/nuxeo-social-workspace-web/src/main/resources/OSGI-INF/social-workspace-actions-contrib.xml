@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <component name="org.nuxeo.ecm.social.workspace.actions">
 
+
+  <require> org.nuxeo.ecm.user.center.actions</require>
+
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
              point="actions">
 
