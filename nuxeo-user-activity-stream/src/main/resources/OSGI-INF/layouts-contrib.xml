@@ -31,7 +31,26 @@
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
     point="widgets">
 
-    <widget name="summary_user_activity_stream" type="summary_user_activity_stream" />
+    <widget name="summary_user_activity_stream" type="summary_user_activity_stream">
+      <labels>
+        <label mode="any"></label>
+      </labels>
+      <controls mode="any">
+        <control name="handleLabels">true</control>
+      </controls>
+    </widget>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="actions">
+
+    <action id="userActivityStream" type="widget" order="300">
+      <category>USER_PANEL_RIGHT</category>
+      <properties>
+        <property name="widgetName">summary_user_activity_stream</property>
+      </properties>
+    </action>
 
   </extension>
 

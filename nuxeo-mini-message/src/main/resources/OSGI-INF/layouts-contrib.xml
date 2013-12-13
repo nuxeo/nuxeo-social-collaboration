@@ -31,7 +31,26 @@
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
     point="widgets">
 
-    <widget name="summary_user_mini_messages" type="summary_user_mini_messages" />
+    <widget name="summary_user_mini_messages" type="summary_user_mini_messages">
+      <labels>
+        <label mode="any"></label>
+      </labels>
+      <controls mode="any">
+        <control name="handleLabels">true</control>
+      </controls>
+    </widget>
+
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="actions">
+
+    <action id="userMiniMessages" type="widget" order="200">
+      <category>USER_PANEL_RIGHT</category>
+      <properties>
+        <property name="widgetName">summary_user_mini_messages</property>
+      </properties>
+    </action>
 
   </extension>
 
