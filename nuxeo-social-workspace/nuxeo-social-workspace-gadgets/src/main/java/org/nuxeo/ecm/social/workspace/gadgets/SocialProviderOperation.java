@@ -195,7 +195,7 @@ public class SocialProviderOperation {
                 sortInfos.add(sortInfo);
             }
         }
-        return sortInfos;
+        return sortInfos.isEmpty() ? null : sortInfos;
     }
 
 }
