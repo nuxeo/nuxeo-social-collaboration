@@ -9,97 +9,100 @@
     id="user_relationships_network">
 
    <!-- view form -->
-   <f:subview rendered="#{not empty userManagementActions.selectedUser and userManagementActions.showUserOrGroup}"
-        id="viewUserView">
-     <h:form>
-       <p class="directoryBack">
-         <a4j:commandLink immediate="true"
-           value="#{messages['command.directoryBack']}"
-           action="#{userManagementActions.resetState}"
-           reRender="user_relationships_network" />
-       </p>
-     </h:form>
-     <a4j:form id="viewUser"
-       rendered="#{userManagementActions.detailsMode == 'view'}">
-       <nxl:layout name="gridUserLayout" mode="view"
-             value="#{userProfileActions.selectedUserProfile}" />
-     </a4j:form>
-   </f:subview>
+  <c:if test="#{not empty userManagementActions.selectedUser and userManagementActions.showUserOrGroup}">
+    <f:subview id="viewUserView">
+      <h:form>
+        <p class="directoryBack">
+          <a4j:commandLink immediate="true"
+            value="#{messages['command.directoryBack']}"
+            action="#{userManagementActions.resetState}"
+            reRender="user_relationships_network" />
+        </p>
+      </h:form>
+      <a4j:form id="viewUser"
+        rendered="#{userManagementActions.detailsMode == 'view'}">
+        <nxl:layout name="gridUserLayout" mode="view"
+          value="#{userProfileActions.selectedUserProfile}" />
+      </a4j:form>
+    </f:subview>
+  </c:if>
 
   <!-- search form -->
- <f:subview rendered="#{not userManagementActions.showUserOrGroup}"
-    id="relationshipNetworkView">
-  <div class="userRelationsPanel halfWidth floatL">
-    <h2>#{messages['label.relationship.search.relation']}</h2>
-    <a4j:outputPanel id="usersListingRelationshipPanel" layout="block">
-      <nxu:set var="contentViewName" value="users_listing_relationship">
-        <div class="tabsContent">
-          <ui:decorate template="/incl/content_view.xhtml">
-            <ui:define name="content_view_header">
-              <a4j:region id="search_users_region">
-                <!-- search form -->
-                <a4j:form id="searchForm">
-                  <h:inputText id="searchText"
-                      value="#{userManagementActions.searchString}"
-                      onkeydown="if(event.keyCode == 13 ||event.keyCode == 9 ){return false;}"
-                      styleClass="directoryFilter">
-                    <a4j:support event="onkeyup"
-                        reRender="usersListingRelationshipPanel,userNetworkPanel"
-                        requestDelay="1000" action="#{contentViewActions.refreshAndRewind(contentViewName)}"
-                        ignoreDupResponses="true" />
-                  </h:inputText>
-                  <f:verbatim>&amp;nbsp;</f:verbatim>
-                  <a4j:commandButton id="searchButton"
-                      value="#{messages['command.search']}"
-                      action="#{contentViewActions.refreshAndRewind(contentViewName)}" styleClass="button"
-                      reRender="usersListingRelationshipPanel,userNetworkPanel"/>
-                  <a4j:commandButton id="clearButton"
-                      value="#{messages['command.clearSearch']}"
-                      action="#{userManagementActions.clearSearch}" styleClass="button"
-                      reRender="usersListingRelationshipPanel,userNetworkPanel,searchForm"/>
-                  <a4j:status>
-                    <f:facet name="start">
-                      <h:graphicImage value="/img/standart_waiter.gif"/>
-                    </f:facet>
-                  </a4j:status>
-                </a4j:form>
-              </a4j:region>
-            </ui:define>
+  <c:if test="#{not userManagementActions.showUserOrGroup}">
+    <f:subview id="relationshipNetworkView">
+      <div class="userRelationsPanel halfWidth floatL">
+        <h2>#{messages['label.relationship.search.relation']}</h2>
+        <a4j:outputPanel id="usersListingRelationshipPanel" layout="block">
+          <nxu:set var="contentViewName" value="users_listing_relationship">
+            <div class="tabsContent">
+              <ui:decorate template="/incl/content_view.xhtml">
+                <ui:define name="content_view_header">
+                  <a4j:region id="search_users_region">
+                    <!-- search form -->
+                    <a4j:form id="searchForm">
+                      <h:inputText id="searchText"
+                        value="#{userManagementActions.searchString}"
+                        onkeydown="if(event.keyCode == 13 ||event.keyCode == 9 ){return false;}"
+                        styleClass="directoryFilter">
+                        <a4j:support event="onkeyup"
+                          reRender="usersListingRelationshipPanel,userNetworkPanel"
+                          requestDelay="1000" action="#{contentViewActions.refreshAndRewind(contentViewName)}"
+                          ignoreDupResponses="true" />
+                      </h:inputText>
+                      <f:verbatim>&amp;nbsp;</f:verbatim>
+                      <a4j:commandButton id="searchButton"
+                        value="#{messages['command.search']}"
+                        action="#{contentViewActions.refreshAndRewind(contentViewName)}" styleClass="button"
+                        reRender="usersListingRelationshipPanel,userNetworkPanel"/>
+                      <a4j:commandButton id="clearButton"
+                        value="#{messages['command.clearSearch']}"
+                        action="#{userManagementActions.clearSearch}" styleClass="button"
+                        reRender="usersListingRelationshipPanel,userNetworkPanel,searchForm"/>
+                      <a4j:status>
+                        <f:facet name="start">
+                          <h:graphicImage value="/img/standart_waiter.gif"/>
+                        </f:facet>
+                      </a4j:status>
+                    </a4j:form>
+                  </a4j:region>
+                </ui:define>
 
-            <ui:define name="pageNavigationControls">
-              <ui:include src="/pagination/a4jPageNavigationControls.xhtml">
-                <ui:param name="contentIdToBeReRendered"
-                    value="#{contentViewRenderId}_resultsPanel,#{contentViewRenderId}_contentViewActionsPanel"/>
-              </ui:include>
-            </ui:define>
+                <ui:define name="pageNavigationControls">
+                  <ui:include src="/pagination/a4jPageNavigationControls.xhtml">
+                    <ui:param name="contentIdToBeReRendered"
+                      value="#{contentViewRenderId}_resultsPanel,#{contentViewRenderId}_contentViewActionsPanel"/>
+                  </ui:include>
+                </ui:define>
 
-            <ui:define name="content_view_syndication_buttons"/>
-          </ui:decorate>
-        </div>
-      </nxu:set>
-    </a4j:outputPanel>
-  </div>
-  <div class="userRelationsPanel halfWidth floatR">
-    <h2>#{messages['label.relationship.network']}</h2>
-    <a4j:outputPanel id="userNetworkPanel" layout="block">
-      <nxu:set var="contentViewName" value="user_relationships">
-        <div class="tabsContent">
-          <ui:decorate template="/incl/content_view.xhtml">
-            <ui:define name="content_view_header"/>
+                <ui:define name="content_view_syndication_buttons"/>
+              </ui:decorate>
+            </div>
+          </nxu:set>
+        </a4j:outputPanel>
+      </div>
+      <div class="userRelationsPanel halfWidth floatR">
+        <h2>#{messages['label.relationship.network']}</h2>
+        <a4j:outputPanel id="userNetworkPanel" layout="block">
+          <nxu:set var="contentViewName" value="user_relationships">
+            <div class="tabsContent">
+              <ui:decorate template="/incl/content_view.xhtml">
+                <ui:define name="content_view_header"/>
 
-            <ui:define name="pageNavigationControls">
-              <ui:include src="/pagination/a4jPageNavigationControls.xhtml">
-                <ui:param name="contentIdToBeReRendered"
-                    value="#{contentViewRenderId}_resultsPanel,#{contentViewRenderId}_contentViewActionsPanel"/>
-              </ui:include>
-            </ui:define>
+                <ui:define name="pageNavigationControls">
+                  <ui:include src="/pagination/a4jPageNavigationControls.xhtml">
+                    <ui:param name="contentIdToBeReRendered"
+                      value="#{contentViewRenderId}_resultsPanel,#{contentViewRenderId}_contentViewActionsPanel"/>
+                  </ui:include>
+                </ui:define>
 
-            <ui:define name="content_view_syndication_buttons"/>
-          </ui:decorate>
-        </div>
-    </nxu:set>
-    </a4j:outputPanel>
-  </div>
-  </f:subview>
+                <ui:define name="content_view_syndication_buttons"/>
+              </ui:decorate>
+            </div>
+          </nxu:set>
+        </a4j:outputPanel>
+      </div>
+    </f:subview>
+  </c:if>
+
   <div class="clear"></div>
 </a4j:outputPanel>
