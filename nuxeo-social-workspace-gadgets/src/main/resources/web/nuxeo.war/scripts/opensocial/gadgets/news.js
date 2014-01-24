@@ -6,7 +6,6 @@ var NXRequestParams = { operationId: 'Social.Provider', // id of operation or ch
     providerName: 'news',
     pageSize: 5,
     contextPath: getTargetContextPath(),
-    sortInfo: "dc:modified 1",
     documentLinkBuilder: prefs.getString("documentLinkBuilder")
   }, // parameters for the chain or operation
   operationContext: {}, // context
