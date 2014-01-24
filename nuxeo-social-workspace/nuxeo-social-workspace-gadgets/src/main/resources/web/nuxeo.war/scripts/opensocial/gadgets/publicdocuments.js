@@ -8,7 +8,6 @@ var NXRequestParams = { operationId:'Social.Provider', // id of operation or cha
     pageSize:5,
     contextPath:getTargetContextPath(),
     onlyPublicDocuments:"true", //restrict the research to public-section
-    sortInfo:"dc:modified 1",
     documentLinkBuilder: prefs.getString("documentLinkBuilder")
   }, // parameters for the chain or operation
   operationContext:{}, // context
