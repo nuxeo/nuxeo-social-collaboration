@@ -7,8 +7,7 @@ var NXRequestParams = { operationId:'Social.Provider', // id of operation or cha
     providerName: 'public_documents',
     pageSize:5,
     contextPath:getTargetContextPath(),
-    onlyPublicDocuments:"true", //restrict the research to public-section
-    sortInfo:"dc:modified 1"
+    onlyPublicDocuments:"true" //restrict the research to public-section
   }, // parameters for the chain or operation
   operationContext:{}, // context
   operationDocumentProperties:"common,dublincore,note,file", // schema that must be fetched from resulting documents

@@ -5,8 +5,7 @@ var NXRequestParams = { operationId: 'Social.Provider', // id of operation or ch
   operationParams: {
     providerName: 'news',
     pageSize: 5,
-    contextPath: getTargetContextPath(),
-    sortInfo: "dc:modified 1"
+    contextPath: getTargetContextPath()
   }, // parameters for the chain or operation
   operationContext: {}, // context
   operationDocumentProperties: "common,dublincore,note", // schema that must be fetched from resulting documents
