@@ -41,7 +41,7 @@
             <nxu:set var="collaborationActions" value="#{webActions.getActionsList('COLLABORATION_TAB_ACTIONS')}" cache="true">
 
             <c:if test="#{not empty collaborationActions or currentUser.administrator}">
-            <ul class="actionList">
+            <ul class="actionList" id="socialCollaborationDropDownMenu">
               <li class="dropDownMenu button dropdown">
                 <h:outputText value="#{messages['label.social.workspace.actions']}" />
                 <ul class="actionSubList">
@@ -68,6 +68,13 @@
                 </ul>
               </li>
             </ul>
+
+            <script>
+              jQuery(document).ready(function() {
+                jQuery("#socialCollaborationDropDownMenu").dropdown();
+              });
+            </script>
+
             </c:if>
 
             </nxu:set>

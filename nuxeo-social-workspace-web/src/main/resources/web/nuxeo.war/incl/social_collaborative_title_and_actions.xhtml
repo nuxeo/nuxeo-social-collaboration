@@ -35,7 +35,7 @@
         value="#{nxu:test(empty showActions, true, showActions)}">
         <c:if test="#{finalShowActions}">
           <ui:insert name="social_collaboration_actions">
-            <ul class="actionList">
+            <ul class="actionList" id="socialCollaborativeDropDownMenu">
               <li class="dropDownMenu button dropdown">
                 <h:outputText value="#{messages['label.social.workspace.actions']}" />
                 <ui:insert name="action_menu_before" />
@@ -85,6 +85,13 @@
                 <ui:insert name="action_menu_after" />
               </li>
             </ul>
+
+            <script>
+              jQuery(document).ready(function() {
+                jQuery("#socialCollaborativeDropDownMenu").dropdown();
+              });
+            </script>
+
           </ui:insert>
         </c:if>
       </nxu:set>
