@@ -30,7 +30,6 @@ import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.core.api.Blob;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.social.activity.stream.AbstractUserActivityTest;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -53,26 +52,24 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
         initializeSomeRelations();
         createDocumentsWithBender();
 
-        CoreSession newSession = openSessionAs("Leela");
+        try (CoreSession newSession = openSessionAs("Leela")) {
+            OperationContext ctx = new OperationContext(newSession);
+            assertNotNull(ctx);
 
-        OperationContext ctx = new OperationContext(newSession);
-        assertNotNull(ctx);
+            OperationChain chain = new OperationChain(
+                    "testUserActivityStreamOperation");
+            chain.add(GetActivityStream.ID);
+            Blob result = (Blob) automationService.run(ctx, chain);
+            assertNotNull(result);
+            String json = result.getString();
+            assertNotNull(json);
 
-        OperationChain chain = new OperationChain(
-                "testUserActivityStreamOperation");
-        chain.add(GetActivityStream.ID);
-        Blob result = (Blob) automationService.run(ctx, chain);
-        assertNotNull(result);
-        String json = result.getString();
-        assertNotNull(json);
-
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> m = mapper.readValue(json,
-                new TypeReference<Map<String, Object>>() {
-                });
-        List<Map<String, Object>> activities = (List<Map<String, Object>>) m.get("activities");
-        assertEquals(4, activities.size());
-
-        CoreInstance.getInstance().close(newSession);
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> m = mapper.readValue(json,
+                    new TypeReference<Map<String, Object>>() {
+                    });
+            List<Map<String, Object>> activities = (List<Map<String, Object>>) m.get("activities");
+            assertEquals(4, activities.size());
+        }
     }
 }

@@ -36,7 +36,6 @@ import org.nuxeo.ecm.activity.ActivityImpl;
 import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
@@ -193,40 +192,40 @@ public abstract class AbstractUserActivityTest {
         session.save();
         session.save();
 
-        CoreSession newSession = openSessionAs("Bender");
-        DocumentModel doc = newSession.createDocumentModel(
-                workspacesDocument.getPathAsString(), "file1", "File");
-        doc = newSession.createDocument(doc);
-        acp = doc.getACP();
-        acl = acp.getOrCreateACL();
-        acl.add(new ACE("Leela", READ, true));
-        doc.setACP(acp, true);
-        newSession.save();
-        newSession.save();
+        try (CoreSession newSession = openSessionAs("Bender")) {
+            DocumentModel doc = newSession.createDocumentModel(
+                    workspacesDocument.getPathAsString(), "file1", "File");
+            doc = newSession.createDocument(doc);
+            acp = doc.getACP();
+            acl = acp.getOrCreateACL();
+            acl.add(new ACE("Leela", READ, true));
+            doc.setACP(acp, true);
+            newSession.save();
+            newSession.save();
 
-        doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(),
-                "file2", "File");
-        doc = newSession.createDocument(doc);
-        acp = doc.getACP();
-        acl = acp.getOrCreateACL();
-        acl.add(new ACE("Leela", READ, true));
-        doc.setACP(acp, true);
-        newSession.save();
-        newSession.save();
+            doc = newSession.createDocumentModel(
+                    workspacesDocument.getPathAsString(), "file2", "File");
+            doc = newSession.createDocument(doc);
+            acp = doc.getACP();
+            acl = acp.getOrCreateACL();
+            acl.add(new ACE("Leela", READ, true));
+            doc.setACP(acp, true);
+            newSession.save();
+            newSession.save();
 
-        doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(),
-                "file-without-right", "File");
-        doc = newSession.createDocument(doc);
-        acp = doc.getACP();
-        acl = acp.getOrCreateACL();
-        acl.add(new ACE("Leela", READ, false));
-        doc.setACP(acp, true);
-        newSession.save();
-        newSession.save();
+            doc = newSession.createDocumentModel(
+                    workspacesDocument.getPathAsString(), "file-without-right",
+                    "File");
+            doc = newSession.createDocument(doc);
+            acp = doc.getACP();
+            acl = acp.getOrCreateACL();
+            acl.add(new ACE("Leela", READ, false));
+            doc.setACP(acp, true);
+            newSession.save();
+            newSession.save();
 
-        eventService.waitForAsyncCompletion();
-
-        CoreInstance.getInstance().close(newSession);
+            eventService.waitForAsyncCompletion();
+        }
     }
 
 }
