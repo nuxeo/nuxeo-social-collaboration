@@ -58,23 +58,22 @@ public class TestPublicSocialWorkspaceAccess extends
 
     @Test
     public void shouldReturnPublicSocialWorkspace() throws Exception {
-        CoreSession newSession = openSessionAs("John");
+        try (CoreSession newSession = openSessionAs("John")) {
 
-        SocialWorkspaceService service = Framework.getService(SocialWorkspaceService.class);
-        List<SocialWorkspace> socialWorkspaces = service.getDetachedPublicSocialWorkspaces(newSession);
-        assertEquals(1, socialWorkspaces.size());
+            SocialWorkspaceService service = Framework.getService(SocialWorkspaceService.class);
+            List<SocialWorkspace> socialWorkspaces = service.getDetachedPublicSocialWorkspaces(newSession);
+            assertEquals(1, socialWorkspaces.size());
 
-        String query = String.format("Select * From %s ",
-                SocialConstants.SOCIAL_WORKSPACE_TYPE);
-        DocumentModelList docs = newSession.query(query);
-        assertEquals(0, docs.size());
+            String query = String.format("Select * From %s ",
+                    SocialConstants.SOCIAL_WORKSPACE_TYPE);
+            DocumentModelList docs = newSession.query(query);
+            assertEquals(0, docs.size());
 
-        DatabaseHelper.DATABASE.sleepForFulltext(); // we'll do a search
-        socialWorkspaces = service.searchDetachedPublicSocialWorkspaces(
-                newSession, "marketing");
-        assertEquals(1, socialWorkspaces.size());
-
-        CoreInstance.getInstance().close(newSession);
+            DatabaseHelper.DATABASE.sleepForFulltext(); // we'll do a search
+            socialWorkspaces = service.searchDetachedPublicSocialWorkspaces(
+                    newSession, "marketing");
+            assertEquals(1, socialWorkspaces.size());
+        }
     }
 
 }

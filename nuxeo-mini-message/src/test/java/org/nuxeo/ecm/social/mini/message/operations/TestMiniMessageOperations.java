@@ -53,160 +53,165 @@ public class TestMiniMessageOperations extends AbstractMiniMessageTest {
 
     @Test
     public void shouldAddAMiniMessage() throws Exception {
-        CoreSession newSession = openSessionAs("Leela");
-        OperationContext ctx = new OperationContext(newSession);
-        assertNotNull(ctx);
+        try (CoreSession newSession = openSessionAs("Leela")) {
+            OperationContext ctx = new OperationContext(newSession);
+            assertNotNull(ctx);
 
-        OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(AddMiniMessage.ID).set("message",
-                "At the risk of sounding negative, no.");
-        Blob result = (Blob) automationService.run(ctx, chain);
-        assertNotNull(result);
-        String json = result.getString();
-        assertNotNull(json);
+            OperationChain chain = new OperationChain(
+                    "testMiniMessageOperation");
+            chain.add(AddMiniMessage.ID).set("message",
+                    "At the risk of sounding negative, no.");
+            Blob result = (Blob) automationService.run(ctx, chain);
+            assertNotNull(result);
+            String json = result.getString();
+            assertNotNull(json);
 
-        List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
-                ActivityHelper.createUserActivityObject("Leela"),
-                CIRCLE_RELATION, 0, 0);
-        assertNotNull(messages);
-        assertEquals(1, messages.size());
-
-        CoreInstance.getInstance().close(newSession);
+            List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
+                    ActivityHelper.createUserActivityObject("Leela"),
+                    CIRCLE_RELATION, 0, 0);
+            assertNotNull(messages);
+            assertEquals(1, messages.size());
+        }
     }
 
     @Test
     public void shouldGetNoMiniMessage() throws Exception {
-        CoreSession newSession = openSessionAs("Leela");
-        OperationContext ctx = new OperationContext(newSession);
-        assertNotNull(ctx);
+        try (CoreSession newSession = openSessionAs("Leela")) {
+            OperationContext ctx = new OperationContext(newSession);
+            assertNotNull(ctx);
 
-        OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessages.ID);
-        Blob result = (Blob) automationService.run(ctx, chain);
-        assertNotNull(result);
-        String json = result.getString();
-        assertNotNull(json);
+            OperationChain chain = new OperationChain(
+                    "testMiniMessageOperation");
+            chain.add(GetMiniMessages.ID);
+            Blob result = (Blob) automationService.run(ctx, chain);
+            assertNotNull(result);
+            String json = result.getString();
+            assertNotNull(json);
 
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> m = mapper.readValue(json,
-                new TypeReference<Map<String, Object>>() {
-                });
-        @SuppressWarnings("unchecked")
-        List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
-        assertTrue(miniMessages.isEmpty());
-
-        CoreInstance.getInstance().close(newSession);
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> m = mapper.readValue(json,
+                    new TypeReference<Map<String, Object>>() {
+                    });
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
+            assertTrue(miniMessages.isEmpty());
+        }
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void shouldGetPaginatedMiniMessages() throws Exception {
         initializeSomeMiniMessagesAndRelations();
-        CoreSession newSession = openSessionAs("Leela");
+        try (CoreSession newSession = openSessionAs("Leela")) {
 
-        OperationContext ctx = new OperationContext(newSession);
-        assertNotNull(ctx);
+            OperationContext ctx = new OperationContext(newSession);
+            assertNotNull(ctx);
 
-        OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessages.ID);
-        Blob result = (Blob) automationService.run(ctx, chain);
-        assertNotNull(result);
-        String json = result.getString();
-        assertNotNull(json);
+            OperationChain chain = new OperationChain(
+                    "testMiniMessageOperation");
+            chain.add(GetMiniMessages.ID);
+            Blob result = (Blob) automationService.run(ctx, chain);
+            assertNotNull(result);
+            String json = result.getString();
+            assertNotNull(json);
 
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> m = mapper.readValue(json,
-                new TypeReference<Map<String, Object>>() {
-                });
-        List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
-        assertEquals(5, miniMessages.size());
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> m = mapper.readValue(json,
+                    new TypeReference<Map<String, Object>>() {
+                    });
+            List<Map<String, Object>> miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
+            assertEquals(5, miniMessages.size());
 
-        chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessages.ID).set("offset", 5);
-        result = (Blob) automationService.run(ctx, chain);
-        assertNotNull(result);
-        json = result.getString();
-        assertNotNull(json);
+            chain = new OperationChain("testMiniMessageOperation");
+            chain.add(GetMiniMessages.ID).set("offset", 5);
+            result = (Blob) automationService.run(ctx, chain);
+            assertNotNull(result);
+            json = result.getString();
+            assertNotNull(json);
 
-        mapper = new ObjectMapper();
-        m = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
-        });
-        miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
-        assertEquals(5, miniMessages.size());
+            mapper = new ObjectMapper();
+            m = mapper.readValue(json,
+                    new TypeReference<Map<String, Object>>() {
+                    });
+            miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
+            assertEquals(5, miniMessages.size());
 
-        chain = new OperationChain("testMiniMessageOperation");
-        chain.add(GetMiniMessages.ID).set("offset", 10);
-        result = (Blob) automationService.run(ctx, chain);
-        assertNotNull(result);
-        json = result.getString();
-        assertNotNull(json);
+            chain = new OperationChain("testMiniMessageOperation");
+            chain.add(GetMiniMessages.ID).set("offset", 10);
+            result = (Blob) automationService.run(ctx, chain);
+            assertNotNull(result);
+            json = result.getString();
+            assertNotNull(json);
 
-        mapper = new ObjectMapper();
-        m = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
-        });
-        miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
-        assertEquals(0, miniMessages.size());
-
-        CoreInstance.getInstance().close(newSession);
+            mapper = new ObjectMapper();
+            m = mapper.readValue(json,
+                    new TypeReference<Map<String, Object>>() {
+                    });
+            miniMessages = (List<Map<String, Object>>) m.get("miniMessages");
+            assertEquals(0, miniMessages.size());
+        }
     }
 
     @Test
     public void shouldRemoveAMiniMessage() throws Exception {
         initializeSomeMiniMessagesAndRelations();
-        CoreSession newSession = openSessionAs("Bender");
+        try (CoreSession newSession = openSessionAs("Bender")) {
 
-        String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
-        List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
-                benderActivityObject, 0, 0);
-        assertEquals(5, messages.size());
-        MiniMessage miniMessage = messages.get(0);
+            String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
+            List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
+                    benderActivityObject, 0, 0);
+            assertEquals(5, messages.size());
+            MiniMessage miniMessage = messages.get(0);
 
-        OperationContext ctx = new OperationContext(newSession);
-        assertNotNull(ctx);
+            OperationContext ctx = new OperationContext(newSession);
+            assertNotNull(ctx);
 
-        OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(RemoveMiniMessage.ID).set("miniMessageId", String.valueOf(miniMessage.getId()));
-        automationService.run(ctx, chain);
+            OperationChain chain = new OperationChain(
+                    "testMiniMessageOperation");
+            chain.add(RemoveMiniMessage.ID).set("miniMessageId",
+                    String.valueOf(miniMessage.getId()));
+            automationService.run(ctx, chain);
 
-        messages = miniMessageService.getMiniMessageFrom(
-                benderActivityObject, 0, 0);
-        assertEquals(4, messages.size());
+            messages = miniMessageService.getMiniMessageFrom(
+                    benderActivityObject, 0, 0);
+            assertEquals(4, messages.size());
 
-        miniMessage = messages.get(0);
-        chain = new OperationChain("testMiniMessageOperation");
-        chain.add(RemoveMiniMessage.ID).set("miniMessageId", String.valueOf(miniMessage.getId()));
-        automationService.run(ctx, chain);
+            miniMessage = messages.get(0);
+            chain = new OperationChain("testMiniMessageOperation");
+            chain.add(RemoveMiniMessage.ID).set("miniMessageId",
+                    String.valueOf(miniMessage.getId()));
+            automationService.run(ctx, chain);
 
-        messages = miniMessageService.getMiniMessageFrom(
-                benderActivityObject, 0, 0);
-        assertEquals(3, messages.size());
-
-        CoreInstance.getInstance().close(newSession);
+            messages = miniMessageService.getMiniMessageFrom(
+                    benderActivityObject, 0, 0);
+            assertEquals(3, messages.size());
+        }
     }
 
     @Test
     public void shouldNotBeAbleToRemoveOtherUserMiniMessage() throws Exception {
         initializeSomeMiniMessagesAndRelations();
-        CoreSession newSession = openSessionAs("Leela");
+        try (CoreSession newSession = openSessionAs("Leela")) {
 
-        String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
-        List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
-                benderActivityObject, 0, 0);
-        assertEquals(5, messages.size());
-        MiniMessage miniMessage = messages.get(0);
+            String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
+            List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
+                    benderActivityObject, 0, 0);
+            assertEquals(5, messages.size());
+            MiniMessage miniMessage = messages.get(0);
 
-        OperationContext ctx = new OperationContext(newSession);
-        assertNotNull(ctx);
+            OperationContext ctx = new OperationContext(newSession);
+            assertNotNull(ctx);
 
-        OperationChain chain = new OperationChain("testMiniMessageOperation");
-        chain.add(RemoveMiniMessage.ID).set("miniMessageId", String.valueOf(miniMessage.getId()));
-        automationService.run(ctx, chain);
+            OperationChain chain = new OperationChain(
+                    "testMiniMessageOperation");
+            chain.add(RemoveMiniMessage.ID).set("miniMessageId",
+                    String.valueOf(miniMessage.getId()));
+            automationService.run(ctx, chain);
 
-        messages = miniMessageService.getMiniMessageFrom(
-                benderActivityObject, 0, 0);
-        assertEquals(5, messages.size());
-
-        CoreInstance.getInstance().close(newSession);
+            messages = miniMessageService.getMiniMessageFrom(
+                    benderActivityObject, 0, 0);
+            assertEquals(5, messages.size());
+        }
     }
 
 }
