@@ -34,8 +34,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
-import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.RepositorySettings;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -74,7 +74,7 @@ public abstract class AbstractMiniMessageTest {
     public static RelationshipKind CIRCLE_RELATION = RelationshipKind.fromGroup("circle");
 
     @Inject
-    protected FeaturesRunner featuresRunner;
+    protected RepositorySettings settings;
 
     @Inject
     protected ActivityStreamService activityStreamService;
@@ -174,9 +174,7 @@ public abstract class AbstractMiniMessageTest {
     }
 
     protected CoreSession openSessionAs(String username) throws ClientException {
-        CoreFeature coreFeature = featuresRunner.getFeature(CoreFeature.class);
-        return coreFeature.getRepository().getRepositoryHandler().openSessionAs(
-                username);
+        return settings.openSessionAs(username);
     }
 
     protected Principal createUser(String username) throws ClientException {

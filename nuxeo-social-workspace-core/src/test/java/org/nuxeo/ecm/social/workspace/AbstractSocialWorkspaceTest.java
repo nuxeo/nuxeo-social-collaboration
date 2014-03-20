@@ -15,6 +15,7 @@ import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.RepositorySettings;
 import org.nuxeo.ecm.core.test.annotations.BackendType;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -72,7 +73,7 @@ public abstract class AbstractSocialWorkspaceTest {
     protected RelationshipService relationshipService;
 
     @Inject
-    protected FeaturesRunner featuresRunner;
+    protected RepositorySettings settings;
 
     protected SocialWorkspace socialWorkspace;
 
@@ -143,8 +144,6 @@ public abstract class AbstractSocialWorkspaceTest {
     }
 
     protected CoreSession openSessionAs(String username) throws ClientException {
-        CoreFeature coreFeature = featuresRunner.getFeature(CoreFeature.class);
-        return coreFeature.getRepository().getRepositoryHandler().openSessionAs(
-                username);
+        return settings.openSessionAs(username);
     }
 }

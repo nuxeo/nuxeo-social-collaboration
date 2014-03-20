@@ -131,7 +131,7 @@ public class CheckSocialWorkspaceValidationTasks implements EventListener {
         protected UnrestrictedSocialWorkspaceValidationTasksChecker()
                 throws Exception {
             super(
-                    Framework.getService(RepositoryManager.class).getDefaultRepository().getName());
+                    Framework.getService(RepositoryManager.class).getDefaultRepositoryName());
         }
 
         @Override
