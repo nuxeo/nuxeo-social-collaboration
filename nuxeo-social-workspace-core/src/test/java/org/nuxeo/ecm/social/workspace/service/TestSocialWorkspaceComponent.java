@@ -47,7 +47,8 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 @RepositoryConfig(type = BackendType.H2, init = DefaultRepositoryInit.class, user = "Administrator")
 @Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
-        "org.nuxeo.ecm.platform.notification.core", "org.nuxeo.ecm.user.registration" })
+        "org.nuxeo.ecm.platform.notification.core", "org.nuxeo.ecm.user.invite",
+        "org.nuxeo.ecm.user.registration" })
 @LocalDeploy({
         "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml",

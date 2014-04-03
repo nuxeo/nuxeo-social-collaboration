@@ -4,7 +4,7 @@ import static org.nuxeo.ecm.social.workspace.adapters.SocialWorkspaceAdapter.MEM
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 import static org.nuxeo.ecm.user.registration.DocumentRegistrationInfo.DOCUMENT_ID_FIELD;
 import static org.nuxeo.ecm.user.registration.DocumentRegistrationInfo.DOCUMENT_RIGHT_FIELD;
-import static org.nuxeo.ecm.user.registration.UserRegistrationInfo.USERNAME_FIELD;
+import static org.nuxeo.ecm.user.invite.UserRegistrationInfo.USERNAME_FIELD;
 
 import java.security.Principal;
 
@@ -25,7 +25,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  */
 public class SocialRegistrationUserFactory extends
-        DefaultRegistrationUserFactory {
+    DefaultRegistrationUserFactory {
     public static final String NOT_NOTIFY_MEMBER_FIELD = "socialer:doNotNotifyMembers";
 
     public static final String ADMINISTRATOR_RIGHT = "administrator";

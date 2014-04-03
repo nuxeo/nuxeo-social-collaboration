@@ -24,7 +24,7 @@ import static org.jboss.seam.international.StatusMessage.Severity.INFO;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationUserFactory.ADMINISTRATOR_RIGHT;
 import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationUserFactory.MEMBER_RIGHT;
-import static org.nuxeo.ecm.user.registration.UserRegistrationService.ValidationMethod.EMAIL;
+import static org.nuxeo.ecm.user.invite.UserInvitationService.ValidationMethod.EMAIL;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,12 +49,12 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.ecm.user.registration.UserRegistrationInfo;
+import org.nuxeo.ecm.user.invite.UserRegistrationInfo;
 import org.nuxeo.ecm.user.registration.actions.UserRegistrationActions;
 
 /**
  * Action bean to manage bulk user import in a Social Workspace
- * 
+ *
  * @author Arnaud KERVERN <akervern@nuxeo.com>
  * @since 5.5
  */

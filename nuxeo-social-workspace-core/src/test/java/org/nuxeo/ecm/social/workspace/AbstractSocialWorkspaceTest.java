@@ -54,7 +54,9 @@ import com.google.inject.Inject;
         "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
         "org.nuxeo.ecm.social.workspace.core",
         "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.user.relationships" })
+        "org.nuxeo.ecm.user.relationships",
+        "org.nuxeo.ecm.user.invite",
+        "org.nuxeo.ecm.user.registration"})
 @LocalDeploy({
         "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })

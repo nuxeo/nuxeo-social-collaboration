@@ -34,7 +34,8 @@
         <title>You are invited to access Nuxeo</title>
         <template>skin/views/userRegistration/ReviveEmailTemplate.ftl</template>
       </reviveEmail>
-      <validationRelUrl>site/userRegistration/validate/</validationRelUrl>
+      <enterPasswordUrl>site/userRegistration/enterpassword/</enterPasswordUrl>
+      <validationRelUrl>site/userRegistration/validate</validationRelUrl>
       <registrationUserFactory>org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationUserFactory</registrationUserFactory>
     </configuration>
   </extension>
