@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.UserPrincipal;
@@ -43,6 +42,7 @@ public class TestPublicSocialWorkspaceAccess extends
 
     @Before
     public void setup() throws Exception {
+        session = settings.openSessionAs("Administrator", false, false);
         Principal user = session.getPrincipal();
         assertFalse(((UserPrincipal) user).isAdministrator());
 
