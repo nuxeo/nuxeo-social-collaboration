@@ -4,20 +4,31 @@
 h1 { text-align: left }
 h3.summaryTitle {color:#333; font-weight:bold; padding:0 0 .3em }
 .content_block .labelColumn { display:none }
-.description_block { font-size:120%; padding:0 0 2em 1.4em }
 .actions_block,  .content_block,  .metadata_block { margin-bottom: 2em }
-.description_block { border-bottom: 1px dashed #ddd; color: #999; margin: 0 0 2em; padding: 0 }
+.description_block { font-size:120%; border-bottom: 1px dashed #ddd; color: #999; margin: 0 0 2em; padding: 0 }
 .note_content_block {	border: none; margin: 0; padding: 1.4em 0 0 }
 
-.summary_div_0 { background-color: white; border: 1px solid #ddd; box-shadow: 1px 3px 2px #ccc; padding: 1.5em 1.5em 2em; width: 58% }
+.description_block .createdBy,
+.description_block .creationDate,
+.description_block .versionNumber {
+	font-size: .8em;}
+
+.description_block .createdBy {
+  border-top: 1px dashed #ddd;
+  font-weight: bold;
+  line-height: 90%;
+  margin-top: 1em;
+  padding: .5em 0 0 }
+
+.summary_div_0 { background-color: white; border: 1px solid #ddd; box-shadow: 1px 3px 2px #ccc; padding: 1.5em 1.5em 2em; width: 58%; float: left; margin: 0 4em 0 0; }
 .summary_div_0 p { color:#444; font-size: 1em; line-height: 160%; }
 .summary_div_0 h3.summaryTitle { display:none }
-.summary_div_1 { font-size: 90% }
+.summary_div_1 { font-size: 90%; float: left; }
 .summary_div_1 h3.summaryTitle { border-bottom: 3px double #ccc; padding: 0 0 .4em 0 }
 .summary_div_0 .fieldColumn img,  .summary_div_1 .fieldColumn img,  .summary_div_2 .fieldColumn img { max-width: 120px; max-height: 120px }
 
 /* For Articles and News listing */
-.documentItemListing { background-color: white; border: 1px solid #ddd; box-shadow: 1px 3px 2px #ccc; padding: 1em }
+.documentItemListing { background-color: white; border: 1px solid #e7e7e7; border-bottom: 3px solid #e7e7e7; padding: 1em }
 .documentItemListing .tool { float: right }
 .documentItemListing .tool ul { list-style: none; margin: 0; padding:0 .3em .2em }
 .documentItemListing .tool .actions li { cursor: pointer; position: relative }
@@ -28,19 +39,22 @@ h3.summaryTitle {color:#333; font-weight:bold; padding:0 0 .3em }
 .documentItemListing .actions ul li a:hover { background-color: #d3e7f2; text-decoration: none }
 .documentItemListing .documentHeader span { font-size: 120%; font-weight: bold }
 .documentItemListing .documentHeader { padding: .3em 0 .4em }
-.documentItemListing .content { background-color: white; color: #999; font-size: 105%; line-height: 14pt; padding: 0 }
+.content .documentItemListing .content { background-color: white; color: #999; font-size: 105%; line-height: 14pt; padding: 0 0 1em }
 .documentItemListing .info { color: #666; text-align: right }
 .documentItemListing .info span { padding: 0 0 0 .4em }
 .article_item_listing, .news_item_listing { margin: 1.5em auto 0; width: 80% }
 .article_item_listing .dataOutput td, .news_item_listing .dataOutput td { border: none }
 
 .nxMainContainer { font-size: 1em; min-height: 660px; height: auto!important; height: 660px }
-.nxMainContainer .content { background-color: #f6f6f6; font-family: "default (__FLAVOR__ font)"; padding: 1.5em 2.3em 6em }
+.nxMainContainer .content { background-color: #f9f9f9; font-family: "default (__FLAVOR__ font)"; padding: 1.5em 2.3em 6em }
 
 .content form#documentLayout { margin: 0 auto; width: 95% }
 
 /* Single page style used in forms */
-.singlePage { background-color: white; border: 1px solid #ddd; box-shadow: 1px 3px 2px #ccc; margin: 0 auto; padding: 2em; width: 75% }
+.headerTitleAndTools {
+ margin-bottom: 2em }
+
+.singlePage { background-color: white; border: 1px solid #e7e7e7; border-bottom: 3px solid #e7e7e7; margin: 0 auto; padding: 2em; width: 75% }
 
 /* Fix style inheritance for gadgets */
 body, table td, select { font-family: "default (__FLAVOR__ font)"; font-size: normal }
