@@ -46,8 +46,7 @@ h3.summaryTitle {
   box-shadow: 1px 3px 2px #ccc;
   padding: 1.5em 1.5em 2em;
   width: 58%;
-  float: left;
-  margin: 0 4em 0 0 }
+  float: left }
 
 .summary_div_0 p {
   color:#444;
@@ -58,8 +57,9 @@ h3.summaryTitle {
   display:none }
 
 .summary_div_1 {
-  font-size: 90%;
-  float: left }
+  float: right;
+  font-size: .95em;
+  width: 35%; }
 
 .summary_div_0 .fieldColumn img,
 .summary_div_1 .fieldColumn img,
