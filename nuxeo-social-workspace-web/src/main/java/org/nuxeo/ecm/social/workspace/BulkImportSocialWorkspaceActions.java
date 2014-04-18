@@ -136,7 +136,7 @@ public class BulkImportSocialWorkspaceActions extends UserRegistrationActions {
 
                 userRegistrationService.submitRegistrationRequest(
                         configurationName, userinfo, docinfo,
-                        getAdditionalsParameters(), EMAIL, autoAccept);
+                        getAdditionalsParameters(), EMAIL, autoAccept, documentManager.getPrincipal().getName());
 
                 facesMessages.add(
                         INFO,

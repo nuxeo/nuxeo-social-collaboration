@@ -82,9 +82,9 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener;
+import org.nuxeo.ecm.user.invite.UserRegistrationInfo;
 import org.nuxeo.ecm.user.registration.DocumentRegistrationInfo;
 import org.nuxeo.ecm.user.registration.UserRegistrationService;
-import org.nuxeo.ecm.user.invite.UserRegistrationInfo;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
@@ -675,7 +675,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         try {
             getRegistrationService().submitRegistrationRequest(
                     SOCIAL_CONFIGURATION_NAME, userInfo, docInfo,
-                    additionalInfo, EMAIL, autoAccept);
+                    additionalInfo, EMAIL, autoAccept, principal.getName());
         } catch (ClientException e) {
             log.warn("Unable to submit social registration", e);
         }
