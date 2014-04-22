@@ -46,7 +46,7 @@
           <a4j:commandLink
             rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}"
             reRender="add_relationship_#{widget.id}"
-            styleClass="button relationship_#{widget.id}_button">
+            styleClass="button relationship_#{widget.id}_#{layoutListingStatus.index}_button">
             <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
           </a4j:commandLink>
           <!--end add button-->
@@ -55,13 +55,13 @@
           <a4j:commandLink
             rendered="#{userRelationshipActions.isAlreadyConnected(userName)}"
             reRender="add_relationship_#{widget.id}"
-            styleClass="button relationship_#{widget.id}_button">
+            styleClass="button relationship_#{widget.id}_#{layoutListingStatus.index}_button">
             <h:outputText value="#{messages['action.social.user.relationship.join']}" />
           </a4j:commandLink>
           <!--end button-->
           <div class="relationPopUpContainer">
             <a4j:region id="#{widget.id}_region">
-              <div id="add_relationship_#{widget.id}_popup" class="relationPopUp">
+              <div id="add_relationship_#{widget.id}_#{layoutListingStatus.index}_popup" class="relationPopUp">
                 <a4j:status>
                   <f:facet name="start">
                     <h:graphicImage value="/img/standart_waiter.gif" />
@@ -91,16 +91,16 @@
             </a4j:region>
           </div>
           <script type="text/javascript">
-            var div = jQuery("#add_relationship_#{widget.id}_popup");
+            var div = jQuery("#add_relationship_#{widget.id}_#{layoutListingStatus.index}_popup");
             div.mouseleave(function() {
                 div.fadeOut(500);
             });
-            var btn = jQuery(".relationship_#{widget.id}_button");
+            var btn = jQuery(".relationship_#{widget.id}_#{layoutListingStatus.index}_button");
             btn.click(function() {
                 jQuery(".relationPopUp").each(function() {
                     jQuery(this).fadeOut(500);
                 });
-                jQuery("#add_relationship_#{widget.id}_popup").fadeIn(500);
+                jQuery("#add_relationship_#{widget.id}_#{layoutListingStatus.index}_popup").fadeIn(500);
             });
           </script>
         </div>
