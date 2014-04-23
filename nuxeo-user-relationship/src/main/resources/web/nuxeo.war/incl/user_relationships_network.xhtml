@@ -44,10 +44,11 @@
                         value="#{userManagementActions.searchString}"
                         onkeydown="if(event.keyCode == 13 ||event.keyCode == 9 ){return false;}"
                         styleClass="directoryFilter">
-                        <a4j:support event="onkeyup"
-                          reRender="usersListingRelationshipPanel,userNetworkPanel"
-                          requestDelay="1000" action="#{contentViewActions.refreshAndRewind(contentViewName)}"
-                          ignoreDupResponses="true" />
+                        <a4j:ajax event="keyup"
+                          render="usersListingRelationshipPanel,userNetworkPanel"
+                          listener="#{contentViewActions.refreshAndRewind(contentViewName)}" />
+                          <a4j:attachQueue requestDelay="1000" ignoreDupResponses="true" />
+                        </a4j:ajax>
                       </h:inputText>
                       <f:verbatim>&amp;nbsp;</f:verbatim>
                       <a4j:commandButton id="searchButton"

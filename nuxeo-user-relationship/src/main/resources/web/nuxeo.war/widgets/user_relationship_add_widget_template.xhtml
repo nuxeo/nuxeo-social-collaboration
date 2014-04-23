@@ -75,11 +75,10 @@
                     <nxu:column>
                       <h:selectBooleanCheckbox valueChangeListener="#{userRelationshipActions.relationshipCheckboxChanged}"
                   value="#{userRelationshipActions.allRelationshipsState[kind]}">
-                        <a4j:support event="onclick"
-                    reRender="add_relationship_#{widget.id}_btn,facesStatusMessagePanel,#{widgetProperty_panelIdsToBeReRendered}">
-                          <f:param name="selectedKind" value="#{kind.toString()}" />
-                          <f:param name="selectedUser" value="#{userName}" />
-                        </a4j:support>
+                        <a4j:ajax event="click"
+                          render="add_relationship_#{widget.id}_btn,facesStatusMessagePanel,#{widgetProperty_panelIdsToBeReRendered}"/>
+                        <f:attribute name="selectedKind" value="#{kind.toString()}" />
+                        <f:attribute name="selectedUser" value="#{userName}" />
                         <span>
                           <h:outputText value="#{messages['label.relation.'.concat(kind.name)]}" />
                         </span>
