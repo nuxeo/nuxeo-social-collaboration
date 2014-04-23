@@ -19,11 +19,11 @@
             reRender="user_relationships_network" />
         </p>
       </h:form>
-      <a4j:form id="viewUser"
+      <h:form id="viewUser"
         rendered="#{userManagementActions.detailsMode == 'view'}">
         <nxl:layout name="gridUserLayout" mode="view"
           value="#{userProfileActions.selectedUserProfile}" />
-      </a4j:form>
+      </h:form>
     </f:subview>
   </c:if>
 
@@ -39,7 +39,7 @@
                 <ui:define name="content_view_header">
                   <a4j:region id="search_users_region">
                     <!-- search form -->
-                    <a4j:form id="searchForm">
+                    <h:form id="searchForm">
                       <h:inputText id="searchText"
                         value="#{userManagementActions.searchString}"
                         onkeydown="if(event.keyCode == 13 ||event.keyCode == 9 ){return false;}"
@@ -63,7 +63,7 @@
                           <h:graphicImage value="/img/standart_waiter.gif"/>
                         </f:facet>
                       </a4j:status>
-                    </a4j:form>
+                    </h:form>
                   </a4j:region>
                 </ui:define>
 
