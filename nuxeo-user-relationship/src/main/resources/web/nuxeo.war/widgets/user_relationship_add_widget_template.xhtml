@@ -45,7 +45,7 @@
           <!--add button-->
           <a4j:commandLink
             rendered="#{not userRelationshipActions.isAlreadyConnected(userName)}"
-            reRender="add_relationship_#{widget.id}"
+            render="add_relationship_#{widget.id}"
             styleClass="button relationship_#{widget.id}_#{layoutListingStatus.index}_button">
             <h:outputText value="#{messages['action.social.user.relationship.addNew']}" />
           </a4j:commandLink>
@@ -54,7 +54,7 @@
           <!--modify button-->
           <a4j:commandLink
             rendered="#{userRelationshipActions.isAlreadyConnected(userName)}"
-            reRender="add_relationship_#{widget.id}"
+            render="add_relationship_#{widget.id}"
             styleClass="button relationship_#{widget.id}_#{layoutListingStatus.index}_button">
             <h:outputText value="#{messages['action.social.user.relationship.join']}" />
           </a4j:commandLink>

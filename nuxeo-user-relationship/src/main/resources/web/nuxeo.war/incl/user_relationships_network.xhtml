@@ -16,7 +16,7 @@
           <a4j:commandLink immediate="true"
             value="#{messages['command.directoryBack']}"
             action="#{userManagementActions.resetState}"
-            reRender="user_relationships_network" />
+            render="user_relationships_network" />
         </p>
       </h:form>
       <h:form id="viewUser"
@@ -54,11 +54,11 @@
                       <a4j:commandButton id="searchButton"
                         value="#{messages['command.search']}"
                         action="#{contentViewActions.refreshAndRewind(contentViewName)}" styleClass="button"
-                        reRender="usersListingRelationshipPanel,userNetworkPanel"/>
+                        render="usersListingRelationshipPanel,userNetworkPanel"/>
                       <a4j:commandButton id="clearButton"
                         value="#{messages['command.clearSearch']}"
                         action="#{userManagementActions.clearSearch}" styleClass="button"
-                        reRender="usersListingRelationshipPanel,userNetworkPanel,searchForm"/>
+                        render="usersListingRelationshipPanel,userNetworkPanel,searchForm"/>
                       <a4j:status>
                         <f:facet name="start">
                           <h:graphicImage value="/img/standart_waiter.gif"/>
