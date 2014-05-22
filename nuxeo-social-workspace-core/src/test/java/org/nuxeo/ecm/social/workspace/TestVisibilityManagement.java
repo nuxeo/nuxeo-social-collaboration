@@ -16,7 +16,6 @@
  */
 package org.nuxeo.ecm.social.workspace;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -28,13 +27,7 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.ARTICLE_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.NEWS_ITEM_TYPE;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_FACET;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TYPE;
-import static org.nuxeo.ecm.social.workspace.SocialConstants.VALIDATE_SOCIAL_WORKSPACE_TASK_NAME;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,18 +35,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.EventService;
-import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.core.event.impl.EventImpl;
-import org.nuxeo.ecm.platform.task.Task;
-import org.nuxeo.ecm.platform.task.TaskService;
-import org.nuxeo.ecm.platform.task.test.TaskUTConstants;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
-import org.nuxeo.ecm.social.workspace.listeners.CheckSocialWorkspaceValidationTasks;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
@@ -63,19 +49,13 @@ import com.google.inject.Inject;
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
  */
 // no listener configured
-@Deploy({ "org.nuxeo.ecm.automation.core",
-        "org.nuxeo.ecm.platform.task.automation",TaskUTConstants.API_BUNDLE_NAME,
-        "org.nuxeo.ecm.automation.features", TaskUTConstants.CORE_BUNDLE_NAME,
-        TaskUTConstants.TESTING_BUNDLE_NAME })
+@Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features" })
 @LocalDeploy("org.nuxeo.ecm.automation.core:override-social-workspace-operation-chains-contrib.xml")
 public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     public static final String SOCIAL_WORKSPACE_NAME = "sws";
 
     private static final Log log = LogFactory.getLog(TestVisibilityManagement.class);
-
-    @Inject
-    protected TaskService taskService;
 
     @Inject
     protected EventService eventService;
@@ -286,118 +266,6 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
         assertNotNull(socialDocument.getPublicDocument());
         assertTrue(socialDocument.getPublicDocument().isProxy());
         checkPublic(socialDocument.getPublicDocument());
-    }
-
-    @Test
-    public void testModeratedSocialWorkspaceCreation() throws Exception {
-        assertNotNull(taskService);
-
-        DocumentModel moderated = createDocument(
-                session.getRootDocument().getPathAsString(), "willBeApproved",
-                SOCIAL_WORKSPACE_TYPE);
-        assertEquals("project", moderated.getCurrentLifeCycleState());
-        List<Task> tasks = taskService.getTaskInstances(moderated, (NuxeoPrincipal) null, session);
-        assertEquals(1, tasks.size());
-        assertEquals(VALIDATE_SOCIAL_WORKSPACE_TASK_NAME,
-                tasks.get(0).getName());
-        assertTrue(tasks.get(0).isOpened());
-
-        assertTrue(moderated.followTransition("approve"));
-        removeValidationTasks(moderated);
-        session.save();
-        assertEquals("approved", moderated.getCurrentLifeCycleState());
-
-        tasks = taskService.getTaskInstances(moderated,
-                (NuxeoPrincipal) null, session);
-        assertNotNull(tasks);
-        assertTrue(tasks.isEmpty());
-
-        moderated = createDocument(session.getRootDocument().getPathAsString(),
-                "willBeRejected", SOCIAL_WORKSPACE_TYPE);
-        assertEquals("project", moderated.getCurrentLifeCycleState());
-        assertFalse(taskService.getTaskInstances(moderated, (NuxeoPrincipal) null,
-                 session).isEmpty());
-        assertTrue(moderated.followTransition("delete"));
-        removeValidationTasks(moderated);
-        session.save();
-        assertEquals("deleted", moderated.getCurrentLifeCycleState());
-
-        assertTrue(taskService.getTaskInstances(moderated, (NuxeoPrincipal) null,
-                session).isEmpty());
-    }
-
-    @Test
-    public void testSocialWorkspaceCreationExpiration() throws Exception {
-        DocumentModel socialWorkspace = createDocument(
-                session.getRootDocument().getPathAsString(), "willBeExpired",
-                SOCIAL_WORKSPACE_TYPE);
-        String id = socialWorkspace.getId();
-        assertEquals("project", socialWorkspace.getCurrentLifeCycleState());
-
-        // Change task due date at two days before
-        List<Task> tasks = taskService.getTaskInstances(
-                socialWorkspace, (NuxeoPrincipal) null, session);
-        assertFalse(tasks.isEmpty());
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -2);
-        Task task = tasks.get(0);
-        task.setDueDate(cal.getTime());
-        session.saveDocument(task.getDocument());
-        session.save();
-
-        CheckSocialWorkspaceValidationTasks fakeListener = new CheckSocialWorkspaceValidationTasks();
-        DocumentEventContext docCtx = new DocumentEventContext(session,
-                session.getPrincipal(), socialWorkspace);
-        fakeListener.handleEvent(new EventImpl("checkExpiredTasksSignal",
-                docCtx));
-        session.save();
-
-        DocumentModel doc = session.getDocument(new IdRef(id));
-        assertEquals("deleted", doc.getCurrentLifeCycleState());
-    }
-
-    @Test
-    public void testTaskDueDate() throws Exception {
-        DocumentModel wk1 = createDocument(
-                session.getRootDocument().getPathAsString(), "willBeExpired",
-                SOCIAL_WORKSPACE_TYPE);
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 15);
-
-        // Change task due date at two days before
-        List<Task> tasks = taskService.getTaskInstances(wk1,(NuxeoPrincipal) null, session);
-        assertEquals(1, tasks.size());
-        Task task = tasks.get(0);
-
-        Calendar dueDate = Calendar.getInstance();
-        dueDate.setTime(task.getDueDate());
-
-        assertEquals(cal.get(Calendar.DATE), dueDate.get(Calendar.DATE));
-    }
-
-    protected void removeValidationTasks(DocumentModel doc) {
-        List<Task> canceledTasks = new ArrayList<Task>();
-        try {
-            List<Task> taskInstances = taskService.getTaskInstances(
-                    doc, (NuxeoPrincipal) null, session);
-            for (Task task : taskInstances) {
-                if (VALIDATE_SOCIAL_WORKSPACE_TASK_NAME.equals(task.getName())) {
-                    task.cancel(session);
-                    canceledTasks.add(task);
-                }
-            }
-            if (!canceledTasks.isEmpty()) {
-                DocumentModel[] docToSave = new DocumentModel[canceledTasks.size()];
-                canceledTasks.toArray(docToSave);
-                session.saveDocuments(docToSave);
-            }
-        } catch (Exception e) {
-            log.warn(
-                    "failed cancel tasks for accepted/rejected SocialWorkspace",
-                    e);
-        }
-
     }
 
     protected void checkPublic(DocumentModel doc) throws ClientException {

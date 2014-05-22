@@ -45,8 +45,6 @@ public class SocialConstants {
 
     public static final String COLLABORATION_DASHBOARD_SPACE_NAME = "collaborationDashboardSpace";
 
-    public static final String VALIDATE_SOCIAL_WORKSPACE_TASK_NAME = "validateSocialWorkspace";
-
     public static final String DASHBOARD_SPACES_CONTAINER_TYPE = "DashboardSpacesContainer";
 
     public static final String SOCIAL_WORKSPACE_CONTAINER_TYPE = "SocialDomain";

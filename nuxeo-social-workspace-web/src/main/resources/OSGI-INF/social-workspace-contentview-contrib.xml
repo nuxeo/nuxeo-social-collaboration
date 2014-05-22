@@ -4,27 +4,6 @@
 <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
   point="contentViews">
 
-    <contentView name="SocialWorkspaces">
-      <coreQueryPageProvider>
-        <property name="coreSession">#{documentManager}</property>
-        <pattern>SELECT * FROM SocialWorkspace WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0)</pattern>
-        <sort column="dc:title" ascending="true"/>
-        <pageSize>10</pageSize>
-      </coreQueryPageProvider>
-      <useGlobalPageSize>true</useGlobalPageSize>
-      <refresh>
-        <event>documentChanged</event>
-        <event>documentChildrenChanged</event>
-      </refresh>
-      <cacheKey>#{currentDocument.id}</cacheKey>
-      <cacheSize>10</cacheSize>
-      <selectionList>CURRENT_SELECTION</selectionList>
-      <actions category="MODERATE_SOCIAL_WORKSPACE"/>
-      <resultLayouts>
-        <layout name="SocialWorkspaces@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png"/>
-      </resultLayouts>
-    </contentView>
-
     <contentView name="article_listing_view">
       <coreQueryPageProvider>
         <property name="coreSession">#{documentManager}</property>

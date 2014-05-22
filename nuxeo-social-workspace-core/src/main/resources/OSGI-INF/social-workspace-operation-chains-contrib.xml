@@ -8,13 +8,6 @@
         <param type="string" name="name">admins</param>
         <param type="object" name="value">administrators</param>
       </operation>
-      <operation id="Workflow.CreateTask">
-        <param type="string" name="task name">validateSocialWorkspace</param>
-        <param type="string" name="directive">VERIFICATION</param>
-        <param type="string" name="comment">Please validate social workspace</param>
-        <param type="string" name="variable name for actors prefixed ids">admins</param>
-        <param type="boolean" name="create one task per actor">true</param>
-      </operation>
       <operation id="Notification.SendMail">
         <param type="boolean" name="rollbackOnError">false</param>
         <param type="string" name="from">expr:Env["mail.from"]</param>
@@ -26,19 +19,6 @@ Social Workspace &lt;a href="${docUrl}"&gt;${Document.title}&lt;/a&gt; was creat
         <param type="string" name="subject">Social Workspace  created</param>
         <param type="string" name="HTML">true</param>
         <param type="stringlist" name="to">expr:Fn.getEmailsFromGroup("administrators")</param>
-      </operation>
-    </chain>
-    <chain id="SocialWorkspaceNotValidatedChain">
-      <operation id="Context.FetchDocument"/>
-      <operation id="Document.SetLifeCycle">
-        <param type="string" name="value">delete</param>
-      </operation>
-      <operation id="Notification.SendMail">
-        <param type="boolean" name="rollbackOnError">false</param>
-        <param type="string" name="from">expr:Env["mail.from"]</param>
-        <param type="string" name="message">Social Workspace "${Document.title}" was not validated by adminitrators and it will be suspended.</param>
-        <param type="string" name="subject">expr:Social Workspace not validated: @{Document.title}</param>
-        <param type="stringlist" name="to">expr:Fn.getEmail(Document["dc:creator"])</param>
       </operation>
     </chain>
   </extension>

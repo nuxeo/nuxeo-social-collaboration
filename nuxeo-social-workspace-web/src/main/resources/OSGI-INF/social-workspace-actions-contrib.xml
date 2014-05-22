@@ -182,12 +182,6 @@
       <filter-id>new_news_item</filter-id>
     </action>
 
-    <action id="SocialWorkspacesAdministration" link="view_admin-fragment.xhtml"
-      label="label.social.collaboration.administration" order="150">
-      <category>NUXEO_ADMIN</category>
-      <filter-id>socialCollaborationManagementAccess</filter-id>
-    </action>
-
     <action id="SWUserRegistrationRequestsListingLocal" link="/incl/userregistration/requests_listing_local.xhtml"
       order="240" label="tab.userregistration.requests" type="rest_document_link">
       <category>TAB_MANAGE_sub_tab</category>
@@ -199,13 +193,6 @@
           </condition>
         </rule>
       </filter>
-    </action>
-
-    <action id="SocialWorkspacesRequests"
-      link="/incl/social_workspace_administration/social_workspace_requests.xhtml"
-      label="label.socialworkspace.requests" order="10">
-      <category>SocialWorkspacesAdministration_sub_tab</category>
-      <filter-id>only_for_manager</filter-id>
     </action>
 
     <action id="TAB_MANAGE_SOCIAL_WORKSPACE"
