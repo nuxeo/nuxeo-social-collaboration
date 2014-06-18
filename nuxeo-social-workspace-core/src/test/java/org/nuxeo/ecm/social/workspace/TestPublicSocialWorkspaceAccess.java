@@ -40,9 +40,10 @@ import org.nuxeo.runtime.api.Framework;
 public class TestPublicSocialWorkspaceAccess extends
         AbstractSocialWorkspaceTest {
 
+
     @Before
     public void setup() throws Exception {
-        session = settings.openSessionAs("Administrator", false, false);
+        try (CoreSession session = settings.openSessionAs("Administrator", false, false)) {
         Principal user = session.getPrincipal();
         assertFalse(((UserPrincipal) user).isAdministrator());
 
@@ -53,7 +54,7 @@ public class TestPublicSocialWorkspaceAccess extends
                 new ACE("John", "READ", true));
         session.setACP(session.getRootDocument().getRef(),
                 session.getRootDocument().getACP(), true);
-        session.save();
+        }
     }
 
     @Test
