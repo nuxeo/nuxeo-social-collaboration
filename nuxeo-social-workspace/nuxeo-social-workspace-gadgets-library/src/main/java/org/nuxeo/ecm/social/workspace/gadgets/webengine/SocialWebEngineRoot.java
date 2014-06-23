@@ -252,8 +252,13 @@ public class SocialWebEngineRoot extends ModuleRoot {
         // add navigation arguments
         args.put("page", docs.getCurrentPageIndex());
         args.put("maxPage", docs.getNumberOfPages());
-        args.put("nextPage", page < docs.getNumberOfPages() - 1 ? page + 1
-                : page);
+        if (docs.getNumberOfPages() > 0) {
+            args.put("nextPage", page < docs.getNumberOfPages() - 1 ? page + 1
+                    : page);
+        } else {
+            // unknown size
+            args.put("nextPage", page + 1);
+        }
         args.put("prevPage", page > 0 ? page - 1 : page);
 
         if (isSearch) {

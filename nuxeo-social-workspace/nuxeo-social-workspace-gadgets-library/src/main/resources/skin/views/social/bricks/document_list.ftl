@@ -1,5 +1,9 @@
 <div>
   <#if (docs?size == 0)>
+    <div id="pageNavigationControls">
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', 0)" id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
+      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${prevPage})" id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
+    </div>
   	${Context.getMessage("label.empty.list")}
   <#else>
 
@@ -9,9 +13,9 @@
   <div id="pageNavigationControls">
     <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', 0)" id="navFirstPage" src="${contextPath}/icons/action_page_rewind.gif" />
       <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${prevPage})" id="navPrevPage" src="${contextPath}/icons/action_page_previous.gif"/>
-      <span class="currentPageStatus" id="nxDocumentListPage">${page + 1}/${maxPage}</span>
+      <span class="currentPageStatus" id="nxDocumentListPage">${page + 1}<#if (maxPage > 0) >/${maxPage}</#if></span>
       <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${nextPage})" id="navNextPage" src="${contextPath}/icons/action_page_next.gif"/>
-      <input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/>
+      <#if (maxPage > 0) ><input type="image" onclick="javascript: Library.documentList('${currentDoc.id}', ${maxPage - 1} )" id="navLastPage" src="${contextPath}/icons/action_page_fastforward.gif"/></#if>
   </div>
   <table class="dataList">
     <thead>
