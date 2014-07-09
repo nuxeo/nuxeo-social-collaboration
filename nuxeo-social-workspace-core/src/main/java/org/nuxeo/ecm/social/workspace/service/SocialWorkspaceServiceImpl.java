@@ -194,10 +194,12 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     public SocialWorkspace getSocialWorkspace(DocumentModel doc) {
         try {
             CoreSession session = doc.getCoreSession();
-            List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
-            for (DocumentModel parent : parents) {
-                if (isSocialWorkspace(parent)) {
-                    return toSocialWorkspace(parent);
+            if (session != null) {
+                List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
+                for (DocumentModel parent : parents) {
+                    if (isSocialWorkspace(parent)) {
+                        return toSocialWorkspace(parent);
+                    }
                 }
             }
             return null;
