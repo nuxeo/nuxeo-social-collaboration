@@ -63,7 +63,7 @@ import com.google.inject.Inject;
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
  */
 // no listener configured
-@Deploy({ "org.nuxeo.ecm.automation.core",
+@Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.platform.query.api",
         "org.nuxeo.ecm.platform.task.automation",TaskUTConstants.API_BUNDLE_NAME,
         "org.nuxeo.ecm.automation.features", TaskUTConstants.CORE_BUNDLE_NAME,
         TaskUTConstants.TESTING_BUNDLE_NAME })
