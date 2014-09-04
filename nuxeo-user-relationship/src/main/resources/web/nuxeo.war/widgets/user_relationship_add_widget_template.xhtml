@@ -6,10 +6,10 @@
   id="#{widget.id}" rendered="#{widget.mode == 'view' }">
 
 
-  <c:set var="andLabel" value=" #{messages['label.and']} " scope="page" />
+  <c:set var="andLabel" value=" #{messages['label.and']} " scope="request" />
   <c:set var="userSchema" value="#{userManager.userSchemaName}"/>
-  <c:set var="userName" value="#{field_0[userSchema].username}" scope="page" />
-  <c:set var="displayedName" value="#{nxu:test(empty field_0[userSchema].firstName, userName, field_0[userSchema].firstName)}" scope="page" />
+  <c:set var="userName" value="#{field_0[userSchema].username}" scope="request" />
+  <c:set var="displayedName" value="#{nxu:test(empty field_0[userSchema].firstName, userName, field_0[userSchema].firstName)}" scope="request" />
   <a4j:outputPanel id="userRelationPanel" layout="block">
 
     <a4j:outputPanel

@@ -7,7 +7,7 @@
 
   <c:set var="displayedName"
     value="#{nxu:test(empty userManagementActions.selectedUser.user.firstName, userManagementActions.selectedUser.id, userManagementActions.selectedUser.user.firstName)}"
-    scope="page" />
+    scope="request" />
 
   <nxu:set var="relations" value="#{userRelationshipActions.relationshipsFromSelectedUser}">
 
