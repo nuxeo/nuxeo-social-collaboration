@@ -21,7 +21,8 @@
     <link rel="stylesheet" type="text/css" href="${contextPath}/nxthemes-lib/gadget-common.css,jquery.fancybox.style.css,gadget-library.css?path=${contextPath}&basepath=${contextPath}"/>
     <!-- insert JS Context -->
     ${jsContext}
-    <script src="${contextPath}/nxthemes-lib/jquery.js,jquery.fancybox.js,gadget-context-management.js,gadget-library.js"></script>
+    <script src="${contextPath}/nxthemes-lib/jquery.js"></script>
+    <script src="${contextPath}/nxthemes-lib/jquery.fancybox.js,gadget-context-management.js,gadget-library.js"></script>
   </head>
 
   <body>
