@@ -46,7 +46,7 @@
                         styleClass="directoryFilter">
                         <a4j:ajax event="keyup"
                           render="usersListingRelationshipPanel,userNetworkPanel"
-                          listener="#{contentViewActions.refreshAndRewind(contentViewName)}" />
+                          listener="#{contentViewActions.refreshAndRewind(contentViewName)}">
                           <a4j:attachQueue requestDelay="1000" ignoreDupResponses="true" />
                         </a4j:ajax>
                       </h:inputText>
