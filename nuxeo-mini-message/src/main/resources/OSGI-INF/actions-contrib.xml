@@ -4,7 +4,7 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <action id="MiniMessages" link="user_center_fragment.xhtml"
+    <action id="MiniMessages" link="/user_center_fragment.xhtml"
       label="mini.messages.tab.view" icon="/icons/minimessages.png" order="35">
       <category>USER_CENTER</category>
       <filter-id>not_anonymous</filter-id>

@@ -4,7 +4,7 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <action id="ActivityStream" link="user_center_fragment.xhtml"
+    <action id="ActivityStream" link="/user_center_fragment.xhtml"
       label="user.activity.stream.tab.view" icon="/icons/activity_stream.png" order="30">
       <category>USER_CENTER</category>
       <filter-id>not_anonymous</filter-id>
