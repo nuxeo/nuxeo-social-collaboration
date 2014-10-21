@@ -335,7 +335,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             ACL acl = acp.getOrCreateACL(NEWS_ITEMS_ROOT_ACL_NAME);
             acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(),
                     EVERYTHING, true));
-            acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
+            acl.add(new ACE(socialWorkspace.getMembersGroupName(), READ));
+            acl.add(ACE.BLOCK);
             newsItemsRoot.setACP(acp, true);
             session.saveDocument(newsItemsRoot);
         } catch (ClientException e) {

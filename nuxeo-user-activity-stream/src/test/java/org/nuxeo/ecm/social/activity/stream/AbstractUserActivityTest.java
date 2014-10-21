@@ -42,6 +42,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
+import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
@@ -216,7 +217,8 @@ public abstract class AbstractUserActivityTest {
             doc = newSession.createDocument(doc);
             acp = doc.getACP();
             acl = acp.getOrCreateACL();
-            acl.add(new ACE("Leela", READ, false));
+            acl.add(new ACE(SecurityConstants.ADMINISTRATOR, READ));
+            acl.add(ACE.BLOCK);
             doc.setACP(acp, true);
             newSession.save();
             newSession.save();
