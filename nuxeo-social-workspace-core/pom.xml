@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.nuxeo.ecm.social</groupId>
     <artifactId>nuxeo-social-collaboration-parent</artifactId>
-    <version>5.9.6-SNAPSHOT</version>
+    <version>5.9.6-I20141027_2013</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>nuxeo-social-workspace-core</artifactId>
