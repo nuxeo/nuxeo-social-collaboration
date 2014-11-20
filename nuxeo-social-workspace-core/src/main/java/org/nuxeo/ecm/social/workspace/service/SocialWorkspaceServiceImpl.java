@@ -82,6 +82,7 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
 import org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper;
 import org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener;
+import org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationConstant;
 import org.nuxeo.ecm.user.invite.UserRegistrationInfo;
 import org.nuxeo.ecm.user.registration.DocumentRegistrationInfo;
 import org.nuxeo.ecm.user.registration.UserRegistrationService;
@@ -715,7 +716,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         DocumentModelList docs = null;
         try {
             docs = getRegistrationService().getRegistrationsForUser(
-                    socialWorkspace.getId(), principal.getName());
+                    socialWorkspace.getId(), principal.getName(), SocialRegistrationConstant.SOCIAL_CONFIGURATION_NAME);
             if (docs.size() > 0) {
                 return docs.get(0).getCurrentLifeCycleState();
             }

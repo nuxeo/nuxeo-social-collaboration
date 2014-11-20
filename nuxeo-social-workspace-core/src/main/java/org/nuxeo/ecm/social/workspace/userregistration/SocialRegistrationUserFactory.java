@@ -4,7 +4,6 @@ import static org.nuxeo.ecm.social.workspace.adapters.SocialWorkspaceAdapter.MEM
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialWorkspace;
 import static org.nuxeo.ecm.user.registration.DocumentRegistrationInfo.DOCUMENT_ID_FIELD;
 import static org.nuxeo.ecm.user.registration.DocumentRegistrationInfo.DOCUMENT_RIGHT_FIELD;
-import static org.nuxeo.ecm.user.invite.UserRegistrationInfo.USERNAME_FIELD;
 
 import java.security.Principal;
 
@@ -18,6 +17,7 @@ import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
+import org.nuxeo.ecm.user.invite.UserRegistrationConfiguration;
 import org.nuxeo.ecm.user.registration.DefaultRegistrationUserFactory;
 import org.nuxeo.runtime.api.Framework;
 
@@ -35,7 +35,7 @@ public class SocialRegistrationUserFactory extends
 
     @Override
     public DocumentModel doAddDocumentPermission(CoreSession session,
-            DocumentModel registrationDoc) throws ClientException {
+            DocumentModel registrationDoc,UserRegistrationConfiguration configuration) throws ClientException {
         String docId = (String) registrationDoc.getPropertyValue(DOCUMENT_ID_FIELD);
         if (StringUtils.isBlank(docId)) {
             throw new ClientException("SocialWorkspace id is missing");
@@ -46,7 +46,7 @@ public class SocialRegistrationUserFactory extends
             throw new ClientException(
                     "Document passed is not a Social Workspace");
         }
-        String login = (String) registrationDoc.getPropertyValue(USERNAME_FIELD);
+        String login = (String) registrationDoc.getPropertyValue(configuration.getUserInfoUsernameField());
         Principal principal = getUserManager().getPrincipal(login);
 
         // Set if new member notification is needed
