@@ -216,8 +216,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     @Override
     public void registerContribution(Object contribution,
-            String extensionPoint, ComponentInstance contributor)
-            throws Exception {
+            String extensionPoint, ComponentInstance contributor) {
         if (CONFIGURATION_EP.equals(extensionPoint)) {
             ConfigurationDescriptor config = (ConfigurationDescriptor) contribution;
             if (config.getValidationTimeInDays() > 0) {
