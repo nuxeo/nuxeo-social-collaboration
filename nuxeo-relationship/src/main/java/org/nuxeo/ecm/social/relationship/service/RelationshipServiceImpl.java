@@ -66,19 +66,18 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     protected RelationshipKindRegistry relationshipKindRegistry;
 
     @Override
-    public void activate(ComponentContext context) throws Exception {
+    public void activate(ComponentContext context) {
         relationshipKindRegistry = new RelationshipKindRegistry();
     }
 
     @Override
-    public void deactivate(ComponentContext context) throws Exception {
+    public void deactivate(ComponentContext context) {
         relationshipKindRegistry = null;
     }
 
     @Override
     public void registerContribution(Object contribution,
-            String extensionPoint, ComponentInstance contributor)
-            throws Exception {
+            String extensionPoint, ComponentInstance contributor) {
         if (KINDS_EXTENSION_POINT.equals(extensionPoint)) {
             relationshipKindRegistry.addContribution((RelationshipKindDescriptor) contribution);
         }
