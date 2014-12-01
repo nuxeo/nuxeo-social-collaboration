@@ -36,8 +36,7 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
     private static final Log log = LogFactory.getLog(SocialWorkspaceGroupComputer.class);
 
     @Override
-    public List<String> getGroupsForUser(NuxeoPrincipalImpl nuxeoPrincipal)
-            throws Exception {
+    public List<String> getGroupsForUser(NuxeoPrincipalImpl nuxeoPrincipal) {
         String user = ActivityHelper.createUserActivityObject(nuxeoPrincipal);
         List<String> groupsId = new ArrayList<String>();
         // member of a social workspace
@@ -54,13 +53,13 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
     }
 
     @Override
-    public List<String> getAllGroupIds() throws Exception {
+    public List<String> getAllGroupIds() {
         // Retrieve all groupIds is not desired.
         return null;
     }
 
     @Override
-    public List<String> getGroupMembers(String groupName) throws Exception {
+    public List<String> getGroupMembers(String groupName) {
         if (!isValidSocialWorkspaceGroupName(groupName)) {
             return null;
         }
@@ -70,14 +69,14 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
     }
 
     @Override
-    public List<String> getParentsGroupNames(String groupName) throws Exception {
+    public List<String> getParentsGroupNames(String groupName) {
         // Make a subgroup with social workspace group should not be
         // implemented.
         return null;
     }
 
     @Override
-    public List<String> getSubGroupsNames(String groupName) throws Exception {
+    public List<String> getSubGroupsNames(String groupName) {
         // not needed here
         return null;
     }
