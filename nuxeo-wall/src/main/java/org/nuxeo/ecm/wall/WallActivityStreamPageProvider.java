@@ -42,8 +42,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.6
  */
-public class WallActivityStreamPageProvider extends
-        AbstractActivityPageProvider<ActivityMessage> {
+public class WallActivityStreamPageProvider extends AbstractActivityPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,13 +70,11 @@ public class WallActivityStreamPageProvider extends
             Map<String, Serializable> parameters = new HashMap<String, Serializable>();
             parameters.put(ACTIVITY_STREAM_PARAMETER, getActivityStreamName());
             parameters.put(CONTEXT_DOCUMENT_PARAMETER, getContextDocument());
-            ActivitiesList activities = activityStreamService.query(
-                    WallActivityStreamFilter.ID, parameters,
+            ActivitiesList activities = activityStreamService.query(WallActivityStreamFilter.ID, parameters,
                     getCurrentPageOffset(), pageSize);
             nextOffset = offset + activities.size();
             activities = activities.filterActivities(getCoreSession());
-            pageActivityMessages.addAll(activities.toActivityMessages(
-                    getLocale(), getActivityLinkBuilderName()));
+            pageActivityMessages.addAll(activities.toActivityMessages(getLocale(), getActivityLinkBuilderName()));
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
         return pageActivityMessages;
@@ -87,8 +84,7 @@ public class WallActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         String activityStreamName = (String) props.get(ACTIVITY_STREAM_NAME_PROPERTY);
         if (activityStreamName == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + ACTIVITY_STREAM_NAME_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + ACTIVITY_STREAM_NAME_PROPERTY + " property.");
         }
         return activityStreamName;
     }
@@ -97,8 +93,7 @@ public class WallActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         DocumentModel contextDocument = (DocumentModel) props.get(CONTEXT_DOCUMENT_PROPERTY);
         if (contextDocument == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + CONTEXT_DOCUMENT_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + CONTEXT_DOCUMENT_PROPERTY + " property.");
         }
         return contextDocument;
     }
@@ -107,8 +102,7 @@ public class WallActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         Locale locale = (Locale) props.get(LOCALE_PROPERTY);
         if (locale == null) {
-            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY
-                    + " property.");
+            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY + " property.");
         }
         return locale;
     }
@@ -122,8 +116,7 @@ public class WallActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         CoreSession session = (CoreSession) props.get(CORE_SESSION_PROPERTY);
         if (session == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + CORE_SESSION_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + CORE_SESSION_PROPERTY + " property.");
         }
         return session;
     }

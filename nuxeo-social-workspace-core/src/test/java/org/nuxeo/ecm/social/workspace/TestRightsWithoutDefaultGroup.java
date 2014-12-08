@@ -30,8 +30,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 
 /**
- * This test case aims to test the case where "userManager.getDefaultGroup()" is
- * not configured in Nuxeo distribution.
+ * This test case aims to test the case where "userManager.getDefaultGroup()" is not configured in Nuxeo distribution.
  *
  * @author rlegall@nuxeo.com
  */
@@ -51,46 +50,32 @@ public class TestRightsWithoutDefaultGroup extends AbstractSocialWorkspaceTest {
         socialWorkspaceDoc = socialWorkspace.getDocument();
 
         nobody = new NuxeoPrincipalImpl("nobody");
-        applicationMember = createUserWithGroup("applicationMember",
-                userManager.getDefaultGroup());
-        swMember = createUserWithGroup("swMember",
-                socialWorkspace.getMembersGroupName());
-        swAdministrator = createUserWithGroup("swAdministrator",
-                socialWorkspace.getAdministratorsGroupName());
+        applicationMember = createUserWithGroup("applicationMember", userManager.getDefaultGroup());
+        swMember = createUserWithGroup("swMember", socialWorkspace.getMembersGroupName());
+        swAdministrator = createUserWithGroup("swAdministrator", socialWorkspace.getAdministratorsGroupName());
     }
 
     @Test
     public void testPublicSectionRights() throws Exception {
-        PathRef publicSectionPathRef = new PathRef(
-                socialWorkspace.getPublicSectionPath());
+        PathRef publicSectionPathRef = new PathRef(socialWorkspace.getPublicSectionPath());
         assertTrue(session.exists(publicSectionPathRef));
         assertNotNull(session.getDocument(publicSectionPathRef));
 
         assertFalse(session.hasPermission(nobody, publicSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ_WRITE));
-        assertTrue(session.hasPermission(swMember, publicSectionPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, publicSectionPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef,
-                EVERYTHING));
+        assertFalse(session.hasPermission(applicationMember, publicSectionPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, publicSectionPathRef, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicSectionPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicSectionPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef, EVERYTHING));
 
         socialWorkspace.makePublic();
 
         assertTrue(session.hasPermission(nobody, publicSectionPathRef, READ));
-        assertTrue(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ_WRITE));
-        assertTrue(session.hasPermission(swMember, publicSectionPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, publicSectionPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef,
-                EVERYTHING));
+        assertTrue(session.hasPermission(applicationMember, publicSectionPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, publicSectionPathRef, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicSectionPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicSectionPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef, EVERYTHING));
     }
 
 }

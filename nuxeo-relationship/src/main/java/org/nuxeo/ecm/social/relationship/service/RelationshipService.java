@@ -49,20 +49,18 @@ public interface RelationshipService {
     /**
      * Gets all targets that match the targetPattern with the given kind.
      */
-    List<String> getTargetsWithFulltext(String actorId, RelationshipKind kind,
-            String targetPattern);
+    List<String> getTargetsWithFulltext(String actorId, RelationshipKind kind, String targetPattern);
 
     /**
      * Gets all targets of a specific relation.
      *
-     * @param kind if null, it will return all targets {@see #getTargets}, it
-     *            can be only filled with the group or the name
+     * @param kind if null, it will return all targets {@see #getTargets}, it can be only filled with the group or the
+     *            name
      */
     List<String> getTargetsOfKind(String actorId, RelationshipKind kind);
 
     /**
-     * Gets registered (contributed with the extension point) relationship kinds
-     * depending of a group
+     * Gets registered (contributed with the extension point) relationship kinds depending of a group
      *
      * @return an UnmodifiableList with all user relationship types
      * @param group can be null, or empty if you want to get all kinds
@@ -72,8 +70,7 @@ public interface RelationshipService {
     /**
      * Adds a relation between two entities.
      *
-     * @return {@code true} if a new relation is created, {@code false}
-     *         otherwise.
+     * @return {@code true} if a new relation is created, {@code false} otherwise.
      */
     Boolean addRelation(String actorId, String targetId, RelationshipKind kind);
 
@@ -82,7 +79,6 @@ public interface RelationshipService {
      *
      * @return true if a relation has been deleted, false otherwise
      */
-    Boolean removeRelation(String actorId, String targetId,
-            RelationshipKind kind);
+    Boolean removeRelation(String actorId, String targetId, RelationshipKind kind);
 
 }

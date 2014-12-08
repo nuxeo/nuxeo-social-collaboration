@@ -53,8 +53,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-public class UserActivityStreamPageProvider extends
-        AbstractActivityPageProvider<ActivityMessage> {
+public class UserActivityStreamPageProvider extends AbstractActivityPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -88,24 +87,20 @@ public class UserActivityStreamPageProvider extends
                 Map<String, Serializable> parameters = new HashMap<String, Serializable>();
                 parameters.put(ACTOR_PARAMETER, getActor());
                 parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
-                ActivitiesList activities = activityStreamService.query(
-                        UserActivityStreamFilter.ID, parameters,
+                ActivitiesList activities = activityStreamService.query(UserActivityStreamFilter.ID, parameters,
                         getCurrentPageOffset(), pageSize);
                 nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
-                pageActivityMessages.addAll(activities.toActivityMessages(
-                        getLocale(), getActivityLinkBuilderName()));
+                pageActivityMessages.addAll(activities.toActivityMessages(getLocale(), getActivityLinkBuilderName()));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
                 Map<String, Serializable> parameters = new HashMap<String, Serializable>();
                 parameters.put(ACTOR_PARAMETER, getActor());
                 parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FROM_ACTOR);
-                ActivitiesList activities = activityStreamService.query(
-                        UserActivityStreamFilter.ID, parameters,
+                ActivitiesList activities = activityStreamService.query(UserActivityStreamFilter.ID, parameters,
                         getCurrentPageOffset(), pageSize);
                 nextOffset = offset + activities.size();
                 activities = activities.filterActivities(getCoreSession());
-                pageActivityMessages.addAll(activities.toActivityMessages(
-                        getLocale(), getActivityLinkBuilderName()));
+                pageActivityMessages.addAll(activities.toActivityMessages(getLocale(), getActivityLinkBuilderName()));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }
@@ -119,8 +114,7 @@ public class UserActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         String actor = (String) props.get(ACTOR_PROPERTY);
         if (actor == null) {
-            throw new ClientRuntimeException("Cannot find " + ACTOR_PROPERTY
-                    + " property.");
+            throw new ClientRuntimeException("Cannot find " + ACTOR_PROPERTY + " property.");
         }
         return actor;
     }
@@ -129,8 +123,7 @@ public class UserActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         Locale locale = (Locale) props.get(LOCALE_PROPERTY);
         if (locale == null) {
-            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY
-                    + " property.");
+            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY + " property.");
         }
         return locale;
     }
@@ -139,8 +132,7 @@ public class UserActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         CoreSession session = (CoreSession) props.get(CORE_SESSION_PROPERTY);
         if (session == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + CORE_SESSION_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + CORE_SESSION_PROPERTY + " property.");
         }
         return session;
     }

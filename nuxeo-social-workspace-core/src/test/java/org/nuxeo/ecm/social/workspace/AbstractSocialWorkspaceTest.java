@@ -37,27 +37,16 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(CoreFeature.class)
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({
-        "org.nuxeo.ecm.platform.api",
-        "org.nuxeo.ecm.platform.dublincore",
-        "org.nuxeo.ecm.directory",
-        "org.nuxeo.ecm.directory.sql",
-        "org.nuxeo.ecm.directory.types.contrib",
-        "org.nuxeo.ecm.platform.usermanager.api",
-        "org.nuxeo.ecm.platform.usermanager",
+@Deploy({ "org.nuxeo.ecm.platform.api", "org.nuxeo.ecm.platform.dublincore", "org.nuxeo.ecm.directory",
+        "org.nuxeo.ecm.directory.sql", "org.nuxeo.ecm.directory.types.contrib",
+        "org.nuxeo.ecm.platform.usermanager.api", "org.nuxeo.ecm.platform.usermanager",
         "org.nuxeo.ecm.platform.test:test-usermanagerimpl/directory-config.xml",
         "org.nuxeo.ecm.platform.picture.core:OSGI-INF/picturebook-schemas-contrib.xml",
-        "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.platform.types.api",
-        "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.opensocial.spaces",
-        "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
-        "org.nuxeo.ecm.social.workspace.core",
-        "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.user.relationships",
-        "org.nuxeo.ecm.user.invite",
-        "org.nuxeo.ecm.user.registration"})
-@LocalDeploy({
-        "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
+        "org.nuxeo.ecm.platform.content.template", "org.nuxeo.ecm.platform.types.api",
+        "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.opensocial.spaces", "org.nuxeo.ecm.core.persistence",
+        "org.nuxeo.ecm.activity", "org.nuxeo.ecm.social.workspace.core", "org.nuxeo.ecm.platform.content.template",
+        "org.nuxeo.ecm.user.relationships", "org.nuxeo.ecm.user.invite", "org.nuxeo.ecm.user.registration" })
+@LocalDeploy({ "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public abstract class AbstractSocialWorkspaceTest {
 
@@ -82,19 +71,15 @@ public abstract class AbstractSocialWorkspaceTest {
 
     @Before
     public void disableListeners() {
-        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
-                false);
-        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text",
-                false);
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener", false);
+        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text", false);
     }
 
     /**
      * Creates document and wait for all post-commit listener execution
      */
-    public DocumentModel createDocument(String pathAsString, String name,
-            String type) throws Exception {
-        DocumentModel doc = session.createDocumentModel(pathAsString, name,
-                type);
+    public DocumentModel createDocument(String pathAsString, String name, String type) throws Exception {
+        DocumentModel doc = session.createDocumentModel(pathAsString, name, type);
         doc.setPropertyValue("dc:title", name);
         doc = session.createDocument(doc);
         session.save(); // fire post commit event listener
@@ -106,12 +91,10 @@ public abstract class AbstractSocialWorkspaceTest {
     /**
      * Creates document and wait for all post-commit listener execution
      */
-    public DocumentModel createSocialDocument(String pathAsString, String name,
-            String type, boolean isPublic) throws Exception {
-        DocumentModel doc = session.createDocumentModel(pathAsString, name,
-                type);
-        doc.setPropertyValue(
-                SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, isPublic);
+    public DocumentModel createSocialDocument(String pathAsString, String name, String type, boolean isPublic)
+            throws Exception {
+        DocumentModel doc = session.createDocumentModel(pathAsString, name, type);
+        doc.setPropertyValue(SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, isPublic);
         doc = session.createDocument(doc);
         session.save(); // fire post commit event listener
         session.save(); // flush the session to retrieve document
@@ -119,11 +102,9 @@ public abstract class AbstractSocialWorkspaceTest {
         return doc;
     }
 
-    protected SocialWorkspace createSocialWorkspace(String socialWorkspaceName,
-            boolean isPublic) throws Exception {
-        DocumentModel doc = createDocument(
-                session.getRootDocument().getPathAsString(),
-                socialWorkspaceName, SOCIAL_WORKSPACE_TYPE);
+    protected SocialWorkspace createSocialWorkspace(String socialWorkspaceName, boolean isPublic) throws Exception {
+        DocumentModel doc = createDocument(session.getRootDocument().getPathAsString(), socialWorkspaceName,
+                SOCIAL_WORKSPACE_TYPE);
         SocialWorkspace sw = toSocialWorkspace(doc);
 
         if (isPublic) {
@@ -132,13 +113,11 @@ public abstract class AbstractSocialWorkspaceTest {
         return sw;
     }
 
-    protected SocialWorkspace createSocialWorkspace(String socialWorkspaceName)
-            throws Exception {
+    protected SocialWorkspace createSocialWorkspace(String socialWorkspaceName) throws Exception {
         return createSocialWorkspace(socialWorkspaceName, false);
     }
 
-    protected static NuxeoPrincipal createUserWithGroup(String username,
-            String... groups) throws ClientException {
+    protected static NuxeoPrincipal createUserWithGroup(String username, String... groups) throws ClientException {
         NuxeoPrincipalImpl user = new NuxeoPrincipalImpl(username);
         user.allGroups = Arrays.asList(groups);
         return user;

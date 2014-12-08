@@ -49,12 +49,9 @@ public class TestRights extends AbstractSocialWorkspaceTest {
         socialWorkspaceDoc = socialWorkspace.getDocument();
 
         nobody = new NuxeoPrincipalImpl("nobody");
-        applicationMember = createUserWithGroup("applicationMember",
-                userManager.getDefaultGroup());
-        swMember = createUserWithGroup("swMember",
-                socialWorkspace.getMembersGroupName());
-        swAdministrator = createUserWithGroup("swAdministrator",
-                socialWorkspace.getAdministratorsGroupName());
+        applicationMember = createUserWithGroup("applicationMember", userManager.getDefaultGroup());
+        swMember = createUserWithGroup("swMember", socialWorkspace.getMembersGroupName());
+        swAdministrator = createUserWithGroup("swAdministrator", socialWorkspace.getAdministratorsGroupName());
 
         ClassLoader cl = H2Dialect.class.getClassLoader();
         System.out.println(H2Dialect.class.getClassLoader().toString());
@@ -62,135 +59,94 @@ public class TestRights extends AbstractSocialWorkspaceTest {
 
     @Test
     public void testSocialWorkspaceRights() throws Exception {
-        assertFalse(session.hasPermission(nobody, socialWorkspaceDoc.getRef(),
-                READ));
-        assertFalse(session.hasPermission(applicationMember,
-                socialWorkspaceDoc.getRef(), READ));
-        assertTrue(session.hasPermission(swMember, socialWorkspaceDoc.getRef(),
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember,
-                socialWorkspaceDoc.getRef(), EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator,
-                socialWorkspaceDoc.getRef(), EVERYTHING));
+        assertFalse(session.hasPermission(nobody, socialWorkspaceDoc.getRef(), READ));
+        assertFalse(session.hasPermission(applicationMember, socialWorkspaceDoc.getRef(), READ));
+        assertTrue(session.hasPermission(swMember, socialWorkspaceDoc.getRef(), READ_WRITE));
+        assertFalse(session.hasPermission(swMember, socialWorkspaceDoc.getRef(), EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, socialWorkspaceDoc.getRef(), EVERYTHING));
     }
 
     @Test
     public void testPublicSocialWorkspaceRights() throws Exception {
-        PathRef publicSectionPathRef = new PathRef(
-                socialWorkspace.getPublicSectionPath());
+        PathRef publicSectionPathRef = new PathRef(socialWorkspace.getPublicSectionPath());
         assertTrue(session.exists(publicSectionPathRef));
         assertNotNull(session.getDocument(publicSectionPathRef));
-        PathRef publicDashboardPathRef = new PathRef(
-                socialWorkspace.getPublicDashboardSpacePath());
+        PathRef publicDashboardPathRef = new PathRef(socialWorkspace.getPublicDashboardSpacePath());
         assertTrue(session.exists(publicDashboardPathRef));
         assertNotNull(session.getDocument(publicDashboardPathRef));
 
         // public section
         assertFalse(session.hasPermission(nobody, publicSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ_WRITE));
-        assertTrue(session.hasPermission(swMember, publicSectionPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, publicSectionPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef,
-                EVERYTHING));
+        assertFalse(session.hasPermission(applicationMember, publicSectionPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, publicSectionPathRef, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicSectionPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicSectionPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef, EVERYTHING));
 
         // public dashboard
         assertFalse(session.hasPermission(nobody, publicDashboardPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicDashboardPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicDashboardPathRef, READ_WRITE));
-        assertTrue(session.hasPermission(swMember, publicDashboardPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, publicDashboardPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator,
-                publicDashboardPathRef, EVERYTHING));
+        assertFalse(session.hasPermission(applicationMember, publicDashboardPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, publicDashboardPathRef, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicDashboardPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicDashboardPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicDashboardPathRef, EVERYTHING));
 
         socialWorkspace.makePublic();
 
         // public section
         assertFalse(session.hasPermission(nobody, publicSectionPathRef, READ));
-        assertTrue(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicSectionPathRef, READ_WRITE));
-        assertTrue(session.hasPermission(swMember, publicSectionPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, publicSectionPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef,
-                EVERYTHING));
+        assertTrue(session.hasPermission(applicationMember, publicSectionPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, publicSectionPathRef, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicSectionPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicSectionPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicSectionPathRef, EVERYTHING));
 
         // public dashboard
         assertFalse(session.hasPermission(nobody, publicDashboardPathRef, READ));
-        assertTrue(session.hasPermission(applicationMember,
-                publicDashboardPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                publicDashboardPathRef, READ_WRITE));
-        assertTrue(session.hasPermission(swMember, publicDashboardPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, publicDashboardPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator,
-                publicDashboardPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(applicationMember, publicDashboardPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, publicDashboardPathRef, READ_WRITE));
+        assertTrue(session.hasPermission(swMember, publicDashboardPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, publicDashboardPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, publicDashboardPathRef, EVERYTHING));
     }
 
     @Test
     public void testPrivateSocialWorkspaceRights() throws Exception {
-        PathRef privateSectionPathRef = new PathRef(
-                socialWorkspace.getPrivateSectionPath());
+        PathRef privateSectionPathRef = new PathRef(socialWorkspace.getPrivateSectionPath());
         assertTrue(session.exists(privateSectionPathRef));
         assertNotNull(session.getDocument(privateSectionPathRef));
-        PathRef privateDashboardPathRef = new PathRef(
-                socialWorkspace.getPrivateDashboardSpacePath());
+        PathRef privateDashboardPathRef = new PathRef(socialWorkspace.getPrivateDashboardSpacePath());
         assertTrue(session.exists(privateDashboardPathRef));
         assertNotNull(session.getDocument(privateDashboardPathRef));
 
         // private section
         assertFalse(session.hasPermission(nobody, privateSectionPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                privateSectionPathRef, READ));
-        assertTrue(session.hasPermission(swMember, privateSectionPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, privateSectionPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator,
-                privateSectionPathRef, EVERYTHING));
+        assertFalse(session.hasPermission(applicationMember, privateSectionPathRef, READ));
+        assertTrue(session.hasPermission(swMember, privateSectionPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, privateSectionPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, privateSectionPathRef, EVERYTHING));
 
         // private dashboard
         assertFalse(session.hasPermission(nobody, privateDashboardPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                privateDashboardPathRef, READ));
-        assertTrue(session.hasPermission(swMember, privateDashboardPathRef,
-                READ_WRITE));
-        assertFalse(session.hasPermission(swMember, privateDashboardPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator,
-                privateDashboardPathRef, EVERYTHING));
+        assertFalse(session.hasPermission(applicationMember, privateDashboardPathRef, READ));
+        assertTrue(session.hasPermission(swMember, privateDashboardPathRef, READ_WRITE));
+        assertFalse(session.hasPermission(swMember, privateDashboardPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, privateDashboardPathRef, EVERYTHING));
     }
 
     @Test
     public void testNewsItemsRootRights() throws Exception {
-        PathRef newsItemsRootPathRef = new PathRef(
-                socialWorkspace.getNewsItemsRootPath());
+        PathRef newsItemsRootPathRef = new PathRef(socialWorkspace.getNewsItemsRootPath());
 
         assertTrue(session.exists(newsItemsRootPathRef));
         assertNotNull(session.getDocument(newsItemsRootPathRef));
 
         assertFalse(session.hasPermission(nobody, newsItemsRootPathRef, READ));
-        assertFalse(session.hasPermission(applicationMember,
-                newsItemsRootPathRef, READ));
+        assertFalse(session.hasPermission(applicationMember, newsItemsRootPathRef, READ));
         assertTrue(session.hasPermission(swMember, newsItemsRootPathRef, READ));
         assertFalse(session.hasPermission(swMember, newsItemsRootPathRef, WRITE));
-        assertFalse(session.hasPermission(swMember, newsItemsRootPathRef,
-                EVERYTHING));
-        assertTrue(session.hasPermission(swAdministrator, newsItemsRootPathRef,
-                EVERYTHING));
+        assertFalse(session.hasPermission(swMember, newsItemsRootPathRef, EVERYTHING));
+        assertTrue(session.hasPermission(swAdministrator, newsItemsRootPathRef, EVERYTHING));
     }
 
 }

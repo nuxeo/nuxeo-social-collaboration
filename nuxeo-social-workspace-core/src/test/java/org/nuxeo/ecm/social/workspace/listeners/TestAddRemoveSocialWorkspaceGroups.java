@@ -28,10 +28,8 @@ import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
-public class TestAddRemoveSocialWorkspaceGroups extends
-        AbstractSocialWorkspaceTest {
+public class TestAddRemoveSocialWorkspaceGroups extends AbstractSocialWorkspaceTest {
 
     public static final String SOCIAL_WORKSPACE_NAME = "sws";
 
@@ -43,22 +41,14 @@ public class TestAddRemoveSocialWorkspaceGroups extends
         assertNotNull(userManager);
 
         String activityObject = ActivityHelper.createDocumentActivityObject(socialWorkspaceDoc);
-        assertEquals(1,
-                relationshipService.getTargets(activityObject).size());
-        assertEquals(
-                1,
-                relationshipService.getTargetsOfKind(activityObject,
-                        buildRelationAdministratorKind()).size());
-        assertEquals(
-                1,
-                relationshipService.getTargetsOfKind(activityObject,
-                        buildRelationMemberKind()).size());
+        assertEquals(1, relationshipService.getTargets(activityObject).size());
+        assertEquals(1, relationshipService.getTargetsOfKind(activityObject, buildRelationAdministratorKind()).size());
+        assertEquals(1, relationshipService.getTargetsOfKind(activityObject, buildRelationMemberKind()).size());
 
         session.removeDocument(socialWorkspaceDoc.getRef());
         session.save();
 
-        assertEquals(0,
-                relationshipService.getTargets(activityObject).size());
+        assertEquals(0, relationshipService.getTargets(activityObject).size());
     }
 
 }

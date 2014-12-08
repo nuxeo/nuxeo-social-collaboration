@@ -35,7 +35,6 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
- *
  */
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
 public class TestSocialWorkspaceHelper extends AbstractSocialWorkspaceTest {
@@ -51,16 +50,12 @@ public class TestSocialWorkspaceHelper extends AbstractSocialWorkspaceTest {
         String idSW = socialWorkspaceDoc.getId();
         String labelSW = socialWorkspaceDoc.getName();
 
-        assertEquals(
-                SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspaceDoc),
+        assertEquals(SocialWorkspaceHelper.getSocialWorkspaceAdministratorsGroupName(socialWorkspaceDoc),
                 socialWorkspace.getAdministratorsGroupName());
-        assertEquals("Administrators of " + labelSW,
-                socialWorkspace.getAdministratorsGroupLabel());
-        assertEquals(
-                SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspaceDoc),
+        assertEquals("Administrators of " + labelSW, socialWorkspace.getAdministratorsGroupLabel());
+        assertEquals(SocialWorkspaceHelper.getSocialWorkspaceMembersGroupName(socialWorkspaceDoc),
                 socialWorkspace.getMembersGroupName());
-        assertEquals("Members of " + labelSW,
-                socialWorkspace.getMembersGroupLabel());
+        assertEquals("Members of " + labelSW, socialWorkspace.getMembersGroupLabel());
     }
 
     @Test
@@ -73,19 +68,13 @@ public class TestSocialWorkspaceHelper extends AbstractSocialWorkspaceTest {
         assertTrue(isValidSocialWorkspaceGroupName(memGroupName));
         assertFalse(isValidSocialWorkspaceGroupName(other));
 
-        assertEquals("32-34",
-                getRelationDocActivityObjectFromGroupName(admGroupName));
-        assertEquals("33223-343244",
-                getRelationDocActivityObjectFromGroupName(memGroupName));
+        assertEquals("32-34", getRelationDocActivityObjectFromGroupName(admGroupName));
+        assertEquals("33223-343244", getRelationDocActivityObjectFromGroupName(memGroupName));
 
-        assertEquals(buildRelationAdministratorKind(),
-                buildRelationKindFromGroupName(admGroupName));
-        assertNotSame(buildRelationMemberKind(),
-                buildRelationKindFromGroupName(memGroupName));
-        assertEquals(buildRelationMemberKind(),
-                buildRelationKindFromGroupName(memGroupName));
-        assertNotSame(buildRelationAdministratorKind(),
-                buildRelationKindFromGroupName(memGroupName));
+        assertEquals(buildRelationAdministratorKind(), buildRelationKindFromGroupName(admGroupName));
+        assertNotSame(buildRelationMemberKind(), buildRelationKindFromGroupName(memGroupName));
+        assertEquals(buildRelationMemberKind(), buildRelationKindFromGroupName(memGroupName));
+        assertNotSame(buildRelationAdministratorKind(), buildRelationKindFromGroupName(memGroupName));
     }
 
 }

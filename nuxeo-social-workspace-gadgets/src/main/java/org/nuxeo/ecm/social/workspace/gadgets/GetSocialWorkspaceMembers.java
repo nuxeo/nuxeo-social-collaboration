@@ -46,7 +46,6 @@ import org.nuxeo.ecm.user.center.profile.UserProfileService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 @Operation(id = GetSocialWorkspaceMembers.ID, category = Constants.CAT_EXECUTION, label = "Social Workspace Members", description = "return members of a social workspace")
 public class GetSocialWorkspaceMembers {
@@ -81,21 +80,19 @@ public class GetSocialWorkspaceMembers {
 
     @OperationMethod
     public Blob run() throws Exception {
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
-                session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(session, new PathRef(
+                contextPath));
         List<String> users = socialWorkspace.searchMembers(pattern);
         return buildResponse(users);
     }
 
-    protected Blob buildResponse(List<String> users)
-            throws UnsupportedEncodingException, ClientException {
+    protected Blob buildResponse(List<String> users) throws UnsupportedEncodingException, ClientException {
         JSONObject result = new JSONObject();
         result.put("page", page);
         result.put("pageMax", Math.ceil((float) users.size() / pageSize));
 
         int startIndex = page * pageSize;
-        users = users.subList(page * pageSize,
-                Math.min(startIndex + pageSize, users.size()));
+        users = users.subList(page * pageSize, Math.min(startIndex + pageSize, users.size()));
 
         JSONArray array = new JSONArray();
         for (String user : users) {
@@ -104,16 +101,14 @@ public class GetSocialWorkspaceMembers {
             o.element("id", principal.getName());
             o.element("firstName", principal.getFirstName());
             o.element("lastName", principal.getLastName());
-            o.element("profileURL",
-                    ActivityMessageHelper.getUserProfileURL(principal.getName()));
+            o.element("profileURL", ActivityMessageHelper.getUserProfileURL(principal.getName()));
             o.element("avatarURL", getAvatarURL(principal));
             array.add(o);
         }
 
         result.put("users", array);
 
-        return new InputStreamBlob(new ByteArrayInputStream(
-                result.toString().getBytes("UTF-8")), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(result.toString().getBytes("UTF-8")), "application/json");
     }
 
     protected String getAvatarURL(Principal principal) throws ClientException {

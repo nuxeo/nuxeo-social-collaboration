@@ -40,8 +40,7 @@ import com.google.inject.Inject;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-@Deploy({ "org.nuxeo.ecm.automation.core",
-        "org.nuxeo.ecm.platform.query.api:OSGI-INF/pageprovider-framework.xml" })
+@Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.platform.query.api:OSGI-INF/pageprovider-framework.xml" })
 public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
 
     @Inject
@@ -56,8 +55,7 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
             OperationContext ctx = new OperationContext(newSession);
             assertNotNull(ctx);
 
-            OperationChain chain = new OperationChain(
-                    "testUserActivityStreamOperation");
+            OperationChain chain = new OperationChain("testUserActivityStreamOperation");
             chain.add(GetActivityStream.ID);
             Blob result = (Blob) automationService.run(ctx, chain);
             assertNotNull(result);
@@ -65,9 +63,8 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
             assertNotNull(json);
 
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> m = mapper.readValue(json,
-                    new TypeReference<Map<String, Object>>() {
-                    });
+            Map<String, Object> m = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
+            });
             List<Map<String, Object>> activities = (List<Map<String, Object>>) m.get("activities");
             assertEquals(4, activities.size());
         }

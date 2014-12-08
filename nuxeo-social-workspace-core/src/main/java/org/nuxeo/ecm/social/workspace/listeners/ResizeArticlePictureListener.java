@@ -76,11 +76,9 @@ public class ResizeArticlePictureListener implements EventListener {
         float scale = Math.min(wScale, hscale);
 
         if (scale < 1) {
-            image = service.resize(image, "jpg", (int) (width * scale),
-                    (int) (height * scale), info.getDepth());
+            image = service.resize(image, "jpg", (int) (width * scale), (int) (height * scale), info.getDepth());
             image.setMimeType("image/jpeg"); // XXX : Should be automatic
-            doc.setPropertyValue(CONTENT_PICTURE_PICTURE_PROPERTY,
-                    (Serializable) image);
+            doc.setPropertyValue(CONTENT_PICTURE_PICTURE_PROPERTY, (Serializable) image);
         }
     }
 

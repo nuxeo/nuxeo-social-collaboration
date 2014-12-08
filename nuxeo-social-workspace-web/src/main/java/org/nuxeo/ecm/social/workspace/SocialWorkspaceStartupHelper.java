@@ -26,8 +26,8 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.webapp.helpers.StartupHelper;
 
 /**
- * Overriding default {@see org.nuxeo.ecm.webapp.helpers.StartupHelper} to
- * redirect user into their dashboards after login in.
+ * Overriding default {@see org.nuxeo.ecm.webapp.helpers.StartupHelper} to redirect user into their dashboards after
+ * login in.
  *
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.5

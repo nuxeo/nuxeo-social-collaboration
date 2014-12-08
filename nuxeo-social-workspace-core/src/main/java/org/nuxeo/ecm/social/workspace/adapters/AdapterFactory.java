@@ -28,7 +28,6 @@ import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 public class AdapterFactory implements DocumentAdapterFactory {
 

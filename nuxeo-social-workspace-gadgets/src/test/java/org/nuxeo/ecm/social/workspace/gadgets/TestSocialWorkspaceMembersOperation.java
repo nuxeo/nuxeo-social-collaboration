@@ -54,44 +54,26 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 @RunWith(FeaturesRunner.class)
 @Features(CoreFeature.class)
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({
-        "org.nuxeo.ecm.platform.api",
-        "org.nuxeo.ecm.platform.dublincore",
-        "org.nuxeo.ecm.directory",
-        "org.nuxeo.ecm.directory.sql",
-        "org.nuxeo.ecm.directory.types.contrib",
-        "org.nuxeo.ecm.platform.usermanager.api",
-        "org.nuxeo.ecm.platform.usermanager",
-        "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.opensocial.spaces",
-        "org.nuxeo.ecm.platform.types.api",
-        "org.nuxeo.ecm.platform.types.core",
-        "org.nuxeo.ecm.automation.core",
-        "org.nuxeo.ecm.core.persistence",
-        "org.nuxeo.ecm.platform.url.api",
-        "org.nuxeo.ecm.platform.url.core",
+@Deploy({ "org.nuxeo.ecm.platform.api", "org.nuxeo.ecm.platform.dublincore", "org.nuxeo.ecm.directory",
+        "org.nuxeo.ecm.directory.sql", "org.nuxeo.ecm.directory.types.contrib",
+        "org.nuxeo.ecm.platform.usermanager.api", "org.nuxeo.ecm.platform.usermanager",
+        "org.nuxeo.ecm.platform.content.template", "org.nuxeo.ecm.opensocial.spaces",
+        "org.nuxeo.ecm.platform.types.api", "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.automation.core",
+        "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
         "org.nuxeo.ecm.platform.ui:OSGI-INF/urlservice-framework.xml",
-        "org.nuxeo.ecm.user.center:OSGI-INF/urlservice-contrib.xml",
-        "org.nuxeo.ecm.platform.userworkspace.types",
-        "org.nuxeo.ecm.platform.userworkspace.api",
-        "org.nuxeo.ecm.platform.userworkspace.core",
-        "org.nuxeo.ecm.user.center.profile",
-        "org.nuxeo.ecm.activity",
-        "org.nuxeo.ecm.automation.features",
-        "org.nuxeo.ecm.platform.query.api",
-        "org.nuxeo.ecm.social.workspace.core",
-        "org.nuxeo.ecm.platform.content.template",
-        "org.nuxeo.ecm.user.relationships",
+        "org.nuxeo.ecm.user.center:OSGI-INF/urlservice-contrib.xml", "org.nuxeo.ecm.platform.userworkspace.types",
+        "org.nuxeo.ecm.platform.userworkspace.api", "org.nuxeo.ecm.platform.userworkspace.core",
+        "org.nuxeo.ecm.user.center.profile", "org.nuxeo.ecm.activity", "org.nuxeo.ecm.automation.features",
+        "org.nuxeo.ecm.platform.query.api", "org.nuxeo.ecm.social.workspace.core",
+        "org.nuxeo.ecm.platform.content.template", "org.nuxeo.ecm.user.relationships",
         "org.nuxeo.ecm.social.workspace.gadgets",
         "org.nuxeo.ecm.platform.test:test-usermanagerimpl/directory-config.xml",
         "org.nuxeo.ecm.platform.picture.core:OSGI-INF/picturebook-schemas-contrib.xml" })
-@LocalDeploy({
-        "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
+@LocalDeploy({ "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public class TestSocialWorkspaceMembersOperation {
     @Inject
@@ -112,17 +94,14 @@ public class TestSocialWorkspaceMembersOperation {
 
     @Before
     public void disableListeners() {
-        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
-                false);
-        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text",
-                false);
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener", false);
+        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text", false);
     }
 
     @Before
     public void setup() throws Exception {
         // create social workspace
-        socialWorkspaceDocument = session.createDocumentModel("/",
-                "testSocialWorkspace", SOCIAL_WORKSPACE_TYPE);
+        socialWorkspaceDocument = session.createDocumentModel("/", "testSocialWorkspace", SOCIAL_WORKSPACE_TYPE);
         socialWorkspaceDocument = session.createDocument(socialWorkspaceDocument);
         socialWorkspace = socialWorkspaceDocument.getAdapter(SocialWorkspace.class);
         assertNotNull(socialWorkspace);
@@ -132,8 +111,7 @@ public class TestSocialWorkspaceMembersOperation {
         String schemaName = userManager.getUserSchemaName();
 
         testUser.setPropertyValue(schemaName + ":username", "testUser");
-        testUser.setPropertyValue(schemaName + ":firstName",
-                "testUser_firstName");
+        testUser.setPropertyValue(schemaName + ":firstName", "testUser_firstName");
         testUser.setPropertyValue(schemaName + ":lastName", "testUser_lastName");
         userManager.createUser(testUser);
         assertNotNull(userManager.getPrincipal("testUser"));
@@ -158,8 +136,7 @@ public class TestSocialWorkspaceMembersOperation {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("fakeChain");
-        OperationParameters oParams = new OperationParameters(
-                GetSocialWorkspaceMembers.ID);
+        OperationParameters oParams = new OperationParameters(GetSocialWorkspaceMembers.ID);
         oParams.set("pattern", "testU%");
         oParams.set("page", 0);
         oParams.set("pageSize", 5);
@@ -170,9 +147,7 @@ public class TestSocialWorkspaceMembersOperation {
         JSONObject o = JSONObject.fromObject(result.getString());
         JSONArray array = (JSONArray) o.get("users");
         assertEquals(1, array.size());
-        assertEquals("testUser_firstName",
-                ((JSONObject) array.get(0)).get("firstName"));
-        assertEquals("testUser_lastName",
-                ((JSONObject) array.get(0)).get("lastName"));
+        assertEquals("testUser_firstName", ((JSONObject) array.get(0)).get("firstName"));
+        assertEquals("testUser_lastName", ((JSONObject) array.get(0)).get("lastName"));
     }
 }

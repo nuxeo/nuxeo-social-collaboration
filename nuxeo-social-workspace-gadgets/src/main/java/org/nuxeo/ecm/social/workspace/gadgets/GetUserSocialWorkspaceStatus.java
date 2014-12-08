@@ -70,13 +70,11 @@ public class GetUserSocialWorkspaceStatus {
     @OperationMethod
     public Blob run() throws Exception {
         NuxeoPrincipal currentUser = (NuxeoPrincipal) session.getPrincipal();
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
-                session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(session, new PathRef(
+                contextPath));
 
-        List<String> targets = relationshipService.getTargetsOfKind(
-                ActivityHelper.createDocumentActivityObject(
-                        socialWorkspace.getDocument().getRepositoryName(),
-                        socialWorkspace.getId()),
+        List<String> targets = relationshipService.getTargetsOfKind(ActivityHelper.createDocumentActivityObject(
+                socialWorkspace.getDocument().getRepositoryName(), socialWorkspace.getId()),
                 RelationshipKind.fromString("socialworkspace:members"));
         if (targets.contains(ActivityHelper.createUserActivityObject(currentUser))) {
             return buildResponse(socialWorkspace.getDocument(), Status.MEMBER);
@@ -85,32 +83,26 @@ public class GetUserSocialWorkspaceStatus {
         } else {
             String reqestStatus = socialWorkspace.getSubscriptionRequestStatus(currentUser);
             if (reqestStatus == null) { // no subscrition requests
-                return buildResponse(socialWorkspace.getDocument(),
-                        Status.NOT_MEMBER);
+                return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
             } else if (REQUEST_PENDING_STATE.equals(reqestStatus)) {
-                return buildResponse(socialWorkspace.getDocument(),
-                        Status.REQUEST_PENDING);
+                return buildResponse(socialWorkspace.getDocument(), Status.REQUEST_PENDING);
             } else if (REQUEST_ACCEPTED_STATE.equals(reqestStatus)) {
-                return buildResponse(socialWorkspace.getDocument(),
-                        Status.REQUEST_ACCEPTED);
+                return buildResponse(socialWorkspace.getDocument(), Status.REQUEST_ACCEPTED);
             } else if (REQUEST_REJECTED_STATE.equals(reqestStatus)) {
-                return buildResponse(socialWorkspace.getDocument(),
-                        Status.REQUEST_REJECTED);
+                return buildResponse(socialWorkspace.getDocument(), Status.REQUEST_REJECTED);
             } else {
-                return buildResponse(socialWorkspace.getDocument(),
-                        Status.NOT_MEMBER);
+                return buildResponse(socialWorkspace.getDocument(), Status.NOT_MEMBER);
             }
         }
     }
 
-    protected static Blob buildResponse(DocumentModel sws, Status status)
-            throws ClientException, UnsupportedEncodingException {
+    protected static Blob buildResponse(DocumentModel sws, Status status) throws ClientException,
+            UnsupportedEncodingException {
         JSONObject obj = new JSONObject();
         obj.element("status", status);
         obj.element("title", sws.getPropertyValue("dc:title"));
         obj.element("description", sws.getPropertyValue("dc:description"));
-        return new InputStreamBlob(new ByteArrayInputStream(
-                obj.toString().getBytes("UTF-8")), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(obj.toString().getBytes("UTF-8")), "application/json");
     }
 
 }

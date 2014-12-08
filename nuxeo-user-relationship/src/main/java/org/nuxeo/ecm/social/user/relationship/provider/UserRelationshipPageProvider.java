@@ -44,15 +44,13 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Page provider listing user's relationships
  * <p>
- * This page provider requires two parameters: the first one to be filled with
- * the username of which user you want the relations, and the second one to be
- * filled with a search string.
+ * This page provider requires two parameters: the first one to be filled with the username of which user you want the
+ * relations, and the second one to be filled with a search string.
  * <p>
  *
  * @since 5.5
  */
-public class UserRelationshipPageProvider extends
-        AbstractPageProvider<DocumentModel> {
+public class UserRelationshipPageProvider extends AbstractPageProvider<DocumentModel> {
 
     private static final Log log = LogFactory.getLog(UserRelationshipPageProvider.class);
 
@@ -87,8 +85,7 @@ public class UserRelationshipPageProvider extends
             } else {
                 // handle offset
                 if (offset <= resultsCount) {
-                    for (int i = Long.valueOf(offset).intValue(); i < resultsCount
-                            && i < offset + pageSize; i++) {
+                    for (int i = Long.valueOf(offset).intValue(); i < resultsCount && i < offset + pageSize; i++) {
                         addUsernameToRelationshipPage(ActivityHelper.getUsername(relationships.get(i)));
                     }
                 }
@@ -99,8 +96,8 @@ public class UserRelationshipPageProvider extends
 
     protected void addUsernameToRelationshipPage(String username) {
         try {
-            DocumentModel userProfile = getUserProfileService().getUserProfile(
-                    getUserManager().getUserModel(username), getCoreSession());
+            DocumentModel userProfile = getUserProfileService().getUserProfile(getUserManager().getUserModel(username),
+                    getCoreSession());
             relationshipPage.add(userProfile);
         } catch (ClientException e) {
             log.warn("Cannot get user model for:" + username, e);
@@ -109,8 +106,7 @@ public class UserRelationshipPageProvider extends
 
     protected void fillRelationshipsForCurrentUser() {
         relationships = new ArrayList<String>();
-        relationships.addAll(getRelationshipService().getTargetsOfKind(
-                getCurrentUser(),
+        relationships.addAll(getRelationshipService().getTargetsOfKind(getCurrentUser(),
                 RelationshipKind.fromGroup(CIRCLE_RELATIONSHIP_KIND_GROUP)));
     }
 

@@ -53,8 +53,7 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         activity.setPublishedDate(new Date());
         activityStreamService.addActivity(activity);
 
-        List<Activity> activities = activityStreamService.query(
-                ActivityStreamService.ALL_ACTIVITIES, null);
+        List<Activity> activities = activityStreamService.query(ActivityStreamService.ALL_ACTIVITIES, null);
         assertEquals(1, activities.size());
         Activity storedActivity = activities.get(0);
         assertEquals(activity.getActor(), storedActivity.getActor());
@@ -67,19 +66,16 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         initializeSomeMiniMessagesAndRelations();
         String benderActivityObject = ActivityHelper.createUserActivityObject("Bender");
 
-        List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(
-                benderActivityObject, 0, 0);
+        List<MiniMessage> messages = miniMessageService.getMiniMessageFrom(benderActivityObject, 0, 0);
         assertNotNull(messages);
         assertEquals(5, messages.size());
         MiniMessage miniMessage = messages.get(0);
-        assertEquals(
-                "I don't tell you how to tell me what to do, so don't tell me how to do what you tell me to do!",
+        assertEquals("I don't tell you how to tell me what to do, so don't tell me how to do what you tell me to do!",
                 miniMessage.getMessage());
         assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(1);
-        assertEquals("Oh wait, your serious. Let me laugh even harder.",
-                miniMessage.getMessage());
+        assertEquals("Oh wait, your serious. Let me laugh even harder.", miniMessage.getMessage());
         assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(2);
@@ -87,14 +83,11 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(3);
-        assertEquals(
-                "This is the worst kind of discrimination: the kind against me!",
-                miniMessage.getMessage());
+        assertEquals("This is the worst kind of discrimination: the kind against me!", miniMessage.getMessage());
         assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
         miniMessage = messages.get(4);
-        assertEquals("Of all the friends I've had... you're the first.",
-                miniMessage.getMessage());
+        assertEquals("Of all the friends I've had... you're the first.", miniMessage.getMessage());
         assertEquals("Bender", miniMessage.getActor());
         assertNotNull(miniMessage.getPublishedDate());
     }
@@ -104,8 +97,7 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
         initializeSomeMiniMessagesAndRelations();
 
         List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
-                ActivityHelper.createUserActivityObject("Leela"),
-                CIRCLE_RELATION, 0, 0);
+                ActivityHelper.createUserActivityObject("Leela"), CIRCLE_RELATION, 0, 0);
         assertNotNull(messages);
         assertEquals(10, messages.size());
     }
@@ -116,23 +108,20 @@ public class TestMiniMessageService extends AbstractMiniMessageTest {
 
         String leelaActivityObject = ActivityHelper.createUserActivityObject("Leela");
 
-        List<MiniMessage> messages = miniMessageService.getMiniMessageFor(
-                leelaActivityObject, CIRCLE_RELATION, 0, 0);
+        List<MiniMessage> messages = miniMessageService.getMiniMessageFor(leelaActivityObject, CIRCLE_RELATION, 0, 0);
         assertNotNull(messages);
         assertEquals(10, messages.size());
 
         MiniMessage firstMiniMessage = messages.get(0);
         miniMessageService.removeMiniMessage(firstMiniMessage);
-        messages = miniMessageService.getMiniMessageFor(leelaActivityObject,
-                CIRCLE_RELATION, 0, 0);
+        messages = miniMessageService.getMiniMessageFor(leelaActivityObject, CIRCLE_RELATION, 0, 0);
         assertNotNull(messages);
         assertEquals(9, messages.size());
         assertFalse(messages.contains(firstMiniMessage));
 
         firstMiniMessage = messages.get(0);
         miniMessageService.removeMiniMessage(firstMiniMessage);
-        messages = miniMessageService.getMiniMessageFor(leelaActivityObject,
-                CIRCLE_RELATION, 0, 0);
+        messages = miniMessageService.getMiniMessageFor(leelaActivityObject, CIRCLE_RELATION, 0, 0);
         assertNotNull(messages);
         assertEquals(8, messages.size());
         assertFalse(messages.contains(firstMiniMessage));

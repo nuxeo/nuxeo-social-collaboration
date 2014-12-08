@@ -86,50 +86,42 @@ public class AddMiniMessage {
             publishedDate = new Date();
         }
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                locale);
+        Locale locale = language != null && !language.isEmpty() ? new Locale(language) : Locale.ENGLISH;
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
 
         String context = null;
         if (doc != null) {
             context = ActivityHelper.createDocumentActivityObject(doc);
         } else if (contextPath != null) {
-            ContextActivityObject contextActivityObject = new ContextActivityObject(
-                    session, contextPath);
+            ContextActivityObject contextActivityObject = new ContextActivityObject(session, contextPath);
             contextActivityObject.runUnrestricted();
             if (contextActivityObject.documentActivityObject != null) {
                 context = contextActivityObject.documentActivityObject;
             }
         }
 
-        MiniMessage miniMessage = miniMessageService.addMiniMessage(
-                session.getPrincipal(), message, publishedDate, context);
+        MiniMessage miniMessage = miniMessageService.addMiniMessage(session.getPrincipal(), message, publishedDate,
+                context);
 
         NuxeoPrincipal principal = userManager.getPrincipal(miniMessage.getActor());
-        String fullName = principal == null ? "" : principal.getFirstName()
-                + " " + principal.getLastName();
+        String fullName = principal == null ? "" : principal.getFirstName() + " " + principal.getLastName();
 
         Map<String, Object> o = new HashMap<String, Object>();
         o.put("id", miniMessage.getId());
         o.put("actor", miniMessage.getActor());
         o.put("fullName", fullName);
         o.put("message", miniMessage.getMessage());
-        o.put("publishedDate",
-                dateFormat.format(miniMessage.getPublishedDate()));
-        o.put("isCurrentUserMiniMessage",
-                session.getPrincipal().getName().equals(miniMessage.getActor()));
+        o.put("publishedDate", dateFormat.format(miniMessage.getPublishedDate()));
+        o.put("isCurrentUserMiniMessage", session.getPrincipal().getName().equals(miniMessage.getActor()));
 
         ObjectMapper mapper = new ObjectMapper();
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, o);
 
-        return new InputStreamBlob(new ByteArrayInputStream(
-                writer.toString().getBytes("UTF-8")), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), "application/json");
     }
 
-    private static class ContextActivityObject extends
-            UnrestrictedSessionRunner {
+    private static class ContextActivityObject extends UnrestrictedSessionRunner {
 
         private String contextPath;
 

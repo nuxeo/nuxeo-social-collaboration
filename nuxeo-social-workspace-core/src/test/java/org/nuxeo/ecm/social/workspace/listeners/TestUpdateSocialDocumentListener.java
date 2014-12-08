@@ -33,8 +33,7 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 import com.google.inject.Inject;
 
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
-public class TestUpdateSocialDocumentListener extends
-        AbstractSocialWorkspaceTest {
+public class TestUpdateSocialDocumentListener extends AbstractSocialWorkspaceTest {
 
     @Inject
     protected EventService eventService;
@@ -48,18 +47,14 @@ public class TestUpdateSocialDocumentListener extends
         socialWorkspace = createSocialWorkspace("Socialworkspace for test");
         socialWorkspaceDoc = socialWorkspace.getDocument();
 
-        publicSection = session.getDocument(new PathRef(
-                socialWorkspace.getPublicSectionPath()));
-        privateSection = session.getDocument(new PathRef(
-                socialWorkspace.getPrivateSectionPath()));
+        publicSection = session.getDocument(new PathRef(socialWorkspace.getPublicSectionPath()));
+        privateSection = session.getDocument(new PathRef(socialWorkspace.getPrivateSectionPath()));
     }
 
     @Test
-    public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateNews()
-            throws Exception {
+    public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateNews() throws Exception {
 
-        DocumentModel newsItem = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "A private News",
+        DocumentModel newsItem = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "A private News",
                 NEWS_ITEM_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(newsItem);
         DocumentModel initialExposedDocument = socialDocument.getRestrictedDocument();
@@ -88,10 +83,8 @@ public class TestUpdateSocialDocumentListener extends
     }
 
     @Test
-    public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle()
-            throws Exception {
-        DocumentModel article = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "A private Article",
+    public void proxyShouldBeUpdatedWhenDocumentIsModifiedForPrivateArticle() throws Exception {
+        DocumentModel article = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "A private Article",
                 SocialConstants.ARTICLE_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(article);
         DocumentModel initialExposedDocument = socialDocument.getRestrictedDocument();
@@ -123,8 +116,7 @@ public class TestUpdateSocialDocumentListener extends
 
     }
 
-    protected DocumentModel updateTitle(DocumentModel doc, String value)
-            throws Exception {
+    protected DocumentModel updateTitle(DocumentModel doc, String value) throws Exception {
         doc.getContextData().clearScope(ScopeType.DEFAULT);
         doc.setPropertyValue("dc:title", value);
         doc = session.saveDocument(doc);

@@ -86,9 +86,7 @@ public class MiniMessageActions implements Serializable {
     public void deleteMiniMessage(MiniMessage miniMessage) {
         MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
         miniMessageService.removeMiniMessage(miniMessage);
-        facesMessages.add(
-                StatusMessage.Severity.INFO,
-                resourcesAccessor.getMessages().get("info.mini.message.deleted"));
+        facesMessages.add(StatusMessage.Severity.INFO, resourcesAccessor.getMessages().get("info.mini.message.deleted"));
     }
 
     @Observer(MINI_MESSAGE_CREATED_EVENT)

@@ -125,8 +125,7 @@ public class SocialProviderOperation {
         }
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
-        props.put(CoreQueryDocumentPageProvider.CORE_SESSION_PROPERTY,
-                (Serializable) session);
+        props.put(CoreQueryDocumentPageProvider.CORE_SESSION_PROPERTY, (Serializable) session);
 
         Long targetPageSize = null;
         if (pageSize != null) {
@@ -137,15 +136,14 @@ public class SocialProviderOperation {
             return EMPTY_LIST;
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
-                session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(session, new PathRef(
+                contextPath));
 
         String finalPath = "/";
         if (socialWorkspace != null) {
             finalPath = socialWorkspace.getDocument().getPathAsString();
 
-            if (onlyPublicDocuments != null
-                    && Boolean.parseBoolean(onlyPublicDocuments)) {
+            if (onlyPublicDocuments != null && Boolean.parseBoolean(onlyPublicDocuments)) {
                 finalPath = socialWorkspace.getPublicSectionPath();
             }
 
@@ -163,21 +161,16 @@ public class SocialProviderOperation {
         if (query != null) {
             CoreQueryPageProviderDescriptor desc = new CoreQueryPageProviderDescriptor();
             desc.setPattern(query);
-            return new PaginableDocumentModelListImpl(
-                    (PageProvider<DocumentModel>) pps.getPageProvider("", desc,
-                            null, sortInfos, targetPageSize, new Long(page),
-                            props, parameters), documentLinkBuilder);
+            return new PaginableDocumentModelListImpl((PageProvider<DocumentModel>) pps.getPageProvider("", desc, null,
+                    sortInfos, targetPageSize, new Long(page), props, parameters), documentLinkBuilder);
         } else {
-            Object[] params = new Object[parameters != null ? parameters.length + 1
-                    : 1];
+            Object[] params = new Object[parameters != null ? parameters.length + 1 : 1];
             if (parameters != null) {
                 System.arraycopy(parameters, 0, params, 0, parameters.length);
             }
             params[params.length - 1] = finalPath;
-            return new PaginableDocumentModelListImpl(
-                    (PageProvider<DocumentModel>) pps.getPageProvider(
-                            providerName, sortInfos, targetPageSize, new Long(
-                                    page), props, params), documentLinkBuilder);
+            return new PaginableDocumentModelListImpl((PageProvider<DocumentModel>) pps.getPageProvider(providerName,
+                    sortInfos, targetPageSize, new Long(page), props, params), documentLinkBuilder);
         }
     }
 
@@ -189,8 +182,7 @@ public class SocialProviderOperation {
                 SortInfo sortInfo;
                 if (sortInfoDesc.contains(sortParameterSeparator)) {
                     String[] parts = sortInfoDesc.split(sortParameterSeparator);
-                    sortInfo = new SortInfo(parts[0],
-                            Boolean.parseBoolean(parts[1]));
+                    sortInfo = new SortInfo(parts[0], Boolean.parseBoolean(parts[1]));
                 } else {
                     sortInfo = new SortInfo(sortInfoDesc, true);
                 }

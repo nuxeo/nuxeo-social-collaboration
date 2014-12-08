@@ -51,8 +51,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-public class SocialWorkspaceActivityStreamPageProvider extends
-        AbstractActivityPageProvider<ActivityMessage> {
+public class SocialWorkspaceActivityStreamPageProvider extends AbstractActivityPageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -79,16 +78,13 @@ public class SocialWorkspaceActivityStreamPageProvider extends
             ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
             Map<String, Serializable> parameters = new HashMap<String, Serializable>();
             parameters.put(REPOSITORY_NAME_PARAMETER, getRepositoryName());
-            parameters.put(SOCIAL_WORKSPACE_ID_PARAMETER,
-                    getSocialWorkspaceId());
+            parameters.put(SOCIAL_WORKSPACE_ID_PARAMETER, getSocialWorkspaceId());
 
-            ActivitiesList activities = activityStreamService.query(
-                    SocialWorkspaceActivityStreamFilter.ID, parameters,
+            ActivitiesList activities = activityStreamService.query(SocialWorkspaceActivityStreamFilter.ID, parameters,
                     getCurrentPageOffset(), pageSize);
             nextOffset = offset + activities.size();
             activities = activities.filterActivities(getCoreSession());
-            pageActivityMessages.addAll(activities.toActivityMessages(
-                    getLocale(), getActivityLinkBuilderName()));
+            pageActivityMessages.addAll(activities.toActivityMessages(getLocale(), getActivityLinkBuilderName()));
 
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);
         }
@@ -99,8 +95,7 @@ public class SocialWorkspaceActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         String socialWorkspaceId = (String) props.get(SOCIAL_WORKSPACE_ID_PROPERTY);
         if (socialWorkspaceId == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + SOCIAL_WORKSPACE_ID_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + SOCIAL_WORKSPACE_ID_PROPERTY + " property.");
         }
         return socialWorkspaceId;
     }
@@ -109,8 +104,7 @@ public class SocialWorkspaceActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         String repositoryName = (String) props.get(REPOSITORY_NAME_PROPERTY);
         if (repositoryName == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + REPOSITORY_NAME_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + REPOSITORY_NAME_PROPERTY + " property.");
         }
         return repositoryName;
     }
@@ -119,8 +113,7 @@ public class SocialWorkspaceActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         Locale locale = (Locale) props.get(LOCALE_PROPERTY);
         if (locale == null) {
-            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY
-                    + " property.");
+            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY + " property.");
         }
         return locale;
     }
@@ -129,8 +122,7 @@ public class SocialWorkspaceActivityStreamPageProvider extends
         Map<String, Serializable> props = getProperties();
         CoreSession session = (CoreSession) props.get(CORE_SESSION_PROPERTY);
         if (session == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + CORE_SESSION_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + CORE_SESSION_PROPERTY + " property.");
         }
         return session;
     }

@@ -55,7 +55,6 @@ import org.nuxeo.ecm.webapp.helpers.EventManager;
 
 /**
  * @author Benjamin JALON <bjalon@nuxeo.com>
- * 
  */
 @Name("collaborationActions")
 @Scope(CONVERSATION)
@@ -83,7 +82,7 @@ public class CollaborationActions implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String COLLABORATION_VIEW_ID = "collaboration";
-    
+
     public static final String DASHBOARD_VIEW_ID = "dashboard";
 
     public static final String MAIN_TABS_DOCUMENTS = "MAIN_TABS:documents";
@@ -105,7 +104,7 @@ public class CollaborationActions implements Serializable {
 
     @In(create = true)
     protected transient WebActions webActions;
-    
+
     @In(create = true)
     protected transient RestHelper restHelper;
 
@@ -116,8 +115,8 @@ public class CollaborationActions implements Serializable {
     }
 
     /**
-     * Navigate to the Dashboard of the Social Workspace if the document belong
-     * to one of it, else navigate to the default view of the current document.
+     * Navigate to the Dashboard of the Social Workspace if the document belong to one of it, else navigate to the
+     * default view of the current document.
      */
     public String backToDashboard() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
@@ -132,8 +131,7 @@ public class CollaborationActions implements Serializable {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));
             webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
-            return navigationContext.navigateToDocument(dashboardSpacesRoot,
-                    COLLABORATION_VIEW_ID);
+            return navigationContext.navigateToDocument(dashboardSpacesRoot, COLLABORATION_VIEW_ID);
         } else {
             return navigationContext.navigateToDocument(currentDocument);
         }
@@ -170,12 +168,10 @@ public class CollaborationActions implements Serializable {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));
             webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
-            return navigationContext.navigateToDocument(dashboardSpacesRoot,
-                    COLLABORATION_VIEW_ID);
+            return navigationContext.navigateToDocument(dashboardSpacesRoot, COLLABORATION_VIEW_ID);
         } else if (isSocialDocument(currentDocument)) {
             webActions.setCurrentTabIds(SocialWorkspaceActions.MAIN_TABS_COLLABORATION);
-            return navigationContext.navigateToDocument(currentDocument,
-                    COLLABORATION_VIEW_ID);
+            return navigationContext.navigateToDocument(currentDocument, COLLABORATION_VIEW_ID);
         } else {
             return navigationContext.navigateToDocument(currentDocument);
         }
@@ -185,16 +181,14 @@ public class CollaborationActions implements Serializable {
         return navigateToListing(ARTICLES_VIEW);
     }
 
-    protected String navigateToListing(String listingView)
-            throws ClientException {
+    protected String navigateToListing(String listingView) throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
 
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(currentDocument);
         if (socialWorkspace != null) {
             DocumentModel dashboardSpacesRoot = documentManager.getDocument(new PathRef(
                     socialWorkspace.getDashboardSpacesRootPath()));
-            return navigationContext.navigateToDocument(dashboardSpacesRoot,
-                    listingView);
+            return navigationContext.navigateToDocument(dashboardSpacesRoot, listingView);
         } else {
             return navigationContext.navigateToDocument(currentDocument);
         }
@@ -238,8 +232,7 @@ public class CollaborationActions implements Serializable {
         return createNewDocument(type);
     }
 
-    public void deleteSocialDocument(DocumentModel document)
-            throws ClientException {
+    public void deleteSocialDocument(DocumentModel document) throws ClientException {
         document.followTransition(DELETE_TRANSITION);
         documentManager.saveDocument(document);
         DocumentModel parentDoc = documentManager.getDocument(document.getParentRef());
@@ -255,11 +248,9 @@ public class CollaborationActions implements Serializable {
         return editSocialDocument(currentDocument);
     }
 
-    public String editSocialDocument(DocumentModel document)
-            throws ClientException {
+    public String editSocialDocument(DocumentModel document) throws ClientException {
         if (isSocialDocument(document)) {
-            return navigationContext.navigateToDocument(document,
-                    EDIT_SOCIAL_DOCUMENT_VIEW);
+            return navigationContext.navigateToDocument(document, EDIT_SOCIAL_DOCUMENT_VIEW);
         } else {
             DocumentModel currentDocument = navigationContext.getCurrentDocument();
             return navigationContext.navigateToDocument(currentDocument);
@@ -281,21 +272,18 @@ public class CollaborationActions implements Serializable {
     public String saveOncreate() throws ClientException {
         documentActions.saveDocument();
         DocumentModel currentDoc = navigationContext.getCurrentDocument();
-        return navigationContext.navigateToDocument(currentDoc,
-                AFTER_SOCIAL_COLLABORATION_CREATION_VIEW);
+        return navigationContext.navigateToDocument(currentDoc, AFTER_SOCIAL_COLLABORATION_CREATION_VIEW);
     }
 
     public String updateCurrentDocument() throws ClientException {
         documentActions.updateCurrentDocument();
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
-        return navigationContext.navigateToDocument(currentDocument,
-                AFTER_SOCIAL_COLLABORATION_EDITION_VIEW);
+        return navigationContext.navigateToDocument(currentDocument, AFTER_SOCIAL_COLLABORATION_EDITION_VIEW);
     }
 
     public String displayCreateSocialWorkspaceForm() throws ClientException {
         previous = navigationContext.getCurrentDocument();
-        if (previous != null
-                && DASHBOARD_SPACES_CONTAINER_TYPE.equals(previous.getType())) {
+        if (previous != null && DASHBOARD_SPACES_CONTAINER_TYPE.equals(previous.getType())) {
             if (documentManager.hasPermission(previous.getParentRef(), READ)) {
                 previous = documentManager.getDocument(previous.getParentRef());
             }
@@ -320,8 +308,7 @@ public class CollaborationActions implements Serializable {
         try {
             DocumentModel parent = socialWorkspaceService.getSocialWorkspaceContainer(documentManager);
             if (parent != null) {
-                return (documentManager.hasPermission(parent.getRef(),
-                        ADD_CHILDREN));
+                return (documentManager.hasPermission(parent.getRef(), ADD_CHILDREN));
             }
         } catch (Exception e) {
             log.debug(e, e);

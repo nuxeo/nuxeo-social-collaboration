@@ -56,29 +56,23 @@ public class SocialWorkspaceHelper {
         // Helper class
     }
 
-    public static String getSocialWorkspaceAdministratorsGroupName(
-            String activityObject) {
+    public static String getSocialWorkspaceAdministratorsGroupName(String activityObject) {
         return activityObject + SEPARATOR + ADMINISTRATORS_SUFFIX;
     }
 
-    public static String getSocialWorkspaceAdministratorsGroupName(
-            DocumentModel doc) {
-        return ActivityHelper.createDocumentActivityObject(doc) + SEPARATOR
-                + ADMINISTRATORS_SUFFIX;
+    public static String getSocialWorkspaceAdministratorsGroupName(DocumentModel doc) {
+        return ActivityHelper.createDocumentActivityObject(doc) + SEPARATOR + ADMINISTRATORS_SUFFIX;
     }
 
-    public static String getSocialWorkspaceMembersGroupName(
-            String activityObject) {
+    public static String getSocialWorkspaceMembersGroupName(String activityObject) {
         return activityObject + SEPARATOR + MEMBERS_SUFFIX;
     }
 
     public static String getSocialWorkspaceMembersGroupName(DocumentModel doc) {
-        return ActivityHelper.createDocumentActivityObject(doc) + SEPARATOR
-                + MEMBERS_SUFFIX;
+        return ActivityHelper.createDocumentActivityObject(doc) + SEPARATOR + MEMBERS_SUFFIX;
     }
 
-    public static String getSocialWorkspaceAdministratorsGroupLabel(
-            String docTitle) {
+    public static String getSocialWorkspaceAdministratorsGroupLabel(String docTitle) {
         return ADMINISTRATORS_LABEL_PREFIX + docTitle;
     }
 
@@ -91,21 +85,18 @@ public class SocialWorkspaceHelper {
                 && (groupName.endsWith(getSocialWorkspaceAdministratorsGroupName("")) || groupName.endsWith(getSocialWorkspaceMembersGroupName("")));
     }
 
-    public static RelationshipKind buildRelationKindFromGroupName(
-            String groupName) {
+    public static RelationshipKind buildRelationKindFromGroupName(String groupName) {
         String name = StringUtils.split(groupName, SEPARATOR)[1];
         if (MEMBERS_SUFFIX.equals(name)) {
             return buildRelationMemberKind();
         } else if (ADMINISTRATORS_SUFFIX.equals(name)) {
             return buildRelationAdministratorKind();
         }
-        log.warn("Trying to instantiate RelationshipKind from an unknown group: "
-                + groupName);
+        log.warn("Trying to instantiate RelationshipKind from an unknown group: " + groupName);
         return null;
     }
 
-    public static String getRelationDocActivityObjectFromGroupName(
-            String groupName) {
+    public static String getRelationDocActivityObjectFromGroupName(String groupName) {
         return StringUtils.split(groupName, SEPARATOR)[0];
     }
 
@@ -122,8 +113,7 @@ public class SocialWorkspaceHelper {
     }
 
     public static boolean isSocialWorkspaceContainer(DocumentModel doc) {
-        return doc != null
-                && doc.getType().equals(SOCIAL_WORKSPACE_CONTAINER_TYPE);
+        return doc != null && doc.getType().equals(SOCIAL_WORKSPACE_CONTAINER_TYPE);
     }
 
     public static boolean isSocialWorkspace(DocumentModel doc) {
@@ -131,8 +121,7 @@ public class SocialWorkspaceHelper {
     }
 
     public static boolean isSocialDocument(DocumentModel doc) {
-        return doc != null && !doc.isProxy() && !doc.isVersion()
-                && doc.hasFacet(SOCIAL_DOCUMENT_FACET);
+        return doc != null && !doc.isProxy() && !doc.isVersion() && doc.hasFacet(SOCIAL_DOCUMENT_FACET);
     }
 
     public static SocialWorkspace toSocialWorkspace(DocumentModel doc) {
@@ -145,31 +134,25 @@ public class SocialWorkspaceHelper {
 
     public static String getPrivateSectionPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
-            throw new IllegalArgumentException(
-                    "Given social workspace is null, can't return the private section");
+            throw new IllegalArgumentException("Given social workspace is null, can't return the private section");
         }
-        return socialWorkspace.getPathAsString() + "/"
-                + PRIVATE_SECTION_RELATIVE_PATH;
+        return socialWorkspace.getPathAsString() + "/" + PRIVATE_SECTION_RELATIVE_PATH;
     }
 
     public static String getPublicSectionPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
-            throw new IllegalArgumentException(
-                    "Given social workspace is null, can't return the private section");
+            throw new IllegalArgumentException("Given social workspace is null, can't return the private section");
         }
 
-        return socialWorkspace.getPathAsString() + "/"
-                + PUBLIC_SECTION_RELATIVE_PATH;
+        return socialWorkspace.getPathAsString() + "/" + PUBLIC_SECTION_RELATIVE_PATH;
     }
 
     public static String getNewsItemsRootPath(DocumentModel socialWorkspace) {
         if (socialWorkspace == null) {
-            throw new IllegalArgumentException(
-                    "Given social workspace is null, can't return the private section");
+            throw new IllegalArgumentException("Given social workspace is null, can't return the private section");
         }
 
-        return socialWorkspace.getPathAsString() + "/"
-                + NEWS_ROOT_RELATIVE_PATH;
+        return socialWorkspace.getPathAsString() + "/" + NEWS_ROOT_RELATIVE_PATH;
     }
 
 }

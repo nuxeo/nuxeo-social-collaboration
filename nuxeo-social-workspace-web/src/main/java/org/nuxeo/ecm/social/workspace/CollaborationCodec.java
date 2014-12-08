@@ -47,8 +47,8 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 /**
  * Codec for Collaboration, handle id and path URLs.
  * <p>
- * When using id URLs, check if the document can be seen in the Collaboration
- * view, if not, display the default view of the document.
+ * When using id URLs, check if the document can be seen in the Collaboration view, if not, display the default view of
+ * the document.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.6
@@ -123,8 +123,7 @@ public class CollaborationCodec extends AbstractDocumentViewCodec {
         return docView;
     }
 
-    protected DocumentView computeDocumentView(CoreSession session,
-            DocumentView docView) throws ClientException {
+    protected DocumentView computeDocumentView(CoreSession session, DocumentView docView) throws ClientException {
         DocumentModel doc = session.getDocument(docView.getDocumentLocation().getDocRef());
         // do nothing for the 'public' dashboard (sw/social document)
         if (DASHBOARD_SPACES_CONTAINER_TYPE.equals(doc.getType())) {
@@ -132,15 +131,13 @@ public class CollaborationCodec extends AbstractDocumentViewCodec {
         }
 
         if (doc.hasFacet(SOCIAL_WORKSPACE_FACET)) {
-            docView.setDocumentLocation(new DocumentLocationImpl(
-                    session.getChild(doc.getRef(), "social")));
+            docView.setDocumentLocation(new DocumentLocationImpl(session.getChild(doc.getRef(), "social")));
             docView.setViewId("dashboard");
         } else {
             TypeManager typeService = Framework.getLocalService(TypeManager.class);
             Type type = typeService.getType(doc.getType());
             if (doc.hasFacet(FacetNames.FOLDERISH)
-                    || (!typeService.getAllowedSubTypes(SOCIAL_WORKSPACE_TYPE).contains(
-                            type) && !typeService.getAllowedSubTypes(
+                    || (!typeService.getAllowedSubTypes(SOCIAL_WORKSPACE_TYPE).contains(type) && !typeService.getAllowedSubTypes(
                             NEWS_ITEM_ROOT_TYPE).contains(type))) {
                 docView.setViewId(type.getDefaultView());
                 docView.addParameter("tabIds", "MAIN_TAB:documents");

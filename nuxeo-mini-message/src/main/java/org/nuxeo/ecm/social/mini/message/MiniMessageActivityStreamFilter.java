@@ -39,8 +39,7 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Activity Stream filter handling mini message activities.
  * <p>
- * The different queries this filter can handle are defined in the
- * {@link QueryType} enum.
+ * The different queries this filter can handle are defined in the {@link QueryType} enum.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
@@ -76,39 +75,33 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
     }
 
     @Override
-    public void handleNewActivity(ActivityStreamService activityStreamService,
-            Activity activity) {
+    public void handleNewActivity(ActivityStreamService activityStreamService, Activity activity) {
         // nothing to do
     }
 
     @Override
     @Deprecated
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
+    public void handleRemovedActivities(ActivityStreamService activityStreamService,
             Collection<Serializable> activityIds) {
         // nothing to do
     }
 
     @Override
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
-            ActivitiesList activities) {
+    public void handleRemovedActivities(ActivityStreamService activityStreamService, ActivitiesList activities) {
     }
 
     @Override
-    public void handleRemovedActivityReply(
-            ActivityStreamService activityStreamService, Activity activity,
+    public void handleRemovedActivityReply(ActivityStreamService activityStreamService, Activity activity,
             ActivityReply activityReply) {
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, long offset, long limit) {
+    public ActivitiesList query(ActivityStreamService activityStreamService, Map<String, Serializable> parameters,
+            long offset, long limit) {
         QueryType queryType = (QueryType) parameters.get(QUERY_TYPE_PARAMETER);
         if (queryType == null) {
-            throw new IllegalArgumentException(QUERY_TYPE_PARAMETER
-                    + " is required.");
+            throw new IllegalArgumentException(QUERY_TYPE_PARAMETER + " is required.");
         }
         String actor = (String) parameters.get(ACTOR_PARAMETER);
         String context = (String) parameters.get(CONTEXT_PARAMETER);
@@ -118,14 +111,12 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
         switch (queryType) {
         case MINI_MESSAGES_FOR_ACTOR:
             if (actor == null) {
-                throw new IllegalArgumentException(ACTOR_PARAMETER
-                        + " is required");
+                throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
             }
 
             RelationshipKind relationshipKind = (RelationshipKind) parameters.get(RELATIONSHIP_KIND_PARAMETER);
             RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
-            List<String> actors = relationshipService.getTargetsOfKind(actor,
-                    relationshipKind);
+            List<String> actors = relationshipService.getTargetsOfKind(actor, relationshipKind);
             actors.add(actor);
 
             StringBuilder sb = new StringBuilder(
@@ -146,8 +137,7 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             break;
         case MINI_MESSAGES_FROM_ACTOR:
             if (actor == null) {
-                throw new IllegalArgumentException(ACTOR_PARAMETER
-                        + " is required");
+                throw new IllegalArgumentException(ACTOR_PARAMETER + " is required");
             }
             query = em.createQuery("select activity from Activity activity "
                     + "where activity.actor = :actor and activity.verb = :verb "
@@ -160,8 +150,7 @@ public class MiniMessageActivityStreamFilter implements ActivityStreamFilter {
             query = em.createQuery("select activity from Activity activity where activity.id = :id");
             Serializable miniMessageId = parameters.get(MINI_MESSAGE_ID_PARAMETER);
             if (miniMessageId == null) {
-                throw new IllegalArgumentException(MINI_MESSAGE_ID_PARAMETER
-                        + " is required");
+                throw new IllegalArgumentException(MINI_MESSAGE_ID_PARAMETER + " is required");
             }
             query.setParameter("id", miniMessageId);
             break;

@@ -147,9 +147,7 @@ public class ManageSocialWorkspaceActions implements Serializable {
             }
         }
 
-        facesMessages.add(
-                StatusMessage.Severity.INFO,
-                resourcesAccessor.getMessages().get(GROUPS_SAVE_COMPLETED_LABEL));
+        facesMessages.add(StatusMessage.Severity.INFO, resourcesAccessor.getMessages().get(GROUPS_SAVE_COMPLETED_LABEL));
     }
 
     public void setAdministrators(List<String> administrators) {
@@ -160,14 +158,12 @@ public class ManageSocialWorkspaceActions implements Serializable {
         this.members = members;
     }
 
-    public List<String> getFilteredUserVirtualGroups(String userId)
-            throws Exception {
+    public List<String> getFilteredUserVirtualGroups(String userId) throws Exception {
         List<String> virtualGroups = userManagementActions.getUserVirtualGroups(userId);
         if (virtualGroups != null) {
             List<String> filteredVirtualGroups = new ArrayList<String>();
             for (String virtualGroup : virtualGroups) {
-                if (!virtualGroup.endsWith(MEMBERS_GROUP_SUFFIX)
-                        && !virtualGroup.endsWith(ADMINISTRATORS_GROUP_SUFFIX)) {
+                if (!virtualGroup.endsWith(MEMBERS_GROUP_SUFFIX) && !virtualGroup.endsWith(ADMINISTRATORS_GROUP_SUFFIX)) {
                     filteredVirtualGroups.add(virtualGroup);
                 }
             }

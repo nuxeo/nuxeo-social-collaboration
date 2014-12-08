@@ -33,8 +33,7 @@ import org.nuxeo.ecm.social.relationship.RelationshipKind;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.6
  */
-public abstract class AbstractSocialWorkspaceMiniMessagePageProvider<T> extends
-        AbstractActivityPageProvider<T> {
+public abstract class AbstractSocialWorkspaceMiniMessagePageProvider<T> extends AbstractActivityPageProvider<T> {
 
     public static final String LOCALE_PROPERTY = "locale";
 
@@ -50,8 +49,7 @@ public abstract class AbstractSocialWorkspaceMiniMessagePageProvider<T> extends
         Map<String, Serializable> props = getProperties();
         Locale locale = (Locale) props.get(LOCALE_PROPERTY);
         if (locale == null) {
-            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY
-                    + " property.");
+            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY + " property.");
         }
         return locale;
     }
@@ -60,8 +58,7 @@ public abstract class AbstractSocialWorkspaceMiniMessagePageProvider<T> extends
         Map<String, Serializable> props = getProperties();
         String socialWorkspaceId = (String) props.get(SOCIAL_WORKSPACE_ID_PROPERTY);
         if (socialWorkspaceId == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + SOCIAL_WORKSPACE_ID_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + SOCIAL_WORKSPACE_ID_PROPERTY + " property.");
         }
         return socialWorkspaceId;
     }
@@ -70,8 +67,7 @@ public abstract class AbstractSocialWorkspaceMiniMessagePageProvider<T> extends
         Map<String, Serializable> props = getProperties();
         String repositoryName = (String) props.get(REPOSITORY_NAME_PROPERTY);
         if (repositoryName == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + REPOSITORY_NAME_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + REPOSITORY_NAME_PROPERTY + " property.");
         }
         return repositoryName;
     }
@@ -80,8 +76,7 @@ public abstract class AbstractSocialWorkspaceMiniMessagePageProvider<T> extends
         Map<String, Serializable> props = getProperties();
         String relationshipKind = (String) props.get(RELATIONSHIP_KIND_PROPERTY);
         if (relationshipKind == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + RELATIONSHIP_KIND_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + RELATIONSHIP_KIND_PROPERTY + " property.");
         }
         return RelationshipKind.fromString(relationshipKind);
     }

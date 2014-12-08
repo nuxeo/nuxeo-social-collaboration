@@ -93,8 +93,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
 /**
  * Default implementation of {@see SocialWorkspaceService} service.
  */
-public class SocialWorkspaceServiceImpl extends DefaultComponent implements
-        SocialWorkspaceService {
+public class SocialWorkspaceServiceImpl extends DefaultComponent implements SocialWorkspaceService {
 
     private static final Log log = LogFactory.getLog(SocialWorkspaceServiceImpl.class);
 
@@ -119,25 +118,20 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     private ActivityStreamService activityStreamService;
 
     @Override
-    public List<SocialWorkspace> getDetachedPublicSocialWorkspaces(
-            CoreSession session) {
+    public List<SocialWorkspace> getDetachedPublicSocialWorkspaces(CoreSession session) {
         return searchDetachedPublicSocialWorkspaces(session, null);
     }
 
     @Override
-    public List<SocialWorkspace> searchDetachedPublicSocialWorkspaces(
-            CoreSession session, final String pattern) {
+    public List<SocialWorkspace> searchDetachedPublicSocialWorkspaces(CoreSession session, final String pattern) {
 
         final List<SocialWorkspace> socialWorkspaces = new ArrayList<SocialWorkspace>();
 
-        UnrestrictedSessionRunner runner = new UnrestrictedSessionRunner(
-                session) {
+        UnrestrictedSessionRunner runner = new UnrestrictedSessionRunner(session) {
 
             private static final String ALL_PUBLIC_SOCIAL_WORKSPACE_QUERY = "SELECT * FROM Document "
-                    + "WHERE ecm:mixinType != 'HiddenInNavigation' "
-                    + "AND ecm:mixinType = '%s' "
-                    + "AND ecm:currentLifeCycleState !='deleted' "
-                    + "AND socialw:isPublic = 1 ";
+                    + "WHERE ecm:mixinType != 'HiddenInNavigation' " + "AND ecm:mixinType = '%s' "
+                    + "AND ecm:currentLifeCycleState !='deleted' " + "AND socialw:isPublic = 1 ";
 
             private static final String FULL_TEXT_WHERE_CLAUSE = "AND ecm:fulltext = '%s' ";
 
@@ -145,11 +139,9 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
             @Override
             public void run() throws ClientException {
-                String query = String.format(ALL_PUBLIC_SOCIAL_WORKSPACE_QUERY,
-                        SOCIAL_WORKSPACE_FACET);
+                String query = String.format(ALL_PUBLIC_SOCIAL_WORKSPACE_QUERY, SOCIAL_WORKSPACE_FACET);
                 if (!StringUtils.isBlank(pattern)) {
-                    query = String.format(query + FULL_TEXT_WHERE_CLAUSE,
-                            pattern);
+                    query = String.format(query + FULL_TEXT_WHERE_CLAUSE, pattern);
                 }
                 query += ORDER_BY;
 
@@ -176,11 +168,9 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public SocialWorkspace getDetachedSocialWorkspace(CoreSession session,
-            DocumentRef docRef) {
+    public SocialWorkspace getDetachedSocialWorkspace(CoreSession session, DocumentRef docRef) {
         try {
-            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session,
-                    docRef);
+            SocialWorkspaceFinder finder = new SocialWorkspaceFinder(session, docRef);
             finder.runUnrestricted();
             if (finder.socialWorkspace != null) {
                 return toSocialWorkspace(finder.socialWorkspace);
@@ -215,8 +205,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public void registerContribution(Object contribution,
-            String extensionPoint, ComponentInstance contributor) {
+    public void registerContribution(Object contribution, String extensionPoint, ComponentInstance contributor) {
         if (CONFIGURATION_EP.equals(extensionPoint)) {
             ConfigurationDescriptor config = (ConfigurationDescriptor) contribution;
             if (config.getValidationTimeInDays() > 0) {
@@ -235,16 +224,14 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     @Override
     public DocumentModel getSocialWorkspaceContainer(CoreSession session) {
         try {
-            return session.getDocument(new PathRef(
-                    socialWorkspaceContainer.getPath()));
+            return session.getDocument(new PathRef(socialWorkspaceContainer.getPath()));
         } catch (ClientException e) {
             throw new ClientRuntimeException(e);
         }
     }
 
     @Override
-    public void handleSocialWorkspaceCreation(
-            final SocialWorkspace socialWorkspace, final Principal principal) {
+    public void handleSocialWorkspaceCreation(final SocialWorkspace socialWorkspace, final Principal principal) {
         createBaseRelationshipsWithSocialWorkspace(socialWorkspace, principal);
         CoreSession session = socialWorkspace.getDocument().getCoreSession();
         try {
@@ -265,13 +252,11 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
     }
 
-    private void createBaseRelationshipsWithSocialWorkspace(
-            SocialWorkspace socialWorkspace, Principal principal) {
+    private void createBaseRelationshipsWithSocialWorkspace(SocialWorkspace socialWorkspace, Principal principal) {
         addSocialWorkspaceAdministrator(socialWorkspace, principal);
         // This group is just added here to prevent user from re-login before
         // matching this virtual group.
-        ((NuxeoPrincipal) principal).getAllGroups().add(
-                socialWorkspace.getAdministratorsGroupName());
+        ((NuxeoPrincipal) principal).getAllGroups().add(socialWorkspace.getAdministratorsGroupName());
     }
 
     @Override
@@ -299,8 +284,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             ACL acl = acp.getOrCreateACL(SOCIAL_WORKSPACE_ACL_NAME);
             addSocialWorkspaceACL(acl, socialWorkspace);
             doc.setACP(acp, true);
-            doc.putContextData(ScopeType.REQUEST,
-                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
             doc = session.saveDocument(doc);
             socialWorkspace.setDocument(doc);
         } catch (ClientException e) {
@@ -310,10 +294,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
 
     private void addSocialWorkspaceACL(ACL acl, SocialWorkspace socialWorkspace) {
         addEverythingForAdministratorsACE(acl);
-        acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(),
-                SecurityConstants.EVERYTHING, true));
-        acl.add(new ACE(socialWorkspace.getMembersGroupName(),
-                SecurityConstants.READ_WRITE, true));
+        acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(), SecurityConstants.EVERYTHING, true));
+        acl.add(new ACE(socialWorkspace.getMembersGroupName(), SecurityConstants.READ_WRITE, true));
         acl.add(new ACE(EVERYONE, SecurityConstants.EVERYTHING, false));
     }
 
@@ -323,18 +305,15 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
     }
 
-    private static void initializeNewsItemsRootRights(
-            SocialWorkspace socialWorkspace) {
+    private static void initializeNewsItemsRootRights(SocialWorkspace socialWorkspace) {
         try {
             CoreSession session = socialWorkspace.getDocument().getCoreSession();
-            PathRef newsItemsRootPath = new PathRef(
-                    socialWorkspace.getNewsItemsRootPath());
+            PathRef newsItemsRootPath = new PathRef(socialWorkspace.getNewsItemsRootPath());
             DocumentModel newsItemsRoot = session.getDocument(newsItemsRootPath);
 
             ACP acp = newsItemsRoot.getACP();
             ACL acl = acp.getOrCreateACL(NEWS_ITEMS_ROOT_ACL_NAME);
-            acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(),
-                    EVERYTHING, true));
+            acl.add(new ACE(socialWorkspace.getAdministratorsGroupName(), EVERYTHING, true));
             acl.add(new ACE(socialWorkspace.getMembersGroupName(), WRITE, false));
             newsItemsRoot.setACP(acp, true);
             session.saveDocument(newsItemsRoot);
@@ -344,10 +323,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public boolean addSocialWorkspaceAdministrator(
-            SocialWorkspace socialWorkspace, Principal principal) {
-        if (addPrincipalToSocialWorkspace(
-                ActivityHelper.createUserActivityObject(principal.getName()),
+    public boolean addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace, Principal principal) {
+        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
                 buildRelationAdministratorKind())) {
             addSocialWorkspaceMember(socialWorkspace, principal);
@@ -358,14 +335,11 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
-            Principal principal) {
-        Boolean memberCreated = addSocialWorkspaceMemberWithoutNotification(
-                socialWorkspace, principal);
+    public boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace, Principal principal) {
+        Boolean memberCreated = addSocialWorkspaceMemberWithoutNotification(socialWorkspace, principal);
         if (memberCreated) {
             updatePrincipalGroups(principal);
-            fireEventMembersManagement(socialWorkspace,
-                    Arrays.asList(principal), EVENT_MEMBERS_ADDED);
+            fireEventMembersManagement(socialWorkspace, Arrays.asList(principal), EVENT_MEMBERS_ADDED);
         }
         return memberCreated;
     }
@@ -378,27 +352,21 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
     }
 
-    private boolean addSocialWorkspaceMemberWithoutNotification(
-            SocialWorkspace socialWorkspace, Principal principal) {
-        if (addPrincipalToSocialWorkspace(
-                ActivityHelper.createUserActivityObject(principal.getName()),
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
-                buildRelationMemberKind())) {
-            addNewActivity(principal, socialWorkspace,
-                    buildRelationMemberKind());
+    private boolean addSocialWorkspaceMemberWithoutNotification(SocialWorkspace socialWorkspace, Principal principal) {
+        if (addPrincipalToSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationMemberKind())) {
+            addNewActivity(principal, socialWorkspace, buildRelationMemberKind());
             return true;
         }
         return false;
     }
 
     @Override
-    public List<String> addSocialWorkspaceMembers(
-            SocialWorkspace socialWorkspace, String groupName)
+    public List<String> addSocialWorkspaceMembers(SocialWorkspace socialWorkspace, String groupName)
             throws ClientException {
         NuxeoGroup group = getUserManager().getGroup(groupName);
         if (group == null) {
-            throw new ClientException(String.format("Group (%s) not found",
-                    groupName));
+            throw new ClientException(String.format("Group (%s) not found", groupName));
         }
 
         List<String> importedUsers = new ArrayList<String>();
@@ -420,15 +388,13 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
 
         // Notify bulk import
-        fireEventMembersManagement(socialWorkspace, importedPrincipal,
-                EVENT_MEMBERS_ADDED);
+        fireEventMembersManagement(socialWorkspace, importedPrincipal, EVENT_MEMBERS_ADDED);
 
         return importedUsers;
     }
 
     @Override
-    public List<String> addSocialWorkspaceMembers(
-            SocialWorkspace socialWorkspace, List<String> emails)
+    public List<String> addSocialWorkspaceMembers(SocialWorkspace socialWorkspace, List<String> emails)
             throws ClientException {
         List<String> memberAddedList = new ArrayList<String>(emails.size());
         List<Principal> principalAdded = new ArrayList<Principal>();
@@ -439,18 +405,15 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             Set<String> pattern = new HashSet<String>();
             pattern.add(emailKey);
 
-            DocumentModelList foundUsers = userManager.searchUsers(filter,
-                    pattern);
+            DocumentModelList foundUsers = userManager.searchUsers(filter, pattern);
 
             if (foundUsers.isEmpty()) {
                 continue;
             } else if (foundUsers.size() > 1) {
-                log.info("For the email " + email
-                        + " several user were found. First one used.");
+                log.info("For the email " + email + " several user were found. First one used.");
             }
 
-            NuxeoPrincipal principal = userManager.getPrincipal(foundUsers.get(
-                    0).getId());
+            NuxeoPrincipal principal = userManager.getPrincipal(foundUsers.get(0).getId());
             if (socialWorkspace.shouldRequestSubscription(principal)) {
                 // Pass false to admin validation as only admins can bulk add
                 // users
@@ -460,75 +423,56 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             }
         }
         // Notify bulk import
-        fireEventMembersManagement(socialWorkspace, principalAdded,
-                EVENT_MEMBERS_ADDED);
+        fireEventMembersManagement(socialWorkspace, principalAdded, EVENT_MEMBERS_ADDED);
 
         return memberAddedList;
     }
 
-    private void addNewActivity(Principal principal,
-            SocialWorkspace socialWorkspace, RelationshipKind kind) {
+    private void addNewActivity(Principal principal, SocialWorkspace socialWorkspace, RelationshipKind kind) {
         ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
         // Activity without context
-        Activity activity = createActivity(principal, socialWorkspace, kind,
-                false);
+        Activity activity = createActivity(principal, socialWorkspace, kind, false);
         activityStreamService.addActivity(activity);
         // with Social Workspace as context
         activity = createActivity(principal, socialWorkspace, kind, true);
         activityStreamService.addActivity(activity);
     }
 
-    private Activity createActivity(Principal principal,
-            SocialWorkspace socialWorkspace, RelationshipKind kind,
+    private Activity createActivity(Principal principal, SocialWorkspace socialWorkspace, RelationshipKind kind,
             boolean addContext) {
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument());
-        return new ActivityBuilder().actor(
-                ActivityHelper.createUserActivityObject(principal.getName())).displayActor(
-                ActivityHelper.generateDisplayName(principal)).verb(
-                kind.toString()).object(
+        return new ActivityBuilder().actor(ActivityHelper.createUserActivityObject(principal.getName())).displayActor(
+                ActivityHelper.generateDisplayName(principal)).verb(kind.toString()).object(
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument())).displayObject(
-                socialWorkspace.getTitle()).target(
-                socialWorkspaceActivityObject).displayTarget(
-                socialWorkspace.getTitle()).context(
-                addContext ? socialWorkspaceActivityObject : null).build();
+                socialWorkspace.getTitle()).target(socialWorkspaceActivityObject).displayTarget(
+                socialWorkspace.getTitle()).context(addContext ? socialWorkspaceActivityObject : null).build();
     }
 
     @Override
-    public void removeSocialWorkspaceAdministrator(
-            SocialWorkspace socialWorkspace, Principal principal) {
-        removePrincipalFromSocialWorkspace(
-                ActivityHelper.createUserActivityObject(principal.getName()),
+    public void removeSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace, Principal principal) {
+        removePrincipalFromSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
                 ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
                 buildRelationAdministratorKind());
     }
 
     @Override
-    public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
-            Principal principal) {
-        if (removePrincipalFromSocialWorkspace(
-                ActivityHelper.createUserActivityObject(principal.getName()),
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
-                buildRelationMemberKind())) {
-            fireEventMembersManagement(socialWorkspace,
-                    Arrays.asList(principal), EVENT_MEMBERS_REMOVED);
+    public void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace, Principal principal) {
+        if (removePrincipalFromSocialWorkspace(ActivityHelper.createUserActivityObject(principal.getName()),
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), buildRelationMemberKind())) {
+            fireEventMembersManagement(socialWorkspace, Arrays.asList(principal), EVENT_MEMBERS_REMOVED);
         }
     }
 
-    private boolean addPrincipalToSocialWorkspace(String principalName,
-            String socialWorkspaceId, RelationshipKind kind) {
-        boolean added = getRelationshipService().addRelation(principalName,
-                socialWorkspaceId, kind);
-        added &= getRelationshipService().addRelation(socialWorkspaceId,
-                principalName, kind);
+    private boolean addPrincipalToSocialWorkspace(String principalName, String socialWorkspaceId, RelationshipKind kind) {
+        boolean added = getRelationshipService().addRelation(principalName, socialWorkspaceId, kind);
+        added &= getRelationshipService().addRelation(socialWorkspaceId, principalName, kind);
         return added;
     }
 
-    private boolean removePrincipalFromSocialWorkspace(String principalName,
-            String socialWorkspaceId, RelationshipKind kind) {
-        boolean removed = getRelationshipService().removeRelation(
-                principalName, socialWorkspaceId, kind);
-        removed |= getRelationshipService().removeRelation(socialWorkspaceId,
-                principalName, kind);
+    private boolean removePrincipalFromSocialWorkspace(String principalName, String socialWorkspaceId,
+            RelationshipKind kind) {
+        boolean removed = getRelationshipService().removeRelation(principalName, socialWorkspaceId, kind);
+        removed |= getRelationshipService().removeRelation(socialWorkspaceId, principalName, kind);
         return removed;
     }
 
@@ -537,8 +481,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, true);
-            doc.putContextData(ScopeType.REQUEST,
-                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionReadable(session, socialWorkspace);
@@ -551,10 +494,8 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
     }
 
-    private void makePublicSectionReadable(CoreSession session,
-            SocialWorkspace socialWorkspace) throws ClientException {
-        PathRef publicSectionRef = new PathRef(
-                socialWorkspace.getPublicSectionPath());
+    private void makePublicSectionReadable(CoreSession session, SocialWorkspace socialWorkspace) throws ClientException {
+        PathRef publicSectionRef = new PathRef(socialWorkspace.getPublicSectionPath());
         DocumentModel publicSection = session.getDocument(publicSectionRef);
 
         ACP acp = publicSection.getACP();
@@ -571,10 +512,9 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         acl.add(new ACE(defaultGroup, READ, true));
     }
 
-    private void makePublicDashboardReadable(CoreSession session,
-            SocialWorkspace socialWorkspace) throws ClientException {
-        PathRef dashboardSpacesRootRef = new PathRef(
-                socialWorkspace.getDashboardSpacesRootPath());
+    private void makePublicDashboardReadable(CoreSession session, SocialWorkspace socialWorkspace)
+            throws ClientException {
+        PathRef dashboardSpacesRootRef = new PathRef(socialWorkspace.getDashboardSpacesRootPath());
         DocumentModel dashboardSpacesRoot = session.getDocument(dashboardSpacesRootRef);
         ACP acp = dashboardSpacesRoot.getACP();
         ACL acl = acp.getOrCreateACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
@@ -583,8 +523,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         dashboardSpacesRoot.setACP(acp, true);
         session.saveDocument(dashboardSpacesRoot);
 
-        PathRef privateDashboardSpaceRef = new PathRef(
-                socialWorkspace.getPrivateDashboardSpacePath());
+        PathRef privateDashboardSpaceRef = new PathRef(socialWorkspace.getPrivateDashboardSpacePath());
         DocumentModel privateDashboardSpace = session.getDocument(privateDashboardSpaceRef);
         acp = privateDashboardSpace.getACP();
         acl = acp.getOrCreateACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
@@ -598,8 +537,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         try {
             DocumentModel doc = socialWorkspace.getDocument();
             doc.setPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY, false);
-            doc.putContextData(ScopeType.REQUEST,
-                    SocialWorkspaceListener.DO_NOT_PROCESS, true);
+            doc.putContextData(ScopeType.REQUEST, SocialWorkspaceListener.DO_NOT_PROCESS, true);
 
             CoreSession session = doc.getCoreSession();
             makePublicSectionUnreadable(session, socialWorkspace);
@@ -612,10 +550,9 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         }
     }
 
-    private static void makePublicSectionUnreadable(CoreSession session,
-            SocialWorkspace socialWorkspace) throws ClientException {
-        PathRef publicSectionRef = new PathRef(
-                socialWorkspace.getPublicSectionPath());
+    private static void makePublicSectionUnreadable(CoreSession session, SocialWorkspace socialWorkspace)
+            throws ClientException {
+        PathRef publicSectionRef = new PathRef(socialWorkspace.getPublicSectionPath());
         DocumentModel publicSection = session.getDocument(publicSectionRef);
 
         ACP acp = publicSection.getACP();
@@ -624,36 +561,31 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         session.saveDocument(publicSection);
     }
 
-    private static void fireEventMembersManagement(
-            SocialWorkspace socialWorkspace, List<Principal> usernames,
+    private static void fireEventMembersManagement(SocialWorkspace socialWorkspace, List<Principal> usernames,
             String eventName) {
         if (socialWorkspace.isMembersNotificationEnabled()) {
             DocumentModel doc = socialWorkspace.getDocument();
-            EventContext ctx = new DocumentEventContext(doc.getCoreSession(),
-                    doc.getCoreSession().getPrincipal(), doc);
+            EventContext ctx = new DocumentEventContext(doc.getCoreSession(), doc.getCoreSession().getPrincipal(), doc);
             ctx.setProperty(CTX_PRINCIPALS_PROPERTY, (Serializable) usernames);
 
             try {
-                Framework.getLocalService(EventService.class).fireEvent(
-                        ctx.newEvent(eventName));
+                Framework.getLocalService(EventService.class).fireEvent(ctx.newEvent(eventName));
             } catch (ClientException e) {
                 log.warn("Unable to notify social workspace members", e);
             }
         }
     }
 
-    private static void makePublicDashboardUnreadable(CoreSession session,
-            SocialWorkspace socialWorkspace) throws ClientException {
-        PathRef dashboardSpacesRootRef = new PathRef(
-                socialWorkspace.getDashboardSpacesRootPath());
+    private static void makePublicDashboardUnreadable(CoreSession session, SocialWorkspace socialWorkspace)
+            throws ClientException {
+        PathRef dashboardSpacesRootRef = new PathRef(socialWorkspace.getDashboardSpacesRootPath());
         DocumentModel dashboardSpacesRoot = session.getDocument(dashboardSpacesRootRef);
         ACP acp = dashboardSpacesRoot.getACP();
         acp.removeACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
         dashboardSpacesRoot.setACP(acp, true);
         session.saveDocument(dashboardSpacesRoot);
 
-        PathRef privateDashboardSpaceRef = new PathRef(
-                socialWorkspace.getPrivateDashboardSpacePath());
+        PathRef privateDashboardSpaceRef = new PathRef(socialWorkspace.getPrivateDashboardSpacePath());
         DocumentModel privateDashboardSpace = session.getDocument(privateDashboardSpaceRef);
         acp = privateDashboardSpace.getACP();
         acp.removeACL(PUBLIC_SOCIAL_WORKSPACE_ACL_NAME);
@@ -662,37 +594,30 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
-            Principal principal) {
-        handleSubscriptionRequest(socialWorkspace, principal,
-                !socialWorkspace.mustApproveSubscription());
+    public void handleSubscriptionRequest(SocialWorkspace socialWorkspace, Principal principal) {
+        handleSubscriptionRequest(socialWorkspace, principal, !socialWorkspace.mustApproveSubscription());
     }
 
-    protected void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
-            Principal principal, boolean autoAccept) {
-        UserRegistrationInfo userInfo = buildUserRegistrationInfo(
-                socialWorkspace, (NuxeoPrincipal) principal);
+    protected void handleSubscriptionRequest(SocialWorkspace socialWorkspace, Principal principal, boolean autoAccept) {
+        UserRegistrationInfo userInfo = buildUserRegistrationInfo(socialWorkspace, (NuxeoPrincipal) principal);
         DocumentRegistrationInfo docInfo = buildDocumentRegistrationInfo(socialWorkspace);
         Map<String, Serializable> additionalInfo = new HashMap<String, Serializable>();
         try {
-            getRegistrationService().submitRegistrationRequest(
-                    SOCIAL_CONFIGURATION_NAME, userInfo, docInfo,
+            getRegistrationService().submitRegistrationRequest(SOCIAL_CONFIGURATION_NAME, userInfo, docInfo,
                     additionalInfo, EMAIL, autoAccept, principal.getName());
         } catch (ClientException e) {
             log.warn("Unable to submit social registration", e);
         }
     }
 
-    private DocumentRegistrationInfo buildDocumentRegistrationInfo(
-            SocialWorkspace socialWorkspace) {
+    private DocumentRegistrationInfo buildDocumentRegistrationInfo(SocialWorkspace socialWorkspace) {
         DocumentRegistrationInfo docInfo = new DocumentRegistrationInfo();
         docInfo.setDocumentId(socialWorkspace.getId());
         docInfo.setDocumentTitle(socialWorkspace.getTitle());
         return docInfo;
     }
 
-    private UserRegistrationInfo buildUserRegistrationInfo(
-            SocialWorkspace socialWorkspace, NuxeoPrincipal principal) {
+    private UserRegistrationInfo buildUserRegistrationInfo(SocialWorkspace socialWorkspace, NuxeoPrincipal principal) {
         UserRegistrationInfo userInfo = new UserRegistrationInfo();
         userInfo.setLogin(principal.getName());
         userInfo.setEmail(principal.getEmail());
@@ -703,19 +628,17 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public boolean isSubscriptionRequestPending(
-            SocialWorkspace socialWorkspace, Principal principal) {
+    public boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace, Principal principal) {
         log.warn("Deprecated call to org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl#getSubscriptionRequestStatus");
         return false;
     }
 
     @Override
-    public String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
-            Principal principal) {
+    public String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace, Principal principal) {
         DocumentModelList docs = null;
         try {
-            docs = getRegistrationService().getRegistrationsForUser(
-                    socialWorkspace.getId(), principal.getName(), SocialRegistrationConstant.SOCIAL_CONFIGURATION_NAME);
+            docs = getRegistrationService().getRegistrationsForUser(socialWorkspace.getId(), principal.getName(),
+                    SocialRegistrationConstant.SOCIAL_CONFIGURATION_NAME);
             if (docs.size() > 0) {
                 return docs.get(0).getCurrentLifeCycleState();
             }
@@ -726,23 +649,19 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
-            SubscriptionRequest subscriptionRequest) {
+    public void acceptSubscriptionRequest(SocialWorkspace socialWorkspace, SubscriptionRequest subscriptionRequest) {
         log.warn("Deprecated call to org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl#acceptSubscriptionRequest");
     }
 
     @Override
-    public void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
-            SubscriptionRequest subscriptionRequest) {
+    public void rejectSubscriptionRequest(SocialWorkspace socialWorkspace, SubscriptionRequest subscriptionRequest) {
         log.warn("Deprecated call to org.nuxeo.ecm.social.workspace.service.SocialWorkspaceServiceImpl#rejectSubscriptionRequest");
     }
 
     @Override
-    public List<String> searchUsers(SocialWorkspace socialWorkspace,
-            RelationshipKind kind, String pattern) {
+    public List<String> searchUsers(SocialWorkspace socialWorkspace, RelationshipKind kind, String pattern) {
         List<String> targets = getRelationshipService().getTargetsWithFulltext(
-                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()),
-                kind, pattern);
+                ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument()), kind, pattern);
         List<String> users = new ArrayList<String>();
         for (String target : targets) {
             users.add(ActivityHelper.getUsername(target));
@@ -752,20 +671,16 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public List<String> searchMembers(SocialWorkspace socialWorkspace,
-            String pattern) {
+    public List<String> searchMembers(SocialWorkspace socialWorkspace, String pattern) {
         // get members of the social workspace
-        List<String> list = searchUsers(socialWorkspace,
-                buildRelationMemberKind(), null);
+        List<String> list = searchUsers(socialWorkspace, buildRelationMemberKind(), null);
         return filterUsers(pattern, list);
     }
 
     @Override
-    public List<String> searchAdministrators(SocialWorkspace socialWorkspace,
-            String pattern) {
+    public List<String> searchAdministrators(SocialWorkspace socialWorkspace, String pattern) {
         // get administrators of the social workspace
-        List<String> list = searchUsers(socialWorkspace,
-                buildRelationAdministratorKind(), null);
+        List<String> list = searchUsers(socialWorkspace, buildRelationAdministratorKind(), null);
         return filterUsers(pattern, list);
     }
 
@@ -782,8 +697,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             for (DocumentModel user : users) {
                 String name;
                 try {
-                    name = (String) user.getProperty(
-                            getUserManager().getUserSchemaName(),
+                    name = (String) user.getProperty(getUserManager().getUserSchemaName(),
                             getUserManager().getUserIdField());
                     if (validNames.contains(name)) {
                         members.add(name);
@@ -808,8 +722,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
             }
         }
         if (relationshipService == null) {
-            throw new ClientRuntimeException(
-                    "RelationshipService is not registered.");
+            throw new ClientRuntimeException("RelationshipService is not registered.");
         }
         return relationshipService;
     }
@@ -818,8 +731,7 @@ public class SocialWorkspaceServiceImpl extends DefaultComponent implements
         return Framework.getLocalService(UserRegistrationService.class);
     }
 
-    private static class SocialWorkspaceFinder extends
-            UnrestrictedSessionRunner {
+    private static class SocialWorkspaceFinder extends UnrestrictedSessionRunner {
 
         private final DocumentRef docRef;
 

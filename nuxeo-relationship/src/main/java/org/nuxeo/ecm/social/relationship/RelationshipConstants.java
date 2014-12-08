@@ -45,13 +45,10 @@ public class RelationshipConstants {
 
     public static final String KIND_FIELD_LABEL = "label";
 
-    public static final String RELATIONSHIP_PROPERTY_KIND = RELATIONSHIP_SCHEMA_NAME
-            + ":" + RELATIONSHIP_FIELD_KIND;
+    public static final String RELATIONSHIP_PROPERTY_KIND = RELATIONSHIP_SCHEMA_NAME + ":" + RELATIONSHIP_FIELD_KIND;
 
-    public static final String KIND_PROPERTY_GROUP = KIND_SCHEMA_NAME + ":"
-            + KIND_FIELD_GROUP;
+    public static final String KIND_PROPERTY_GROUP = KIND_SCHEMA_NAME + ":" + KIND_FIELD_GROUP;
 
-    public static final String KIND_PROPERTY_NAME = KIND_SCHEMA_NAME + ":"
-            + KIND_FIELD_NAME;
+    public static final String KIND_PROPERTY_NAME = KIND_SCHEMA_NAME + ":" + KIND_FIELD_NAME;
 
 }

@@ -28,8 +28,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-public class SocialWorkspaceAdapter extends BaseAdapter implements
-        SocialWorkspace {
+public class SocialWorkspaceAdapter extends BaseAdapter implements SocialWorkspace {
 
     public static final String MEMBER_NOTIFICATION_DISABLED = "memberNotificationDisabled";
 
@@ -58,8 +57,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public boolean isPublic() {
-        Boolean isPublic = (Boolean) getDocProperty(doc,
-                SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY);
+        Boolean isPublic = (Boolean) getDocProperty(doc, SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY);
         return isPublic == null ? false : isPublic;
     }
 
@@ -80,35 +78,30 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public boolean mustApproveSubscription() {
-        Boolean approveSubscription = (Boolean) getDocProperty(doc,
-                FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION);
+        Boolean approveSubscription = (Boolean) getDocProperty(doc, FIELD_SOCIAL_WORKSPACE_APPROVE_SUBSCRIPTION);
         return approveSubscription == null ? false : approveSubscription;
     }
 
     @Override
     public boolean isMembersNotificationEnabled() {
-        Boolean membersNotificationDisabled = (Boolean) doc.getContextData(
-                ScopeType.REQUEST, MEMBER_NOTIFICATION_DISABLED);
-        return membersNotificationDisabled == null ? true
-                : !membersNotificationDisabled;
+        Boolean membersNotificationDisabled = (Boolean) doc.getContextData(ScopeType.REQUEST,
+                MEMBER_NOTIFICATION_DISABLED);
+        return membersNotificationDisabled == null ? true : !membersNotificationDisabled;
     }
 
     @Override
     public boolean addAdministrator(Principal principal) {
-        return getSocialWorkspaceService().addSocialWorkspaceAdministrator(
-                this, principal);
+        return getSocialWorkspaceService().addSocialWorkspaceAdministrator(this, principal);
     }
 
     @Override
     public boolean addMember(Principal principal) {
-        return getSocialWorkspaceService().addSocialWorkspaceMember(this,
-                principal);
+        return getSocialWorkspaceService().addSocialWorkspaceMember(this, principal);
     }
 
     @Override
     public void removeAdministrator(Principal principal) {
-        getSocialWorkspaceService().removeSocialWorkspaceAdministrator(this,
-                principal);
+        getSocialWorkspaceService().removeSocialWorkspaceAdministrator(this, principal);
     }
 
     @Override
@@ -148,14 +141,12 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public List<String> getMembers() {
-        return getSocialWorkspaceService().searchUsers(this,
-                buildRelationMemberKind(), null);
+        return getSocialWorkspaceService().searchUsers(this, buildRelationMemberKind(), null);
     }
 
     @Override
     public List<String> getAdministrators() {
-        return getSocialWorkspaceService().searchUsers(this,
-                buildRelationAdministratorKind(), null);
+        return getSocialWorkspaceService().searchUsers(this, buildRelationAdministratorKind(), null);
     }
 
     @Override
@@ -213,14 +204,12 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public String getPublicDashboardSpacePath() {
-        return new Path(getDashboardSpacesRootPath()).append(
-                PUBLIC_DASHBOARD_SPACE_NAME).toString();
+        return new Path(getDashboardSpacesRootPath()).append(PUBLIC_DASHBOARD_SPACE_NAME).toString();
     }
 
     @Override
     public String getPrivateDashboardSpacePath() {
-        return new Path(getDashboardSpacesRootPath()).append(
-                PRIVATE_DASHBOARD_SPACE_NAME).toString();
+        return new Path(getDashboardSpacesRootPath()).append(PRIVATE_DASHBOARD_SPACE_NAME).toString();
     }
 
     @Override
@@ -229,7 +218,7 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
     }
 
     public boolean shouldRequestSubscription(Principal principal) {
-        return !(isAdministratorOrMember((NuxeoPrincipal)principal) || isSubscriptionRequestPending(principal));
+        return !(isAdministratorOrMember((NuxeoPrincipal) principal) || isSubscriptionRequestPending(principal));
     }
 
     @Override
@@ -239,22 +228,17 @@ public class SocialWorkspaceAdapter extends BaseAdapter implements
 
     @Override
     public String getSubscriptionRequestStatus(Principal principal) {
-        return getSocialWorkspaceService().getSubscriptionRequestStatus(this,
-                principal);
+        return getSocialWorkspaceService().getSubscriptionRequestStatus(this, principal);
     }
 
     @Override
-    public void acceptSubscriptionRequest(
-            SubscriptionRequest subscriptionRequest) {
-        getSocialWorkspaceService().acceptSubscriptionRequest(this,
-                subscriptionRequest);
+    public void acceptSubscriptionRequest(SubscriptionRequest subscriptionRequest) {
+        getSocialWorkspaceService().acceptSubscriptionRequest(this, subscriptionRequest);
     }
 
     @Override
-    public void rejectSubscriptionRequest(
-            SubscriptionRequest subscriptionRequest) {
-        getSocialWorkspaceService().rejectSubscriptionRequest(this,
-                subscriptionRequest);
+    public void rejectSubscriptionRequest(SubscriptionRequest subscriptionRequest) {
+        getSocialWorkspaceService().rejectSubscriptionRequest(this, subscriptionRequest);
     }
 
     @Override

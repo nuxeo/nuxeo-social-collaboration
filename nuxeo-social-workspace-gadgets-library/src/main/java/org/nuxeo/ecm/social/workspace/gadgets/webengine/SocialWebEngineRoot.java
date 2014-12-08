@@ -97,7 +97,6 @@ import org.nuxeo.runtime.api.Framework;
  */
 /**
  * @author rlegall
- *
  */
 @Path("/social")
 @WebObject(type = "social")
@@ -123,13 +122,11 @@ public class SocialWebEngineRoot extends ModuleRoot {
         String queryText = formData.getString("queryText");
         int pageSize = getIntFromString(formData.getString("limit"));
         int page = getIntFromString(formData.getString("page"));
-        return buildDocumentList(ref, pageSize, page, queryText).arg(
-                "renderFullHtml", true);
+        return buildDocumentList(ref, pageSize, page, queryText).arg("renderFullHtml", true);
     }
 
     /**
-     * Main method that return a html snipped with the list of documents
-     * specified in request.
+     * Main method that return a html snipped with the list of documents specified in request.
      * <p>
      * parameters:
      * <ul>
@@ -141,8 +138,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("documentList")
-    public Object documentList(@Context HttpServletRequest request)
-            throws Exception {
+    public Object documentList(@Context HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -158,8 +154,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @GET
     @Path("documentListGet")
-    public Object documentListGet(@Context HttpServletRequest request)
-            throws Exception {
+    public Object documentListGet(@Context HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -178,8 +173,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("search")
-    public Object search(@Context HttpServletRequest request)
-            throws Exception {
+    public Object search(@Context HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
 
         String lang = formData.getString("lang");
@@ -194,14 +188,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return buildDocumentList(ref, pageSize, page, queryText);
     }
 
-    Template buildDocumentList(String ref, int pageSize, int page,
-            String queryText) throws Exception {
+    Template buildDocumentList(String ref, int pageSize, int page, String queryText) throws Exception {
         DocumentRef docRef = getDocumentRef(ref);
         return buildDocumentList(docRef, pageSize, page, queryText);
     }
 
-    Template buildDocumentList(DocumentRef docRef, int pageSize, int page,
-            String queryText) throws Exception {
+    Template buildDocumentList(DocumentRef docRef, int pageSize, int page, String queryText) throws Exception {
         boolean isSearch = queryText != null && queryText.trim().length() > 0;
 
         // build freemarker arguments map
@@ -239,22 +231,17 @@ public class SocialWebEngineRoot extends ModuleRoot {
         args.put("socialWorkspace", socialWorkspace);
         args.put("docs", docs);
 
-        args.put("publishablePublic",
-                getPublishableDocs(socialWorkspace, docs, true));
-        args.put("publishablePrivate",
-                getPublishableDocs(socialWorkspace, docs, false));
+        args.put("publishablePublic", getPublishableDocs(socialWorkspace, docs, true));
+        args.put("publishablePrivate", getPublishableDocs(socialWorkspace, docs, false));
         args.put("removable", getDocsWithDeleteRight(docs));
-        args.put(
-                "isPublicSocialWorkspace",
-                socialWorkspace.getPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY));
+        args.put("isPublicSocialWorkspace", socialWorkspace.getPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY));
         args.put("collaboration_views", getCollaborationViews(docs));
 
         // add navigation arguments
         args.put("page", docs.getCurrentPageIndex());
         args.put("maxPage", docs.getNumberOfPages());
         if (docs.getNumberOfPages() > 0) {
-            args.put("nextPage", page < docs.getNumberOfPages() - 1 ? page + 1
-                    : page);
+            args.put("nextPage", page < docs.getNumberOfPages() - 1 ? page + 1 : page);
         } else {
             // unknown size
             args.put("nextPage", page + 1);
@@ -270,8 +257,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @POST
     @Path("publishDocument")
-    public Object publishDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object publishDocument(@Context HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         CoreSession session = ctx.getCoreSession();
         DocumentRef docRef = getDocumentRef(formData.getString("targetRef"));
@@ -297,23 +283,21 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @POST
     @Path("deleteDocument")
-    public Object deleteDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object deleteDocument(@Context HttpServletRequest request) throws Exception {
         FormData formData = new FormData(request);
         String target = formData.getString("targetRef");
         DocumentRef docRef = getDocumentRef(target);
         CoreSession session = ctx.getCoreSession();
 
-        if (session.getAllowedStateTransitions(docRef).contains(
-                DELETE_TRANSITION)) {
+        if (session.getAllowedStateTransitions(docRef).contains(DELETE_TRANSITION)) {
             session.followTransition(docRef, DELETE_TRANSITION);
         } else {
             session.removeDocument(docRef);
         }
-        
-        // Must save session to ensure that currentLifeCycleState is updated 
+
+        // Must save session to ensure that currentLifeCycleState is updated
         session.save();
-            
+
         return documentList(request);
     }
 
@@ -322,20 +306,17 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("createDocumentForm")
-    public Object createDocumentForm(@QueryParam("docRef") String ref,
-            @QueryParam("doctype") String docTypeId,
+    public Object createDocumentForm(@QueryParam("docRef") String ref, @QueryParam("doctype") String docTypeId,
             @QueryParam("lang") String lang) throws Exception {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
 
-        DocumentType coreType = TypeService.getSchemaManager().getDocumentType(
-                docTypeId);
+        DocumentType coreType = TypeService.getSchemaManager().getDocumentType(docTypeId);
 
-        return getView("create_document_form").arg("currentDoc", currentDoc).arg(
-                "docType", getTypeService().getType(docTypeId)).arg("coreType",
-                coreType);
+        return getView("create_document_form").arg("currentDoc", currentDoc).arg("docType",
+                getTypeService().getType(docTypeId)).arg("coreType", coreType);
     }
 
     /**
@@ -343,20 +324,18 @@ public class SocialWebEngineRoot extends ModuleRoot {
      */
     @GET
     @Path("selectDocTypeToCreate")
-    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref,
-            @QueryParam("lang") String lang) throws ClientException {
+    public Object selectDocTypeToCreate(@QueryParam("docRef") String ref, @QueryParam("lang") String lang)
+            throws ClientException {
         setLanguage(lang);
         DocumentRef docRef = getDocumentRef(ref);
         CoreSession session = ctx.getCoreSession();
         DocumentModel currentDoc = session.getDocument(docRef);
         TypeManager typeService = getTypeService();
-        Map<String, List<Type>> types = typeService.getTypeMapForDocumentType(
-                currentDoc.getType(), currentDoc);
+        Map<String, List<Type>> types = typeService.getTypeMapForDocumentType(currentDoc.getType(), currentDoc);
         filterAllowedTypes(types);
 
-        return getView("select_doc_type").arg("currentDoc", currentDoc).arg(
-                "docTypes", types).arg("categories", types.keySet()).arg(
-                "lang", lang);
+        return getView("select_doc_type").arg("currentDoc", currentDoc).arg("docTypes", types).arg("categories",
+                types.keySet()).arg("lang", lang);
     }
 
     protected void filterAllowedTypes(Map<String, List<Type>> typesMap) {
@@ -385,29 +364,25 @@ public class SocialWebEngineRoot extends ModuleRoot {
             throw new ClientException(e.getMessage(), e);
         }
         if (typeService == null) {
-            throw new ClientException(
-                    "Can't fetch the typeService, please contact your administrator");
+            throw new ClientException("Can't fetch the typeService, please contact your administrator");
         }
         return typeService;
     }
 
     /**
-     * Create the document given a post request where input item name is the
-     * field name ("dc:title", ...) and "docRef" value is the target document
-     * where to create the given document
+     * Create the document given a post request where input item name is the field name ("dc:title", ...) and "docRef"
+     * value is the target document where to create the given document
      */
     @POST
     @Path("createDocument")
-    public Object createDocument(@Context HttpServletRequest request)
-            throws Exception {
+    public Object createDocument(@Context HttpServletRequest request) throws Exception {
         CoreSession session = ctx.getCoreSession();
         FormData formData = new FormData(request);
         String type = formData.getDocumentType();
         String title = formData.getDocumentTitle();
         DocumentRef docRef = getDocumentRef(formData.getString("docRef"));
         DocumentModel parent = session.getDocument(docRef);
-        DocumentModel newDoc = session.createDocumentModel(
-                parent.getPathAsString(), title, type);
+        DocumentModel newDoc = session.createDocumentModel(parent.getPathAsString(), title, type);
         formData.fillDocument(newDoc);
         newDoc = session.createDocument(newDoc);
         session.save();
@@ -418,58 +393,45 @@ public class SocialWebEngineRoot extends ModuleRoot {
         }
     }
 
-    protected static PaginableDocumentModelList getChildren(DocumentModel doc,
-            int pageSize, int page) throws Exception {
+    protected static PaginableDocumentModelList getChildren(DocumentModel doc, int pageSize, int page) throws Exception {
         CoreSession session = doc.getCoreSession();
 
         OperationContext ctx = new OperationContext(session);
         OperationChain chain = new OperationChain("getChildren");
 
-        String query = "SELECT * FROM Document "
-                + "WHERE ecm:mixinType != 'HiddenInNavigation' "
-                + "AND ecm:isCheckedInVersion = 0 "
-                + "AND ecm:currentLifeCycleState != 'deleted'"
-                + "AND ecm:parentId = '" + doc.getId() + "' "
-                + "AND ecm:primaryType != 'VEVENT'"
-                + "ORDER BY dc:title";
+        String query = "SELECT * FROM Document " + "WHERE ecm:mixinType != 'HiddenInNavigation' "
+                + "AND ecm:isCheckedInVersion = 0 " + "AND ecm:currentLifeCycleState != 'deleted'"
+                + "AND ecm:parentId = '" + doc.getId() + "' " + "AND ecm:primaryType != 'VEVENT'" + "ORDER BY dc:title";
 
-        chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
-                "page", page).set("pageSize", pageSize > 0 ? pageSize : 5);
+        chain.add(DocumentPageProviderOperation.ID).set("query", query).set("page", page).set("pageSize",
+                pageSize > 0 ? pageSize : 5);
 
-        return (PaginableDocumentModelList) getAutomationService().run(ctx,
-                chain);
+        return (PaginableDocumentModelList) getAutomationService().run(ctx, chain);
     }
 
-    protected static PaginableDocumentModelList search(DocumentModel doc,
-            int pageSize, int page, String queryText) throws Exception {
+    protected static PaginableDocumentModelList search(DocumentModel doc, int pageSize, int page, String queryText)
+            throws Exception {
         CoreSession session = doc.getCoreSession();
 
         OperationContext ctx = new OperationContext(session);
         OperationChain chain = new OperationChain("search");
 
-        String escapedQueryText = NXQLQueryBuilder.prepareStringLiteral(
-                queryText.trim(), false, true);
+        String escapedQueryText = NXQLQueryBuilder.prepareStringLiteral(queryText.trim(), false, true);
 
-        String query = "SELECT * FROM Document "
-                + "WHERE ecm:mixinType != 'HiddenInNavigation' "
+        String query = "SELECT * FROM Document " + "WHERE ecm:mixinType != 'HiddenInNavigation' "
                 + "AND ecm:isCheckedInVersion = 0 " + "AND ecm:isProxy = 0 "
-                + "AND ecm:currentLifeCycleState != 'deleted' "
-                + "AND ecm:fulltext = '" + escapedQueryText + "%' "
-                + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "' "
-                + "ORDER BY dc:title";
-        chain.add(DocumentPageProviderOperation.ID).set("query", query).set(
-                "page", page).set("pageSize", pageSize > 0 ? pageSize : 5);
+                + "AND ecm:currentLifeCycleState != 'deleted' " + "AND ecm:fulltext = '" + escapedQueryText + "%' "
+                + "AND ecm:path STARTSWITH '" + doc.getPathAsString() + "' " + "ORDER BY dc:title";
+        chain.add(DocumentPageProviderOperation.ID).set("query", query).set("page", page).set("pageSize",
+                pageSize > 0 ? pageSize : 5);
 
-        return (PaginableDocumentModelList) getAutomationService().run(ctx,
-                chain);
+        return (PaginableDocumentModelList) getAutomationService().run(ctx, chain);
     }
 
     /**
-     * Computes a list with the ancestors of the document specified within the
-     * SocialWorkspace.
+     * Computes a list with the ancestors of the document specified within the SocialWorkspace.
      */
-    protected static List<DocumentModel> getAncestors(DocumentModel doc)
-            throws ClientException {
+    protected static List<DocumentModel> getAncestors(DocumentModel doc) throws ClientException {
         List<DocumentModel> list = new ArrayList<DocumentModel>();
         CoreSession session = doc.getCoreSession();
         list.add(doc);
@@ -526,8 +488,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return automationService;
     }
 
-    protected static List<String> getPublishableDocs(
-            DocumentModel socialWorkspace, DocumentModelList docs,
+    protected static List<String> getPublishableDocs(DocumentModel socialWorkspace, DocumentModelList docs,
             boolean isPublic) throws ClientException {
         boolean isPublicSocialWorkspace = (Boolean) socialWorkspace.getPropertyValue(SOCIAL_WORKSPACE_IS_PUBLIC_PROPERTY);
 
@@ -537,8 +498,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
             if (isPublic) { // is public publication
                 for (DocumentModel doc : docs) {
                     SocialDocument socialDocument = toSocialDocument(doc);
-                    if (socialDocument != null
-                            && socialDocument.isRestrictedToMembers()) {
+                    if (socialDocument != null && socialDocument.isRestrictedToMembers()) {
                         list.add(doc.getId());
                     }
                 }
@@ -554,8 +514,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return list;
     }
 
-    protected static List<String> getDocsWithDeleteRight(DocumentModelList docs)
-            throws ClientException {
+    protected static List<String> getDocsWithDeleteRight(DocumentModelList docs) throws ClientException {
         List<String> docsIdResult = new ArrayList<String>();
         if (docs.isEmpty()) {
             return docsIdResult;
@@ -564,9 +523,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         CoreSession session = docs.get(0).getCoreSession();
         for (DocumentModel doc : docs) {
             if (session.hasPermission(doc.getRef(), REMOVE)
-                    && session.hasPermission(
-                            session.getParentDocumentRef(doc.getRef()),
-                            REMOVE_CHILDREN)) {
+                    && session.hasPermission(session.getParentDocumentRef(doc.getRef()), REMOVE_CHILDREN)) {
                 docsIdResult.add(doc.getId());
             }
         }
@@ -574,8 +531,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         return docsIdResult;
     }
 
-    protected static Map<String, String> getCollaborationViews(
-            DocumentModelList docs) throws ClientException {
+    protected static Map<String, String> getCollaborationViews(DocumentModelList docs) throws ClientException {
         Map<String, String> viewResults = new HashMap<String, String>();
         if (docs.isEmpty()) {
             return viewResults;
@@ -602,8 +558,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     public String getTranslatedLabel(String label) {
-        String newLabel = I18NUtils.getMessageString("messages", label, null,
-                ctx.getLocale());
+        String newLabel = I18NUtils.getMessageString("messages", label, null, ctx.getLocale());
         if (newLabel == null) {
             return label;
         }
@@ -611,8 +566,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * Returns the main blob for the given {@code doc}, {@code null} if there is
-     * no main file available.
+     * Returns the main blob for the given {@code doc}, {@code null} if there is no main file available.
      */
     public Blob getAttachment(DocumentModel doc) throws ClientException {
         BlobHolder bh = doc.getAdapter(BlobHolder.class);
@@ -638,26 +592,22 @@ public class SocialWebEngineRoot extends ModuleRoot {
     }
 
     /**
-     * Indicates if the current user has the right to Add Children to the
-     * current Document
+     * Indicates if the current user has the right to Add Children to the current Document
      *
      * @param docId the reference of the document
-     * @return true if the current user has the right to Add Children to the
-     *         current Document and false otherwise
+     * @return true if the current user has the right to Add Children to the current Document and false otherwise
      */
     public boolean hasAddChildrenRight(String docId) {
         try {
             IdRef docRef = new IdRef(docId);
-            boolean hasPermission = ctx.getCoreSession().hasPermission(docRef,
-                    ADD_CHILDREN);
+            boolean hasPermission = ctx.getCoreSession().hasPermission(docRef, ADD_CHILDREN);
             return hasPermission;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public List<DocumentModel> getComments(DocumentModel doc)
-            throws ClientException {
+    public List<DocumentModel> getComments(DocumentModel doc) throws ClientException {
         // Load document comments if exist
         List<DocumentModel> comments = null;
         CommentableDocument commentableDoc = doc.getAdapter(CommentableDocument.class);
@@ -669,20 +619,17 @@ public class SocialWebEngineRoot extends ModuleRoot {
 
     @GET
     @Path("documentCommentList")
-    public Object documentCommentList(@QueryParam("docRef") String ref)
-            throws Exception {
+    public Object documentCommentList(@QueryParam("docRef") String ref) throws Exception {
         // build freemarker arguments map
         Map<String, Object> args = new HashMap<String, Object>();
         CoreSession session = ctx.getCoreSession();
         IdRef docRef = new IdRef(ref);
         DocumentModel doc = session.getDocument(docRef);
         args.put("doc", doc);
-        return Response.ok(getView("document_comments_template").args(args)).header(
-                "docRef", ref).build();
+        return Response.ok(getView("document_comments_template").args(args)).header("docRef", ref).build();
     }
 
-    public List<DocumentModel> getCommentChildren(DocumentModel doc,
-            DocumentModel parent) throws ClientException {
+    public List<DocumentModel> getCommentChildren(DocumentModel doc, DocumentModel parent) throws ClientException {
         // Load all comment children of the document doc
         List<DocumentModel> comments = null;
         CommentableDocument commentableDoc = doc.getAdapter(CommentableDocument.class);
@@ -704,16 +651,12 @@ public class SocialWebEngineRoot extends ModuleRoot {
             // Create pending comment
             DocumentModel myComment = session.createDocumentModel("Comment");
             // Set comment properties
-            myComment.setProperty("comment", "author",
-                    ctx.getPrincipal().getName());
-            myComment.setProperty("comment", "text",
-                    request.getParameter("commentContent"));
-            myComment.setProperty("comment", "creationDate",
-                    Calendar.getInstance());
+            myComment.setProperty("comment", "author", ctx.getPrincipal().getName());
+            myComment.setProperty("comment", "text", request.getParameter("commentContent"));
+            myComment.setProperty("comment", "creationDate", Calendar.getInstance());
             // Retrieve document to comment
             String docToCommentRef = request.getParameter("docToCommentRef");
-            DocumentModel docToComment = session.getDocument(new IdRef(
-                    docToCommentRef));
+            DocumentModel docToComment = session.getDocument(new IdRef(docToCommentRef));
             String commentParentRef = request.getParameter("commentParentRef");
             // Create comment
             CommentableDocument commentableDoc = null;
@@ -723,25 +666,22 @@ public class SocialWebEngineRoot extends ModuleRoot {
             DocumentModel newComment;
             if (commentParentRef != null) {
                 // if exists retrieve comment parent
-                DocumentModel commentParent = session.getDocument(new IdRef(
-                        commentParentRef));
+                DocumentModel commentParent = session.getDocument(new IdRef(commentParentRef));
                 newComment = commentableDoc.addComment(commentParent, myComment);
             } else {
                 newComment = commentableDoc.addComment(myComment);
             }
             // automatically validate the comments
             if (CommentsConstants.COMMENT_LIFECYCLE.equals(newComment.getLifeCyclePolicy())) {
-                new FollowTransitionUnrestricted(ctx.getCoreSession(),
-                        newComment.getRef(),
+                new FollowTransitionUnrestricted(ctx.getCoreSession(), newComment.getRef(),
                         CommentsConstants.TRANSITION_TO_PUBLISHED_STATE).runUnrestricted();
             }
             // Return the new comment view
             Map<String, Object> args = new HashMap<String, Object>();
             args.put("doc", docToComment);
             args.put("comment", newComment);
-            return Response.ok(getView("bricks/document_comments").args(args)).header(
-                    "docRef", docToCommentRef).header("parentCommentRef",
-                    commentParentRef).build();
+            return Response.ok(getView("bricks/document_comments").args(args)).header("docRef", docToCommentRef).header(
+                    "parentCommentRef", commentParentRef).build();
         } catch (Throwable t) {
             log.error("failed to add comment", t);
             throw ClientException.wrap(t);
@@ -766,9 +706,7 @@ public class SocialWebEngineRoot extends ModuleRoot {
         } else {
             likeService.like(userName, docToLike);
         }
-        return Response.ok(
-                getView("bricks/document_like").arg("doc", docToLike)).header(
-                "docRef", docRef).build();
+        return Response.ok(getView("bricks/document_like").arg("doc", docToLike)).header("docRef", docRef).build();
     }
 
     public boolean hasUserLiked(DocumentModel doc) {
@@ -786,40 +724,32 @@ public class SocialWebEngineRoot extends ModuleRoot {
      * Get the related user avatar to display in the UI comment
      */
     public String getAvatarURL(String commentUser) throws ClientException {
-        String url = VirtualHostHelper.getContextPathProperty()
-                + "/icons/missing_avatar.png";
+        String url = VirtualHostHelper.getContextPathProperty() + "/icons/missing_avatar.png";
         UserProfileService userProfileService = Framework.getLocalService(UserProfileService.class);
-        DocumentModel userProfileDoc = userProfileService.getUserProfileDocument(
-                commentUser, ctx.getCoreSession());
+        DocumentModel userProfileDoc = userProfileService.getUserProfileDocument(commentUser, ctx.getCoreSession());
         if (userProfileDoc == null) {
             return url;
         }
 
         if (userProfileDoc.getPropertyValue(AVATAR_PROPERTY) != null) {
-            url = VirtualHostHelper.getContextPathProperty()
-                    + "/"
-                    + DocumentModelFunctions.fileUrl("downloadFile",
-                            userProfileDoc, AVATAR_PROPERTY, "avatar");
+            url = VirtualHostHelper.getContextPathProperty() + "/"
+                    + DocumentModelFunctions.fileUrl("downloadFile", userProfileDoc, AVATAR_PROPERTY, "avatar");
         }
         return url;
     }
 
     /**
-     * Computes and returns the URL for the given {@code doc}, using the
-     * document link builder sets in the
+     * Computes and returns the URL for the given {@code doc}, using the document link builder sets in the
      * {@link org.nuxeo.ecm.webengine.model.WebContext}.
      */
     public String computeDocumentURL(DocumentModel doc) {
-        DocumentLocation docLoc = new DocumentLocationImpl(
-                doc.getRepositoryName(), new IdRef(doc.getId()));
-        DocumentView docView = new DocumentViewImpl(docLoc, doc.getAdapter(
-                TypeInfo.class).getDefaultView());
+        DocumentLocation docLoc = new DocumentLocationImpl(doc.getRepositoryName(), new IdRef(doc.getId()));
+        DocumentView docView = new DocumentViewImpl(docLoc, doc.getAdapter(TypeInfo.class).getDefaultView());
         DocumentViewCodecManager documentViewCodecManager = Framework.getLocalService(DocumentViewCodecManager.class);
         String documentLinkBuilder = (String) ctx.getProperty("documentLinkBuilder");
         String codecName = isBlank(documentLinkBuilder) ? documentViewCodecManager.getDefaultCodecName()
                 : documentLinkBuilder;
         String baseURL = VirtualHostHelper.getBaseURL(ctx.getRequest());
-        return documentViewCodecManager.getUrlFromDocumentView(codecName,
-                docView, true, baseURL);
+        return documentViewCodecManager.getUrlFromDocumentView(codecName, docView, true, baseURL);
     }
 }

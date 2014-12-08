@@ -35,8 +35,7 @@ import org.nuxeo.ecm.social.workspace.adapters.SocialDocument;
 import org.nuxeo.ecm.webapp.helpers.EventNames;
 
 /**
- * This seam action bean is used to create or update a proxy of the current
- * social document.
+ * This seam action bean is used to create or update a proxy of the current social document.
  *
  * @author rlegall
  */
@@ -53,8 +52,7 @@ public class SocialDocumentVisibilityActions implements Serializable {
     protected transient NavigationContext navigationContext;
 
     /**
-     * create or update a proxy of the current social document in the public
-     * social section of the social workspace.
+     * create or update a proxy of the current social document in the public social section of the social workspace.
      */
     public void makePublic() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
@@ -62,8 +60,8 @@ public class SocialDocumentVisibilityActions implements Serializable {
     }
 
     /**
-     * create or update a proxy of the social document passed as an argument in
-     * the public social section of the social workspace.
+     * create or update a proxy of the social document passed as an argument in the public social section of the social
+     * workspace.
      */
     public void makePublic(DocumentModel document) throws ClientException {
         SocialDocument socialDocument = toSocialDocument(document);
@@ -72,8 +70,7 @@ public class SocialDocumentVisibilityActions implements Serializable {
     }
 
     /**
-     * hide the current document to non members of the social collaboration
-     * workspace
+     * hide the current document to non members of the social collaboration workspace
      */
     public void restrictToMembers() throws ClientException {
         DocumentModel currentDocument = navigationContext.getCurrentDocument();
@@ -81,11 +78,9 @@ public class SocialDocumentVisibilityActions implements Serializable {
     }
 
     /**
-     * Hide the social document passed as parameter to non members of the social
-     * collaboration workspace
+     * Hide the social document passed as parameter to non members of the social collaboration workspace
      */
-    public void restrictToMembers(DocumentModel document)
-            throws ClientException {
+    public void restrictToMembers(DocumentModel document) throws ClientException {
         SocialDocument socialDocument = toSocialDocument(document);
         socialDocument.restrictToMembers();
         Events.instance().raiseEvent(EventNames.DOCUMENT_CHANGED, document);
@@ -114,8 +109,7 @@ public class SocialDocumentVisibilityActions implements Serializable {
     }
 
     /**
-     * Indicates if the current document is only visible by members of the
-     * community
+     * Indicates if the current document is only visible by members of the community
      *
      * @return true if the current document is public, false otherwise.
      * @throws ClientException
@@ -126,8 +120,7 @@ public class SocialDocumentVisibilityActions implements Serializable {
     }
 
     /**
-     * Indicates if the document passed as a parameter is only visible by
-     * members of the community
+     * Indicates if the document passed as a parameter is only visible by members of the community
      *
      * @return true if the current document is public, false otherwise.
      * @throws ClientException

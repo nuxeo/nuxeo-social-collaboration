@@ -43,8 +43,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-public class SocialWorkspaceMiniMessagePageProvider extends
-        AbstractSocialWorkspaceMiniMessagePageProvider<MiniMessage> {
+public class SocialWorkspaceMiniMessagePageProvider extends AbstractSocialWorkspaceMiniMessagePageProvider<MiniMessage> {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,14 +53,12 @@ public class SocialWorkspaceMiniMessagePageProvider extends
             pageMiniMessages = new ArrayList<MiniMessage>();
             long pageSize = getMinMaxPageSize();
 
-            String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
-                    getRepositoryName(), getSocialWorkspaceId());
+            String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(getRepositoryName(),
+                    getSocialWorkspaceId());
             RelationshipKind relationshipKind = getRelationshipKind();
             MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
-            pageMiniMessages.addAll(miniMessageService.getMiniMessageFor(
-                    socialWorkspaceActivityObject, relationshipKind,
-                    socialWorkspaceActivityObject, getCurrentPageOffset(),
-                    pageSize));
+            pageMiniMessages.addAll(miniMessageService.getMiniMessageFor(socialWorkspaceActivityObject,
+                    relationshipKind, socialWorkspaceActivityObject, getCurrentPageOffset(), pageSize));
             nextOffset = offset + pageMiniMessages.size();
 
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);

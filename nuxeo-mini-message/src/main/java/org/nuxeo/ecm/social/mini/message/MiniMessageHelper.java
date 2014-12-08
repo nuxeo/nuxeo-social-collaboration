@@ -64,11 +64,9 @@ public class MiniMessageHelper {
         return "<a href=\"" + url + "\" target=\"_top\">" + url + "</a>";
     }
 
-    public static String toJSON(PageProvider<MiniMessage> pageProvider,
-            Locale locale, CoreSession session) {
+    public static String toJSON(PageProvider<MiniMessage> pageProvider, Locale locale, CoreSession session) {
         try {
-            DateFormat dateFormat = DateFormat.getDateInstance(
-                    DateFormat.MEDIUM, locale);
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
 
             List<Map<String, Object>> miniMessages = new ArrayList<Map<String, Object>>();
             for (MiniMessage miniMessage : pageProvider.getCurrentPage()) {
@@ -77,17 +75,13 @@ public class MiniMessageHelper {
                 o.put("actor", miniMessage.getActor());
                 o.put("displayActor", miniMessage.getDisplayActor());
                 o.put("message", miniMessage.getMessage());
-                o.put("publishedDate",
-                        dateFormat.format(miniMessage.getPublishedDate()));
-                o.put("isCurrentUserMiniMessage",
-                        session.getPrincipal().getName().equals(
-                                miniMessage.getActor()));
+                o.put("publishedDate", dateFormat.format(miniMessage.getPublishedDate()));
+                o.put("isCurrentUserMiniMessage", session.getPrincipal().getName().equals(miniMessage.getActor()));
                 miniMessages.add(o);
             }
 
             Map<String, Object> m = new HashMap<String, Object>();
-            m.put("offset",
-                    ((AbstractActivityPageProvider) pageProvider).getNextOffset());
+            m.put("offset", ((AbstractActivityPageProvider) pageProvider).getNextOffset());
             m.put("limit", pageProvider.getCurrentPageSize());
             m.put("miniMessages", miniMessages);
 

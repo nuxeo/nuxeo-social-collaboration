@@ -52,18 +52,15 @@ import org.nuxeo.runtime.api.Framework;
 public class MiniMessageServiceImpl implements MiniMessageService {
 
     @Override
-    public MiniMessage addMiniMessage(Principal principal, String message,
-            Date publishedDate) {
+    public MiniMessage addMiniMessage(Principal principal, String message, Date publishedDate) {
         return addMiniMessage(principal, message, publishedDate, null);
     }
 
     @Override
-    public MiniMessage addMiniMessage(Principal principal, String message,
-            Date publishedDate, String contextActivityObject) {
-        Activity activity = new ActivityBuilder().actor(
-                ActivityHelper.createUserActivityObject(principal)).displayActor(
-                ActivityHelper.generateDisplayName(principal)).verb(VERB).object(
-                message).publishedDate(publishedDate).context(
+    public MiniMessage addMiniMessage(Principal principal, String message, Date publishedDate,
+            String contextActivityObject) {
+        Activity activity = new ActivityBuilder().actor(ActivityHelper.createUserActivityObject(principal)).displayActor(
+                ActivityHelper.generateDisplayName(principal)).verb(VERB).object(message).publishedDate(publishedDate).context(
                 contextActivityObject).build();
         activity = getActivityStreamService().addActivity(activity);
         return MiniMessage.fromActivity(activity);
@@ -86,26 +83,21 @@ public class MiniMessageServiceImpl implements MiniMessageService {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGE_BY_ID);
         parameters.put(MINI_MESSAGE_ID_PARAMETER, miniMessageId);
-        List<Activity> activities = getActivityStreamService().query(
-                MiniMessageActivityStreamFilter.ID, parameters);
-        return activities.isEmpty() ? null
-                : MiniMessage.fromActivity(activities.get(0));
+        List<Activity> activities = getActivityStreamService().query(MiniMessageActivityStreamFilter.ID, parameters);
+        return activities.isEmpty() ? null : MiniMessage.fromActivity(activities.get(0));
     }
 
     @Override
-    public List<MiniMessage> getMiniMessageFor(String actorActivityObject,
-            RelationshipKind relationshipKind, long offset, long limit) {
-        return getMiniMessageFor(actorActivityObject, relationshipKind, null,
-                offset, limit);
-    }
-
-    @Override
-    public List<MiniMessage> getMiniMessageFor(String actorActivityObject,
-            RelationshipKind relationshipKind, String contextActivityObject,
+    public List<MiniMessage> getMiniMessageFor(String actorActivityObject, RelationshipKind relationshipKind,
             long offset, long limit) {
-        List<Activity> activities = getMiniMessageActivitiesFor(
-                actorActivityObject, relationshipKind, contextActivityObject,
-                offset, limit);
+        return getMiniMessageFor(actorActivityObject, relationshipKind, null, offset, limit);
+    }
+
+    @Override
+    public List<MiniMessage> getMiniMessageFor(String actorActivityObject, RelationshipKind relationshipKind,
+            String contextActivityObject, long offset, long limit) {
+        List<Activity> activities = getMiniMessageActivitiesFor(actorActivityObject, relationshipKind,
+                contextActivityObject, offset, limit);
         List<MiniMessage> miniMessages = new ArrayList<MiniMessage>();
         for (Activity activity : activities) {
             miniMessages.add(MiniMessage.fromActivity(activity));
@@ -114,10 +106,8 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     }
 
     @Override
-    public List<MiniMessage> getMiniMessageFrom(String actorActivityObject,
-            long offset, long limit) {
-        List<Activity> activities = getMiniMessageActivitiesFrom(
-                actorActivityObject, offset, limit);
+    public List<MiniMessage> getMiniMessageFrom(String actorActivityObject, long offset, long limit) {
+        List<Activity> activities = getMiniMessageActivitiesFrom(actorActivityObject, offset, limit);
         List<MiniMessage> miniMessages = new ArrayList<MiniMessage>();
         for (Activity activity : activities) {
             miniMessages.add(MiniMessage.fromActivity(activity));
@@ -126,33 +116,27 @@ public class MiniMessageServiceImpl implements MiniMessageService {
     }
 
     @Override
-    public ActivitiesList getMiniMessageActivitiesFor(
-            String actorActivityObject, RelationshipKind relationshipKind,
+    public ActivitiesList getMiniMessageActivitiesFor(String actorActivityObject, RelationshipKind relationshipKind,
             long offset, long limit) {
-        return getMiniMessageActivitiesFor(actorActivityObject,
-                relationshipKind, null, offset, limit);
+        return getMiniMessageActivitiesFor(actorActivityObject, relationshipKind, null, offset, limit);
     }
 
     @Override
-    public ActivitiesList getMiniMessageActivitiesFor(
-            String actorActivityObject, RelationshipKind relationshipKind,
+    public ActivitiesList getMiniMessageActivitiesFor(String actorActivityObject, RelationshipKind relationshipKind,
             String contextActivityObject, long offset, long limit) {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
         parameters.put(ACTOR_PARAMETER, actorActivityObject);
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FOR_ACTOR);
         parameters.put(CONTEXT_PARAMETER, contextActivityObject);
-        return getActivityStreamService().query(
-                MiniMessageActivityStreamFilter.ID, parameters, offset, limit);
+        return getActivityStreamService().query(MiniMessageActivityStreamFilter.ID, parameters, offset, limit);
     }
 
     @Override
-    public ActivitiesList getMiniMessageActivitiesFrom(
-            String actorActivityObject, long offset, long limit) {
+    public ActivitiesList getMiniMessageActivitiesFrom(String actorActivityObject, long offset, long limit) {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
         parameters.put(ACTOR_PARAMETER, actorActivityObject);
         parameters.put(QUERY_TYPE_PARAMETER, MINI_MESSAGES_FROM_ACTOR);
-        return getActivityStreamService().query(
-                MiniMessageActivityStreamFilter.ID, parameters, offset, limit);
+        return getActivityStreamService().query(MiniMessageActivityStreamFilter.ID, parameters, offset, limit);
     }
 
     public ActivityStreamService getActivityStreamService() {

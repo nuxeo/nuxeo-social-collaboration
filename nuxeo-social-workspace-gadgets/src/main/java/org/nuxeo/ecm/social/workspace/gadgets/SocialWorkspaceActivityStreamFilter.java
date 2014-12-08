@@ -39,8 +39,7 @@ import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-public class SocialWorkspaceActivityStreamFilter implements
-        ActivityStreamFilter {
+public class SocialWorkspaceActivityStreamFilter implements ActivityStreamFilter {
 
     public static final String ID = "SocialWorkspaceActivityStreamFilter";
 
@@ -61,52 +60,45 @@ public class SocialWorkspaceActivityStreamFilter implements
     }
 
     @Override
-    public void handleNewActivity(ActivityStreamService activityStreamService,
-            Activity activity) {
+    public void handleNewActivity(ActivityStreamService activityStreamService, Activity activity) {
         // nothing for now
     }
 
     @Override
     @Deprecated
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
+    public void handleRemovedActivities(ActivityStreamService activityStreamService,
             Collection<Serializable> activityIds) {
         // nothing for now
     }
 
     @Override
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
-            ActivitiesList activities) {
+    public void handleRemovedActivities(ActivityStreamService activityStreamService, ActivitiesList activities) {
     }
 
     @Override
-    public void handleRemovedActivityReply(
-            ActivityStreamService activityStreamService, Activity activity,
+    public void handleRemovedActivityReply(ActivityStreamService activityStreamService, Activity activity,
             ActivityReply activityReply) {
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, long offset, long limit) {
+    public ActivitiesList query(ActivityStreamService activityStreamService, Map<String, Serializable> parameters,
+            long offset, long limit) {
         String repositoryName = (String) parameters.get(REPOSITORY_NAME_PARAMETER);
         if (repositoryName == null) {
-            throw new IllegalArgumentException(REPOSITORY_NAME_PARAMETER
-                    + " is required");
+            throw new IllegalArgumentException(REPOSITORY_NAME_PARAMETER + " is required");
         }
 
         String socialWorkspaceId = (String) parameters.get(SOCIAL_WORKSPACE_ID_PARAMETER);
         if (socialWorkspaceId == null) {
-            throw new IllegalArgumentException(SOCIAL_WORKSPACE_ID_PARAMETER
-                    + " is required");
+            throw new IllegalArgumentException(SOCIAL_WORKSPACE_ID_PARAMETER + " is required");
         }
 
         ActivityStream socialWorkspaceActivityStream = activityStreamService.getActivityStream(SOCIAL_WORKSPACE_ACTIVITY_STREAM_NAME);
         List<String> verbs = socialWorkspaceActivityStream.getVerbs();
 
-        String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
-                repositoryName, socialWorkspaceId);
+        String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(repositoryName,
+                socialWorkspaceId);
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
         Query query;

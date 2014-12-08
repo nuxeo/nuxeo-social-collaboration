@@ -46,8 +46,7 @@ import com.google.inject.Inject;
  * @since 5.5
  */
 @Deploy("org.nuxeo.ecm.platform.query.api:OSGI-INF/pageprovider-framework.xml")
-public class TestUserActivityStreamPageProvider extends
-        AbstractUserActivityTest {
+public class TestUserActivityStreamPageProvider extends AbstractUserActivityTest {
 
     public static final String PROVIDER_NAME = "user_activity_stream";
 

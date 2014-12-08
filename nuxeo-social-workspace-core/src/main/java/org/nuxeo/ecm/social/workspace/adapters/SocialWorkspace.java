@@ -7,8 +7,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
 /**
- * An object that wraps a {@code DocumentModel} having the facet
- * {@code SocialWorkspace}.
+ * An object that wraps a {@code DocumentModel} having the facet {@code SocialWorkspace}.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
@@ -31,14 +30,12 @@ public interface SocialWorkspace {
     String getPath();
 
     /**
-     * Returns {@code true} if this Social Workspace is public, {@code false}
-     * otherwise.
+     * Returns {@code true} if this Social Workspace is public, {@code false} otherwise.
      */
     boolean isPublic();
 
     /**
-     * Returns {@code true} if this Social Workspace is private, {@code false}
-     * otherwise.
+     * Returns {@code true} if this Social Workspace is private, {@code false} otherwise.
      */
     boolean isPrivate();
 
@@ -53,14 +50,14 @@ public interface SocialWorkspace {
     void makePrivate();
 
     /**
-     * Returns {@code true} if the subscriptions to this Social Workspace need
-     * an administrator approval, {@code false} otherwise.
+     * Returns {@code true} if the subscriptions to this Social Workspace need an administrator approval, {@code false}
+     * otherwise.
      */
     boolean mustApproveSubscription();
 
     /**
-     * Returns {@code true} if the social workspace won't send a notification to
-     * its members when modifications occurred.
+     * Returns {@code true} if the social workspace won't send a notification to its members when modifications
+     * occurred.
      */
     boolean isMembersNotificationEnabled();
 
@@ -72,16 +69,14 @@ public interface SocialWorkspace {
     /**
      * Adds a user to this Social Workspace members group.
      *
-     * @return {@code true} if the user was successfully added to the members
-     *         group, {@code false} otherwise.
+     * @return {@code true} if the user was successfully added to the members group, {@code false} otherwise.
      */
     boolean addMember(Principal principal);
 
     /**
      * Removes a user from this Social Workspace administrators group.
      *
-     * @return {@code true} if the user was successfully added to the
-     *         administrators group, {@code false} otherwise.
+     * @return {@code true} if the user was successfully added to the administrators group, {@code false} otherwise.
      */
     void removeAdministrator(Principal principal);
 
@@ -91,38 +86,33 @@ public interface SocialWorkspace {
     void removeMember(Principal principal);
 
     /**
-     * Returns true if the given {@code principal} is administrator of this
-     * Social Workspace, {@code false} otherwise.
+     * Returns true if the given {@code principal} is administrator of this Social Workspace, {@code false} otherwise.
      */
     boolean isAdministrator(NuxeoPrincipal principal);
 
     /**
-     * Returns true if the given {@code principal} is member of this Social
-     * Workspace, {@code false} otherwise.
+     * Returns true if the given {@code principal} is member of this Social Workspace, {@code false} otherwise.
      */
     boolean isMember(NuxeoPrincipal principal);
 
     /**
-     * Returns true if the given {@code principal} is administrator or member of
-     * this Social Workspace, {@code false} otherwise.
+     * Returns true if the given {@code principal} is administrator or member of this Social Workspace, {@code false}
+     * otherwise.
      */
     boolean isAdministratorOrMember(NuxeoPrincipal principal);
 
     /**
-     * Search through members of this social workspace that match with the
-     * passed pattern.
+     * Search through members of this social workspace that match with the passed pattern.
      */
     List<String> searchMembers(String pattern);
 
     /**
-     * Search through administrators of this social workspace that match with
-     * the passed pattern.
+     * Search through administrators of this social workspace that match with the passed pattern.
      */
     List<String> searchAdministrators(String pattern);
 
     /**
-     * Search through members and administrators of this social workspace that
-     * match with the passed pattern.
+     * Search through members and administrators of this social workspace that match with the passed pattern.
      */
     List<String> searchUsers(String pattern);
 
@@ -202,16 +192,14 @@ public interface SocialWorkspace {
     public boolean shouldRequestSubscription(Principal principal);
 
     /**
-     * Returns {@code true} if there is a pending Subscription Request for the
-     * given {@code principal}, {@code false} otherwise.
+     * Returns {@code true} if there is a pending Subscription Request for the given {@code principal}, {@code false}
+     * otherwise.
      */
     boolean isSubscriptionRequestPending(Principal principal);
 
     /**
-     * Returns status of subscription request for the given {@code principal}
-     * Values returned are: pending, accepted, rejected or null if there is no
-     * subscription request
-     *
+     * Returns status of subscription request for the given {@code principal} Values returned are: pending, accepted,
+     * rejected or null if there is no subscription request
      */
     String getSubscriptionRequestStatus(Principal principal);
 

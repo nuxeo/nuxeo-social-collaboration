@@ -42,8 +42,7 @@ public class TestUserActivityStreamFilter extends AbstractUserActivityTest {
 
     @Before
     public void disableActivityStreamListener() {
-        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
-                false);
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener", false);
     }
 
     @Test
@@ -54,8 +53,7 @@ public class TestUserActivityStreamFilter extends AbstractUserActivityTest {
         Map<String, Serializable> parameters = new HashMap<String, Serializable>();
         parameters.put(QUERY_TYPE_PARAMETER, ACTIVITY_STREAM_FOR_ACTOR);
         parameters.put(ACTOR_PARAMETER, "Leela");
-        List<Activity> activities = activityStreamService.query(
-                UserActivityStreamFilter.ID, parameters);
+        List<Activity> activities = activityStreamService.query(UserActivityStreamFilter.ID, parameters);
         assertEquals(5, activities.size());
 
         Activity activity = activities.get(0);

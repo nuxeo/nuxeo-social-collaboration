@@ -44,8 +44,7 @@ public final class MiniMessage {
 
     private Date publishedDate;
 
-    private MiniMessage(Serializable id, String actor, String displayActor,
-            String message, Date publishedDate) {
+    private MiniMessage(Serializable id, String actor, String displayActor, String message, Date publishedDate) {
         this.id = id;
         this.actor = actor;
         this.displayActor = displayActor;
@@ -55,10 +54,8 @@ public final class MiniMessage {
 
     public static MiniMessage fromActivity(Activity activity) {
         String message = MiniMessageHelper.replaceURLsByLinks(activity.getObject());
-        return new MiniMessage(activity.getId(),
-                getUsername(activity.getActor()),
-                ActivityMessageHelper.getUserProfileLink(activity.getActor(),
-                        activity.getDisplayActor()), message,
+        return new MiniMessage(activity.getId(), getUsername(activity.getActor()),
+                ActivityMessageHelper.getUserProfileLink(activity.getActor(), activity.getDisplayActor()), message,
                 activity.getPublishedDate());
     }
 

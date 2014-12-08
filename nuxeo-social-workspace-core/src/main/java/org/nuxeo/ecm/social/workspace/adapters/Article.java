@@ -20,7 +20,6 @@ import java.util.Calendar;
 
 /**
  * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 public interface Article {
 

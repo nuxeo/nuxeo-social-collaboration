@@ -63,8 +63,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author Arnaud Kervern <akervern@nuxeo.com>
  * @since 5.5
  */
-public class SocialWorkspaceMembersManagementListener implements
-        PostCommitEventListener {
+public class SocialWorkspaceMembersManagementListener implements PostCommitEventListener {
 
     private static Log log = LogFactory.getLog(SocialWorkspaceMembersManagementListener.class);
 
@@ -80,8 +79,7 @@ public class SocialWorkspaceMembersManagementListener implements
 
         for (Event event : eventBundle) {
             String eventName = event.getName();
-            if (EVENT_MEMBERS_ADDED.equals(eventName)
-                    || EVENT_MEMBERS_REMOVED.equals(eventName)) {
+            if (EVENT_MEMBERS_ADDED.equals(eventName) || EVENT_MEMBERS_REMOVED.equals(eventName)) {
                 addDocumentContextToMap(socialDocuments, event);
             }
         }
@@ -90,8 +88,7 @@ public class SocialWorkspaceMembersManagementListener implements
         }
     }
 
-    public void addDocumentContextToMap(
-            Map<DocumentRef, List<Event>> socialDocuments, Event event) {
+    public void addDocumentContextToMap(Map<DocumentRef, List<Event>> socialDocuments, Event event) {
         DocumentEventContext docCtx = (DocumentEventContext) event.getContext();
 
         DocumentRef docRef = docCtx.getSourceDocument().getRef();
@@ -104,8 +101,7 @@ public class SocialWorkspaceMembersManagementListener implements
         }
     }
 
-    private void notifyForDocument(
-            Map.Entry<DocumentRef, List<Event>> eventContexts) {
+    private void notifyForDocument(Map.Entry<DocumentRef, List<Event>> eventContexts) {
         List<Principal> addedMembers = new ArrayList<Principal>();
         List<Principal> removedMembers = new ArrayList<Principal>();
 
@@ -120,17 +116,14 @@ public class SocialWorkspaceMembersManagementListener implements
         }
 
         if (!addedMembers.isEmpty() || !removedMembers.isEmpty()) {
-            DocumentEventContext context = (DocumentEventContext) eventContexts.getValue().get(
-                    0).getContext();
+            DocumentEventContext context = (DocumentEventContext) eventContexts.getValue().get(0).getContext();
             notifyMembers(context, addedMembers, removedMembers);
         }
     }
 
-    public void notifyMembers(DocumentEventContext docCtx,
-            List<Principal> addedMembers, List<Principal> removedMembers) {
+    public void notifyMembers(DocumentEventContext docCtx, List<Principal> addedMembers, List<Principal> removedMembers) {
 
-        SocialWorkspace sw = docCtx.getSourceDocument().getAdapter(
-                SocialWorkspace.class);
+        SocialWorkspace sw = docCtx.getSourceDocument().getAdapter(SocialWorkspace.class);
 
         if (sw == null) {
             log.info("Event is handling a non social workspace document");
@@ -148,8 +141,7 @@ public class SocialWorkspaceMembersManagementListener implements
         StringList to = buildRecipientsList(sw, addedMembers);
 
         if (to.isEmpty()) {
-            log.info("No recipients found for member notification in"
-                    + docCtx.getSourceDocument().getId());
+            log.info("No recipients found for member notification in" + docCtx.getSourceDocument().getId());
             return;
         }
 
@@ -159,8 +151,8 @@ public class SocialWorkspaceMembersManagementListener implements
 
         try {
             OperationChain chain = new OperationChain("SendMail");
-            chain.add(SendMail.ID).set("from", from).set("to", to).set("HTML",
-                    true).set("subject", subject).set("message", message);
+            chain.add(SendMail.ID).set("from", from).set("to", to).set("HTML", true).set("subject", subject).set(
+                    "message", message);
             Framework.getLocalService(AutomationService.class).run(ctx, chain);
         } catch (Exception e) {
             log.warn("Unable to notify members about a member management.", e);
@@ -177,8 +169,7 @@ public class SocialWorkspaceMembersManagementListener implements
         return ret;
     }
 
-    private StringList buildRecipientsList(SocialWorkspace socialWorkspace,
-            List<Principal> principals) {
+    private StringList buildRecipientsList(SocialWorkspace socialWorkspace, List<Principal> principals) {
         Set<String> emails = new HashSet<String>();
         List<String> members = socialWorkspace.getMembers();
 
@@ -195,8 +186,7 @@ public class SocialWorkspaceMembersManagementListener implements
                     emails.add(email);
                 }
             } catch (ClientException e) {
-                log.info(String.format("Trying to fetch an unknown user: %s",
-                        username));
+                log.info(String.format("Trying to fetch an unknown user: %s", username));
                 log.debug(e, e);
             }
         }
@@ -205,8 +195,7 @@ public class SocialWorkspaceMembersManagementListener implements
     }
 
     private static String loadTemplate(String key) {
-        InputStream io = SocialWorkspaceServiceImpl.class.getClassLoader().getResourceAsStream(
-                key);
+        InputStream io = SocialWorkspaceServiceImpl.class.getClassLoader().getResourceAsStream(key);
         if (io != null) {
             try {
                 return FileUtils.read(io);

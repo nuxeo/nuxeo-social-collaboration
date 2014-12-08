@@ -81,22 +81,18 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
         notMember = new NuxeoPrincipalImpl("notMember");
         member = createUserWithGroup("member", membersGroup);
         assertTrue(member.getAllGroups().contains(membersGroup));
-        administrator = createUserWithGroup("administratorOfSW",
-                administratorsGroup);
+        administrator = createUserWithGroup("administratorOfSW", administratorsGroup);
     }
 
     @Test
     public void testShouldNotBeSocialDocument() throws Exception {
-        DocumentModel outOfSocialWorkspace = createDocument("/",
-                "wrong place of creation", ARTICLE_TYPE);
+        DocumentModel outOfSocialWorkspace = createDocument("/", "wrong place of creation", ARTICLE_TYPE);
         assertNull(toSocialDocument(outOfSocialWorkspace));
     }
 
     @Test
-    public void shouldCreatePrivateProxyForSocialDocumentPrivate()
-            throws Exception {
-        DocumentModel privateNews = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "private news",
+    public void shouldCreatePrivateProxyForSocialDocumentPrivate() throws Exception {
+        DocumentModel privateNews = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "private news",
                 NEWS_ITEM_TYPE, false);
         SocialDocument socialDocument = toSocialDocument(privateNews);
 
@@ -126,11 +122,9 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
     }
 
     @Test
-    public void shouldCreatePrivateProxyForSocialDocumentWithFacetAdded()
-            throws Exception {
+    public void shouldCreatePrivateProxyForSocialDocumentWithFacetAdded() throws Exception {
         DocumentModel socialDocumentFacetedNotePrivate = session.createDocumentModel(
-                socialWorkspaceDoc.getPathAsString(), "Social Document Note1",
-                "Note");
+                socialWorkspaceDoc.getPathAsString(), "Social Document Note1", "Note");
         socialDocumentFacetedNotePrivate.addFacet(SOCIAL_DOCUMENT_FACET);
         socialDocumentFacetedNotePrivate = session.createDocument(socialDocumentFacetedNotePrivate);
         session.save();
@@ -147,11 +141,9 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
         checkRestricted(socialDocument.getRestrictedDocument());
 
         DocumentModel socialDocumentFacetedNotePublic = session.createDocumentModel(
-                socialWorkspaceDoc.getPathAsString(), "Social Document Note2",
-                "Note");
+                socialWorkspaceDoc.getPathAsString(), "Social Document Note2", "Note");
         socialDocumentFacetedNotePublic.addFacet(SOCIAL_DOCUMENT_FACET);
-        socialDocumentFacetedNotePublic.setPropertyValue(
-                SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, true);
+        socialDocumentFacetedNotePublic.setPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, true);
         socialDocumentFacetedNotePublic = session.createDocument(socialDocumentFacetedNotePublic);
         session.save();
         eventService.waitForAsyncCompletion();
@@ -168,10 +160,8 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
     }
 
     @Test
-    public void shouldCreatePrivateProxyForSocialDocumentPublic()
-            throws Exception {
-        DocumentModel privateNews = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "private news",
+    public void shouldCreatePrivateProxyForSocialDocumentPublic() throws Exception {
+        DocumentModel privateNews = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "private news",
                 NEWS_ITEM_TYPE, true);
 
         SocialDocument socialDocument = toSocialDocument(privateNews);
@@ -203,8 +193,7 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     @Test
     public void shouldNotCreatePrivateProxyForArticlePrivate() throws Exception {
-        DocumentModel privateArticle = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "privatenews",
+        DocumentModel privateArticle = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "privatenews",
                 ARTICLE_TYPE, false);
 
         SocialDocument socialDocument = toSocialDocument(privateArticle);
@@ -237,8 +226,7 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
 
     @Test
     public void shouldNotCreatePrivateProxyForArticlePublic() throws Exception {
-        DocumentModel privateArticle = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "privatenews",
+        DocumentModel privateArticle = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "privatenews",
                 ARTICLE_TYPE, true);
 
         SocialDocument socialDocument = toSocialDocument(privateArticle);
@@ -272,15 +260,13 @@ public class TestVisibilityManagement extends AbstractSocialWorkspaceTest {
         assertTrue(session.hasPermission(notMember, doc.getRef(), READ));
         assertFalse(session.hasPermission(notMember, doc.getRef(), READ_WRITE));
         assertTrue(session.hasPermission(member, doc.getRef(), READ_WRITE));
-        assertTrue(session.hasPermission(administrator, doc.getRef(),
-                EVERYTHING));
+        assertTrue(session.hasPermission(administrator, doc.getRef(), EVERYTHING));
     }
 
     protected void checkRestricted(DocumentModel doc) throws ClientException {
         assertFalse(session.hasPermission(notMember, doc.getRef(), READ));
         assertTrue(session.hasPermission(member, doc.getRef(), READ_WRITE));
-        assertTrue(session.hasPermission(administrator, doc.getRef(),
-                EVERYTHING));
+        assertTrue(session.hasPermission(administrator, doc.getRef(), EVERYTHING));
     }
 
 }

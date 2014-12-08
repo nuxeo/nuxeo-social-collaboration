@@ -45,8 +45,7 @@ public class DeleteSocialDocumentListener implements EventListener {
     /**
      * Remove social document publication into social workspace if needed.
      */
-    public static void cleanProxy(CoreSession session,
-            SocialDocument socialDocument) throws ClientException {
+    public static void cleanProxy(CoreSession session, SocialDocument socialDocument) throws ClientException {
         DocumentModel publicProxy = socialDocument.getPublicDocument();
         if (publicProxy != null) {
             session.removeDocument(publicProxy.getRef());

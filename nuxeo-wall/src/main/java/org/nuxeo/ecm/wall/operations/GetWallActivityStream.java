@@ -110,8 +110,7 @@ public class GetWallActivityStream {
             activityStreamName = "socialWorkspaceWallActivityStream";
         }
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
+        Locale locale = language != null && !language.isEmpty() ? new Locale(language) : Locale.ENGLISH;
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(ACTIVITY_STREAM_NAME_PROPERTY, activityStreamName);
@@ -127,22 +126,17 @@ public class GetWallActivityStream {
         List<ActivityMessage> activityMessages = pageProvider.getCurrentPage();
         List<Map<String, Object>> activitiesJSON = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : activityMessages) {
-            Map<String, Object> o = activityMessage.toMap(session, locale,
-                    activityLinkBuilder);
-            o.put("replies",
-                    toActivityReplyMessagesJSON(session, locale,
-                            activityMessage.getActivityReplyMessages()));
+            Map<String, Object> o = activityMessage.toMap(session, locale, activityLinkBuilder);
+            o.put("replies", toActivityReplyMessagesJSON(session, locale, activityMessage.getActivityReplyMessages()));
             if (activityMessage.getVerb().equals("minimessage")) {
-                o.put("allowDeletion",
-                        getAllowDeletion(activityMessage.getActor()));
+                o.put("allowDeletion", getAllowDeletion(activityMessage.getActor()));
             }
             o.put("likeStatus", getLikeStatus(activityMessage.getActivityId()));
             activitiesJSON.add(o);
         }
 
         Map<String, Object> m = new HashMap<String, Object>();
-        m.put("offset",
-                ((WallActivityStreamPageProvider) pageProvider).getNextOffset());
+        m.put("offset", ((WallActivityStreamPageProvider) pageProvider).getNextOffset());
         m.put("limit", pageProvider.getPageSize());
         m.put("activities", activitiesJSON);
 
@@ -150,22 +144,16 @@ public class GetWallActivityStream {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, m);
 
-        return new InputStreamBlob(new ByteArrayInputStream(
-                writer.toString().getBytes("UTF-8")), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), "application/json");
     }
 
-    private List<Map<String, Object>> toActivityReplyMessagesJSON(
-            CoreSession session, Locale locale,
-            List<ActivityReplyMessage> activityReplyMessages)
-            throws ClientException {
+    private List<Map<String, Object>> toActivityReplyMessagesJSON(CoreSession session, Locale locale,
+            List<ActivityReplyMessage> activityReplyMessages) throws ClientException {
         List<Map<String, Object>> replies = new ArrayList<Map<String, Object>>();
         for (ActivityReplyMessage activityReplyMessage : activityReplyMessages) {
-            Map<String, Object> o = activityReplyMessage.toMap(session, locale,
-                    activityLinkBuilder);
-            o.put("allowDeletion",
-                    getAllowDeletion(activityReplyMessage.getActor()));
-            o.put("likeStatus",
-                    getLikeStatus(activityReplyMessage.getActivityReplyId()));
+            Map<String, Object> o = activityReplyMessage.toMap(session, locale, activityLinkBuilder);
+            o.put("allowDeletion", getAllowDeletion(activityReplyMessage.getActor()));
+            o.put("likeStatus", getLikeStatus(activityReplyMessage.getActivityReplyId()));
             replies.add(o);
         }
         return replies;
@@ -178,8 +166,7 @@ public class GetWallActivityStream {
 
     private Map<String, Serializable> getLikeStatus(Serializable id) {
         String activityObject = ActivityHelper.createActivityObject(id);
-        LikeStatus likeStatus = likeService.getLikeStatus(
-                session.getPrincipal().getName(), activityObject);
+        LikeStatus likeStatus = likeService.getLikeStatus(session.getPrincipal().getName(), activityObject);
         return likeStatus.toMap();
     }
 

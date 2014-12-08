@@ -44,8 +44,7 @@ public interface SocialWorkspaceService {
      *
      * @param principal the Principal initializing the Social Workspace
      */
-    void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace,
-            Principal principal);
+    void handleSocialWorkspaceCreation(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
      * Handles a Social Workspace deletion:
@@ -56,47 +55,40 @@ public interface SocialWorkspaceService {
     void handleSocialWorkspaceDeletion(SocialWorkspace socialWorkspace);
 
     /**
-     * Returns the {@code SocialWorkspace} container of the given document if it
-     * is in a Social Workspace even if the user does not have right on it,
-     * {@code null} otherwise.
+     * Returns the {@code SocialWorkspace} container of the given document if it is in a Social Workspace even if the
+     * user does not have right on it, {@code null} otherwise.
      * <p>
      * The underlying {@code DocumentModel} is detached.
      */
     SocialWorkspace getDetachedSocialWorkspace(DocumentModel doc);
 
     /**
-     * Returns the {@code SocialWorkspace} container of the given document ref
-     * if it is in a Social Workspace even if the user does not have right on
-     * it, {@code null} otherwise.
+     * Returns the {@code SocialWorkspace} container of the given document ref if it is in a Social Workspace even if
+     * the user does not have right on it, {@code null} otherwise.
      * <p>
      * The underlying {@code DocumentModel} is detached.
      */
-    SocialWorkspace getDetachedSocialWorkspace(CoreSession session,
-            DocumentRef docRef);
+    SocialWorkspace getDetachedSocialWorkspace(CoreSession session, DocumentRef docRef);
 
     /**
-     * Returns the {@code SocialWorkspace} container of the given document if it
-     * is part of a Social Workspace, {@code null} otherwise.
+     * Returns the {@code SocialWorkspace} container of the given document if it is part of a Social Workspace,
+     * {@code null} otherwise.
      */
     SocialWorkspace getSocialWorkspace(DocumentModel doc);
 
     /**
      * Adds a user to the {@code socialWorkspace} administrators group.
      *
-     * @return {@code true} if the user was successfully added to the
-     *         administrators group, {@code false} otherwise.
+     * @return {@code true} if the user was successfully added to the administrators group, {@code false} otherwise.
      */
-    boolean addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
-            Principal principal);
+    boolean addSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
      * Adds a user to the {@code socialWorkspace} members group.
      *
-     * @return {@code true} if the user was successfully added to the members
-     *         group, {@code false} otherwise.
+     * @return {@code true} if the user was successfully added to the members group, {@code false} otherwise.
      */
-    boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace,
-            Principal principal);
+    boolean addSocialWorkspaceMember(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
      * Add all group's users to the {@code socialWorkspace} members groups
@@ -105,36 +97,31 @@ public interface SocialWorkspaceService {
      * @return {@code List<String>} containing imported users, or an empty one.
      * @throws ClientException when groupName doesn't exist
      */
-    List<String> addSocialWorkspaceMembers(SocialWorkspace socialWorkspace,
-            String groupName) throws ClientException;
+    List<String> addSocialWorkspaceMembers(SocialWorkspace socialWorkspace, String groupName) throws ClientException;
 
     /**
      * Add several users to the {@code socialWorkspace} members group.
      *
      * @param principals
-     * @return {@code List<String>} contains the email of user added, or an
-     *         empty one.
+     * @return {@code List<String>} contains the email of user added, or an empty one.
      */
-    List<String> addSocialWorkspaceMembers(SocialWorkspace socialWorkspace,
-            List<String> principals) throws ClientException;
+    List<String> addSocialWorkspaceMembers(SocialWorkspace socialWorkspace, List<String> principals)
+            throws ClientException;
 
     /**
      * Removes a user from the @{code socialWorkspace} administrators group.
      */
-    void removeSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace,
-            Principal principal);
+    void removeSocialWorkspaceAdministrator(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
      * Removes a user from the @{code socialWorkspace} members group.
      */
-    void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace,
-            Principal principal);
+    void removeSocialWorkspaceMember(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
      * Makes the given {@code socialWorkspace} public.
      * <p>
-     * Puts the correct rights so that non-members can view public documents and
-     * public dashboard.
+     * Puts the correct rights so that non-members can view public documents and public dashboard.
      */
     void makeSocialWorkspacePublic(SocialWorkspace socialWorkspace);
 
@@ -146,59 +133,53 @@ public interface SocialWorkspaceService {
     void makeSocialWorkspacePrivate(SocialWorkspace socialWorkspace);
 
     /**
-     * Gets the number of days before a social workspace expires without
-     * validation.
+     * Gets the number of days before a social workspace expires without validation.
      *
      * @return number of days
      */
     int getValidationDays();
 
     /**
-     * Handles a Subscription Request on {@code socialWorkspace} for the given
-     * {@code principal}.
+     * Handles a Subscription Request on {@code socialWorkspace} for the given {@code principal}.
      */
-    void handleSubscriptionRequest(SocialWorkspace socialWorkspace,
-            Principal principal);
+    void handleSubscriptionRequest(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
-     * Returns {@code true} if there is a pending Subscription Request for the
-     * given {@code principal}, {@code false} otherwise.
+     * Returns {@code true} if there is a pending Subscription Request for the given {@code principal}, {@code false}
+     * otherwise.
+     * 
      * @deprecated since 5.6 see SocialWorkspace
      */
     @Deprecated
-    boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace,
-            Principal principal);
+    boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
-     * Returns status of subscription request for the given {@code principal}
-     * Values returned are: pending, accepted, rejected or null if there is no
-     * subscription request
+     * Returns status of subscription request for the given {@code principal} Values returned are: pending, accepted,
+     * rejected or null if there is no subscription request
      */
     @Deprecated
-    String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
-            Principal principal);
+    String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace, Principal principal);
 
     /**
      * Accepts the {@code subscriptionRequest} for {@code socialWorkspace}.
+     * 
      * @deprecated since 5.6 see SocialWorkspace
      */
     @Deprecated
-    void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
-            SubscriptionRequest subscriptionRequest);
+    void acceptSubscriptionRequest(SocialWorkspace socialWorkspace, SubscriptionRequest subscriptionRequest);
 
     /**
      * Rejects the {@code subscriptionRequest} for {@code socialWorkspace}.
+     * 
      * @deprecated since 5.6 see SocialWorkspace
      */
     @Deprecated
-    void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
-            SubscriptionRequest subscriptionRequest);
+    void rejectSubscriptionRequest(SocialWorkspace socialWorkspace, SubscriptionRequest subscriptionRequest);
 
     /**
      * Return matching public social workspace according the given pattern.
      */
-    List<SocialWorkspace> searchDetachedPublicSocialWorkspaces(
-            CoreSession session, String pattern);
+    List<SocialWorkspace> searchDetachedPublicSocialWorkspaces(CoreSession session, String pattern);
 
     /**
      * Return all public Social Workspaces.
@@ -211,8 +192,7 @@ public interface SocialWorkspaceService {
      * @param kind can be null or empty to search through all users.
      * @param pattern can be blank.
      */
-    List<String> searchUsers(SocialWorkspace socialWorkspace,
-            RelationshipKind kind, String pattern);
+    List<String> searchUsers(SocialWorkspace socialWorkspace, RelationshipKind kind, String pattern);
 
     /**
      * Returns all matching members from a Social Workspace, or an empty list.
@@ -222,13 +202,11 @@ public interface SocialWorkspaceService {
     List<String> searchMembers(SocialWorkspace socialWorkspace, String pattern);
 
     /**
-     * Returns all matching administrators from a Social Workspace, or an empty
-     * list.
+     * Returns all matching administrators from a Social Workspace, or an empty list.
      *
      * @param pattern can be blank.
      */
-    List<String> searchAdministrators(SocialWorkspace socialWorkspace,
-            String pattern);
+    List<String> searchAdministrators(SocialWorkspace socialWorkspace, String pattern);
 
     /**
      * Returns Social Workspace Container and create it if needed.
@@ -238,8 +216,8 @@ public interface SocialWorkspaceService {
     DocumentModel getSocialWorkspaceContainer(CoreSession session);
 
     /**
-     * Returns the configured SocialWorkspaceContainerDescriptor that contains
-     * the path, title and description of the container.
+     * Returns the configured SocialWorkspaceContainerDescriptor that contains the path, title and description of the
+     * container.
      */
     SocialWorkspaceContainerDescriptor getSocialWorkspaceContainerDescriptor();
 }

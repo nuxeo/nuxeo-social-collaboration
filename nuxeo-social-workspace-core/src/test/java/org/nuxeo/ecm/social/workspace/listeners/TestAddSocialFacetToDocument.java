@@ -39,22 +39,19 @@ public class TestAddSocialFacetToDocument extends AbstractSocialWorkspaceTest {
     public void testAddSocialFacet() throws Exception {
 
         socialWorkspace = createSocialWorkspace(SOCIAL_WORKSPACE_NAME, true);
-        folderInSocialWorkspace = createDocument(socialWorkspace.getPath(),
-                "Folder in Social Workspace", "SocialFolder");
+        folderInSocialWorkspace = createDocument(socialWorkspace.getPath(), "Folder in Social Workspace",
+                "SocialFolder");
 
-        DocumentModel fileInSocialWorkspace = createDocument(
-                socialWorkspace.getPath(), "Regular File in Social Workspace",
-                "File");
+        DocumentModel fileInSocialWorkspace = createDocument(socialWorkspace.getPath(),
+                "Regular File in Social Workspace", "File");
         session.save();
         fileInSocialWorkspace = session.getDocument(fileInSocialWorkspace.getRef());
         assertTrue(fileInSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
-        DocumentModel fileOutOfSocialWorkspace = createDocument("/",
-                "Regular File create at root level", "File");
+        DocumentModel fileOutOfSocialWorkspace = createDocument("/", "Regular File create at root level", "File");
         assertFalse(fileOutOfSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
-        DocumentModel copy = session.copy(fileOutOfSocialWorkspace.getRef(),
-                socialWorkspace.getDocument().getRef(),
+        DocumentModel copy = session.copy(fileOutOfSocialWorkspace.getRef(), socialWorkspace.getDocument().getRef(),
                 "Copy of File out of Social Workspace");
         String copyId = copy.getId();
         session.save();
@@ -65,8 +62,7 @@ public class TestAddSocialFacetToDocument extends AbstractSocialWorkspaceTest {
         assertFalse(fileOutOfSocialWorkspace.hasFacet(SOCIAL_DOCUMENT_FACET));
 
         DocumentRef swsRef = socialWorkspace.getDocument().getRef();
-        DocumentModel movedFile = session.move(
-                fileOutOfSocialWorkspace.getRef(), swsRef, "Moved File");
+        DocumentModel movedFile = session.move(fileOutOfSocialWorkspace.getRef(), swsRef, "Moved File");
         session.save();
         movedFile = session.getDocument(movedFile.getRef());
         assertNotNull(movedFile);

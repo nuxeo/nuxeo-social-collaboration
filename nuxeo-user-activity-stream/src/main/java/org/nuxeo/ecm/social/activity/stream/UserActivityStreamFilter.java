@@ -42,8 +42,7 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Activity Stream filter handling user activity stream.
  * <p>
- * The different queries this filter can handle are defined in the
- * {@link QueryType} enum.
+ * The different queries this filter can handle are defined in the {@link QueryType} enum.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
@@ -73,39 +72,33 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
     }
 
     @Override
-    public void handleNewActivity(ActivityStreamService activityStreamService,
-            Activity activity) {
+    public void handleNewActivity(ActivityStreamService activityStreamService, Activity activity) {
         // nothing for now
     }
 
     @Override
     @Deprecated
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
+    public void handleRemovedActivities(ActivityStreamService activityStreamService,
             Collection<Serializable> activityIds) {
         // nothing for now
     }
 
     @Override
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
-            ActivitiesList activities) {
+    public void handleRemovedActivities(ActivityStreamService activityStreamService, ActivitiesList activities) {
     }
 
     @Override
-    public void handleRemovedActivityReply(
-            ActivityStreamService activityStreamService, Activity activity,
+    public void handleRemovedActivityReply(ActivityStreamService activityStreamService, Activity activity,
             ActivityReply activityReply) {
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, long offset, long limit) {
+    public ActivitiesList query(ActivityStreamService activityStreamService, Map<String, Serializable> parameters,
+            long offset, long limit) {
         QueryType queryType = (QueryType) parameters.get(QUERY_TYPE_PARAMETER);
         if (queryType == null) {
-            throw new IllegalArgumentException(QUERY_TYPE_PARAMETER
-                    + " is required.");
+            throw new IllegalArgumentException(QUERY_TYPE_PARAMETER + " is required.");
         }
 
         String actor = (String) parameters.get(ACTOR_PARAMETER);
@@ -125,8 +118,7 @@ public class UserActivityStreamFilter implements ActivityStreamFilter {
             RelationshipService relationshipService = Framework.getLocalService(RelationshipService.class);
             List<String> actors = new ArrayList<String>();
             for (String relationshipKind : relationshipKinds) {
-                actors.addAll(relationshipService.getTargetsOfKind(actor,
-                        RelationshipKind.fromString(relationshipKind)));
+                actors.addAll(relationshipService.getTargetsOfKind(actor, RelationshipKind.fromString(relationshipKind)));
             }
             if (actors.isEmpty()) {
                 return new ActivitiesListImpl();

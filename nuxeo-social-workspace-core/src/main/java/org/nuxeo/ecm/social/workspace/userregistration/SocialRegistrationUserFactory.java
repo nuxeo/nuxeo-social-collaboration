@@ -24,34 +24,32 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  */
-public class SocialRegistrationUserFactory extends
-    DefaultRegistrationUserFactory {
+public class SocialRegistrationUserFactory extends DefaultRegistrationUserFactory {
     public static final String NOT_NOTIFY_MEMBER_FIELD = "socialer:doNotNotifyMembers";
 
     public static final String ADMINISTRATOR_RIGHT = "administrator";
+
     public static final String MEMBER_RIGHT = "member";
 
     private static final Log log = LogFactory.getLog(SocialRegistrationUserFactory.class);
 
     @Override
-    public DocumentModel doAddDocumentPermission(CoreSession session,
-            DocumentModel registrationDoc,UserRegistrationConfiguration configuration) throws ClientException {
+    public DocumentModel doAddDocumentPermission(CoreSession session, DocumentModel registrationDoc,
+            UserRegistrationConfiguration configuration) throws ClientException {
         String docId = (String) registrationDoc.getPropertyValue(DOCUMENT_ID_FIELD);
         if (StringUtils.isBlank(docId)) {
             throw new ClientException("SocialWorkspace id is missing");
         }
-        SocialWorkspace sw = toSocialWorkspace(session.getDocument(new IdRef(
-                docId)));
+        SocialWorkspace sw = toSocialWorkspace(session.getDocument(new IdRef(docId)));
         if (sw == null) {
-            throw new ClientException(
-                    "Document passed is not a Social Workspace");
+            throw new ClientException("Document passed is not a Social Workspace");
         }
         String login = (String) registrationDoc.getPropertyValue(configuration.getUserInfoUsernameField());
         Principal principal = getUserManager().getPrincipal(login);
 
         // Set if new member notification is needed
         sw.getDocument().putContextData(MEMBER_NOTIFICATION_DISABLED,
-                        registrationDoc.getPropertyValue(NOT_NOTIFY_MEMBER_FIELD));
+                registrationDoc.getPropertyValue(NOT_NOTIFY_MEMBER_FIELD));
 
         Boolean isAdded;
         if (ADMINISTRATOR_RIGHT.equals(registrationDoc.getPropertyValue(DOCUMENT_RIGHT_FIELD))) {
@@ -69,8 +67,7 @@ public class SocialRegistrationUserFactory extends
     }
 
     @Override
-    public void doPostAddDocumentPermission(CoreSession session,
-            DocumentModel registrationDoc, DocumentModel document)
+    public void doPostAddDocumentPermission(CoreSession session, DocumentModel registrationDoc, DocumentModel document)
             throws ClientException {
         // Nothing to do
     }

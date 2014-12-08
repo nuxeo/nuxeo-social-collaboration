@@ -30,8 +30,7 @@ import org.nuxeo.ecm.social.workspace.AbstractSocialWorkspaceTest;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 @LocalDeploy("org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml")
-public class TestDeleteSocialDocumentListener extends
-        AbstractSocialWorkspaceTest {
+public class TestDeleteSocialDocumentListener extends AbstractSocialWorkspaceTest {
 
     protected DocumentModel privateSection;
 
@@ -42,21 +41,16 @@ public class TestDeleteSocialDocumentListener extends
         socialWorkspace = createSocialWorkspace("SocialWorkspace for test");
         socialWorkspaceDoc = socialWorkspace.getDocument();
 
-        publicSection = session.getDocument(new PathRef(
-                socialWorkspace.getPublicSectionPath()));
-        privateSection = session.getDocument(new PathRef(
-                socialWorkspace.getPrivateSectionPath()));
+        publicSection = session.getDocument(new PathRef(socialWorkspace.getPublicSectionPath()));
+        privateSection = session.getDocument(new PathRef(socialWorkspace.getPrivateSectionPath()));
     }
 
     @Test
-    public void testShouldCleanupOfProxiesForNewsAtDeletionTime()
-            throws Exception {
-        DocumentModel privateNews1 = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "A private News",
+    public void testShouldCleanupOfProxiesForNewsAtDeletionTime() throws Exception {
+        DocumentModel privateNews1 = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "A private News",
                 NEWS_ITEM_TYPE, false);
 
-        DocumentModel privateNews2 = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(),
+        DocumentModel privateNews2 = createSocialDocument(socialWorkspaceDoc.getPathAsString(),
                 "AAA another private News", NEWS_ITEM_TYPE, false);
 
         assertEquals(1, getNumberOfProxy(privateNews1));
@@ -66,8 +60,7 @@ public class TestDeleteSocialDocumentListener extends
         assertEquals(0, getNumberOfProxy(privateNews1));
         assertEquals(1, getNumberOfProxy(privateNews2));
 
-        DocumentModel publicNews = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "A public news",
+        DocumentModel publicNews = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "A public news",
                 NEWS_ITEM_TYPE, true);
         assertEquals(1, getNumberOfProxy(publicNews));
 
@@ -80,18 +73,15 @@ public class TestDeleteSocialDocumentListener extends
     }
 
     @Test
-    public void testShouldCleanupOfProxiesForArticleAtDeletionTime()
-            throws Exception {
-        DocumentModel privateArticle1 = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "A private News",
+    public void testShouldCleanupOfProxiesForArticleAtDeletionTime() throws Exception {
+        DocumentModel privateArticle1 = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "A private News",
                 ARTICLE_TYPE, false);
 
         assertEquals(0, getNumberOfProxy(privateArticle1));
         session.followTransition(privateArticle1.getRef(), DELETE_TRANSITION);
         assertEquals(0, getNumberOfProxy(privateArticle1));
 
-        DocumentModel publicArticle = createSocialDocument(
-                socialWorkspaceDoc.getPathAsString(), "A public news",
+        DocumentModel publicArticle = createSocialDocument(socialWorkspaceDoc.getPathAsString(), "A public news",
                 NEWS_ITEM_TYPE, true);
 
         assertEquals(1, getNumberOfProxy(publicArticle));
