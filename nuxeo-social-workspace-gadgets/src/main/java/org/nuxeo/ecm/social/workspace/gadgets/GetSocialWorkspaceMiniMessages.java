@@ -24,7 +24,6 @@ import static org.nuxeo.ecm.social.workspace.gadgets.AbstractSocialWorkspaceMini
 import static org.nuxeo.ecm.social.workspace.gadgets.AbstractSocialWorkspaceMiniMessagePageProvider.REPOSITORY_NAME_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.gadgets.AbstractSocialWorkspaceMiniMessagePageProvider.SOCIAL_WORKSPACE_ID_PROPERTY;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
@@ -152,7 +151,7 @@ public class GetSocialWorkspaceMiniMessages {
             mapper.writeValue(writer, m);
 
             String json = writer.toString();
-            return new InputStreamBlob(new ByteArrayInputStream(json.getBytes("UTF-8")), "application/json");
+            return new StringBlob(json.toString(), "application/json");
         } else {
             @SuppressWarnings("unchecked")
             PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
@@ -160,7 +159,7 @@ public class GetSocialWorkspaceMiniMessages {
             pageProvider.setCurrentPageOffset(targetOffset);
 
             String json = toJSON(pageProvider, locale, session);
-            return new InputStreamBlob(new ByteArrayInputStream(json.getBytes("UTF-8")), "application/json");
+            return new StringBlob(json.toString(), "application/json");
         }
     }
 

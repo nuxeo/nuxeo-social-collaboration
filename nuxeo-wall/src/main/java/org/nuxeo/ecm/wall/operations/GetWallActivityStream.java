@@ -24,7 +24,6 @@ import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CONTEXT_DOCUMENT
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.CORE_SESSION_PROPERTY;
 import static org.nuxeo.ecm.wall.WallActivityStreamPageProvider.LOCALE_PROPERTY;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.rating.api.LikeService;
@@ -144,7 +143,7 @@ public class GetWallActivityStream {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, m);
 
-        return new InputStreamBlob(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), "application/json");
+        return new StringBlob(writer.toString(), "application/json");
     }
 
     private List<Map<String, Object>> toActivityReplyMessagesJSON(CoreSession session, Locale locale,

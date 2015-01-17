@@ -17,7 +17,6 @@
 
 package org.nuxeo.ecm.social.mini.message.operations;
 
-import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.Date;
@@ -40,7 +39,7 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
-import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
 import org.nuxeo.ecm.social.mini.message.MiniMessageService;
@@ -118,7 +117,7 @@ public class AddMiniMessage {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, o);
 
-        return new InputStreamBlob(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), "application/json");
+        return new StringBlob(writer.toString(), "application/json");
     }
 
     private static class ContextActivityObject extends UnrestrictedSessionRunner {

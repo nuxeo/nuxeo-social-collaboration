@@ -20,11 +20,11 @@ import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistration
 import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationConstant.REQUEST_PENDING_STATE;
 import static org.nuxeo.ecm.social.workspace.userregistration.SocialRegistrationConstant.REQUEST_REJECTED_STATE;
 
-import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import net.sf.json.JSONObject;
+
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -37,7 +37,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.impl.blob.InputStreamBlob;
+import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -102,7 +102,7 @@ public class GetUserSocialWorkspaceStatus {
         obj.element("status", status);
         obj.element("title", sws.getPropertyValue("dc:title"));
         obj.element("description", sws.getPropertyValue("dc:description"));
-        return new InputStreamBlob(new ByteArrayInputStream(obj.toString().getBytes("UTF-8")), "application/json");
+        return new StringBlob(obj.toString(), "application/json");
     }
 
 }
