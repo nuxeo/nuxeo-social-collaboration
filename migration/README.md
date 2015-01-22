@@ -6,9 +6,9 @@ You can find the script [here](social-collaboration-migration.sql).
 
 This script was tested on PostgreSQL.
 
-# What does the script do?
+# What Does the Script Do?
 
-**Document types migration**
+**Document Types Migration**
 
 Migrate all Social Collaboration specific types to default ones:
 
@@ -21,38 +21,38 @@ Migrate all Social Collaboration specific types to default ones:
 
 All icons are also migrated to have the right ones.
 
-**Keeping Article / NewsItem uploaded image**
+**Keeping Article / NewsItem Uploaded Image**
 
-If an image was uploaded to a `Article` or `NewsItem`, it's migrated to be an attachment (stored on the `files` schema).
+If an image was uploaded to an `Article` or `NewsItem`, it's migrated to be an attachment (stored on the `files` schema).
 
-**Delete unused documents**
+**Deleting Unused Documents**
 
-Delete the following documents (and all their children):
+Deletes the following documents (and all their children):
 
 - All documents of type `SocialSection` and `DashboardSpacesContainer`
 - Document with name `collaborationDashboardSpace` (the one storing the Collaboration dashboard)
 
-**Drop unused schema tables**
+**Dropping Unused Schema Tables**
 
-Drop the following tables:
+Drops the following tables:
 
 - `social_document`
 - `social_workspace`
 - `content_picture`
 - `socialprofile`
 
-**Delete everything related to Social Collaboration registration requests**
+**Deleting Everything Related to Social Collaboration Registration Requests**
 
-Delete documents of type `SocialRegistration`.
+Deletes documents of type `SocialRegistration`.
 
-Drop table `social_user_registration`
+Drops the table `social_user_registration`
 
-**Remove Social Workspace validation tasks**
+**Removing Social Workspace Validation Tasks**
 
-**Remove all ACLs defined by Social Collaboration**
+**Removing All ACLs Defined by Social Collaboration**
 
 - `socialWorkspaceAcl`
 - `newsItemsRootAcl`
 - `publicSocialWorkspaceAcl`
 
-**Remove Social Collaboration gadgets from all dashboards** 
+**Removing Social Collaboration Gadgets from All Dashboards** 
