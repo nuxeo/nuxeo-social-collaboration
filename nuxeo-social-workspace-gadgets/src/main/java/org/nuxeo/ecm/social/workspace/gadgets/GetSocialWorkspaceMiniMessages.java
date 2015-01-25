@@ -42,9 +42,9 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
@@ -151,7 +151,7 @@ public class GetSocialWorkspaceMiniMessages {
             mapper.writeValue(writer, m);
 
             String json = writer.toString();
-            return new StringBlob(json.toString(), "application/json");
+            return Blobs.createBlob(json.toString(), "application/json");
         } else {
             @SuppressWarnings("unchecked")
             PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
@@ -159,7 +159,7 @@ public class GetSocialWorkspaceMiniMessages {
             pageProvider.setCurrentPageOffset(targetOffset);
 
             String json = toJSON(pageProvider, locale, session);
-            return new StringBlob(json.toString(), "application/json");
+            return Blobs.createBlob(json.toString(), "application/json");
         }
     }
 

@@ -32,6 +32,7 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -39,7 +40,6 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.social.mini.message.MiniMessage;
 import org.nuxeo.ecm.social.mini.message.MiniMessageService;
@@ -117,7 +117,7 @@ public class AddMiniMessage {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, o);
 
-        return new StringBlob(writer.toString(), "application/json");
+        return Blobs.createBlob(writer.toString(), "application/json");
     }
 
     private static class ContextActivityObject extends UnrestrictedSessionRunner {
