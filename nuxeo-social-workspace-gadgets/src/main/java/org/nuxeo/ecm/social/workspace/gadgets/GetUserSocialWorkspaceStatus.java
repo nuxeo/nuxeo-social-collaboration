@@ -32,12 +32,12 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
@@ -102,7 +102,7 @@ public class GetUserSocialWorkspaceStatus {
         obj.element("status", status);
         obj.element("title", sws.getPropertyValue("dc:title"));
         obj.element("description", sws.getPropertyValue("dc:description"));
-        return new StringBlob(obj.toString(), "application/json");
+        return Blobs.createBlob(obj.toString(), "application/json");
     }
 
 }

@@ -43,11 +43,11 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.rating.api.LikeService;
@@ -143,7 +143,7 @@ public class GetWallActivityStream {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, m);
 
-        return new StringBlob(writer.toString(), "application/json");
+        return Blobs.createBlob(writer.toString(), "application/json");
     }
 
     private List<Map<String, Object>> toActivityReplyMessagesJSON(CoreSession session, Locale locale,
