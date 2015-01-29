@@ -40,6 +40,7 @@ import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -49,6 +50,7 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 import com.google.inject.Inject;
 
@@ -56,9 +58,9 @@ import com.google.inject.Inject;
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @RunWith(FeaturesRunner.class)
-@Features(CoreFeature.class)
+@Features({TransactionalFeature.class, CoreFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.platform.api", "org.nuxeo.ecm.platform.dublincore", "org.nuxeo.ecm.directory",
+@Deploy({ "org.nuxeo.ecm.platform.notification.api", "org.nuxeo.ecm.platform.notification.core", "org.nuxeo.ecm.platform.api", "org.nuxeo.ecm.platform.dublincore", "org.nuxeo.ecm.directory",
         "org.nuxeo.ecm.directory.sql", "org.nuxeo.ecm.directory.types.contrib",
         "org.nuxeo.ecm.platform.usermanager.api", "org.nuxeo.ecm.platform.usermanager",
         "org.nuxeo.ecm.platform.content.template", "org.nuxeo.ecm.opensocial.spaces",
@@ -100,6 +102,7 @@ public class TestSocialWorkspaceMembersOperation {
 
     @Before
     public void setup() throws Exception {
+        Framework.getProperties().put("mail.from", "noreply@nuxeo.com");
         // create social workspace
         socialWorkspaceDocument = session.createDocumentModel("/", "testSocialWorkspace", SOCIAL_WORKSPACE_TYPE);
         socialWorkspaceDocument = session.createDocument(socialWorkspaceDocument);
@@ -119,7 +122,9 @@ public class TestSocialWorkspaceMembersOperation {
         // make the user member of SocialWorkspace
         socialWorkspace.addMember(userManager.getPrincipal("testUser"));
 
-        session.save();
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
+        waitForAsyncEvents();
     }
 
     @After

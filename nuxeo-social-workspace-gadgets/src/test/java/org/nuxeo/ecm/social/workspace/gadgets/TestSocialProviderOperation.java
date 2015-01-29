@@ -36,6 +36,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
@@ -46,6 +47,7 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 import com.google.inject.Inject;
 
@@ -53,12 +55,13 @@ import com.google.inject.Inject;
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  */
 @RunWith(FeaturesRunner.class)
-@Features(PlatformFeature.class)
+@Features({TransactionalFeature.class, PlatformFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.social.workspace.core", "org.nuxeo.ecm.social.workspace.gadgets",
+@Deploy({ "org.nuxeo.ecm.platform.notification.api", "org.nuxeo.ecm.platform.notification.core", "org.nuxeo.ecm.platform.api","org.nuxeo.ecm.social.workspace.core", "org.nuxeo.ecm.social.workspace.gadgets",
         "org.nuxeo.ecm.platform.types.api", "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.core.persistence",
         "org.nuxeo.ecm.activity", "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
-        "org.nuxeo.ecm.platform.query.api", "org.nuxeo.ecm.user.relationships" })
+        "org.nuxeo.ecm.platform.query.api", "org.nuxeo.ecm.user.relationships","org.nuxeo.ecm.platform.url.core",
+        "org.nuxeo.ecm.platform.url.api" })
 @LocalDeploy({ "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public class TestSocialProviderOperation {
@@ -86,37 +89,31 @@ public class TestSocialProviderOperation {
 
     @Before
     public void initRepo() throws Exception {
-
+        Framework.getProperties().setProperty("mail.from", "noreply@nuxeo.com");
         session.removeChildren(session.getRootDocument().getRef());
-        session.save();
 
         // create social workspaces
         DocumentModel sws1 = session.createDocumentModel("/", "sws1", "SocialWorkspace");
         sws1.setPropertyValue("dc:title", "Social Workspace 1");
         sws1 = session.createDocument(sws1);
 
-        session.save();
-
         DocumentModel sws2 = session.createDocumentModel("/", "sws2", "SocialWorkspace");
         sws2.setPropertyValue("dc:title", "Social Workspace 2");
         sws2 = session.createDocument(sws2);
-        session.save();
 
         // create two articles in 2nd social workspace
         DocumentModel article1 = session.createDocumentModel("/sws2", "article1", "Article");
         article1.setPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, true);
         article1.setPropertyValue("dc:title", "Public Article");
         article1 = session.createDocument(article1);
-        session.save();
-        Framework.getService(EventService.class).waitForAsyncCompletion();
-        session.save();
-        article1 = session.getDocument(article1.getRef());
 
         DocumentModel article2 = session.createDocumentModel("/sws2", "article2", "Article");
         article2.setPropertyValue("dc:title", "Non Public Article");
         article2 = session.createDocument(article2);
 
-        session.save();
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
+        waitForAsyncEvents();
     }
 
     @After
