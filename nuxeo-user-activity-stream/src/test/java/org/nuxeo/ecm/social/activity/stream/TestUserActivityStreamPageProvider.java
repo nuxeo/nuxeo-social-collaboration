@@ -38,6 +38,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 import com.google.inject.Inject;
 
@@ -58,7 +59,8 @@ public class TestUserActivityStreamPageProvider extends AbstractUserActivityTest
     public void shouldFilterDocumentsRelatedActivities() throws ClientException {
         initializeSomeRelations();
         initializeDummyDocumentRelatedActivities();
-
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
         Map<String, Serializable> properties = new HashMap<String, Serializable>();
         properties.put(ACTOR_PROPERTY, "Leela");
         properties.put(STREAM_TYPE_PROPERTY, FOR_ACTOR_STREAM_TYPE);
@@ -76,7 +78,6 @@ public class TestUserActivityStreamPageProvider extends AbstractUserActivityTest
     public void shouldFilterActivitiesBasedOnACLs() throws ClientException {
         initializeSomeRelations();
         createDocumentsWithBender();
-
         try (CoreSession newSession = openSessionAs("Leela")) {
             Map<String, Serializable> properties = new HashMap<String, Serializable>();
             properties.put(ACTOR_PROPERTY, "Leela");

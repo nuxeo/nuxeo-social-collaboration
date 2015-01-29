@@ -33,7 +33,6 @@ import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.social.activity.stream.AbstractUserActivityTest;
 import org.nuxeo.runtime.test.runner.Deploy;
-
 import com.google.inject.Inject;
 
 /**
@@ -50,7 +49,6 @@ public class TestUserActivityStreamOperation extends AbstractUserActivityTest {
     public void shouldFilterActivitiesBasedOnACLs() throws Exception {
         initializeSomeRelations();
         createDocumentsWithBender();
-
         try (CoreSession newSession = openSessionAs("Leela")) {
             OperationContext ctx = new OperationContext(newSession);
             assertNotNull(ctx);

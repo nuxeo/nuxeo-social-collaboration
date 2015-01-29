@@ -16,6 +16,7 @@ import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.RepositorySettings;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
@@ -27,6 +28,7 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 import com.google.inject.Inject;
 
@@ -35,7 +37,7 @@ import com.google.inject.Inject;
  * @since 5.5
  */
 @RunWith(FeaturesRunner.class)
-@Features(CoreFeature.class)
+@Features({ TransactionalFeature.class, CoreFeature.class })
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.platform.api", "org.nuxeo.ecm.platform.dublincore", "org.nuxeo.ecm.directory",
         "org.nuxeo.ecm.directory.sql", "org.nuxeo.ecm.directory.types.contrib",
@@ -82,9 +84,9 @@ public abstract class AbstractSocialWorkspaceTest {
         DocumentModel doc = session.createDocumentModel(pathAsString, name, type);
         doc.setPropertyValue("dc:title", name);
         doc = session.createDocument(doc);
-        session.save(); // fire post commit event listener
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
         Framework.getService(EventService.class).waitForAsyncCompletion();
-        session.save(); // flush the session to retrieve document
         return doc;
     }
 
@@ -96,8 +98,8 @@ public abstract class AbstractSocialWorkspaceTest {
         DocumentModel doc = session.createDocumentModel(pathAsString, name, type);
         doc.setPropertyValue(SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, isPublic);
         doc = session.createDocument(doc);
-        session.save(); // fire post commit event listener
-        session.save(); // flush the session to retrieve document
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
         Framework.getService(EventService.class).waitForAsyncCompletion();
         return doc;
     }

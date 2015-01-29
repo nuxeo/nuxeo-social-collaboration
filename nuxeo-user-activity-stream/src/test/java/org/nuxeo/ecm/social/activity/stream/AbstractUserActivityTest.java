@@ -48,6 +48,7 @@ import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.persistence.PersistenceProvider;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.RepositorySettings;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
@@ -57,6 +58,7 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 import com.google.inject.Inject;
 
@@ -65,7 +67,7 @@ import com.google.inject.Inject;
  * @since 5.5
  */
 @RunWith(FeaturesRunner.class)
-@Features(PlatformFeature.class)
+@Features({ TransactionalFeature.class, PlatformFeature.class })
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity", "org.nuxeo.ecm.user.relationships",
         "org.nuxeo.ecm.social.user.activity.stream", "org.nuxeo.ecm.platform.userworkspace.types",
@@ -177,8 +179,8 @@ public abstract class AbstractUserActivityTest {
         acl.add(new ACE("Bender", EVERYTHING, true));
         acl.add(new ACE("Leela", READ, true));
         workspacesDocument.setACP(acp, true);
-        session.save();
-        session.save();
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
 
         try (CoreSession newSession = openSessionAs("Bender")) {
             DocumentModel doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(), "file1", "File");
@@ -187,8 +189,8 @@ public abstract class AbstractUserActivityTest {
             acl = acp.getOrCreateACL();
             acl.add(new ACE("Leela", READ, true));
             doc.setACP(acp, true);
-            newSession.save();
-            newSession.save();
+            TransactionHelper.commitOrRollbackTransaction();
+            TransactionHelper.startTransaction();
 
             doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(), "file2", "File");
             doc = newSession.createDocument(doc);
@@ -196,8 +198,8 @@ public abstract class AbstractUserActivityTest {
             acl = acp.getOrCreateACL();
             acl.add(new ACE("Leela", READ, true));
             doc.setACP(acp, true);
-            newSession.save();
-            newSession.save();
+            TransactionHelper.commitOrRollbackTransaction();
+            TransactionHelper.startTransaction();
 
             doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(), "file-without-right", "File");
             doc = newSession.createDocument(doc);
@@ -206,11 +208,13 @@ public abstract class AbstractUserActivityTest {
             acl.add(new ACE(SecurityConstants.ADMINISTRATOR, READ));
             acl.add(ACE.BLOCK);
             doc.setACP(acp, true);
-            newSession.save();
-            newSession.save();
+            TransactionHelper.commitOrRollbackTransaction();
+            TransactionHelper.startTransaction();
 
-            eventService.waitForAsyncCompletion();
         }
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
+        eventService.waitForAsyncCompletion();
     }
 
 }
