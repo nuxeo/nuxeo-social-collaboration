@@ -116,8 +116,7 @@ public class GetMiniMessages {
             targetLimit = limit.longValue();
         }
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
+        Locale locale = language != null && !language.isEmpty() ? new Locale(language) : Locale.ENGLISH;
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(LOCALE_PROPERTY, locale);
@@ -135,14 +134,12 @@ public class GetMiniMessages {
             for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
                 Map<String, Object> o = activityMessage.toMap(session, locale);
                 String actorUsername = getUsername(activityMessage.getActor());
-                o.put("allowDeletion",
-                        session.getPrincipal().getName().equals(actorUsername));
+                o.put("allowDeletion", session.getPrincipal().getName().equals(actorUsername));
                 miniMessages.add(o);
             }
 
             Map<String, Object> m = new HashMap<String, Object>();
-            m.put("offset",
-                    ((AbstractActivityPageProvider) pageProvider).getNextOffset());
+            m.put("offset", ((AbstractActivityPageProvider) pageProvider).getNextOffset());
             m.put("limit", pageProvider.getCurrentPageSize());
             m.put("miniMessages", miniMessages);
 
@@ -151,8 +148,7 @@ public class GetMiniMessages {
             mapper.writeValue(writer, m);
 
             String json = writer.toString();
-            return new InputStreamBlob(new ByteArrayInputStream(
-                    json.getBytes("UTF-8")), "application/json");
+            return new InputStreamBlob(new ByteArrayInputStream(json.getBytes("UTF-8")), "application/json");
         } else {
             @SuppressWarnings("unchecked")
             PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
@@ -160,8 +156,7 @@ public class GetMiniMessages {
             pageProvider.setCurrentPageOffset(targetOffset);
 
             String json = toJSON(pageProvider, locale, session);
-            return new InputStreamBlob(new ByteArrayInputStream(
-                    json.getBytes("UTF-8")), "application/json");
+            return new InputStreamBlob(new ByteArrayInputStream(json.getBytes("UTF-8")), "application/json");
         }
     }
 

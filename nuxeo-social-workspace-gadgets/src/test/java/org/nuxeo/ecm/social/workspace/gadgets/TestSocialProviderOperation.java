@@ -51,20 +51,15 @@ import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
-@RepositoryConfig( init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.social.workspace.core",
-        "org.nuxeo.ecm.social.workspace.gadgets",
-        "org.nuxeo.ecm.platform.types.api",
-        "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.core.persistence",
-        "org.nuxeo.ecm.activity", "org.nuxeo.ecm.automation.core",
-        "org.nuxeo.ecm.automation.features",
+@RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
+@Deploy({ "org.nuxeo.ecm.social.workspace.core", "org.nuxeo.ecm.social.workspace.gadgets",
+        "org.nuxeo.ecm.platform.types.api", "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.core.persistence",
+        "org.nuxeo.ecm.activity", "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
         "org.nuxeo.ecm.platform.query.api", "org.nuxeo.ecm.user.relationships" })
-@LocalDeploy({
-        "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
+@LocalDeploy({ "org.nuxeo.ecm.user.relationships:test-user-relationship-directories-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:social-workspace-test.xml" })
 public class TestSocialProviderOperation {
 
@@ -85,10 +80,8 @@ public class TestSocialProviderOperation {
 
     @Before
     public void disableListeners() {
-        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
-                false);
-        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text",
-                false);
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener", false);
+        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text", false);
     }
 
     @Before
@@ -98,22 +91,19 @@ public class TestSocialProviderOperation {
         session.save();
 
         // create social workspaces
-        DocumentModel sws1 = session.createDocumentModel("/", "sws1",
-                "SocialWorkspace");
+        DocumentModel sws1 = session.createDocumentModel("/", "sws1", "SocialWorkspace");
         sws1.setPropertyValue("dc:title", "Social Workspace 1");
         sws1 = session.createDocument(sws1);
 
         session.save();
 
-        DocumentModel sws2 = session.createDocumentModel("/", "sws2",
-                "SocialWorkspace");
+        DocumentModel sws2 = session.createDocumentModel("/", "sws2", "SocialWorkspace");
         sws2.setPropertyValue("dc:title", "Social Workspace 2");
         sws2 = session.createDocument(sws2);
         session.save();
 
         // create two articles in 2nd social workspace
-        DocumentModel article1 = session.createDocumentModel("/sws2",
-                "article1", "Article");
+        DocumentModel article1 = session.createDocumentModel("/sws2", "article1", "Article");
         article1.setPropertyValue(SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, true);
         article1.setPropertyValue("dc:title", "Public Article");
         article1 = session.createDocument(article1);
@@ -122,8 +112,7 @@ public class TestSocialProviderOperation {
         session.save();
         article1 = session.getDocument(article1.getRef());
 
-        DocumentModel article2 = session.createDocumentModel("/sws2",
-                "article2", "Article");
+        DocumentModel article2 = session.createDocumentModel("/sws2", "article2", "Article");
         article2.setPropertyValue("dc:title", "Non Public Article");
         article2 = session.createDocument(article2);
 
@@ -141,8 +130,7 @@ public class TestSocialProviderOperation {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("fakeChain");
-        OperationParameters oParams = new OperationParameters(
-                SocialProviderOperation.ID);
+        OperationParameters oParams = new OperationParameters(SocialProviderOperation.ID);
         oParams.set("query", "select * from Article where ecm:isProxy = 0");
         oParams.set("contextPath", "/sws2");
         chain.add(oParams);
@@ -165,8 +153,7 @@ public class TestSocialProviderOperation {
         assertNotNull(ctx);
 
         OperationChain chain = new OperationChain("fakeChain");
-        OperationParameters oParams = new OperationParameters(
-                SocialProviderOperation.ID);
+        OperationParameters oParams = new OperationParameters(SocialProviderOperation.ID);
         oParams.set("query", "select * from Article");
         oParams.set("contextPath", "/sws2");
         oParams.set("onlyPublicDocuments", "true");

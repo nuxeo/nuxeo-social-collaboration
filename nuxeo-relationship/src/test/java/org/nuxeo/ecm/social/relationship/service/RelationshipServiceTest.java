@@ -62,19 +62,13 @@ public class RelationshipServiceTest {
 
     @Test
     public void testFriendshipsCreation() throws ClientException {
-        String user1 = ActivityHelper.createUserActivityObject(createUser(
-                "user1").getId());
-        String user2 = ActivityHelper.createUserActivityObject(createUser(
-                "user2").getId());
-        String user3 = ActivityHelper.createUserActivityObject(createUser(
-                "user3").getId());
-        String user4 = ActivityHelper.createUserActivityObject(createUser(
-                "user4").getId());
+        String user1 = ActivityHelper.createUserActivityObject(createUser("user1").getId());
+        String user2 = ActivityHelper.createUserActivityObject(createUser("user2").getId());
+        String user3 = ActivityHelper.createUserActivityObject(createUser("user3").getId());
+        String user4 = ActivityHelper.createUserActivityObject(createUser("user4").getId());
 
-        RelationshipKind relation = RelationshipKind.newInstance("group",
-                "relation");
-        RelationshipKind coworker = RelationshipKind.newInstance("group",
-                "coworker");
+        RelationshipKind relation = RelationshipKind.newInstance("group", "relation");
+        RelationshipKind coworker = RelationshipKind.newInstance("group", "coworker");
 
         assertTrue(relationshipService.addRelation(user1, user2, relation));
         assertTrue(relationshipService.addRelation(user1, user2, coworker));
@@ -86,12 +80,10 @@ public class RelationshipServiceTest {
         assertFalse(relationshipService.addRelation(user1, user4, coworker));
 
         assertEquals(3, relationshipService.getTargets(user1).size());
-        assertEquals(2,
-                relationshipService.getRelationshipKinds(user1, user2).size());
+        assertEquals(2, relationshipService.getRelationshipKinds(user1, user2).size());
 
         // is he into a relationship ?
-        List<String> user1Relations = relationshipService.getTargetsOfKind(
-                user1, relation);
+        List<String> user1Relations = relationshipService.getTargetsOfKind(user1, relation);
         assertEquals(1, user1Relations.size());
         assertEquals(user2, user1Relations.get(0));
 
@@ -131,15 +123,11 @@ public class RelationshipServiceTest {
         String user = ActivityHelper.createUserActivityObject("user_kindSearch");
 
         RelationshipKind doc_read = RelationshipKind.newInstance("doc", "read");
-        RelationshipKind doc_readWrite = RelationshipKind.newInstance("doc",
-                "readWrite");
+        RelationshipKind doc_readWrite = RelationshipKind.newInstance("doc", "readWrite");
 
-        RelationshipKind user_friend = RelationshipKind.newInstance("user",
-                "friend");
-        RelationshipKind user_coworker = RelationshipKind.newInstance("user",
-                "coworker");
-        RelationshipKind user_ignored = RelationshipKind.newInstance("user",
-                "ignored");
+        RelationshipKind user_friend = RelationshipKind.newInstance("user", "friend");
+        RelationshipKind user_coworker = RelationshipKind.newInstance("user", "coworker");
+        RelationshipKind user_ignored = RelationshipKind.newInstance("user", "ignored");
 
         assertTrue(relationshipService.addRelation(user, "user2", user_friend));
         assertTrue(relationshipService.addRelation(user, "user2", user_coworker));
@@ -151,40 +139,24 @@ public class RelationshipServiceTest {
         assertTrue(relationshipService.addRelation(user, "doc3", doc_read));
 
         assertEquals(6, relationshipService.getTargets(user).size());
-        assertEquals(
-                3,
-                relationshipService.getTargetsOfKind(user,
-                        RelationshipKind.fromGroup("user")).size());
-        assertEquals(
-                1,
-                relationshipService.getTargetsOfKind(user,
-                        RelationshipKind.fromName("coworker")).size());
-        assertEquals(
-                0,
-                relationshipService.getTargetsOfKind(user,
-                        RelationshipKind.fromName("unknown")).size());
-        assertEquals(
-                0,
-                relationshipService.getTargetsOfKind(user,
-                        RelationshipKind.newInstance("user", "unknown")).size());
+        assertEquals(3, relationshipService.getTargetsOfKind(user, RelationshipKind.fromGroup("user")).size());
+        assertEquals(1, relationshipService.getTargetsOfKind(user, RelationshipKind.fromName("coworker")).size());
+        assertEquals(0, relationshipService.getTargetsOfKind(user, RelationshipKind.fromName("unknown")).size());
+        assertEquals(0,
+                relationshipService.getTargetsOfKind(user, RelationshipKind.newInstance("user", "unknown")).size());
     }
 
     @Test
     public void testRelationshipWithFulltext() throws ClientException {
         String pattern = "patternToFind";
-        String user1 = ActivityHelper.createUserActivityObject(createUser(
-                "user21").getId());
-        String user2 = ActivityHelper.createUserActivityObject(createUser(
-                "user" + pattern).getId());
-        String user3 = ActivityHelper.createUserActivityObject(createUser(
-                "user23").getId());
+        String user1 = ActivityHelper.createUserActivityObject(createUser("user21").getId());
+        String user2 = ActivityHelper.createUserActivityObject(createUser("user" + pattern).getId());
+        String user3 = ActivityHelper.createUserActivityObject(createUser("user23").getId());
         String doc1 = ActivityHelper.DOC_PREFIX + createDoc("doc21").getId();
         String doc2 = ActivityHelper.DOC_PREFIX + "doc" + pattern;
 
-        RelationshipKind read = RelationshipKind.newInstance("document",
-                "have_read");
-        RelationshipKind coworker = RelationshipKind.newInstance("group",
-                "relation");
+        RelationshipKind read = RelationshipKind.newInstance("document", "have_read");
+        RelationshipKind coworker = RelationshipKind.newInstance("group", "relation");
 
         assertTrue(relationshipService.addRelation(user1, user3, coworker));
         assertTrue(relationshipService.addRelation(user1, user2, coworker));
@@ -192,22 +164,13 @@ public class RelationshipServiceTest {
         assertTrue(relationshipService.addRelation(user1, doc2, read));
 
         assertEquals(4, relationshipService.getTargets(user1).size());
-        assertEquals(
-                2,
-                relationshipService.getTargetsWithFulltext(user1,
-                        ActivityHelper.USER_PREFIX).size());
-        assertEquals(
-                2,
-                relationshipService.getTargetsWithFulltext(user1,
-                        ActivityHelper.DOC_PREFIX).size());
+        assertEquals(2, relationshipService.getTargetsWithFulltext(user1, ActivityHelper.USER_PREFIX).size());
+        assertEquals(2, relationshipService.getTargetsWithFulltext(user1, ActivityHelper.DOC_PREFIX).size());
 
-        List<String> targetsWithFulltext = relationshipService.getTargetsWithFulltext(
-                user1, pattern);
+        List<String> targetsWithFulltext = relationshipService.getTargetsWithFulltext(user1, pattern);
         assertEquals(2, targetsWithFulltext.size());
 
-        assertEquals(
-                1,
-                relationshipService.getTargetsWithFulltext(user1, read, pattern).size());
+        assertEquals(1, relationshipService.getTargetsWithFulltext(user1, read, pattern).size());
 
     }
 

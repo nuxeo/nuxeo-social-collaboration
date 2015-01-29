@@ -117,17 +117,15 @@ public class GetSocialWorkspaceMiniMessages {
             kind = relationshipKind;
         }
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
+        Locale locale = language != null && !language.isEmpty() ? new Locale(language) : Locale.ENGLISH;
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
-                session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(session, new PathRef(
+                contextPath));
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(LOCALE_PROPERTY, locale);
         props.put(SOCIAL_WORKSPACE_ID_PROPERTY, socialWorkspace.getId());
-        props.put(REPOSITORY_NAME_PROPERTY,
-                socialWorkspace.getDocument().getRepositoryName());
+        props.put(REPOSITORY_NAME_PROPERTY, socialWorkspace.getDocument().getRepositoryName());
         props.put(RELATIONSHIP_KIND_PROPERTY, kind);
 
         if (asActivities) {
@@ -140,14 +138,12 @@ public class GetSocialWorkspaceMiniMessages {
             for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
                 Map<String, Object> o = activityMessage.toMap(session, locale);
                 String actorUsername = getUsername(activityMessage.getActor());
-                o.put("allowDeletion",
-                        session.getPrincipal().getName().equals(actorUsername));
+                o.put("allowDeletion", session.getPrincipal().getName().equals(actorUsername));
                 miniMessages.add(o);
             }
 
             Map<String, Object> m = new HashMap<String, Object>();
-            m.put("offset",
-                    ((AbstractActivityPageProvider) pageProvider).getNextOffset());
+            m.put("offset", ((AbstractActivityPageProvider) pageProvider).getNextOffset());
             m.put("limit", pageProvider.getCurrentPageSize());
             m.put("miniMessages", miniMessages);
 
@@ -156,8 +152,7 @@ public class GetSocialWorkspaceMiniMessages {
             mapper.writeValue(writer, m);
 
             String json = writer.toString();
-            return new InputStreamBlob(new ByteArrayInputStream(
-                    json.getBytes("UTF-8")), "application/json");
+            return new InputStreamBlob(new ByteArrayInputStream(json.getBytes("UTF-8")), "application/json");
         } else {
             @SuppressWarnings("unchecked")
             PageProvider<MiniMessage> pageProvider = (PageProvider<MiniMessage>) pageProviderService.getPageProvider(
@@ -165,8 +160,7 @@ public class GetSocialWorkspaceMiniMessages {
             pageProvider.setCurrentPageOffset(targetOffset);
 
             String json = toJSON(pageProvider, locale, session);
-            return new InputStreamBlob(new ByteArrayInputStream(
-                    json.getBytes("UTF-8")), "application/json");
+            return new InputStreamBlob(new ByteArrayInputStream(json.getBytes("UTF-8")), "application/json");
         }
     }
 

@@ -30,19 +30,14 @@ import org.nuxeo.ecm.social.workspace.adapters.SubscriptionRequest;
  */
 public interface SubscriptionRequestHandler {
 
-    void handleSubscriptionRequestFor(SocialWorkspace socialWorkspace,
-            Principal principal);
+    void handleSubscriptionRequestFor(SocialWorkspace socialWorkspace, Principal principal);
 
-    boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace,
-            Principal principal);
+    boolean isSubscriptionRequestPending(SocialWorkspace socialWorkspace, Principal principal);
 
-    String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace,
-            Principal principal);
+    String getSubscriptionRequestStatus(SocialWorkspace socialWorkspace, Principal principal);
 
-    void acceptSubscriptionRequest(SocialWorkspace socialWorkspace,
-            SubscriptionRequest subscriptionRequest);
+    void acceptSubscriptionRequest(SocialWorkspace socialWorkspace, SubscriptionRequest subscriptionRequest);
 
-    void rejectSubscriptionRequest(SocialWorkspace socialWorkspace,
-            SubscriptionRequest subscriptionRequest);
+    void rejectSubscriptionRequest(SocialWorkspace socialWorkspace, SubscriptionRequest subscriptionRequest);
 
 }

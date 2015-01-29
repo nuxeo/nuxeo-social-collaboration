@@ -31,7 +31,6 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 @Operation(id = JoinSocialWorkspaceRequest.ID, category = Constants.CAT_EXECUTION, label = "Join Social Workspace", description = "Operation that will handle join request")
 public class JoinSocialWorkspaceRequest {
@@ -55,8 +54,8 @@ public class JoinSocialWorkspaceRequest {
             return;
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
-                session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(session, new PathRef(
+                contextPath));
         socialWorkspace.handleSubscriptionRequest(session.getPrincipal());
     }
 

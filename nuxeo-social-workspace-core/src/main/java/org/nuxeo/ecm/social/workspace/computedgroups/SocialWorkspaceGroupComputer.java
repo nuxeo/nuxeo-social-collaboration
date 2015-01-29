@@ -22,8 +22,7 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Social Workspace group computer to provide virtual groups.
  * <p>
- * We have two virtual groups: - members of a social workspace - administrators
- * of a social workspace
+ * We have two virtual groups: - members of a social workspace - administrators of a social workspace
  * <p>
  * It do not provide sub groups.
  *
@@ -36,18 +35,15 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
     private static final Log log = LogFactory.getLog(SocialWorkspaceGroupComputer.class);
 
     @Override
-    public List<String> getGroupsForUser(NuxeoPrincipalImpl nuxeoPrincipal)
-            throws Exception {
+    public List<String> getGroupsForUser(NuxeoPrincipalImpl nuxeoPrincipal) throws Exception {
         String user = ActivityHelper.createUserActivityObject(nuxeoPrincipal);
         List<String> groupsId = new ArrayList<String>();
         // member of a social workspace
-        for (String swId : getRelationshipService().getTargetsOfKind(user,
-                buildRelationMemberKind())) {
+        for (String swId : getRelationshipService().getTargetsOfKind(user, buildRelationMemberKind())) {
             groupsId.add(getSocialWorkspaceMembersGroupName(swId));
         }
         // administrator of a social workspace
-        for (String swId : getRelationshipService().getTargetsOfKind(user,
-                buildRelationAdministratorKind())) {
+        for (String swId : getRelationshipService().getTargetsOfKind(user, buildRelationAdministratorKind())) {
             groupsId.add(getSocialWorkspaceAdministratorsGroupName(swId));
         }
         return groupsId;
@@ -64,8 +60,7 @@ public class SocialWorkspaceGroupComputer extends AbstractGroupComputer {
         if (!isValidSocialWorkspaceGroupName(groupName)) {
             return null;
         }
-        return getRelationshipService().getTargetsOfKind(
-                getRelationDocActivityObjectFromGroupName(groupName),
+        return getRelationshipService().getTargetsOfKind(getRelationDocActivityObjectFromGroupName(groupName),
                 buildRelationKindFromGroupName(groupName));
     }
 

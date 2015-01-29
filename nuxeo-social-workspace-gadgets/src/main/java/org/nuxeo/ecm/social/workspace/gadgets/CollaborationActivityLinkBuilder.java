@@ -28,25 +28,19 @@ import org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Activity link builder for Collaboration tab, use the {@code collaboration}
- * URL pattern to generate documents URL.
+ * Activity link builder for Collaboration tab, use the {@code collaboration} URL pattern to generate documents URL.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.6
  */
-public class CollaborationActivityLinkBuilder extends
-        DefaultActivityLinkBuilder {
+public class CollaborationActivityLinkBuilder extends DefaultActivityLinkBuilder {
 
     @Override
     public String getDocumentURL(String repositoryName, String documentId) {
-        DocumentLocation docLoc = new DocumentLocationImpl(repositoryName,
-                new IdRef(documentId));
-        DocumentView docView = new DocumentViewImpl(docLoc,
-                "view_social_document");
+        DocumentLocation docLoc = new DocumentLocationImpl(repositoryName, new IdRef(documentId));
+        DocumentView docView = new DocumentViewImpl(docLoc, "view_social_document");
         URLPolicyService urlPolicyService = Framework.getLocalService(URLPolicyService.class);
-        return VirtualHostHelper.getContextPathProperty()
-                + "/"
-                + urlPolicyService.getUrlFromDocumentView("collaboration",
-                        docView, null);
+        return VirtualHostHelper.getContextPathProperty() + "/"
+                + urlPolicyService.getUrlFromDocumentView("collaboration", docView, null);
     }
 }

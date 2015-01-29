@@ -84,10 +84,8 @@ public class BulkImportSocialWorkspaceActions extends UserRegistrationActions {
     public List<Map<String, String>> getRightsMenuEntries() {
         if (rightsMenuEntries == null) {
             rightsMenuEntries = new ArrayList<Map<String, String>>();
-            rightsMenuEntries.add(buildEntry("label.social.workspace.member",
-                    MEMBER_RIGHT));
-            rightsMenuEntries.add(buildEntry(
-                    "label.social.workspace.administrator", ADMINISTRATOR_RIGHT));
+            rightsMenuEntries.add(buildEntry("label.social.workspace.member", MEMBER_RIGHT));
+            rightsMenuEntries.add(buildEntry("label.social.workspace.administrator", ADMINISTRATOR_RIGHT));
         }
         return rightsMenuEntries;
     }
@@ -131,30 +129,21 @@ public class BulkImportSocialWorkspaceActions extends UserRegistrationActions {
 
             SocialWorkspace sw = toSocialWorkspace(navigationContext.getCurrentDocument());
             if (isInvitationPossible(sw, userinfo)) {
-                boolean autoAccept = !(StringUtils.isBlank(multipleEmails)
-                        && sw.mustApproveSubscription());
+                boolean autoAccept = !(StringUtils.isBlank(multipleEmails) && sw.mustApproveSubscription());
 
-                userRegistrationService.submitRegistrationRequest(
-                        configurationName, userinfo, docinfo,
+                userRegistrationService.submitRegistrationRequest(configurationName, userinfo, docinfo,
                         getAdditionalsParameters(), EMAIL, autoAccept, documentManager.getPrincipal().getName());
 
-                facesMessages.add(
-                        INFO,
-                        resourcesAccessor.getMessages().get(
-                                "label.user.invited.success"));
+                facesMessages.add(INFO, resourcesAccessor.getMessages().get("label.user.invited.success"));
             }
         } catch (ClientException e) {
             log.info("Unable to register user: " + e.getMessage());
             log.debug(e, e);
-            facesMessages.add(
-                    ERROR,
-                    resourcesAccessor.getMessages().get(
-                            "label.unable.invite.user"));
+            facesMessages.add(ERROR, resourcesAccessor.getMessages().get("label.unable.invite.user"));
         }
     }
 
-    protected boolean isInvitationPossible(SocialWorkspace sw,
-            UserRegistrationInfo userInfo) {
+    protected boolean isInvitationPossible(SocialWorkspace sw, UserRegistrationInfo userInfo) {
 
         try {
             // Build userManager filters
@@ -170,8 +159,7 @@ public class BulkImportSocialWorkspaceActions extends UserRegistrationActions {
                 NuxeoPrincipal nxp = userManager.getPrincipal(users.get(0).getId());
                 return sw.shouldRequestSubscription(nxp);
             } else {
-                return StringUtils.isBlank(sw.getSubscriptionRequestStatus(new NuxeoPrincipalImpl(
-                        userInfo.getLogin())));
+                return StringUtils.isBlank(sw.getSubscriptionRequestStatus(new NuxeoPrincipalImpl(userInfo.getLogin())));
             }
         } catch (ClientException e) {
             log.debug(e, e);

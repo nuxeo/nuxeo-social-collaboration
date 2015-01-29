@@ -18,16 +18,15 @@ public class ImageBlobValidator implements Validator {
     private static final String ERROR_INPUT_FILE_NOT_AN_IMAGE = "error.inputFile.notAnImage";
 
     @Override
-    public void validate(FacesContext context, UIComponent component,
-            Object value) throws ValidatorException {
+    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         Blob blob = (Blob) ((InputFileInfo) value).getBlob();
         String mimeType = null;
         if (blob != null) {
             mimeType = blob.getMimeType();
         }
         if (mimeType != null && !mimeType.startsWith(IMAGE_MIME_TYPE_PREFIX)) {
-            throw new ValidatorException(MessageFactory.getMessage(
-                    ERROR_INPUT_FILE_NOT_AN_IMAGE, FacesMessage.SEVERITY_ERROR));
+            throw new ValidatorException(MessageFactory.getMessage(ERROR_INPUT_FILE_NOT_AN_IMAGE,
+                    FacesMessage.SEVERITY_ERROR));
         }
     }
 

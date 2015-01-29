@@ -46,8 +46,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-public class InitializeSocialWorkspaceDashboardsListener implements
-        EventListener {
+public class InitializeSocialWorkspaceDashboardsListener implements EventListener {
 
     @Override
     public void handleEvent(Event event) throws ClientException {
@@ -69,18 +68,15 @@ public class InitializeSocialWorkspaceDashboardsListener implements
                 return;
             }
 
-            SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(
-                    doc);
+            SocialWorkspace socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(doc);
 
             if (socialWorkspace != null) {
-                initializeDashboards(documentEventContext.getCoreSession(),
-                        doc, socialWorkspace);
+                initializeDashboards(documentEventContext.getCoreSession(), doc, socialWorkspace);
             }
         }
     }
 
-    private static void initializeDashboards(CoreSession session,
-            DocumentModel doc, SocialWorkspace socialWorkspace)
+    private static void initializeDashboards(CoreSession session, DocumentModel doc, SocialWorkspace socialWorkspace)
             throws ClientException {
         Locale locale;
         try {
@@ -92,63 +88,49 @@ public class InitializeSocialWorkspaceDashboardsListener implements
         Map<String, String> additionalPreferences = buildAdditionalPreferences(socialWorkspace);
 
         if (PRIVATE_DASHBOARD_SPACE_NAME.equals(doc.getName())) {
-            initializePrivateDashboard(doc, session, locale,
-                    additionalPreferences);
+            initializePrivateDashboard(doc, session, locale, additionalPreferences);
         } else if (PUBLIC_DASHBOARD_SPACE_NAME.equals(doc.getName())) {
-            initializePublicDashboard(doc, session, locale,
-                    additionalPreferences);
+            initializePublicDashboard(doc, session, locale, additionalPreferences);
         }
     }
 
-    private static Map<String, String> buildAdditionalPreferences(
-            SocialWorkspace socialWorkspace) {
+    private static Map<String, String> buildAdditionalPreferences(SocialWorkspace socialWorkspace) {
         Map<String, String> additionalPreferences = new HashMap<String, String>();
-        additionalPreferences.put("nuxeoTargetRepository",
-                socialWorkspace.getDocument().getRepositoryName());
-        additionalPreferences.put("nuxeoTargetContextPath",
-                socialWorkspace.getPath());
-        additionalPreferences.put("nuxeoTargetContextObject",
-                socialWorkspace.getDocument().getType());
+        additionalPreferences.put("nuxeoTargetRepository", socialWorkspace.getDocument().getRepositoryName());
+        additionalPreferences.put("nuxeoTargetContextPath", socialWorkspace.getPath());
+        additionalPreferences.put("nuxeoTargetContextObject", socialWorkspace.getDocument().getType());
         return additionalPreferences;
     }
 
-    private static void initializePrivateDashboard(DocumentModel doc,
-            CoreSession session, Locale locale,
+    private static void initializePrivateDashboard(DocumentModel doc, CoreSession session, Locale locale,
             Map<String, String> additionalPreferences) throws ClientException {
         Space space = doc.getAdapter(Space.class);
         space.initLayout(LayoutHelper.buildLayout(LayoutHelper.Preset.X_3_DEFAULT));
         // first column
-        WebContentHelper.createOpenSocialGadget(space, session, locale, "news",
-                0, 0, 0, additionalPreferences);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "articles", 0, 0, 1, additionalPreferences);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "members", 0, 0, 2, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "news", 0, 0, 0, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "articles", 0, 0, 1, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "members", 0, 0, 2, additionalPreferences);
         // second column
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "library", 0, 1, 0, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "library", 0, 1, 0, additionalPreferences);
         // third column
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "socialworkspaceminimessages", 0, 2, 0, additionalPreferences);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "socialworkspaceactivitystream", 0, 2, 1, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "socialworkspaceminimessages", 0, 2, 0,
+                additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "socialworkspaceactivitystream", 0, 2, 1,
+                additionalPreferences);
     }
 
-    private static void initializePublicDashboard(DocumentModel doc,
-            CoreSession session, Locale locale,
+    private static void initializePublicDashboard(DocumentModel doc, CoreSession session, Locale locale,
             Map<String, String> additionalPreferences) throws ClientException {
         Space space = doc.getAdapter(Space.class);
         space.initLayout(LayoutHelper.buildLayout(LayoutHelper.Preset.X_2_66_33));
         // first column
-        WebContentHelper.createOpenSocialGadget(space, session, locale, "news",
-                0, 0, 0, additionalPreferences);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "publicarticles", 0, 0, 1, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "news", 0, 0, 0, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "publicarticles", 0, 0, 1,
+                additionalPreferences);
         // second column
-        WebContentHelper.createOpenSocialGadget(space, session, locale, "join",
-                0, 1, 0, additionalPreferences);
-        WebContentHelper.createOpenSocialGadget(space, session, locale,
-                "publicdocuments", 0, 1, 1, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "join", 0, 1, 0, additionalPreferences);
+        WebContentHelper.createOpenSocialGadget(space, session, locale, "publicdocuments", 0, 1, 1,
+                additionalPreferences);
     }
 
     private static SocialWorkspaceService getSocialWorkspaceService() {

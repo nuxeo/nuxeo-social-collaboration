@@ -28,13 +28,10 @@ import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.social.relationship.RelationshipKind;
 
 /**
- *
- *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.6
  */
-public abstract class AbstractMiniMessagePageProvider<T> extends
-        AbstractActivityPageProvider<T> {
+public abstract class AbstractMiniMessagePageProvider<T> extends AbstractActivityPageProvider<T> {
 
     public static final String LOCALE_PROPERTY = "locale";
 
@@ -54,8 +51,7 @@ public abstract class AbstractMiniMessagePageProvider<T> extends
         Map<String, Serializable> props = getProperties();
         Locale locale = (Locale) props.get(LOCALE_PROPERTY);
         if (locale == null) {
-            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY
-                    + " property.");
+            throw new ClientRuntimeException("Cannot find " + LOCALE_PROPERTY + " property.");
         }
         return locale;
     }
@@ -64,8 +60,7 @@ public abstract class AbstractMiniMessagePageProvider<T> extends
         Map<String, Serializable> props = getProperties();
         String actor = (String) props.get(ACTOR_PROPERTY);
         if (actor == null) {
-            throw new ClientRuntimeException("Cannot find " + ACTOR_PROPERTY
-                    + " property.");
+            throw new ClientRuntimeException("Cannot find " + ACTOR_PROPERTY + " property.");
         }
         return ActivityHelper.createUserActivityObject(actor);
     }
@@ -83,8 +78,7 @@ public abstract class AbstractMiniMessagePageProvider<T> extends
         Map<String, Serializable> props = getProperties();
         String relationshipKind = (String) props.get(RELATIONSHIP_KIND_PROPERTY);
         if (relationshipKind == null) {
-            throw new ClientRuntimeException("Cannot find "
-                    + RELATIONSHIP_KIND_PROPERTY + " property.");
+            throw new ClientRuntimeException("Cannot find " + RELATIONSHIP_KIND_PROPERTY + " property.");
         }
         return RelationshipKind.fromString(relationshipKind);
     }

@@ -78,15 +78,13 @@ public class SocialWorkspaceActions implements Serializable {
     public boolean isCurrentUserAdministratorOrMemberOfCurrentSocialWorkspace() {
         DocumentModel doc = navigationContext.getCurrentDocument();
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(doc);
-        return socialWorkspace != null
-                && socialWorkspace.isAdministratorOrMember(currentUser);
+        return socialWorkspace != null && socialWorkspace.isAdministratorOrMember(currentUser);
     }
 
     public boolean isCurrentUserAdministratorOfCurrentSocialWorkspace() {
         DocumentModel doc = navigationContext.getCurrentDocument();
         SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(doc);
-        return socialWorkspace != null
-                && socialWorkspace.isAdministrator(currentUser);
+        return socialWorkspace != null && socialWorkspace.isAdministrator(currentUser);
     }
 
     public boolean enableSocialWorkspaceActions() throws ClientException {
@@ -120,8 +118,7 @@ public class SocialWorkspaceActions implements Serializable {
     }
 
     public void setCollaborationMainTab(String tabs) {
-        webActions.setCurrentTabIds(!StringUtils.isBlank(tabs) ? tabs
-                : MAIN_TABS_COLLABORATION);
+        webActions.setCurrentTabIds(!StringUtils.isBlank(tabs) ? tabs : MAIN_TABS_COLLABORATION);
     }
 
 }

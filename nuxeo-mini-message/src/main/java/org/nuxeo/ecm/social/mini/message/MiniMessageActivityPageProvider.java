@@ -28,17 +28,15 @@ import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Page provider listing mini messages, as a list of {@link Activity}, for a
- * given actor
+ * Page provider listing mini messages, as a list of {@link Activity}, for a given actor
  * <p>
- * This page provider requires two properties: the first one to be filled with
- * the actor, and the second one to be filled with the relationship kind to use.
+ * This page provider requires two properties: the first one to be filled with the actor, and the second one to be
+ * filled with the relationship kind to use.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.6
  */
-public class MiniMessageActivityPageProvider extends
-        AbstractMiniMessagePageProvider<ActivityMessage> implements
+public class MiniMessageActivityPageProvider extends AbstractMiniMessagePageProvider<ActivityMessage> implements
         PageProvider<ActivityMessage> {
 
     private static final long serialVersionUID = 1L;
@@ -54,14 +52,11 @@ public class MiniMessageActivityPageProvider extends
             MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
             String streamType = getStreamType();
             if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFor(
-                        getActor(), getRelationshipKind(),
-                        getCurrentPageOffset(), pageSize).toActivityMessages(
-                        getLocale()));
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFor(getActor(),
+                        getRelationshipKind(), getCurrentPageOffset(), pageSize).toActivityMessages(getLocale()));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFrom(
-                        getActor(), getCurrentPageOffset(), pageSize).toActivityMessages(
-                        getLocale()));
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFrom(getActor(),
+                        getCurrentPageOffset(), pageSize).toActivityMessages(getLocale()));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }

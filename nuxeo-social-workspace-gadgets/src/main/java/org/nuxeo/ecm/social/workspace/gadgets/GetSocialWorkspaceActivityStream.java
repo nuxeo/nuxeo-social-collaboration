@@ -97,16 +97,14 @@ public class GetSocialWorkspaceActivityStream {
             targetLimit = limit.longValue();
         }
 
-        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(
-                session, new PathRef(contextPath));
+        SocialWorkspace socialWorkspace = socialWorkspaceService.getDetachedSocialWorkspace(session, new PathRef(
+                contextPath));
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
+        Locale locale = language != null && !language.isEmpty() ? new Locale(language) : Locale.ENGLISH;
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(SOCIAL_WORKSPACE_ID_PROPERTY, socialWorkspace.getId());
-        props.put(REPOSITORY_NAME_PROPERTY,
-                socialWorkspace.getDocument().getRepositoryName());
+        props.put(REPOSITORY_NAME_PROPERTY, socialWorkspace.getDocument().getRepositoryName());
         props.put(LOCALE_PROPERTY, locale);
         props.put(CORE_SESSION_PROPERTY, (Serializable) session);
         props.put(ACTIVITY_LINK_BUILDER_NAME_PROPERTY, activityLinkBuilder);
@@ -116,13 +114,11 @@ public class GetSocialWorkspaceActivityStream {
 
         List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
-            activities.add(activityMessage.toMap(session, locale,
-                    activityLinkBuilder));
+            activities.add(activityMessage.toMap(session, locale, activityLinkBuilder));
         }
 
         Map<String, Object> m = new HashMap<String, Object>();
-        m.put("offset",
-                ((SocialWorkspaceActivityStreamPageProvider) pageProvider).getNextOffset());
+        m.put("offset", ((SocialWorkspaceActivityStreamPageProvider) pageProvider).getNextOffset());
         m.put("limit", pageProvider.getPageSize());
         m.put("activities", activities);
 
@@ -130,8 +126,7 @@ public class GetSocialWorkspaceActivityStream {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, m);
 
-        return new InputStreamBlob(new ByteArrayInputStream(
-                writer.toString().getBytes("UTF-8")), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), "application/json");
     }
 
 }

@@ -41,8 +41,7 @@ public abstract class BaseAdapter {
         }
     }
 
-    protected static void setDocProperty(DocumentModel doc, String xpath,
-            Serializable value) {
+    protected static void setDocProperty(DocumentModel doc, String xpath, Serializable value) {
         try {
             doc.setPropertyValue(xpath, value);
         } catch (ClientException e) {

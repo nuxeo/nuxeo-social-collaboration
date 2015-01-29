@@ -45,8 +45,7 @@ public class ImportEventListener implements EventListener {
 
     @Override
     public void handleEvent(Event event) throws ClientException {
-        List<Principal> principals = (List<Principal>) event.getContext().getProperty(
-                CTX_PRINCIPALS_PROPERTY);
+        List<Principal> principals = (List<Principal>) event.getContext().getProperty(CTX_PRINCIPALS_PROPERTY);
         lastPrincipalsCount = principals.size();
 
         if (event.getName().equals(EVENT_MEMBERS_REMOVED)) {

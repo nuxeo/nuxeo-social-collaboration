@@ -38,8 +38,7 @@ import org.nuxeo.ecm.user.center.dashboard.AbstractDashboardSpaceCreator;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Dashboard space provider returning the collaboration dashboard to be
- * displayed in collaboration tab </p>
+ * Dashboard space provider returning the collaboration dashboard to be displayed in collaboration tab </p>
  *
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
  * @since 5.5
@@ -54,8 +53,7 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
     }
 
     @Override
-    protected Space doGetSpace(CoreSession session,
-            DocumentModel contextDocument, String spaceName,
+    protected Space doGetSpace(CoreSession session, DocumentModel contextDocument, String spaceName,
             Map<String, String> parameters) throws SpaceException {
         try {
             return getOrCreateSpace(session, parameters);
@@ -65,29 +63,23 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
         }
     }
 
-    protected Space getOrCreateSpace(CoreSession session,
-            Map<String, String> parameters) throws ClientException {
-        DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getSocialWorkspaceContainer(
-                session);
-        DocumentRef collaborationDashboardSpaceRef = new PathRef(
-                socialWorkspaceContainer.getPathAsString(),
+    protected Space getOrCreateSpace(CoreSession session, Map<String, String> parameters) throws ClientException {
+        DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getSocialWorkspaceContainer(session);
+        DocumentRef collaborationDashboardSpaceRef = new PathRef(socialWorkspaceContainer.getPathAsString(),
                 COLLABORATION_DASHBOARD_SPACE_NAME);
         if (session.exists(collaborationDashboardSpaceRef)) {
             DocumentModel collaborationDashboardSpace = session.getDocument(collaborationDashboardSpaceRef);
             return collaborationDashboardSpace.getAdapter(Space.class);
         } else {
-            DocumentModel collaborationDashboardSpace = getOrCreateCollaborationDashboardSpace(
-                    session, parameters);
+            DocumentModel collaborationDashboardSpace = getOrCreateCollaborationDashboardSpace(session, parameters);
             return collaborationDashboardSpace.getAdapter(Space.class);
         }
 
     }
 
-    protected DocumentModel getOrCreateCollaborationDashboardSpace(
-            CoreSession session, Map<String, String> parameters)
+    protected DocumentModel getOrCreateCollaborationDashboardSpace(CoreSession session, Map<String, String> parameters)
             throws ClientException {
-        CollaborationDashBoardSpaceCreator creator = new CollaborationDashBoardSpaceCreator(
-                session, parameters);
+        CollaborationDashBoardSpaceCreator creator = new CollaborationDashBoardSpaceCreator(session, parameters);
         creator.runUnrestricted();
         return session.getDocument(creator.getCollaborationDashboardSpaceRef());
 
@@ -97,13 +89,11 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
         return Framework.getLocalService(SocialWorkspaceService.class);
     }
 
-    class CollaborationDashBoardSpaceCreator extends
-            AbstractDashboardSpaceCreator {
+    class CollaborationDashBoardSpaceCreator extends AbstractDashboardSpaceCreator {
 
         DocumentRef collaborationDashboardSpaceRef;
 
-        protected CollaborationDashBoardSpaceCreator(CoreSession session,
-                Map<String, String> parameters) {
+        protected CollaborationDashBoardSpaceCreator(CoreSession session, Map<String, String> parameters) {
             super(session, parameters);
         }
 
@@ -112,15 +102,11 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
         }
 
         public void run() throws ClientException {
-            DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getSocialWorkspaceContainer(
-                    session);
+            DocumentModel socialWorkspaceContainer = getSocialWorkspaceService().getSocialWorkspaceContainer(session);
             DocumentModel collaborationDashboardSpace = session.createDocumentModel(
-                    socialWorkspaceContainer.getPathAsString(),
-                    COLLABORATION_DASHBOARD_SPACE_NAME, SPACE_DOCUMENT_TYPE);
-            collaborationDashboardSpace.setPropertyValue("dc:title",
-                    "global dashboard space");
-            collaborationDashboardSpace.setPropertyValue("dc:description",
-                    "global dashboard space");
+                    socialWorkspaceContainer.getPathAsString(), COLLABORATION_DASHBOARD_SPACE_NAME, SPACE_DOCUMENT_TYPE);
+            collaborationDashboardSpace.setPropertyValue("dc:title", "global dashboard space");
+            collaborationDashboardSpace.setPropertyValue("dc:description", "global dashboard space");
             collaborationDashboardSpace = session.createDocument(collaborationDashboardSpace);
 
             addInitialGadgets(collaborationDashboardSpace);
@@ -128,16 +114,11 @@ public class CollaborationDashboardSpaceProvider extends AbstractSpaceProvider {
 
         }
 
-        protected void initializeGadgets(Space space, CoreSession session,
-                Locale locale) throws ClientException {
-            WebContentHelper.createOpenSocialGadget(space, session, locale,
-                    "publicsocialworkspaces", 0, 0, 0);
-            WebContentHelper.createOpenSocialGadget(space, session, locale,
-                    "news", 0, 0, 1);
-            WebContentHelper.createOpenSocialGadget(space, session, locale,
-                    "usersocialworkspaces", 0, 1, 0);
-            WebContentHelper.createOpenSocialGadget(space, session, locale,
-                    "useractivitystream", 0, 1, 1);
+        protected void initializeGadgets(Space space, CoreSession session, Locale locale) throws ClientException {
+            WebContentHelper.createOpenSocialGadget(space, session, locale, "publicsocialworkspaces", 0, 0, 0);
+            WebContentHelper.createOpenSocialGadget(space, session, locale, "news", 0, 0, 1);
+            WebContentHelper.createOpenSocialGadget(space, session, locale, "usersocialworkspaces", 0, 1, 0);
+            WebContentHelper.createOpenSocialGadget(space, session, locale, "useractivitystream", 0, 1, 1);
         }
 
     }

@@ -54,8 +54,7 @@ import org.nuxeo.runtime.model.DefaultComponent;
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
  * @since 5.5
  */
-public class RelationshipServiceImpl extends DefaultComponent implements
-        RelationshipService {
+public class RelationshipServiceImpl extends DefaultComponent implements RelationshipService {
 
     public static final String KINDS_EXTENSION_POINT = "relationshipKinds";
 
@@ -76,8 +75,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public void registerContribution(Object contribution,
-            String extensionPoint, ComponentInstance contributor)
+    public void registerContribution(Object contribution, String extensionPoint, ComponentInstance contributor)
             throws Exception {
         if (KINDS_EXTENSION_POINT.equals(extensionPoint)) {
             relationshipKindRegistry.addContribution((RelationshipKindDescriptor) contribution);
@@ -85,15 +83,13 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public List<RelationshipKind> getRelationshipKinds(String actorId,
-            String targetId) {
+    public List<RelationshipKind> getRelationshipKinds(String actorId, String targetId) {
         Map<String, Serializable> filters = new HashMap<String, Serializable>();
         filters.put(RELATIONSHIP_FIELD_ACTOR, actorId);
         filters.put(RELATIONSHIP_FIELD_TARGET, targetId);
 
         Set<RelationshipKind> kinds = new HashSet<RelationshipKind>();
-        for (DocumentModel relation : queryRelationshipsDirectory(filters,
-                false)) {
+        for (DocumentModel relation : queryRelationshipsDirectory(filters, false)) {
             try {
                 kinds.add(buildKindFromRelationshipModel(relation));
             } catch (ClientException e) {
@@ -111,9 +107,8 @@ public class RelationshipServiceImpl extends DefaultComponent implements
         if (!(kind == null || kind.isEmpty())) {
             filters.put(RELATIONSHIP_FIELD_KIND, kind.toString());
         }
-        return buildListFromProperty(
-                queryRelationshipsDirectory(filters, false),
-                RELATIONSHIP_SCHEMA_NAME, RELATIONSHIP_FIELD_TARGET);
+        return buildListFromProperty(queryRelationshipsDirectory(filters, false), RELATIONSHIP_SCHEMA_NAME,
+                RELATIONSHIP_FIELD_TARGET);
     }
 
     @Override
@@ -122,14 +117,12 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public List<String> getTargetsWithFulltext(String actorId,
-            String targetPattern) {
+    public List<String> getTargetsWithFulltext(String actorId, String targetPattern) {
         return getTargetsWithFulltext(actorId, null, targetPattern);
     }
 
     @Override
-    public List<String> getTargetsWithFulltext(String actorId,
-            RelationshipKind kind, String targetPattern) {
+    public List<String> getTargetsWithFulltext(String actorId, RelationshipKind kind, String targetPattern) {
         Map<String, Serializable> filters = new HashMap<String, Serializable>();
         filters.put(RELATIONSHIP_FIELD_ACTOR, actorId);
         if (!(kind == null || kind.isEmpty())) {
@@ -138,9 +131,8 @@ public class RelationshipServiceImpl extends DefaultComponent implements
         if (!StringUtils.isBlank(targetPattern)) {
             filters.put(RELATIONSHIP_FIELD_TARGET, targetPattern);
         }
-        return buildListFromProperty(
-                queryRelationshipsDirectory(filters, true),
-                RELATIONSHIP_SCHEMA_NAME, RELATIONSHIP_FIELD_TARGET);
+        return buildListFromProperty(queryRelationshipsDirectory(filters, true), RELATIONSHIP_SCHEMA_NAME,
+                RELATIONSHIP_FIELD_TARGET);
     }
 
     @Override
@@ -154,8 +146,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public Boolean addRelation(String actorId, String targetId,
-            RelationshipKind kind) {
+    public Boolean addRelation(String actorId, String targetId, RelationshipKind kind) {
         if (kind == null) {
             throw new ClientRuntimeException("Type cannot be null");
         }
@@ -172,15 +163,13 @@ public class RelationshipServiceImpl extends DefaultComponent implements
 
             DocumentModelList relationships = relationshipsDirectory.query(relationship);
             if (relationships.isEmpty()) {
-                relationshipsDirectory.createEntry(new HashMap<String, Object>(
-                        relationship));
+                relationshipsDirectory.createEntry(new HashMap<String, Object>(relationship));
                 return true;
             } else {
                 return false;
             }
         } catch (ClientException e) {
-            throw new ClientRuntimeException("Unable to create a new relation",
-                    e);
+            throw new ClientRuntimeException("Unable to create a new relation", e);
         } finally {
             if (relationshipsDirectory != null) {
                 try {
@@ -194,8 +183,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
     }
 
     @Override
-    public Boolean removeRelation(String actorId, String targetId,
-            RelationshipKind kind) {
+    public Boolean removeRelation(String actorId, String targetId, RelationshipKind kind) {
         DirectoryService directoryService = Framework.getLocalService(DirectoryService.class);
         Session relationshipDirectory = null;
         try {
@@ -210,8 +198,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
                 filter.put(RELATIONSHIP_FIELD_KIND, kind.toString());
             }
 
-            DocumentModelList relations = relationshipDirectory.query(filter,
-                    filter.keySet());
+            DocumentModelList relations = relationshipDirectory.query(filter, filter.keySet());
             if (relations.isEmpty()) {
                 log.warn("Trying to delete a relationship that doesn't exists");
                 return false;
@@ -222,8 +209,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
                 return true;
             }
         } catch (ClientException e) {
-            throw new ClientRuntimeException("Unable to remove a relationship",
-                    e);
+            throw new ClientRuntimeException("Unable to remove a relationship", e);
         } finally {
             if (relationshipDirectory != null) {
                 try {
@@ -236,8 +222,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
         }
     }
 
-    protected DocumentModelList queryRelationshipsDirectory(
-            Map<String, Serializable> filter, Boolean withFulltext) {
+    protected DocumentModelList queryRelationshipsDirectory(Map<String, Serializable> filter, Boolean withFulltext) {
         DirectoryService directoryService = Framework.getLocalService(DirectoryService.class);
         Session relationshipsDirectory = null;
         try {
@@ -249,11 +234,9 @@ public class RelationshipServiceImpl extends DefaultComponent implements
                 fulltextFields.addAll(filter.keySet());
             }
 
-            return relationshipsDirectory.query(filter, fulltextFields,
-                    getRelationshipsOrderBy());
+            return relationshipsDirectory.query(filter, fulltextFields, getRelationshipsOrderBy());
         } catch (ClientException e) {
-            throw new ClientRuntimeException(
-                    "Unable to query through relationships directory", e);
+            throw new ClientRuntimeException("Unable to query through relationships directory", e);
         } finally {
             if (relationshipsDirectory != null) {
                 try {
@@ -266,8 +249,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
         }
     }
 
-    protected static List<String> buildListFromProperty(DocumentModelList docs,
-            String schema, String property) {
+    protected static List<String> buildListFromProperty(DocumentModelList docs, String schema, String property) {
         Set<String> values = new HashSet<String>();
         for (DocumentModel doc : docs) {
             try {
@@ -279,8 +261,7 @@ public class RelationshipServiceImpl extends DefaultComponent implements
         return new ArrayList<String>(values);
     }
 
-    protected static RelationshipKind buildKindFromRelationshipModel(
-            DocumentModel relation) throws ClientException {
+    protected static RelationshipKind buildKindFromRelationshipModel(DocumentModel relation) throws ClientException {
         return RelationshipKind.fromString((String) relation.getPropertyValue(RELATIONSHIP_PROPERTY_KIND));
     }
 

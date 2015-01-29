@@ -39,20 +39,17 @@ import org.nuxeo.ecm.spaces.api.exceptions.SpaceException;
 public class SocialWorkspacePrivateSpaceProvider extends AbstractSpaceProvider {
 
     @Override
-    protected Space doGetSpace(CoreSession session,
-            DocumentModel contextDocument, String spaceName,
+    protected Space doGetSpace(CoreSession session, DocumentModel contextDocument, String spaceName,
             Map<String, String> parameters) throws SpaceException {
         try {
             if (isSocialWorkspace(contextDocument)) {
                 SocialWorkspace socialWorkspace = toSocialWorkspace(contextDocument);
-                DocumentModel doc = session.getDocument(new PathRef(
-                        socialWorkspace.getPrivateDashboardSpacePath()));
+                DocumentModel doc = session.getDocument(new PathRef(socialWorkspace.getPrivateDashboardSpacePath()));
                 return doc.getAdapter(Space.class);
             } else {
                 // assume dashboard spaces root
-                DocumentModel doc = session.getDocument(new PathRef(
-                        contextDocument.getPathAsString() + "/"
-                                + PRIVATE_DASHBOARD_SPACE_NAME));
+                DocumentModel doc = session.getDocument(new PathRef(contextDocument.getPathAsString() + "/"
+                        + PRIVATE_DASHBOARD_SPACE_NAME));
                 return doc.getAdapter(Space.class);
             }
         } catch (ClientException e) {

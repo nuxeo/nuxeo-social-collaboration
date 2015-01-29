@@ -44,15 +44,13 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 @RepositoryConfig(init = DefaultRepositoryInit.class)
-@Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features",
-        "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
-        "org.nuxeo.ecm.platform.notification.core", "org.nuxeo.ecm.user.invite",
+@Deploy({ "org.nuxeo.ecm.automation.core", "org.nuxeo.ecm.automation.features", "org.nuxeo.ecm.platform.url.api",
+        "org.nuxeo.ecm.platform.url.core", "org.nuxeo.ecm.platform.notification.core", "org.nuxeo.ecm.user.invite",
         "org.nuxeo.ecm.user.registration" })
-@LocalDeploy({
-        "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml",
+@LocalDeploy({ "org.nuxeo.ecm.social.workspace.core:test-social-workspace-listener-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:test-social-workspace-service-contrib.xml",
         "org.nuxeo.ecm.social.workspace.core:test-social-workspace-usermanager-contrib.xml",
-        "org.nuxeo.ecm.social.workspace.core:test-user-registration-contrib.xml"})
+        "org.nuxeo.ecm.social.workspace.core:test-user-registration-contrib.xml" })
 public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
     @Inject
@@ -80,40 +78,33 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         assertTrue(socialWorkspace.isMembersNotificationEnabled());
 
         String userAlreadyMember1Email = "userAlreadyMember1@mail.net";
-        DocumentModel userAlreadyMember1 = createUserForTest(
-                userAlreadyMember1Email, "userAlreadyMember1");
+        DocumentModel userAlreadyMember1 = createUserForTest(userAlreadyMember1Email, "userAlreadyMember1");
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember1.getId()));
         assertEquals(2, ImportEventListener.getMemberAddedCount());
 
-        socialWorkspace.getDocument().putContextData(ScopeType.REQUEST,
-                "memberNotificationDisabled", true);
+        socialWorkspace.getDocument().putContextData(ScopeType.REQUEST, "memberNotificationDisabled", true);
         assertFalse(socialWorkspace.isMembersNotificationEnabled());
 
-        DocumentModel userAlreadyMember2 = createUserForTest(
-                "userAlreadyMember2@mail.net", "userAlreadyMember2");
+        DocumentModel userAlreadyMember2 = createUserForTest("userAlreadyMember2@mail.net", "userAlreadyMember2");
         socialWorkspace.addMember(userManager.getPrincipal(userAlreadyMember2.getId()));
 
         assertEquals(2, ImportEventListener.getMemberAddedCount());
-        socialWorkspace.getDocument().putContextData(ScopeType.REQUEST,
-                "memberNotificationDisabled", false);
+        socialWorkspace.getDocument().putContextData(ScopeType.REQUEST, "memberNotificationDisabled", false);
 
-        DocumentModel fulltextEmailUser1 = createUserForTest(
-                "fulltextEmailUser1@mail.net", "fulltextEmailUser1");
+        DocumentModel fulltextEmailUser1 = createUserForTest("fulltextEmailUser1@mail.net", "fulltextEmailUser1");
 
         String userNewMember1Email = "userNewMember1@mail.net";
         createUserForTest(userNewMember1Email, "userNewMember1");
         createUserForTest("userNewMember2@mail.net", "userNewMember2");
 
         String nonExsitingUser1Email = "nonExistingUser1@mail.net";
-        List<String> emails = Arrays.asList(userAlreadyMember1Email,
-                "userAlreadyMember2@mail.net", "userNewMember1@mail.net",
-                "userNewMember2@mail.net", nonExsitingUser1Email,
+        List<String> emails = Arrays.asList(userAlreadyMember1Email, "userAlreadyMember2@mail.net",
+                "userNewMember1@mail.net", "userNewMember2@mail.net", nonExsitingUser1Email,
                 "nonExistingUser2@mail.net", fulltextEmailUser1.getId());
 
         Framework.getLocalService(EventService.class).waitForAsyncCompletion();
 
-        List<String> addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
-                socialWorkspace, emails);
+        List<String> addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(socialWorkspace, emails);
         assertEquals(3, socialWorkspace.getMembers().size());
         assertTrue(socialWorkspace.isAdministratorOrMember(userManager.getPrincipal("userAlreadyMember1")));
         assertEquals(3, addedUsers.size());
@@ -125,8 +116,7 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
         session.save();
 
-        addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(
-                socialWorkspace, new ArrayList<String>());
+        addedUsers = socialWorkspaceService.addSocialWorkspaceMembers(socialWorkspace, new ArrayList<String>());
         assertTrue(addedUsers.isEmpty());
     }
 
@@ -138,16 +128,13 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         String existingUser2 = "userAlreadyMember2";
 
         DocumentModel group1 = userManager.getBareGroupModel();
-        group1.setPropertyValue(userManager.getGroupSchemaName() + ":"
-                + userManager.getGroupIdField(), "group1");
-        List<String> members = Arrays.asList(existingUser1, existingUser2,
-                "Administrator", "unknown");
-        group1.setProperty(userManager.getGroupSchemaName(),
-                userManager.getGroupMembersField(), members);
+        group1.setPropertyValue(userManager.getGroupSchemaName() + ":" + userManager.getGroupIdField(), "group1");
+        List<String> members = Arrays.asList(existingUser1, existingUser2, "Administrator", "unknown");
+        group1.setProperty(userManager.getGroupSchemaName(), userManager.getGroupMembersField(), members);
 
         group1 = userManager.createGroup(group1);
-        members = (List<String>) group1.getPropertyValue(userManager.getGroupSchemaName()
-                + ":" + userManager.getGroupMembersField());
+        members = (List<String>) group1.getPropertyValue(userManager.getGroupSchemaName() + ":"
+                + userManager.getGroupMembersField());
         assertEquals(4, members.size());
 
         SocialWorkspace sw = createSocialWorkspace("SocialWorkspaceWithGroup");
@@ -155,11 +142,9 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
 
         int beforeImportCount = ImportEventListener.getMemberAddedCount();
         sw.getDocument().putContextData("allowMemberNotification", false);
-        List<String> imported = socialWorkspaceService.addSocialWorkspaceMembers(
-                sw, group1.getName());
+        List<String> imported = socialWorkspaceService.addSocialWorkspaceMembers(sw, group1.getName());
         assertEquals(2, imported.size());
-        assertEquals(beforeImportCount,
-                ImportEventListener.getMemberAddedCount());
+        assertEquals(beforeImportCount, ImportEventListener.getMemberAddedCount());
         assertTrue(imported.contains(existingUser1));
         assertTrue(imported.contains(existingUser2));
         assertFalse(imported.contains("Administrator"));
@@ -175,17 +160,13 @@ public class TestSocialWorkspaceComponent extends AbstractSocialWorkspaceTest {
         assertTrue(session.exists(new PathRef("/collaboration")));
         DocumentModel container = socialWorkspaceService.getSocialWorkspaceContainer(session);
         assertEquals("Collaboration", container.getTitle());
-        assertEquals("/",
-                session.getDocument(container.getParentRef()).getPathAsString());
+        assertEquals("/", session.getDocument(container.getParentRef()).getPathAsString());
     }
 
-    protected DocumentModel createUserForTest(String userEmail, String userId)
-            throws ClientException {
+    protected DocumentModel createUserForTest(String userEmail, String userId) throws ClientException {
         DocumentModel user = userManager.getBareUserModel();
-        user.setPropertyValue(userManager.getUserSchemaName() + ":"
-                + userManager.getUserEmailField(), userEmail);
-        user.setPropertyValue(userManager.getUserSchemaName() + ":"
-                + userManager.getUserIdField(), userId);
+        user.setPropertyValue(userManager.getUserSchemaName() + ":" + userManager.getUserEmailField(), userEmail);
+        user.setPropertyValue(userManager.getUserSchemaName() + ":" + userManager.getUserIdField(), userId);
 
         return userManager.createUser(user);
     }

@@ -35,8 +35,7 @@ public class TestAdapters extends AbstractSocialWorkspaceTest {
 
     @Test
     public void testArticleAdapter() throws Exception {
-        DocumentModel article = session.createDocumentModel(
-                session.getRootDocument().getPathAsString(), "article1",
+        DocumentModel article = session.createDocumentModel(session.getRootDocument().getPathAsString(), "article1",
                 ARTICLE_TYPE);
         assertNotNull(article);
         article = session.createDocument(article);

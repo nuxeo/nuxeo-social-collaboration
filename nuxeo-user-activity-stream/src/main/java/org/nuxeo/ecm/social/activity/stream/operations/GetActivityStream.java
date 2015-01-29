@@ -104,8 +104,7 @@ public class GetActivityStream {
             targetLimit = limit.longValue();
         }
 
-        Locale locale = language != null && !language.isEmpty() ? new Locale(
-                language) : Locale.ENGLISH;
+        Locale locale = language != null && !language.isEmpty() ? new Locale(language) : Locale.ENGLISH;
 
         Map<String, Serializable> props = new HashMap<String, Serializable>();
         props.put(UserActivityStreamFilter.ACTOR_PARAMETER, actor);
@@ -119,13 +118,11 @@ public class GetActivityStream {
 
         List<Map<String, Object>> activities = new ArrayList<Map<String, Object>>();
         for (ActivityMessage activityMessage : pageProvider.getCurrentPage()) {
-            activities.add(activityMessage.toMap(session, locale,
-                    activityLinkBuilder));
+            activities.add(activityMessage.toMap(session, locale, activityLinkBuilder));
         }
 
         Map<String, Object> m = new HashMap<String, Object>();
-        m.put("offset",
-                ((UserActivityStreamPageProvider) pageProvider).getNextOffset());
+        m.put("offset", ((UserActivityStreamPageProvider) pageProvider).getNextOffset());
         m.put("limit", pageProvider.getPageSize());
         m.put("activities", activities);
 
@@ -133,8 +130,7 @@ public class GetActivityStream {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, m);
 
-        return new InputStreamBlob(new ByteArrayInputStream(
-                writer.toString().getBytes("UTF-8")), "application/json");
+        return new InputStreamBlob(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), "application/json");
     }
 
 }

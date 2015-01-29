@@ -37,8 +37,7 @@ public class UserRelationshipServiceBusinessDelegate implements Serializable {
             try {
                 relationshipService = Framework.getService(RelationshipService.class);
             } catch (Exception e) {
-                throw new ClientException(
-                        "Error while trying to acquire RelationshipService", e);
+                throw new ClientException("Error while trying to acquire RelationshipService", e);
             }
 
             if (null == relationshipService) {

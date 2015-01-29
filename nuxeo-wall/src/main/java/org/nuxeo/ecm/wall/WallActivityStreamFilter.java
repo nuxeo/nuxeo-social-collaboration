@@ -61,39 +61,33 @@ public class WallActivityStreamFilter implements ActivityStreamFilter {
     }
 
     @Override
-    public void handleNewActivity(ActivityStreamService activityStreamService,
-            Activity activity) {
+    public void handleNewActivity(ActivityStreamService activityStreamService, Activity activity) {
         // nothing for now
     }
 
     @Override
     @Deprecated
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
+    public void handleRemovedActivities(ActivityStreamService activityStreamService,
             Collection<Serializable> activityIds) {
         // nothing for now
     }
 
     @Override
-    public void handleRemovedActivities(
-            ActivityStreamService activityStreamService,
-            ActivitiesList activities) {
+    public void handleRemovedActivities(ActivityStreamService activityStreamService, ActivitiesList activities) {
         // nothing for now
     }
 
     @Override
-    public void handleRemovedActivityReply(
-            ActivityStreamService activityStreamService, Activity activity,
+    public void handleRemovedActivityReply(ActivityStreamService activityStreamService, Activity activity,
             ActivityReply activityReply) {
     }
 
     @Override
-    public ActivitiesList query(ActivityStreamService activityStreamService,
-            Map<String, Serializable> parameters, long offset, long limit) {
+    public ActivitiesList query(ActivityStreamService activityStreamService, Map<String, Serializable> parameters,
+            long offset, long limit) {
         DocumentModel doc = (DocumentModel) parameters.get(CONTEXT_DOCUMENT_PARAMETER);
         if (doc == null) {
-            throw new IllegalArgumentException(CONTEXT_DOCUMENT_PARAMETER
-                    + " is required");
+            throw new IllegalArgumentException(CONTEXT_DOCUMENT_PARAMETER + " is required");
         }
         String docActivityObject = ActivityHelper.createDocumentActivityObject(doc);
 
@@ -105,10 +99,8 @@ public class WallActivityStreamFilter implements ActivityStreamFilter {
         List<String> verbs = wallActivityStream.getVerbs();
 
         EntityManager em = ((ActivityStreamServiceImpl) activityStreamService).getEntityManager();
-        Query query = em.createQuery("select activity from Activity activity "
-                + "where activity.context = :context "
-                + "and activity.verb in (:verbs) "
-                + "and activity.actor like :actor "
+        Query query = em.createQuery("select activity from Activity activity " + "where activity.context = :context "
+                + "and activity.verb in (:verbs) " + "and activity.actor like :actor "
                 + "order by activity.lastUpdatedDate desc");
         query.setParameter("context", docActivityObject);
         query.setParameter("verbs", verbs);

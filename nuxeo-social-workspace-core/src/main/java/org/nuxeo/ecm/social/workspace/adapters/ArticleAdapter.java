@@ -27,7 +27,6 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
- *
  */
 public class ArticleAdapter extends BaseAdapter implements Article {
 

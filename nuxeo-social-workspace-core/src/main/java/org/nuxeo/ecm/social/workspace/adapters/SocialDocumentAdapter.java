@@ -42,7 +42,6 @@ import org.nuxeo.runtime.api.Framework;
  * Default implementation of {@link SocialDocument}.
  *
  * @author Benjamin JALON <bjalon@nuxeo.com>
- *
  */
 public class SocialDocumentAdapter implements SocialDocument {
 
@@ -59,35 +58,29 @@ public class SocialDocumentAdapter implements SocialDocument {
     /**
      * @param sourceDocument on which social publications need to be performed
      */
-    public SocialDocumentAdapter(DocumentModel sourceDocument)
-            throws ClientException {
+    public SocialDocumentAdapter(DocumentModel sourceDocument) throws ClientException {
         this.sourceDocument = sourceDocument;
 
         if (sourceDocument != null && getSession() == null) {
-            throw new ClientException(
-                    "All action will be impossible as the given getSession() is null");
+            throw new ClientException("All action will be impossible as the given getSession() is null");
         }
         if (sourceDocument == null) {
             throw new ClientException("Give document model is null");
         }
 
         if (!SocialWorkspaceHelper.isSocialDocument(sourceDocument)) {
-            throw new ClientException(
-                    "Make public a document is restricted to social document only not for :"
-                            + sourceDocument.getPathAsString());
+            throw new ClientException("Make public a document is restricted to social document only not for :"
+                    + sourceDocument.getPathAsString());
         }
 
-        socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(
-                sourceDocument);
+        socialWorkspace = getSocialWorkspaceService().getDetachedSocialWorkspace(sourceDocument);
         if (socialWorkspace == null) {
-            throw new ClientException(
-                    "Given document is not into a social workspace");
+            throw new ClientException("Given document is not into a social workspace");
         }
     }
 
     protected DocumentModel getPrivateSection() throws ClientException {
-        DocumentRef pathRef = new PathRef(
-                socialWorkspace.getPrivateSectionPath());
+        DocumentRef pathRef = new PathRef(socialWorkspace.getPrivateSectionPath());
         if (privateSocialSection == null) {
             privateSocialSection = getSession().getDocument(pathRef);
         }
@@ -95,8 +88,7 @@ public class SocialDocumentAdapter implements SocialDocument {
     }
 
     protected DocumentModel getPublicSection() throws ClientException {
-        DocumentRef pathRef = new PathRef(
-                socialWorkspace.getPublicSectionPath());
+        DocumentRef pathRef = new PathRef(socialWorkspace.getPublicSectionPath());
         if (publicSocialSection == null) {
             publicSocialSection = getSession().getDocument(pathRef);
         }
@@ -125,8 +117,7 @@ public class SocialDocumentAdapter implements SocialDocument {
             return sourceDocument;
         }
 
-        DocumentModel exposedDocument = getSession().publishDocument(
-                sourceDocument, getPrivateSection());
+        DocumentModel exposedDocument = getSession().publishDocument(sourceDocument, getPrivateSection());
         getSession().save();
         return exposedDocument;
     }
@@ -146,8 +137,7 @@ public class SocialDocumentAdapter implements SocialDocument {
         }
 
         // private Article or new social document
-        DocumentModel exposedDocument = getSession().publishDocument(
-                sourceDocument, getPublicSection());
+        DocumentModel exposedDocument = getSession().publishDocument(sourceDocument, getPublicSection());
         getSession().save();
 
         addMakeDocumentPublicActivity(exposedDocument, session.getPrincipal());
@@ -156,16 +146,13 @@ public class SocialDocumentAdapter implements SocialDocument {
     }
 
     protected void setIsPublicField(boolean value) throws ClientException {
-        sourceDocument.setPropertyValue(
-                SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, value);
-        sourceDocument.putContextData(
-                VisibilitySocialDocumentListener.ALREADY_PROCESSED, true);
+        sourceDocument.setPropertyValue(SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY, value);
+        sourceDocument.putContextData(VisibilitySocialDocumentListener.ALREADY_PROCESSED, true);
         sourceDocument = session.saveDocument(sourceDocument);
     }
 
     protected DocumentModel getPublicProxy() throws ClientException {
-        DocumentModelList proxies = getSession().getProxies(
-                sourceDocument.getRef(), getPublicSection().getRef());
+        DocumentModelList proxies = getSession().getProxies(sourceDocument.getRef(), getPublicSection().getRef());
 
         validateDocumentVisibility(proxies, true);
 
@@ -177,8 +164,7 @@ public class SocialDocumentAdapter implements SocialDocument {
     }
 
     protected DocumentModel getPrivateProxy() throws ClientException {
-        DocumentModelList proxies = getSession().getProxies(
-                sourceDocument.getRef(), getPrivateSection().getRef());
+        DocumentModelList proxies = getSession().getProxies(sourceDocument.getRef(), getPrivateSection().getRef());
 
         validateDocumentVisibility(proxies, false);
 
@@ -189,16 +175,15 @@ public class SocialDocumentAdapter implements SocialDocument {
         return null;
     }
 
-    protected void validateDocumentVisibility(DocumentModelList proxies,
-            boolean isPublicProxies) throws ClientException {
+    protected void validateDocumentVisibility(DocumentModelList proxies, boolean isPublicProxies)
+            throws ClientException {
         if (proxies.size() > 1) {
             String message = String.format("Too many published document: %s, please check."
                     + sourceDocument.getPathAsString());
             throw new ClientException(message);
         }
 
-        if (!isPublicProxies && ARTICLE_TYPE.equals(sourceDocument.getType())
-                && proxies.size() == 1) {
+        if (!isPublicProxies && ARTICLE_TYPE.equals(sourceDocument.getType()) && proxies.size() == 1) {
             String message = String.format("Article can't have a private proxy: %s, please check."
                     + sourceDocument.getPathAsString());
             throw new ClientException(message);
@@ -206,19 +191,14 @@ public class SocialDocumentAdapter implements SocialDocument {
 
     }
 
-    protected void addMakeDocumentPublicActivity(DocumentModel doc,
-            Principal principal) {
+    protected void addMakeDocumentPublicActivity(DocumentModel doc, Principal principal) {
         String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(socialWorkspace.getDocument());
         ActivityStreamService activityStreamService = Framework.getLocalService(ActivityStreamService.class);
-        Activity activity = new ActivityBuilder().verb(
-                MAKE_DOCUMENT_PUBLIC_VERB).actor(
+        Activity activity = new ActivityBuilder().verb(MAKE_DOCUMENT_PUBLIC_VERB).actor(
                 ActivityHelper.createUserActivityObject(principal)).displayActor(
-                ActivityHelper.generateDisplayName(principal)).object(
-                ActivityHelper.createDocumentActivityObject(doc)).displayObject(
-                ActivityHelper.getDocumentTitle(doc)).target(
-                socialWorkspaceActivityObject).displayTarget(
-                socialWorkspace.getTitle()).context(
-                socialWorkspaceActivityObject).build();
+                ActivityHelper.generateDisplayName(principal)).object(ActivityHelper.createDocumentActivityObject(doc)).displayObject(
+                ActivityHelper.getDocumentTitle(doc)).target(socialWorkspaceActivityObject).displayTarget(
+                socialWorkspace.getTitle()).context(socialWorkspaceActivityObject).build();
         activityStreamService.addActivity(activity);
     }
 
@@ -256,20 +236,16 @@ public class SocialDocumentAdapter implements SocialDocument {
     }
 
     /**
-     * This method will update the exposed document to the social workspace. If
-     * the exposed document is not a proxy (private articles for instance) this
-     * method will do nothing return the document. But if the document is a
-     * proxy, it will be remove and recreate into the same section but will
-     * point to the last version of the target document.
+     * This method will update the exposed document to the social workspace. If the exposed document is not a proxy
+     * (private articles for instance) this method will do nothing return the document. But if the document is a proxy,
+     * it will be remove and recreate into the same section but will point to the last version of the target document.
      */
-    protected DocumentModel updateExposedDocument(
-            DocumentModel exposedDocument, boolean isPublic)
+    protected DocumentModel updateExposedDocument(DocumentModel exposedDocument, boolean isPublic)
             throws ClientException {
 
         if (!exposedDocument.isProxy() && isPublic) {
             // => Article
-            exposedDocument = getSession().publishDocument(sourceDocument,
-                    getPublicProxy());
+            exposedDocument = getSession().publishDocument(sourceDocument, getPublicProxy());
             getSession().save();
             return exposedDocument;
         }
@@ -285,13 +261,11 @@ public class SocialDocumentAdapter implements SocialDocument {
             targetSection = getPrivateSection();
         }
 
-        DocumentModel currentTarget = getSession().getDocument(
-                exposedDocument.getParentRef());
-        exposedDocument = getSession().publishDocument(sourceDocument,
-                currentTarget, true);
+        DocumentModel currentTarget = getSession().getDocument(exposedDocument.getParentRef());
+        exposedDocument = getSession().publishDocument(sourceDocument, currentTarget, true);
         if (!currentTarget.getId().equals(targetSection.getId())) {
-            exposedDocument = getSession().move(exposedDocument.getRef(),
-                    targetSection.getRef(), exposedDocument.getName());
+            exposedDocument = getSession().move(exposedDocument.getRef(), targetSection.getRef(),
+                    exposedDocument.getName());
         }
         getSession().save();
         return exposedDocument;

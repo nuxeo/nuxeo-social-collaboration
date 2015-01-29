@@ -57,15 +57,11 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
-        "org.nuxeo.ecm.user.relationships",
-        "org.nuxeo.ecm.social.mini.message", "org.nuxeo.ecm.platform.url.api",
-        "org.nuxeo.ecm.platform.url.core",
+@Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity", "org.nuxeo.ecm.user.relationships",
+        "org.nuxeo.ecm.social.mini.message", "org.nuxeo.ecm.platform.url.api", "org.nuxeo.ecm.platform.url.core",
         "org.nuxeo.ecm.platform.ui:OSGI-INF/urlservice-framework.xml",
-        "org.nuxeo.ecm.user.center:OSGI-INF/urlservice-contrib.xml",
-        "org.nuxeo.ecm.platform.userworkspace.types",
-        "org.nuxeo.ecm.platform.userworkspace.api",
-        "org.nuxeo.ecm.platform.userworkspace.core",
+        "org.nuxeo.ecm.user.center:OSGI-INF/urlservice-contrib.xml", "org.nuxeo.ecm.platform.userworkspace.types",
+        "org.nuxeo.ecm.platform.userworkspace.api", "org.nuxeo.ecm.platform.userworkspace.core",
         "org.nuxeo.ecm.user.center.profile" })
 @LocalDeploy("org.nuxeo.ecm.social.mini.message:mini-message-test.xml")
 public abstract class AbstractMiniMessageTest {
@@ -98,8 +94,8 @@ public abstract class AbstractMiniMessageTest {
 
     @Before
     public void cleanupDatabase() throws ClientException {
-        ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(
-                true, new PersistenceProvider.RunVoid() {
+        ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(true,
+                new PersistenceProvider.RunVoid() {
                     @Override
                     public void runWith(EntityManager em) {
                         Query query = em.createQuery("delete from Activity");
@@ -110,66 +106,44 @@ public abstract class AbstractMiniMessageTest {
 
     @Before
     public void disableActivityStreamListener() {
-        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener",
-                false);
+        eventServiceAdmin.setListenerEnabledFlag("activityStreamListener", false);
     }
 
-    protected void initializeSomeMiniMessagesAndRelations()
-            throws ClientException {
+    protected void initializeSomeMiniMessagesAndRelations() throws ClientException {
         DateTime now = new DateTime();
         Principal bender = createUser("Bender");
         Principal leela = createUser("Leela");
         Principal fry = createUser("Fry");
         Principal zapp = createUser("Zapp");
 
-        miniMessageService.addMiniMessage(bender,
-                "Of all the friends I've had... you're the first.",
-                now.toDate());
-        miniMessageService.addMiniMessage(
-                bender,
-                "This is the worst kind of discrimination: the kind against me!",
+        miniMessageService.addMiniMessage(bender, "Of all the friends I've had... you're the first.", now.toDate());
+        miniMessageService.addMiniMessage(bender, "This is the worst kind of discrimination: the kind against me!",
                 now.plusMinutes(1).toDate());
-        miniMessageService.addMiniMessage(bender, "Lies, lies and slander!",
-                now.plusMinutes(2).toDate());
-        miniMessageService.addMiniMessage(bender,
-                "Oh wait, your serious. Let me laugh even harder.",
+        miniMessageService.addMiniMessage(bender, "Lies, lies and slander!", now.plusMinutes(2).toDate());
+        miniMessageService.addMiniMessage(bender, "Oh wait, your serious. Let me laugh even harder.",
                 now.plusMinutes(3).toDate());
-        miniMessageService.addMiniMessage(
-                bender,
+        miniMessageService.addMiniMessage(bender,
                 "I don't tell you how to tell me what to do, so don't tell me how to do what you tell me to do!",
                 now.plusMinutes(4).toDate());
-        miniMessageService.addMiniMessage(leela,
-                "At the risk of sounding negative, no.",
-                now.plusMinutes(5).toDate());
-        miniMessageService.addMiniMessage(fry,
-                "When I'm with you, every day feels like double soup Tuesday.",
+        miniMessageService.addMiniMessage(leela, "At the risk of sounding negative, no.", now.plusMinutes(5).toDate());
+        miniMessageService.addMiniMessage(fry, "When I'm with you, every day feels like double soup Tuesday.",
                 now.plusMinutes(10).toDate());
-        miniMessageService.addMiniMessage(
-                fry,
-                "We've lost power of the forward Gameboy! Mario not responding!",
+        miniMessageService.addMiniMessage(fry, "We've lost power of the forward Gameboy! Mario not responding!",
                 now.plusMinutes(15).toDate());
-        miniMessageService.addMiniMessage(zapp,
-                "Kif, I have made it with a woman. Inform the men.",
+        miniMessageService.addMiniMessage(zapp, "Kif, I have made it with a woman. Inform the men.",
                 now.plusMinutes(20).toDate());
-        miniMessageService.addMiniMessage(zapp,
-                "I surrender, and volunteer for treason!",
-                now.plusMinutes(21).toDate());
+        miniMessageService.addMiniMessage(zapp, "I surrender, and volunteer for treason!", now.plusMinutes(21).toDate());
 
-        RelationshipKind friends = RelationshipKind.newInstance("circle",
-                "friends");
-        RelationshipKind coworkers = RelationshipKind.newInstance("circle",
-                "coworkers");
+        RelationshipKind friends = RelationshipKind.newInstance("circle", "friends");
+        RelationshipKind coworkers = RelationshipKind.newInstance("circle", "coworkers");
 
         String leelaActivityObject = ActivityHelper.createUserActivityObject(leela.getName());
         String benderActivityObject = ActivityHelper.createUserActivityObject(bender.getName());
         String fryActivityObject = ActivityHelper.createUserActivityObject(fry.getName());
         String zappActivityObject = ActivityHelper.createUserActivityObject(zapp.getName());
-        relationshipService.addRelation(leelaActivityObject,
-                benderActivityObject, friends);
-        relationshipService.addRelation(leelaActivityObject, fryActivityObject,
-                friends);
-        relationshipService.addRelation(leelaActivityObject,
-                zappActivityObject, coworkers);
+        relationshipService.addRelation(leelaActivityObject, benderActivityObject, friends);
+        relationshipService.addRelation(leelaActivityObject, fryActivityObject, friends);
+        relationshipService.addRelation(leelaActivityObject, zappActivityObject, coworkers);
     }
 
     protected CoreSession openSessionAs(String username) throws ClientException {

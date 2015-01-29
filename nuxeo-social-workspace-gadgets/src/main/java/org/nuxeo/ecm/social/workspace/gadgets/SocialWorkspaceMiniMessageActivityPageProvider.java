@@ -55,14 +55,13 @@ public class SocialWorkspaceMiniMessageActivityPageProvider extends
             pageMiniMessages = new ArrayList<ActivityMessage>();
             long pageSize = getMinMaxPageSize();
 
-            String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(
-                    getRepositoryName(), getSocialWorkspaceId());
+            String socialWorkspaceActivityObject = ActivityHelper.createDocumentActivityObject(getRepositoryName(),
+                    getSocialWorkspaceId());
             RelationshipKind relationshipKind = getRelationshipKind();
             MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
-            pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFor(
-                    socialWorkspaceActivityObject, relationshipKind,
-                    socialWorkspaceActivityObject, getCurrentPageOffset(),
-                    pageSize).toActivityMessages(getLocale()));
+            pageMiniMessages.addAll(miniMessageService.getMiniMessageActivitiesFor(socialWorkspaceActivityObject,
+                    relationshipKind, socialWorkspaceActivityObject, getCurrentPageOffset(), pageSize).toActivityMessages(
+                    getLocale()));
             nextOffset = offset + pageMiniMessages.size();
 
             setResultsCount(UNKNOWN_SIZE_AFTER_QUERY);

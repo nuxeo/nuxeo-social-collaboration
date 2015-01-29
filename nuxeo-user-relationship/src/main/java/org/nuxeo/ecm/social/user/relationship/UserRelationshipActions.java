@@ -89,13 +89,11 @@ public class UserRelationshipActions implements Serializable {
     protected Map<RelationshipKind, Boolean> allRelationshipsState;
 
     public boolean isAlreadyConnected() {
-        return !isCurrentUser()
-                && !getRelationshipsWithSelectedUser().isEmpty();
+        return !isCurrentUser() && !getRelationshipsWithSelectedUser().isEmpty();
     }
 
     public boolean isAlreadyConnected(String userName) {
-        return !isCurrentUser(userName)
-                && !getRelationshipsWithUser(userName).isEmpty();
+        return !isCurrentUser(userName) && !getRelationshipsWithUser(userName).isEmpty();
     }
 
     public boolean isCurrentUser() {
@@ -127,29 +125,25 @@ public class UserRelationshipActions implements Serializable {
         String currentUser = ActivityHelper.createUserActivityObject(getCurrentUser());
         String selectedUser = ActivityHelper.createUserActivityObject(userName);
         RelationshipKind relationshipKind = RelationshipKind.fromString(kind);
-        if (relationshipService.addRelation(currentUser, selectedUser,
-                relationshipKind)) {
+        if (relationshipService.addRelation(currentUser, selectedUser, relationshipKind)) {
             setFacesMessage("label.social.user.relationship.addRelation.success");
             addNewRelationActivity(currentUser, selectedUser, relationshipKind);
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
     }
 
-    protected void addNewRelationActivity(String actorActivityObject,
-            String targetActivityObject, RelationshipKind relationshipKind) {
+    protected void addNewRelationActivity(String actorActivityObject, String targetActivityObject,
+            RelationshipKind relationshipKind) {
         Activity activity = new ActivityBuilder().actor(actorActivityObject).displayActor(
                 Functions.userFullName(ActivityHelper.getUsername(actorActivityObject))).verb(
                 relationshipKind.getGroup()).object(targetActivityObject).displayObject(
                 Functions.userFullName(ActivityHelper.getUsername(targetActivityObject))).build();
-        Framework.getLocalService(ActivityStreamService.class).addActivity(
-                activity);
+        Framework.getLocalService(ActivityStreamService.class).addActivity(activity);
     }
 
     protected void removeRelationship(String userName, String kind) {
-        if (relationshipService.removeRelation(
-                ActivityHelper.createUserActivityObject(getCurrentUser()),
-                ActivityHelper.createUserActivityObject(userName),
-                RelationshipKind.fromString(kind))) {
+        if (relationshipService.removeRelation(ActivityHelper.createUserActivityObject(getCurrentUser()),
+                ActivityHelper.createUserActivityObject(userName), RelationshipKind.fromString(kind))) {
             setFacesMessage("label.social.user.relationship.removeRelation.success");
             Events.instance().raiseEvent(USER_RELATIONSHIP_CHANGED);
         }
@@ -159,8 +153,7 @@ public class UserRelationshipActions implements Serializable {
         return getRelationshipsWithSelectedUser().contains(relationshipKind);
     }
 
-    public Map<RelationshipKind, Boolean> getAllRelationshipsState()
-            throws ClientException {
+    public Map<RelationshipKind, Boolean> getAllRelationshipsState() throws ClientException {
         if (allRelationshipsState == null) {
             allRelationshipsState = new HashMap<RelationshipKind, Boolean>();
             for (RelationshipKind kind : relationshipService.getRegisteredKinds(null)) {
@@ -216,14 +209,12 @@ public class UserRelationshipActions implements Serializable {
     }
 
     protected void setFacesMessage(String msg) {
-        facesMessages.add(StatusMessage.Severity.INFO,
-                resourcesAccessor.getMessages().get(msg));
+        facesMessages.add(StatusMessage.Severity.INFO, resourcesAccessor.getMessages().get(msg));
     }
 
     public boolean canViewProfile(DocumentModel userProfile) {
         try {
-            return currentUser.isAdministrator() || isCurrentUser()
-                    || isPublicProfile(userProfile)
+            return currentUser.isAdministrator() || isCurrentUser() || isPublicProfile(userProfile)
                     || isInCirclesOf(userProfile);
         } catch (ClientException e) {
             log.error("Failed to test profile visibility", e);
@@ -231,20 +222,17 @@ public class UserRelationshipActions implements Serializable {
         return false;
     }
 
-    protected boolean isPublicProfile(DocumentModel userProfile)
-            throws ClientException {
+    protected boolean isPublicProfile(DocumentModel userProfile) throws ClientException {
         Boolean publicProfile = (Boolean) userProfile.getPropertyValue(PUBLICPROFILE_FIELD);
         return publicProfile.booleanValue();
     }
 
-    protected boolean isInCirclesOf(DocumentModel userProfile)
-            throws ClientException {
+    protected boolean isInCirclesOf(DocumentModel userProfile) throws ClientException {
         String currentUsrActObj = ActivityHelper.createUserActivityObject(currentUser);
         String selectedUsrActObj = ActivityHelper.createUserActivityObject((String) userProfile.getProperty(
                 userManager.getUserSchemaName(), userManager.getUserIdField()));
         for (RelationshipKind kind : getKinds()) {
-            List<String> targetsOfKind = relationshipService.getTargetsOfKind(
-                    selectedUsrActObj, kind);
+            List<String> targetsOfKind = relationshipService.getTargetsOfKind(selectedUsrActObj, kind);
             if (targetsOfKind.contains(currentUsrActObj)) {
                 return true;
             }

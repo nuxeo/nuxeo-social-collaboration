@@ -29,14 +29,13 @@ import org.nuxeo.ecm.activity.ActivityStreamService;
 import org.nuxeo.ecm.activity.ActivityStreamServiceImpl;
 
 /**
- * Upgrades the activities for the relationship between an user and a Social
- * Workspace created in Nuxeo 5.5 to match Nuxeo >= 5.6.
+ * Upgrades the activities for the relationship between an user and a Social Workspace created in Nuxeo 5.5 to match
+ * Nuxeo >= 5.6.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.7
  */
-public class SocialWorkspaceMembersActivityUpgrader extends
-        AbstractActivityUpgrader {
+public class SocialWorkspaceMembersActivityUpgrader extends AbstractActivityUpgrader {
 
     @Override
     public void doUpgrade(ActivityStreamService activityStreamService) {
@@ -46,8 +45,7 @@ public class SocialWorkspaceMembersActivityUpgrader extends
         query.setParameter("actor", "doc:%");
 
         @SuppressWarnings("unchecked")
-        ActivitiesList activities = new ActivitiesListImpl(
-                query.getResultList());
+        ActivitiesList activities = new ActivitiesListImpl(query.getResultList());
         for (Activity activity : activities) {
             String oldActor = activity.getActor();
             String oldDisplayActor = activity.getDisplayActor();

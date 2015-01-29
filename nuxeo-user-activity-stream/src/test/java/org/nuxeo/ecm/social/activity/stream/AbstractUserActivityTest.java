@@ -67,12 +67,9 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity",
-        "org.nuxeo.ecm.user.relationships",
-        "org.nuxeo.ecm.social.user.activity.stream",
-        "org.nuxeo.ecm.platform.userworkspace.types",
-        "org.nuxeo.ecm.platform.userworkspace.api",
-        "org.nuxeo.ecm.platform.userworkspace.core",
+@Deploy({ "org.nuxeo.ecm.core.persistence", "org.nuxeo.ecm.activity", "org.nuxeo.ecm.user.relationships",
+        "org.nuxeo.ecm.social.user.activity.stream", "org.nuxeo.ecm.platform.userworkspace.types",
+        "org.nuxeo.ecm.platform.userworkspace.api", "org.nuxeo.ecm.platform.userworkspace.core",
         "org.nuxeo.ecm.user.center.profile" })
 @LocalDeploy("org.nuxeo.ecm.social.user.activity.stream:user-activity-stream-test.xml")
 public abstract class AbstractUserActivityTest {
@@ -105,8 +102,8 @@ public abstract class AbstractUserActivityTest {
 
     @Before
     public void cleanupDatabase() throws ClientException {
-        ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(
-                true, new PersistenceProvider.RunVoid() {
+        ((ActivityStreamServiceImpl) activityStreamService).getOrCreatePersistenceProvider().run(true,
+                new PersistenceProvider.RunVoid() {
                     @Override
                     public void runWith(EntityManager em) {
                         Query query = em.createQuery("delete from Activity");
@@ -117,8 +114,7 @@ public abstract class AbstractUserActivityTest {
 
     @Before
     public void disableBinaryTextListener() {
-        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text",
-                false);
+        eventServiceAdmin.setListenerEnabledFlag("sql-storage-binary-text", false);
     }
 
     protected CoreSession openSessionAs(String username) throws ClientException {
@@ -126,17 +122,12 @@ public abstract class AbstractUserActivityTest {
     }
 
     protected void initializeSomeRelations() {
-        RelationshipKind friends = RelationshipKind.newInstance(
-                CIRCLE_RELATIONSHIP_KIND_GROUP, "friends");
-        RelationshipKind coworkers = RelationshipKind.newInstance(
-                CIRCLE_RELATIONSHIP_KIND_GROUP, "coworkers");
+        RelationshipKind friends = RelationshipKind.newInstance(CIRCLE_RELATIONSHIP_KIND_GROUP, "friends");
+        RelationshipKind coworkers = RelationshipKind.newInstance(CIRCLE_RELATIONSHIP_KIND_GROUP, "coworkers");
 
-        relationshipService.addRelation(leelaActivityObject,
-                benderActivityObject, friends);
-        relationshipService.addRelation(leelaActivityObject, fryActivityObject,
-                friends);
-        relationshipService.addRelation(leelaActivityObject,
-                zappActivityObject, coworkers);
+        relationshipService.addRelation(leelaActivityObject, benderActivityObject, friends);
+        relationshipService.addRelation(leelaActivityObject, fryActivityObject, friends);
+        relationshipService.addRelation(leelaActivityObject, zappActivityObject, coworkers);
 
         initializeRelationsActivities();
     }
@@ -180,8 +171,7 @@ public abstract class AbstractUserActivityTest {
     }
 
     protected void createDocumentsWithBender() throws ClientException {
-        DocumentModel workspacesDocument = session.getDocument(new PathRef(
-                "/default-domain/workspaces"));
+        DocumentModel workspacesDocument = session.getDocument(new PathRef("/default-domain/workspaces"));
         ACP acp = workspacesDocument.getACP();
         ACL acl = acp.getOrCreateACL();
         acl.add(new ACE("Bender", EVERYTHING, true));
@@ -191,8 +181,7 @@ public abstract class AbstractUserActivityTest {
         session.save();
 
         try (CoreSession newSession = openSessionAs("Bender")) {
-            DocumentModel doc = newSession.createDocumentModel(
-                    workspacesDocument.getPathAsString(), "file1", "File");
+            DocumentModel doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(), "file1", "File");
             doc = newSession.createDocument(doc);
             acp = doc.getACP();
             acl = acp.getOrCreateACL();
@@ -201,8 +190,7 @@ public abstract class AbstractUserActivityTest {
             newSession.save();
             newSession.save();
 
-            doc = newSession.createDocumentModel(
-                    workspacesDocument.getPathAsString(), "file2", "File");
+            doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(), "file2", "File");
             doc = newSession.createDocument(doc);
             acp = doc.getACP();
             acl = acp.getOrCreateACL();
@@ -211,9 +199,7 @@ public abstract class AbstractUserActivityTest {
             newSession.save();
             newSession.save();
 
-            doc = newSession.createDocumentModel(
-                    workspacesDocument.getPathAsString(), "file-without-right",
-                    "File");
+            doc = newSession.createDocumentModel(workspacesDocument.getPathAsString(), "file-without-right", "File");
             doc = newSession.createDocument(doc);
             acp = doc.getACP();
             acl = acp.getOrCreateACL();

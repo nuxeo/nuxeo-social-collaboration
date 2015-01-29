@@ -34,14 +34,13 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Page provider listing mini messages for a given actor
  * <p>
- * This page provider requires two properties: the first one to be filled with
- * the actor, and the second one to be filled with the relationship kind to use.
+ * This page provider requires two properties: the first one to be filled with the actor, and the second one to be
+ * filled with the relationship kind to use.
  *
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>
  * @since 5.5
  */
-public class MiniMessagePageProvider extends
-        AbstractMiniMessagePageProvider<MiniMessage> implements
+public class MiniMessagePageProvider extends AbstractMiniMessagePageProvider<MiniMessage> implements
         PageProvider<MiniMessage> {
 
     private static final long serialVersionUID = 1L;
@@ -57,12 +56,11 @@ public class MiniMessagePageProvider extends
             MiniMessageService miniMessageService = Framework.getLocalService(MiniMessageService.class);
             String streamType = getStreamType();
             if (FOR_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(miniMessageService.getMiniMessageFor(
-                        getActor(), getRelationshipKind(),
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageFor(getActor(), getRelationshipKind(),
                         getCurrentPageOffset(), pageSize));
             } else if (FROM_ACTOR_STREAM_TYPE.equals(streamType)) {
-                pageMiniMessages.addAll(miniMessageService.getMiniMessageFrom(
-                        getActor(), getCurrentPageOffset(), pageSize));
+                pageMiniMessages.addAll(miniMessageService.getMiniMessageFrom(getActor(), getCurrentPageOffset(),
+                        pageSize));
             } else {
                 log.error("Unknown stream type: " + streamType);
             }

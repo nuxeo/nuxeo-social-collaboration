@@ -50,8 +50,7 @@ public class GetPublicSocialWorkspaces {
         SocialWorkspaceService service = Framework.getService(SocialWorkspaceService.class);
 
         DocumentModelList result = new DocumentModelListImpl();
-        for (SocialWorkspace sw : service.searchDetachedPublicSocialWorkspaces(
-                session, pattern)) {
+        for (SocialWorkspace sw : service.searchDetachedPublicSocialWorkspaces(session, pattern)) {
             result.add(sw.getDocument());
         }
         return result;

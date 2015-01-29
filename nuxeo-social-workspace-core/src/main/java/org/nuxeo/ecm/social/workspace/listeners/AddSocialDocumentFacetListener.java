@@ -43,18 +43,16 @@ import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Adds {@code SocialDocument} facet to documents created, copied or moved in a
- * {@code SocialWorkspace}.
+ * Adds {@code SocialDocument} facet to documents created, copied or moved in a {@code SocialWorkspace}.
  * <p>
- * Do not add the facet if the document has the Folderish facet, or if it's not
- * a
+ * Do not add the facet if the document has the Folderish facet, or if it's not a
  *
  * @author <a href="mailto:rlegall@nuxeo.com">Ronan Le Gall</a>
  */
 public class AddSocialDocumentFacetListener implements EventListener {
 
-    private static final List<String> validEventTypes = Arrays.asList(
-            DOCUMENT_CREATED_BY_COPY, DOCUMENT_MOVED, ABOUT_TO_CREATE);
+    private static final List<String> validEventTypes = Arrays.asList(DOCUMENT_CREATED_BY_COPY, DOCUMENT_MOVED,
+            ABOUT_TO_CREATE);
 
     @Override
     public void handleEvent(Event event) throws ClientException {
@@ -71,8 +69,7 @@ public class AddSocialDocumentFacetListener implements EventListener {
 
         List<String> allowedTypes = getSocialWorkspaceAllowedSubTypes();
         DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
-        if (document.hasFacet(FacetNames.FOLDERISH)
-                || !allowedTypes.contains(document.getType())) {
+        if (document.hasFacet(FacetNames.FOLDERISH) || !allowedTypes.contains(document.getType())) {
             return;
         }
 
@@ -82,8 +79,7 @@ public class AddSocialDocumentFacetListener implements EventListener {
 
         CoreSession session = ctx.getCoreSession();
         DocumentModel documentParent = session.getDocument(document.getParentRef());
-        SocialWorkspace sws = getSocialWorkspaceService().getSocialWorkspace(
-                documentParent);
+        SocialWorkspace sws = getSocialWorkspaceService().getSocialWorkspace(documentParent);
 
         if (sws == null) {
             return;

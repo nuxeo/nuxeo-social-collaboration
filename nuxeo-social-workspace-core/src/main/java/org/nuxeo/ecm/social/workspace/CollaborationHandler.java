@@ -52,12 +52,9 @@ public class CollaborationHandler implements PostContentCreationHandler {
                 String parentPath = path.removeLastSegments(1).toString();
                 String name = path.lastSegment();
 
-                DocumentModel container = session.createDocumentModel(
-                        parentPath, name, SOCIAL_WORKSPACE_CONTAINER_TYPE);
-                container.setPropertyValue(DC_TITLE,
-                        socialWorkspaceContainer.getTitle());
-                container.setPropertyValue(DC_DESCRIPTION,
-                        socialWorkspaceContainer.getDescription());
+                DocumentModel container = session.createDocumentModel(parentPath, name, SOCIAL_WORKSPACE_CONTAINER_TYPE);
+                container.setPropertyValue(DC_TITLE, socialWorkspaceContainer.getTitle());
+                container.setPropertyValue(DC_DESCRIPTION, socialWorkspaceContainer.getDescription());
                 session.createDocument(container);
             }
         } catch (ClientException e) {
