@@ -5,7 +5,8 @@
    This is the same contribution as org.nuxeo.ecm.social.workspace.operation.chains
    without the SendMail operation
   -->
-
+  <require>org.nuxeo.ecm.social.workspace.operation.chains</require>
+  
   <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="chains">
     <chain id="SocialWorkspaceCreatedChain" replace="true">
       <operation id="Context.FetchDocument"/>
