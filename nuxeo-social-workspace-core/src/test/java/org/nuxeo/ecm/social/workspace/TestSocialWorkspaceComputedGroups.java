@@ -10,6 +10,8 @@ import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.getSoc
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.junit.Test;
 import org.nuxeo.ecm.activity.ActivityHelper;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -21,8 +23,6 @@ import org.nuxeo.ecm.social.relationship.RelationshipKind;
 import org.nuxeo.ecm.social.relationship.service.RelationshipService;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.computedgroups.SocialWorkspaceGroupComputer;
-
-import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>
