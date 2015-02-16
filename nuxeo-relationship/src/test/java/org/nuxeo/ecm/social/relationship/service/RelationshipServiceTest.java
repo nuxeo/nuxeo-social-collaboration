@@ -2,9 +2,12 @@ package org.nuxeo.ecm.social.relationship.service;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang.StringUtils;
 import org.junit.runner.RunWith;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import org.nuxeo.ecm.activity.ActivityHelper;
@@ -21,8 +24,6 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
-
-import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:akervern@nuxeo.com">Arnaud Kervern</a>

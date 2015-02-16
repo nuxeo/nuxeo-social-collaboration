@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.common.collections.ScopeType;

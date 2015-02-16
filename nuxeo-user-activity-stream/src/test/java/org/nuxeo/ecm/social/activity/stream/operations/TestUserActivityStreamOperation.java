@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNotNull;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
@@ -33,7 +35,6 @@ import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.social.activity.stream.AbstractUserActivityTest;
 import org.nuxeo.runtime.test.runner.Deploy;
-import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:troger@nuxeo.com">Thomas Roger</a>

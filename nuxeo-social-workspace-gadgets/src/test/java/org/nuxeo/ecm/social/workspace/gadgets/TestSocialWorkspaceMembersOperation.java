@@ -22,6 +22,8 @@ import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_WORKSPACE_TY
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -51,8 +53,6 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 import org.nuxeo.runtime.transaction.TransactionHelper;
-
-import com.google.inject.Inject;
 
 /**
  * @author <a href="mailto:ei@nuxeo.com">Eugen Ionica</a>
