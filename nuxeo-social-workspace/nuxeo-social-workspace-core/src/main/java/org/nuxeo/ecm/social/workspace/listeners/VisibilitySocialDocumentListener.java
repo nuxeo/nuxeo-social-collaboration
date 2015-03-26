@@ -20,6 +20,8 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_UPDATED;
 import static org.nuxeo.ecm.social.workspace.SocialConstants.SOCIAL_DOCUMENT_IS_PUBLIC_PROPERTY;
 import static org.nuxeo.ecm.social.workspace.helper.SocialWorkspaceHelper.toSocialDocument;
+import static org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener.QUOTA_DISABLED;
+import static org.nuxeo.ecm.social.workspace.listeners.SocialWorkspaceListener.THUMBNAIL_UPDATED;
 
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.ClientRuntimeException;
@@ -63,7 +65,7 @@ public class VisibilitySocialDocumentListener implements EventListener {
             return;
         }
 
-        if (ctx.hasProperty(ALREADY_PROCESSED)) {
+        if (ctx.hasProperty(ALREADY_PROCESSED) || ctx.hasProperty(QUOTA_DISABLED) || ctx.hasProperty(THUMBNAIL_UPDATED)) {
             return;
         }
 

@@ -48,6 +48,10 @@ public class SocialWorkspaceListener implements EventListener {
 
     public static final String DO_NOT_PROCESS = "doNotProcess";
 
+    public static final String QUOTA_DISABLED = "disableQuotaListener";
+
+    public static final String THUMBNAIL_UPDATED = "thumbnailUpdated";
+
     @Override
     public void handleEvent(Event event) throws ClientException {
         if (!(event.getContext() instanceof DocumentEventContext)) {
@@ -55,7 +59,7 @@ public class SocialWorkspaceListener implements EventListener {
         }
 
         DocumentEventContext ctx = (DocumentEventContext) event.getContext();
-        if (ctx.hasProperty(DO_NOT_PROCESS)) {
+        if (ctx.hasProperty(DO_NOT_PROCESS) || ctx.hasProperty(QUOTA_DISABLED) || ctx.hasProperty(THUMBNAIL_UPDATED)) {
             return;
         }
 
