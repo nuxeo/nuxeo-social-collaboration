@@ -53,6 +53,9 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 public abstract class AbstractSocialWorkspaceTest {
 
     @Inject
+    protected CoreFeature coreFeature;
+
+    @Inject
     protected CoreSession session;
 
     @Inject
@@ -128,4 +131,9 @@ public abstract class AbstractSocialWorkspaceTest {
     protected CoreSession openSessionAs(String username) throws ClientException {
         return settings.openSessionAs(username);
     }
+
+    protected void sleepForFulltext() {
+        coreFeature.getStorageConfiguration().sleepForFulltext();
+    }
+
 }
