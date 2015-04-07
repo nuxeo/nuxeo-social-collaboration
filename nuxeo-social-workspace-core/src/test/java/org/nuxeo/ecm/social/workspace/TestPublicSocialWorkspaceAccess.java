@@ -28,7 +28,6 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.UserPrincipal;
 import org.nuxeo.ecm.core.api.security.ACE;
-import org.nuxeo.ecm.core.storage.sql.DatabaseHelper;
 import org.nuxeo.ecm.social.workspace.adapters.SocialWorkspace;
 import org.nuxeo.ecm.social.workspace.service.SocialWorkspaceService;
 import org.nuxeo.runtime.api.Framework;
@@ -64,7 +63,7 @@ public class TestPublicSocialWorkspaceAccess extends AbstractSocialWorkspaceTest
             DocumentModelList docs = newSession.query(query);
             assertEquals(0, docs.size());
 
-            DatabaseHelper.DATABASE.sleepForFulltext(); // we'll do a search
+            sleepForFulltext(); // we'll do a search
             socialWorkspaces = service.searchDetachedPublicSocialWorkspaces(newSession, "marketing");
             assertEquals(1, socialWorkspaces.size());
         }
