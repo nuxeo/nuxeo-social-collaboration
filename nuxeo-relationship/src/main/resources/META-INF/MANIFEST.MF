@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 1
-Bundle-Name: Nuxeo User Relationship
-Bundle-SymbolicName: org.nuxeo.ecm.user.relationships;singleton:=true
-Bundle-Vendor: Nuxeo
-Bundle-Version: 1.0.0
-Nuxeo-Component: OSGI-INF/relationship-directories-contrib.xml,
- OSGI-INF/relationship-service.xml
