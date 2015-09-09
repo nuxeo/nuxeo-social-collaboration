@@ -1,43 +1,11 @@
 <component name="org.nuxeo.ecm.survey.test">
 
-  <extension target="org.nuxeo.ecm.core.persistence.PersistenceComponent"
-		point="hibernate">
-		<hibernateConfiguration name="nxactivities">
-		  <properties>
-        <property name="hibernate.connection.url">jdbc:hsqldb:mem:.;sql.enforce_strict_size=true</property>;
-        <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
-        <property name="hibernate.connection.auto_commit">true</property>
-        <property name="hibernate.connection.pool_size">1</property>;
-        <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>;
-        <property name="hibernate.hbm2ddl.auto">create-drop</property>;
-        <property name="hibernate.show_sql">false</property>; // true to debug
-        <property name="hibernate.format_sql">true</property>;
-		   </properties>
-		</hibernateConfiguration>
+  <extension target="org.nuxeo.runtime.datasource" point="datasources">
+    <datasource name="jdbc/nxactivities" driverClassName="${nuxeo.test.vcs.driver}"
+      url="${nuxeo.test.vcs.url}" username="${nuxeo.test.vcs.user}" password="${nuxeo.test.vcs.password}" 
+      maxPoolSize="20" minPoolSize="5"/>
   </extension>
-
-  <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
-    point="directories">
-
-    <directory name="actorRelationshipDirectory" remove="true" />
-
-    <directory name="actorRelationshipDirectory">
-      <schema>actor_relationship</schema>
-      <dbDriver>${nuxeo.test.vcs.driver}</dbDriver>
-      <dbUrl>${nuxeo.test.vcs.url}</dbUrl>
-      <dbUser>${nuxeo.test.vcs.user}</dbUser>
-      <dbPassword>${nuxeo.test.vcs.password}</dbPassword>
-      <cacheTimeout>3600</cacheTimeout>
-      <cacheMaxSize>1000</cacheMaxSize>
-      <table>actor_relationship</table>
-      <idField>id</idField>
-      <autoincrementIdField>true</autoincrementIdField>
-      <createTablePolicy>on_missing_columns</createTablePolicy>
-      <substringMatchType>subany</substringMatchType>
-    </directory>
-
-  </extension>
-
+  
   <extension target="org.nuxeo.ecm.social.relationship.service.RelationshipService"
     point="relationshipKinds">
     <kind group="circle" name="friends" label="%s is friend with %s" />
